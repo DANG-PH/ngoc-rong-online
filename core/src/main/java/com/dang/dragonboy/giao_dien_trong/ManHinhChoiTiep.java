@@ -10,10 +10,13 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.Input;
 
 //He thong
 import com.dang.dragonboy.he_thong.Main;
 import com.dang.dragonboy.he_thong.ThaoTac;
+//Giao dien ngoai
+import com.dang.dragonboy.giao_dien_ngoai.ManHinhSplash;
 //NhanVat
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.nhan_vat.NhanVatCauHinh;
@@ -30,7 +33,7 @@ public class ManHinhChoiTiep implements Screen {
     private NhanVat nhanVat;
     private ShapeRenderer shapeRenderer;
     private SpriteBatch batch;
-    private BitmapFont font, fontText;
+    private BitmapFont font, fontText , fontDauThan;
     private GlyphLayout layout;
     //camera
     private QuanLyCamera camManager;
@@ -47,7 +50,15 @@ public class ManHinhChoiTiep implements Screen {
     private Texture khoi;
     private Texture ruongdo;
     private Texture nhagohan;
-    private Texture[] dauTraiDat = new Texture[3];
+
+    private Texture[] caccaydau = new Texture[7];
+    private int capcaydau;
+    private Texture cui_dot_lua;
+    private Texture[] lua =  new Texture[4];
+    private int frameLua = 0;
+    private float timeLua = 0f;
+    private Texture duiga;
+
     private Texture muiTen;
 
     private Texture npcdau, npcthan ,npcchan;
@@ -74,13 +85,24 @@ public class ManHinhChoiTiep implements Screen {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
-            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ";
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ";
         param.size = 18;
         font = generator.generateFont(param);
         param.size = 17;
         fontText = generator.generateFont(param);
         generator.dispose();
+        // Font có viền đen dành riêng cho dòng chữ "Đậu thần cấp ..."
+        FreeTypeFontGenerator generator2 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchinh.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter param2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        param2.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ";
+        param2.size = 22;
+        param2.color = Color.WHITE;
+        param2.borderWidth = 1f;
+        param2.borderColor = new Color(0.4f, 0.4f, 0.4f, 1f);
 
+        fontDauThan = generator2.generateFont(param2);
+        generator2.dispose();
         hudRenderer = new VeHUD(font, layout);
         SkillIcon[] traidatIcons = loadSkillIcons("traidat");  // Load tạm icon trái đất
         hudRenderer.setSkillIcons(traidatIcons);             // Gán vào HUD
@@ -113,11 +135,20 @@ public class ManHinhChoiTiep implements Screen {
 
         light = new Texture("hieuung/hieuungmap/light.png");
         khoi = new Texture("hieuung/hieuungmap/khoimay.png");
+        for (int i = 0; i < 4; i++) {
+            lua[i] = new Texture( "hieuung/hieuungmap/lua"+(i+1)+".png");
+        }
+        cui_dot_lua = new Texture("map/"+"traidat"+"/chung/trangtri/cuinuongduiga.png");
+        duiga = new Texture("map/"+"traidat"+"/chung/trangtri/duiga.png");
+        for (int i = 0; i < 7; i++) {
+            caccaydau[i] = new Texture( "map/"+"traidat"+"/chung/trangtri/caydau"+(i+1)+".png");
+        }
 
-        ruongdo = new Texture("map/traidat/chung/trangtri/ruongdo.png");
-        nhagohan = new Texture("map/traidat/chung/nhacua/nhacua2_earth.png");
+        ruongdo = new Texture("map/"+"traidat"+"/chung/trangtri/ruongdo.png");
+        nhagohan = new Texture("map/"+"traidat"+"/chung/nhacua/nhacua2_earth.png");
 
-        String id = "caitrang_goku_black_rose";
+        capcaydau = 6;
+        String id = "caitrang_vegito_xeno";
 
         NhanVatCauHinh config = NhanVatXuLy.xuly_id(id);
 
@@ -130,7 +161,7 @@ public class ManHinhChoiTiep implements Screen {
             config.lechMap
         );
         nhanVat = goku;
-
+        nhanVat.doiVanBay("phuong_hoang_lua");
         npcdau = new Texture("nhanvat/npc/ong_gohan/dau.png");
         npcthan = new Texture("nhanvat/npc/ong_gohan/than.png");
         npcchan = new Texture("nhanvat/npc/ong_gohan/chan.png");
@@ -150,7 +181,7 @@ public class ManHinhChoiTiep implements Screen {
     }
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 0.1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         // Cập nhật camera theo vị trí nhân vật
         float targetX = nhanVat.getX();
@@ -159,7 +190,7 @@ public class ManHinhChoiTiep implements Screen {
         // Giới hạn camera trong vùng bản đồ (1420x760)
         camManager.updateMainCamera(nhanVat.getX(), nhanVat.getY(), 1420, 760);
         batch.setProjectionMatrix(camManager.camera.combined);
-
+        shapeRenderer.setColor(5 / 255f, 194 / 255f, 168 / 255f, 1);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         // Chỉnh màu shapeRenderer theo hành tinh
         HanhTinhDuocChon = 0;
@@ -174,11 +205,17 @@ public class ManHinhChoiTiep implements Screen {
                 shapeRenderer.setColor(5 / 255f, 194 / 255f, 168 / 255f, 1); // Namek (xanh lá)
                 break;
         }
-        shapeRenderer.rect(0, 460, 1020, 150);
-        shapeRenderer.setColor(5 / 255f, 194 / 255f, 168 / 255f, 1);
+        shapeRenderer.rect(0, 460, 1420, 400);
         shapeRenderer.end();
 
+        //thoi gian
         thoiGianTichLuy += delta * 15f;
+        timeLua += delta;
+        if (timeLua > 0.12f){
+            frameLua = (frameLua + 1)%lua.length;
+            timeLua = 0;
+        }
+
         nhanVat.capNhat();
 
         // 1. Vẽ thế giới (map, nhân vật,...)
@@ -251,16 +288,50 @@ public class ManHinhChoiTiep implements Screen {
         batch.setColor(1f, 1f, 1f, 1f); // Trả về mặc định
         veNhanVatDung(batch, 400, 188 , npcdau,npcthan,npcchan,0f,8.5f,0f,-20f);
         tenNpc(font,"Ông Gôhan",400,260,40,30);
+        // cây đậu + đùi gà + lửa + củi
+        float caydauW = caccaydau[capcaydau].getWidth() * 0.5f;
+        float caydauH = caccaydau[capcaydau].getHeight() * 0.48f;
+        batch.draw(caccaydau[capcaydau],600,192,caydauW, caydauH);
+        String text = "Đậu thần cấp " + (capcaydau + 1);
+        layout.setText(fontDauThan, text);
+        fontDauThan.draw(batch, layout,
+            600 + (caccaydau[capcaydau].getWidth() * 0.5f - layout.width) / 2f,
+            192 + caccaydau[capcaydau].getHeight() * 0.5f + 15
+        );
+        batch.draw(cui_dot_lua,1170,180,66,48);
+        Texture luaa = lua[frameLua];
+        float luaaW = luaa.getWidth() * 0.5f;
+        float luaaH = luaa.getHeight() * 0.5f;
+        batch.draw(luaa,1203,203,luaaW,luaaH);
+        batch.draw(duiga,1178,205,33,24);
         nhanVat.ve(batch, thoiGianTichLuy);
         batch.end();
+        if (targetX > 610 && targetX < 1060) {
+            shapeRenderer.setProjectionMatrix(camManager.camera.combined);
+            Gdx.gl.glEnable(GL20.GL_BLEND); // Câu lệnh để pha alpha tùy ý
 
+            shapeRenderer.setColor(0f, 0f, 0f, 0.5f); // trắng mờ
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.rect(760, 300, 230, 60);
+            shapeRenderer.end();
+
+            batch.begin();
+            layout.setText(fontDauThan,"Làng Aru");
+            fontDauThan.draw(batch,layout,760+(230-layout.width)/2f,250+65+20);
+            batch.end();
+        }
+        // Kiểm tra nếu đứng trong vùng "Làng Aru" và bấm Enter thì chuyển màn
+        if (targetX > 760 && targetX < 990 && targetY >= 0 && targetY <= 400) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+                game.setScreen(new ManHinhSplash(game, new ManHinhLangAru(game)));
+            }
+        }
         // 2. Vẽ UI cố định
         batch.setProjectionMatrix(camManager.uiCamera.combined);
         batch.begin();
         hudRenderer.render(batch);
         hudRenderer.update(delta);
         batch.end();
-
     }
     private void veNhanVatDung(SpriteBatch batch, float x, float y, Texture dau,Texture than, Texture chan ,float thanXOffset,float thanYOffset , float dauXOffset ,float dauYOffset) {
         float doDaoDong = (float) Math.sin(thoiGianTichLuy) * 1.08f;
@@ -303,5 +374,38 @@ public class ManHinhChoiTiep implements Screen {
     @Override public void pause() {}
     @Override public void resume() {}
     @Override public void hide() {}
-    @Override public void dispose() {}
+    @Override public void dispose() {
+        shapeRenderer.dispose();
+        batch.dispose();
+        font.dispose();
+        fontText.dispose();
+        nutdn.dispose();
+        nutclick.dispose();
+        muiTen.dispose();
+        sky.dispose();
+        nuixa.dispose();
+        nui.dispose();
+        nuicay.dispose();
+        nuithap.dispose();
+        cayco.dispose();
+        cayco1.dispose();
+        dochanhtinh.dispose();
+        caycoi1.dispose();
+        caycoi2.dispose();
+        light.dispose();
+        khoi.dispose();
+        ruongdo.dispose();
+        nhagohan.dispose();
+        cui_dot_lua.dispose();
+        duiga.dispose();
+        npcdau.dispose();
+        npcthan.dispose();
+        npcchan.dispose();
+
+        for (Texture tex : mdtd) tex.dispose();
+        for (Texture tex : dtd) tex.dispose();
+        for (Texture tex : ldtd) tex.dispose();
+        for (Texture tex : lua) tex.dispose();
+        for (Texture tex : caccaydau) tex.dispose();
+    }
 }

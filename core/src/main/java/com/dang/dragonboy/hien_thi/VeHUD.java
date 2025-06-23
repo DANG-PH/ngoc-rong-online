@@ -122,8 +122,8 @@ public class VeHUD {
 
         // Tên nhân vật ngay ở thanhhp.png
         font.setColor(0f / 255f, 83f / 255f, 37f / 255f, 1f);
-        layout.setText(font, "admin");
-        font.draw(batch, layout, 60, screenHeight - 80 - 5 + 50);
+        layout.setText(font, "HaiDang");
+        font.draw(batch, layout, 52, screenHeight - 80 - 5 + 50);
 
         // số đậu thần
         font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);

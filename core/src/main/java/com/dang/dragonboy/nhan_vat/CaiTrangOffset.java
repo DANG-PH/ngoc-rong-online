@@ -11,6 +11,7 @@ public class CaiTrangOffset {
     static {
         OFFSET_CAI_TRANG.put("goku_black", taoGokuBlack());
         OFFSET_CAI_TRANG.put("goku_black_rose", taoGokuBlackRose());
+        OFFSET_CAI_TRANG.put("vegito_xeno", taoVegitoXeno());
     }
 
     // Hàm công khai để lấy offset theo tên cải trang
@@ -49,5 +50,14 @@ public class CaiTrangOffset {
         map.put(TrangThai.BAY_NGANG, new DoLechModular(0f, -1f, -0.3f, -15.5f));
         return map;
     }
-    // đoạn sau thêm ct vào đây
+    // Vegito Xeno
+    private static Map<TrangThai, DoLechModular> taoVegitoXeno() {
+        Map<TrangThai, DoLechModular> map = new HashMap<>();
+        map.put(TrangThai.DUNG_YEN, new DoLechModular(11.3f, -18.5f, 5f, -63.5f));
+        map.put(TrangThai.DI_CHUYEN, new DoLechModular(18f, -4f, 7.5f, -47.5f));
+        map.put(TrangThai.NHAY, new DoLechModular(6f, 7.5f, 0.5f, -53.5f));
+        map.put(TrangThai.ROI, new DoLechModular(-5.5f, 6.5f, -4f, -56.5f));
+        map.put(TrangThai.BAY_NGANG, new DoLechModular(11.3f, -18.5f, 5f, -63.5f));
+        return map;
+    }
 }
