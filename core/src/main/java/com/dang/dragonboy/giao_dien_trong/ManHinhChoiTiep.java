@@ -69,6 +69,12 @@ public class ManHinhChoiTiep implements Screen {
     private float thoiGianHienNutClick = 0;
     private int HanhTinhDuocChon;
     private float thoiGianTichLuy = 0;
+
+    private Texture PopupNhanvat;
+    private Texture nutX ;
+    private boolean dangHienPopup = false;
+    private boolean nhanX = false;
+
     //HUD
     private VeHUD hudRenderer;
 
@@ -95,7 +101,7 @@ public class ManHinhChoiTiep implements Screen {
         FreeTypeFontGenerator generator2 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchinh.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param2.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
-            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ";
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể";
         param2.size = 22;
         param2.color = Color.WHITE;
         param2.borderWidth = 1f;
@@ -166,6 +172,9 @@ public class ManHinhChoiTiep implements Screen {
         npcthan = new Texture("nhanvat/npc/ong_gohan/than.png");
         npcchan = new Texture("nhanvat/npc/ong_gohan/chan.png");
 
+        // Popup nhan vat
+        PopupNhanvat = new Texture("hud/giaodientrong/popupnhanvat.jpg");
+        nutX = new Texture("hud/giaodientrong/nutX.png");
     }
 
     @Override
@@ -306,11 +315,37 @@ public class ManHinhChoiTiep implements Screen {
         batch.draw(duiga,1178,205,33,24);
         nhanVat.ve(batch, thoiGianTichLuy);
         batch.end();
+        if (targetX > 410 && targetX < 850) {
+            shapeRenderer.setProjectionMatrix(camManager.camera.combined);
+            Gdx.gl.glEnable(GL20.GL_BLEND); // Câu lệnh để pha alpha tùy ý
+
+            shapeRenderer.setColor(0f, 0f, 0f, 0.5f);
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.rect(
+                600 + (caccaydau[capcaydau].getWidth() * 0.5f) / 2f -90,
+                192 + caccaydau[capcaydau].getHeight() * 0.5f + 35,
+                180,
+                80);
+            shapeRenderer.end();
+
+            batch.begin();
+            layout.setText(fontDauThan,"Có thể thu hoạch");
+            fontDauThan.draw(batch,layout,
+                600 + (caccaydau[capcaydau].getWidth() * 0.5f - layout.width) / 2f,
+                192 + caccaydau[capcaydau].getHeight() * 0.5f + 90
+            );
+            layout.setText(fontDauThan,(2*(capcaydau+1)+3)+"/"+(2*(capcaydau+1)+3));
+            fontDauThan.draw(batch,layout,
+                600 + (caccaydau[capcaydau].getWidth() * 0.5f - layout.width) / 2f,
+                192 + caccaydau[capcaydau].getHeight() * 0.5f + 65
+            );
+            batch.end();
+        }
         if (targetX > 610 && targetX < 1060) {
             shapeRenderer.setProjectionMatrix(camManager.camera.combined);
             Gdx.gl.glEnable(GL20.GL_BLEND); // Câu lệnh để pha alpha tùy ý
 
-            shapeRenderer.setColor(0f, 0f, 0f, 0.5f); // trắng mờ
+            shapeRenderer.setColor(0f, 0f, 0f, 0.5f);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.rect(760, 300, 230, 60);
             shapeRenderer.end();
@@ -331,7 +366,27 @@ public class ManHinhChoiTiep implements Screen {
         batch.begin();
         hudRenderer.render(batch);
         hudRenderer.update(delta);
+        if (dangHienPopup){
+            batch.draw(PopupNhanvat,0,0,350,610);
+            float nutXW = nutX.getWidth()*0.5f;
+            float nutXH = nutX.getHeight()*0.55f;
+            batch.draw(nutX,350-nutXW-6,610-nutXH-5,nutXW,nutXH-5);
+        }
         batch.end();
+        if (Gdx.input.justTouched()) {
+            int mouseX = Gdx.input.getX();
+            int mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
+            if (mouseX >= 0f && mouseX <= 25 && mouseY >= Gdx.graphics.getHeight() / 4f *3 && mouseY <= Gdx.graphics.getHeight() / 4f *3 +35){
+                dangHienPopup = true;
+            }
+            if (dangHienPopup){
+                float nutXW = nutX.getWidth()*0.5f;
+                float nutXH = nutX.getHeight()*0.55f;
+                if (mouseX >= 350-nutXW-6 && mouseX <= 350-nutXW-6+nutXW && mouseY >= 610-nutXH-5 && mouseY <= 610-nutXH-5+nutXH){
+                    dangHienPopup = false;
+                }
+            }
+        }
     }
     private void veNhanVatDung(SpriteBatch batch, float x, float y, Texture dau,Texture than, Texture chan ,float thanXOffset,float thanYOffset , float dauXOffset ,float dauYOffset) {
         float doDaoDong = (float) Math.sin(thoiGianTichLuy) * 1.08f;
