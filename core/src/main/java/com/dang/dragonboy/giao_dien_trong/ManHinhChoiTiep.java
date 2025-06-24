@@ -108,56 +108,67 @@ public class ManHinhChoiTiep implements Screen {
 
         fontDauThan = generator2.generateFont(param2);
         generator2.dispose();
-        hudRenderer = new VeHUD(font, layout);
-        SkillIcon[] traidatIcons = loadSkillIcons("traidat");  // Load tạm icon trái đất
-        hudRenderer.setSkillIcons(traidatIcons);             // Gán vào HUD
+
+        int index_hanh_tinh = 0;
+        String hanhtinh = "haidang";
+        switch (index_hanh_tinh) {
+            case 0:
+                hanhtinh="traidat";
+                break;
+            case 1:
+                hanhtinh="xayda";
+                break;
+            case 2:
+                hanhtinh="namek";
+                break;
+        }
 
         nutdn = new Texture("hud/giaodienngoai/chung/nutdangnhap3.png");
         nutclick = new Texture("hud/giaodienngoai/chung/nutclick2.png");
         muiTen = new Texture("hud/giaodienngoai/chung/muitenvang.png");
 
 
-        sky = new Texture("hud/giaodienngoai/"+"traidat"+ "/" + "sky_" + "traidat" + ".png");
-        nuixa = new Texture("hud/giaodienngoai/"+"traidat"+ "/" + "nuixa_" + "traidat" + ".png");
-        nui = new Texture("hud/giaodienngoai/"+"traidat"+ "/" + "nui_" +"traidat" + ".png");
-        nuicay = new Texture("hud/giaodienngoai/"+"traidat"+ "/" + "nuicay_" + "traidat" + ".png");
-        nuithap = new Texture("hud/giaodienngoai/"+"traidat"+ "/" + "nuithap_" + "traidat" + ".png");
+        sky = new Texture("hud/giaodienngoai/"+hanhtinh+ "/" + "sky_" + hanhtinh + ".png");
+        nuixa = new Texture("hud/giaodienngoai/"+hanhtinh+ "/" + "nuixa_" + hanhtinh + ".png");
+        nui = new Texture("hud/giaodienngoai/"+hanhtinh+ "/" + "nui_" +hanhtinh + ".png");
+        nuicay = new Texture("hud/giaodienngoai/"+hanhtinh+ "/" + "nuicay_" + hanhtinh + ".png");
+        nuithap = new Texture("hud/giaodienngoai/"+hanhtinh+ "/" + "nuithap_" + hanhtinh + ".png");
 
-        cayco = new Texture("map/"+"traidat"+ "/chung/cayco/" + "cayco3_" + "traidat" + ".png");
-        cayco1 = new Texture("map/"+"traidat"+ "/chung/cayco/"  + "cayco5_" + "traidat" + ".png");
+        cayco = new Texture("map/"+hanhtinh+ "/chung/cayco/" + "cayco3_" + hanhtinh + ".png");
+        cayco1 = new Texture("map/"+hanhtinh+ "/chung/cayco/"  + "cayco5_" + hanhtinh + ".png");
 
         for (int i = 0; i < 5; i++) {
-            mdtd[i] = new Texture("map/"+"traidat"+ "/chung/dat/"  + "matdat_" + "traidat" + (i + 1) + ".png");
+            mdtd[i] = new Texture("map/"+hanhtinh+ "/chung/dat/"  + "matdat_" + hanhtinh + (i + 1) + ".png");
         }
         for (int i = 0; i < 3; i++) {
-            dtd[i] = new Texture("map/"+"traidat"+ "/chung/dat/"  + "dat_" + "traidat"+ (i + 1) + ".png");
-            ldtd[i] = new Texture("map/"+"traidat"+ "/chung/dat/"  + "longdat_" + "traidat"+ (i + 1) + ".png");
+            dtd[i] = new Texture("map/"+hanhtinh+ "/chung/dat/"  + "dat_" + hanhtinh+ (i + 1) + ".png");
+            ldtd[i] = new Texture("map/"+hanhtinh+ "/chung/dat/"  + "longdat_" + hanhtinh+ (i + 1) + ".png");
         }
-        dochanhtinh = new Texture("map/"+"traidat"+ "/chung/dat/"  + "doc_" + "traidat" + ".png");
+        dochanhtinh = new Texture("map/"+hanhtinh+ "/chung/dat/"  + "doc_" + hanhtinh + ".png");
 
-        caycoi1 = new Texture("map/"+"traidat"+ "/chung/caycoi/"  + "caycoi1_"+"traidat" + ".png") ;
-        caycoi2 = new Texture("map/"+"traidat"+ "/chung/caycoi/" + "caycoi2_"+"traidat" + ".png");
+        caycoi1 = new Texture("map/"+hanhtinh+ "/chung/caycoi/"  + "caycoi1_"+hanhtinh + ".png") ;
+        caycoi2 = new Texture("map/"+hanhtinh+ "/chung/caycoi/" + "caycoi2_"+hanhtinh + ".png");
 
         light = new Texture("hieuung/hieuungmap/light.png");
         khoi = new Texture("hieuung/hieuungmap/khoimay.png");
         for (int i = 0; i < 4; i++) {
             lua[i] = new Texture( "hieuung/hieuungmap/lua"+(i+1)+".png");
         }
-        cui_dot_lua = new Texture("map/"+"traidat"+"/chung/trangtri/cuinuongduiga.png");
-        duiga = new Texture("map/"+"traidat"+"/chung/trangtri/duiga.png");
+        cui_dot_lua = new Texture("map/"+hanhtinh+"/chung/trangtri/cuinuongduiga.png");
+        duiga = new Texture("map/"+hanhtinh+"/chung/trangtri/duiga.png");
         for (int i = 0; i < 7; i++) {
-            caccaydau[i] = new Texture( "map/"+"traidat"+"/chung/trangtri/caydau"+(i+1)+".png");
+            caccaydau[i] = new Texture( "map/"+hanhtinh+"/chung/trangtri/caydau"+(i+1)+".png");
         }
 
-        ruongdo = new Texture("map/"+"traidat"+"/chung/trangtri/ruongdo.png");
-        nhagohan = new Texture("map/"+"traidat"+"/chung/nhacua/nhacua2_earth.png");
-
+        ruongdo = new Texture("map/"+hanhtinh+"/chung/trangtri/ruongdo.png");
+        nhagohan = new Texture("map/"+hanhtinh+"/chung/nhacua/nhacua2_earth.png");
+        hudRenderer = new VeHUD(font, layout);
+        SkillIcon[] traidatIcons = loadSkillIcons("traidat");
+        hudRenderer.setSkillIcons(traidatIcons);
         capcaydau = 6;
-        String id = "caitrang_vegito_xeno";
+        NhanVatCauHinh config = Doicaitrang("goku_black");
 
-        NhanVatCauHinh config = NhanVatXuLy.xuly_id(id);
-
-        NhanVat goku = new NhanVat(
+        NhanVat haidang = new NhanVat(
             100, 175,
             config.dau_dung, config.dau_chay,
             config.than_dung, config.than_nhay, config.than_roi, config.than_chay,
@@ -166,7 +177,7 @@ public class ManHinhChoiTiep implements Screen {
             config.lechMap,
             config.avt
         );
-        nhanVat = goku;
+        nhanVat = haidang;
         hudRenderer.setNhanVat(nhanVat);
         // Tạo map và load địa hình
         MapNhaGohan map = new MapNhaGohan();
@@ -184,7 +195,12 @@ public class ManHinhChoiTiep implements Screen {
     public void show() {
         Gdx.input.setInputProcessor(new ThaoTac(nhanVat, hudRenderer));
     }
-
+    private NhanVatCauHinh Doicaitrang(String TenCaiTrang){
+        return NhanVatXuLy.xuly_id("caitrang_"+TenCaiTrang);
+    }
+    private NhanVatCauHinh Doi_avt_setdo(String HanhTinh, String TenAvatar , String SetDo){
+        return NhanVatXuLy.xuly_id("avatar_"+HanhTinh+"+"+TenAvatar+"+"+SetDo);
+    }
     private void drawText(BitmapFont font, String text, float x, float y, Color color) {
         font.setColor(color);
         layout.setText(font, text);
