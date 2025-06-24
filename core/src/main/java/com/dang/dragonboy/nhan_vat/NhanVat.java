@@ -98,7 +98,7 @@ public class NhanVat {
         this.chan_bay = chan_bay;
 
         this.rong = chan_dung.getWidth() * tiLe;
-        this.cao = chan_dung.getHeight() * tiLe + than_dung.getHeight() * tiLe + dau_dung.getHeight() * tiLe;
+        this.cao = chan_dung.getHeight() * tiLe + than_dung.getHeight() * tiLe + dau_dung.getHeight() * 0.15f;
 
         this.lechTheoTrangThai = lechTheoTrangThai; //  Dòng này cực kỳ quan trọng
         taiAnhVanBay("candauvan"); // tùy chọn
@@ -215,21 +215,42 @@ public class NhanVat {
                 trangThai = TrangThai.DUNG_YEN;
             }
         }
-        x += vx;
-        y += vy;
+        int steps = 10;
+        float dx = vx / steps;
+        float dy = vy / steps;
 
-        dangDungDat = false;
-        for (HitboxDat dat : danhSachDat) {
-            if (dat.kiemTraVaCham(x, y + vy, rong, cao)) {
-                if (vy <= 0) {
+        for (int i = 0; i < steps; i++) {
+            // Di chuyển nhỏ
+            x += dx;
+            dangDungDat = false;
+            for (HitboxDat dat : danhSachDat) {
+                if (dat.vaChamBenTrai(x, y, rong, cao)) {
+                    x = dat.x - rong;
+                    break;
+                } else if (dat.vaChamBenPhai(x, y, rong, cao)) {
+                    x = dat.x + dat.width;
+                    break;
+                }
+            }
+
+            y += dy;
+
+            for (HitboxDat dat : danhSachDat) {
+                if (dat.vaChamTuTren(x, y, rong, cao, vy)) {
                     y = dat.y + dat.height;
                     vy = 0;
                     dangDungDat = true;
                     daNhay = false;
+                    break;
+                } else if (dat.vaChamTuDuoi(x, y, rong, cao, vy)) {
+                    y = dat.y - cao;
+                    vy = 0;
+                    break;
                 }
-                break;
             }
         }
+
+
         // Giới hạn không cho ra khỏi bản đồ
         float gioiHanXMin = 0;
         x = Math.max(gioiHanXMin, Math.min(x, gioiHanXMax));
@@ -278,6 +299,14 @@ public class NhanVat {
     public void datToaDo(float x, float y) {
         this.x = x;
         this.y = y;
+    }
+    public void setflip(String huong){
+        if ("trai".equals(huong)){
+            setFlipTrai();
+        }
+        else {
+            setFlipPhai();
+        }
     }
 
     public void ve(SpriteBatch batch, float thoiGian) {

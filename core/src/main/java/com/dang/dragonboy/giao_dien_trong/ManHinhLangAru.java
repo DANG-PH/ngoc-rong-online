@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.dang.dragonboy.he_thong.Main;
 import com.dang.dragonboy.he_thong.ThongTinChuyenMap;
 import com.dang.dragonboy.hien_thi.VeHUD;
@@ -18,6 +19,7 @@ import com.dang.dragonboy.xu_ly_map.MapLangAru;
 
 public class ManHinhLangAru implements Screen {
     private Main game;
+    private ShapeRenderer shapeRenderer;
     private ThongTinChuyenMap thongtin;
     private SpriteBatch batch;
     private Texture nen;
@@ -32,6 +34,7 @@ public class ManHinhLangAru implements Screen {
         this.thongtin =  thongtin;
         if ("nhagohan".equals(thongtin.mapTruoc)){
             thongtin.nhanVat.datToaDo(500,300);
+            thongtin.nhanVat.setflip("phai");
         }
         nhanVat = thongtin.nhanVat;
         hud = thongtin.hud;
@@ -40,6 +43,7 @@ public class ManHinhLangAru implements Screen {
         map.taiDuLieuMap();
         nhanVat.setDanhSachDat(map.LayDanhSachDat());
         nhanVat.setGioiHanToaDo(map.getChieuRongMap(), map.getChieuCaoMap());
+        shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
         // Font có viền đen dành riêng cho dòng chữ "Đậu thần cấp ..."
         FreeTypeFontGenerator generator2 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchinh.ttf"));
@@ -62,7 +66,6 @@ public class ManHinhLangAru implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         thoiGianTichLuy += delta * 15f;
 
         hud.update(delta); // cập nhật trạng thái HUD

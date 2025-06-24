@@ -196,6 +196,8 @@ public class VeHUD {
             float nutXY = 610 - nutXH - 5;
             if (x >= nutXX && x <= nutXX + nutXW && y >= nutXY && y <= nutXY + nutXH) {
                 tatPopupNhanVat();
+            } else if (x > 350 && x <= 1020) {
+                tatPopupNhanVat();
             }
         }
         // === VÙNG SKILL (nếu muốn bắt click skill sau) ===

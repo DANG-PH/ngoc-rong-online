@@ -10,8 +10,31 @@ public class HitboxDat {
         this.height = height;
     }
 
-    // Phương thức kiểm tra va chạm (đây là cái bạn cần)
-    public boolean kiemTraVaCham(float nx, float ny, float nrong, float ncao) {
-        return nx + nrong > x && nx < x + width && ny <= y + height && ny + ncao >= y;
+    // Va chạm từ TRÊN (để xử lý tiếp đất)
+    public boolean vaChamTuTren(float nx, float ny, float nrong, float ncao, float vy) {
+        return vy <= 0 &&
+            nx + nrong > x &&
+            nx < x + width &&
+            ny >= y + height - 5 &&
+            ny <= y + height;
+    }
+
+    // Va chạm từ DƯỚI (đập đầu vào nền phía trên)
+    public boolean vaChamTuDuoi(float nx, float ny, float nrong, float ncao, float vy) {
+        return vy > 0 &&
+            nx + nrong > x &&
+            nx < x + width &&
+            ny + ncao >= y &&
+            ny + ncao <= y + 5;
+    }
+
+    public boolean vaChamBenPhai(float nx, float ny, float nrong, float ncao) {
+        return nx <= x + width && nx + nrong > x + width - 1.5 &&
+            ny + ncao > y && ny < y + height;
+    }
+
+    public boolean vaChamBenTrai(float nx, float ny, float nrong, float ncao) {
+        return nx + nrong >= x && nx < x + 1.5 &&
+            ny + ncao > y && ny < y + height;
     }
 }
