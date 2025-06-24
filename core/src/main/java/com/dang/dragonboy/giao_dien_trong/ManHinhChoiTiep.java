@@ -169,7 +169,8 @@ public class ManHinhChoiTiep implements Screen {
         // Tạo map và load địa hình
         MapNhaGohan map = new MapNhaGohan();
         map.taiDuLieuMap();
-        nhanVat.setDanhSachDat(map.getDanhSachDat());
+        nhanVat.setDanhSachDat(map.LayDanhSachDat());
+        nhanVat.setGioiHanToaDo(map.getChieuRongMap(), map.getChieuCaoMap());
         nhanVat.doiVanBay("phuong_hoang_lua");
         npcdau = new Texture("nhanvat/npc/ong_gohan/dau.png");
         npcthan = new Texture("nhanvat/npc/ong_gohan/than.png");
@@ -358,7 +359,7 @@ public class ManHinhChoiTiep implements Screen {
         // Kiểm tra nếu đứng trong vùng "Làng Aru" và bấm Enter thì chuyển màn
         if (targetX > 760 && targetX < 990 && targetY >= 0 && targetY <= 400) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-                ThongTinChuyenMap info = new ThongTinChuyenMap(nhanVat, "nhagohan");
+                ThongTinChuyenMap info = new ThongTinChuyenMap(nhanVat, "nhagohan",hudRenderer);
                 game.setScreen(new ManHinhSplash(game, new ManHinhLangAru(game, info)));
             }
         }
@@ -369,11 +370,6 @@ public class ManHinhChoiTiep implements Screen {
         hudRenderer.update(delta);
         hudRenderer.renderPopup(batch);
         batch.end();
-        if (Gdx.input.justTouched()) {
-            int mouseX = Gdx.input.getX();
-            int mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
-            hudRenderer.xuLyClick(mouseX, mouseY);
-        }
     }
     private void veNhanVatDung(SpriteBatch batch, float x, float y, Texture dau,Texture than, Texture chan ,float thanXOffset,float thanYOffset , float dauXOffset ,float dauYOffset) {
         float doDaoDong = (float) Math.sin(thoiGianTichLuy) * 1.08f;

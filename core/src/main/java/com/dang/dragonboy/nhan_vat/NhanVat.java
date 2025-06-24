@@ -66,6 +66,9 @@ public class NhanVat {
     private VanBayCauHinh vanBayCauHinh;
     private int frameVanBay = 0;
     private float timeVanBay = 0f;
+
+    private float gioiHanXMax;
+    private float gioiHanYMax;
     private List<HitboxDat> danhSachDat = new ArrayList<>();
 
     public void setDanhSachDat(List<HitboxDat> ds) {
@@ -127,6 +130,11 @@ public class NhanVat {
 
     public void thaNhay() {
         phimNhayDangGiu = false;
+    }
+
+    public void setGioiHanToaDo(float chieuRongMap, float chieuCaoMap) {
+        this.gioiHanXMax = chieuRongMap - rong;
+        this.gioiHanYMax = chieuCaoMap - cao;
     }
 
     public void capNhat() {
@@ -224,12 +232,9 @@ public class NhanVat {
         }
         // Giới hạn không cho ra khỏi bản đồ
         float gioiHanXMin = 0;
-        float gioiHanXMax = 1420 - rong; // chiều rộng nhân vật đã được tính sẵn
-
         x = Math.max(gioiHanXMin, Math.min(x, gioiHanXMax));
 
         float gioiHanYMin=0;
-        float gioiHanYMax = 760 - cao; // trần trên bản đồ, có thể chỉnh
         y =Math.max(gioiHanYMin, Math.min(y, gioiHanYMax));
     }
     public void setFlipTrai() {

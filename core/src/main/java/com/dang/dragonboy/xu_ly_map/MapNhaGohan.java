@@ -7,4 +7,12 @@ public class MapNhaGohan extends MapCoBan {
         // Thêm nền đất chính
         danhSachDat.add(new HitboxDat(0, 175, 1420, 0));
     }
+    @Override
+    public float getChieuRongMap() {
+        return 1420f;
+    }
+    @Override
+    public float getChieuCaoMap() {
+        return 760f;
+    }
 }

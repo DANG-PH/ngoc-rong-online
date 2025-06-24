@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.dang.dragonboy.he_thong.Main;
 import com.dang.dragonboy.he_thong.ThongTinChuyenMap;
+import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.xu_ly_map.MapLangAru;
 
@@ -24,6 +25,7 @@ public class ManHinhLangAru implements Screen {
     private GlyphLayout layout;
     private float thoiGianTichLuy = 0;
     private NhanVat nhanVat;
+    private VeHUD hud;
 
     public ManHinhLangAru(Main game, ThongTinChuyenMap thongtin) {
         this.game = game;
@@ -32,11 +34,12 @@ public class ManHinhLangAru implements Screen {
             thongtin.nhanVat.datToaDo(500,300);
         }
         nhanVat = thongtin.nhanVat;
+        hud = thongtin.hud;
         // Tạo map và load địa hình
         MapLangAru map = new MapLangAru();
         map.taiDuLieuMap();
-
-        nhanVat.setDanhSachDat(map.getDanhSachDat());
+        nhanVat.setDanhSachDat(map.LayDanhSachDat());
+        nhanVat.setGioiHanToaDo(map.getChieuRongMap(), map.getChieuCaoMap());
         batch = new SpriteBatch();
         // Font có viền đen dành riêng cho dòng chữ "Đậu thần cấp ..."
         FreeTypeFontGenerator generator2 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchinh.ttf"));
@@ -59,12 +62,20 @@ public class ManHinhLangAru implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         thoiGianTichLuy += delta * 15f;
+
+        hud.update(delta); // cập nhật trạng thái HUD
+
         batch.begin();
         layout.setText(fontDauThan,"Làng Aru Cập Nhật Sau");
-        fontDauThan.draw(batch,layout,420,300);
+        fontDauThan.draw(batch, layout, 420, 300);
+
         nhanVat.capNhat();
         nhanVat.ve(batch, thoiGianTichLuy);
+
+        hud.render(batch);        // vẽ HUD
+        hud.renderPopup(batch);   // vẽ popup
         batch.end();
     }
 

@@ -117,9 +117,9 @@ public class VeHUD {
             }
 
             // số kỹ năng
+            font.setColor(Color.WHITE);
             String text = (i + 1) + "";
             layout.setText(font, text);
-            font.setColor(Color.WHITE);
             font.draw(batch, layout, x + (oskillW - layout.width) / 2, skillY + oskillH + 15f);
         }
         // nút popup thông tin nhân vật (bên trái trên)
