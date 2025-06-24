@@ -25,6 +25,11 @@ public class VeHUD {
     private int skillDangChon = -1; // -1: chưa chọn
 
     private ShapeRenderer shapeRenderer;
+
+    private Texture popupNhanVat;
+    private Texture nutX;
+    private boolean dangHienPopup = false;
+
     public VeHUD(BitmapFont font, GlyphLayout layout) {
         this.font = font;
         this.layout = layout;
@@ -38,6 +43,8 @@ public class VeHUD {
         oskill = new Texture("hud/giaodientrong/oskill.png");
         oskillclick = new Texture("hud/giaodientrong/oskillclick.png");
         nutpopup = new Texture("hud/giaodientrong/nutpopup.png");
+        popupNhanVat = new Texture("hud/giaodientrong/popupnhanvat.jpg");
+        nutX = new Texture("hud/giaodientrong/nutX.png");
     }
 
     public void render(SpriteBatch batch) {
@@ -174,11 +181,44 @@ public class VeHUD {
         if (x >= odauthanX && x <= odauthanX + 75 && y >= odauthanY && y <= odauthanY + 75) {
             clickODauThan();
         }
+        // Vùng mở popup
+        float nutPopupX = 0f;
+        float nutPopupY = screenHeight / 4f * 3;
+        if (x >= nutPopupX && x <= nutPopupX + 25 && y >= nutPopupY && y <= nutPopupY + 35) {
+            hienPopupNhanVat();
+        }
 
+        // Vùng nutX để tắt popup
+        if (dangHienPopup) {
+            float nutXW = nutX.getWidth() * 0.5f;
+            float nutXH = nutX.getHeight() * 0.55f;
+            float nutXX = 350 - nutXW - 6;
+            float nutXY = 610 - nutXH - 5;
+            if (x >= nutXX && x <= nutXX + nutXW && y >= nutXY && y <= nutXY + nutXH) {
+                tatPopupNhanVat();
+            }
+        }
         // === VÙNG SKILL (nếu muốn bắt click skill sau) ===
     }
+    public void hienPopupNhanVat() {
+        dangHienPopup = true;
+    }
 
+    public void tatPopupNhanVat() {
+        dangHienPopup = false;
+    }
 
+    public boolean isDangHienPopup() {
+        return dangHienPopup;
+    }
+    public void renderPopup(SpriteBatch batch) {
+        if (!dangHienPopup) return;
+
+        batch.draw(popupNhanVat, 0, 0, 350, 610);
+        float nutXW = nutX.getWidth() * 0.5f;
+        float nutXH = nutX.getHeight() * 0.55f;
+        batch.draw(nutX, 350 - nutXW - 6, 610 - nutXH - 5, nutXW, nutXH - 5);
+    }
     public void dispose() {
         ochat.dispose();
         ochatclick.dispose();
@@ -188,5 +228,7 @@ public class VeHUD {
         oskill.dispose();
         oskillclick.dispose();
         nutpopup.dispose();
+        popupNhanVat.dispose();
+        nutX.dispose();
     }
 }

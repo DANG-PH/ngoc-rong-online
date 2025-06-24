@@ -10,17 +10,33 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.dang.dragonboy.he_thong.Main;
+import com.dang.dragonboy.he_thong.ThongTinChuyenMap;
+import com.dang.dragonboy.nhan_vat.NhanVat;
+import com.dang.dragonboy.xu_ly_map.MapLangAru;
 
 
 public class ManHinhLangAru implements Screen {
     private Main game;
+    private ThongTinChuyenMap thongtin;
     private SpriteBatch batch;
     private Texture nen;
     private BitmapFont font, fontText , fontDauThan;
     private GlyphLayout layout;
+    private float thoiGianTichLuy = 0;
+    private NhanVat nhanVat;
 
-    public ManHinhLangAru(Main game) {
+    public ManHinhLangAru(Main game, ThongTinChuyenMap thongtin) {
         this.game = game;
+        this.thongtin =  thongtin;
+        if ("nhagohan".equals(thongtin.mapTruoc)){
+            thongtin.nhanVat.datToaDo(500,300);
+        }
+        nhanVat = thongtin.nhanVat;
+        // Tạo map và load địa hình
+        MapLangAru map = new MapLangAru();
+        map.taiDuLieuMap();
+
+        nhanVat.setDanhSachDat(map.getDanhSachDat());
         batch = new SpriteBatch();
         // Font có viền đen dành riêng cho dòng chữ "Đậu thần cấp ..."
         FreeTypeFontGenerator generator2 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchinh.ttf"));
@@ -43,9 +59,12 @@ public class ManHinhLangAru implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        thoiGianTichLuy += delta * 15f;
         batch.begin();
         layout.setText(fontDauThan,"Làng Aru Cập Nhật Sau");
         fontDauThan.draw(batch,layout,420,300);
+        nhanVat.capNhat();
+        nhanVat.ve(batch, thoiGianTichLuy);
         batch.end();
     }
 

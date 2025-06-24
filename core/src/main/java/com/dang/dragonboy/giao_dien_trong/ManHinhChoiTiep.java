@@ -15,6 +15,7 @@ import com.badlogic.gdx.Input;
 //He thong
 import com.dang.dragonboy.he_thong.Main;
 import com.dang.dragonboy.he_thong.ThaoTac;
+import com.dang.dragonboy.he_thong.ThongTinChuyenMap;
 //Giao dien ngoai
 import com.dang.dragonboy.giao_dien_ngoai.ManHinhSplash;
 //NhanVat
@@ -25,6 +26,8 @@ import com.dang.dragonboy.nhan_vat.NhanVatXuLy;
 import com.dang.dragonboy.hien_thi.QuanLyCamera;
 import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.hien_thi.SkillIcon;
+import com.dang.dragonboy.xu_ly_map.MapLangAru;
+import com.dang.dragonboy.xu_ly_map.MapNhaGohan;
 
 
 public class ManHinhChoiTiep implements Screen {
@@ -70,10 +73,6 @@ public class ManHinhChoiTiep implements Screen {
     private int HanhTinhDuocChon;
     private float thoiGianTichLuy = 0;
 
-    private Texture PopupNhanvat;
-    private Texture nutX ;
-    private boolean dangHienPopup = false;
-    private boolean nhanX = false;
 
     //HUD
     private VeHUD hudRenderer;
@@ -167,14 +166,15 @@ public class ManHinhChoiTiep implements Screen {
             config.lechMap
         );
         nhanVat = goku;
+        // Tạo map và load địa hình
+        MapNhaGohan map = new MapNhaGohan();
+        map.taiDuLieuMap();
+        nhanVat.setDanhSachDat(map.getDanhSachDat());
         nhanVat.doiVanBay("phuong_hoang_lua");
         npcdau = new Texture("nhanvat/npc/ong_gohan/dau.png");
         npcthan = new Texture("nhanvat/npc/ong_gohan/than.png");
         npcchan = new Texture("nhanvat/npc/ong_gohan/chan.png");
 
-        // Popup nhan vat
-        PopupNhanvat = new Texture("hud/giaodientrong/popupnhanvat.jpg");
-        nutX = new Texture("hud/giaodientrong/nutX.png");
     }
 
     @Override
@@ -358,7 +358,8 @@ public class ManHinhChoiTiep implements Screen {
         // Kiểm tra nếu đứng trong vùng "Làng Aru" và bấm Enter thì chuyển màn
         if (targetX > 760 && targetX < 990 && targetY >= 0 && targetY <= 400) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-                game.setScreen(new ManHinhSplash(game, new ManHinhLangAru(game)));
+                ThongTinChuyenMap info = new ThongTinChuyenMap(nhanVat, "nhagohan");
+                game.setScreen(new ManHinhSplash(game, new ManHinhLangAru(game, info)));
             }
         }
         // 2. Vẽ UI cố định
@@ -366,26 +367,12 @@ public class ManHinhChoiTiep implements Screen {
         batch.begin();
         hudRenderer.render(batch);
         hudRenderer.update(delta);
-        if (dangHienPopup){
-            batch.draw(PopupNhanvat,0,0,350,610);
-            float nutXW = nutX.getWidth()*0.5f;
-            float nutXH = nutX.getHeight()*0.55f;
-            batch.draw(nutX,350-nutXW-6,610-nutXH-5,nutXW,nutXH-5);
-        }
+        hudRenderer.renderPopup(batch);
         batch.end();
         if (Gdx.input.justTouched()) {
             int mouseX = Gdx.input.getX();
             int mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
-            if (mouseX >= 0f && mouseX <= 25 && mouseY >= Gdx.graphics.getHeight() / 4f *3 && mouseY <= Gdx.graphics.getHeight() / 4f *3 +35){
-                dangHienPopup = true;
-            }
-            if (dangHienPopup){
-                float nutXW = nutX.getWidth()*0.5f;
-                float nutXH = nutX.getHeight()*0.55f;
-                if (mouseX >= 350-nutXW-6 && mouseX <= 350-nutXW-6+nutXW && mouseY >= 610-nutXH-5 && mouseY <= 610-nutXH-5+nutXH){
-                    dangHienPopup = false;
-                }
-            }
+            hudRenderer.xuLyClick(mouseX, mouseY);
         }
     }
     private void veNhanVatDung(SpriteBatch batch, float x, float y, Texture dau,Texture than, Texture chan ,float thanXOffset,float thanYOffset , float dauXOffset ,float dauYOffset) {

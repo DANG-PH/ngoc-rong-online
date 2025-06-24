@@ -6,6 +6,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.Map;
 import java.util.HashMap;
 import com.dang.dragonboy.nhan_vat.van_bay.VanBayCauHinh;
+
+import java.util.List;
+import java.util.ArrayList;
+import com.dang.dragonboy.xu_ly_map.HitboxDat;
+
 enum TrangThai {
     DUNG_YEN,
     DI_CHUYEN,
@@ -61,7 +66,11 @@ public class NhanVat {
     private VanBayCauHinh vanBayCauHinh;
     private int frameVanBay = 0;
     private float timeVanBay = 0f;
+    private List<HitboxDat> danhSachDat = new ArrayList<>();
 
+    public void setDanhSachDat(List<HitboxDat> ds) {
+        this.danhSachDat = ds;
+    }
     public NhanVat(float x, float y,
                    Texture dau_dung, Texture dau_chay,
                    Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,
@@ -201,13 +210,17 @@ public class NhanVat {
         x += vx;
         y += vy;
 
-        if (y <= doCaoDat) {
-            y = doCaoDat;
-            vy = 0;
-            dangDungDat = true;
-            daNhay = false; // reset ngay khi chạm đất
-        } else {
-            dangDungDat = false;
+        dangDungDat = false;
+        for (HitboxDat dat : danhSachDat) {
+            if (dat.kiemTraVaCham(x, y + vy, rong, cao)) {
+                if (vy <= 0) {
+                    y = dat.y + dat.height;
+                    vy = 0;
+                    dangDungDat = true;
+                    daNhay = false;
+                }
+                break;
+            }
         }
         // Giới hạn không cho ra khỏi bản đồ
         float gioiHanXMin = 0;
@@ -256,6 +269,10 @@ public class NhanVat {
 
     public void doiVanBay(String tenMoi) {
         taiAnhVanBay(tenMoi);
+    }
+    public void datToaDo(float x, float y) {
+        this.x = x;
+        this.y = y;
     }
 
     public void ve(SpriteBatch batch, float thoiGian) {
