@@ -4,6 +4,9 @@ import com.badlogic.gdx.graphics.Texture;
 import java.util.Map;
 
 public class NhanVatCauHinh {
+    //avt
+    public String avt;
+
     // Đầu
     public Texture dau_dung;
     public Texture dau_chay;
@@ -30,8 +33,10 @@ public class NhanVatCauHinh {
         Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,
         Texture chan_dung, Texture chan_nhay, Texture chan_roi, Texture[] chan_chay,
         Texture than_bay, Texture chan_bay,
-        Map<TrangThai, DoLechModular> lechMap
+        Map<TrangThai, DoLechModular> lechMap,
+        String avt
     ) {
+        this.avt=avt;
         this.dau_dung = dau_dung;
         this.dau_chay = dau_chay;
         this.than_dung = than_dung;

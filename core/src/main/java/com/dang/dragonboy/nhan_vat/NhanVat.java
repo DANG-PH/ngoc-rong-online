@@ -28,6 +28,8 @@ public class NhanVat {
     private Map<TrangThai, DoLechModular> lechTheoTrangThai = new HashMap<>();
 
     // Ảnh các phần
+    private String avt;
+    private Texture avtTexture; // ảnh cache
     private Texture dau_dung, dau_chay;
     private Texture than_dung, than_nhay, than_roi;
     private Texture[] than_chay;
@@ -78,9 +80,11 @@ public class NhanVat {
                    Texture dau_dung, Texture dau_chay,
                    Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,
                    Texture chan_dung, Texture chan_nhay, Texture chan_roi, Texture[] chan_chay,
-                   Texture than_bay,Texture chan_bay,Map<TrangThai, DoLechModular> lechTheoTrangThai) {
+                   Texture than_bay,Texture chan_bay,Map<TrangThai, DoLechModular> lechTheoTrangThai,String avt) {
         this.x = x;
         this.y = y;
+
+        this.avt = avt;
 
         this.dau_dung = dau_dung;
         this.dau_chay = dau_chay;
@@ -103,9 +107,15 @@ public class NhanVat {
         this.lechTheoTrangThai = lechTheoTrangThai; //  Dòng này cực kỳ quan trọng
         taiAnhVanBay("candauvan"); // tùy chọn
     }
-
-
-
+    public String doiavatar(){
+        return avt;
+    }
+    public void dispose() {
+        if (avtTexture != null) {
+            avtTexture.dispose();
+            avtTexture = null;
+        }
+    }
     public void diTrai() {
         phimTraiDangGiu = true;
         phimPhaiDangGiu = false;

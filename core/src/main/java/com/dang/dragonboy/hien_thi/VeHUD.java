@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.dang.dragonboy.nhan_vat.NhanVat;
 
 public class VeHUD {
     private Texture ochat, ochatclick;
@@ -29,6 +30,8 @@ public class VeHUD {
     private Texture popupNhanVat;
     private Texture nutX;
     private boolean dangHienPopup = false;
+    private NhanVat nhanVat;
+    private Texture texAvt = null;
 
     public VeHUD(BitmapFont font, GlyphLayout layout) {
         this.font = font;
@@ -202,6 +205,7 @@ public class VeHUD {
         }
         // === VÙNG SKILL (nếu muốn bắt click skill sau) ===
     }
+
     public void hienPopupNhanVat() {
         dangHienPopup = true;
     }
@@ -213,13 +217,24 @@ public class VeHUD {
     public boolean isDangHienPopup() {
         return dangHienPopup;
     }
+    public void setNhanVat(NhanVat nhanVat) {
+        this.nhanVat = nhanVat;
+        if (texAvt != null) texAvt.dispose(); // nếu có thì giải phóng cũ
+
+        String path = nhanVat.doiavatar();
+        texAvt = new Texture(path); // load luôn tại đây
+    }
     public void renderPopup(SpriteBatch batch) {
-        if (!dangHienPopup) return;
+        if (!dangHienPopup || texAvt == null) return;
 
         batch.draw(popupNhanVat, 0, 0, 350, 610);
         float nutXW = nutX.getWidth() * 0.5f;
         float nutXH = nutX.getHeight() * 0.55f;
         batch.draw(nutX, 350 - nutXW - 6, 610 - nutXH - 5, nutXW, nutXH - 5);
+
+        float texAvtW = texAvt.getWidth() * 0.52f;
+        float texAvtH = texAvt.getHeight() * 0.52f;
+        batch.draw(texAvt, 0, 505, texAvtW, texAvtH);
     }
     public void dispose() {
         ochat.dispose();
@@ -232,5 +247,6 @@ public class VeHUD {
         nutpopup.dispose();
         popupNhanVat.dispose();
         nutX.dispose();
+        if (texAvt != null) texAvt.dispose();
     }
 }

@@ -163,9 +163,11 @@ public class ManHinhChoiTiep implements Screen {
             config.than_dung, config.than_nhay, config.than_roi, config.than_chay,
             config.chan_dung, config.chan_nhay, config.chan_roi, config.chan_chay,
             config.than_bay, config.chan_bay,
-            config.lechMap
+            config.lechMap,
+            config.avt
         );
         nhanVat = goku;
+        hudRenderer.setNhanVat(nhanVat);
         // Tạo map và load địa hình
         MapNhaGohan map = new MapNhaGohan();
         map.taiDuLieuMap();

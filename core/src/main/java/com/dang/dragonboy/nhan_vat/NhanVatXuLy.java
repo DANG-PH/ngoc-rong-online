@@ -10,6 +10,8 @@ public class NhanVatXuLy {
     public static NhanVatCauHinh loadCaiTrang(String tenCaiTrang) {
         String path = "nhanvat/caitrang/" + tenCaiTrang + "/";
 
+        String avt = path + "avt.png";
+
         Texture dau_dung = new Texture(path + "dung.png");
         Texture dau_chay = new Texture(path + "chay.png");
 
@@ -44,7 +46,8 @@ public class NhanVatXuLy {
             than_dung, than_nhay, than_roi, than_chay,
             chan_dung, chan_nhay, chan_roi, chan_chay,
             than_bay, chan_bay,
-            lech
+            lech,
+            avt
         );
     }
 
@@ -53,6 +56,8 @@ public class NhanVatXuLy {
         String basePath = "nhanvat/" + hanhtinh + "/";
         String setPath = basePath + "do/" + set + "/";
         String avatarPath = basePath + "avatar/" + avatar + "/";
+
+        String avt = avatarPath + "avt.png";
 
         Texture dau_dung = new Texture(avatarPath + "dung.png");
         Texture dau_chay = new Texture(avatarPath + "chay.png");
@@ -88,7 +93,8 @@ public class NhanVatXuLy {
             than_dung, than_nhay, than_roi, than_chay,
             chan_dung, chan_nhay, chan_roi, chan_chay,
             than_bay, chan_bay,
-            lech
+            lech,
+            avt
         );
     }
 
