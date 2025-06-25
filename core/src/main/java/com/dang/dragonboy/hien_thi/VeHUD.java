@@ -12,7 +12,9 @@ import com.badlogic.gdx.utils.Align;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import java.text.DecimalFormat;
-
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.Gdx;
 
 public class VeHUD {
 
@@ -48,8 +50,21 @@ public class VeHUD {
 
     private Texture hanh_trang,hanh_trang_click,hanh_trang_dang_mac,hanh_trang_dang_mac_click;
 
+    private float scrollY = 0f;
+    private float maxScroll = 0f;
+    private final float scrollSpeed = 20f; // số pixel cuộn mỗi lần
+
+
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data; // truyền data vào để xử lí hud
+    }
+
+    public void scroll(int amount) {
+        // amount âm là cuộn lên, dương là cuộn xuống
+        scrollY += amount * scrollSpeed;
+
+        // Giới hạn scroll
+        scrollY = Math.max(0, Math.min(scrollY, maxScroll));
     }
 
     public VeHUD(GlyphLayout layout) {
@@ -399,13 +414,39 @@ public class VeHUD {
             fontMotaNhiemVu.draw(batch,layout,20,385-25-30);
         }
         if (chucNangDangChon == 1){
-            for (int i = 0; i < 8; i++){
-                batch.draw(hanh_trang_dang_mac,3,395-i*49,344,50);
+            float viewY = 35;
+            float viewHeight = 444 - 35;
+            int KhoangCachItem = 49;
+
+            int soTrangBi = 8;
+            int soKhac = 12;
+            int tongSoTrangBi = soTrangBi + soKhac;
+
+            float totalHeight = tongSoTrangBi * KhoangCachItem;
+            maxScroll = Math.max(0, totalHeight - viewHeight);
+
+            batch.flush();
+            Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
+            Gdx.gl.glScissor(0, (int)viewY, 350, (int)viewHeight);
+
+            // Vị trí bắt đầu vẽ từ trên xuống
+            float startY = viewY + viewHeight - KhoangCachItem + scrollY;
+
+            for (int i = 0; i < soTrangBi; i++) {
+                float y = startY - i * KhoangCachItem;
+                batch.draw(hanh_trang_dang_mac, 3, y, 344, 50);
             }
-            for (int i = 0; i < 12; i++){
-                batch.draw(hanh_trang,3,52-i*49,344,50);
+
+            for (int i = 0; i < soKhac; i++) {
+                float y = startY - (soTrangBi + i) * KhoangCachItem;
+                batch.draw(hanh_trang, 3, y, 344, 50);
             }
+
+            batch.flush();
+            Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
         }
+
+
         if (chucNangDangChon == 2){
             layout.setText(fontNhiemVu,"Kỹ năng đang phát triển!");
             fontNhiemVu.draw(batch,layout,0+(350- layout.width)/2f,420);
@@ -418,6 +459,9 @@ public class VeHUD {
             layout.setText(fontNhiemVu,"Chức năng đang phát triển!");
             fontNhiemVu.draw(batch,layout,0+(350- layout.width)/2f,420);
         }
+    }
+    public int getChucNangDangChon() {
+        return chucNangDangChon;
     }
     private String formatVangNgoc(long so) {
         if (so >= 1_000_000_000) {
