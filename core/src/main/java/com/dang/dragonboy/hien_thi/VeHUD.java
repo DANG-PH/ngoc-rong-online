@@ -46,6 +46,8 @@ public class VeHUD {
     private Texture vang,ngoc;
     private Texture thanhtheluc;
 
+    private Texture hanh_trang,hanh_trang_click,hanh_trang_dang_mac,hanh_trang_dang_mac_click;
+
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data; // truyền data vào để xử lí hud
     }
@@ -69,6 +71,10 @@ public class VeHUD {
         vang = new Texture("hud/giaodientrong/vang.png");
         ngoc = new Texture("hud/giaodientrong/ngoc.png");
         thanhtheluc = new Texture("hud/giaodientrong/ttluc.jpg");
+        hanh_trang = new Texture("hud/giaodientrong/ohanhtrang.jpg");
+        hanh_trang_click = new Texture("hud/giaodientrong/ohanhtrangclick.jpg");
+        hanh_trang_dang_mac = new Texture("hud/giaodientrong/ohanhtrangdangmac.jpg");
+        hanh_trang_dang_mac_click = new Texture("hud/giaodientrong/ohanhtrangdangmacclick.jpg");
         // Load font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -201,7 +207,7 @@ public class VeHUD {
 
         // số đậu thần
         font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
-        layout.setText(font, "0");
+        layout.setText(font, duLieuNguoiChoi.getSoDauThan()+"");
         font.draw(batch, layout, screenWidth - 75- 10 + 33, 10 + 43);
     }
 
@@ -310,24 +316,6 @@ public class VeHUD {
         float texAvtH = texAvt.getHeight() * 0.52f;
         batch.draw(texAvt, 0, 505, texAvtW, texAvtH);
 
-        // Tên nhân vật + thể lực + Cấp bậc + Sức mạnh
-        font.setColor(1,1,1,1);
-        layout.setText(font, duLieuNguoiChoi.getTen());
-        font.draw(batch,layout,125,595);
-
-        layout.setText(fontsm,"Thể lực");
-        fontsm.draw(batch,layout,125,570);
-        batch.draw(thanhtheluc ,125+68,556);
-        layout.setText(fontsm, duLieuNguoiChoi.getCapBac());
-        fontsm.draw(batch,layout,125,545);
-        // ===== Vẽ sức mạnh =====
-        DecimalFormat dinhDang = new DecimalFormat("#,###");
-
-        long sucManh = duLieuNguoiChoi.getSucManh();
-        String sucManhHienThi = dinhDang.format(sucManh);
-        layout.setText(fontsm, "Sức mạnh: " + sucManhHienThi);
-        fontsm.draw(batch, layout, 125, 520);
-
         // ===== Vẽ vàng, ngọc =====
         batch.draw(vang, 10, 8, 20, 20);
         batch.draw(ngoc, 275, 7, 20, 20);
@@ -367,6 +355,23 @@ public class VeHUD {
         }
         // noi dung theo chuc nang
         if (chucNangDangChon == 0){
+            // Tên nhân vật + thể lực + Cấp bậc + Sức mạnh
+            font.setColor(1,1,1,1);
+            layout.setText(font, duLieuNguoiChoi.getTen());
+            font.draw(batch,layout,125,595);
+
+            layout.setText(fontsm,"Thể lực");
+            fontsm.draw(batch,layout,125,570);
+            batch.draw(thanhtheluc ,125+68,556);
+            layout.setText(fontsm, duLieuNguoiChoi.getCapBac());
+            fontsm.draw(batch,layout,125,545);
+            // ===== Vẽ sức mạnh =====
+            DecimalFormat dinhDang = new DecimalFormat("#,###");
+
+            long sucManh = duLieuNguoiChoi.getSucManh();
+            String sucManhHienThi = dinhDang.format(sucManh);
+            layout.setText(fontsm, "Sức mạnh: " + sucManhHienThi);
+            fontsm.draw(batch, layout, 125, 520);
             // chỉnh OOP theo nhiệm vụ sau cấu trúc ( mô tả, nhiệm vụ cần làm , mô tả dài )
             //mo ta
             layout.setText(fontNhiemVu,"Nhiệm vụ tập luyện"); // cần thay đổi sau
@@ -394,8 +399,12 @@ public class VeHUD {
             fontMotaNhiemVu.draw(batch,layout,20,385-25-30);
         }
         if (chucNangDangChon == 1){
-            layout.setText(fontNhiemVu,"Hành trang đang phát triển!");
-            fontNhiemVu.draw(batch,layout,0+(350- layout.width)/2f,420);
+            for (int i = 0; i < 8; i++){
+                batch.draw(hanh_trang_dang_mac,3,395-i*49,344,50);
+            }
+            for (int i = 0; i < 12; i++){
+                batch.draw(hanh_trang,3,52-i*49,344,50);
+            }
         }
         if (chucNangDangChon == 2){
             layout.setText(fontNhiemVu,"Kỹ năng đang phát triển!");

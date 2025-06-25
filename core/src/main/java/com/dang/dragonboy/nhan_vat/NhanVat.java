@@ -145,6 +145,13 @@ public class NhanVat {
     public void tangNgoc(int soLuong) {
         this.ngoc += soLuong;
     }
+    public void giamVang(int soLuong) {
+        this.vang -= soLuong;
+    }
+
+    public void giamNgoc(int soLuong) {
+        this.ngoc -= soLuong;
+    }
 
     public void tangDau(int soluong){
         this.soDauThan += soluong;
