@@ -52,7 +52,7 @@ public class VeHUD {
 
     private float scrollY = 0f;
     private float maxScroll = 0f;
-    private final float scrollSpeed = 20f; // số pixel cuộn mỗi lần
+    private final float scrollSpeed = 30f; // số pixel cuộn mỗi lần
 
 
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
