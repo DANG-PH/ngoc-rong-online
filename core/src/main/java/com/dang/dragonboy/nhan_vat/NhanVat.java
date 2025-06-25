@@ -79,16 +79,16 @@ public class NhanVat {
     }
 
     // ==== THUỘC TÍNH GAMEPLAY ==== //
-    private long sucManh = 999999999;
+    private long sucManh = 99_999_999_999L;
     private int theLuc = 100;
-    private int hpHienTai = 90;
+    private int hpHienTai = 100;
     private int hpToiDa = 100;
-    private int kiHienTai = 75;
+    private int kiHienTai = 100;
     private int kiToiDa = 100;
     private int soDauThan = 1;
-    private int vang = 1000000;
-    private int ngoc = 120;
-    private String capBac = "Chiến binh cấp F";
+    private int vang = 1000000000;
+    private int ngoc = 1000000000;
+    private String capBac = "Thần Xayda cấp 9+99.99%";
 
     public long getSucManh() {
         return sucManh;
@@ -138,12 +138,12 @@ public class NhanVat {
         this.kiHienTai = Math.max(0, Math.min(ki, kiToiDa));
     }
 
-    public void tangVang(int soTien) {
-        this.vang += soTien;
+    public void tangVang(int soLuong) {
+        this.vang += soLuong;
     }
 
-    public void tangNgoc(int soTien) {
-        this.ngoc += soTien;
+    public void tangNgoc(int soLuong) {
+        this.ngoc += soLuong;
     }
 
     public void tangDau(int soluong){

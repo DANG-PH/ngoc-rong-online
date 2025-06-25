@@ -73,7 +73,7 @@ public class VeHUD {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
-            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự";
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ";
         param.size = 18;
         font = generator.generateFont(param);
         generator.dispose();
@@ -81,7 +81,7 @@ public class VeHUD {
         FreeTypeFontGenerator generator2 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchinh.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param2.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
-            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự";
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ";
         param2.size = 22;
         param2.color = Color.WHITE;
         param2.borderWidth = 1f;
@@ -92,7 +92,7 @@ public class VeHUD {
         FreeTypeFontGenerator generator3 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchucnang.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param3 = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param3.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
-            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự";
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ";
         param3.size = 14;
         param3.color = new Color(94 / 255f, 86 / 255f, 74 / 255f, 1f);
         fontChucnang = generator3.generateFont(param3);
@@ -135,7 +135,7 @@ public class VeHUD {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         float kiPercent = (float) duLieuNguoiChoi.getKiHienTai() / duLieuNguoiChoi.getKiToiDa();
         shapeRenderer.setColor(0f / 255f, 157f / 255f, 212f / 255f, 1f);
-        shapeRenderer.rect(155, screenHeight - 80 - 5 + 50 - 25, 110 * kiPercent , 25);
+        shapeRenderer.rect(155, screenHeight - 80 - 5 + 50 - 25, 130 * kiPercent , 25);
         shapeRenderer.end();
 
         // RENDER SAU ẢNH ĐẬU THẦN ( trắng )
@@ -332,18 +332,15 @@ public class VeHUD {
         batch.draw(vang, 10, 8, 20, 20);
         batch.draw(ngoc, 275, 7, 20, 20);
 
-        // → Định dạng vàng
-        long vang = duLieuNguoiChoi.getVang();
-        String vangHienThi = dinhDang.format(vang);
+        // → Định dạng rút gọn vàng
+        String vangHienThi = formatVangNgoc(duLieuNguoiChoi.getVang());
         layout.setText(fontvangngoc, vangHienThi);
         fontvangngoc.draw(batch, layout, 10 + 20 + 10, 22);
 
-        // → Định dạng ngọc
-        long ngoc = duLieuNguoiChoi.getNgoc();
-        String ngocHienThi = dinhDang.format(ngoc);
+        // → Định dạng rút gọn ngọc
+        String ngocHienThi = formatVangNgoc(duLieuNguoiChoi.getNgoc());
         layout.setText(fontvangngoc, ngocHienThi);
         fontvangngoc.draw(batch, layout, 275 + 20 + 10, 22);
-
 
         // chuc nang
         String[] TextChucnang1 = {
@@ -411,6 +408,17 @@ public class VeHUD {
         if (chucNangDangChon == 4){
             layout.setText(fontNhiemVu,"Chức năng đang phát triển!");
             fontNhiemVu.draw(batch,layout,0+(350- layout.width)/2f,420);
+        }
+    }
+    private String formatVangNgoc(long so) {
+        if (so >= 1_000_000_000) {
+            return String.format("%.1ftỷ", so / 1_000_000_000.0);
+        } else if (so >= 1_000_000) {
+            return String.format("%.1ftr", so / 1_000_000.0);
+        } else if (so >= 1_000) {
+            return String.format("%dK", so / 1_000);
+        } else {
+            return String.valueOf(so);
         }
     }
     public void dispose() {
