@@ -53,7 +53,12 @@ public class VeHUD {
     private float scrollY = 0f;
     private float maxScroll = 0f;
     private final float scrollSpeed = 30f; // số pixel cuộn mỗi lần
+    private int hangTrangDangChon = -1;
 
+    private Texture o_noi_tai,o_noi_tai_click,o_chi_so_co_ban,o_chi_so_co_ban_click;
+    private int oChiSoDangChon = -1;
+    private Texture[] iconchisocoban = new Texture[5];
+    private Texture iconnoitai;
 
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data; // truyền data vào để xử lí hud
@@ -90,6 +95,14 @@ public class VeHUD {
         hanh_trang_click = new Texture("hud/giaodientrong/ohanhtrangclick.jpg");
         hanh_trang_dang_mac = new Texture("hud/giaodientrong/ohanhtrangdangmac.jpg");
         hanh_trang_dang_mac_click = new Texture("hud/giaodientrong/ohanhtrangdangmacclick.jpg");
+        o_chi_so_co_ban =  new Texture("hud/giaodientrong/ochiso.png");
+        o_chi_so_co_ban_click = new Texture("hud/giaodientrong/ochisoclick.png");
+        o_noi_tai = new Texture("hud/giaodientrong/onoitai.png");
+        o_noi_tai_click = new Texture("hud/giaodientrong/onoitaiclick.png");
+        for (int i = 0; i < 5; i++){
+            iconchisocoban[i] = new Texture("kynang/iconkynang/chung/"+(i+1)+".png");
+        }
+        iconnoitai = new Texture("kynang/iconkynang/chung/noitai.png");
         // Load font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -288,8 +301,12 @@ public class VeHUD {
             float nutXY = 610 - nutXH - 2;
             if (x >= nutXX && x <= nutXX + nutXW && y >= nutXY && y <= nutXY + nutXH) {
                 tatPopupNhanVat();
+                hangTrangDangChon = -1;
+                oChiSoDangChon = -1;
             } else if (x > 350 && x <= 1020) {
                 tatPopupNhanVat();
+                hangTrangDangChon = -1;
+                oChiSoDangChon = -1;
             }
             // cac nut chuc nang
             for (int i = 0; i < 5; i++) {
@@ -298,7 +315,51 @@ public class VeHUD {
                 }
             }
         }
-        // === VÙNG SKILL (nếu muốn bắt click skill sau) ===
+        if (dangHienPopup && chucNangDangChon == 1) {
+            float viewY = 35;
+            float viewHeight = 444 - 35;
+            int KhoangCachItem = 49;
+            int tongSoO = 8 + 12;
+
+            // Kiểm tra có click vào vùng hành trang không
+            if (x >= 3 && x <= 3 + 344 && y >= viewY && y <= viewY + viewHeight) {
+
+                // Tính tọa độ tương đối trong khung scroll
+                float relativeY = y - viewY;
+
+                // Tính vị trí click từ đỉnh danh sách cuộn
+                float realY = scrollY + (viewHeight - relativeY);
+
+                int index = (int)(realY / KhoangCachItem);
+
+                if (index >= 0 && index < tongSoO) {
+                    hangTrangDangChon = index;
+                }
+            }
+        }
+        if (dangHienPopup && chucNangDangChon == 2) {
+            float viewY = 35;
+            float viewHeight = 444 - 35;
+            int KhoangCachItem = 61;
+            int tongSoO = 15;
+
+            // Kiểm tra có click vào vùng hành trang không
+            if (x >= 3 && x <= 3 + 344 && y >= viewY && y <= viewY + viewHeight) {
+
+                // Tính tọa độ tương đối trong khung scroll
+                float relativeY = y - viewY;
+
+                // Tính vị trí click từ đỉnh danh sách cuộn
+                float realY = scrollY + (viewHeight - relativeY);
+
+                int index = (int)(realY / KhoangCachItem);
+
+                if (index >= 0 && index < tongSoO) {
+                    oChiSoDangChon = index;
+                }
+            }
+        }
+
     }
 
     public void hienPopupNhanVat() {
@@ -434,12 +495,14 @@ public class VeHUD {
 
             for (int i = 0; i < soTrangBi; i++) {
                 float y = startY - i * KhoangCachItem;
-                batch.draw(hanh_trang_dang_mac, 3, y, 344, 50);
+                Texture tex = (hangTrangDangChon == i) ? hanh_trang_dang_mac_click : hanh_trang_dang_mac;
+                batch.draw(tex, 3, y, 344, 50);
             }
 
             for (int i = 0; i < soKhac; i++) {
                 float y = startY - (soTrangBi + i) * KhoangCachItem;
-                batch.draw(hanh_trang, 3, y, 344, 50);
+                Texture tex = (hangTrangDangChon == soTrangBi + i) ? hanh_trang_click : hanh_trang;
+                batch.draw(tex, 3, y, 344, 50);
             }
 
             batch.flush();
@@ -448,8 +511,51 @@ public class VeHUD {
 
 
         if (chucNangDangChon == 2){
-            layout.setText(fontNhiemVu,"Kỹ năng đang phát triển!");
-            fontNhiemVu.draw(batch,layout,0+(350- layout.width)/2f,420);
+            float viewY = 35;
+            float viewHeight = 444 - 35;
+            int KhoangCachO = 61;
+
+            int oChiSoCoBan = 5;
+            int oNoiTai = 1;
+            int oSKill = 9;
+            int tongO = oChiSoCoBan + oNoiTai + oSKill;
+
+            float totalHeight = tongO * KhoangCachO;
+            maxScroll = Math.max(0, totalHeight - viewHeight);
+
+            batch.flush();
+            Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
+            Gdx.gl.glScissor(0, (int)viewY, 350, (int)viewHeight);
+
+            // Vị trí bắt đầu vẽ từ trên xuống
+            float startY = viewY + viewHeight - KhoangCachO + scrollY;
+
+            for (int i = 0; i < oChiSoCoBan; i++) {
+                float y = startY - i * KhoangCachO;
+                Texture tex = (oChiSoDangChon == i) ? o_chi_so_co_ban_click :o_chi_so_co_ban;
+                batch.draw(tex, 350-288-3, y, 288, 62);
+                batch.draw(oskill,3,y+2,350-288-3-3,58);
+                batch.draw(iconchisocoban[i], 3 + 8, y+2 + 8, 350-288-3-3 - 16, 58 - 16);
+            }
+
+            for (int i = 0; i < oNoiTai; i++) {
+                float y = startY - (oChiSoCoBan + i) * KhoangCachO;
+                Texture tex = (oChiSoDangChon == oChiSoCoBan + i) ? o_noi_tai_click : o_noi_tai;
+                batch.draw(tex, 350-288-3, y, 288, 62);
+                batch.draw(oskill,3,y+2,350-288-3-3,58);
+                batch.draw(iconnoitai, 3 + 8, y+2 + 8, 350-288-3-3 - 16, 58 - 16);
+            }
+            for (int i = 0; i < oSKill; i++) {
+                float y = startY - (oChiSoCoBan + oNoiTai + i) * KhoangCachO;
+                Texture tex = (oChiSoDangChon == oChiSoCoBan + oNoiTai + i) ?  o_chi_so_co_ban_click :o_chi_so_co_ban;
+                batch.draw(tex, 350-288-3, y, 288, 62);
+                batch.draw(oskill,3,y+2,350-288-3-3,58);
+                if (skillIcons != null && skillIcons[i] != null) {
+                    batch.draw(skillIcons[i].icon, 3 + 8, y+2 + 8, 350-288-3-3 - 16, 58 - 16);
+                }
+            }
+            batch.flush();
+            Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
         }
         if (chucNangDangChon == 3){
             layout.setText(fontNhiemVu,"Bang hội đang phát triển!");
