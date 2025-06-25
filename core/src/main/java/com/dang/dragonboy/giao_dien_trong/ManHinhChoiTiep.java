@@ -28,6 +28,8 @@ import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.hien_thi.SkillIcon;
 import com.dang.dragonboy.xu_ly_map.MapLangAru;
 import com.dang.dragonboy.xu_ly_map.MapNhaGohan;
+// dữ liệu
+import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 
 
 public class ManHinhChoiTiep implements Screen {
@@ -163,6 +165,7 @@ public class ManHinhChoiTiep implements Screen {
         ruongdo = new Texture("map/"+hanhtinh+"/chung/trangtri/ruongdo.png");
         nhagohan = new Texture("map/"+hanhtinh+"/chung/nhacua/nhacua2_earth.png");
         hudRenderer = new VeHUD(layout);
+        // load skill + thuộc tính nhân vật
         SkillIcon[] traidatIcons = loadSkillIcons("traidat");
         hudRenderer.setSkillIcons(traidatIcons);
         capcaydau = 6;
@@ -178,8 +181,22 @@ public class ManHinhChoiTiep implements Screen {
             config.avt
         );
         nhanVat = haidang;
-        haidang.setTen(tenNhanVat);
-        hudRenderer.setNhanVat(nhanVat);
+        nhanVat.setTen(tenNhanVat); // set tên nhân vật trong nhanvat.java
+        hudRenderer.setNhanVat(nhanVat);// load cái này để đổi avt theo ct
+        // load du lieu nguoi dung
+        DuLieuNguoiChoi duLieu = new DuLieuNguoiChoi(
+            nhanVat.getTen(),
+            nhanVat.getSucManh(),
+            nhanVat.getTheLuc(),
+            nhanVat.getHpHienTai(), nhanVat.getHpToiDa(),
+            nhanVat.getKiHienTai(), nhanVat.getKiToiDa(),
+            nhanVat.getSoDauThan(),
+            nhanVat.getVang(),
+            nhanVat.getNgoc(),
+            nhanVat.getCapBac()
+        );
+        hudRenderer.setDuLieuNguoiChoi(duLieu);
+
         // Tạo map và load địa hình
         MapNhaGohan map = new MapNhaGohan();
         map.taiDuLieuMap();

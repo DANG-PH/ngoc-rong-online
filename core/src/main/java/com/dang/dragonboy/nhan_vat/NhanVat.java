@@ -77,6 +77,79 @@ public class NhanVat {
     public void setDanhSachDat(List<HitboxDat> ds) {
         this.danhSachDat = ds;
     }
+
+    // ==== THUỘC TÍNH GAMEPLAY ==== //
+    private long sucManh = 999999999;
+    private int theLuc = 100;
+    private int hpHienTai = 90;
+    private int hpToiDa = 100;
+    private int kiHienTai = 75;
+    private int kiToiDa = 100;
+    private int soDauThan = 1;
+    private int vang = 1000000;
+    private int ngoc = 120;
+    private String capBac = "Chiến binh cấp F";
+
+    public long getSucManh() {
+        return sucManh;
+    }
+
+    public int getTheLuc() {
+        return theLuc;
+    }
+
+    public int getHpHienTai() {
+        return hpHienTai;
+    }
+
+    public int getHpToiDa() {
+        return hpToiDa;
+    }
+
+    public int getKiHienTai() {
+        return kiHienTai;
+    }
+
+    public int getKiToiDa() {
+        return kiToiDa;
+    }
+
+    public int getSoDauThan() {
+        return soDauThan;
+    }
+
+    public int getVang() {
+        return vang;
+    }
+
+    public int getNgoc() {
+        return ngoc;
+    }
+
+    public String getCapBac() {
+        return capBac;
+    }
+
+    public void setHpHienTai(int hp) {
+        this.hpHienTai = Math.max(0, Math.min(hp, hpToiDa));
+    }
+
+    public void setKiHienTai(int ki) {
+        this.kiHienTai = Math.max(0, Math.min(ki, kiToiDa));
+    }
+
+    public void tangVang(int soTien) {
+        this.vang += soTien;
+    }
+
+    public void tangNgoc(int soTien) {
+        this.ngoc += soTien;
+    }
+
+    public void tangDau(int soluong){
+        this.soDauThan += soluong;
+    }
+
     public NhanVat(float x, float y,
                    Texture dau_dung, Texture dau_chay,
                    Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,

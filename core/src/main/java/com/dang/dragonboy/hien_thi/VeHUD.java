@@ -10,8 +10,14 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Align;
 import com.dang.dragonboy.nhan_vat.NhanVat;
+import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
+import java.text.DecimalFormat;
+
 
 public class VeHUD {
+
+    private DuLieuNguoiChoi duLieuNguoiChoi;
+
     private Texture ochat, ochatclick;
     private Texture thanhhp;
     private Texture odauthan, odauthanclick;
@@ -39,7 +45,10 @@ public class VeHUD {
     private int chucNangDangChon = 0;
     private Texture vang,ngoc;
     private Texture thanhtheluc;
-    private String tennv = "";
+
+    public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
+        this.duLieuNguoiChoi = data; // truyền data vào để xử lí hud
+    }
 
     public VeHUD(GlyphLayout layout) {
         this.layout = layout;
@@ -117,15 +126,16 @@ public class VeHUD {
 
         // THANH HP (đỏ)
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        //shapeRenderer.setColor(213f / 255f, 34f / 255f, 0f / 255f, 1f);
+        float hpPercent = (float) duLieuNguoiChoi.getHpHienTai() / duLieuNguoiChoi.getHpToiDa();
         shapeRenderer.setColor(189f / 255f, 29f / 255f, 0f / 255f, 1f);
-        shapeRenderer.rect(165, screenHeight - 80 - 5 + 50, 50 , 25);
+        shapeRenderer.rect(165, screenHeight - 80 - 5 + 50, 130 * hpPercent , 25);
         shapeRenderer.end();
 
         // THANH KI (xanh)
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        float kiPercent = (float) duLieuNguoiChoi.getKiHienTai() / duLieuNguoiChoi.getKiToiDa();
         shapeRenderer.setColor(0f / 255f, 157f / 255f, 212f / 255f, 1f);
-        shapeRenderer.rect(155, screenHeight - 80 - 5 + 50 - 25, 110 , 25);
+        shapeRenderer.rect(155, screenHeight - 80 - 5 + 50 - 25, 110 * kiPercent , 25);
         shapeRenderer.end();
 
         // RENDER SAU ẢNH ĐẬU THẦN ( trắng )
@@ -186,7 +196,7 @@ public class VeHUD {
 
         // Tên nhân vật ngay ở thanhhp.png
         font.setColor(0f / 255f, 83f / 255f, 37f / 255f, 1f);
-        layout.setText(font, tennv); // cần thay đổi đầu tiên , truyền từ tạo mới vào
+        layout.setText(font, duLieuNguoiChoi.getTen());
         font.draw(batch, layout, 5+(155- layout.width)/2f, screenHeight - 80 - 5 + 50);
 
         // số đậu thần
@@ -285,7 +295,6 @@ public class VeHUD {
     public void setNhanVat(NhanVat nhanVat) {
         this.nhanVat = nhanVat;
         if (texAvt != null) texAvt.dispose(); // nếu có thì giải phóng cũ
-        this.tennv = nhanVat.getTen(); // Gán cho biến toàn cục
         String path = nhanVat.doiavatar();
         texAvt = new Texture(path); // load luôn tại đây
     }
@@ -303,24 +312,38 @@ public class VeHUD {
 
         // Tên nhân vật + thể lực + Cấp bậc + Sức mạnh
         font.setColor(1,1,1,1);
-        layout.setText(font,tennv); // cần thay đổi đầu tiên , truyền từ tạo mới vào
+        layout.setText(font, duLieuNguoiChoi.getTen());
         font.draw(batch,layout,125,595);
 
         layout.setText(fontsm,"Thể lực");
         fontsm.draw(batch,layout,125,570);
         batch.draw(thanhtheluc ,125+68,556);
-        layout.setText(fontsm,"Thần Xayda cấp 9+99.99%"); // cần thay đổi sau
+        layout.setText(fontsm, duLieuNguoiChoi.getCapBac());
         fontsm.draw(batch,layout,125,545);
-        layout.setText(fontsm,"Sức mạnh: 99.999.999.999"); // cần thay đổi sau
-        fontsm.draw(batch,layout,125,520);
+        // ===== Vẽ sức mạnh =====
+        DecimalFormat dinhDang = new DecimalFormat("#,###");
 
-        // vang ngoc sau nay xu ly theo vang ngoc nhan vat
-        batch.draw(vang,10,8,20,20);
-        batch.draw(ngoc,275,7,20,20);
-        layout.setText(fontvangngoc,"0"); // cần thay đổi sau
-        fontvangngoc.draw(batch,layout,10+20+10,22);
-        layout.setText(fontvangngoc,"0");
-        fontvangngoc.draw(batch,layout,275+20+10,22); // cần thay đổi sau
+        long sucManh = duLieuNguoiChoi.getSucManh();
+        String sucManhHienThi = dinhDang.format(sucManh);
+        layout.setText(fontsm, "Sức mạnh: " + sucManhHienThi);
+        fontsm.draw(batch, layout, 125, 520);
+
+        // ===== Vẽ vàng, ngọc =====
+        batch.draw(vang, 10, 8, 20, 20);
+        batch.draw(ngoc, 275, 7, 20, 20);
+
+        // → Định dạng vàng
+        long vang = duLieuNguoiChoi.getVang();
+        String vangHienThi = dinhDang.format(vang);
+        layout.setText(fontvangngoc, vangHienThi);
+        fontvangngoc.draw(batch, layout, 10 + 20 + 10, 22);
+
+        // → Định dạng ngọc
+        long ngoc = duLieuNguoiChoi.getNgoc();
+        String ngocHienThi = dinhDang.format(ngoc);
+        layout.setText(fontvangngoc, ngocHienThi);
+        fontvangngoc.draw(batch, layout, 275 + 20 + 10, 22);
+
 
         // chuc nang
         String[] TextChucnang1 = {
