@@ -338,7 +338,7 @@ public class ManHinhChoiMoi implements Screen {
                 chuyenManHinhDong = false;
             }
             if (chuyenManHinhTaoMoi) {
-                game.setScreen(new ManHinhChoiTiep(game));
+                game.setScreen(new ManHinhChoiTiep(game, tenNguoiChoi));
                 chuyenManHinhTaoMoi = false;
             }
 

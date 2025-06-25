@@ -20,6 +20,7 @@ enum TrangThai {
 }
 public class NhanVat {
     public float x, y;
+    private String ten;
     public float vx = 0, vy = 0;
     public float rong, cao;
     public boolean dangDungDat = true;
@@ -124,6 +125,13 @@ public class NhanVat {
     public void diPhai() {
         phimPhaiDangGiu = true;
         phimTraiDangGiu = false;
+    }
+    public void setTen(String ten) {
+        this.ten = ten;
+    }
+
+    public String getTen() {
+        return ten;
     }
 
     public void dungTrai() {

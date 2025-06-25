@@ -77,7 +77,7 @@ public class ManHinhChoiTiep implements Screen {
     //HUD
     private VeHUD hudRenderer;
 
-    public ManHinhChoiTiep(Main game) {
+    public ManHinhChoiTiep(Main game , String tenNhanVat) {
         this.game = game;
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
@@ -162,11 +162,11 @@ public class ManHinhChoiTiep implements Screen {
 
         ruongdo = new Texture("map/"+hanhtinh+"/chung/trangtri/ruongdo.png");
         nhagohan = new Texture("map/"+hanhtinh+"/chung/nhacua/nhacua2_earth.png");
-        hudRenderer = new VeHUD(font, layout);
+        hudRenderer = new VeHUD(layout);
         SkillIcon[] traidatIcons = loadSkillIcons("traidat");
         hudRenderer.setSkillIcons(traidatIcons);
         capcaydau = 6;
-        NhanVatCauHinh config = Doicaitrang("goku_black");
+        NhanVatCauHinh config = Doicaitrang("vegito_xeno");
 
         NhanVat haidang = new NhanVat(
             100, 175,
@@ -178,6 +178,7 @@ public class ManHinhChoiTiep implements Screen {
             config.avt
         );
         nhanVat = haidang;
+        haidang.setTen(tenNhanVat);
         hudRenderer.setNhanVat(nhanVat);
         // Tạo map và load địa hình
         MapNhaGohan map = new MapNhaGohan();

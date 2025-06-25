@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.Align;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 
 public class VeHUD {
@@ -16,7 +18,7 @@ public class VeHUD {
     private Texture oskill, oskillclick;
     private Texture nutpopup;
 
-    private BitmapFont font;
+    private BitmapFont font,fontChucnang,fontDauThan,fontNhiemVu,fontNhiemVu1,fontNhiemVuChuaLam,fontMotaNhiemVu,fontvangngoc,fontsm;
     private GlyphLayout layout;
 
     private SkillIcon[] skillIcons;
@@ -30,11 +32,16 @@ public class VeHUD {
     private Texture popupNhanVat;
     private Texture nutX;
     private boolean dangHienPopup = false;
+    private boolean vuaMoPopup = false;
     private NhanVat nhanVat;
     private Texture texAvt = null;
+    private Texture nutchucnang,nutchucnangclick;
+    private int chucNangDangChon = 0;
+    private Texture vang,ngoc;
+    private Texture thanhtheluc;
+    private String tennv = "";
 
-    public VeHUD(BitmapFont font, GlyphLayout layout) {
-        this.font = font;
+    public VeHUD(GlyphLayout layout) {
         this.layout = layout;
         shapeRenderer = new ShapeRenderer();
         // Load HUD textures
@@ -48,6 +55,53 @@ public class VeHUD {
         nutpopup = new Texture("hud/giaodientrong/nutpopup.png");
         popupNhanVat = new Texture("hud/giaodientrong/popupnhanvat.jpg");
         nutX = new Texture("hud/giaodientrong/nutX.png");
+        nutchucnang = new Texture("hud/giaodientrong/nutchucnang.png");
+        nutchucnangclick = new Texture("hud/giaodientrong/nutchucnangclick.png");
+        vang = new Texture("hud/giaodientrong/vang.png");
+        ngoc = new Texture("hud/giaodientrong/ngoc.png");
+        thanhtheluc = new Texture("hud/giaodientrong/ttluc.jpg");
+        // Load font
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        param.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự";
+        param.size = 18;
+        font = generator.generateFont(param);
+        generator.dispose();
+        // Font có viền đen dành riêng cho dòng chữ "Đậu thần cấp ..."
+        FreeTypeFontGenerator generator2 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchinh.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter param2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        param2.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự";
+        param2.size = 22;
+        param2.color = Color.WHITE;
+        param2.borderWidth = 1f;
+        param2.borderColor = new Color(0.4f, 0.4f, 0.4f, 1f);
+        fontDauThan = generator2.generateFont(param2);
+        generator2.dispose();
+        // font cho mấy chữ chức năng
+        FreeTypeFontGenerator generator3 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchucnang.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter param3 = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        param3.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự";
+        param3.size = 14;
+        param3.color = new Color(94 / 255f, 86 / 255f, 74 / 255f, 1f);
+        fontChucnang = generator3.generateFont(param3);
+        param3.size = 16;
+        fontNhiemVu = generator3.generateFont(param3);
+        param3.size = 15;
+        param3.color = new Color(0f / 255f, 123f / 255f, 255f / 255f, 1f);
+        fontNhiemVu1 = generator3.generateFont(param3);
+        param3.color = new Color(94 / 255f, 86 / 255f, 74 / 255f, 1f);
+        fontNhiemVuChuaLam = generator3.generateFont(param3);
+        param3.color = new Color(0f / 255f, 85f / 255f, 38f / 255f, 1f);
+        param3.size = 15;
+        fontMotaNhiemVu = generator3.generateFont(param3);
+        param3.color = new Color(1,1,0,1);
+        fontvangngoc = generator3.generateFont(param3);
+        param3.size = 15;
+        fontsm = generator3.generateFont(param3);
+        generator3.dispose();
     }
 
     public void render(SpriteBatch batch) {
@@ -132,8 +186,8 @@ public class VeHUD {
 
         // Tên nhân vật ngay ở thanhhp.png
         font.setColor(0f / 255f, 83f / 255f, 37f / 255f, 1f);
-        layout.setText(font, "HaiDang");
-        font.draw(batch, layout, 52, screenHeight - 80 - 5 + 50);
+        layout.setText(font, tennv); // cần thay đổi đầu tiên , truyền từ tạo mới vào
+        font.draw(batch, layout, 5+(155- layout.width)/2f, screenHeight - 80 - 5 + 50);
 
         // số đậu thần
         font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
@@ -191,16 +245,26 @@ public class VeHUD {
             hienPopupNhanVat();
         }
 
-        // Vùng nutX để tắt popup
         if (dangHienPopup) {
+            if (vuaMoPopup) {
+                vuaMoPopup = false;
+                return;
+            }
+            // nutX để tắt popup
             float nutXW = nutX.getWidth() * 0.5f;
             float nutXH = nutX.getHeight() * 0.55f;
             float nutXX = 350 - nutXW - 6;
-            float nutXY = 610 - nutXH - 5;
+            float nutXY = 610 - nutXH - 2;
             if (x >= nutXX && x <= nutXX + nutXW && y >= nutXY && y <= nutXY + nutXH) {
                 tatPopupNhanVat();
             } else if (x > 350 && x <= 1020) {
                 tatPopupNhanVat();
+            }
+            // cac nut chuc nang
+            for (int i = 0; i < 5; i++) {
+                if (x >= 2+i*68+3 && x <= 2+i*68+3 + 68 && y >= 450 && y <= 450 + 52){
+                    chucNangDangChon=i;
+                }
             }
         }
         // === VÙNG SKILL (nếu muốn bắt click skill sau) ===
@@ -208,6 +272,7 @@ public class VeHUD {
 
     public void hienPopupNhanVat() {
         dangHienPopup = true;
+        vuaMoPopup = true;
     }
 
     public void tatPopupNhanVat() {
@@ -220,21 +285,110 @@ public class VeHUD {
     public void setNhanVat(NhanVat nhanVat) {
         this.nhanVat = nhanVat;
         if (texAvt != null) texAvt.dispose(); // nếu có thì giải phóng cũ
-
+        this.tennv = nhanVat.getTen(); // Gán cho biến toàn cục
         String path = nhanVat.doiavatar();
         texAvt = new Texture(path); // load luôn tại đây
     }
     public void renderPopup(SpriteBatch batch) {
         if (!dangHienPopup || texAvt == null) return;
-
+        //avt + nut X
         batch.draw(popupNhanVat, 0, 0, 350, 610);
         float nutXW = nutX.getWidth() * 0.5f;
         float nutXH = nutX.getHeight() * 0.55f;
-        batch.draw(nutX, 350 - nutXW - 6, 610 - nutXH - 5, nutXW, nutXH - 5);
+        batch.draw(nutX, 350 - nutXW - 6, 610 - nutXH - 2, nutXW, nutXH - 5);
 
         float texAvtW = texAvt.getWidth() * 0.52f;
         float texAvtH = texAvt.getHeight() * 0.52f;
         batch.draw(texAvt, 0, 505, texAvtW, texAvtH);
+
+        // Tên nhân vật + thể lực + Cấp bậc + Sức mạnh
+        font.setColor(1,1,1,1);
+        layout.setText(font,tennv); // cần thay đổi đầu tiên , truyền từ tạo mới vào
+        font.draw(batch,layout,125,595);
+
+        layout.setText(fontsm,"Thể lực");
+        fontsm.draw(batch,layout,125,570);
+        batch.draw(thanhtheluc ,125+68,556);
+        layout.setText(fontsm,"Thần Xayda cấp 9+99.99%"); // cần thay đổi sau
+        fontsm.draw(batch,layout,125,545);
+        layout.setText(fontsm,"Sức mạnh: 99.999.999.999"); // cần thay đổi sau
+        fontsm.draw(batch,layout,125,520);
+
+        // vang ngoc sau nay xu ly theo vang ngoc nhan vat
+        batch.draw(vang,10,8,20,20);
+        batch.draw(ngoc,275,7,20,20);
+        layout.setText(fontvangngoc,"0"); // cần thay đổi sau
+        fontvangngoc.draw(batch,layout,10+20+10,22);
+        layout.setText(fontvangngoc,"0");
+        fontvangngoc.draw(batch,layout,275+20+10,22); // cần thay đổi sau
+
+        // chuc nang
+        String[] TextChucnang1 = {
+            "Nhiệm",
+            "Hành",
+            "Kỹ",
+            "Bang",
+            "Chức"
+        };
+        String[] TextChucnang2 = {
+            "Vụ",
+            "Trang",
+            "Năng",
+            "Hội",
+            "năng"
+        };
+        for (int i = 0; i < 5; i++) {
+            Texture nutcn = chucNangDangChon==i ? nutchucnangclick : nutchucnang;
+            batch.draw(nutcn, 2+i*68+3, 450, 68, 52);
+            layout.setText(fontChucnang,TextChucnang1[i]);
+            fontChucnang.draw(batch,layout,2+i*68+3+(68- layout.width)/2f,450 + 41);
+            layout.setText(fontChucnang,TextChucnang2[i]);
+            fontChucnang.draw(batch,layout,2+i*68+3+(68- layout.width)/2f,450 + 20);
+        }
+        // noi dung theo chuc nang
+        if (chucNangDangChon == 0){
+            // chỉnh OOP theo nhiệm vụ sau cấu trúc ( mô tả, nhiệm vụ cần làm , mô tả dài )
+            //mo ta
+            layout.setText(fontNhiemVu,"Nhiệm vụ tập luyện"); // cần thay đổi sau
+            fontNhiemVu.draw(batch,layout,0+(350- layout.width)/2f,420);
+
+            // nhiệm vụ có nhiều phần , chỉ hiện thị phần hiện tại và đã làm
+            layout.setText(fontNhiemVu1,"- Đánh ngã 5 mộc nhân (0/5)"); // cần thay đổi sau
+            fontNhiemVu1.draw(batch,layout,20,385);
+            layout.setText(fontNhiemVuChuaLam,"- ...");
+            fontNhiemVuChuaLam.draw(batch,layout,20,385-25);
+
+            // mo ta dai
+            layout.setText(fontMotaNhiemVu,
+                "Mộc nhân được đặt nhiều tại Làng Aru, " +
+                    "ngay trước nhà ông Gohan " +
+                    "Hãy đánh ngã 5 mộc nhân, sau đó quay " +
+                    "về nhà báo cáo với ông Gohan " +
+                    "Để đánh, hãy click đôi vào đối tượng \n" +
+                    "Thưởng 3 k sức mạnh \n" +
+                    "Thưởng 3 k tiềm năng",
+                fontMotaNhiemVu.getColor(), // dùng lại màu đã set // cần thay đổi sau
+                290,                 // wrapWidth
+                Align.left,          // căn trái mặc định
+                true);               // bật tự xuống dòng
+            fontMotaNhiemVu.draw(batch,layout,20,385-25-30);
+        }
+        if (chucNangDangChon == 1){
+            layout.setText(fontNhiemVu,"Hành trang đang phát triển!");
+            fontNhiemVu.draw(batch,layout,0+(350- layout.width)/2f,420);
+        }
+        if (chucNangDangChon == 2){
+            layout.setText(fontNhiemVu,"Kỹ năng đang phát triển!");
+            fontNhiemVu.draw(batch,layout,0+(350- layout.width)/2f,420);
+        }
+        if (chucNangDangChon == 3){
+            layout.setText(fontNhiemVu,"Bang hội đang phát triển!");
+            fontNhiemVu.draw(batch,layout,0+(350- layout.width)/2f,420);
+        }
+        if (chucNangDangChon == 4){
+            layout.setText(fontNhiemVu,"Chức năng đang phát triển!");
+            fontNhiemVu.draw(batch,layout,0+(350- layout.width)/2f,420);
+        }
     }
     public void dispose() {
         ochat.dispose();
