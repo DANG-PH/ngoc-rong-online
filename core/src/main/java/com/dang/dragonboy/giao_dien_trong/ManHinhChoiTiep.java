@@ -188,20 +188,26 @@ public class ManHinhChoiTiep implements Screen {
         for (int i = 0; i < 9; i++) {
             capSkill[i] = nhanVat.getCapSkill(i + 1); // nếu skill 1-9
         }
+        String[] tenSkill = new String[9];
+        for (int i = 0; i < 9; i++) {
+            tenSkill[i] = nhanVat.getTenSkill(i+1,"xayda"); // nếu skill 1-9
+        }
         DuLieuNguoiChoi duLieu = new DuLieuNguoiChoi(
             nhanVat.getTen(),
             nhanVat.getSucManh(),
             nhanVat.getTheLuc(),
-            nhanVat.getHpHienTai(), nhanVat.getHpToiDa(),
-            nhanVat.getKiHienTai(), nhanVat.getKiToiDa(),
+            nhanVat.getHpHienTai(), nhanVat.getHpToiDa(), nhanVat.getHpGoc(),
+            nhanVat.getKiHienTai(), nhanVat.getKiToiDa(), nhanVat.getKiGoc(),
             nhanVat.getSucDanhGoc(), nhanVat.getGiapGoc(),
-            nhanVat.getChiMangGoc(), nhanVat.getSatThuongChiMang(),
+            nhanVat.getSucDanhNhanVat(),nhanVat.getGiapNhanVat(),
+            nhanVat.getChiMangGoc(), nhanVat.getChiMangNhanVat(),
+            nhanVat.getSatThuongChiMang(),
             nhanVat.getTiemNangNhanVat(),nhanVat.getDiemSoiDongNhanVat(),
             nhanVat.getSoDauThan(),
             nhanVat.getVang(),
             nhanVat.getNgoc(),
             nhanVat.getCapBac(),
-            capSkill
+            capSkill,tenSkill
         );
         hudRenderer.setDuLieuNguoiChoi(duLieu);
 

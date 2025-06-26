@@ -4,9 +4,7 @@ public class DuLieuNguoiChoi {
     private String ten;
     private long sucManh;
     private int theLuc;
-
-    private int ThanhhpToiDa;
-    private int ThanhkiToiDa;
+    private int HpNhanVat,KiNhanVat,SucDanhNhanVat,GiapNhanVat,ChiMangNhanVat;
     private int HpGoc;
     private int KiGoc;
     private int HpHienTai;
@@ -23,26 +21,34 @@ public class DuLieuNguoiChoi {
     private long ngoc;
     private String capBac;
     private int[] capSkill = new int[9];  // Mặc định toàn 0
+    private String[] tenSkill = new String[9];
 
     // Constructor
     public DuLieuNguoiChoi(String ten, long sucManh, int theLuc,
-                           int HpHienTai, int HpGoc,
-                           int KiHienTai, int KiGoc,
+                           int HpHienTai, int HpNhanVat, int HpGoc,
+                           int KiHienTai,int KiNhanVat, int KiGoc,
                            int SucDanhGoc,int GiapGoc,
-                           int ChiMangGoc,int SatThuongChiMang,
+                           int SucDanhNhanVat,int GiapNhanVat,
+                           int ChiMangGoc, int ChiMangNhanVat,
+                           int SatThuongChiMang,
                            int TiemNangNhanVat,int DiemSoiDongNhanVat,
                            int soDauThan, long vang, long ngoc,
-                           String capBac,int[] capSkill) {
+                           String capBac,int[] capSkill,String[] tenSkill) {
         this.ten = ten;
         this.sucManh = sucManh;
         this.theLuc = theLuc;
         this.HpHienTai = HpHienTai;
+        this.HpNhanVat = HpNhanVat;
         this.HpGoc = HpGoc;
         this.KiHienTai = KiHienTai;
+        this.KiNhanVat = KiNhanVat;
         this.KiGoc = KiGoc;
         this.SucDanhGoc = SucDanhGoc;
+        this.SucDanhNhanVat = SucDanhNhanVat;
         this.GiapGoc = GiapGoc;
+        this.GiapNhanVat = GiapNhanVat;
         this.ChiMangGoc = ChiMangGoc;
+        this.ChiMangNhanVat = ChiMangNhanVat;
         this.SatThuongChiMang = SatThuongChiMang;
         this.TiemNangNhanVat = TiemNangNhanVat;
         this.DiemSoiDongNhanVat = DiemSoiDongNhanVat;
@@ -53,6 +59,9 @@ public class DuLieuNguoiChoi {
         if (capSkill != null && capSkill.length == 9) {
             System.arraycopy(capSkill, 0, this.capSkill, 0, 9);
         }
+        if (tenSkill != null && tenSkill.length == 9) {
+            System.arraycopy(tenSkill, 0, this.tenSkill, 0, 9);
+        }
     }
 
     // Getter
@@ -60,12 +69,17 @@ public class DuLieuNguoiChoi {
     public long getSucManh() { return sucManh; }
     public int getTheLuc() { return theLuc; }
     public int getHpHienTai() { return HpHienTai; }
-    public int getHpToiDa() { return HpGoc; }
+    public int getHpToiDa() { return HpNhanVat; }
+    public int getHpGoc() { return HpGoc; }
     public int getKiHienTai() { return KiHienTai; }
-    public int getKiToiDa() { return KiGoc; }
+    public int getKiGoc() { return KiGoc; }
+    public int getKiToiDa() { return KiNhanVat; }
     public int getSucDanhGoc() { return SucDanhGoc; }
+    public int getSucDanhNhanVat() { return SucDanhNhanVat; }
     public int getGiapGoc() { return GiapGoc; }
+    public int getGiapNhanVat() { return GiapNhanVat; }
     public int getChiMangGoc() { return ChiMangGoc; }
+    public int getChiMangNhanVat() { return ChiMangNhanVat; }
     public int getSatThuongChiMang() { return SatThuongChiMang; }
     public int getTiemNangNhanVat() { return TiemNangNhanVat; }
     public int getDiemSoiDongNhanVat() { return DiemSoiDongNhanVat; }
@@ -73,26 +87,62 @@ public class DuLieuNguoiChoi {
     public long getVang() { return vang; }
     public long getNgoc() { return ngoc; }
     public String getCapBac() { return capBac; }
+    public int getCapSkill(int index) {
+        if (index >= 0 && index < capSkill.length) {
+            return capSkill[index];
+        }
+        return -1;
+    }
+    public String getTenSkill(int index) {
+        if (index >= 0 && index < tenSkill.length) {
+            return tenSkill[index];
+        }
+        return null;
+    }
 
 
     public void tangSucManh(int SucManhCongThem){
         this.sucManh += SucManhCongThem;
     }
-    public void tangHp(int HpCongThem){
+
+    public void tangHpGoc(int HpCongThem){
         this.HpGoc += HpCongThem;
+        this.HpNhanVat += HpCongThem;
+    }
+    public void tangKiGoc(int KiCongThem){
+        this.KiGoc += KiCongThem;
+        this.KiNhanVat += KiCongThem;
+    }
+    public void tangSucDanhGoc(int SucDanhCongThem){
+        this.SucDanhGoc += SucDanhCongThem;
+        this.SucDanhNhanVat += SucDanhCongThem;
+    }
+    public void tangGiapGoc(int GiapCongThem){
+        this.GiapGoc += GiapCongThem;
+        this.GiapNhanVat += GiapCongThem;
+    }
+    public void tangChiMangGoc(int ChiMangThem){
+        this.ChiMangGoc += ChiMangThem;
+        this.ChiMangNhanVat += ChiMangThem;
+    }
+
+    public void tangHp(int HpCongThem){
+        this.HpNhanVat += HpCongThem;
     }
     public void tangKi(int KiCongThem){
-        this.KiGoc += KiCongThem;
+        this.KiNhanVat += KiCongThem;
     }
     public void tangSucDanh(int SucDanhCongThem){
-        this.SucDanhGoc += SucDanhCongThem;
+        this.SucDanhNhanVat += SucDanhCongThem;
     }
     public void tangGiap(int GiapCongThem){
-        this.GiapGoc += GiapCongThem;
+        this.GiapNhanVat += GiapCongThem;
     }
     public void tangChiMang(int ChiMangThem){
-        this.ChiMangGoc += ChiMangThem;
+        this.ChiMangNhanVat += ChiMangThem;
     }
+
+    public void tangSatThuongChiMang(int SatThuongChiMangThem){this.SatThuongChiMang += SatThuongChiMangThem;}
     public void tangTiemNang(int TiemNangCongThem){
         this.TiemNangNhanVat += TiemNangCongThem;
     }

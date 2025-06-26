@@ -26,7 +26,7 @@ public class VeHUD {
     private Texture oskill, oskillclick;
     private Texture nutpopup;
 
-    private BitmapFont font,fontChucnang,fontDauThan,fontNhiemVu,fontNhiemVu1,fontNhiemVuChuaLam,fontMotaNhiemVu,fontvangngoc,fontsm;
+    private BitmapFont font,fontChucnang,fontDauThan,fontNhiemVu,fontNhiemVu1,fontNhiemVuChuaLam,fontMotaNhiemVu,fontvangngoc,fontsm,fontSkilldaco,fontSkillchuaco,fontMotaSkill ;
     private GlyphLayout layout;
 
     private SkillIcon[] skillIcons;
@@ -103,6 +103,7 @@ public class VeHUD {
             iconchisocoban[i] = new Texture("kynang/iconkynang/chung/"+(i+1)+".png");
         }
         iconnoitai = new Texture("kynang/iconkynang/chung/noitai.png");
+
         // Load font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -110,6 +111,11 @@ public class VeHUD {
             "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ";
         param.size = 18;
         font = generator.generateFont(param);
+        param.size = 19;
+        param.color = (new Color(0.4118f, 0.4588f, 0.9137f, 1f));
+        fontSkilldaco = generator.generateFont(param);
+        param.color = (new Color(0.0902f, 0.7490f, 0.0039f, 1f));
+        fontSkillchuaco = generator.generateFont(param);
         generator.dispose();
         // Font có viền đen dành riêng cho dòng chữ "Đậu thần cấp ..."
         FreeTypeFontGenerator generator2 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchinh.ttf"));
@@ -140,6 +146,8 @@ public class VeHUD {
         param3.color = new Color(0f / 255f, 85f / 255f, 38f / 255f, 1f);
         param3.size = 15;
         fontMotaNhiemVu = generator3.generateFont(param3);
+        param3.size = 14;
+        fontMotaSkill = generator3.generateFont(param3);
         param3.color = new Color(1,1,0,1);
         fontvangngoc = generator3.generateFont(param3);
         param3.size = 15;
@@ -511,6 +519,21 @@ public class VeHUD {
 
 
         if (chucNangDangChon == 2){
+            DecimalFormat dinhDang = new DecimalFormat("#,###");
+            String[] textChiSoCoBan1 = {
+                "HP gốc: " + dinhDang.format(duLieuNguoiChoi.getHpGoc()),
+                "KI gốc: " + dinhDang.format(duLieuNguoiChoi.getKiGoc()),
+                "Sức đánh gốc: " + dinhDang.format(duLieuNguoiChoi.getSucDanhGoc()),
+                "Giáp gốc: " + dinhDang.format(duLieuNguoiChoi.getGiapGoc()),
+                "Crit gốc: " + duLieuNguoiChoi.getChiMangGoc() +"%"
+            };
+            String[] textChiSoCoBan2 = {
+                dinhDang.format(duLieuNguoiChoi.getHpGoc()+1000)+" tiềm năng: tăng 20",
+                dinhDang.format(duLieuNguoiChoi.getKiGoc()+1000)+" tiềm năng: tăng 20",
+                dinhDang.format(duLieuNguoiChoi.getSucDanhGoc()*100)+" tiềm năng: tăng 1",
+                dinhDang.format(500000+duLieuNguoiChoi.getGiapGoc()*100000)+" tiềm năng: tăng 1",
+                formatVangNgoc(30000000+(duLieuNguoiChoi.getChiMangGoc()-1)*5000000000L)+" tiềm năng: tăng 1"
+            };
             float viewY = 35;
             float viewHeight = 444 - 35;
             int KhoangCachO = 61;
@@ -536,6 +559,10 @@ public class VeHUD {
                 batch.draw(tex, 350-288-3, y, 288, 62);
                 batch.draw(oskill,3,y+2,350-288-3-3,58);
                 batch.draw(iconchisocoban[i], 3 + 8, y+2 + 8, 350-288-3-3 - 16, 58 - 16);
+                layout.setText(fontSkilldaco,textChiSoCoBan1[i]);
+                fontSkilldaco.draw(batch,layout,350-288+8,y+50);
+                layout.setText(fontMotaSkill,textChiSoCoBan2[i]);
+                fontMotaSkill.draw(batch,layout,350-288+8,y+22);
             }
 
             for (int i = 0; i < oNoiTai; i++) {
@@ -570,6 +597,7 @@ public class VeHUD {
         return chucNangDangChon;
     }
     private String formatVangNgoc(long so) {
+        if (so < 0) return "10.000.000"; // hoặc return "???", hoặc format lại số âm tùy ý
         if (so >= 1_000_000_000) {
             return String.format("%.1ftỷ", so / 1_000_000_000.0);
         } else if (so >= 1_000_000) {

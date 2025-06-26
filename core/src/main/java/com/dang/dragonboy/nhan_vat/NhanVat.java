@@ -82,13 +82,18 @@ public class NhanVat {
     private long sucManh = 99_999_999_999L;
     private int theLuc = 100;
 
-    private int HpGoc = 2000;
-    private int KiGoc = 200;
-    private int HpHienTai = 1500;
-    private int KiHienTai = 190;
-    private int SucDanhGoc = 15;
-    private int GiapGoc = 10;
-    private int ChiMangGoc = 0;
+    private int HpGoc = 550000;
+    private int KiGoc = 550000;
+    private int HpNhanVat = HpGoc;
+    private int KiNhanVat = KiGoc;
+    private int HpHienTai = 450000;
+    private int KiHienTai = 350000;
+    private int SucDanhGoc = 25000;
+    private int SucDanhNhanVat = SucDanhGoc;
+    private int GiapGoc = 941;
+    private int GiapNhanVat = GiapGoc;
+    private int ChiMangGoc = 4;
+    private int ChiMangNhanVat = ChiMangGoc;
     private int SatThuongChiMang = 100;
     private int TiemNangNhanVat = 10000000;
     private int DiemSoiDongNhanVat = 0;
@@ -120,24 +125,37 @@ public class NhanVat {
     }
 
     public int getHpToiDa() {
+        return HpNhanVat;
+    }
+    public int getHpGoc(){
         return HpGoc;
     }
-
     public int getKiHienTai() {
         return KiHienTai;
     }
-
-    public int getKiToiDa() {
+    public int getKiGoc(){
         return KiGoc;
+    }
+    public int getKiToiDa() {
+        return KiNhanVat;
     }
     public int getSucDanhGoc(){
         return SucDanhGoc;
     }
+    public int getSucDanhNhanVat(){
+        return SucDanhNhanVat;
+    }
     public int getGiapGoc(){
         return GiapGoc;
     }
+    public int getGiapNhanVat(){
+        return GiapNhanVat;
+    }
     public int getChiMangGoc(){
         return ChiMangGoc;
+    }
+    public int getChiMangNhanVat(){
+        return ChiMangNhanVat;
     }
     public int getSatThuongChiMang(){
         return SatThuongChiMang;
@@ -175,6 +193,48 @@ public class NhanVat {
             case 8: return CapSkill8;
             case 9: return CapSkill9;
             default: return 0;
+        }
+    }
+    public String getTenSkill(int skill,String hanhTinh){
+        if ("traidat".equals(hanhTinh)){
+            switch (skill){
+                case 1: return "Chiêu đấm dragon";
+                case 2: return "Chiêu Kamejoko";
+                case 3: return "Thái Dương Hạ San";
+                case 4: return "Kaioken";
+                case 5: return "Quả cầu khinh khi";
+                case 6: return "Dịch chuyển tức thời";
+                case 7: return "Thôi miên";
+                case 8: return "BigBang Kamehameha";
+                case 9: return "Khiên năng lượng";
+                default: return "";
+            }
+        } else if ("xayda".equals(hanhTinh)) {
+            switch (skill){
+                case 1: return "Chiêu đấm Galick";
+                case 2: return "Chiêu Antomic";
+                case 3: return "Tái tạo năng lượng";
+                case 4: return "Biến hình";
+                case 5: return "Tự phát nổ";
+                case 6: return "Huýt sáo";
+                case 7: return "Trói";
+                case 8: return "Cađíc liên hoàn chưởng";
+                case 9: return "Khiên năng lượng";
+                default: return "";
+            }
+        } else {
+            switch (skill){
+                case 1: return "Chiêu đấm Demon";
+                case 2: return "Chiêu Masenko";
+                case 3: return "Hồi sinh";
+                case 4: return "Masenkosappo";
+                case 5: return "Đẻ trứng";
+                case 6: return "Biến sicula";
+                case 7: return "Đấm liên hoàn";
+                case 8: return "Ma phong ba";
+                case 9: return "Khiên năng lượng";
+                default: return "";
+            }
         }
     }
 
