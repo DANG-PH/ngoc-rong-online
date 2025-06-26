@@ -26,7 +26,7 @@ public class VeHUD {
     private Texture oskill, oskillclick;
     private Texture nutpopup;
 
-    private BitmapFont font,fontChucnang,fontDauThan,fontNhiemVu,fontNhiemVu1,fontNhiemVuChuaLam,fontMotaNhiemVu,fontvangngoc,fontsm,fontSkilldaco,fontSkillchuaco,fontMotaSkill,fontCapSKill,fontMotaNoiTai ;
+    private BitmapFont font,fontChucnang,fontDauThan,fontNhiemVu,fontNhiemVu1,fontNhiemVuChuaLam,fontMotaNhiemVu,fontvangngoc,fontsm,fontSkilldaco,fontSkillchuaco,fontMotaSkill,fontCapSKill,fontMotaNoiTai,fontTiemNang ;
     private GlyphLayout layout;
 
     private SkillIcon[] skillIcons;
@@ -59,6 +59,21 @@ public class VeHUD {
     private int oChiSoDangChon = -1;
     private Texture[] iconchisocoban = new Texture[5];
     private Texture iconnoitai;
+
+    private Texture nutvuong,nutvuongclick;
+    boolean DangHienPopupThongTin = false;
+    float TimeChoHienPopup = 0;
+    private boolean vuaMoPopupThongTin = false;
+    float PopupThongTinX = 0;
+    float PopupThongTinY = 0;
+    float PopupThongTinW = 0;
+    float PopupThongTinH = 0;
+    String MotaThongTin = "Test";
+    float nutClickTimer = 0;
+    int oChiSoDangChonTamThoi = -1;
+    int giaTriTangTamThoi = 0;
+    long chiPhiTamThoi = 0;
+    private int nutduocchon =-1;
 
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data; // truyền data vào để xử lí hud
@@ -103,7 +118,8 @@ public class VeHUD {
             iconchisocoban[i] = new Texture("kynang/iconkynang/chung/"+(i+1)+".png");
         }
         iconnoitai = new Texture("kynang/iconkynang/chung/noitai.png");
-
+        nutvuong = new Texture("hud/giaodientrong/nutvuong.png");
+        nutvuongclick = new Texture("hud/giaodientrong/nutvuongclick.png");
         // Load font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -154,12 +170,37 @@ public class VeHUD {
         fontMotaSkill = generator3.generateFont(param3);
         param3.color = new Color(1,1,0,1);
         fontvangngoc = generator3.generateFont(param3);
+        param3.color = new Color(1,1,1,1);
+        param3.size = 14;
+        fontTiemNang = generator3.generateFont(param3);
+        param3.color = new Color(1,1,0,1);
         param3.size = 15;
         fontsm = generator3.generateFont(param3);
         generator3.dispose();
     }
 
     public void render(SpriteBatch batch) {
+        if (nutClickTimer > 0) {
+            nutClickTimer -= Gdx.graphics.getDeltaTime();
+            if (nutClickTimer <= 0) {
+                switch (oChiSoDangChonTamThoi) {
+                    case 0 -> duLieuNguoiChoi.tangHpGoc(giaTriTangTamThoi);
+                    case 1 -> duLieuNguoiChoi.tangKiGoc(giaTriTangTamThoi);
+                    case 2 -> duLieuNguoiChoi.tangSucDanhGoc(giaTriTangTamThoi);
+                    case 3 -> duLieuNguoiChoi.tangGiapGoc(giaTriTangTamThoi);
+                    case 4 -> duLieuNguoiChoi.tangChiMangGoc(giaTriTangTamThoi);
+                }
+                duLieuNguoiChoi.giamTiemNang((int) chiPhiTamThoi);
+                DangHienPopupThongTin = false;
+                TimeChoHienPopup = 0;
+            }
+        }
+        if (DangHienPopupThongTin){
+            TimeChoHienPopup-=Gdx.graphics.getDeltaTime();
+        }
+        if (chucNangDangChon != 2){
+            DangHienPopupThongTin = false;
+        }
         batch.end();
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
@@ -315,7 +356,7 @@ public class VeHUD {
                 tatPopupNhanVat();
                 hangTrangDangChon = -1;
                 oChiSoDangChon = -1;
-            } else if (x > 350 && x <= 1020) {
+            } else if (x > 350 && x <= 1020 && !DangHienPopupThongTin) {
                 tatPopupNhanVat();
                 hangTrangDangChon = -1;
                 oChiSoDangChon = -1;
@@ -349,7 +390,7 @@ public class VeHUD {
                 }
             }
         }
-        if (dangHienPopup && chucNangDangChon == 2) {
+        if (dangHienPopup && chucNangDangChon == 2 && !DangHienPopupThongTin) {
             float viewY = 35;
             float viewHeight = 444 - 35;
             int KhoangCachItem = 61;
@@ -368,10 +409,120 @@ public class VeHUD {
 
                 if (index >= 0 && index < tongSoO) {
                     oChiSoDangChon = index;
+                    DangHienPopupThongTin = true;
+                    if (index >= 0 && index < 5) {
+                        PopupThongTinX = 5;
+                        PopupThongTinY = viewY + viewHeight - (index + 1) * KhoangCachItem + scrollY;
+                        PopupThongTinW = 360;
+                        PopupThongTinH = 80;
+                        MotaThongTin = "HaiDang";
+                        TimeChoHienPopup = 0.3f;
+                        if ((PopupThongTinY-120)<0){
+                            PopupThongTinY = 125;
+                        }
+                        if ((PopupThongTinY+PopupThongTinH)>590){
+                            PopupThongTinY = 590-PopupThongTinH;
+                        }
+                        vuaMoPopupThongTin = true;
+                    } else if (index == 5) {
+                        PopupThongTinW = 600;
+                        PopupThongTinX = (1020-PopupThongTinW)/2f;
+                        PopupThongTinY = 125;
+                        PopupThongTinH = 90;
+                        MotaThongTin = "HaiDang";
+                        TimeChoHienPopup = 0.3f;
+                        vuaMoPopupThongTin = true;
+                    } else {
+                        PopupThongTinX = 5;
+                        PopupThongTinY = viewY + viewHeight - (index + 1) * KhoangCachItem + scrollY;
+                        PopupThongTinW = 360;
+                        PopupThongTinH = 250;
+                        MotaThongTin = "HaiDang";
+                        TimeChoHienPopup = 0.3f;
+                        if ((PopupThongTinY-120)<0){
+                            PopupThongTinY = 125;
+                        }
+                        if ((PopupThongTinY+PopupThongTinH)>590){
+                            PopupThongTinY = 590-PopupThongTinH;
+                        }
+                        vuaMoPopupThongTin = true;
+                    }
                 }
             }
         }
+        // Tắt popup thông tin
+        if (DangHienPopupThongTin) {
+            if (vuaMoPopupThongTin) {
+                vuaMoPopupThongTin = false;
+                return;
+            }
+            if (oChiSoDangChon != 5) {
+                if (x > 0 && x <= 360 && (y > PopupThongTinY + PopupThongTinH || y < PopupThongTinY - 130)) {
+                    DangHienPopupThongTin = false;
+                    TimeChoHienPopup = 0;
+                } else if (x > 360 && x <= 1020) {
+                    DangHienPopupThongTin = false;
+                    TimeChoHienPopup = 0;
+                }
+            } else {
+                if (y > PopupThongTinY + PopupThongTinH) {
+                    DangHienPopupThongTin = false;
+                    TimeChoHienPopup = 0;
+                } else if (x < PopupThongTinX || x > PopupThongTinX + PopupThongTinW) {
+                    DangHienPopupThongTin = false;
+                    TimeChoHienPopup = 0;
+                }
+            }
+        }
+        if (DangHienPopupThongTin){
+            if (oChiSoDangChon >= 0 && oChiSoDangChon < 4) {
+                int[] buocTangTheoChiSo = {20, 20, 1, 1};
+                int[] gioiHanToiDa = {550000, 550000, 25000, 3000}; // Giới hạn HP, KI, Sức đánh, Giáp
+                int buocTang = buocTangTheoChiSo[oChiSoDangChon];
 
+                int chiSoGoc = switch (oChiSoDangChon) {
+                    case 0 -> duLieuNguoiChoi.getHpGoc();
+                    case 1 -> duLieuNguoiChoi.getKiGoc();
+                    case 2 -> duLieuNguoiChoi.getSucDanhGoc();
+                    case 3 -> duLieuNguoiChoi.getGiapGoc();
+                    default -> 0;
+                };
+
+                float yNut = PopupThongTinY - 115;
+                for (int i = 0; i < 3; i++) {
+                    int soLanTang = (int) Math.pow(10, i);
+                    int giaTriTang = buocTang * soLanTang;
+                    long chiPhi = tinhChiPhiTiemNang(oChiSoDangChon, chiSoGoc, soLanTang, buocTang);
+
+                    boolean trongVungNut = (x >= 1 + i * 120 && x <= 1 + i * 120 + 114 && y >= yNut && y <= yNut + 114);
+                    boolean duTiemNang = duLieuNguoiChoi.getTiemNangNhanVat() >= chiPhi;
+                    boolean khongVuotGioiHan = chiSoGoc + giaTriTang <= gioiHanToiDa[oChiSoDangChon];
+
+                    if (trongVungNut && duTiemNang && khongVuotGioiHan) {
+                        nutClickTimer = 0.3f;
+                        oChiSoDangChonTamThoi = oChiSoDangChon;
+                        giaTriTangTamThoi = giaTriTang;
+                        chiPhiTamThoi = chiPhi;
+                        nutduocchon=i;
+                    }
+                }
+            } else {
+                int gioiHanToiDa = 10; // Crit tối đa 10%
+                float yNut = PopupThongTinY - 115;
+                long chiPhi = tinhChiPhiTiemNang(4, duLieuNguoiChoi.getChiMangGoc(), 1, 1);
+                if (chiPhi<=0){chiPhi=10000000;}
+                boolean trongVungNut = (x >= 1  && x <= 1 + 114 && y >= yNut && y <= yNut + 114);
+                boolean duTiemNang = duLieuNguoiChoi.getTiemNangNhanVat() >= chiPhi;
+                boolean khongVuotGioiHan = duLieuNguoiChoi.getChiMangGoc() + 1 <= gioiHanToiDa;
+
+                if (trongVungNut && duTiemNang && khongVuotGioiHan) {
+                    nutClickTimer = 0.3f;
+                    oChiSoDangChonTamThoi = oChiSoDangChon;
+                    giaTriTangTamThoi = 1;
+                    chiPhiTamThoi = chiPhi;
+                }
+            }
+        }
     }
 
     public void hienPopupNhanVat() {
@@ -524,6 +675,14 @@ public class VeHUD {
 
         if (chucNangDangChon == 2){
             DecimalFormat dinhDang = new DecimalFormat("#,###");
+            layout.setText(fontTiemNang,"Top 1");
+            fontTiemNang.draw(batch,layout,105+(225-layout.width)/2f,600);
+            layout.setText(fontvangngoc,"Điểm tiềm năng");
+            fontvangngoc.draw(batch,layout,105+(225-layout.width)/2f,575);
+            layout.setText(fontTiemNang,dinhDang.format(duLieuNguoiChoi.getTiemNangNhanVat()));
+            fontTiemNang.draw(batch,layout,105+(225-layout.width)/2f,550);
+            layout.setText(fontvangngoc,"Năng động: "+dinhDang.format(duLieuNguoiChoi.getDiemSoiDongNhanVat()));
+            fontvangngoc.draw(batch,layout,105+(225-layout.width)/2f,525);
             String[] textChiSoCoBan1 = {
                 "HP gốc: " + dinhDang.format(duLieuNguoiChoi.getHpGoc()),
                 "KI gốc: " + dinhDang.format(duLieuNguoiChoi.getKiGoc()),
@@ -609,6 +768,11 @@ public class VeHUD {
             }
             batch.flush();
             Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
+            batch.end();
+            if (DangHienPopupThongTin && TimeChoHienPopup <= 0) {
+                PopupThongTin(shapeRenderer,batch, PopupThongTinX, PopupThongTinY ,PopupThongTinW , PopupThongTinH ,oChiSoDangChon);
+            }
+            batch.begin();
         }
         if (chucNangDangChon == 3){
             layout.setText(fontNhiemVu,"Bang hội đang phát triển!");
@@ -633,6 +797,97 @@ public class VeHUD {
         } else {
             return String.valueOf(so);
         }
+    }
+    void PopupThongTin(ShapeRenderer shapeRenderer,SpriteBatch batch, float x, float y , float width, float height , int oChiSoDangChon) {
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(1, 1, 1, 1);
+        shapeRenderer.rect(x, y, width, height);
+        shapeRenderer.end();
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(Color.BLACK);
+        for (int i = 0; i < 2; i++) {
+            shapeRenderer.rect(x - i, y - i, width + i * 2, height + i * 2);
+        }
+        shapeRenderer.end();
+        batch.begin();
+        if (oChiSoDangChon<5){
+            if (oChiSoDangChon != 4) {
+                String[] tenChiSo = {"HP", "KI", "SĐ", "Giáp"};
+                int[] buocTangTheoChiSo = {20, 20, 1, 1}; // mỗi lần tăng bao nhiêu cho từng chỉ số
+                float[] chiSoGocArray = {
+                    duLieuNguoiChoi.getHpGoc(),
+                    duLieuNguoiChoi.getKiGoc(),
+                    duLieuNguoiChoi.getSucDanhGoc(),
+                    duLieuNguoiChoi.getGiapGoc()
+                };
+                int chiSoGoc = (int) chiSoGocArray[oChiSoDangChon];
+                int buocTang = buocTangTheoChiSo[oChiSoDangChon];
+                String ten = tenChiSo[oChiSoDangChon];
+
+                int[] tangGiaTri = new int[3];
+                long[] chiPhiTiemNang = new long[3];
+
+                for (int i = 0; i < 3; i++) {
+                    int soLanTang = (int) Math.pow(10, i); // x1, x10, x100
+                    tangGiaTri[i] = buocTang * soLanTang;
+                    chiPhiTiemNang[i] = tinhChiPhiTiemNang(oChiSoDangChon, chiSoGoc, soLanTang, buocTang);
+                }
+                for (int i = 0; i < 3; i++) {
+                    float nutX = 1 + i * 120;
+                    float nutY = y - 115;
+                    if (nutduocchon==i) {
+                        Texture nutVe = nutClickTimer > 0 ? nutvuongclick : nutvuong;
+                        batch.draw(nutVe , nutX, nutY, 114, 114);
+                    }
+                    else {
+                        batch.draw(nutvuong , nutX, nutY, 114, 114);
+                    }
+
+                    font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+
+                    layout.setText(font, "Tăng");
+                    font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 30);
+
+                    layout.setText(font, tangGiaTri[i] + ten);
+                    font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 55);
+
+                    layout.setText(font, "-"+formatVangNgoc(chiPhiTiemNang[i]));
+                    font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 80);
+                }
+            } else {
+                Texture nutVe = nutClickTimer > 0 ? nutvuongclick : nutvuong;
+                batch.draw(nutVe,1,y - 115, 114, 114);
+                layout.setText(font, "Tăng");
+                font.draw(batch, layout, 1 + (114 - layout.width) / 2f, y - 115 + 114 - 30);
+                layout.setText(font, "1 Crit");
+                font.draw(batch, layout, 1 + (114 - layout.width) / 2f, y - 115 + 114 - 55);
+                layout.setText(font, formatVangNgoc(30000000 + (duLieuNguoiChoi.getChiMangGoc() - 1) * 5000000000L) + "");
+                font.draw(batch, layout, 1 + (114 - layout.width) / 2f, y - 115 + 114 - 80);
+            }
+        }
+        batch.end();
+    }
+    long tinhChiPhiTiemNang(int oChiSo, int chiSoGoc, int soLanTang, int buocTang) {
+        long tong = 0;
+        for (int j = 1; j <= soLanTang; j++) {
+            switch (oChiSo) {
+                case 0: // HP
+                case 1: // KI
+                    tong += chiSoGoc + buocTang * j + 1000;
+                    break;
+                case 2: // Sức đánh
+                    tong += (chiSoGoc + j - 1) * 100L;
+                    break;
+                case 3: // Giáp
+                    tong += 500000 + (chiSoGoc + j - 1) * 100000L;
+                    break;
+                case 4:  // Crit
+                    tong += 30_000_000L + (chiSoGoc + j - 1 - 1) * 5_000_000_000L;
+                    break;
+            }
+        }
+        return tong;
     }
     public void dispose() {
         ochat.dispose();

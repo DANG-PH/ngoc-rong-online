@@ -82,20 +82,20 @@ public class NhanVat {
     private long sucManh = 99_999_999_999L;
     private int theLuc = 100;
 
-    private int HpGoc = 550000;
-    private int KiGoc = 550000;
-    private int HpNhanVat = HpGoc;
-    private int KiNhanVat = KiGoc;
-    private int HpHienTai = 450000;
-    private int KiHienTai = 350000;
-    private int SucDanhGoc = 25000;
-    private int SucDanhNhanVat = SucDanhGoc;
-    private int GiapGoc = 941;
+    private int HpGoc = 2000;
+    private int KiGoc = 200;
+    private float HpNhanVat = HpGoc;
+    private float KiNhanVat = KiGoc;
+    private float HpHienTai = HpNhanVat*0.7f;
+    private float KiHienTai = KiNhanVat*0.9f;
+    private int SucDanhGoc = 15;
+    private float SucDanhNhanVat = SucDanhGoc;
+    private int GiapGoc = 10;
     private int GiapNhanVat = GiapGoc;
-    private int ChiMangGoc = 4;
+    private int ChiMangGoc = 0;
     private int ChiMangNhanVat = ChiMangGoc;
-    private int SatThuongChiMang = 100;
-    private int TiemNangNhanVat = 10000000;
+    private int SatThuongChiMang = 150;
+    private long TiemNangNhanVat = 99999999999L;
     private int DiemSoiDongNhanVat = 0;
 
     private int soDauThan = 1;
@@ -120,29 +120,29 @@ public class NhanVat {
         return theLuc;
     }
 
-    public int getHpHienTai() {
+    public float getHpHienTai() {
         return HpHienTai;
     }
 
-    public int getHpToiDa() {
+    public float getHpToiDa() {
         return HpNhanVat;
     }
     public int getHpGoc(){
         return HpGoc;
     }
-    public int getKiHienTai() {
+    public float getKiHienTai() {
         return KiHienTai;
     }
     public int getKiGoc(){
         return KiGoc;
     }
-    public int getKiToiDa() {
+    public float getKiToiDa() {
         return KiNhanVat;
     }
     public int getSucDanhGoc(){
         return SucDanhGoc;
     }
-    public int getSucDanhNhanVat(){
+    public float getSucDanhNhanVat(){
         return SucDanhNhanVat;
     }
     public int getGiapGoc(){
@@ -160,7 +160,7 @@ public class NhanVat {
     public int getSatThuongChiMang(){
         return SatThuongChiMang;
     }
-    public int getTiemNangNhanVat(){
+    public long getTiemNangNhanVat(){
         return TiemNangNhanVat;
     }
     public int getDiemSoiDongNhanVat(){

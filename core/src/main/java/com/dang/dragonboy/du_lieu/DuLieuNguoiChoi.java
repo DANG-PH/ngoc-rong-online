@@ -4,16 +4,17 @@ public class DuLieuNguoiChoi {
     private String ten;
     private long sucManh;
     private int theLuc;
-    private int HpNhanVat,KiNhanVat,SucDanhNhanVat,GiapNhanVat,ChiMangNhanVat;
+    private float HpNhanVat,KiNhanVat,SucDanhNhanVat;
+    private int GiapNhanVat,ChiMangNhanVat;
     private int HpGoc;
     private int KiGoc;
-    private int HpHienTai;
-    private int KiHienTai;
+    private float HpHienTai;
+    private float KiHienTai;
     private int SucDanhGoc;
     private int GiapGoc;
     private int ChiMangGoc;
     private int SatThuongChiMang;
-    private int TiemNangNhanVat;
+    private long TiemNangNhanVat;
     private int DiemSoiDongNhanVat;
 
     private int soDauThan;
@@ -25,13 +26,13 @@ public class DuLieuNguoiChoi {
 
     // Constructor
     public DuLieuNguoiChoi(String ten, long sucManh, int theLuc,
-                           int HpHienTai, int HpNhanVat, int HpGoc,
-                           int KiHienTai,int KiNhanVat, int KiGoc,
+                           float HpHienTai, float HpNhanVat, int HpGoc,
+                           float KiHienTai,float KiNhanVat, int KiGoc,
                            int SucDanhGoc,int GiapGoc,
-                           int SucDanhNhanVat,int GiapNhanVat,
+                           float SucDanhNhanVat,int GiapNhanVat,
                            int ChiMangGoc, int ChiMangNhanVat,
                            int SatThuongChiMang,
-                           int TiemNangNhanVat,int DiemSoiDongNhanVat,
+                           long TiemNangNhanVat,int DiemSoiDongNhanVat,
                            int soDauThan, long vang, long ngoc,
                            String capBac,int[] capSkill,String[] tenSkill) {
         this.ten = ten;
@@ -68,20 +69,20 @@ public class DuLieuNguoiChoi {
     public String getTen() { return ten; }
     public long getSucManh() { return sucManh; }
     public int getTheLuc() { return theLuc; }
-    public int getHpHienTai() { return HpHienTai; }
-    public int getHpToiDa() { return HpNhanVat; }
+    public float getHpHienTai() { return HpHienTai; }
+    public float getHpToiDa() { return HpNhanVat; }
     public int getHpGoc() { return HpGoc; }
-    public int getKiHienTai() { return KiHienTai; }
+    public float getKiHienTai() { return KiHienTai; }
     public int getKiGoc() { return KiGoc; }
-    public int getKiToiDa() { return KiNhanVat; }
+    public float getKiToiDa() { return KiNhanVat; }
     public int getSucDanhGoc() { return SucDanhGoc; }
-    public int getSucDanhNhanVat() { return SucDanhNhanVat; }
+    public float getSucDanhNhanVat() { return SucDanhNhanVat; }
     public int getGiapGoc() { return GiapGoc; }
     public int getGiapNhanVat() { return GiapNhanVat; }
     public int getChiMangGoc() { return ChiMangGoc; }
     public int getChiMangNhanVat() { return ChiMangNhanVat; }
     public int getSatThuongChiMang() { return SatThuongChiMang; }
-    public int getTiemNangNhanVat() { return TiemNangNhanVat; }
+    public long getTiemNangNhanVat() { return TiemNangNhanVat; }
     public int getDiemSoiDongNhanVat() { return DiemSoiDongNhanVat; }
     public int getSoDauThan() { return soDauThan; }
     public long getVang() { return vang; }
