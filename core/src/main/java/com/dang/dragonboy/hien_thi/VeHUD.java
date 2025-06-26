@@ -26,7 +26,7 @@ public class VeHUD {
     private Texture oskill, oskillclick;
     private Texture nutpopup;
 
-    private BitmapFont font,fontChucnang,fontDauThan,fontNhiemVu,fontNhiemVu1,fontNhiemVuChuaLam,fontMotaNhiemVu,fontvangngoc,fontsm,fontSkilldaco,fontSkillchuaco,fontMotaSkill ;
+    private BitmapFont font,fontChucnang,fontDauThan,fontNhiemVu,fontNhiemVu1,fontNhiemVuChuaLam,fontMotaNhiemVu,fontvangngoc,fontsm,fontSkilldaco,fontSkillchuaco,fontMotaSkill,fontCapSKill,fontMotaNoiTai ;
     private GlyphLayout layout;
 
     private SkillIcon[] skillIcons;
@@ -108,7 +108,7 @@ public class VeHUD {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
-            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ";
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ";
         param.size = 18;
         font = generator.generateFont(param);
         param.size = 19;
@@ -121,7 +121,7 @@ public class VeHUD {
         FreeTypeFontGenerator generator2 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchinh.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param2.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
-            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ";
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ";
         param2.size = 22;
         param2.color = Color.WHITE;
         param2.borderWidth = 1f;
@@ -132,7 +132,7 @@ public class VeHUD {
         FreeTypeFontGenerator generator3 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchucnang.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param3 = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param3.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
-            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ";
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ";
         param3.size = 14;
         param3.color = new Color(94 / 255f, 86 / 255f, 74 / 255f, 1f);
         fontChucnang = generator3.generateFont(param3);
@@ -141,11 +141,15 @@ public class VeHUD {
         param3.size = 15;
         param3.color = new Color(0f / 255f, 123f / 255f, 255f / 255f, 1f);
         fontNhiemVu1 = generator3.generateFont(param3);
+        param3.size = 14;
+        fontCapSKill = generator3.generateFont(param3);
         param3.color = new Color(94 / 255f, 86 / 255f, 74 / 255f, 1f);
         fontNhiemVuChuaLam = generator3.generateFont(param3);
         param3.color = new Color(0f / 255f, 85f / 255f, 38f / 255f, 1f);
         param3.size = 15;
         fontMotaNhiemVu = generator3.generateFont(param3);
+        param3.size = 14;
+        fontMotaNoiTai = generator3.generateFont(param3);
         param3.size = 14;
         fontMotaSkill = generator3.generateFont(param3);
         param3.color = new Color(1,1,0,1);
@@ -569,6 +573,14 @@ public class VeHUD {
                 float y = startY - (oChiSoCoBan + i) * KhoangCachO;
                 Texture tex = (oChiSoDangChon == oChiSoCoBan + i) ? o_noi_tai_click : o_noi_tai;
                 batch.draw(tex, 350-288-3, y, 288, 62);
+                layout.setText(
+                    fontMotaNoiTai,
+                    "Khiên năng lượng +55% tốc độ hồi phục [15 đến 55]",
+                    fontMotaNoiTai.getColor(), // dùng lại màu đã set
+                    250,                 // wrapWidth
+                    Align.left,          // căn trái mặc định
+                    true);               // bật tự xuống dòng
+                fontMotaNoiTai.draw(batch, layout, 350 - 288 + 8, y + 45);
                 batch.draw(oskill,3,y+2,350-288-3-3,58);
                 batch.draw(iconnoitai, 3 + 8, y+2 + 8, 350-288-3-3 - 16, 58 - 16);
             }
@@ -576,6 +588,20 @@ public class VeHUD {
                 float y = startY - (oChiSoCoBan + oNoiTai + i) * KhoangCachO;
                 Texture tex = (oChiSoDangChon == oChiSoCoBan + oNoiTai + i) ?  o_chi_so_co_ban_click :o_chi_so_co_ban;
                 batch.draw(tex, 350-288-3, y, 288, 62);
+                int capskill = duLieuNguoiChoi.getCapSkill(i);
+                if (capskill >= 1) {
+                    layout.setText(fontSkilldaco, duLieuNguoiChoi.getTenSkill(i));
+                    fontSkilldaco.draw(batch, layout, 350 - 288 + 8, y + 50);
+                    layout.setText(fontMotaSkill, "Đã mở khóa skill");
+                    fontMotaSkill.draw(batch, layout, 350 - 288 + 8, y + 22);
+                    layout.setText(fontCapSKill, "Cấp: "+capskill);
+                    fontCapSKill.draw(batch, layout, 350 - 60, y + 50);
+                } else {
+                    layout.setText(fontSkillchuaco, duLieuNguoiChoi.getTenSkill(i));
+                    fontSkillchuaco.draw(batch, layout, 350 - 288 + 8, y + 50);
+                    layout.setText(fontMotaSkill, "Chưa mở khóa skill");
+                    fontMotaSkill.draw(batch, layout, 350 - 288 + 8, y + 22);
+                }
                 batch.draw(oskill,3,y+2,350-288-3-3,58);
                 if (skillIcons != null && skillIcons[i] != null) {
                     batch.draw(skillIcons[i].icon, 3 + 8, y+2 + 8, 350-288-3-3 - 16, 58 - 16);

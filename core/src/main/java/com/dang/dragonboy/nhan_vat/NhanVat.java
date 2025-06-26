@@ -106,7 +106,7 @@ public class NhanVat {
     private int CapSkill2 = 1;
     private int CapSkill3 = 1;
     private int CapSkill4 = 1;
-    private int CapSkill5 = 1;
+    private int CapSkill5 = 7;
     private int CapSkill6 = 0;
     private int CapSkill7 = 0;
     private int CapSkill8 = 0;
@@ -205,7 +205,7 @@ public class NhanVat {
                 case 5: return "Quả cầu khinh khi";
                 case 6: return "Dịch chuyển tức thời";
                 case 7: return "Thôi miên";
-                case 8: return "BigBang Kamehameha";
+                case 8: return "Super Kamehameha";
                 case 9: return "Khiên năng lượng";
                 default: return "";
             }
@@ -226,10 +226,10 @@ public class NhanVat {
             switch (skill){
                 case 1: return "Chiêu đấm Demon";
                 case 2: return "Chiêu Masenko";
-                case 3: return "Hồi sinh";
-                case 4: return "Masenkosappo";
+                case 3: return "Trị thương";
+                case 4: return "Makankosappo";
                 case 5: return "Đẻ trứng";
-                case 6: return "Biến sicula";
+                case 6: return "Biến Sôcôla";
                 case 7: return "Đấm liên hoàn";
                 case 8: return "Ma phong ba";
                 case 9: return "Khiên năng lượng";
