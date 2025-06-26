@@ -182,7 +182,7 @@ public class DuLieuNguoiChoi {
     public void giamChiMang(int ChiMang){
         this.ChiMangGoc -= ChiMang;
     }
-    public void giamTiemNang(int TiemNang){
+    public void giamTiemNang(long TiemNang){
         this.TiemNangNhanVat -= TiemNang;
     }
     public void giamDiemSoiDong(int DiemSoiDong){

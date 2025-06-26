@@ -166,7 +166,7 @@ public class ManHinhChoiTiep implements Screen {
         nhagohan = new Texture("map/"+hanhtinh+"/chung/nhacua/nhacua2_earth.png");
         hudRenderer = new VeHUD(layout);
         // load skill + thuộc tính nhân vật
-        SkillIcon[] traidatIcons = loadSkillIcons("xayda");
+        SkillIcon[] traidatIcons = loadSkillIcons("namek");
         hudRenderer.setSkillIcons(traidatIcons);
         capcaydau = 6;
         NhanVatCauHinh config = Doicaitrang("vegito_xeno");
@@ -190,7 +190,7 @@ public class ManHinhChoiTiep implements Screen {
         }
         String[] tenSkill = new String[9];
         for (int i = 0; i < 9; i++) {
-            tenSkill[i] = nhanVat.getTenSkill(i+1,"xayda"); // nếu skill 1-9
+            tenSkill[i] = nhanVat.getTenSkill(i+1,"namek"); // nếu skill 1-9
         }
         DuLieuNguoiChoi duLieu = new DuLieuNguoiChoi(
             nhanVat.getTen(),

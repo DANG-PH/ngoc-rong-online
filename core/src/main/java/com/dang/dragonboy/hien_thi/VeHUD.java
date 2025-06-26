@@ -190,7 +190,7 @@ public class VeHUD {
                     case 3 -> duLieuNguoiChoi.tangGiapGoc(giaTriTangTamThoi);
                     case 4 -> duLieuNguoiChoi.tangChiMangGoc(giaTriTangTamThoi);
                 }
-                duLieuNguoiChoi.giamTiemNang((int) chiPhiTamThoi);
+                duLieuNguoiChoi.giamTiemNang((long) chiPhiTamThoi);
                 DangHienPopupThongTin = false;
                 TimeChoHienPopup = 0;
             }
@@ -883,7 +883,7 @@ public class VeHUD {
                     tong += 500000 + (chiSoGoc + j - 1) * 100000L;
                     break;
                 case 4:  // Crit
-                    tong += 30_000_000L + (chiSoGoc + j - 1 - 1) * 5_000_000_000L;
+                    tong = 30000000 + (duLieuNguoiChoi.getChiMangGoc() - 1) * 5000000000L;
                     break;
             }
         }
