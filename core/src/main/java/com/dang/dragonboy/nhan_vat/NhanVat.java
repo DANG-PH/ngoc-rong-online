@@ -81,14 +81,31 @@ public class NhanVat {
     // ==== THUỘC TÍNH GAMEPLAY ==== //
     private long sucManh = 99_999_999_999L;
     private int theLuc = 100;
-    private int hpHienTai = 100;
-    private int hpToiDa = 100;
-    private int kiHienTai = 100;
-    private int kiToiDa = 100;
+
+    private int HpGoc = 2000;
+    private int KiGoc = 200;
+    private int HpHienTai = 1500;
+    private int KiHienTai = 190;
+    private int SucDanhGoc = 15;
+    private int GiapGoc = 10;
+    private int ChiMangGoc = 0;
+    private int SatThuongChiMang = 100;
+    private int TiemNangNhanVat = 10000000;
+    private int DiemSoiDongNhanVat = 0;
+
     private int soDauThan = 1;
-    private int vang = 1000000000;
-    private int ngoc = 1000000000;
+    private int vang = 100;
+    private int ngoc = 100;
     private String capBac = "Thần Xayda cấp 9+99.99%";
+    private int CapSkill1 = 1;
+    private int CapSkill2 = 1;
+    private int CapSkill3 = 1;
+    private int CapSkill4 = 1;
+    private int CapSkill5 = 1;
+    private int CapSkill6 = 0;
+    private int CapSkill7 = 0;
+    private int CapSkill8 = 0;
+    private int CapSkill9 = 0;
 
     public long getSucManh() {
         return sucManh;
@@ -99,21 +116,38 @@ public class NhanVat {
     }
 
     public int getHpHienTai() {
-        return hpHienTai;
+        return HpHienTai;
     }
 
     public int getHpToiDa() {
-        return hpToiDa;
+        return HpGoc;
     }
 
     public int getKiHienTai() {
-        return kiHienTai;
+        return KiHienTai;
     }
 
     public int getKiToiDa() {
-        return kiToiDa;
+        return KiGoc;
     }
-
+    public int getSucDanhGoc(){
+        return SucDanhGoc;
+    }
+    public int getGiapGoc(){
+        return GiapGoc;
+    }
+    public int getChiMangGoc(){
+        return ChiMangGoc;
+    }
+    public int getSatThuongChiMang(){
+        return SatThuongChiMang;
+    }
+    public int getTiemNangNhanVat(){
+        return TiemNangNhanVat;
+    }
+    public int getDiemSoiDongNhanVat(){
+        return DiemSoiDongNhanVat;
+    }
     public int getSoDauThan() {
         return soDauThan;
     }
@@ -129,32 +163,19 @@ public class NhanVat {
     public String getCapBac() {
         return capBac;
     }
-
-    public void setHpHienTai(int hp) {
-        this.hpHienTai = Math.max(0, Math.min(hp, hpToiDa));
-    }
-
-    public void setKiHienTai(int ki) {
-        this.kiHienTai = Math.max(0, Math.min(ki, kiToiDa));
-    }
-
-    public void tangVang(int soLuong) {
-        this.vang += soLuong;
-    }
-
-    public void tangNgoc(int soLuong) {
-        this.ngoc += soLuong;
-    }
-    public void giamVang(int soLuong) {
-        this.vang -= soLuong;
-    }
-
-    public void giamNgoc(int soLuong) {
-        this.ngoc -= soLuong;
-    }
-
-    public void tangDau(int soluong){
-        this.soDauThan += soluong;
+    public int getCapSkill(int Skill){
+        switch (Skill) {
+            case 1: return CapSkill1;
+            case 2: return CapSkill2;
+            case 3: return CapSkill3;
+            case 4: return CapSkill4;
+            case 5: return CapSkill5;
+            case 6: return CapSkill6;
+            case 7: return CapSkill7;
+            case 8: return CapSkill8;
+            case 9: return CapSkill9;
+            default: return 0;
+        }
     }
 
     public NhanVat(float x, float y,

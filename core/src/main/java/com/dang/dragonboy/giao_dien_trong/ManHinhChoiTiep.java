@@ -184,16 +184,24 @@ public class ManHinhChoiTiep implements Screen {
         nhanVat.setTen(tenNhanVat); // set tên nhân vật trong nhanvat.java
         hudRenderer.setNhanVat(nhanVat);// load cái này để đổi avt theo ct
         // load du lieu nguoi dung
+        int[] capSkill = new int[9];
+        for (int i = 0; i < 9; i++) {
+            capSkill[i] = nhanVat.getCapSkill(i + 1); // nếu skill 1-9
+        }
         DuLieuNguoiChoi duLieu = new DuLieuNguoiChoi(
             nhanVat.getTen(),
             nhanVat.getSucManh(),
             nhanVat.getTheLuc(),
             nhanVat.getHpHienTai(), nhanVat.getHpToiDa(),
             nhanVat.getKiHienTai(), nhanVat.getKiToiDa(),
+            nhanVat.getSucDanhGoc(), nhanVat.getGiapGoc(),
+            nhanVat.getChiMangGoc(), nhanVat.getSatThuongChiMang(),
+            nhanVat.getTiemNangNhanVat(),nhanVat.getDiemSoiDongNhanVat(),
             nhanVat.getSoDauThan(),
             nhanVat.getVang(),
             nhanVat.getNgoc(),
-            nhanVat.getCapBac()
+            nhanVat.getCapBac(),
+            capSkill
         );
         hudRenderer.setDuLieuNguoiChoi(duLieu);
 
