@@ -80,6 +80,8 @@ public class VeHUD {
     private Texture[] oSkills;
     float nutClickTimer2 = 0;
 
+    private float dauThanRenderH= 53f;
+
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data; // truyền data vào để xử lí hud
     }
@@ -254,6 +256,10 @@ public class VeHUD {
         if (chucNangDangChon != 2){
             DangHienPopupThongTin = false;
         }
+        if (dauThanRenderH < 53f){
+            dauThanRenderH+=10.6f*Gdx.graphics.getDeltaTime();
+            dauThanRenderH = Math.min(dauThanRenderH, 53f);
+        }
         batch.end();
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
@@ -281,7 +287,7 @@ public class VeHUD {
         // RENDER SAU ẢNH ĐẬU THẦN ( trắng )
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(1f,1f,1f, 1f);
-        shapeRenderer.rect(screenWidth - 75- 10 + 10, 10 + 10, 53 , 53);
+        shapeRenderer.rect(screenWidth - 75- 10 + 10, 10 + 10, 53 , dauThanRenderH);
         shapeRenderer.end();
 
         batch.begin();
@@ -342,7 +348,8 @@ public class VeHUD {
         // số đậu thần
         font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
         layout.setText(font, duLieuNguoiChoi.getSoDauThan()+"");
-        font.draw(batch, layout, screenWidth - 75- 10 + 33, 10 + 43);
+        font.draw(batch, layout, odauthanX+(odauthanW- layout.width)/2f , odauthanY + 43);
+
     }
 
     public void clickOChat() {
@@ -350,6 +357,12 @@ public class VeHUD {
     }
     public void clickODauThan() {
         thoiGianClickODauThan = 0.2f;
+        if (dauThanRenderH>=53f && duLieuNguoiChoi.getSoDauThan()>0){
+            duLieuNguoiChoi.giamDau();
+            duLieuNguoiChoi.tangHpHienTai(1000);
+            duLieuNguoiChoi.tangKiHienTai(1000);
+            dauThanRenderH = 0f;
+        }
     }
     public void chonSkill(int index) {
         if (index >= 0 && index < 5) {
@@ -854,7 +867,13 @@ public class VeHUD {
             batch.begin();
             if (HienPopUpGanSkill) {
                 for (int i = 0; i < 5; i++) {
-                    batch.draw(nutvuong, 210 + i * 120, 5, 114, 114);
+                    if (nutduocchon==i) {
+                        Texture nutVe = nutClickTimer2 > 0 ? nutvuongclick : nutvuong;
+                        batch.draw(nutVe , 210 + i * 120, 5, 114, 114);
+                    }
+                    else {
+                        batch.draw(nutvuong , 210 + i * 120, 5, 114, 114);
+                    }
                     layout.setText(font,"Vào");
                     font.draw(batch,layout,210 + i * 120+(114- layout.width)/2f,5+114-40);
                     layout.setText(font,"phím "+(i+1));

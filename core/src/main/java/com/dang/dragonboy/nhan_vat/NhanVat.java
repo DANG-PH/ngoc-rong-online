@@ -98,7 +98,7 @@ public class NhanVat {
     private long TiemNangNhanVat = 99999999999L;
     private int DiemSoiDongNhanVat = 0;
 
-    private int soDauThan = 1;
+    private int soDauThan = 99;
     private int vang = 100;
     private int ngoc = 100;
     private String capBac = "Thần Xayda cấp 9+99.99%";

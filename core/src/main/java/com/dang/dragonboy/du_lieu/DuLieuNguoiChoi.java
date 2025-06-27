@@ -139,8 +139,16 @@ public class DuLieuNguoiChoi {
     public void tangHp(int HpCongThem){
         this.HpNhanVat += HpCongThem;
     }
+    public void tangHpHienTai(int HpCongThem){
+        this.HpHienTai += HpCongThem;
+        this.HpHienTai = Math.min(HpHienTai,HpNhanVat);
+    }
     public void tangKi(int KiCongThem){
         this.KiNhanVat += KiCongThem;
+    }
+    public void tangKiHienTai(int KiCongThem){
+        this.KiHienTai += KiCongThem;
+        this.KiHienTai = Math.min(KiHienTai,KiNhanVat);
     }
     public void tangSucDanh(int SucDanhCongThem){
         this.SucDanhNhanVat += SucDanhCongThem;
