@@ -102,15 +102,15 @@ public class NhanVat {
     private int vang = 100;
     private int ngoc = 100;
     private String capBac = "Thần Xayda cấp 9+99.99%";
-    private int CapSkill1 = 1;
-    private int CapSkill2 = 1;
-    private int CapSkill3 = 1;
-    private int CapSkill4 = 1;
-    private int CapSkill5 = 7;
-    private int CapSkill6 = 0;
-    private int CapSkill7 = 0;
+    private int CapSkill1 = 7;
+    private int CapSkill2 = 6;
+    private int CapSkill3 = 5;
+    private int CapSkill4 = 4;
+    private int CapSkill5 = 3;
+    private int CapSkill6 = 2;
+    private int CapSkill7 = 1;
     private int CapSkill8 = 0;
-    private int CapSkill9 = 0;
+    private int CapSkill9 = 7;
 
     public long getSucManh() {
         return sucManh;
@@ -234,6 +234,48 @@ public class NhanVat {
                 case 8: return "Ma phong ba";
                 case 9: return "Khiên năng lượng";
                 default: return "";
+            }
+        }
+    }
+    public String[] getMotaSkill(int skill,String hanhTinh){
+        if ("traidat".equals(hanhTinh)){
+            switch (skill){
+                case 1: return new String[]{"Tấn công cận chiến","Tăng sức đánh","KI tiêu hao","Hồi chiêu"};
+                case 2: return new String[]{"Bắn xa nhờ năng lượng","Tăng sức đánh","KI tiêu hao","Hồi chiêu"};
+                case 3: return new String[]{"Làm kẻ địch bất động","","KI tiêu hao","Hồi chiêu"};
+                case 4: return new String[]{"Kaioken","","KI tiêu hao","Hồi chiêu"};
+                case 5: return new String[]{"Quả cầu khinh khi","","KI tiêu hao","Hồi chiêu"};
+                case 6: return new String[]{"Dịch chuyển tức thời","","KI tiêu hao","Hồi chiêu"};
+                case 7: return new String[]{"Thôi miên","","KI tiêu hao","Hồi chiêu"};
+                case 8: return new String[]{"Super Kamehameha","","KI tiêu hao","Hồi chiêu"};
+                case 9: return new String[]{"Khiên năng lượng","","KI tiêu hao","Hồi chiêu"};
+                default: return new String[]{""};
+            }
+        } else if ("xayda".equals(hanhTinh)) {
+            switch (skill){
+                case 1: return new String[]{"Tấn công cận chiến","Tăng sức đánh: "+(100+10*CapSkill1)+"%","KI tiêu hao: "+(10*CapSkill1),"Hồi chiêu: "+0.5+"s"};
+                case 2: return new String[]{"Bắn xa nhờ năng lượng","Tăng sức đánh :"+(150+20*CapSkill2)+"%","KI tiêu hao: "+(300+100*CapSkill2),"Hồi chiêu: 2.2s"};
+                case 3: return new String[]{"Tái tạo lại HP và MP đang có","Tự tái tạo HP MP "+(3+1*CapSkill3)+"%/s","KI tiêu hao: 0%","Hồi chiêu: "+(60-5*CapSkill3)+"s"};
+                case 4: return new String[]{"Biến hình thành khỉ","Tăng sức đánh, HP và tốc độ","KI tiêu hao: 10%","Hồi chiêu: "+(500-20*CapSkill4)+"s"};
+                case 5: return new String[]{"Tự phát nổ","Hy sinh, gây sát thương lớn cho kẻ thù","KI tiêu hao: 50%","Hồi chiêu: 120s"};
+                case 6: return new String[]{"Huýt sáo","Tăng tạm thời "+(30+10*CapSkill6)+"%HP cho mọi người","KI tiêu hao: 20","Hồi chiêu: 180s"};
+                case 7: return new String[]{"Trói","Trói kẻ thù","KI tiêu hao: 32000","Hồi chiêu: "+(70-5*CapSkill7)+"s"};
+                case 8: return new String[]{"Cađíc liên hoàn chưởng","Tăng sức đánh: "+(550+CapSkill8*50)+"%","KI tiêu hao: 80%","Hồi chiêu: 170s"};
+                case 9: return new String[]{"Khiên năng lượng","Vô hiệu các đòn tấn công","KI tiêu hao: 33%","Hồi chiêu: "+(175-10*CapSkill9)+"s"};
+                default: return new String[]{""};
+            }
+        } else {
+            switch (skill){
+                case 1: return new String[]{"Tấn công cận chiến","Tăng sức đánh","KI tiêu hao","Hồi chiêu"};
+                case 2: return new String[]{"Bắn xa nhờ năng lượng","Tăng sức đánh","KI tiêu hao","Hồi chiêu"};
+                case 3: return new String[]{"Trị thương cho bạn và đồng minh","","KI tiêu hao","Hồi chiêu"};
+                case 4: return new String[]{"Makankosappo","","KI tiêu hao","Hồi chiêu"};
+                case 5: return new String[]{"Đẻ trứng","","KI tiêu hao","Hồi chiêu"};
+                case 6: return new String[]{"Biến Sôcôla","","KI tiêu hao","Hồi chiêu"};
+                case 7: return new String[]{"Đấm liên hoàn","","KI tiêu hao","Hồi chiêu"};
+                case 8: return new String[]{"Ma phong ba","","KI tiêu hao","Hồi chiêu"};
+                case 9: return new String[]{"Khiên năng lượng","","KI tiêu hao","Hồi chiêu"};
+                default: return new String[]{""};
             }
         }
     }

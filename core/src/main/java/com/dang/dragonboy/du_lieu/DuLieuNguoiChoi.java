@@ -23,6 +23,7 @@ public class DuLieuNguoiChoi {
     private String capBac;
     private int[] capSkill = new int[9];  // Mặc định toàn 0
     private String[] tenSkill = new String[9];
+    private String[][] motaSkill = new String[9][];
 
     // Constructor
     public DuLieuNguoiChoi(String ten, long sucManh, int theLuc,
@@ -34,7 +35,7 @@ public class DuLieuNguoiChoi {
                            int SatThuongChiMang,
                            long TiemNangNhanVat,int DiemSoiDongNhanVat,
                            int soDauThan, long vang, long ngoc,
-                           String capBac,int[] capSkill,String[] tenSkill) {
+                           String capBac,int[] capSkill,String[] tenSkill,String[][] motaSkill) {
         this.ten = ten;
         this.sucManh = sucManh;
         this.theLuc = theLuc;
@@ -62,6 +63,9 @@ public class DuLieuNguoiChoi {
         }
         if (tenSkill != null && tenSkill.length == 9) {
             System.arraycopy(tenSkill, 0, this.tenSkill, 0, 9);
+        }
+        if (motaSkill != null && motaSkill.length == 9) {
+            System.arraycopy(motaSkill, 0, this.motaSkill, 0, 9);
         }
     }
 
@@ -100,7 +104,12 @@ public class DuLieuNguoiChoi {
         }
         return null;
     }
-
+    public String[] getMotaSKill(int index){
+        if (index >= 0 && index < motaSkill.length) {
+            return motaSkill[index];
+        }
+        return null;
+    }
 
     public void tangSucManh(int SucManhCongThem){
         this.sucManh += SucManhCongThem;

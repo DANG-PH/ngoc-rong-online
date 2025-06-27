@@ -166,7 +166,7 @@ public class ManHinhChoiTiep implements Screen {
         nhagohan = new Texture("map/"+hanhtinh+"/chung/nhacua/nhacua2_earth.png");
         hudRenderer = new VeHUD(layout);
         // load skill + thuộc tính nhân vật
-        SkillIcon[] traidatIcons = loadSkillIcons("namek");
+        SkillIcon[] traidatIcons = loadSkillIcons("xayda");
         hudRenderer.setSkillIcons(traidatIcons);
         capcaydau = 6;
         NhanVatCauHinh config = Doicaitrang("vegito_xeno");
@@ -190,7 +190,11 @@ public class ManHinhChoiTiep implements Screen {
         }
         String[] tenSkill = new String[9];
         for (int i = 0; i < 9; i++) {
-            tenSkill[i] = nhanVat.getTenSkill(i+1,"namek"); // nếu skill 1-9
+            tenSkill[i] = nhanVat.getTenSkill(i+1,"xayda"); // nếu skill 1-9
+        }
+        String[][] motaSkill = new String[9][];
+        for (int i = 0; i < 9; i++) {
+            motaSkill[i] = nhanVat.getMotaSkill(i + 1, "xayda");
         }
         DuLieuNguoiChoi duLieu = new DuLieuNguoiChoi(
             nhanVat.getTen(),
@@ -207,7 +211,7 @@ public class ManHinhChoiTiep implements Screen {
             nhanVat.getVang(),
             nhanVat.getNgoc(),
             nhanVat.getCapBac(),
-            capSkill,tenSkill
+            capSkill,tenSkill,motaSkill
         );
         hudRenderer.setDuLieuNguoiChoi(duLieu);
 
@@ -448,12 +452,12 @@ public class ManHinhChoiTiep implements Screen {
         drawText(font, ten, toadoX + (width - layout.width) / 2, toadoY + height, Color.YELLOW);
     }
     private SkillIcon[] loadSkillIcons(String hanhTinh) {
-        SkillIcon[] icons = new SkillIcon[9];
+        SkillIcon[] skillIcons = new SkillIcon[9];
         for (int i = 0; i < 9; i++) {
             String path = "kynang/iconkynang/"+hanhTinh+"/skill" + (i + 1) + "_" + hanhTinh.toLowerCase() + ".png";
-            icons[i] = new SkillIcon(path);
+            skillIcons[i] = new SkillIcon(path);
         }
-        return icons;
+        return skillIcons;
     }
 
     @Override public void resize(int width, int height) {
