@@ -57,7 +57,7 @@ public class ManHinhChoiTiep implements Screen {
     private Texture nhagohan;
 
     private Texture[] caccaydau = new Texture[7];
-    private int capcaydau;
+    public int capcaydau;
     private Texture cui_dot_lua;
     private Texture[] lua =  new Texture[4];
     private int frameLua = 0;
@@ -79,7 +79,7 @@ public class ManHinhChoiTiep implements Screen {
     //HUD
     private VeHUD hudRenderer;
 
-    public ManHinhChoiTiep(Main game , String tenNhanVat) {
+    public ManHinhChoiTiep(Main game , String tenNhanVat, String hanhtinh ,String nhanvat) {
         this.game = game;
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
@@ -110,20 +110,6 @@ public class ManHinhChoiTiep implements Screen {
 
         fontDauThan = generator2.generateFont(param2);
         generator2.dispose();
-
-        int index_hanh_tinh = 0;
-        String hanhtinh = "haidang";
-        switch (index_hanh_tinh) {
-            case 0:
-                hanhtinh="traidat";
-                break;
-            case 1:
-                hanhtinh="xayda";
-                break;
-            case 2:
-                hanhtinh="namek";
-                break;
-        }
 
         nutdn = new Texture("hud/giaodienngoai/chung/nutdangnhap3.png");
         nutclick = new Texture("hud/giaodienngoai/chung/nutclick2.png");
@@ -168,9 +154,8 @@ public class ManHinhChoiTiep implements Screen {
         // load skill + thuộc tính nhân vật
         SkillIcon[] traidatIcons = loadSkillIcons("xayda");
         hudRenderer.setSkillIcons(traidatIcons);
-        capcaydau = 6;
+        //NhanVatCauHinh config = Doi_avt_ao_quan(hanhtinh,nhanvat+"_base","set_cam","set_cam") ;
         NhanVatCauHinh config = Doicaitrang("vegito_xeno");
-
         NhanVat haidang = new NhanVat(
             100, 175,
             config.dau_dung, config.dau_chay,
@@ -178,7 +163,8 @@ public class ManHinhChoiTiep implements Screen {
             config.chan_dung, config.chan_nhay, config.chan_roi, config.chan_chay,
             config.than_bay, config.chan_bay,
             config.lechMap,
-            config.avt
+            config.avt,
+            6
         );
         nhanVat = haidang;
         nhanVat.setTen(tenNhanVat); // set tên nhân vật trong nhanvat.java
@@ -211,10 +197,11 @@ public class ManHinhChoiTiep implements Screen {
             nhanVat.getVang(),
             nhanVat.getNgoc(),
             nhanVat.getCapBac(),
-            capSkill,tenSkill,motaSkill
+            capSkill,tenSkill,motaSkill,
+            nhanVat.getCapcaydau()
         );
         hudRenderer.setDuLieuNguoiChoi(duLieu);
-
+        capcaydau = duLieu.getCapCayDau();
         // Tạo map và load địa hình
         MapNhaGohan map = new MapNhaGohan();
         map.taiDuLieuMap();
@@ -234,8 +221,8 @@ public class ManHinhChoiTiep implements Screen {
     private NhanVatCauHinh Doicaitrang(String TenCaiTrang){
         return NhanVatXuLy.xuly_id("caitrang_"+TenCaiTrang);
     }
-    private NhanVatCauHinh Doi_avt_setdo(String HanhTinh, String TenAvatar , String SetDo){
-        return NhanVatXuLy.xuly_id("avatar_"+HanhTinh+"+"+TenAvatar+"+"+SetDo);
+    private NhanVatCauHinh Doi_avt_ao_quan(String HanhTinh, String TenAvatar , String ao, String quan){
+        return NhanVatXuLy.xuly_id("avatar_"+HanhTinh+"+"+TenAvatar+"+"+ao+"+"+quan);
     }
     private void drawText(BitmapFont font, String text, float x, float y, Color color) {
         font.setColor(color);

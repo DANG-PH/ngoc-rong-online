@@ -296,10 +296,11 @@ public class ManHinhChoiMoi implements Screen {
             // Click nút Tạo mới
             if (mouseX >= nutTaoMoiX && mouseX <= nutTaoMoiX + 135 &&
                 mouseY >= 20 && mouseY <= 70) {
-                isTaoMoiPressed = true;
-                thoiGianHienNutClick = 0.2f;
-                chuyenManHinhTaoMoi = true; // Ghi nhớ chuyển sau
-
+                if (!tenNguoiChoi.isEmpty()) {
+                    isTaoMoiPressed = true;
+                    thoiGianHienNutClick = 0.2f;
+                    chuyenManHinhTaoMoi = true; // Ghi nhớ chuyển sau
+                }
             }
             for (int i = 0; i < 3; i++) {
                 int x = 294 + i * 155;
@@ -338,7 +339,18 @@ public class ManHinhChoiMoi implements Screen {
                 chuyenManHinhDong = false;
             }
             if (chuyenManHinhTaoMoi) {
-                game.setScreen(new ManHinhChoiTiep(game, tenNguoiChoi));
+                String nhanvat = hanhtinhVaNhanvat[hanhTinhDuocChon][nhanVatDuocChon+1];
+                switch (hanhTinhDuocChon){
+                    case 0:
+                        game.setScreen(new ManHinhChoiTiep(game, tenNguoiChoi,"traidat",nhanvat));
+                        break;
+                    case 1:
+                        game.setScreen(new ManHinhChoiTiep(game, tenNguoiChoi,"traidat",nhanvat));
+                        break;
+                    case 2:
+                        game.setScreen(new ManHinhChoiTiep(game, tenNguoiChoi,"traidat",nhanvat));
+                        break;
+                }
                 chuyenManHinhTaoMoi = false;
             }
 

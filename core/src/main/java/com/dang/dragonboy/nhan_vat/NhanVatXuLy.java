@@ -52,9 +52,10 @@ public class NhanVatXuLy {
     }
 
     // ==== AVATAR + SET (dạng modular linh hoạt) ====
-    public static NhanVatCauHinh loadAvatarSet(String hanhtinh ,String avatar, String set) {
+    public static NhanVatCauHinh loadAvatarSet(String hanhtinh ,String avatar, String ao, String quan) {
         String basePath = "nhanvat/" + hanhtinh + "/";
-        String setPath = basePath + "do/" + set + "/";
+        String aoPath = basePath + "do/" + ao + "/";
+        String quanPath = basePath + "do/" + quan + "/";
         String avatarPath = basePath + "avatar/" + avatar + "/";
 
         String avt = avatarPath + "avt.png";
@@ -62,31 +63,31 @@ public class NhanVatXuLy {
         Texture dau_dung = new Texture(avatarPath + "dung.png");
         Texture dau_chay = new Texture(avatarPath + "chay.png");
 
-        Texture than_dung = new Texture(setPath + "thandung.png");
-        Texture than_nhay = new Texture(setPath + "thannhay.png");
-        Texture than_roi = new Texture(setPath + "thanroi.png");
+        Texture than_dung = new Texture(aoPath + "thandung.png");
+        Texture than_nhay = new Texture(aoPath + "thannhay.png");
+        Texture than_roi = new Texture(aoPath + "thanroi.png");
         Texture[] than_chay = {
-            new Texture(setPath + "thanchay0.png"),
-            new Texture(setPath + "thanchay1.png"),
-            new Texture(setPath + "thanchay2.png"),
-            new Texture(setPath + "thanchay3.png"),
-            new Texture(setPath + "thanchay4.png")
+            new Texture(aoPath + "thanchay0.png"),
+            new Texture(aoPath + "thanchay1.png"),
+            new Texture(aoPath + "thanchay2.png"),
+            new Texture(aoPath + "thanchay3.png"),
+            new Texture(aoPath + "thanchay4.png")
         };
-        Texture than_bay = new Texture(setPath + "thanbay.png");
+        Texture than_bay = new Texture(aoPath + "thanbay.png");
 
-        Texture chan_dung = new Texture(setPath + "chandung.png");
-        Texture chan_nhay = new Texture(setPath + "channhay.png");
-        Texture chan_roi = new Texture(setPath + "chanroi.png");
+        Texture chan_dung = new Texture(quanPath + "chandung.png");
+        Texture chan_nhay = new Texture(quanPath + "channhay.png");
+        Texture chan_roi = new Texture(quanPath + "chanroi.png");
         Texture[] chan_chay = {
-            new Texture(setPath + "chanchay0.png"),
-            new Texture(setPath + "chanchay1.png"),
-            new Texture(setPath + "chanchay2.png"),
-            new Texture(setPath + "chanchay3.png"),
-            new Texture(setPath + "chanchay4.png")
+            new Texture(quanPath + "chanchay0.png"),
+            new Texture(quanPath + "chanchay1.png"),
+            new Texture(quanPath + "chanchay2.png"),
+            new Texture(quanPath + "chanchay3.png"),
+            new Texture(quanPath + "chanchay4.png")
         };
-        Texture chan_bay = new Texture(setPath + "chanbay.png");
+        Texture chan_bay = new Texture(quanPath + "chanbay.png");
 
-        Map<TrangThai, DoLechModular> lech = AvatarDoOffset.getOffset(avatar, set);
+        Map<TrangThai, DoLechModular> lech = AvatarDoOffset.getOffset(avatar, ao, quan);
 
         return new NhanVatCauHinh(
             dau_dung, dau_chay,
@@ -103,10 +104,10 @@ public class NhanVatXuLy {
         if (id.startsWith("caitrang_")) {
             return loadCaiTrang(id.replace("caitrang_", ""));
         } else if (id.startsWith("avatar_")) {
-            // Ví dụ: avatar_traidat+set_cam
+            // Ví dụ: avatar_traidat+goku_base+set_cam+set_huy_diet
             String[] parts = id.substring(7).split("\\+");
-            if (parts.length == 3) {
-                return loadAvatarSet(parts[0], parts[1] , parts[2]);
+            if (parts.length == 4) {
+                return loadAvatarSet(parts[0], parts[1] , parts[2], parts[3]);
             }
         }
         return null;

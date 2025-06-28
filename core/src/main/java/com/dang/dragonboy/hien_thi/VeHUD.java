@@ -359,8 +359,8 @@ public class VeHUD {
         thoiGianClickODauThan = 0.2f;
         if (dauThanRenderH>=53f && duLieuNguoiChoi.getSoDauThan()>0){
             duLieuNguoiChoi.giamDau();
-            duLieuNguoiChoi.tangHpHienTai(1000);
-            duLieuNguoiChoi.tangKiHienTai(1000);
+            duLieuNguoiChoi.tangHpHienTai(duLieuNguoiChoi.getDauHoiHPKI());
+            duLieuNguoiChoi.tangKiHienTai(duLieuNguoiChoi.getDauHoiHPKI());
             dauThanRenderH = 0f;
         }
     }

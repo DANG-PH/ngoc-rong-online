@@ -98,6 +98,7 @@ public class NhanVat {
     private long TiemNangNhanVat = 99999999999L;
     private int DiemSoiDongNhanVat = 0;
 
+    private int capcaydau;
     private int soDauThan = 99;
     private int vang = 100;
     private int ngoc = 100;
@@ -112,13 +113,9 @@ public class NhanVat {
     private int CapSkill8 = 0;
     private int CapSkill9 = 7;
 
-    public long getSucManh() {
-        return sucManh;
-    }
+    public long getSucManh() {return sucManh;}
 
-    public int getTheLuc() {
-        return theLuc;
-    }
+    public int getTheLuc() {return theLuc;}
 
     public float getHpHienTai() {
         return HpHienTai;
@@ -166,9 +163,8 @@ public class NhanVat {
     public int getDiemSoiDongNhanVat(){
         return DiemSoiDongNhanVat;
     }
-    public int getSoDauThan() {
-        return soDauThan;
-    }
+    public int getCapcaydau() { return capcaydau; }
+    public int getSoDauThan() { return soDauThan ;}
 
     public int getVang() {
         return vang;
@@ -284,7 +280,7 @@ public class NhanVat {
                    Texture dau_dung, Texture dau_chay,
                    Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,
                    Texture chan_dung, Texture chan_nhay, Texture chan_roi, Texture[] chan_chay,
-                   Texture than_bay,Texture chan_bay,Map<TrangThai, DoLechModular> lechTheoTrangThai,String avt) {
+                   Texture than_bay,Texture chan_bay,Map<TrangThai, DoLechModular> lechTheoTrangThai,String avt,int capcaydau) {
         this.x = x;
         this.y = y;
 
@@ -308,7 +304,8 @@ public class NhanVat {
         this.rong = chan_dung.getWidth() * tiLe;
         this.cao = chan_dung.getHeight() * tiLe + than_dung.getHeight() * tiLe + dau_dung.getHeight() * 0.15f;
 
-        this.lechTheoTrangThai = lechTheoTrangThai; //  Dòng này cực kỳ quan trọng
+        this.lechTheoTrangThai = lechTheoTrangThai;
+        this.capcaydau = capcaydau;
         taiAnhVanBay("candauvan"); // tùy chọn
     }
     public String doiavatar(){

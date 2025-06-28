@@ -24,6 +24,7 @@ public class DuLieuNguoiChoi {
     private int[] capSkill = new int[9];  // Mặc định toàn 0
     private String[] tenSkill = new String[9];
     private String[][] motaSkill = new String[9][];
+    private int capcaydau;
 
     // Constructor
     public DuLieuNguoiChoi(String ten, long sucManh, int theLuc,
@@ -35,7 +36,7 @@ public class DuLieuNguoiChoi {
                            int SatThuongChiMang,
                            long TiemNangNhanVat,int DiemSoiDongNhanVat,
                            int soDauThan, long vang, long ngoc,
-                           String capBac,int[] capSkill,String[] tenSkill,String[][] motaSkill) {
+                           String capBac,int[] capSkill,String[] tenSkill,String[][] motaSkill,int capcaydau) {
         this.ten = ten;
         this.sucManh = sucManh;
         this.theLuc = theLuc;
@@ -54,6 +55,7 @@ public class DuLieuNguoiChoi {
         this.SatThuongChiMang = SatThuongChiMang;
         this.TiemNangNhanVat = TiemNangNhanVat;
         this.DiemSoiDongNhanVat = DiemSoiDongNhanVat;
+        this.capcaydau = capcaydau;
         this.soDauThan = soDauThan;
         this.vang = vang;
         this.ngoc = ngoc;
@@ -88,7 +90,23 @@ public class DuLieuNguoiChoi {
     public int getSatThuongChiMang() { return SatThuongChiMang; }
     public long getTiemNangNhanVat() { return TiemNangNhanVat; }
     public int getDiemSoiDongNhanVat() { return DiemSoiDongNhanVat; }
+    public int getCapCayDau() { return capcaydau ;}
     public int getSoDauThan() { return soDauThan; }
+    public int getDauHoiHPKI() {
+        switch (capcaydau){
+            case 0: return 500;
+            case 1: return 1000;
+            case 2: return 3000;
+            case 3: return 5000;
+            case 4: return 12000;
+            case 5: return 30000;
+            case 6: return 50000;
+            case 7: return 90000;
+            case 8: return 150000;
+            case 9: return 250000;
+            default: return 0;
+        }
+    }
     public long getVang() { return vang; }
     public long getNgoc() { return ngoc; }
     public String getCapBac() { return capBac; }
@@ -167,12 +185,16 @@ public class DuLieuNguoiChoi {
     public void tangDiemSoiDong(int DiemSoiDongCongThem){
         this.DiemSoiDongNhanVat += DiemSoiDongCongThem;
     }
+
     public void tangVang(int soLuong) {
         this.vang += soLuong;
     }
-
     public void tangNgoc(int soLuong) {
         this.ngoc += soLuong;
+    }
+
+    public void tangCapCayDau(){
+        this.capcaydau += 1;
     }
     public void tangDau(int soluong){
         this.soDauThan += soluong;

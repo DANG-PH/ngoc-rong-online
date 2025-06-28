@@ -5,57 +5,95 @@ import java.util.Map;
 
 public class AvatarDoOffset {
 
-    // Cấu trúc lưu offset: avatar -> doSet -> trạng thái -> độ lệch
-    private static final Map<String, Map<String, Map<TrangThai, DoLechModular>>> OFFSET_MAP = new HashMap<>();
+    private static final Map<String, Map<TrangThai, DoLechModular>> OFFSET_AVATAR = new HashMap<>();
+    private static final Map<String, Map<TrangThai, DoLechModular>> OFFSET_AO = new HashMap<>();
+    private static final Map<String, Map<TrangThai, DoLechModular>> OFFSET_QUAN = new HashMap<>();
 
     static {
-        // GOKU_BASE + SET_CAM
-        themOffset("goku_base", "set_cam", taoLech(
-            new DoLechModular(0f, 0f, -0.3f, -15.5f),   // DUNG_YEN
-            new DoLechModular(1.5f, 5.2f, 3.3f, -9f),    // DI_CHUYEN
-            new DoLechModular(-4f, 6f, 3f, -23.5f),      // NHAY
-            new DoLechModular(-5.5f, 6.5f, 0.2f, -31f),  // ROI
-            new DoLechModular(0f, 0f, -0.3f, -15.5f)     // BAY_NGANG
+        // --- AVATAR ---
+        OFFSET_AVATAR.put("Goku_base", taoLech(
+            lechDau(-0.3f, -15.5f),
+            lechDau(3.3f, -9f),
+            lechDau(3f, -23.5f),
+            lechDau(0.2f, -31f),
+            lechDau(-0.3f, -15.5f)
+        ));
+        OFFSET_AVATAR.put("Krillin_base", taoLech(
+            lechDau(-0.3f, -15.5f),
+            lechDau(3.3f, -9f),
+            lechDau(3f, -23.5f),
+            lechDau(0.2f, -31f),
+            lechDau(-0.3f, -15.5f)
+        ));
+        OFFSET_AVATAR.put("Yamcha_base", taoLech(
+            lechDau(-0.3f, -21f),
+            lechDau(3.3f, -14.5f),
+            lechDau(3f, -29f),
+            lechDau(0.2f, -36.5f),
+            lechDau(-0.3f, -21f)
         ));
 
-        // GOKU_BASE + SET_HUY_DIET
-        themOffset("goku_base", "set_huy_diet", taoLech(
-            new DoLechModular(5f, 0f, -2f, -13.5f),
-            new DoLechModular(1.5f, 5.2f, 3.3f, -9f),
-            new DoLechModular(-4f, 6f, 1f, -23.5f),
-            new DoLechModular(-5.5f, 6.5f, -1.2f, -31f),
-            new DoLechModular(0f, 0f, -0.3f, -15.5f)
+        OFFSET_AVATAR.put("avt_vip", taoLech(
+            lechDau(-2f, -13.5f),
+            lechDau( 3.3f, -9f),
+            lechDau( 1f, -23.5f),
+            lechDau(-3.2f, -31f),
+            lechDau(-0.3f, -15.5f)
         ));
 
-        // AVATAR ĐẸP TRAI + SET_CAM
-        themOffset("avt_vip", "set_cam", taoLech(
-            new DoLechModular(0f, 0f, -2f, -13.5f),
-            new DoLechModular(1.5f, 5.2f, 3.3f, -9f),
-            new DoLechModular(-4f, 6f, 1f, -23.5f),
-            new DoLechModular(-5.5f, 6.5f, -1.2f, -31f),
-            new DoLechModular(0f, 0f, -0.3f, -15.5f)
+        // --- ÁO ---
+        OFFSET_AO.put("set_cam", taoLech(
+            lechThan(0f, 0f),
+            lechThan(1.5f, 5.2f ),
+            lechThan(-4f, 6f),
+            lechThan(-5.5f, 6.5f ),
+            lechThan(0f, 0f)
         ));
 
-        // AVATAR ĐẸP TRAI + SET_HUY_DIET
-        themOffset("avt_vip", "set_huy_diet", taoLech(
-            new DoLechModular(3f, 0f, -0.3f, -15.5f),
-            new DoLechModular(1.5f, 5.2f, 3.3f, -9f),
-            new DoLechModular(-4f, 6f, 3f, -23.5f),
-            new DoLechModular(-5.5f, 6.5f, 0.2f, -31f),
-            new DoLechModular(0f, 0f, -0.3f, -15.5f)
+        OFFSET_AO.put("set_huy_diet", taoLech(
+            lechThan(-1f, 4f),
+            lechThan(1.5f, 7f),
+            lechThan(0f, 2f),
+            lechThan(-4f, 2f),
+            lechThan(-1f, 4f)
         ));
 
-        // đoạn sau thêm đồ + avt vào đây
+        // --- QUẦN ---
+        OFFSET_QUAN.put("set_cam", taoLech(
+            lechChan(),
+            lechChan(),
+            lechChan(),
+            lechChan(),
+            lechChan()
+        ));
+
+        OFFSET_QUAN.put("set_huy_diet", taoLech(
+            lechChan(),
+            lechChan(),
+            lechChan(),
+            lechChan(),
+            lechChan()
+        ));
     }
 
-    // Lấy offset theo avatar + set đồ
-    public static Map<TrangThai, DoLechModular> getOffset(String avatar, String doSet) {
-        return OFFSET_MAP
-            .getOrDefault(avatar, new HashMap<>())
-            .getOrDefault(doSet, getMacDinh());
+    // ✅ Lấy offset tổng hợp
+    public static Map<TrangThai, DoLechModular> getOffset(String avatar, String ao, String quan) {
+        Map<TrangThai, DoLechModular> lechTong = new HashMap<>();
+        Map<TrangThai, DoLechModular> lechAvt = OFFSET_AVATAR.getOrDefault(avatar, getMacDinh());
+        Map<TrangThai, DoLechModular> lechAo = OFFSET_AO.getOrDefault(ao, getMacDinh());
+        Map<TrangThai, DoLechModular> lechQuan = OFFSET_QUAN.getOrDefault(quan, getMacDinh());
+
+        for (TrangThai tt : TrangThai.values()) {
+            DoLechModular a = lechAvt.getOrDefault(tt, new DoLechModular(0, 0, 0, 0));
+            DoLechModular b = lechAo.getOrDefault(tt, new DoLechModular(0, 0, 0, 0));
+            DoLechModular c = lechQuan.getOrDefault(tt, new DoLechModular(0, 0, 0, 0));
+            lechTong.put(tt, a.cong(b).cong(c));
+        }
+
+        return lechTong;
     }
 
-    // Hàm tạo Map offset cho từng trạng thái
+    // ✅ Hàm tạo offset theo trạng thái
     private static Map<TrangThai, DoLechModular> taoLech(
         DoLechModular dungYen,
         DoLechModular diChuyen,
@@ -72,21 +110,28 @@ public class AvatarDoOffset {
         return map;
     }
 
-    // Thêm offset vào OFFSET_MAP
-    private static void themOffset(String avatar, String doSet, Map<TrangThai, DoLechModular> offset) {
-        if (!OFFSET_MAP.containsKey(avatar)) {
-            OFFSET_MAP.put(avatar, new HashMap<>());
-        }
-        OFFSET_MAP.get(avatar).put(doSet, offset);
-    }
-
-    // Offset mặc định nếu không khớp avatar + đồ
+    // ✅ Offset mặc định
     private static Map<TrangThai, DoLechModular> getMacDinh() {
         Map<TrangThai, DoLechModular> macDinh = new HashMap<>();
-        DoLechModular lech = new DoLechModular(0, 0, 0, 0);
+        DoLechModular zero = new DoLechModular(0, 0, 0, 0);
         for (TrangThai tt : TrangThai.values()) {
-            macDinh.put(tt, lech);
+            macDinh.put(tt, zero);
         }
         return macDinh;
+    }
+
+    // Chỉ cần đầu (2 số sau)
+    private static DoLechModular lechDau(float dauX, float dauY) {
+        return new DoLechModular(0f, 0f, dauX, dauY);
+    }
+
+    // Chỉ cần thân (2 số đầu)
+    private static DoLechModular lechThan(float thanX, float thanY) {
+        return new DoLechModular(thanX, thanY, 0f, 0f);
+    }
+
+    // offset full 0
+    private static DoLechModular lechChan() {
+        return new DoLechModular(0f, 0f, 0f, 0f);
     }
 }

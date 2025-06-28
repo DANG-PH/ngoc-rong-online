@@ -10,4 +10,14 @@ public class DoLechModular {
         this.lechDauX = ldx;
         this.lechDauY = ldy;
     }
+
+    // Hàm cộng dồn 2 offset
+    public DoLechModular cong(DoLechModular Khac) {
+        return new DoLechModular(
+            this.lechThanX + Khac.lechThanX,
+            this.lechThanY + Khac.lechThanY,
+            this.lechDauX + Khac.lechDauX,
+            this.lechDauY + Khac.lechDauY
+        );
+    }
 }
