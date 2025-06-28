@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Align;
 import com.dang.dragonboy.nhan_vat.NhanVat;
+import com.dang.dragonboy.nhan_vat.NhanVatCauHinh;
+import com.dang.dragonboy.nhan_vat.NhanVatXuLy;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import java.text.DecimalFormat;
 import com.badlogic.gdx.graphics.GL20;
@@ -1110,6 +1112,12 @@ public class VeHUD {
             }
         }
         return tong;
+    }
+    private NhanVatCauHinh Doicaitrang(String TenCaiTrang){
+        return NhanVatXuLy.xuly_id("caitrang_"+TenCaiTrang);
+    }
+    private NhanVatCauHinh Doi_avt_ao_quan(String HanhTinh, String TenAvatar , String ao, String quan){
+        return NhanVatXuLy.xuly_id("avatar_"+HanhTinh+"+"+TenAvatar+"+"+ao+"+"+quan);
     }
     public void dispose() {
         ochat.dispose();

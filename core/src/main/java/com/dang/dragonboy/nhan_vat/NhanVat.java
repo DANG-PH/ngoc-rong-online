@@ -308,6 +308,35 @@ public class NhanVat {
         this.capcaydau = capcaydau;
         taiAnhVanBay("candauvan"); // tùy chọn
     }
+
+    public void fixNhanVat
+        (Texture dau_dung, Texture dau_chay,
+         Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,
+         Texture chan_dung, Texture chan_nhay, Texture chan_roi, Texture[] chan_chay,
+         Texture than_bay,Texture chan_bay,Map<TrangThai, DoLechModular> lechTheoTrangThai,String avt){
+        this.avt = avt;
+
+        this.dau_dung = dau_dung;
+        this.dau_chay = dau_chay;
+        this.than_dung = than_dung;
+        this.than_nhay = than_nhay;
+        this.than_roi = than_roi;
+        this.than_chay = than_chay;
+
+        this.chan_dung = chan_dung;
+        this.chan_nhay = chan_nhay;
+        this.chan_roi = chan_roi;
+        this.chan_chay = chan_chay;
+
+        this.than_bay = than_bay;
+        this.chan_bay = chan_bay;
+
+        this.rong = chan_dung.getWidth() * tiLe;
+        this.cao = chan_dung.getHeight() * tiLe + than_dung.getHeight() * tiLe + dau_dung.getHeight() * 0.15f;
+
+        this.lechTheoTrangThai = lechTheoTrangThai;
+    }
+
     public String doiavatar(){
         return avt;
     }
