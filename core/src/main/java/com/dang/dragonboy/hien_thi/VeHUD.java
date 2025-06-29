@@ -17,6 +17,9 @@ import java.text.DecimalFormat;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.Gdx;
+import com.dang.dragonboy.item.Item;
+import com.dang.dragonboy.item.LoaiItem;
+import java.util.ArrayList;
 
 public class VeHUD {
 
@@ -82,10 +85,28 @@ public class VeHUD {
     private Texture[] oSkills;
     float nutClickTimer2 = 0;
 
+    private Texture ao,quan,gang,giay,rada,iconct,giaplt,vanbay;
+
     private float dauThanRenderH= 53f;
 
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data; // truyền data vào để xử lí hud
+        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
+            "goku_black",
+            LoaiItem.CAITRANG,
+            new Texture("nhanvat/caitrang/goku_black/dung.png"),
+            "Cải trang Goku Black",
+            1,
+            new int[]{25, 25, 25, 0, 0, 0}
+        ));
+        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
+            "vegito_xeno",
+            LoaiItem.CAITRANG,
+            new Texture("nhanvat/caitrang/vegito_xeno/dung.png"),
+            "Cải trang Goku Black",
+            1,
+            new int[]{70, 70, 70, 20, 1000, 0}
+        ));
     }
     public void setSkillIcons(SkillIcon[] skillIcons) {
         this.skillIcons = skillIcons;
@@ -439,19 +460,75 @@ public class VeHUD {
             int KhoangCachItem = 49;
             int tongSoO = 8 + 12;
 
-            // Kiểm tra có click vào vùng hành trang không
             if (x >= 3 && x <= 3 + 344 && y >= viewY && y <= viewY + viewHeight) {
-
-                // Tính tọa độ tương đối trong khung scroll
                 float relativeY = y - viewY;
-
-                // Tính vị trí click từ đỉnh danh sách cuộn
                 float realY = scrollY + (viewHeight - relativeY);
-
                 int index = (int)(realY / KhoangCachItem);
+                hangTrangDangChon = index;
+                if (index >= 8 && index < tongSoO) {
+                    int indexx = hangTrangDangChon - 8;
+                    ArrayList<Item> danhSach = duLieuNguoiChoi.getHanhTrang();
 
-                if (index >= 0 && index < tongSoO) {
-                    hangTrangDangChon = index;
+                    if (indexx < danhSach.size()) {
+                        Item item = danhSach.get(indexx);
+                        if (item.getLoai() == LoaiItem.CAITRANG) {
+                            if (iconct == null){
+                                // 3. Gán cải trang mới
+                                iconct = item.getTexture();
+                                nhanVat.setTenCaiTrang(item.getTenItem());
+                                nhanVat.setMoTaCaiTrang(item.getMoTa());
+                                nhanVat.setChiso(item.getChiso());
+                                // 4. Load config cải trang mới
+                                NhanVatCauHinh c2 = Doicaitrang(item.getTenItem());
+                                nhanVat.fixCaiTrang(
+                                    c2.dau_dung, c2.dau_chay,
+                                    c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
+                                    c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
+                                    c2.than_bay, c2.chan_bay,
+                                    c2.lechMap,
+                                    c2.avt
+                                );
+                                texAvt = new Texture(nhanVat.doiavatar());
+                                tangchiso(item.getChiso());
+                                danhSach.remove(indexx);
+                            } else {
+                                if (NhanVatXuLy.getDangMacCaiTrang()) {
+                                    // 1. Lưu tên cải trang đang mặc
+                                    String tenCu = nhanVat.getTenCaiTrang();
+                                    String Motacu = nhanVat.getMoTaCaiTrang();
+                                    int[] Chisocu = nhanVat.getChiso();
+                                    // 2. Tạo Item từ cải trang đang mặc
+                                    Item caiTrangCu = new Item(
+                                        tenCu,
+                                        LoaiItem.CAITRANG,
+                                        iconct,
+                                        Motacu,
+                                        1,
+                                        Chisocu
+                                    );
+                                    giamchiso(Chisocu);
+                                    // 3. Gán cải trang mới
+                                    iconct = item.getTexture();
+                                    nhanVat.setTenCaiTrang(item.getTenItem());
+                                    nhanVat.setMoTaCaiTrang(item.getMoTa());
+                                    nhanVat.setChiso(item.getChiso());
+                                    // 4. Load config cải trang mới
+                                    NhanVatCauHinh c2 = Doicaitrang(item.getTenItem());
+                                    nhanVat.fixCaiTrang(
+                                        c2.dau_dung, c2.dau_chay,
+                                        c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
+                                        c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
+                                        c2.than_bay, c2.chan_bay,
+                                        c2.lechMap,
+                                        c2.avt
+                                    );
+                                    texAvt = new Texture(nhanVat.doiavatar());
+                                    tangchiso(item.getChiso());
+                                    danhSach.set(indexx, caiTrangCu);
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -636,6 +713,14 @@ public class VeHUD {
         if (texAvt != null) texAvt.dispose(); // nếu có thì giải phóng cũ
         String path = nhanVat.doiavatar();
         texAvt = new Texture(path); // load luôn tại đây
+        this.ao = nhanVat.ao;
+        this.quan = nhanVat.quan;
+        this.gang = nhanVat.gang;
+        this.giay = nhanVat.giay;
+        this.rada = nhanVat.rada;
+        this.iconct = nhanVat.iconct;
+        this.giaplt = nhanVat.giaplt;
+        this.vanbay = nhanVat.vanbay;
     }
     public void renderPopup(SpriteBatch batch) {
         if (!dangHienPopup || texAvt == null) return;
@@ -732,12 +817,24 @@ public class VeHUD {
             fontMotaNhiemVu.draw(batch,layout,20,385-25-30);
         }
         if (chucNangDangChon == 1){
+            // chỉ số nhân vật
+            layout.setText(fontsm,"HP: "+(int)duLieuNguoiChoi.getHpHienTai()+" / "+(int)duLieuNguoiChoi.getHpToiDa());
+            fontsm.draw(batch,layout,125,595);
+            layout.setText(fontsm,"KI: "+(int)duLieuNguoiChoi.getKiHienTai()+" / "+(int)duLieuNguoiChoi.getKiToiDa());
+            fontsm.draw(batch,layout,125,570);
+            layout.setText(fontsm,"Sức đánh: "+(int)duLieuNguoiChoi.getSucDanhNhanVat()+", Crit: "+duLieuNguoiChoi.getChiMangNhanVat()+"%");
+            fontsm.draw(batch,layout,125,545);
+            layout.setText(fontsm,"Giáp: "+(int)duLieuNguoiChoi.getGiapNhanVat()+", ST Crit: "+(int)duLieuNguoiChoi.getSatThuongChiMang()+"%");
+            fontsm.draw(batch,layout,125,520);
+
+            // ô hành trang
             float viewY = 35;
             float viewHeight = 444 - 35;
             int KhoangCachItem = 49;
 
             int soTrangBi = 8;
-            int soKhac = 12;
+            ArrayList<Item> danhSachItem = duLieuNguoiChoi.getHanhTrang();
+            int soKhac = danhSachItem.size();
             int tongSoTrangBi = soTrangBi + soKhac;
 
             float totalHeight = tongSoTrangBi * KhoangCachItem;
@@ -749,17 +846,28 @@ public class VeHUD {
 
             // Vị trí bắt đầu vẽ từ trên xuống
             float startY = viewY + viewHeight - KhoangCachItem + scrollY;
-
+            Texture[] itemNhanVat = {
+                ao,quan,gang,giay,rada,iconct,giaplt,vanbay
+            };
             for (int i = 0; i < soTrangBi; i++) {
                 float y = startY - i * KhoangCachItem;
                 Texture tex = (hangTrangDangChon == i) ? hanh_trang_dang_mac_click : hanh_trang_dang_mac;
                 batch.draw(tex, 3, y, 344, 50);
+                if (itemNhanVat[i]!=null){
+                    batch.draw(itemNhanVat[i],3+(70-itemNhanVat[i].getWidth()*0.5f)/2f,y+(49-itemNhanVat[i].getHeight()*0.5f)/2f,itemNhanVat[i].getWidth()*0.5f,itemNhanVat[i].getHeight()*0.5f);
+                }
             }
-
-            for (int i = 0; i < soKhac; i++) {
+            for (int i = 0; i < danhSachItem.size(); i++) {
                 float y = startY - (soTrangBi + i) * KhoangCachItem;
                 Texture tex = (hangTrangDangChon == soTrangBi + i) ? hanh_trang_click : hanh_trang;
                 batch.draw(tex, 3, y, 344, 50);
+
+                Texture icon = danhSachItem.get(i).getTexture();
+                batch.draw(icon,
+                    3 + (70 - icon.getWidth() * 0.5f) / 2f,
+                    y + (49 - icon.getHeight() * 0.5f) / 2f,
+                    icon.getWidth() * 0.5f,
+                    icon.getHeight() * 0.5f);
             }
 
             batch.flush();
@@ -1119,6 +1227,32 @@ public class VeHUD {
     private NhanVatCauHinh Doi_avt_ao_quan(String HanhTinh, String TenAvatar , String ao, String quan){
         return NhanVatXuLy.xuly_id("avatar_"+HanhTinh+"+"+TenAvatar+"+"+ao+"+"+quan);
     }
+    private void tangchiso(int[] chiso){
+        float hpGoc = duLieuNguoiChoi.getHpGoc();
+        float kiGoc = duLieuNguoiChoi.getKiGoc();
+        float sucdanhGoc = duLieuNguoiChoi.getSucDanhGoc();
+
+        duLieuNguoiChoi.tangHp((int)((chiso[0] / 100f) * hpGoc));
+        duLieuNguoiChoi.tangKi((int)((chiso[1] / 100f) * kiGoc));
+        duLieuNguoiChoi.tangSucDanh((int)((chiso[2] / 100f) * sucdanhGoc));
+        duLieuNguoiChoi.tangChiMang(chiso[3]);
+        duLieuNguoiChoi.tangGiap(chiso[4]);
+        duLieuNguoiChoi.tangSatThuongChiMang(chiso[5]);
+    }
+
+    private void giamchiso(int[] chiso){
+        float hpGoc = duLieuNguoiChoi.getHpGoc();
+        float kiGoc = duLieuNguoiChoi.getKiGoc();
+        float sucdanhGoc = duLieuNguoiChoi.getSucDanhGoc();
+
+        duLieuNguoiChoi.giamHp((int)((chiso[0] / 100f) * hpGoc));
+        duLieuNguoiChoi.giamKi((int)((chiso[1] / 100f) * kiGoc));
+        duLieuNguoiChoi.giamSucDanh((int)((chiso[2] / 100f) * sucdanhGoc));
+        duLieuNguoiChoi.giamChiMang(chiso[3]);
+        duLieuNguoiChoi.giamGiap(chiso[4]);
+        duLieuNguoiChoi.giamSatThuongChiMang(chiso[5]);
+    }
+
     public void dispose() {
         ochat.dispose();
         ochatclick.dispose();

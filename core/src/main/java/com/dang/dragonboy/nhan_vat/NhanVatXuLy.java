@@ -5,13 +5,23 @@ import com.badlogic.gdx.graphics.Texture;
 import java.util.Map;
 
 public class NhanVatXuLy {
-
+    public static boolean dangMacCaiTrang = false;
     // ==== CAITRANG (dạng cố định) ====
     public static NhanVatCauHinh loadCaiTrang(String tenCaiTrang) {
         String path = "nhanvat/caitrang/" + tenCaiTrang + "/";
-
         String avt = path + "avt.png";
+        String itemdo = "vatpham/do/";
+        String itemvanbay = "vatpham/vanbay/";
+        String itemglt = "vatpham/vatphamgame/giapluyentap/";
 
+        Texture itemao = new Texture(itemdo+"aoquan/traidat/set_cam/ao.png");
+        Texture itemquan = new Texture(itemdo+"aoquan/traidat/set_cam/quan.png");
+        Texture gang = new Texture(itemdo+"gang/traidat/gang1.png");
+        Texture giay = new Texture(itemdo+"giay/traidat/giay1.png");
+        Texture rada = new Texture(itemdo+"rada/rada1.png");
+        Texture iconct = new Texture(path + "dung.png");
+        Texture giaplt = new Texture(itemglt+"gltc1.png");
+        Texture vanbay = new Texture(itemvanbay+"phuong_hoang_lua/phuonghoanglua.png");
         Texture dau_dung = new Texture(path + "dung.png");
         Texture dau_chay = new Texture(path + "chay.png");
 
@@ -40,14 +50,15 @@ public class NhanVatXuLy {
         Texture chan_bay = new Texture(path + "chanbay.png");
 
         Map<TrangThai, DoLechModular> lech = CaiTrangOffset.getOffset(tenCaiTrang);
-
+        dangMacCaiTrang = true;
         return new NhanVatCauHinh(
             dau_dung, dau_chay,
             than_dung, than_nhay, than_roi, than_chay,
             chan_dung, chan_nhay, chan_roi, chan_chay,
             than_bay, chan_bay,
             lech,
-            avt
+            avt,
+            itemao,itemquan,gang,giay,rada,iconct,giaplt,vanbay
         );
     }
 
@@ -59,6 +70,18 @@ public class NhanVatXuLy {
         String avatarPath = basePath + "avatar/" + avatar + "/";
 
         String avt = avatarPath + "avt.png";
+        String itemdo = "vatpham/do/";
+        String itemvanbay = "vatpham/vanbay/";
+        String itemglt = "vatpham/vatphamgame/giapluyentap/";
+
+        Texture itemao = new Texture(itemdo+"aoquan/traidat/set_cam/ao.png");
+        Texture itemquan = new Texture(itemdo+"aoquan/traidat/set_cam/quan.png");
+        Texture gang = new Texture(itemdo+"gang/traidat/gang1.png");
+        Texture giay = new Texture(itemdo+"giay/traidat/giay1.png");
+        Texture rada = new Texture(itemdo+"rada/rada1.png");
+        Texture iconct = new Texture(avatarPath + "dung.png");
+        Texture giaplt = new Texture(itemglt+"gltc1.png");
+        Texture vanbay = new Texture(itemvanbay+"phuong_hoang_lua/phuonghoanglua.png");
 
         Texture dau_dung = new Texture(avatarPath + "dung.png");
         Texture dau_chay = new Texture(avatarPath + "chay.png");
@@ -88,14 +111,15 @@ public class NhanVatXuLy {
         Texture chan_bay = new Texture(quanPath + "chanbay.png");
 
         Map<TrangThai, DoLechModular> lech = AvatarDoOffset.getOffset(avatar, ao, quan);
-
+        dangMacCaiTrang = false;
         return new NhanVatCauHinh(
             dau_dung, dau_chay,
             than_dung, than_nhay, than_roi, than_chay,
             chan_dung, chan_nhay, chan_roi, chan_chay,
             than_bay, chan_bay,
             lech,
-            avt
+            avt,
+            itemao,itemquan,gang,giay,rada,iconct,giaplt,vanbay
         );
     }
 
@@ -111,5 +135,9 @@ public class NhanVatXuLy {
             }
         }
         return null;
+    }
+
+    public static boolean getDangMacCaiTrang(){
+        return dangMacCaiTrang;
     }
 }

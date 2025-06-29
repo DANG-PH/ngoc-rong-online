@@ -155,7 +155,7 @@ public class ManHinhChoiTiep implements Screen {
         SkillIcon[] traidatIcons = loadSkillIcons("xayda");
         hudRenderer.setSkillIcons(traidatIcons);
         //NhanVatCauHinh config = Doi_avt_ao_quan(hanhtinh,nhanvat+"_base","set_cam","set_cam") ;
-        NhanVatCauHinh config = Doicaitrang("vegito_xeno");
+        NhanVatCauHinh config = Doi_avt_ao_quan(hanhtinh,nhanvat+"_base","set_base","set_base");
         NhanVat haidang = new NhanVat(
             100, 175,
             config.dau_dung, config.dau_chay,
@@ -164,18 +164,26 @@ public class ManHinhChoiTiep implements Screen {
             config.than_bay, config.chan_bay,
             config.lechMap,
             config.avt,
+            null,null,null,null,null,null,null,config.vanbay,
             6
         );
-        NhanVatCauHinh c2 = Doicaitrang("goku_black");
         nhanVat = haidang;
-//        nhanVat.fixNhanVat(
-//            c2.dau_dung, c2.dau_chay,
-//            c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
-//            c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
-//            c2.than_bay, c2.chan_bay,
-//            c2.lechMap,
-//            c2.avt
-//        );
+//        NhanVatCauHinh c2 = Doi_avt_ao_quan(hanhtinh,nhanvat+"_base","set_huy_diet","set_cam");
+//        if (!NhanVatXuLy.getDangMacCaiTrang()){
+//            nhanVat.fixDau(c2.dau_dung, c2.dau_chay,c2.avt,c2.lechMap,c2.iconct);
+//            nhanVat.fixThan(c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,c2.than_bay,c2.lechMap,c2.ao);
+//            nhanVat.fixChan(c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,c2.chan_bay,c2.lechMap,c2.quan);
+//        } else {
+//            nhanVat.fixCaiTrang(
+//                c2.dau_dung, c2.dau_chay,
+//                c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
+//                c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
+//                c2.than_bay, c2.chan_bay,
+//                c2.lechMap,
+//                c2.avt
+//            );
+//        }
+        nhanVat.doiVanBay("phuong_hoang_lua");
         nhanVat.setTen(tenNhanVat); // set tên nhân vật trong nhanvat.java
         hudRenderer.setNhanVat(nhanVat);// load cái này để đổi avt theo ct
         // load du lieu nguoi dung
@@ -216,7 +224,6 @@ public class ManHinhChoiTiep implements Screen {
         map.taiDuLieuMap();
         nhanVat.setDanhSachDat(map.LayDanhSachDat());
         nhanVat.setGioiHanToaDo(map.getChieuRongMap(), map.getChieuCaoMap());
-        nhanVat.doiVanBay("phuong_hoang_lua");
         npcdau = new Texture("nhanvat/npc/ong_gohan/dau.png");
         npcthan = new Texture("nhanvat/npc/ong_gohan/than.png");
         npcchan = new Texture("nhanvat/npc/ong_gohan/chan.png");

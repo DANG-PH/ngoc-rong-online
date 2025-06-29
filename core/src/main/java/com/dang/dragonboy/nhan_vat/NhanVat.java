@@ -30,6 +30,7 @@ public class NhanVat {
 
     // Ảnh các phần
     private String avt;
+    public Texture ao,quan,gang,giay,rada,iconct,giaplt,vanbay;
     private Texture avtTexture; // ảnh cache
     private Texture dau_dung, dau_chay;
     private Texture than_dung, than_nhay, than_roi;
@@ -82,17 +83,17 @@ public class NhanVat {
     private long sucManh = 99_999_999_999L;
     private int theLuc = 100;
 
-    private int HpGoc = 2000;
-    private int KiGoc = 200;
+    private int HpGoc = 550000;
+    private int KiGoc = 500000;
     private float HpNhanVat = HpGoc;
     private float KiNhanVat = KiGoc;
     private float HpHienTai = HpNhanVat*0.7f;
     private float KiHienTai = KiNhanVat*0.9f;
-    private int SucDanhGoc = 15;
+    private int SucDanhGoc = 24000;
     private float SucDanhNhanVat = SucDanhGoc;
-    private int GiapGoc = 10;
+    private int GiapGoc = 990;
     private int GiapNhanVat = GiapGoc;
-    private int ChiMangGoc = 0;
+    private int ChiMangGoc = 10;
     private int ChiMangNhanVat = ChiMangGoc;
     private int SatThuongChiMang = 150;
     private long TiemNangNhanVat = 99999999999L;
@@ -112,6 +113,34 @@ public class NhanVat {
     private int CapSkill7 = 1;
     private int CapSkill8 = 0;
     private int CapSkill9 = 7;
+    private String tenCaiTrang = "mac_dinh";
+    private String moTaCaiTrang = "mac_dinh";
+    private int[] chiso ;
+
+
+    public void setTenCaiTrang(String ten) {
+        this.tenCaiTrang = ten;
+    }
+
+    public String getTenCaiTrang() {
+        return tenCaiTrang;
+    }
+
+    public void setMoTaCaiTrang(String mota) {
+        this.moTaCaiTrang = mota;
+    }
+
+    public String getMoTaCaiTrang() {
+        return moTaCaiTrang;
+    }
+
+    public void setChiso(int[] chiso) {
+        this.chiso = chiso;
+    }
+
+    public int[] getChiso() {
+        return chiso;
+    }
 
     public long getSucManh() {return sucManh;}
 
@@ -280,11 +309,21 @@ public class NhanVat {
                    Texture dau_dung, Texture dau_chay,
                    Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,
                    Texture chan_dung, Texture chan_nhay, Texture chan_roi, Texture[] chan_chay,
-                   Texture than_bay,Texture chan_bay,Map<TrangThai, DoLechModular> lechTheoTrangThai,String avt,int capcaydau) {
+                   Texture than_bay,Texture chan_bay,Map<TrangThai, DoLechModular> lechTheoTrangThai,String avt,
+                   Texture ao, Texture quan, Texture gang, Texture giay, Texture rada, Texture iconct, Texture giaplt, Texture vanbay,
+                   int capcaydau) {
         this.x = x;
         this.y = y;
 
         this.avt = avt;
+        this.ao = ao;
+        this.quan = quan;
+        this.gang = gang;
+        this.giay = giay;
+        this.rada = rada;
+        this.iconct = iconct;
+        this.giaplt = giaplt;
+        this.vanbay = vanbay;
 
         this.dau_dung = dau_dung;
         this.dau_chay = dau_chay;
@@ -309,7 +348,36 @@ public class NhanVat {
         taiAnhVanBay("candauvan"); // tùy chọn
     }
 
-    public void fixNhanVat
+    public void fixDau (Texture dau_dung, Texture dau_chay,String avt,Map<TrangThai, DoLechModular> lechTheoTrangThai,Texture iconct){
+        this.avt = avt;
+        this.dau_dung = dau_dung;
+        this.dau_chay = dau_chay;
+        this.lechTheoTrangThai = lechTheoTrangThai;
+        this.iconct = iconct;
+    }
+
+    public void fixThan ( Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,Texture than_bay,Map<TrangThai, DoLechModular> lechTheoTrangThai, Texture ao){
+        this.than_dung = than_dung;
+        this.than_nhay = than_nhay;
+        this.than_roi = than_roi;
+        this.than_chay = than_chay;
+        this.than_bay = than_bay;
+        this.lechTheoTrangThai = lechTheoTrangThai;
+        this.ao = ao;
+    }
+
+    public void fixChan ( Texture chan_dung, Texture chan_nhay, Texture chan_roi, Texture[] chan_chay,Texture chan_bay,Map<TrangThai, DoLechModular> lechTheoTrangThai, Texture quan){
+        this.chan_dung = chan_dung;
+        this.chan_nhay = chan_nhay;
+        this.chan_roi = chan_roi;
+        this.chan_chay = chan_chay;
+        this.chan_bay = chan_bay;
+        this.lechTheoTrangThai = lechTheoTrangThai;
+        this.quan = quan;
+    }
+
+
+    public void fixCaiTrang
         (Texture dau_dung, Texture dau_chay,
          Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,
          Texture chan_dung, Texture chan_nhay, Texture chan_roi, Texture[] chan_chay,

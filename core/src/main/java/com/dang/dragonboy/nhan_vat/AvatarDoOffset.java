@@ -42,6 +42,14 @@ public class AvatarDoOffset {
         ));
 
         // --- ÁO ---
+        OFFSET_AO.put("set_base", taoLech(
+            lechThan(0f, -0.4f),
+            lechThan(1.5f, 5.2f ),
+            lechThan(-4f, 6f),
+            lechThan(-6f, 7f ),
+            lechThan(0f, 0f)
+        ));
+
         OFFSET_AO.put("set_cam", taoLech(
             lechThan(0f, 0f),
             lechThan(1.5f, 5.2f ),

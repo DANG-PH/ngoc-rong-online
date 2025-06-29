@@ -1,4 +1,7 @@
 package com.dang.dragonboy.du_lieu;
+import java.util.ArrayList;
+import com.dang.dragonboy.item.Item;
+
 
 public class DuLieuNguoiChoi {
     private String ten;
@@ -25,6 +28,8 @@ public class DuLieuNguoiChoi {
     private String[] tenSkill = new String[9];
     private String[][] motaSkill = new String[9][];
     private int capcaydau;
+
+    private ArrayList<Item> hanhTrang = new ArrayList<>();
 
     // Constructor
     public DuLieuNguoiChoi(String ten, long sucManh, int theLuc,
@@ -69,6 +74,31 @@ public class DuLieuNguoiChoi {
         if (motaSkill != null && motaSkill.length == 9) {
             System.arraycopy(motaSkill, 0, this.motaSkill, 0, 9);
         }
+    }
+
+    public ArrayList<Item> getHanhTrang() {
+        return hanhTrang;
+    }
+
+    public void themItemVaoHanhTrang(Item item) {
+        hanhTrang.add(item);
+    }
+
+    public void xoaItemKhoiHanhTrang(Item item) {
+        hanhTrang.remove(item);
+    }
+
+    public void xoaItemTheoIndex(int index) {
+        if (index >= 0 && index < hanhTrang.size()) {
+            hanhTrang.remove(index);
+        }
+    }
+
+    public Item getItemTheoIndex(int index) {
+        if (index >= 0 && index < hanhTrang.size()) {
+            return hanhTrang.get(index);
+        }
+        return null;
     }
 
     // Getter
@@ -207,19 +237,22 @@ public class DuLieuNguoiChoi {
     }
 
     public void giamHp(int Hp){
-        this.HpGoc -= Hp;
+        this.HpNhanVat -= Hp;
     }
     public void giamKi(int Ki){
-        this.KiGoc -= Ki;
+        this.KiNhanVat -= Ki;
     }
     public void giamSucDanh(int SucDanh){
-        this.SucDanhGoc -= SucDanh;
+        this.SucDanhNhanVat -= SucDanh;
     }
     public void giamGiap(int Giap){
-        this.GiapGoc -= Giap;
+        this.GiapNhanVat -= Giap;
     }
     public void giamChiMang(int ChiMang){
-        this.ChiMangGoc -= ChiMang;
+        this.ChiMangNhanVat -= ChiMang;
+    }
+    public void giamSatThuongChiMang(int STChiMang){
+        this.SatThuongChiMang -= STChiMang;
     }
     public void giamTiemNang(long TiemNang){
         this.TiemNangNhanVat -= TiemNang;

@@ -28,13 +28,17 @@ public class NhanVatCauHinh {
     // Offset
     public Map<TrangThai, DoLechModular> lechMap;
 
+    // item
+    public Texture ao,quan,gang,giay,rada,iconct,giaplt,vanbay;
+
     public NhanVatCauHinh(
         Texture dau_dung, Texture dau_chay,
         Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,
         Texture chan_dung, Texture chan_nhay, Texture chan_roi, Texture[] chan_chay,
         Texture than_bay, Texture chan_bay,
         Map<TrangThai, DoLechModular> lechMap,
-        String avt
+        String avt,
+        Texture ao, Texture quan, Texture gang, Texture giay, Texture rada, Texture iconct, Texture giaplt, Texture vanbay
     ) {
         this.avt=avt;
         this.dau_dung = dau_dung;
@@ -50,5 +54,13 @@ public class NhanVatCauHinh {
         this.chan_chay = chan_chay;
         this.chan_bay = chan_bay;
         this.lechMap = lechMap;
+        this.ao = ao;
+        this.quan = quan;
+        this.gang = gang;
+        this.giay = giay;
+        this.rada = rada;
+        this.iconct = iconct;
+        this.giaplt = giaplt;
+        this.vanbay = vanbay;
     }
 }
