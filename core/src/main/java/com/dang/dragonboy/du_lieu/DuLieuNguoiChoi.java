@@ -176,17 +176,19 @@ public class DuLieuNguoiChoi {
     public void tangHpGoc(int HpCongThem,boolean choPhepHienThi){
         int[] chisoCaiTrang = nhanVat.getChisoCaiTrang(); // chỉ số cải tranga
 
-        float tilePhanTramHP = 0;
+        float tilePhanTramHPctrang = 0;
+        float tilePhanTramHPsetkh = 0;
 
         // Hàm phụ cộng %HP nếu mảng hợp lệ và có phần tử thứ 6
         if (NhanVatXuLy.getDangMacCaiTrang() || NhanVatXuLy.getDangMacAvatar()) {
-            tilePhanTramHP += (chisoCaiTrang != null && chisoCaiTrang.length >= 7) ? chisoCaiTrang[6] : 0;
+            tilePhanTramHPctrang += (chisoCaiTrang != null && chisoCaiTrang.length >= 7) ? chisoCaiTrang[6] : 0;
         }
         if (setKichHoatNappa){
-            tilePhanTramHP += 80;
+            tilePhanTramHPsetkh += 80;
         }
         // Tính HP cộng thêm thực tế
-        int HpCongThemThucTe = Math.round(HpCongThem * (1 + tilePhanTramHP / 100f));
+        int HpCongThemThucTe = Math.round(HpCongThem * (1 + tilePhanTramHPctrang/ 100f));
+        int HpCongThemThucTee = Math.round(HpCongThemThucTe * (1 + tilePhanTramHPsetkh/ 100f));
         // Cộng vào HpGoc (tối đa 550000)
         if (choPhepHienThi){
             this.HpGoc += HpCongThem;
@@ -195,23 +197,25 @@ public class DuLieuNguoiChoi {
             }
         }
         // Cộng vào HP tổng
-        this.HpNhanVat += HpCongThemThucTe;
+        this.HpNhanVat += HpCongThemThucTee;
     }
     public void giamHpGoc(int HpCongThem){
         int[] chisoCaiTrang = nhanVat.getChisoCaiTrang(); // chỉ số cải trang
-        float tilePhanTramHP = 0;
+        float tilePhanTramHPctrang = 0;
+        float tilePhanTramHPsetkh = 0;
 
         // Hàm phụ cộng %HP nếu mảng hợp lệ và có phần tử thứ 6
         if (NhanVatXuLy.getDangMacCaiTrang() || NhanVatXuLy.getDangMacAvatar()) {
-            tilePhanTramHP += (chisoCaiTrang != null && chisoCaiTrang.length >= 7) ? chisoCaiTrang[6] : 0;
+            tilePhanTramHPctrang  += (chisoCaiTrang != null && chisoCaiTrang.length >= 7) ? chisoCaiTrang[6] : 0;
         }
         if (setKichHoatNappa){
-            tilePhanTramHP += 80;
+            tilePhanTramHPsetkh += 80;
         }
         // Tính HP cộng thêm thực tế
-        int HpCongThemThucTe = Math.round(HpCongThem * (1 + tilePhanTramHP / 100f));
+        int HpCongThemThucTe = Math.round(HpCongThem * (1 +  tilePhanTramHPctrang/ 100f));
+        int HpCongThemThucTee = Math.round(HpCongThemThucTe * (1 + tilePhanTramHPsetkh/ 100f));
         // Cộng vào HP tổng
-        this.HpNhanVat -= HpCongThemThucTe;
+        this.HpNhanVat -= HpCongThemThucTee;
     }
 
     public void tangKiGoc(int KiCongThem,boolean choPhepHienThi) {

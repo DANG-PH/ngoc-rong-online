@@ -658,7 +658,7 @@ public class VeHUD {
                                     );
                                 }
                                 tangchiso(item.getChiso());
-                                checkSetKichHoat();
+                                kichHoatSetHienTai();
                                 danhSach.remove(indexx);
                             } else {
                                 macAoMoi(item, indexx, danhSach);
@@ -684,7 +684,7 @@ public class VeHUD {
                                     );
                                 }
                                 tangchiso(item.getChiso());
-                                checkSetKichHoat();
+                                kichHoatSetHienTai();
                                 danhSach.remove(indexx);
                             } else {
                                 macQuanMoi(item, indexx, danhSach);
@@ -698,7 +698,7 @@ public class VeHUD {
                                 nhanVat.setChisoGang(item.getChiso());
                                 skhg = item.getSetkichhoat();
                                 tangchiso(item.getChiso());
-                                checkSetKichHoat();
+                                kichHoatSetHienTai();
                                 danhSach.remove(indexx);
                             } else {
                                 macGangMoi(item, indexx, danhSach);
@@ -712,7 +712,7 @@ public class VeHUD {
                                 nhanVat.setChisoGiay(item.getChiso());
                                 skhj = item.getSetkichhoat();
                                 tangchiso(item.getChiso());
-                                checkSetKichHoat();
+                                kichHoatSetHienTai();
                                 danhSach.remove(indexx);
                             } else {
                                 macGiayMoi(item, indexx, danhSach);
@@ -726,7 +726,7 @@ public class VeHUD {
                                 nhanVat.setChisoRada(item.getChiso());
                                 skhrada = item.getSetkichhoat();
                                 tangchiso(item.getChiso());
-                                checkSetKichHoat();
+                                kichHoatSetHienTai();
                                 danhSach.remove(indexx);
                             } else {
                                 macRadaMoi(item, indexx, danhSach);
@@ -1441,15 +1441,22 @@ public class VeHUD {
         return NhanVatXuLy.xuly_id("avatar_"+HanhTinh+"+"+TenAvatar+"+"+ao+"+"+quan);
     }
     private void macAoMoi(Item item, int indexx, ArrayList<Item> danhSach){
+        // 1. Lưu thông tin áo cũ
         String idCu = nhanVat.getIdAo();
         String tenCu = nhanVat.getTenAo();
         String motacu = nhanVat.getMoTaAo();
         int[] chisocu = nhanVat.getChisoAo();
+        String skhaCu = skha; // lưu lại skha cũ
         LoaiItem loaiCu = LoaiItem.AO;
-        Item aoCu = new Item(idCu, tenCu, loaiCu, ao, motacu, 1, chisocu, skha);
+        Item aoCu = new Item(idCu, tenCu, loaiCu, ao, motacu, 1, chisocu, skhaCu);
+
+        // 2. Gỡ hiệu ứng set cũ trước
+        huyHieuUngSet(skhaCu);
+
+        // 3. Giảm chỉ số áo cũ
         giamchiso(chisocu);
 
-        // 2. Gán cải trang mới
+        // 4. Cập nhật áo mới
         ao = item.getTexture();
         nhanVat.setIdAo(item.getId());
         nhanVat.setTenAo(item.getTenItem());
@@ -1457,7 +1464,8 @@ public class VeHUD {
         nhanVat.setChisoAo(item.getChiso());
         skha = item.getSetkichhoat();
         aodangmac = item.getId();
-        // 3. Load config cải trang mới
+
+        // 5. Load avatar nếu không cải trang
         if (!NhanVatXuLy.getDangMacCaiTrang()) {
             NhanVatCauHinh c2 = Doi_avt_ao_quan(nhanVat.getHanhtinh(), avatardangmac, item.getId(), quandangmac);
             nhanVat.fixCaiTrang(
@@ -1469,26 +1477,43 @@ public class VeHUD {
                 c2.avt
             );
         }
+
+        // 6. Tăng chỉ số áo mới
         tangchiso(item.getChiso());
-        checkSetKichHoat();
-        // 4. Thay vào hành trang
+
+        // 7. Kích hoạt lại set nếu đủ
+        kichHoatSetHienTai();
+
+        // 8. Đưa áo cũ vào hành trang
         danhSach.set(indexx, aoCu);
     }
+
     private void goAo() {
         if (ao == null) return; // Không mặc gì thì không gỡ
-        aodangmac = "set_base";
+
+        // 1. Lưu áo cũ
         String idCu = nhanVat.getIdAo();
         String tenCu = nhanVat.getTenAo();
         String motacu = nhanVat.getMoTaAo();
         int[] chisocu = nhanVat.getChisoAo();
+        String skhaCu = skha;
         LoaiItem loaiCu = LoaiItem.AO;
-        Item aoCu = new Item(idCu, tenCu, loaiCu, ao, motacu, 1, chisocu, skha);
+        Item aoCu = new Item(idCu, tenCu, loaiCu, ao, motacu, 1, chisocu, skhaCu);
+
+        // 2. Gỡ hiệu ứng set trước
+        huyHieuUngSet(skhaCu);
+
+        // 3. Giảm chỉ số áo
         giamchiso(chisocu);
+
+        // 4. Cập nhật trạng thái không mặc
+        ao = null;
         skha = "mac_dinh";
-        checkSetKichHoat();
-        duLieuNguoiChoi.themItemVaoHanhTrang(aoCu);
+        aodangmac = "set_base";
+
+        // 5. Cập nhật giao diện nếu không cải trang
         if (!NhanVatXuLy.getDangMacCaiTrang()){
-            NhanVatCauHinh c2 = Doi_avt_ao_quan(nhanVat.getHanhtinh(),  avatardangmac, "set_base", quandangmac);
+            NhanVatCauHinh c2 = Doi_avt_ao_quan(nhanVat.getHanhtinh(), avatardangmac, "set_base", quandangmac);
             nhanVat.fixCaiTrang(
                 c2.dau_dung, c2.dau_chay,
                 c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
@@ -1498,18 +1523,31 @@ public class VeHUD {
                 c2.avt
             );
         }
-        ao = null;
+
+        // 6. Kích hoạt lại set nếu đủ 4 món còn lại
+        kichHoatSetHienTai();
+
+        // 7. Trả áo cũ vào hành trang
+        duLieuNguoiChoi.themItemVaoHanhTrang(aoCu);
     }
+
     private void macQuanMoi(Item item, int indexx, ArrayList<Item> danhSach){
+        // 1. Lưu thông tin quần cũ
         String idCu = nhanVat.getIdQuan();
         String tenCu = nhanVat.getTenQuan();
         String motacu = nhanVat.getMoTaQuan();
         int[] chisocu = nhanVat.getChisoQuan();
+        String skhqCu = skhq; // lưu lại skhq cũ
         LoaiItem loaiCu = LoaiItem.QUAN;
-        Item quanCu = new Item(idCu, tenCu, loaiCu, quan, motacu, 1, chisocu, skhq);
+        Item quanCu = new Item(idCu, tenCu, loaiCu, quan, motacu, 1, chisocu, skhqCu);
+
+        // 2. Gỡ hiệu ứng set cũ trước khi gỡ chỉ số
+        huyHieuUngSet(skhqCu);
+
+        // 3. Giảm chỉ số quần cũ
         giamchiso(chisocu);
 
-        // 2. Gán cải trang mới
+        // 4. Gán quần mới vào
         quan = item.getTexture();
         nhanVat.setIdQuan(item.getId());
         nhanVat.setTenQuan(item.getTenItem());
@@ -1518,7 +1556,7 @@ public class VeHUD {
         skhq = item.getSetkichhoat();
         quandangmac = item.getId();
 
-        // 3. Load config cải trang mới
+        // 5. Load avatar nếu không cải trang
         if (!NhanVatXuLy.getDangMacCaiTrang()) {
             NhanVatCauHinh c2 = Doi_avt_ao_quan(nhanVat.getHanhtinh(), avatardangmac, aodangmac, item.getId());
             nhanVat.fixCaiTrang(
@@ -1530,146 +1568,250 @@ public class VeHUD {
                 c2.avt
             );
         }
+
+        // 6. Tăng chỉ số quần mới
         tangchiso(item.getChiso());
-        checkSetKichHoat();
-        // 4. Thay vào hành trang
+
+        // 7. Kích hoạt lại set mới nếu đủ
+        kichHoatSetHienTai();
+
+        // 8. Đưa quần cũ vào hành trang
         danhSach.set(indexx, quanCu);
     }
+
     private void goQuan() {
         if (quan == null) return; // Không mặc gì thì không gỡ
-        quandangmac = "set_base";
+
+        // 1. Lưu thông tin quần cũ
         String idCu = nhanVat.getIdQuan();
         String tenCu = nhanVat.getTenQuan();
         String motacu = nhanVat.getMoTaQuan();
         int[] chisocu = nhanVat.getChisoQuan();
+        String skhqCu = skhq;
         LoaiItem loaiCu = LoaiItem.QUAN;
-        Item quanCu = new Item(idCu, tenCu, loaiCu, quan, motacu, 1, chisocu, skhq);
+        Item quanCu = new Item(idCu, tenCu, loaiCu, quan, motacu, 1, chisocu, skhqCu);
+
+        // 2. Gỡ hiệu ứng set trước
+        huyHieuUngSet(skhqCu);
+
+        // 3. Giảm chỉ số quần
         giamchiso(chisocu);
+
+        // 4. Cập nhật lại trạng thái không mặc gì
         skhq = "mac_dinh";
-        checkSetKichHoat();
-        duLieuNguoiChoi.themItemVaoHanhTrang(quanCu);
-        if (!NhanVatXuLy.getDangMacCaiTrang()){
-        NhanVatCauHinh c2 = Doi_avt_ao_quan(nhanVat.getHanhtinh(), avatardangmac, aodangmac, "set_base");
-        nhanVat.fixCaiTrang(
-            c2.dau_dung, c2.dau_chay,
-            c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
-            c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
-            c2.than_bay, c2.chan_bay,
-            c2.lechMap,
-            c2.avt
-        );
-        }
         quan = null;
+        quandangmac = "set_base";
+
+        // 5. Cập nhật giao diện nếu không cải trang
+        if (!NhanVatXuLy.getDangMacCaiTrang()) {
+            NhanVatCauHinh c2 = Doi_avt_ao_quan(nhanVat.getHanhtinh(), avatardangmac, aodangmac, "set_base");
+            nhanVat.fixCaiTrang(
+                c2.dau_dung, c2.dau_chay,
+                c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
+                c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
+                c2.than_bay, c2.chan_bay,
+                c2.lechMap,
+                c2.avt
+            );
+        }
+
+        // 6. Kiểm tra lại set còn lại có đủ không
+        kichHoatSetHienTai();
+
+        // 7. Trả quần cũ vào hành trang
+        duLieuNguoiChoi.themItemVaoHanhTrang(quanCu);
     }
+
     private void macGangMoi(Item item, int indexx, ArrayList<Item> danhSach){
+        // 1. Lưu găng cũ
         String idCu = nhanVat.getIdGang();
         String tenCu = nhanVat.getTenGang();
         String motacu = nhanVat.getMoTaGang();
         int[] chisocu = nhanVat.getChisoGang();
+        String skhgCu = skhg;
         LoaiItem loaiCu = LoaiItem.GANG;
-        Item gangCu = new Item(idCu, tenCu, loaiCu, gang, motacu, 1, chisocu, skhg);
+        Item gangCu = new Item(idCu, tenCu, loaiCu, gang, motacu, 1, chisocu, skhgCu);
+
+        // 2. Gỡ hiệu ứng set cũ
+        huyHieuUngSet(skhgCu);
+
+        // 3. Giảm chỉ số găng cũ
         giamchiso(chisocu);
 
-        // 2. Gán cải trang mới
+        // 4. Gán găng mới
         gang = item.getTexture();
         nhanVat.setIdGang(item.getId());
         nhanVat.setTenGang(item.getTenItem());
         nhanVat.setMoTaGang(item.getMoTa());
         nhanVat.setChisoGang(item.getChiso());
         skhg = item.getSetkichhoat();
+
+        // 5. Tăng chỉ số găng mới
         tangchiso(item.getChiso());
-        checkSetKichHoat();
-        // 4. Thay vào hành trang
+
+        // 6. Kích hoạt lại set nếu đủ
+        kichHoatSetHienTai();
+
+        // 7. Đưa găng cũ vào hành trang
         danhSach.set(indexx, gangCu);
     }
+
     private void goGang() {
         if (gang == null) return; // Không mặc gì thì không gỡ
+
+        // 1. Lưu găng cũ
         String idCu = nhanVat.getIdGang();
         String tenCu = nhanVat.getTenGang();
         String motacu = nhanVat.getMoTaGang();
         int[] chisocu = nhanVat.getChisoGang();
+        String skhgCu = skhg;
         LoaiItem loaiCu = LoaiItem.GANG;
-        Item gangCu = new Item(idCu, tenCu, loaiCu, gang, motacu, 1, chisocu, skhg);
+        Item gangCu = new Item(idCu, tenCu, loaiCu, gang, motacu, 1, chisocu, skhgCu);
+
+        // 2. Gỡ hiệu ứng set trước
+        huyHieuUngSet(skhgCu);
+
+        // 3. Giảm chỉ số găng
         giamchiso(chisocu);
-        skhg = "mac_dinh";
-        checkSetKichHoat();
-        duLieuNguoiChoi.themItemVaoHanhTrang(gangCu);
+
+        // 4. Cập nhật trạng thái không mặc
         gang = null;
+        skhg = "mac_dinh";
+
+        // 5. Kích hoạt lại set nếu vẫn còn đủ 4 món
+        kichHoatSetHienTai();
+
+        // 6. Trả găng cũ vào hành trang
+        duLieuNguoiChoi.themItemVaoHanhTrang(gangCu);
     }
+
     private void macGiayMoi(Item item, int indexx, ArrayList<Item> danhSach){
+        // 1. Lưu giày cũ
         String idCu = nhanVat.getIdGiay();
         String tenCu = nhanVat.getTenGiay();
         String motacu = nhanVat.getMoTaGiay();
         int[] chisocu = nhanVat.getChisoGiay();
+        String skhjCu = skhj;
         LoaiItem loaiCu = LoaiItem.GIAY;
-        Item giayCu = new Item(idCu, tenCu, loaiCu, giay, motacu, 1, chisocu, skhj);
+        Item giayCu = new Item(idCu, tenCu, loaiCu, giay, motacu, 1, chisocu, skhjCu);
+
+        // 2. Gỡ hiệu ứng set cũ
+        huyHieuUngSet(skhjCu);
+
+        // 3. Giảm chỉ số giày cũ
         giamchiso(chisocu);
 
-        // 2. Gán giày mới
+        // 4. Gán giày mới
         giay = item.getTexture();
         nhanVat.setIdGiay(item.getId());
         nhanVat.setTenGiay(item.getTenItem());
         nhanVat.setMoTaGiay(item.getMoTa());
         nhanVat.setChisoGiay(item.getChiso());
         skhj = item.getSetkichhoat();
-        tangchiso(item.getChiso());
-        checkSetKichHoat();
 
-        // 4. Thay vào hành trang
+        // 5. Tăng chỉ số giày mới
+        tangchiso(item.getChiso());
+
+        // 6. Kích hoạt lại set nếu đủ
+        kichHoatSetHienTai();
+
+        // 7. Thay giày cũ vào hành trang
         danhSach.set(indexx, giayCu);
     }
 
+
     private void goGiay() {
         if (giay == null) return; // Không mặc gì thì không gỡ
+
+        // 1. Lưu giày cũ
         String idCu = nhanVat.getIdGiay();
         String tenCu = nhanVat.getTenGiay();
         String motacu = nhanVat.getMoTaGiay();
         int[] chisocu = nhanVat.getChisoGiay();
+        String skhjCu = skhj;
         LoaiItem loaiCu = LoaiItem.GIAY;
-        Item giayCu = new Item(idCu, tenCu, loaiCu, giay, motacu, 1, chisocu, skhj);
+        Item giayCu = new Item(idCu, tenCu, loaiCu, giay, motacu, 1, chisocu, skhjCu);
+
+        // 2. Gỡ hiệu ứng set trước
+        huyHieuUngSet(skhjCu);
+
+        // 3. Giảm chỉ số giày
         giamchiso(chisocu);
-        skhj = "mac_dinh";
-        checkSetKichHoat();
-        duLieuNguoiChoi.themItemVaoHanhTrang(giayCu);
+
+        // 4. Cập nhật lại trạng thái
         giay = null;
+        skhj = "mac_dinh";
+
+        // 5. Kích hoạt lại set nếu vẫn còn đủ
+        kichHoatSetHienTai();
+
+        // 6. Trả giày cũ vào hành trang
+        duLieuNguoiChoi.themItemVaoHanhTrang(giayCu);
     }
     private void macRadaMoi(Item item, int indexx, ArrayList<Item> danhSach){
+        // 1. Lưu rada cũ
         String idCu = nhanVat.getIdRada();
         String tenCu = nhanVat.getTenRada();
         String motacu = nhanVat.getMoTaRada();
         int[] chisocu = nhanVat.getChisoRada();
+        String skhradaCu = skhrada;
         LoaiItem loaiCu = LoaiItem.RADA;
-        Item radaCu = new Item(idCu, tenCu, loaiCu, rada, motacu, 1, chisocu, skhrada);
+        Item radaCu = new Item(idCu, tenCu, loaiCu, rada, motacu, 1, chisocu, skhradaCu);
+
+        // 2. Gỡ hiệu ứng set cũ (nếu có)
+        huyHieuUngSet(skhradaCu);
+
+        // 3. Giảm chỉ số rada cũ
         giamchiso(chisocu);
 
-        // 2. Gán rada mới
+        // 4. Gán rada mới
         rada = item.getTexture();
         nhanVat.setIdRada(item.getId());
         nhanVat.setTenRada(item.getTenItem());
         nhanVat.setMoTaRada(item.getMoTa());
         nhanVat.setChisoRada(item.getChiso());
         skhrada = item.getSetkichhoat();
-        tangchiso(item.getChiso());
-        checkSetKichHoat();
 
-        // 4. Thay vào hành trang
+        // 5. Tăng chỉ số rada mới
+        tangchiso(item.getChiso());
+
+        // 6. Kích hoạt lại hiệu ứng set nếu đủ
+        kichHoatSetHienTai();
+
+        // 7. Thay rada cũ vào hành trang
         danhSach.set(indexx, radaCu);
     }
 
+
     private void goRada() {
         if (rada == null) return; // Không mặc gì thì không gỡ
+
+        // 1. Lưu rada cũ
         String idCu = nhanVat.getIdRada();
         String tenCu = nhanVat.getTenRada();
         String motacu = nhanVat.getMoTaRada();
         int[] chisocu = nhanVat.getChisoRada();
+        String skhradaCu = skhrada;
         LoaiItem loaiCu = LoaiItem.RADA;
-        Item radaCu = new Item(idCu, tenCu, loaiCu, rada, motacu, 1, chisocu, skhrada);
+        Item radaCu = new Item(idCu, tenCu, loaiCu, rada, motacu, 1, chisocu, skhradaCu);
+
+        // 2. Gỡ hiệu ứng set cũ
+        huyHieuUngSet(skhradaCu);
+
+        // 3. Giảm chỉ số rada
         giamchiso(chisocu);
-        skhrada = "mac_dinh";
-        checkSetKichHoat();
-        duLieuNguoiChoi.themItemVaoHanhTrang(radaCu);
+
+        // 4. Cập nhật trạng thái không mặc
         rada = null;
+        skhrada = "mac_dinh";
+
+        // 5. Kích hoạt lại hiệu ứng set nếu còn đủ món
+        kichHoatSetHienTai();
+
+        // 6. Trả rada cũ vào hành trang
+        duLieuNguoiChoi.themItemVaoHanhTrang(radaCu);
     }
+
     private void macCaiTrangMoi(Item item, int indexx, ArrayList<Item> danhSach, boolean caiTrangDangMac, boolean laCaiTrangMoi) {
         // 1. Lưu cải trang cũ
         String idCu = nhanVat.getIdCaiTrang();
@@ -1767,25 +1909,24 @@ public class VeHUD {
         duLieuNguoiChoi.giamKiGoc(chiso[10]);
         duLieuNguoiChoi.giamSucDanhGoc(chiso[11]);
     }
-    private void checkSetKichHoat() {
+    private void huyHieuUngSet(String setDangMac) {
+        if ("Nappa".equals(setDangMac) && vuaMoNappa) {
+            duLieuNguoiChoi.setNappa(false);
+            duLieuNguoiChoi.giamHpPt(80); // giảm đúng 80%
+            vuaMoNappa = false;
+        }
+    }
+    private void kichHoatSetHienTai() {
         boolean fullSetNappa = "Nappa".equals(skha)
             && "Nappa".equals(skhq)
             && "Nappa".equals(skhg)
             && "Nappa".equals(skhj)
             && "Nappa".equals(skhrada);
 
-        if (fullSetNappa) {
-            if (!vuaMoNappa) {
-                duLieuNguoiChoi.setNappa(true);
-                duLieuNguoiChoi.tangHpPt(80);
-                vuaMoNappa = true;
-            }
-        } else {
-            duLieuNguoiChoi.setNappa(false);
-            if (vuaMoNappa) {
-                duLieuNguoiChoi.giamHpPt(80);
-                vuaMoNappa = false;
-            }
+        if (fullSetNappa && !vuaMoNappa) {
+            duLieuNguoiChoi.setNappa(true);
+            duLieuNguoiChoi.tangHpPt(80); // tăng đúng 80%
+            vuaMoNappa = true;
         }
     }
 
