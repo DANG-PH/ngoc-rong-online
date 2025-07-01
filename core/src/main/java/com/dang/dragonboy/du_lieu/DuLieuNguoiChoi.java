@@ -1,9 +1,10 @@
 package com.dang.dragonboy.du_lieu;
 import java.util.ArrayList;
 import com.dang.dragonboy.item.Item;
-
+import com.dang.dragonboy.nhan_vat.NhanVat;
 
 public class DuLieuNguoiChoi {
+    private NhanVat nhanVat;
     private String ten;
     private long sucManh;
     private int theLuc;
@@ -30,7 +31,9 @@ public class DuLieuNguoiChoi {
     private int capcaydau;
 
     private ArrayList<Item> hanhTrang = new ArrayList<>();
-
+    public void setNhanVat(NhanVat nv) {
+        this.nhanVat = nv;
+    }
     // Constructor
     public DuLieuNguoiChoi(String ten, long sucManh, int theLuc,
                            float HpHienTai, float HpNhanVat, int HpGoc,
@@ -81,11 +84,13 @@ public class DuLieuNguoiChoi {
     }
 
     public void themItemVaoHanhTrang(Item item) {
-        hanhTrang.add(item);
+        if (hanhTrang.size() < 21) {
+            hanhTrang.add(item);
+        }
     }
 
-    public void xoaItemKhoiHanhTrang(Item item) {
-        hanhTrang.remove(item);
+    public void xoaItemKhoiHanhTrang(int index) {
+        hanhTrang.remove(index);
     }
 
     public void xoaItemTheoIndex(int index) {
@@ -164,16 +169,28 @@ public class DuLieuNguoiChoi {
     }
 
     public void tangHpGoc(int HpCongThem){
+        int[] chiso = nhanVat.getChisoCaiTrang(); // lấy chỉ số cải trang đang mặc
+        float tilePhanTramHP = chiso != null && chiso.length >= 7 ? chiso[6] : 0; // chiso[6] là %HP
+        int HpCongThemThucTe = Math.round(HpCongThem * (1 + tilePhanTramHP / 100f));
+
         this.HpGoc += HpCongThem;
-        this.HpNhanVat += HpCongThem;
+        this.HpNhanVat += HpCongThemThucTe;
     }
-    public void tangKiGoc(int KiCongThem){
+    public void tangKiGoc(int KiCongThem) {
+        int[] chiso = nhanVat.getChisoCaiTrang(); // lấy chỉ số cải trang đang mặc
+        float tilePhanTramKi = chiso != null && chiso.length >= 8 ? chiso[7] : 0; // chiso[7] là %KI
+        int KiCongThemThucTe = Math.round(KiCongThem * (1 + tilePhanTramKi / 100f));
+
         this.KiGoc += KiCongThem;
-        this.KiNhanVat += KiCongThem;
+        this.KiNhanVat += KiCongThemThucTe;
     }
-    public void tangSucDanhGoc(int SucDanhCongThem){
+    public void tangSucDanhGoc(int SucDanhCongThem) {
+        int[] chiso = nhanVat.getChisoCaiTrang(); // lấy chỉ số cải trang đang mặc
+        float tilePhanTramSucDanh = chiso != null && chiso.length >= 9 ? chiso[8] : 0; // chiso[8] là %Sức đánh
+        int SucDanhCongThemThucTe = Math.round(SucDanhCongThem * (1 + tilePhanTramSucDanh / 100f));
+
         this.SucDanhGoc += SucDanhCongThem;
-        this.SucDanhNhanVat += SucDanhCongThem;
+        this.SucDanhNhanVat += SucDanhCongThemThucTe;
     }
     public void tangGiapGoc(int GiapCongThem){
         this.GiapGoc += GiapCongThem;
@@ -187,19 +204,32 @@ public class DuLieuNguoiChoi {
     public void tangHp(int HpCongThem){
         this.HpNhanVat += HpCongThem;
     }
+    public void tangHpPt(int HpCongThem){ this.HpNhanVat *= (1f+HpCongThem/100f); }
     public void tangHpHienTai(int HpCongThem){
         this.HpHienTai += HpCongThem;
+        this.HpHienTai = Math.min(HpHienTai,HpNhanVat);
+    }
+    public void tangHpPtHienTai(int HpCongThem){
+        this.HpHienTai *= (1f+HpCongThem/100f);
         this.HpHienTai = Math.min(HpHienTai,HpNhanVat);
     }
     public void tangKi(int KiCongThem){
         this.KiNhanVat += KiCongThem;
     }
+    public void tangKiPt(int KiCongThem){ this.KiNhanVat *= (1f+KiCongThem/100f); }
     public void tangKiHienTai(int KiCongThem){
         this.KiHienTai += KiCongThem;
         this.KiHienTai = Math.min(KiHienTai,KiNhanVat);
     }
+    public void tangKiPtHienTai(int KiCongThem){
+        this.KiHienTai *= (1f+KiCongThem/100f);
+        this.KiHienTai = Math.min(KiHienTai,KiNhanVat);
+    }
     public void tangSucDanh(int SucDanhCongThem){
         this.SucDanhNhanVat += SucDanhCongThem;
+    }
+    public void tangSucDanhPt(int SucDanhCongThem){
+        this.SucDanhNhanVat *= (1f+SucDanhCongThem/100f);
     }
     public void tangGiap(int GiapCongThem){
         this.GiapNhanVat += GiapCongThem;
@@ -239,11 +269,20 @@ public class DuLieuNguoiChoi {
     public void giamHp(int Hp){
         this.HpNhanVat -= Hp;
     }
+    public void giamHpPt(int Hp){
+        this.HpNhanVat /= (1f+Hp/100f);
+    }
     public void giamKi(int Ki){
         this.KiNhanVat -= Ki;
     }
+    public void giamKiPt(int Ki){
+        this.KiNhanVat /= (1f+Ki/100f);
+    }
     public void giamSucDanh(int SucDanh){
         this.SucDanhNhanVat -= SucDanh;
+    }
+    public void giamSucDanhPt(int SucDanh){
+        this.SucDanhNhanVat /= (1f+SucDanh/100f);
     }
     public void giamGiap(int Giap){
         this.GiapNhanVat -= Giap;

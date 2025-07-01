@@ -165,7 +165,8 @@ public class ManHinhChoiTiep implements Screen {
             config.lechMap,
             config.avt,
             null,null,null,null,null,null,null,config.vanbay,
-            6
+            6,
+            hanhtinh,nhanvat
         );
         nhanVat = haidang;
 //        NhanVatCauHinh c2 = Doi_avt_ao_quan(hanhtinh,nhanvat+"_base","set_huy_diet","set_cam");

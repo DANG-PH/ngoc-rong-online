@@ -78,12 +78,14 @@ public class NhanVat {
     public void setDanhSachDat(List<HitboxDat> ds) {
         this.danhSachDat = ds;
     }
+    private String hanhtinh;
+    private String nhanvat;
 
     // ==== THUỘC TÍNH GAMEPLAY ==== //
     private long sucManh = 99_999_999_999L;
     private int theLuc = 100;
 
-    private int HpGoc = 550000;
+    private int HpGoc = 500000;
     private int KiGoc = 500000;
     private float HpNhanVat = HpGoc;
     private float KiNhanVat = KiGoc;
@@ -113,11 +115,19 @@ public class NhanVat {
     private int CapSkill7 = 1;
     private int CapSkill8 = 0;
     private int CapSkill9 = 7;
+    private String idCaiTrang = "mac_dinh";
     private String tenCaiTrang = "mac_dinh";
     private String moTaCaiTrang = "mac_dinh";
     private int[] chiso ;
 
 
+    public void setIdCaiTrang(String id) {
+        this.idCaiTrang = id;
+    }
+
+    public String getIdCaiTrang() {
+        return idCaiTrang;
+    }
     public void setTenCaiTrang(String ten) {
         this.tenCaiTrang = ten;
     }
@@ -134,11 +144,11 @@ public class NhanVat {
         return moTaCaiTrang;
     }
 
-    public void setChiso(int[] chiso) {
+    public void setChisoCaiTrang(int[] chiso) {
         this.chiso = chiso;
     }
 
-    public int[] getChiso() {
+    public int[] getChisoCaiTrang() {
         return chiso;
     }
 
@@ -202,6 +212,9 @@ public class NhanVat {
     public int getNgoc() {
         return ngoc;
     }
+
+    public String getHanhtinh(){ return hanhtinh;}
+    public String getNhanvat(){ return nhanvat;}
 
     public String getCapBac() {
         return capBac;
@@ -311,7 +324,7 @@ public class NhanVat {
                    Texture chan_dung, Texture chan_nhay, Texture chan_roi, Texture[] chan_chay,
                    Texture than_bay,Texture chan_bay,Map<TrangThai, DoLechModular> lechTheoTrangThai,String avt,
                    Texture ao, Texture quan, Texture gang, Texture giay, Texture rada, Texture iconct, Texture giaplt, Texture vanbay,
-                   int capcaydau) {
+                   int capcaydau, String hanhtinh, String nhanvat) {
         this.x = x;
         this.y = y;
 
@@ -345,6 +358,8 @@ public class NhanVat {
 
         this.lechTheoTrangThai = lechTheoTrangThai;
         this.capcaydau = capcaydau;
+        this.hanhtinh = hanhtinh;
+        this.nhanvat = nhanvat;
         taiAnhVanBay("candauvan"); // tùy chọn
     }
 
