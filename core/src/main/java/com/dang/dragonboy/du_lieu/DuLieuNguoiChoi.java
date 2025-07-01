@@ -2,6 +2,7 @@ package com.dang.dragonboy.du_lieu;
 import java.util.ArrayList;
 import com.dang.dragonboy.item.Item;
 import com.dang.dragonboy.nhan_vat.NhanVat;
+import com.dang.dragonboy.nhan_vat.NhanVatXuLy;
 
 public class DuLieuNguoiChoi {
     private NhanVat nhanVat;
@@ -12,9 +13,12 @@ public class DuLieuNguoiChoi {
     private int GiapNhanVat,ChiMangNhanVat;
     private int HpGoc;
     private int KiGoc;
+    private int HpGocNhanVat;
+    private int KiGocNhanVat;
     private float HpHienTai;
     private float KiHienTai;
     private int SucDanhGoc;
+    private int SucDanhGocNhanVat;
     private int GiapGoc;
     private int ChiMangGoc;
     private int SatThuongChiMang;
@@ -34,6 +38,7 @@ public class DuLieuNguoiChoi {
     public void setNhanVat(NhanVat nv) {
         this.nhanVat = nv;
     }
+    private boolean setKichHoatNappa = false;
     // Constructor
     public DuLieuNguoiChoi(String ten, long sucManh, int theLuc,
                            float HpHienTai, float HpNhanVat, int HpGoc,
@@ -168,29 +173,106 @@ public class DuLieuNguoiChoi {
         this.sucManh += SucManhCongThem;
     }
 
-    public void tangHpGoc(int HpCongThem){
-        int[] chiso = nhanVat.getChisoCaiTrang(); // lấy chỉ số cải trang đang mặc
-        float tilePhanTramHP = chiso != null && chiso.length >= 7 ? chiso[6] : 0; // chiso[6] là %HP
-        int HpCongThemThucTe = Math.round(HpCongThem * (1 + tilePhanTramHP / 100f));
+    public void tangHpGoc(int HpCongThem,boolean choPhepHienThi){
+        int[] chisoCaiTrang = nhanVat.getChisoCaiTrang(); // chỉ số cải tranga
 
-        this.HpGoc += HpCongThem;
+        float tilePhanTramHP = 0;
+
+        // Hàm phụ cộng %HP nếu mảng hợp lệ và có phần tử thứ 6
+        if (NhanVatXuLy.getDangMacCaiTrang() || NhanVatXuLy.getDangMacAvatar()) {
+            tilePhanTramHP += (chisoCaiTrang != null && chisoCaiTrang.length >= 7) ? chisoCaiTrang[6] : 0;
+        }
+        if (setKichHoatNappa){
+            tilePhanTramHP += 80;
+        }
+        // Tính HP cộng thêm thực tế
+        int HpCongThemThucTe = Math.round(HpCongThem * (1 + tilePhanTramHP / 100f));
+        // Cộng vào HpGoc (tối đa 550000)
+        if (choPhepHienThi){
+            this.HpGoc += HpCongThem;
+            if (this.HpGoc >= 550000){
+                this.HpGoc = 550000;
+            }
+        }
+        // Cộng vào HP tổng
         this.HpNhanVat += HpCongThemThucTe;
     }
-    public void tangKiGoc(int KiCongThem) {
-        int[] chiso = nhanVat.getChisoCaiTrang(); // lấy chỉ số cải trang đang mặc
-        float tilePhanTramKi = chiso != null && chiso.length >= 8 ? chiso[7] : 0; // chiso[7] là %KI
+    public void giamHpGoc(int HpCongThem){
+        int[] chisoCaiTrang = nhanVat.getChisoCaiTrang(); // chỉ số cải trang
+        float tilePhanTramHP = 0;
+
+        // Hàm phụ cộng %HP nếu mảng hợp lệ và có phần tử thứ 6
+        if (NhanVatXuLy.getDangMacCaiTrang() || NhanVatXuLy.getDangMacAvatar()) {
+            tilePhanTramHP += (chisoCaiTrang != null && chisoCaiTrang.length >= 7) ? chisoCaiTrang[6] : 0;
+        }
+        if (setKichHoatNappa){
+            tilePhanTramHP += 80;
+        }
+        // Tính HP cộng thêm thực tế
+        int HpCongThemThucTe = Math.round(HpCongThem * (1 + tilePhanTramHP / 100f));
+        // Cộng vào HP tổng
+        this.HpNhanVat -= HpCongThemThucTe;
+    }
+
+    public void tangKiGoc(int KiCongThem,boolean choPhepHienThi) {
+        int[] chisoCaiTrang = nhanVat.getChisoCaiTrang();
+
+        float tilePhanTramKi = 0;
+        if (NhanVatXuLy.getDangMacCaiTrang() || NhanVatXuLy.getDangMacAvatar()) {
+            tilePhanTramKi +=chisoCaiTrang[7];
+        }
         int KiCongThemThucTe = Math.round(KiCongThem * (1 + tilePhanTramKi / 100f));
 
-        this.KiGoc += KiCongThem;
+        if (choPhepHienThi){
+            this.KiGoc += KiCongThem;
+            if (this.KiGoc >= 550000){
+                this.KiGoc = 550000;
+            }
+        }
         this.KiNhanVat += KiCongThemThucTe;
     }
-    public void tangSucDanhGoc(int SucDanhCongThem) {
-        int[] chiso = nhanVat.getChisoCaiTrang(); // lấy chỉ số cải trang đang mặc
-        float tilePhanTramSucDanh = chiso != null && chiso.length >= 9 ? chiso[8] : 0; // chiso[8] là %Sức đánh
+    public void giamKiGoc(int KiCongThem){
+        int[] chisoCaiTrang = nhanVat.getChisoCaiTrang(); // chỉ số cải trang
+        float tilePhanTramKi = 0;
+
+        // Hàm phụ cộng %Ki nếu mảng hợp lệ và có phần tử thứ 6
+        if (NhanVatXuLy.getDangMacCaiTrang() || NhanVatXuLy.getDangMacAvatar()) {
+            tilePhanTramKi += chisoCaiTrang[7];
+        }
+        // Tính HP cộng thêm thực tế
+        int KiCongThemThucTe = Math.round(KiCongThem * (1 + tilePhanTramKi / 100f));
+        // Cộng vào Ki tổng
+        this.KiNhanVat -= KiCongThemThucTe;
+    }
+    public void tangSucDanhGoc(int SucDanhCongThem,boolean choPhepHienThi) {
+        int[] chisoCaiTrang = nhanVat.getChisoCaiTrang();
+
+        float tilePhanTramSucDanh = 0;
+        if (NhanVatXuLy.getDangMacCaiTrang() || NhanVatXuLy.getDangMacAvatar()) {
+            tilePhanTramSucDanh += chisoCaiTrang[8];
+        }
         int SucDanhCongThemThucTe = Math.round(SucDanhCongThem * (1 + tilePhanTramSucDanh / 100f));
 
-        this.SucDanhGoc += SucDanhCongThem;
+        if (choPhepHienThi){
+            this.SucDanhGoc += SucDanhCongThem;
+            if (this.SucDanhGoc >= 25000){
+                this.SucDanhGoc = 25000;
+            }
+        }
         this.SucDanhNhanVat += SucDanhCongThemThucTe;
+    }
+    public void giamSucDanhGoc(int SucDanhCongThem){
+        int[] chisoCaiTrang = nhanVat.getChisoCaiTrang(); // chỉ số cải trang
+        float tilePhanTramSucDanh = 0;
+
+        // Hàm phụ cộng %Ki nếu mảng hợp lệ và có phần tử thứ 6
+        if (NhanVatXuLy.getDangMacCaiTrang() || NhanVatXuLy.getDangMacAvatar()){
+            tilePhanTramSucDanh += chisoCaiTrang[8];
+        }
+        // Tính HP cộng thêm thực tế
+        int SucDanhCongThemThucTe = Math.round(SucDanhCongThem * (1 + tilePhanTramSucDanh / 100f));
+        // Cộng vào Ki tổng
+        this.SucDanhNhanVat -= SucDanhCongThemThucTe;
     }
     public void tangGiapGoc(int GiapCongThem){
         this.GiapGoc += GiapCongThem;
@@ -309,12 +391,11 @@ public class DuLieuNguoiChoi {
     public void giamDau(){
         this.soDauThan -= 1;
     }
-    // Setter (khi chơi game sẽ cần thay đổi)
-    public void setHpHienTai(int HpHienTai) { this.HpHienTai = HpHienTai; }
-    public void setKiHienTai(int KiHienTai) { this.KiHienTai = KiHienTai; }
-    public void setTheLuc(int theLuc) { this.theLuc = theLuc; }
-    public void setSoDauThan(int soDauThan) { this.soDauThan = soDauThan; }
-    public void setVang(long vang) { this.vang = vang; }
-    public void setNgoc(long ngoc) { this.ngoc = ngoc; }
-
+    public void setNappa(boolean duDieuKien){
+        if (duDieuKien){
+            setKichHoatNappa = true;
+        } else {
+            setKichHoatNappa = false;
+        }
+    }
 }

@@ -6,6 +6,7 @@ import java.util.Map;
 
 public class NhanVatXuLy {
     public static boolean dangMacCaiTrang = false;
+    public static boolean dangMacAvatar = false;
     // ==== CAITRANG (dạng cố định) ====
     public static NhanVatCauHinh loadCaiTrang(String tenCaiTrang) {
         String path = "nhanvat/caitrang/" + tenCaiTrang + "/";
@@ -51,6 +52,7 @@ public class NhanVatXuLy {
 
         Map<TrangThai, DoLechModular> lech = CaiTrangOffset.getOffset(tenCaiTrang);
         dangMacCaiTrang = true;
+        dangMacAvatar = false;
         return new NhanVatCauHinh(
             dau_dung, dau_chay,
             than_dung, than_nhay, than_roi, than_chay,
@@ -68,7 +70,7 @@ public class NhanVatXuLy {
         String aoPath = basePath + "do/" + ao + "/";
         String quanPath = basePath + "do/" + quan + "/";
         String avatarPath = basePath + "avatar/" + avatar + "/";
-
+        String checkDau = avatar;
         String avt = avatarPath + "avt.png";
         String itemdo = "vatpham/do/";
         String itemvanbay = "vatpham/vanbay/";
@@ -112,6 +114,11 @@ public class NhanVatXuLy {
 
         Map<TrangThai, DoLechModular> lech = AvatarDoOffset.getOffset(avatar, ao, quan);
         dangMacCaiTrang = false;
+        if (!checkDau.contains("_base")) {
+            dangMacAvatar = true;
+        } else {
+            dangMacAvatar = false;
+        }
         return new NhanVatCauHinh(
             dau_dung, dau_chay,
             than_dung, than_nhay, than_roi, than_chay,
@@ -139,5 +146,8 @@ public class NhanVatXuLy {
 
     public static boolean getDangMacCaiTrang(){
         return dangMacCaiTrang;
+    }
+    public static boolean getDangMacAvatar(){
+        return dangMacAvatar;
     }
 }

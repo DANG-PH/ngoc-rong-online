@@ -118,9 +118,29 @@ public class NhanVat {
     private String idCaiTrang = "mac_dinh";
     private String tenCaiTrang = "mac_dinh";
     private String moTaCaiTrang = "mac_dinh";
-    private int[] chiso ;
+    private int[] chisoCaiTrang ;
+    private String idAo = "mac_dinh";
+    private String tenAo = "mac_dinh";
+    private String moTaAo = "mac_dinh";
+    private int[] chisoAo ;
+    private String idQuan = "mac_dinh";
+    private String tenQuan = "mac_dinh";
+    private String moTaQuan = "mac_dinh";
+    private int[] chisoQuan ;
+    private String idGang = "mac_dinh";
+    private String tenGang = "mac_dinh";
+    private String moTaGang = "mac_dinh";
+    private int[] chisoGang ;
+    private String idGiay = "mac_dinh";
+    private String tenGiay = "mac_dinh";
+    private String moTaGiay = "mac_dinh";
+    private int[] chisoGiay ;
+    private String idRada = "mac_dinh";
+    private String tenRada = "mac_dinh";
+    private String moTaRada = "mac_dinh";
+    private int[] chisoRada ;
 
-
+    // cai trang
     public void setIdCaiTrang(String id) {
         this.idCaiTrang = id;
     }
@@ -135,7 +155,6 @@ public class NhanVat {
     public String getTenCaiTrang() {
         return tenCaiTrang;
     }
-
     public void setMoTaCaiTrang(String mota) {
         this.moTaCaiTrang = mota;
     }
@@ -145,11 +164,171 @@ public class NhanVat {
     }
 
     public void setChisoCaiTrang(int[] chiso) {
-        this.chiso = chiso;
+        this.chisoCaiTrang = chiso;
     }
 
     public int[] getChisoCaiTrang() {
-        return chiso;
+        return chisoCaiTrang;
+    }
+
+    // ao
+    public void setIdAo(String id) {
+        this.idAo = id;
+    }
+
+    public String getIdAo() {
+        return idAo;
+    }
+
+    public void setTenAo(String ten) {
+        this.tenAo = ten;
+    }
+
+    public String getTenAo() {
+        return tenAo;
+    }
+
+    public void setMoTaAo(String mota) {
+        this.moTaAo = mota;
+    }
+
+    public String getMoTaAo() {
+        return moTaAo;
+    }
+
+    public void setChisoAo(int[] chiso) {
+        this.chisoAo = chiso;
+    }
+
+    public int[] getChisoAo() {
+        return chisoAo;
+    }
+
+    // quan
+    public void setIdQuan(String id) {
+        this.idQuan = id;
+    }
+
+    public String getIdQuan() {
+        return idQuan;
+    }
+
+    public void setTenQuan(String ten) {
+        this.tenQuan = ten;
+    }
+
+    public String getTenQuan() {
+        return tenQuan;
+    }
+
+    public void setMoTaQuan(String mota) {
+        this.moTaQuan = mota;
+    }
+
+    public String getMoTaQuan() {
+        return moTaQuan;
+    }
+
+    public void setChisoQuan(int[] chiso) {
+        this.chisoQuan = chiso;
+    }
+
+    public int[] getChisoQuan() {
+        return chisoQuan;
+    }
+
+    // gang
+    public void setIdGang(String id) {
+        this.idGang = id;
+    }
+
+    public String getIdGang() {
+        return idGang;
+    }
+    public void setTenGang(String ten) {
+        this.tenGang = ten;
+    }
+
+    public String getTenGang() {
+        return tenGang;
+    }
+
+    public void setMoTaGang(String mota) {
+        this.moTaGang = mota;
+    }
+
+    public String getMoTaGang() {
+        return moTaGang;
+    }
+
+    public void setChisoGang(int[] chiso) {
+        this.chisoGang = chiso;
+    }
+
+    public int[] getChisoGang() {
+        return chisoGang;
+    }
+    //giay
+    public void setIdGiay(String id) {
+        this.idGiay = id;
+    }
+
+    public String getIdGiay() {
+        return idGiay;
+    }
+    public void setTenGiay(String ten) {
+        this.tenGiay = ten;
+    }
+
+    public String getTenGiay() {
+        return tenGiay;
+    }
+
+    public void setMoTaGiay(String mota) {
+        this.moTaGiay = mota;
+    }
+
+    public String getMoTaGiay() {
+        return moTaGiay;
+    }
+
+    public void setChisoGiay(int[] chiso) {
+        this.chisoGiay = chiso;
+    }
+
+    public int[] getChisoGiay() {
+        return chisoGiay;
+    }
+    // rada
+    public void setIdRada(String id) {
+        this.idRada = id;
+    }
+
+    public String getIdRada() {
+        return idRada;
+    }
+    public void setTenRada(String ten) {
+        this.tenRada = ten;
+    }
+
+    public String getTenRada() {
+        return tenRada;
+    }
+
+    public void setMoTaRada(String mota) {
+        this.moTaRada = mota;
+    }
+
+    public String getMoTaRada() {
+        return moTaRada;
+    }
+
+    public void setChisoRada(int[] chiso) {
+        this.chisoRada = chiso;
+    }
+
+    public int[] getChisoRada() {
+        return chisoRada;
     }
 
     public long getSucManh() {return sucManh;}
