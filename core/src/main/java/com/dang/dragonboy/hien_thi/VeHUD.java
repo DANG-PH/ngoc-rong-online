@@ -142,16 +142,6 @@ public class VeHUD {
             null
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
-            "set_huy_diet",
-            "ao huy diet",
-            LoaiItem.AO,
-            new Texture("vatpham/do/aoquan/"+nhanVat.getHanhtinh()+"/set_huy_diet/ao.png"),
-            "",
-            1,
-            new int[]{0, 0, 0, 0, 2500, 0, 0, 0, 0,0,0,0},
-            "Nappa"
-        ));
-        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "set_cam",
             "quan cam kame",
             LoaiItem.QUAN,
@@ -160,16 +150,6 @@ public class VeHUD {
             1,
             new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0,5000,0,0},
             null
-        ));
-        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
-            "set_huy_diet",
-            "quan huy diet",
-            LoaiItem.QUAN,
-            new Texture("vatpham/do/aoquan/"+nhanVat.getHanhtinh()+"/set_huy_diet/quan.png"),
-            "",
-            1,
-            new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0,120000,0,0},
-            "Nappa"
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "set_cam",
@@ -182,16 +162,6 @@ public class VeHUD {
             null
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
-            "set_huy_diet",
-            "gang hủy diệt",
-            LoaiItem.GANG,
-            new Texture("vatpham/do/gang/"+nhanVat.getHanhtinh()+"/ganghuydiet.png"),
-            "",
-            1,
-            new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,9000},
-            "Nappa"
-        ));
-        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "set_cam",
             "giay cam",
             LoaiItem.GIAY,
@@ -202,16 +172,6 @@ public class VeHUD {
             null
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
-            "set_huy_diet",
-            "giay huy diet",
-            LoaiItem.GIAY,
-            new Texture("vatpham/do/giay/"+nhanVat.getHanhtinh()+"/giayhuydiet.png"),
-            "",
-            1,
-            new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0,0,100000,0},
-            "Nappa"
-        ));
-        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "rada1",
             "rada cap 1",
             LoaiItem.RADA,
@@ -220,6 +180,46 @@ public class VeHUD {
             1,
             new int[]{0, 0, 0, 1, 0, 0, 0, 0, 0,0,0,0},
             null
+        ));
+        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
+            "set_huy_diet",
+            "ao huy diet",
+            LoaiItem.AO,
+            new Texture("vatpham/do/aoquan/"+nhanVat.getHanhtinh()+"/set_huy_diet/ao.png"),
+            "",
+            1,
+            new int[]{0, 0, 0, 0, 2500, 0, 0, 0, 0,0,0,0},
+            "Nappa"
+        ));
+        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
+            "set_huy_diet",
+            "quan huy diet",
+            LoaiItem.QUAN,
+            new Texture("vatpham/do/aoquan/"+nhanVat.getHanhtinh()+"/set_huy_diet/quan.png"),
+            "",
+            1,
+            new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0,120000,0,0},
+            "Nappa"
+        ));
+        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
+            "set_huy_diet",
+            "gang hủy diệt",
+            LoaiItem.GANG,
+            new Texture("vatpham/do/gang/"+nhanVat.getHanhtinh()+"/ganghuydiet.png"),
+            "",
+            1,
+            new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,9000},
+            "Nappa"
+        ));
+        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
+            "set_huy_diet",
+            "giay huy diet",
+            LoaiItem.GIAY,
+            new Texture("vatpham/do/giay/"+nhanVat.getHanhtinh()+"/giayhuydiet.png"),
+            "",
+            1,
+            new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0,0,100000,0},
+            "Nappa"
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "rada_huy_diet",
