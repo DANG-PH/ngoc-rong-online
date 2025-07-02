@@ -39,6 +39,8 @@ public class DuLieuNguoiChoi {
         this.nhanVat = nv;
     }
     private boolean setKichHoatNappa = false;
+    private boolean checkgiapluyentap = true;
+    private int chiSoGlt;
     // Constructor
     public DuLieuNguoiChoi(String ten, long sucManh, int theLuc,
                            float HpHienTai, float HpNhanVat, int HpGoc,
@@ -251,32 +253,38 @@ public class DuLieuNguoiChoi {
     public void tangSucDanhGoc(int SucDanhCongThem,boolean choPhepHienThi) {
         int[] chisoCaiTrang = nhanVat.getChisoCaiTrang();
 
-        float tilePhanTramSucDanh = 0;
+        float tilePhanTramSucDanhCaiTrang = 0;
+        float tilePhanTramSucDanhglt = 0;
         if (NhanVatXuLy.getDangMacCaiTrang() || NhanVatXuLy.getDangMacAvatar()) {
-            tilePhanTramSucDanh += chisoCaiTrang[8];
+            tilePhanTramSucDanhCaiTrang += chisoCaiTrang[8];
         }
-        int SucDanhCongThemThucTe = Math.round(SucDanhCongThem * (1 + tilePhanTramSucDanh / 100f));
-
+        if (!checkgiapluyentap) {
+            tilePhanTramSucDanhglt += chiSoGlt;
+        }
+        int SucDanhCongThemThucTe = Math.round(SucDanhCongThem * (1 + tilePhanTramSucDanhCaiTrang / 100f));
+        int SucDanhCongThemThucTee = Math.round(SucDanhCongThemThucTe * (1 + tilePhanTramSucDanhglt/ 100f));
         if (choPhepHienThi){
             this.SucDanhGoc += SucDanhCongThem;
             if (this.SucDanhGoc >= 25000){
                 this.SucDanhGoc = 25000;
             }
         }
-        this.SucDanhNhanVat += SucDanhCongThemThucTe;
+        this.SucDanhNhanVat += SucDanhCongThemThucTee;
     }
     public void giamSucDanhGoc(int SucDanhCongThem){
         int[] chisoCaiTrang = nhanVat.getChisoCaiTrang(); // chỉ số cải trang
-        float tilePhanTramSucDanh = 0;
-
-        // Hàm phụ cộng %Ki nếu mảng hợp lệ và có phần tử thứ 6
-        if (NhanVatXuLy.getDangMacCaiTrang() || NhanVatXuLy.getDangMacAvatar()){
-            tilePhanTramSucDanh += chisoCaiTrang[8];
+        float tilePhanTramSucDanhCaiTrang = 0;
+        float tilePhanTramSucDanhglt = 0;
+        if (NhanVatXuLy.getDangMacCaiTrang() || NhanVatXuLy.getDangMacAvatar()) {
+            tilePhanTramSucDanhCaiTrang += chisoCaiTrang[8];
         }
-        // Tính HP cộng thêm thực tế
-        int SucDanhCongThemThucTe = Math.round(SucDanhCongThem * (1 + tilePhanTramSucDanh / 100f));
+        if (!checkgiapluyentap) {
+            tilePhanTramSucDanhglt += chiSoGlt;
+        }
+        int SucDanhCongThemThucTe = Math.round(SucDanhCongThem * (1 + tilePhanTramSucDanhCaiTrang / 100f));
+        int SucDanhCongThemThucTee = Math.round(SucDanhCongThemThucTe * (1 + tilePhanTramSucDanhglt/ 100f));
         // Cộng vào Ki tổng
-        this.SucDanhNhanVat -= SucDanhCongThemThucTe;
+        this.SucDanhNhanVat -= SucDanhCongThemThucTee;
     }
     public void tangGiapGoc(int GiapCongThem){
         this.GiapGoc += GiapCongThem;
@@ -400,6 +408,14 @@ public class DuLieuNguoiChoi {
             setKichHoatNappa = true;
         } else {
             setKichHoatNappa = false;
+        }
+    }
+    public void checkGiapLuyenTap(boolean duDieuKien,int chiso){
+        if (duDieuKien){
+            checkgiapluyentap = true;
+        } else {
+            checkgiapluyentap = false;
+            chiSoGlt = chiso;
         }
     }
 }

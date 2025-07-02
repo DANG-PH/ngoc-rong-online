@@ -22,7 +22,7 @@ public class NhanVatXuLy {
         Texture rada = new Texture(itemdo+"rada/rada1.png");
         Texture iconct = new Texture(path + "dung.png");
         Texture giaplt = new Texture(itemglt+"gltc1.png");
-        Texture vanbay = new Texture(itemvanbay+"phuong_hoang_lua/phuonghoanglua.png");
+        Texture vanbay = new Texture(itemvanbay+"candauvan/candauvan.png");
         Texture dau_dung = new Texture(path + "dung.png");
         Texture dau_chay = new Texture(path + "chay.png");
 
@@ -83,7 +83,7 @@ public class NhanVatXuLy {
         Texture rada = new Texture(itemdo+"rada/rada1.png");
         Texture iconct = new Texture(avatarPath + "dung.png");
         Texture giaplt = new Texture(itemglt+"gltc1.png");
-        Texture vanbay = new Texture(itemvanbay+"phuong_hoang_lua/phuonghoanglua.png");
+        Texture vanbay = new Texture(itemvanbay+"candauvan/candauvan.png");
 
         Texture dau_dung = new Texture(avatarPath + "dung.png");
         Texture dau_chay = new Texture(avatarPath + "chay.png");

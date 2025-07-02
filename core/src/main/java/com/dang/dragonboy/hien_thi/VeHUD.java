@@ -97,10 +97,29 @@ public class VeHUD {
     private String skhj = "thuong";
     private String skhrada = "thuong";
     private boolean vuaMoNappa = false;
+    private boolean vanBayDau = true;
+    private boolean lanDau = true;
+    private int[] chisovuathao;
+    private boolean dangMacGiapLuyenTap = false;
+    private float timeMacGiapLuyenTap;
+    private boolean daCongChiMang = false;
 
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data; // truyền data vào để xử lí hud
         duLieuNguoiChoi.setNhanVat(nhanVat);
+        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
+            "phuong_hoang_lua",
+            "Ván bay",
+            LoaiItem.VANBAY,
+            new Texture("vatpham/vanbay/phuong_hoang_lua/phuonghoanglua.png"),
+            "",
+            1,
+            new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            null,
+            0,
+            0,
+            -1
+        ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "goku_black",
             "Black goku",
@@ -109,7 +128,10 @@ public class VeHUD {
             "Cải trang Goku Black",
             1,
             new int[]{0, 0, 0, 0, 0, 0, 25, 25, 25,0,0,0},
-            null
+            null,
+            0,
+            0,
+            -1
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "vegito_xeno",
@@ -119,7 +141,10 @@ public class VeHUD {
             "Cải trang Goku Black",
             1,
             new int[]{0, 0, 0, 20, 1010, 0, 70, 70, 70,0,0,0},
-            null
+            null,
+            0,
+            0,
+            -1
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "avt_vip",
@@ -129,7 +154,10 @@ public class VeHUD {
             "AVATAR VIP",
             1,
             new int[]{0, 0, 0, 0, 10, 0, 15, 15, 15,0,0,0},
-            null
+            null,
+            0,
+            0,
+            -1
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "set_cam",
@@ -139,7 +167,10 @@ public class VeHUD {
             "",
             1,
             new int[]{0, 0, 0, 0, 10, 0, 0, 0, 0,0,0,0},
-            null
+            null,
+            3,
+            3,
+            -1
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "set_cam",
@@ -149,7 +180,10 @@ public class VeHUD {
             "",
             1,
             new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0,5000,0,0},
-            null
+            null,
+            3,
+            3,
+            -1
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "set_cam",
@@ -159,7 +193,10 @@ public class VeHUD {
             "",
             1,
             new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,5},
-            null
+            null,
+            3,
+            3,
+            -1
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "set_cam",
@@ -169,7 +206,10 @@ public class VeHUD {
             "",
             1,
             new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0,0,200,0},
-            null
+            null,
+            3,
+            3,
+            -1
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "rada1",
@@ -179,7 +219,10 @@ public class VeHUD {
             "",
             1,
             new int[]{0, 0, 0, 1, 0, 0, 0, 0, 0,0,0,0},
-            null
+            null,
+            3,
+            3,
+            -1
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "set_huy_diet",
@@ -189,7 +232,10 @@ public class VeHUD {
             "",
             1,
             new int[]{0, 0, 0, 0, 2500, 0, 0, 0, 0,0,0,0},
-            "Nappa"
+            "Nappa",
+            7,
+            7,
+            -1
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "set_huy_diet",
@@ -199,7 +245,10 @@ public class VeHUD {
             "",
             1,
             new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0,120000,0,0},
-            "Nappa"
+            "Nappa",
+            7,
+            7,
+            -1
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "set_huy_diet",
@@ -209,7 +258,10 @@ public class VeHUD {
             "",
             1,
             new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,9000},
-            "Nappa"
+            "Nappa",
+            7,
+            7,
+            -1
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "set_huy_diet",
@@ -219,7 +271,10 @@ public class VeHUD {
             "",
             1,
             new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0,0,100000,0},
-            "Nappa"
+            "Nappa",
+            7,
+            7,
+            -1
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "rada_huy_diet",
@@ -229,7 +284,36 @@ public class VeHUD {
             "",
             1,
             new int[]{0, 0, 0, 20, 0, 0, 0, 0, 0,0,0,0},
-            "Nappa"
+            "Nappa",
+            7,
+            7,
+            -1
+        ));
+        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
+            "glt_c3",
+            "Giáp luyện tập cấp 3",
+            LoaiItem.GIAPLUYENTAP,
+            new Texture("vatpham/vatphamgame/giapluyentap/gltc3.png"),
+            "",
+            1,
+            new int[]{0, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0},
+            null,
+            7,
+            0,
+            0
+        ));
+        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
+            "glt_c1",
+            "Giáp luyện tập cấp 1",
+            LoaiItem.GIAPLUYENTAP,
+            new Texture("vatpham/vatphamgame/giapluyentap/gltc1.png"),
+            "",
+            1,
+            new int[]{0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0},
+            null,
+            7,
+            0,
+            0
         ));
     }
     public void setSkillIcons(SkillIcon[] skillIcons) {
@@ -407,6 +491,31 @@ public class VeHUD {
             dauThanRenderH+=10.6f*Gdx.graphics.getDeltaTime();
             dauThanRenderH = Math.min(dauThanRenderH, 53f);
         }
+
+        if (dangMacGiapLuyenTap){
+            nhanVat.tangHanSuDungGiapLuyenTap();
+            timeMacGiapLuyenTap = nhanVat.getHanSuDungGiapLuyenTap();
+            nhanVat.setHanSuDungGiapLuyenTap(timeMacGiapLuyenTap);
+            if (daCongChiMang){
+                duLieuNguoiChoi.giamSatThuongChiMang(30);
+                duLieuNguoiChoi.giamChiMang(15);
+                daCongChiMang = false;
+            }
+        } else {
+            nhanVat.giamHanSuDungGiapLuyenTap();
+            timeMacGiapLuyenTap = nhanVat.getHanSuDungGiapLuyenTap();
+            nhanVat.setHanSuDungGiapLuyenTap(timeMacGiapLuyenTap);
+            if (timeMacGiapLuyenTap>10f && !daCongChiMang){
+                duLieuNguoiChoi.tangSatThuongChiMang(30);
+                duLieuNguoiChoi.tangChiMang(15);
+                daCongChiMang = true;
+            }
+            if (daCongChiMang && timeMacGiapLuyenTap<=10f){
+                duLieuNguoiChoi.giamSatThuongChiMang(30);
+                duLieuNguoiChoi.giamChiMang(15);
+                daCongChiMang = false;
+            }
+        }
         batch.end();
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
@@ -438,6 +547,8 @@ public class VeHUD {
         shapeRenderer.end();
 
         batch.begin();
+        layout.setText(fontsm,nhanVat.getHanSuDungGiapLuyenTap()+"");
+        fontsm.draw(batch,layout,500,300);
         // ô chat (góc phải trên)
         int ochatW = 60;
         int ochatH = 60;
@@ -575,6 +686,7 @@ public class VeHUD {
             for (int i = 0; i < 5; i++) {
                 if (x >= 2+i*68+3 && x <= 2+i*68+3 + 68 && y >= 450 && y <= 450 + 52){
                     chucNangDangChon=i;
+                    scrollY = 0;
                 }
             }
         }
@@ -602,6 +714,8 @@ public class VeHUD {
                         goGiay();
                     } else if (index == 4) {
                         goRada();
+                    } else if (index == 6) {
+                        goGiapLuyenTap();
                     }
                 }
                 if (index >= 8) {
@@ -620,6 +734,7 @@ public class VeHUD {
                                 nhanVat.setTenCaiTrang(item.getTenItem());
                                 nhanVat.setMoTaCaiTrang(item.getMoTa());
                                 nhanVat.setChisoCaiTrang(item.getChiso());
+                                nhanVat.setHanSuDungCaiTrang(item.getHanSuDung());
                                 avatardangmac = laCaiTrang ? nhanVat.getNhanvat() + "_base" : item.getId();
 
                                 NhanVatCauHinh c2 = laCaiTrang ? Doicaitrang(item.getId()) : Doi_avt_ao_quan(nhanVat.getHanhtinh(), item.getId(), aodangmac, quandangmac);
@@ -646,6 +761,8 @@ public class VeHUD {
                                 nhanVat.setChisoAo(item.getChiso());
                                 aodangmac = item.getId();
                                 skha = item.getSetkichhoat();
+                                nhanVat.setSoSaoAo(item.getSoSaoPhaLe());
+                                nhanVat.setSoCapAo(item.getSoCap());
                                 if (!NhanVatXuLy.getDangMacCaiTrang()) {
                                     NhanVatCauHinh c2 = Doi_avt_ao_quan(nhanVat.getHanhtinh(), avatardangmac, item.getId(), quandangmac);
                                     nhanVat.fixCaiTrang(
@@ -672,6 +789,8 @@ public class VeHUD {
                                 nhanVat.setChisoQuan(item.getChiso());
                                 quandangmac = item.getId();
                                 skhq = item.getSetkichhoat();
+                                nhanVat.setSoSaoQuan(item.getSoSaoPhaLe());
+                                nhanVat.setSoCapQuan(item.getSoCap());
                                 if (!NhanVatXuLy.getDangMacCaiTrang()) {
                                     NhanVatCauHinh c2 = Doi_avt_ao_quan(nhanVat.getHanhtinh(), avatardangmac, aodangmac, item.getId());
                                     nhanVat.fixCaiTrang(
@@ -697,6 +816,8 @@ public class VeHUD {
                                 nhanVat.setMoTaGang(item.getMoTa());
                                 nhanVat.setChisoGang(item.getChiso());
                                 skhg = item.getSetkichhoat();
+                                nhanVat.setSoSaoGang(item.getSoSaoPhaLe());
+                                nhanVat.setSoCapGang(item.getSoCap());
                                 tangchiso(item.getChiso());
                                 kichHoatSetHienTai();
                                 danhSach.remove(indexx);
@@ -711,6 +832,8 @@ public class VeHUD {
                                 nhanVat.setMoTaGiay(item.getMoTa());
                                 nhanVat.setChisoGiay(item.getChiso());
                                 skhj = item.getSetkichhoat();
+                                nhanVat.setSoSaoGiay(item.getSoSaoPhaLe());
+                                nhanVat.setSoCapGiay(item.getSoCap());
                                 tangchiso(item.getChiso());
                                 kichHoatSetHienTai();
                                 danhSach.remove(indexx);
@@ -725,12 +848,37 @@ public class VeHUD {
                                 nhanVat.setMoTaRada(item.getMoTa());
                                 nhanVat.setChisoRada(item.getChiso());
                                 skhrada = item.getSetkichhoat();
+                                nhanVat.setSoSaoRada(item.getSoSaoPhaLe());
+                                nhanVat.setSoCapRada(item.getSoCap());
                                 tangchiso(item.getChiso());
                                 kichHoatSetHienTai();
                                 danhSach.remove(indexx);
                             } else {
                                 macRadaMoi(item, indexx, danhSach);
                             }
+                        } else if (item.getLoai() == LoaiItem.GIAPLUYENTAP) {
+                            if (giaplt == null){
+                                giaplt = item.getTexture();
+                                nhanVat.setIdGiapLuyenTap(item.getId());
+                                nhanVat.setTenGiapLuyenTap(item.getTenItem());
+                                nhanVat.setMoTaGiapLuyenTap(item.getMoTa());
+                                nhanVat.setChisoGiapLuyenTap(item.getChiso());
+                                nhanVat.setSoSaoGiapLuyenTap(item.getSoSaoPhaLe());
+                                nhanVat.setHanSuDungGiapLuyenTap(timeMacGiapLuyenTap);
+                                dangMacGiapLuyenTap = true;
+                                if (!lanDau) {
+                                    giamchiso(chisovuathao);
+                                    duLieuNguoiChoi.checkGiapLuyenTap(true,0);
+                                } else {
+                                    lanDau = false;
+                                    duLieuNguoiChoi.checkGiapLuyenTap(true,0);
+                                }
+                                danhSach.remove(indexx);
+                            } else {
+                                macGiapLuyenTapMoi(item, indexx, danhSach);
+                            }
+                        } else if (item.getLoai() == LoaiItem.VANBAY) {
+                            macVanBayMoi(item, indexx, danhSach);
                         }
                     }
                 }
@@ -925,6 +1073,7 @@ public class VeHUD {
         this.iconct = nhanVat.iconct;
         this.giaplt = nhanVat.giaplt;
         this.vanbay = nhanVat.vanbay;
+        avatardangmac = nhanVat.getNhanvat()+"_base";
     }
     public void renderPopup(SpriteBatch batch) {
         if (!dangHienPopup || texAvt == null) return;
@@ -1447,8 +1596,10 @@ public class VeHUD {
         String motacu = nhanVat.getMoTaAo();
         int[] chisocu = nhanVat.getChisoAo();
         String skhaCu = skha; // lưu lại skha cũ
+        int sosaocu = nhanVat.getSoSaoAo();
+        int socapcu = nhanVat.getSoCapAo();
         LoaiItem loaiCu = LoaiItem.AO;
-        Item aoCu = new Item(idCu, tenCu, loaiCu, ao, motacu, 1, chisocu, skhaCu);
+        Item aoCu = new Item(idCu, tenCu, loaiCu, ao, motacu, 1, chisocu, skhaCu,sosaocu ,socapcu,-1);
 
         // 2. Gỡ hiệu ứng set cũ trước
         huyHieuUngSet(skhaCu);
@@ -1464,6 +1615,8 @@ public class VeHUD {
         nhanVat.setChisoAo(item.getChiso());
         skha = item.getSetkichhoat();
         aodangmac = item.getId();
+        nhanVat.setSoSaoAo(item.getSoSaoPhaLe());
+        nhanVat.setSoCapAo(item.getSoCap());
 
         // 5. Load avatar nếu không cải trang
         if (!NhanVatXuLy.getDangMacCaiTrang()) {
@@ -1497,8 +1650,10 @@ public class VeHUD {
         String motacu = nhanVat.getMoTaAo();
         int[] chisocu = nhanVat.getChisoAo();
         String skhaCu = skha;
+        int sosaocu = nhanVat.getSoSaoAo();
+        int socapcu = nhanVat.getSoCapAo();
         LoaiItem loaiCu = LoaiItem.AO;
-        Item aoCu = new Item(idCu, tenCu, loaiCu, ao, motacu, 1, chisocu, skhaCu);
+        Item aoCu = new Item(idCu, tenCu, loaiCu, ao, motacu, 1, chisocu, skhaCu,sosaocu,socapcu,-1);
 
         // 2. Gỡ hiệu ứng set trước
         huyHieuUngSet(skhaCu);
@@ -1538,8 +1693,10 @@ public class VeHUD {
         String motacu = nhanVat.getMoTaQuan();
         int[] chisocu = nhanVat.getChisoQuan();
         String skhqCu = skhq; // lưu lại skhq cũ
+        int sosaocu = nhanVat.getSoSaoQuan();
+        int socapcu = nhanVat.getSoCapQuan();
         LoaiItem loaiCu = LoaiItem.QUAN;
-        Item quanCu = new Item(idCu, tenCu, loaiCu, quan, motacu, 1, chisocu, skhqCu);
+        Item quanCu = new Item(idCu, tenCu, loaiCu, quan, motacu, 1, chisocu, skhqCu,sosaocu ,socapcu,-1);
 
         // 2. Gỡ hiệu ứng set cũ trước khi gỡ chỉ số
         huyHieuUngSet(skhqCu);
@@ -1555,6 +1712,8 @@ public class VeHUD {
         nhanVat.setChisoQuan(item.getChiso());
         skhq = item.getSetkichhoat();
         quandangmac = item.getId();
+        nhanVat.setSoSaoQuan(item.getSoSaoPhaLe());
+        nhanVat.setSoCapQuan(item.getSoCap());
 
         // 5. Load avatar nếu không cải trang
         if (!NhanVatXuLy.getDangMacCaiTrang()) {
@@ -1588,8 +1747,10 @@ public class VeHUD {
         String motacu = nhanVat.getMoTaQuan();
         int[] chisocu = nhanVat.getChisoQuan();
         String skhqCu = skhq;
+        int sosaocu = nhanVat.getSoSaoQuan();
+        int socapcu = nhanVat.getSoCapQuan();
         LoaiItem loaiCu = LoaiItem.QUAN;
-        Item quanCu = new Item(idCu, tenCu, loaiCu, quan, motacu, 1, chisocu, skhqCu);
+        Item quanCu = new Item(idCu, tenCu, loaiCu, quan, motacu, 1, chisocu, skhqCu, sosaocu,socapcu,-1);
 
         // 2. Gỡ hiệu ứng set trước
         huyHieuUngSet(skhqCu);
@@ -1629,8 +1790,10 @@ public class VeHUD {
         String motacu = nhanVat.getMoTaGang();
         int[] chisocu = nhanVat.getChisoGang();
         String skhgCu = skhg;
+        int sosaocu = nhanVat.getSoSaoGang();
+        int socapcu = nhanVat.getSoCapGang();
         LoaiItem loaiCu = LoaiItem.GANG;
-        Item gangCu = new Item(idCu, tenCu, loaiCu, gang, motacu, 1, chisocu, skhgCu);
+        Item gangCu = new Item(idCu, tenCu, loaiCu, gang, motacu, 1, chisocu, skhgCu,sosaocu,socapcu,-1);
 
         // 2. Gỡ hiệu ứng set cũ
         huyHieuUngSet(skhgCu);
@@ -1645,6 +1808,8 @@ public class VeHUD {
         nhanVat.setMoTaGang(item.getMoTa());
         nhanVat.setChisoGang(item.getChiso());
         skhg = item.getSetkichhoat();
+        nhanVat.setSoSaoGang(item.getSoSaoPhaLe());
+        nhanVat.setSoCapGang(item.getSoCap());
 
         // 5. Tăng chỉ số găng mới
         tangchiso(item.getChiso());
@@ -1665,8 +1830,10 @@ public class VeHUD {
         String motacu = nhanVat.getMoTaGang();
         int[] chisocu = nhanVat.getChisoGang();
         String skhgCu = skhg;
+        int sosaocu = nhanVat.getSoSaoGang();
+        int socapcu = nhanVat.getSoCapGang();
         LoaiItem loaiCu = LoaiItem.GANG;
-        Item gangCu = new Item(idCu, tenCu, loaiCu, gang, motacu, 1, chisocu, skhgCu);
+        Item gangCu = new Item(idCu, tenCu, loaiCu, gang, motacu, 1, chisocu, skhgCu,sosaocu,socapcu,-1);
 
         // 2. Gỡ hiệu ứng set trước
         huyHieuUngSet(skhgCu);
@@ -1692,8 +1859,10 @@ public class VeHUD {
         String motacu = nhanVat.getMoTaGiay();
         int[] chisocu = nhanVat.getChisoGiay();
         String skhjCu = skhj;
+        int sosaocu = nhanVat.getSoSaoGiay();
+        int socapcu = nhanVat.getSoCapGiay();
         LoaiItem loaiCu = LoaiItem.GIAY;
-        Item giayCu = new Item(idCu, tenCu, loaiCu, giay, motacu, 1, chisocu, skhjCu);
+        Item giayCu = new Item(idCu, tenCu, loaiCu, giay, motacu, 1, chisocu, skhjCu,sosaocu,socapcu,-1);
 
         // 2. Gỡ hiệu ứng set cũ
         huyHieuUngSet(skhjCu);
@@ -1708,6 +1877,8 @@ public class VeHUD {
         nhanVat.setMoTaGiay(item.getMoTa());
         nhanVat.setChisoGiay(item.getChiso());
         skhj = item.getSetkichhoat();
+        nhanVat.setSoSaoGiay(item.getSoSaoPhaLe());
+        nhanVat.setSoCapGiay(item.getSoCap());
 
         // 5. Tăng chỉ số giày mới
         tangchiso(item.getChiso());
@@ -1729,8 +1900,10 @@ public class VeHUD {
         String motacu = nhanVat.getMoTaGiay();
         int[] chisocu = nhanVat.getChisoGiay();
         String skhjCu = skhj;
+        int sosaocu = nhanVat.getSoSaoGiay();
+        int socapcu = nhanVat.getSoCapGiay();
         LoaiItem loaiCu = LoaiItem.GIAY;
-        Item giayCu = new Item(idCu, tenCu, loaiCu, giay, motacu, 1, chisocu, skhjCu);
+        Item giayCu = new Item(idCu, tenCu, loaiCu, giay, motacu, 1, chisocu, skhjCu, sosaocu,socapcu,-1);
 
         // 2. Gỡ hiệu ứng set trước
         huyHieuUngSet(skhjCu);
@@ -1755,8 +1928,10 @@ public class VeHUD {
         String motacu = nhanVat.getMoTaRada();
         int[] chisocu = nhanVat.getChisoRada();
         String skhradaCu = skhrada;
+        int sosaocu = nhanVat.getSoSaoRada();
+        int socapcu = nhanVat.getSoCapRada();
         LoaiItem loaiCu = LoaiItem.RADA;
-        Item radaCu = new Item(idCu, tenCu, loaiCu, rada, motacu, 1, chisocu, skhradaCu);
+        Item radaCu = new Item(idCu, tenCu, loaiCu, rada, motacu, 1, chisocu, skhradaCu,sosaocu,socapcu,-1);
 
         // 2. Gỡ hiệu ứng set cũ (nếu có)
         huyHieuUngSet(skhradaCu);
@@ -1771,6 +1946,8 @@ public class VeHUD {
         nhanVat.setMoTaRada(item.getMoTa());
         nhanVat.setChisoRada(item.getChiso());
         skhrada = item.getSetkichhoat();
+        nhanVat.setSoSaoRada(item.getSoSaoPhaLe());
+        nhanVat.setSoCapRada(item.getSoCap());
 
         // 5. Tăng chỉ số rada mới
         tangchiso(item.getChiso());
@@ -1792,8 +1969,10 @@ public class VeHUD {
         String motacu = nhanVat.getMoTaRada();
         int[] chisocu = nhanVat.getChisoRada();
         String skhradaCu = skhrada;
+        int sosaocu = nhanVat.getSoSaoRada();
+        int socapcu = nhanVat.getSoCapRada();
         LoaiItem loaiCu = LoaiItem.RADA;
-        Item radaCu = new Item(idCu, tenCu, loaiCu, rada, motacu, 1, chisocu, skhradaCu);
+        Item radaCu = new Item(idCu, tenCu, loaiCu, rada, motacu, 1, chisocu, skhradaCu,sosaocu,socapcu,-1);
 
         // 2. Gỡ hiệu ứng set cũ
         huyHieuUngSet(skhradaCu);
@@ -1818,9 +1997,10 @@ public class VeHUD {
         String tenCu = nhanVat.getTenCaiTrang();
         String motacu = nhanVat.getMoTaCaiTrang();
         int[] chisocu = nhanVat.getChisoCaiTrang();
+        float hansudung = nhanVat.getHanSuDungCaiTrang();
         LoaiItem loaiCu = caiTrangDangMac ? LoaiItem.CAITRANG : LoaiItem.AVATAR;
 
-        Item caiTrangCu = new Item(idCu, tenCu, loaiCu, iconct, motacu, 1, chisocu, null);
+        Item caiTrangCu = new Item(idCu, tenCu, loaiCu, iconct, motacu, 1, chisocu, null,0,0,hansudung);
         giamchiso(chisocu);
 
         // 2. Gán cải trang mới
@@ -1829,6 +2009,7 @@ public class VeHUD {
         nhanVat.setTenCaiTrang(item.getTenItem());
         nhanVat.setMoTaCaiTrang(item.getMoTa());
         nhanVat.setChisoCaiTrang(item.getChiso());
+        nhanVat.setHanSuDungCaiTrang(item.getHanSuDung());
         if (laCaiTrangMoi) {
             avatardangmac = nhanVat.getNhanvat() + "_base";
         } else {
@@ -1862,9 +2043,10 @@ public class VeHUD {
         String tenCu = nhanVat.getTenCaiTrang();
         String motacu = nhanVat.getMoTaCaiTrang();
         int[] chisocu = nhanVat.getChisoCaiTrang();
+        float hansudung = nhanVat.getHanSuDungCaiTrang();
         LoaiItem loai = laCaiTrang ? LoaiItem.CAITRANG : LoaiItem.AVATAR;
 
-        Item caiTrangCu = new Item(idCu, tenCu, loai, iconct, motacu, 1, chisocu, null);
+        Item caiTrangCu = new Item(idCu, tenCu, loai, iconct, motacu, 1, chisocu, null,0,0,hansudung);
         giamchiso(chisocu);
         duLieuNguoiChoi.themItemVaoHanhTrang(caiTrangCu);
 
@@ -1879,6 +2061,80 @@ public class VeHUD {
         );
         texAvt = new Texture(nhanVat.doiavatar());
         iconct = null;
+    }
+
+    private void macGiapLuyenTapMoi(Item item, int indexx, ArrayList<Item> danhSach){
+        String idCu = nhanVat.getIdGiapLuyenTap();
+        String tenCu = nhanVat.getTenGiapLuyenTap();
+        String motacu = nhanVat.getMoTaGiapLuyenTap();
+        int[] chisocu = nhanVat.getChisoGiapLuyenTap();
+        int sosaocu = nhanVat.getSoSaoGiapLuyenTap();
+        float hansudung = nhanVat.getHanSuDungGiapLuyenTap();
+        LoaiItem loaiCu = LoaiItem.GIAPLUYENTAP;
+        Item giapLuyenTapCu = new Item(idCu, tenCu, loaiCu, giaplt, motacu, 1, chisocu, null,sosaocu,0,hansudung);
+        giaplt = item.getTexture();
+        nhanVat.setIdGiapLuyenTap(item.getId());
+        nhanVat.setTenGiapLuyenTap(item.getTenItem());
+        nhanVat.setMoTaGiapLuyenTap(item.getMoTa());
+        nhanVat.setChisoGiapLuyenTap(item.getChiso());
+        nhanVat.setSoSaoGiapLuyenTap(item.getSoSaoPhaLe());
+        nhanVat.setHanSuDungGiapLuyenTap(item.getHanSuDung());
+        duLieuNguoiChoi.checkGiapLuyenTap(true,0);
+        danhSach.set(indexx, giapLuyenTapCu);
+        dangMacGiapLuyenTap = true;
+    }
+
+
+    private void goGiapLuyenTap() {
+        if (giaplt == null) return; // Không mặc gì thì không gỡ
+
+        String idCu = nhanVat.getIdGiapLuyenTap();
+        String tenCu = nhanVat.getTenGiapLuyenTap();
+        String motacu = nhanVat.getMoTaGiapLuyenTap();
+        int[] chisocu = nhanVat.getChisoGiapLuyenTap();
+        int sosaocu = nhanVat.getSoSaoGiapLuyenTap();
+        float hansudung = nhanVat.getHanSuDungGiapLuyenTap();
+        LoaiItem loaiCu = LoaiItem.GIAPLUYENTAP;
+        Item giapLuyenTapCu = new Item(idCu, tenCu, loaiCu, giaplt, motacu, 1, chisocu, null,sosaocu,0,hansudung);
+        tangchiso(chisocu);
+        chisovuathao = chisocu;
+        duLieuNguoiChoi.checkGiapLuyenTap(false,chisocu[8]);
+        duLieuNguoiChoi.themItemVaoHanhTrang(giapLuyenTapCu);
+        giaplt = null;
+        dangMacGiapLuyenTap = false;
+    }
+
+    private void macVanBayMoi(Item item, int indexx, ArrayList<Item> danhSach){
+        if (!vanBayDau) {
+            String idCu = nhanVat.getIdVanBay();
+            String tenCu = nhanVat.getTenVanBay();
+            String motacu = nhanVat.getMoTaVanBay();
+            int[] chisocu = nhanVat.getChisoVanBay();
+            LoaiItem loaiCu = LoaiItem.VANBAY;
+            Item vanBayCu = new Item(idCu, tenCu, loaiCu, vanbay, motacu, 1, chisocu, null,0,0,-1);
+
+            tangchiso(chisocu);
+            danhSach.set(indexx, vanBayCu);
+        } else {
+            String idCu = "candauvan";
+            String tenCu = "Cân đẩu vân";
+            String motacu = "Ván bay cân đẩu vân";
+            int[] chisocu = new int[] {0,0,0,0,0,0,0,0,0,0,0,0};
+            LoaiItem loaiCu = LoaiItem.VANBAY;
+            Item vanBayCu = new Item(idCu, tenCu, loaiCu, vanbay, motacu, 1, chisocu, null,0,0,-1);
+
+            tangchiso(chisocu);
+            danhSach.set(indexx, vanBayCu);
+            vanBayDau = false;
+        }
+
+        vanbay = item.getTexture();
+        nhanVat.setIdVanBay(item.getId());
+        nhanVat.setTenVanBay(item.getTenItem());
+        nhanVat.setMoTaVanBay(item.getMoTa());
+        nhanVat.setChisoVanBay(item.getChiso());
+        nhanVat.doiVanBay(item.getId());
+        giamchiso(item.getChiso());
     }
     private void tangchiso(int[] chiso){
         duLieuNguoiChoi.tangHp(chiso[0]); // hp thường

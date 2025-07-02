@@ -184,7 +184,7 @@ public class ManHinhChoiTiep implements Screen {
 //                c2.avt
 //            );
 //        }
-        nhanVat.doiVanBay("phuong_hoang_lua");
+        nhanVat.doiVanBay("candauvan");
         nhanVat.setTen(tenNhanVat); // set tên nhân vật trong nhanvat.java
         hudRenderer.setNhanVat(nhanVat);// load cái này để đổi avt theo ct
         // load du lieu nguoi dung
