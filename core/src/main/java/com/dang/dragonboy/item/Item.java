@@ -10,11 +10,13 @@ public class Item {
     private String moTa;
     private int soLuong;
     private int[] chiso ;
+    private String hanhtinh;
     private String setkichhoat;
     private int soSaoPhaLe, soCap;
     private float HanSuDung;
+    private long sucManhYeuCau;
 
-    public Item(String id, String ten, LoaiItem loai, Texture texture, String moTa, int soLuong, int[] chiso, String setkichhoat, int soSaoPhaLe, int soCap, float HanSuDung) {
+    public Item(String id, String ten, LoaiItem loai, Texture texture, String moTa, int soLuong, int[] chiso, String hanhtinh, long sucManhYeuCau, String setkichhoat, int soSaoPhaLe, int soCap, float HanSuDung) {
         this.id = id;
         this.ten = ten;
         this.loai = loai;
@@ -22,10 +24,12 @@ public class Item {
         this.moTa = moTa;
         this.soLuong = soLuong;
         this.chiso = chiso;
+        this.hanhtinh = hanhtinh;
         this.setkichhoat = setkichhoat;
         this.soSaoPhaLe = soSaoPhaLe;
         this.soCap = soCap;
         this.HanSuDung = HanSuDung;
+        this.sucManhYeuCau = sucManhYeuCau;
     }
 
     public String getId(){
@@ -64,6 +68,8 @@ public class Item {
         return chiso;
     }
 
+    public String getHanhtinh() { return hanhtinh;}
+
     public int getSoSaoPhaLe(){
         return soSaoPhaLe;
     }
@@ -75,6 +81,8 @@ public class Item {
     public float getHanSuDung() {
         return HanSuDung;
     }
+
+    public long getSucManhYeuCau() { return sucManhYeuCau; }
 
     public void suDung() {
         switch (loai) {

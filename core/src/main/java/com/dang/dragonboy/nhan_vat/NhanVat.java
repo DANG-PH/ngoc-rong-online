@@ -120,46 +120,62 @@ public class NhanVat {
     private String moTaCaiTrang = "mac_dinh";
     private int[] chisoCaiTrang ;
     private float hanSuDungCaiTrang;
+    private String hanhTinhCaiTrang;
+    private long sucManhYeuCauCaiTrang;
     private String idAo = "mac_dinh";
     private String tenAo = "mac_dinh";
     private String moTaAo = "mac_dinh";
     private int[] chisoAo ;
     private int soSaoAo;
     private int soCapAo;
+    private String hanhTinhAo;
+    private long sucManhYeuCauAo;
     private String idQuan = "mac_dinh";
     private String tenQuan = "mac_dinh";
     private String moTaQuan = "mac_dinh";
     private int[] chisoQuan ;
     private int soSaoQuan;
     private int soCapQuan;
+    private String hanhTinhQuan;
+    private long sucManhYeuCauQuan;
     private String idGang = "mac_dinh";
     private String tenGang = "mac_dinh";
     private String moTaGang = "mac_dinh";
     private int[] chisoGang ;
     private int soSaoGang;
     private int soCapGang;
+    private String hanhTinhGang;
+    private long sucManhYeuCauGang;
     private String idGiay = "mac_dinh";
     private String tenGiay = "mac_dinh";
     private String moTaGiay = "mac_dinh";
     private int[] chisoGiay ;
     private int soSaoGiay;
     private int soCapGiay;
+    private String hanhTinhGiay;
+    private long sucManhYeuCauGiay;
     private String idRada = "mac_dinh";
     private String tenRada = "mac_dinh";
     private String moTaRada = "mac_dinh";
     private int[] chisoRada ;
     private int soSaoRada;
     private int soCapRada;
+    private String hanhTinhRada;
+    private long sucManhYeuCauRada;
     private String idGiapLuyenTap;
     private String tenGiapLuyenTap = "mac_dinh";
     private String moTaGiapLuyenTap = "mac_dinh";
     private int[] chisoGiapLuyenTap ;
     private int soSaoGiapLuyenTap;
     private float hanSuDungGiapLuyenTap;
+    private String hanhTinhGiapLuyenTap;
+    private long sucManhYeuCauGiapLuyenTap;
     private String idVanBay;
     private String tenVanBayy;
     private String moTaVanBay;
     private int[] chisoVanBay;
+    private String hanhTinhVanBay;
+    private long sucManhYeuCauVanBay;
 
     // cai trang
     public void setIdCaiTrang(String id) {
@@ -198,6 +214,22 @@ public class NhanVat {
 
     public float getHanSuDungCaiTrang() {
         return hanSuDungCaiTrang;
+    }
+
+    public void setHanhTinhCaiTrang(String ht){
+        this.hanhTinhCaiTrang = ht;
+    }
+
+    public String getHanhTinhCaiTrang() {
+        return hanhTinhCaiTrang;
+    }
+
+    public void setSucManhYeuCauCaiTrang(long SucManhYeuCau) {
+        this.sucManhYeuCauCaiTrang = SucManhYeuCau;
+    }
+
+    public long getSucManhYeuCauCaiTrang() {
+        return sucManhYeuCauCaiTrang;
     }
 
     // ao
@@ -249,6 +281,22 @@ public class NhanVat {
         return soCapAo;
     }
 
+    public void setHanhTinhAo(String ht) {
+        this.hanhTinhAo = ht;
+    }
+
+    public String getHanhTinhAo() {
+        return hanhTinhAo;
+    }
+
+    public void setSucManhYeuCauAo(long SucManhYeuCau) {
+        this.sucManhYeuCauAo = SucManhYeuCau;
+    }
+
+    public long getSucManhYeuCauAo() {
+        return sucManhYeuCauAo;
+    }
+
     // quan
     public void setIdQuan(String id) {
         this.idQuan = id;
@@ -296,6 +344,22 @@ public class NhanVat {
 
     public int getSoCapQuan() {
         return soCapQuan;
+    }
+
+    public void setHanhTinhQuan(String ht) {
+        this.hanhTinhQuan = ht;
+    }
+
+    public String getHanhTinhQuan() {
+        return hanhTinhQuan;
+    }
+
+    public void setSucManhYeuCauQuan(long SucManhYeuCau) {
+        this.sucManhYeuCauQuan = SucManhYeuCau;
+    }
+
+    public long getSucManhYeuCauQuan() {
+        return sucManhYeuCauQuan;
     }
 
     // gang
@@ -346,6 +410,22 @@ public class NhanVat {
         return soCapGang;
     }
 
+    public void setHanhTinhGang(String ht) {
+        this.hanhTinhGang = ht;
+    }
+
+    public String getHanhTinhGang() {
+        return hanhTinhGang;
+    }
+
+    public void setSucManhYeuCauGang(long SucManhYeuCau) {
+        this.sucManhYeuCauGang = SucManhYeuCau;
+    }
+
+    public long getSucManhYeuCauGang() {
+        return sucManhYeuCauGang;
+    }
+
     //giay
     public void setIdGiay(String id) {
         this.idGiay = id;
@@ -392,6 +472,22 @@ public class NhanVat {
 
     public int getSoCapGiay() {
         return soCapGiay;
+    }
+
+    public void setHanhTinhGiay(String ht) {
+        this.hanhTinhGiay = ht;
+    }
+
+    public String getHanhTinhGiay() {
+        return hanhTinhGiay;
+    }
+
+    public void setSucManhYeuCauGiay(long SucManhYeuCau) {
+        this.sucManhYeuCauGiay = SucManhYeuCau;
+    }
+
+    public long getSucManhYeuCauGiay() {
+        return sucManhYeuCauGiay;
     }
 
     // rada
@@ -442,6 +538,23 @@ public class NhanVat {
         return soCapRada;
     }
 
+    public void setHanhTinhRada(String ht) {
+        this.hanhTinhRada = ht;
+    }
+
+    public String getHanhTinhRada() {
+        return hanhTinhRada;
+    }
+
+    public void setSucManhYeuCauRada(long SucManhYeuCau) {
+        this.sucManhYeuCauRada = SucManhYeuCau;
+    }
+
+    public long getSucManhYeuCauRada() {
+        return sucManhYeuCauRada;
+    }
+
+    // giap lt
     public void setIdGiapLuyenTap(String id) {
         this.idGiapLuyenTap = id;
     }
@@ -500,6 +613,23 @@ public class NhanVat {
         this.hanSuDungGiapLuyenTap = Math.max(0,Math.min(this.hanSuDungGiapLuyenTap,1800f));
     }
 
+    public void setHanhTinhGiapLuyenTap(String ht) {
+        this.hanhTinhGiapLuyenTap = ht;
+    }
+
+    public String getHanhTinhGiapLuyenTap() {
+        return hanhTinhGiapLuyenTap;
+    }
+
+    public void setSucManhYeuCauGiapLuyenTap(long SucManhYeuCau) {
+        this.sucManhYeuCauGiapLuyenTap = SucManhYeuCau;
+    }
+
+    public long getSucManhYeuCauGiapLuyenTap() {
+        return sucManhYeuCauGiapLuyenTap;
+    }
+
+    // Van Bay
     public void setIdVanBay(String id) {
         this.idVanBay = id;
     }
@@ -532,6 +662,23 @@ public class NhanVat {
         return chisoVanBay;
     }
 
+    public void setHanhTinhVanBay(String ht) {
+        this.hanhTinhVanBay = ht;
+    }
+
+    public String getHanhTinhVanBay() {
+        return hanhTinhVanBay;
+    }
+
+    public void setSucManhYeuCauVanBay(long SucManhYeuCau) {
+        this.sucManhYeuCauVanBay = SucManhYeuCau;
+    }
+
+    public long getSucManhYeuCauVanBay() {
+        return sucManhYeuCauVanBay;
+    }
+
+    // chi so chinh
     public long getSucManh() {return sucManh;}
 
     public int getTheLuc() {return theLuc;}
