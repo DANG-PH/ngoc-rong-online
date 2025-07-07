@@ -216,7 +216,8 @@ public class ManHinhChoiTiep implements Screen {
             nhanVat.getNgoc(),
             nhanVat.getCapBac(),
             capSkill,tenSkill,motaSkill,
-            nhanVat.getCapcaydau()
+            nhanVat.getCapcaydau(),
+            nhanVat.getGiamSatThuongNhanVat()
         );
         hudRenderer.setDuLieuNguoiChoi(duLieu);
         capcaydau = duLieu.getCapCayDau();

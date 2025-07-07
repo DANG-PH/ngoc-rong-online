@@ -100,6 +100,7 @@ public class NhanVat {
     private int SatThuongChiMang = 150;
     private long TiemNangNhanVat = 99999999999L;
     private int DiemSoiDongNhanVat = 0;
+    private int GiamSatThuongNhanVat = 0;
 
     private int capcaydau;
     private int soDauThan = 99;
@@ -729,6 +730,7 @@ public class NhanVat {
     public int getDiemSoiDongNhanVat(){
         return DiemSoiDongNhanVat;
     }
+    public int getGiamSatThuongNhanVat() { return GiamSatThuongNhanVat; }
     public int getCapcaydau() { return capcaydau; }
     public int getSoDauThan() { return soDauThan ;}
 
