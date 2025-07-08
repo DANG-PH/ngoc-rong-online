@@ -249,7 +249,7 @@ public class VeHUD {
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "rada1",
-            "rada cap 1",
+            "rada cấp 1",
             LoaiItem.RADA,
             new Texture("vatpham/do/rada/rada1.png"),
             "Giúp tăng Chí Mạng",
@@ -329,7 +329,7 @@ public class VeHUD {
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "rada_huy_diet",
-            "Rada hủy diệt",
+            "Nhẫn hủy diệt",
             LoaiItem.RADA,
             new Texture("vatpham/do/rada/radahuydiet.png"),
             "Giúp tăng Chí Mạng",
