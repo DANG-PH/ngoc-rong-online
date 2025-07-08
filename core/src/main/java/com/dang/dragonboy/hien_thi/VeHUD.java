@@ -120,10 +120,10 @@ public class VeHUD {
         duLieuNguoiChoi.setNhanVat(nhanVat);
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "phuong_hoang_lua",
-            "Ván bay",
+            "Thú cưỡi cực VIP",
             LoaiItem.VANBAY,
             new Texture("vatpham/vanbay/phuong_hoang_lua/phuonghoanglua.png"),
-            "",
+            "Dùng để bay và hồi phục HP, KI",
             1,
             new int[]{0, 0, 0, 0, 0,   0,  0,  0,  0,  0,  0,  0,  0},
                     //hp,ki,sd,cr,giap,crd,hp%,ki%,sd%,hpg,kig,sdg,giam st
@@ -137,10 +137,10 @@ public class VeHUD {
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "goku_black",
-            "Black goku",
+            "Cải trang",
             LoaiItem.CAITRANG,
             new Texture("nhanvat/caitrang/goku_black/dung.png"),
-            "Cải trang Goku Black",
+            "Cải trang thành Goku Black",
             1,
             new int[]{0, 0, 0, 0, 0, 0, 25, 25, 25,0,0,0,  0},
             nhanVat.getHanhtinh(),
@@ -153,10 +153,10 @@ public class VeHUD {
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "vegito_xeno",
-            "Vegito Hợp thể",
+            "Cải trang hợp thể",
             LoaiItem.CAITRANG,
             new Texture("nhanvat/caitrang/vegito_xeno/dung.png"),
-            "Cải trang Goku Black",
+            "Cải trang thành Vegito Xeno SSJ3",
             1,
             new int[]{0, 0, 0, 20, 1010, 0, 70, 70, 70,0,0,0,  0},
             nhanVat.getHanhtinh(),
@@ -169,12 +169,12 @@ public class VeHUD {
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "avt_vip",
-            "avatar_vip",
+            "AVATAR VIP",
             LoaiItem.AVATAR,
             new Texture("nhanvat/"+nhanVat.getHanhtinh()+"/avatar/avt_vip/dung.png"),
-            "AVATAR VIP",
+            "Dùng để thay đổi khuôn mặt",
             1,
-            new int[]{0, 0, 0, 0, 10, 0, 15, 15, 15,0,0,0,  0},
+            new int[]{0, 0, 0, 0, 10, 0, 15, 15, 0,0,0,0,  0},
             nhanVat.getHanhtinh(),
             1500000,
             null,
@@ -185,10 +185,10 @@ public class VeHUD {
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "set_cam",
-            "ao cam kame",
+            "Áo võ kame",
             LoaiItem.AO,
             new Texture("vatpham/do/aoquan/"+nhanVat.getHanhtinh()+"/set_cam/ao.png"),
-            "",
+            "Giúp giảm sát thương",
             1,
             new int[]{0, 0, 0, 0, 10, 0, 15, 0, 0,0,0,0,  0},
             "traidat",
@@ -201,10 +201,10 @@ public class VeHUD {
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "set_cam",
-            "quan cam kame",
+            "Quần võ kame",
             LoaiItem.QUAN,
             new Texture("vatpham/do/aoquan/"+nhanVat.getHanhtinh()+"/set_cam/quan.png"),
-            "",
+            "Giúp tăng HP",
             1,
             new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0,5000,0,0,  0},
             "traidat",
@@ -217,10 +217,10 @@ public class VeHUD {
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "set_cam",
-            "gang cam",
+            "Găng võ kame",
             LoaiItem.GANG,
             new Texture("vatpham/do/gang/"+nhanVat.getHanhtinh()+"/gang1.png"),
-            "",
+            "Giúp tăng sức đánh",
             1,
             new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,5,  0},
             "traidat",
@@ -233,10 +233,10 @@ public class VeHUD {
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "set_cam",
-            "giay cam",
+            "Giày võ kame",
             LoaiItem.GIAY,
             new Texture("vatpham/do/giay/"+nhanVat.getHanhtinh()+"/giay1.png"),
-            "",
+            "Giúp tăng MP",
             1,
             new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0,0,200,0,  0},
             "traidat",
@@ -252,7 +252,7 @@ public class VeHUD {
             "rada cap 1",
             LoaiItem.RADA,
             new Texture("vatpham/do/rada/rada1.png"),
-            "",
+            "Giúp tăng Chí Mạng",
             1,
             new int[]{0, 0, 0, 1, 0, 0, 0, 0, 0,0,0,0,  0},
             "traidat",
@@ -265,10 +265,10 @@ public class VeHUD {
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "set_huy_diet",
-            "ao huy diet",
+            "Áo hủy diệt",
             LoaiItem.AO,
             new Texture("vatpham/do/aoquan/"+nhanVat.getHanhtinh()+"/set_huy_diet/ao.png"),
-            "",
+            "Giúp giảm sát thương",
             1,
             new int[]{0, 0, 0, 0, 2500, 0,35, 0, 0,0,0,0,  0},
             "traidat",
@@ -281,10 +281,10 @@ public class VeHUD {
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "set_huy_diet",
-            "quan huy diet",
+            "Quần hủy diệt",
             LoaiItem.QUAN,
             new Texture("vatpham/do/aoquan/"+nhanVat.getHanhtinh()+"/set_huy_diet/quan.png"),
-            "",
+            "Giúp tăng HP",
             1,
             new int[]{0, 0, 0, 0, 0, 0, 35, 0, 0,120000,0,0,  0},
             "traidat",
@@ -297,10 +297,10 @@ public class VeHUD {
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "set_huy_diet",
-            "gang hủy diệt",
+            "Găng hủy diệt",
             LoaiItem.GANG,
             new Texture("vatpham/do/gang/"+nhanVat.getHanhtinh()+"/ganghuydiet.png"),
-            "",
+            "Giúp tăng sức đánh",
             1,
             new int[]{0, 0, 0, 0, 0, 0, 35, 0, 0,0,0,9000,  0},
             "traidat",
@@ -313,10 +313,10 @@ public class VeHUD {
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "set_huy_diet",
-            "giay huy diet",
+            "Giày hủy diệt",
             LoaiItem.GIAY,
             new Texture("vatpham/do/giay/"+nhanVat.getHanhtinh()+"/giayhuydiet.png"),
-            "",
+            "Giúp tăng MP",
             1,
             new int[]{0, 0, 0, 0, 0, 0, 35, 0, 0,0,100000,0,  0},
             "traidat",
@@ -329,10 +329,10 @@ public class VeHUD {
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "rada_huy_diet",
-            "rada huy diet",
+            "Rada hủy diệt",
             LoaiItem.RADA,
             new Texture("vatpham/do/rada/radahuydiet.png"),
-            "",
+            "Giúp tăng Chí Mạng",
             1,
             new int[]{0, 0, 0, 20, 0, 0, 35, 0, 0,0,0,0,  0},
             "traidat",
@@ -430,7 +430,7 @@ public class VeHUD {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
-            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ";
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ";
         param.size = 18;
         font = generator.generateFont(param);
         param.size = 19;
@@ -446,7 +446,7 @@ public class VeHUD {
         FreeTypeFontGenerator generator2 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchinh.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param2.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
-            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ";
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ";
         param2.size = 22;
         param2.color = Color.WHITE;
         param2.borderWidth = 1f;
@@ -457,7 +457,7 @@ public class VeHUD {
         FreeTypeFontGenerator generator3 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchucnang.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param3 = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param3.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
-            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ";
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ";
         param3.size = 14;
         param3.color = new Color(94 / 255f, 86 / 255f, 74 / 255f, 1f);
         fontChucnang = generator3.generateFont(param3);
@@ -1218,12 +1218,66 @@ public class VeHUD {
             Texture[] itemNhanVat = {
                 ao,quan,gang,giay,rada,iconct,giaplt,vanbay
             };
+            ArrayList<Item> danhSachDangMac = duLieuNguoiChoi.getHanhTrangDangMac();
             for (int i = 0; i < soTrangBi; i++) {
+                Item item = danhSachDangMac.get(i);
                 float y = startY - i * KhoangCachItem;
                 Texture tex = (hangTrangDangChon == i) ? hanh_trang_dang_mac_click : hanh_trang_dang_mac;
                 batch.draw(tex, 3, y, 344, 50);
                 if (itemNhanVat[i]!=null){
                     batch.draw(itemNhanVat[i],3+(70-itemNhanVat[i].getWidth()*0.5f)/2f,y+(49-itemNhanVat[i].getHeight()*0.5f)/2f,itemNhanVat[i].getWidth()*0.5f,itemNhanVat[i].getHeight()*0.5f);
+                }
+                String[] chisoduoccong = {"HP", "KI", "SD", "Chí mạng","Giáp", "ST Crit", "HP", "KI", "Sức đánh", "HP", "KI", "Sức đánh", "Giảm sát thương"};
+                if (item != null) {
+                    layout.setText(fontMotaSkill, item.getTenItem());
+                    fontMotaSkill.draw(batch, layout, 3 + 70 + 12, y + 49 - 10);
+                }
+                if (i == 7 && vanBayDau){
+                    layout.setText(fontMotaSkill,"Cân đẩu vân");
+                    fontMotaSkill.draw(batch, layout, 3 + 70 + 12, y + 49 - 10);
+                    layout.setText(fontCapSKill,"Dùng để bay không tốn KI");
+                    fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
+                }
+                if (i == 7 && !vanBayDau){
+                    layout.setText(fontCapSKill,item.getMoTa());
+                    fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
+                }
+                if (i == 6 && item != null) {
+                    layout.setText(fontCapSKill,"Hiệu lực trong " + (int) (timeMacGiapLuyenTap / 60f) + " phút");
+                    fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
+                }
+                if (i == 5 && item != null) {
+                    int kc = 0;
+                    int soChiso = 0;
+                    for (int j = 6; j <= 12; j++) {
+                        if (item.getChiso()[j] > 0) {
+                            String prefix = (soChiso == 0) ? "" : ",";
+                            layout.setText(fontCapSKill, prefix + chisoduoccong[j] + "+" + item.getChiso()[j] + "%");
+                            fontCapSKill.draw(batch, layout, 3 + 70 + 12 + kc, y + 49 - 30);
+                            kc += layout.width + 1;
+                            soChiso++;
+                        }
+                    }
+                }
+                if (i == 0 && item != null){
+                    layout.setText(fontCapSKill,"Giáp+"+item.getChiso()[4]);
+                    fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
+                }
+                if (i == 1 && item != null){
+                    layout.setText(fontCapSKill,"HP+"+item.getChiso()[9]);
+                    fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
+                }
+                if (i == 2 && item != null){
+                    layout.setText(fontCapSKill,"Tấn công+"+item.getChiso()[11]);
+                    fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
+                }
+                if (i == 3 && item != null){
+                    layout.setText(fontCapSKill,"KI+"+item.getChiso()[10]);
+                    fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
+                }
+                if (i == 4 && item != null){
+                    layout.setText(fontCapSKill,"Chí mạng+"+item.getChiso()[3]+"%");
+                    fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
                 }
             }
             for (int i = 0; i < soKhac; i++) {
@@ -1244,6 +1298,52 @@ public class VeHUD {
                                 y + (49 - iconHeight) / 2f,
                                 iconWidth,
                                 iconHeight);
+                        }
+                        String[] chisoduoccong = {"HP", "KI", "SD", "Chí mạng","Giáp", "ST Crit", "HP", "KI", "Sức đánh", "HP", "KI", "Sức đánh", "Giảm sát thương"};
+
+                        layout.setText(fontMotaSkill, item.getTenItem());
+                        fontMotaSkill.draw(batch, layout, 3 + 70 + 12, y + 49 - 10);
+
+                        if (item.getLoai() == LoaiItem.VANBAY){
+                            layout.setText(fontCapSKill,item.getMoTa());
+                            fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
+                        }
+                        if (item.getLoai() == LoaiItem.GIAPLUYENTAP) {
+                            layout.setText(fontCapSKill,"Hiệu lực trong " + (int) (timeMacGiapLuyenTap / 60f) + " phút");
+                            fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
+                        }
+                        if (item.getLoai() == LoaiItem.CAITRANG || item.getLoai() == LoaiItem.AVATAR) {
+                            int kc = 0;
+                            int soChiso = 0;
+                            for (int j = 6; j <= 12; j++) {
+                                if (item.getChiso()[j] > 0) {
+                                    String prefix = (soChiso == 0) ? "" : ",";
+                                    layout.setText(fontCapSKill, prefix + chisoduoccong[j] + "+" + item.getChiso()[j] + "%");
+                                    fontCapSKill.draw(batch, layout, 3 + 70 + 12 + kc, y + 49 - 30);
+                                    kc += layout.width + 1;
+                                    soChiso++;
+                                }
+                            }
+                        }
+                        if (item.getLoai() == LoaiItem.AO){
+                            layout.setText(fontCapSKill,"Giáp+"+item.getChiso()[4]);
+                            fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
+                        }
+                        if (item.getLoai() == LoaiItem.QUAN){
+                            layout.setText(fontCapSKill,"HP+"+item.getChiso()[9]);
+                            fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
+                        }
+                        if (item.getLoai() == LoaiItem.GANG){
+                            layout.setText(fontCapSKill,"Tấn công+"+item.getChiso()[11]);
+                            fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
+                        }
+                        if (item.getLoai() == LoaiItem.GIAY){
+                            layout.setText(fontCapSKill,"KI+"+item.getChiso()[10]);
+                            fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
+                        }
+                        if (item.getLoai() == LoaiItem.RADA){
+                            layout.setText(fontCapSKill,"Chí mạng+"+item.getChiso()[3]+"%");
+                            fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
                         }
                     }
                 }
