@@ -13,10 +13,11 @@ public class Item {
     private String hanhtinh;
     private String setkichhoat;
     private int soSaoPhaLe, soCap;
+    private int soSaoPhaLeCuongHoa;
     private float HanSuDung;
     private long sucManhYeuCau;
 
-    public Item(String id, String ten, LoaiItem loai, Texture texture, String moTa, int soLuong, int[] chiso, String hanhtinh, long sucManhYeuCau, String setkichhoat, int soSaoPhaLe, int soCap, float HanSuDung) {
+    public Item(String id, String ten, LoaiItem loai, Texture texture, String moTa, int soLuong, int[] chiso, String hanhtinh, long sucManhYeuCau, String setkichhoat, int soSaoPhaLe,int soSaoPhaLeCuongHoa, int soCap, float HanSuDung) {
         this.id = id;
         this.ten = ten;
         this.loai = loai;
@@ -30,6 +31,7 @@ public class Item {
         this.soCap = soCap;
         this.HanSuDung = HanSuDung;
         this.sucManhYeuCau = sucManhYeuCau;
+        this.soSaoPhaLeCuongHoa = soSaoPhaLeCuongHoa;
     }
 
     public String getId(){
@@ -73,6 +75,8 @@ public class Item {
     public int getSoSaoPhaLe(){
         return soSaoPhaLe;
     }
+
+    public int getSoSaoPhaLeCuongHoa() { return soSaoPhaLeCuongHoa; }
 
     public int getSoCap() {
         return soCap;

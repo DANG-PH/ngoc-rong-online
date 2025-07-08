@@ -129,6 +129,7 @@ public class VeHUD {
             null,
             0,
             0,
+            0,
             -1
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
@@ -142,6 +143,7 @@ public class VeHUD {
             nhanVat.getHanhtinh(),
             1500000,
             null,
+            0,
             0,
             0,
             -1
@@ -159,6 +161,7 @@ public class VeHUD {
             null,
             0,
             0,
+            0,
             -1
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
@@ -172,6 +175,7 @@ public class VeHUD {
             nhanVat.getHanhtinh(),
             1500000,
             null,
+            0,
             0,
             0,
             -1
@@ -189,6 +193,7 @@ public class VeHUD {
             null,
             3,
             3,
+            3,
             -1
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
@@ -203,6 +208,7 @@ public class VeHUD {
             150000,
             null,
             3,
+            0,
             3,
             -1
         ));
@@ -218,6 +224,7 @@ public class VeHUD {
             150000,
             null,
             3,
+            0,
             3,
             -1
         ));
@@ -233,6 +240,7 @@ public class VeHUD {
             150000,
             null,
             3,
+            0,
             3,
             -1
         ));
@@ -248,6 +256,7 @@ public class VeHUD {
             15000,
             null,
             3,
+            0,
             3,
             -1
         ));
@@ -262,6 +271,7 @@ public class VeHUD {
             "traidat",
             40_000_000_000L,
             "Nappa",
+            7,
             7,
             7,
             -1
@@ -279,6 +289,7 @@ public class VeHUD {
             "Nappa",
             7,
             7,
+            7,
             -1
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
@@ -292,6 +303,7 @@ public class VeHUD {
             "traidat",
             40_000_000_000L,
             "Nappa",
+            7,
             7,
             7,
             -1
@@ -309,6 +321,7 @@ public class VeHUD {
             "Nappa",
             7,
             7,
+            7,
             -1
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
@@ -322,6 +335,7 @@ public class VeHUD {
             "traidat",
             40_000_000_000L,
             "Nappa",
+            7,
             7,
             7,
             -1
@@ -338,6 +352,7 @@ public class VeHUD {
             1_000_000_000L,
             null,
             7,
+            7,
             0,
             0
         ));
@@ -346,13 +361,14 @@ public class VeHUD {
             "Giáp luyện tập cấp 1",
             LoaiItem.GIAPLUYENTAP,
             new Texture("vatpham/vatphamgame/giapluyentap/gltc1.png"),
-            "",
+            "Khi mặc vào sẽ tích lũy thời gian luyện tập, khi cởi ra sẽ tăng sức đánh 10% và Crit 15%, ST Crit 30%",
             1,
-            new int[]{0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0,  0},
+            new int[]{0, 0, 0, 0, 0, 0, 25, 0, 10, 0, 0, 0,  0},
             "traidat",
             10_000_000L,
             null,
             7,
+            5,
             0,
             0
         ));
@@ -822,6 +838,7 @@ public class VeHUD {
                                 skha = item.getSetkichhoat();
                                 nhanVat.setSoSaoAo(item.getSoSaoPhaLe());
                                 nhanVat.setSoCapAo(item.getSoCap());
+                                nhanVat.setSoSaoCuongHoaAo(item.getSoSaoPhaLeCuongHoa());
                                 nhanVat.setHanhTinhAo(item.getHanhtinh());
                                 nhanVat.setSucManhYeuCauAo(item.getSucManhYeuCau());
                                 if (!NhanVatXuLy.getDangMacCaiTrang()) {
@@ -854,6 +871,7 @@ public class VeHUD {
                                 skhq = item.getSetkichhoat();
                                 nhanVat.setSoSaoQuan(item.getSoSaoPhaLe());
                                 nhanVat.setSoCapQuan(item.getSoCap());
+                                nhanVat.setSoSaoCuongHoaQuan(item.getSoSaoPhaLeCuongHoa());
                                 nhanVat.setHanhTinhQuan(item.getHanhtinh());
                                 nhanVat.setSucManhYeuCauQuan(item.getSucManhYeuCau());
                                 if (!NhanVatXuLy.getDangMacCaiTrang()) {
@@ -885,6 +903,7 @@ public class VeHUD {
                                 skhg = item.getSetkichhoat();
                                 nhanVat.setSoSaoGang(item.getSoSaoPhaLe());
                                 nhanVat.setSoCapGang(item.getSoCap());
+                                nhanVat.setSoSaoCuongHoaGang(item.getSoSaoPhaLeCuongHoa());
                                 nhanVat.setHanhTinhGang(item.getHanhtinh());
                                 nhanVat.setSucManhYeuCauGang(item.getSucManhYeuCau());
                                 tangchiso(item.getChiso());
@@ -905,6 +924,7 @@ public class VeHUD {
                                 skhj = item.getSetkichhoat();
                                 nhanVat.setSoSaoGiay(item.getSoSaoPhaLe());
                                 nhanVat.setSoCapGiay(item.getSoCap());
+                                nhanVat.setSoSaoCuongHoaGiay(item.getSoSaoPhaLeCuongHoa());
                                 nhanVat.setHanhTinhGiay(item.getHanhtinh());
                                 nhanVat.setSucManhYeuCauGiay(item.getSucManhYeuCau());
                                 tangchiso(item.getChiso());
@@ -925,6 +945,7 @@ public class VeHUD {
                                 skhrada = item.getSetkichhoat();
                                 nhanVat.setSoSaoRada(item.getSoSaoPhaLe());
                                 nhanVat.setSoCapRada(item.getSoCap());
+                                nhanVat.setSoSaoCuongHoaRada(item.getSoSaoPhaLeCuongHoa());
                                 nhanVat.setHanhTinhRada(item.getHanhtinh());
                                 nhanVat.setSucManhYeuCauRada(item.getSucManhYeuCau());
                                 tangchiso(item.getChiso());
@@ -943,6 +964,7 @@ public class VeHUD {
                                 nhanVat.setMoTaGiapLuyenTap(item.getMoTa());
                                 nhanVat.setChisoGiapLuyenTap(item.getChiso());
                                 nhanVat.setSoSaoGiapLuyenTap(item.getSoSaoPhaLe());
+                                nhanVat.setSoSaoCuongHoaGlt(item.getSoSaoPhaLeCuongHoa());
                                 nhanVat.setHanSuDungGiapLuyenTap(timeMacGiapLuyenTap);
                                 nhanVat.setHanhTinhGiapLuyenTap(item.getHanhtinh());
                                 nhanVat.setSucManhYeuCauGiapLuyenTap(item.getSucManhYeuCau());
@@ -1757,7 +1779,11 @@ public class VeHUD {
 
                 for (int i = 0; i < soSao; i++) {
                     float drawX = startX + i * spacing;
-                    batch.draw(saoxanh, drawX, PopupHanhTrangY + PopupHanhTrangH - offsetY, saoxanhW, saoxanhH);
+                    if (i < itemm.getSoSaoPhaLeCuongHoa()){
+                        batch.draw(saoxanh, drawX, PopupHanhTrangY + PopupHanhTrangH - offsetY, saoxanhW, saoxanhH);
+                    } else {
+                        batch.draw(saoden, drawX, PopupHanhTrangY + PopupHanhTrangH - offsetY, saoxanhW, saoxanhH);
+                    }
                 }
             }
         }
@@ -1799,10 +1825,11 @@ public class VeHUD {
         String skhaCu = skha; // lưu lại skha cũ
         int sosaocu = nhanVat.getSoSaoAo();
         int socapcu = nhanVat.getSoCapAo();
+        int sosaocuonghoacu = nhanVat.getSoSaoCuongHoaAo();
         String hanhtinhcu = nhanVat.getHanhTinhAo();
         long sucmanhyeucaucu = nhanVat.getSucManhYeuCauAo();
         LoaiItem loaiCu = LoaiItem.AO;
-        Item aoCu = new Item(idCu, tenCu, loaiCu, ao, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, skhaCu,sosaocu ,socapcu,-1);
+        Item aoCu = new Item(idCu, tenCu, loaiCu, ao, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, skhaCu,sosaocu ,sosaocuonghoacu,socapcu,-1);
 
         // 2. Gỡ hiệu ứng set cũ trước
         huyHieuUngSet(skhaCu);
@@ -1820,6 +1847,7 @@ public class VeHUD {
         aodangmac = item.getId();
         nhanVat.setSoSaoAo(item.getSoSaoPhaLe());
         nhanVat.setSoCapAo(item.getSoCap());
+        nhanVat.setSoSaoCuongHoaAo(item.getSoSaoPhaLeCuongHoa());
         nhanVat.setHanhTinhAo(item.getHanhtinh());
         nhanVat.setSucManhYeuCauAo(item.getSucManhYeuCau());
 
@@ -1857,10 +1885,11 @@ public class VeHUD {
         String skhaCu = skha;
         int sosaocu = nhanVat.getSoSaoAo();
         int socapcu = nhanVat.getSoCapAo();
+        int sosaocuonghoacu = nhanVat.getSoSaoCuongHoaAo();
         String hanhtinhcu = nhanVat.getHanhTinhAo();
         long sucmanhyeucaucu = nhanVat.getSucManhYeuCauAo();
         LoaiItem loaiCu = LoaiItem.AO;
-        Item aoCu = new Item(idCu, tenCu, loaiCu, ao, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, skhaCu,sosaocu,socapcu,-1);
+        Item aoCu = new Item(idCu, tenCu, loaiCu, ao, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, skhaCu,sosaocu,sosaocuonghoacu,socapcu,-1);
 
         // 2. Gỡ hiệu ứng set trước
         huyHieuUngSet(skhaCu);
@@ -1902,10 +1931,11 @@ public class VeHUD {
         String skhqCu = skhq; // lưu lại skhq cũ
         int sosaocu = nhanVat.getSoSaoQuan();
         int socapcu = nhanVat.getSoCapQuan();
+        int sosaocuonghoacu = nhanVat.getSoSaoCuongHoaQuan();
         String hanhtinhcu = nhanVat.getHanhTinhQuan();
         long sucmanhyeucaucu = nhanVat.getSucManhYeuCauQuan();
         LoaiItem loaiCu = LoaiItem.QUAN;
-        Item quanCu = new Item(idCu, tenCu, loaiCu, quan, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, skhqCu,sosaocu ,socapcu,-1);
+        Item quanCu = new Item(idCu, tenCu, loaiCu, quan, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, skhqCu,sosaocu ,sosaocuonghoacu,socapcu,-1);
 
         // 2. Gỡ hiệu ứng set cũ trước khi gỡ chỉ số
         huyHieuUngSet(skhqCu);
@@ -1923,6 +1953,7 @@ public class VeHUD {
         quandangmac = item.getId();
         nhanVat.setSoSaoQuan(item.getSoSaoPhaLe());
         nhanVat.setSoCapQuan(item.getSoCap());
+        nhanVat.setSoSaoCuongHoaQuan(item.getSoSaoPhaLeCuongHoa());
         nhanVat.setHanhTinhQuan(item.getHanhtinh());
         nhanVat.setSucManhYeuCauQuan(item.getSucManhYeuCau());
 
@@ -1960,10 +1991,11 @@ public class VeHUD {
         String skhqCu = skhq;
         int sosaocu = nhanVat.getSoSaoQuan();
         int socapcu = nhanVat.getSoCapQuan();
+        int sosaocuonghoacu = nhanVat.getSoSaoCuongHoaQuan();
         String hanhtinhcu = nhanVat.getHanhTinhQuan();
         long sucmanhyeucaucu = nhanVat.getSucManhYeuCauQuan();
         LoaiItem loaiCu = LoaiItem.QUAN;
-        Item quanCu = new Item(idCu, tenCu, loaiCu, quan, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, skhqCu, sosaocu,socapcu,-1);
+        Item quanCu = new Item(idCu, tenCu, loaiCu, quan, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, skhqCu, sosaocu,sosaocuonghoacu,socapcu,-1);
 
         // 2. Gỡ hiệu ứng set trước
         huyHieuUngSet(skhqCu);
@@ -2005,10 +2037,11 @@ public class VeHUD {
         String skhgCu = skhg;
         int sosaocu = nhanVat.getSoSaoGang();
         int socapcu = nhanVat.getSoCapGang();
+        int sosaocuonghoacu = nhanVat.getSoSaoCuongHoaGang();
         String hanhtinhcu = nhanVat.getHanhTinhGang();
         long sucmanhyeucaucu = nhanVat.getSucManhYeuCauGang();
         LoaiItem loaiCu = LoaiItem.GANG;
-        Item gangCu = new Item(idCu, tenCu, loaiCu, gang, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, skhgCu,sosaocu,socapcu,-1);
+        Item gangCu = new Item(idCu, tenCu, loaiCu, gang, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, skhgCu,sosaocu,sosaocuonghoacu,socapcu,-1);
 
         // 2. Gỡ hiệu ứng set cũ
         huyHieuUngSet(skhgCu);
@@ -2025,6 +2058,7 @@ public class VeHUD {
         skhg = item.getSetkichhoat();
         nhanVat.setSoSaoGang(item.getSoSaoPhaLe());
         nhanVat.setSoCapGang(item.getSoCap());
+        nhanVat.setSoSaoCuongHoaGang(item.getSoSaoPhaLeCuongHoa());
         nhanVat.setHanhTinhGang(item.getHanhtinh());
         nhanVat.setSucManhYeuCauGang(item.getSucManhYeuCau());
 
@@ -2049,10 +2083,11 @@ public class VeHUD {
         String skhgCu = skhg;
         int sosaocu = nhanVat.getSoSaoGang();
         int socapcu = nhanVat.getSoCapGang();
+        int sosaocuonghoacu = nhanVat.getSoSaoCuongHoaGang();
         String hanhtinhcu = nhanVat.getHanhTinhGang();
         long sucmanhyeucaucu = nhanVat.getSucManhYeuCauGang();
         LoaiItem loaiCu = LoaiItem.GANG;
-        Item gangCu = new Item(idCu, tenCu, loaiCu, gang, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, skhgCu,sosaocu,socapcu,-1);
+        Item gangCu = new Item(idCu, tenCu, loaiCu, gang, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, skhgCu,sosaocu,sosaocuonghoacu,socapcu,-1);
 
         // 2. Gỡ hiệu ứng set trước
         huyHieuUngSet(skhgCu);
@@ -2080,10 +2115,11 @@ public class VeHUD {
         String skhjCu = skhj;
         int sosaocu = nhanVat.getSoSaoGiay();
         int socapcu = nhanVat.getSoCapGiay();
+        int sosaocuonghoacu = nhanVat.getSoSaoCuongHoaGiay();
         String hanhtinhcu = nhanVat.getHanhTinhGiay();
         long sucmanhyeucaucu = nhanVat.getSucManhYeuCauGiay();
         LoaiItem loaiCu = LoaiItem.GIAY;
-        Item giayCu = new Item(idCu, tenCu, loaiCu, giay, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, skhjCu,sosaocu,socapcu,-1);
+        Item giayCu = new Item(idCu, tenCu, loaiCu, giay, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, skhjCu,sosaocu,sosaocuonghoacu,socapcu,-1);
 
         // 2. Gỡ hiệu ứng set cũ
         huyHieuUngSet(skhjCu);
@@ -2100,6 +2136,7 @@ public class VeHUD {
         skhj = item.getSetkichhoat();
         nhanVat.setSoSaoGiay(item.getSoSaoPhaLe());
         nhanVat.setSoCapGiay(item.getSoCap());
+        nhanVat.setSoSaoCuongHoaGiay(item.getSoSaoPhaLeCuongHoa());
         nhanVat.setHanhTinhGiay(item.getHanhtinh());
         nhanVat.setSucManhYeuCauGiay(item.getSucManhYeuCau());
 
@@ -2125,10 +2162,11 @@ public class VeHUD {
         String skhjCu = skhj;
         int sosaocu = nhanVat.getSoSaoGiay();
         int socapcu = nhanVat.getSoCapGiay();
+        int sosaocuonghoacu = nhanVat.getSoSaoCuongHoaGiay();
         String hanhtinhcu = nhanVat.getHanhTinhGiay();
         long sucmanhyeucaucu = nhanVat.getSucManhYeuCauGiay();
         LoaiItem loaiCu = LoaiItem.GIAY;
-        Item giayCu = new Item(idCu, tenCu, loaiCu, giay, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, skhjCu, sosaocu,socapcu,-1);
+        Item giayCu = new Item(idCu, tenCu, loaiCu, giay, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, skhjCu, sosaocu,sosaocuonghoacu,socapcu,-1);
 
         // 2. Gỡ hiệu ứng set trước
         huyHieuUngSet(skhjCu);
@@ -2155,10 +2193,11 @@ public class VeHUD {
         String skhradaCu = skhrada;
         int sosaocu = nhanVat.getSoSaoRada();
         int socapcu = nhanVat.getSoCapRada();
+        int sosaocuonghoacu = nhanVat.getSoSaoCuongHoaRada();
         String hanhtinhcu = nhanVat.getHanhTinhRada();
         long sucmanhyeucaucu = nhanVat.getSucManhYeuCauRada();
         LoaiItem loaiCu = LoaiItem.RADA;
-        Item radaCu = new Item(idCu, tenCu, loaiCu, rada, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, skhradaCu,sosaocu,socapcu,-1);
+        Item radaCu = new Item(idCu, tenCu, loaiCu, rada, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, skhradaCu,sosaocu,sosaocuonghoacu,socapcu,-1);
 
         // 2. Gỡ hiệu ứng set cũ (nếu có)
         huyHieuUngSet(skhradaCu);
@@ -2175,6 +2214,7 @@ public class VeHUD {
         skhrada = item.getSetkichhoat();
         nhanVat.setSoSaoRada(item.getSoSaoPhaLe());
         nhanVat.setSoCapRada(item.getSoCap());
+        nhanVat.setSoSaoCuongHoaRada(item.getSoSaoPhaLeCuongHoa());
         nhanVat.setHanhTinhRada(item.getHanhtinh());
         nhanVat.setSucManhYeuCauRada(item.getSucManhYeuCau());
 
@@ -2200,10 +2240,11 @@ public class VeHUD {
         String skhradaCu = skhrada;
         int sosaocu = nhanVat.getSoSaoRada();
         int socapcu = nhanVat.getSoCapRada();
+        int sosaocuonghoacu = nhanVat.getSoSaoCuongHoaRada();
         String hanhtinhcu = nhanVat.getHanhTinhRada();
         long sucmanhyeucaucu = nhanVat.getSucManhYeuCauRada();
         LoaiItem loaiCu = LoaiItem.RADA;
-        Item radaCu = new Item(idCu, tenCu, loaiCu, rada, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, skhradaCu,sosaocu,socapcu,-1);
+        Item radaCu = new Item(idCu, tenCu, loaiCu, rada, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, skhradaCu,sosaocu,sosaocuonghoacu,socapcu,-1);
 
         // 2. Gỡ hiệu ứng set cũ
         huyHieuUngSet(skhradaCu);
@@ -2233,7 +2274,7 @@ public class VeHUD {
         long sucmanhyeucaucu = nhanVat.getSucManhYeuCauCaiTrang();
         LoaiItem loaiCu = caiTrangDangMac ? LoaiItem.CAITRANG : LoaiItem.AVATAR;
 
-        Item caiTrangCu = new Item(idCu, tenCu, loaiCu, iconct, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, null,0,0,hansudung);
+        Item caiTrangCu = new Item(idCu, tenCu, loaiCu, iconct, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, null,0,0,0,hansudung);
         giamchiso(chisocu);
 
         // 2. Gán cải trang mới
@@ -2283,7 +2324,7 @@ public class VeHUD {
         long sucmanhyeucaucu = nhanVat.getSucManhYeuCauCaiTrang();
         LoaiItem loai = laCaiTrang ? LoaiItem.CAITRANG : LoaiItem.AVATAR;
 
-        Item caiTrangCu = new Item(idCu, tenCu, loai, iconct, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, null,0,0,hansudung);
+        Item caiTrangCu = new Item(idCu, tenCu, loai, iconct, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, null,0,0,0,hansudung);
         giamchiso(chisocu);
         duLieuNguoiChoi.themItemVaoHanhTrang(caiTrangCu);
 
@@ -2310,7 +2351,7 @@ public class VeHUD {
         String hanhtinhcu = nhanVat.getHanhTinhGiapLuyenTap();
         long sucmanhyeucaucu = nhanVat.getSucManhYeuCauGiapLuyenTap();
         LoaiItem loaiCu = LoaiItem.GIAPLUYENTAP;
-        Item giapLuyenTapCu = new Item(idCu, tenCu, loaiCu, giaplt, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, null,sosaocu,0,hansudung);
+        Item giapLuyenTapCu = new Item(idCu, tenCu, loaiCu, giaplt, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, null,sosaocu,0,0,hansudung);
         duLieuNguoiChoi.giamHpPt(chisocu[6]);
         giaplt = item.getTexture();
         nhanVat.setIdGiapLuyenTap(item.getId());
@@ -2318,6 +2359,7 @@ public class VeHUD {
         nhanVat.setMoTaGiapLuyenTap(item.getMoTa());
         nhanVat.setChisoGiapLuyenTap(item.getChiso());
         nhanVat.setSoSaoGiapLuyenTap(item.getSoSaoPhaLe());
+        nhanVat.setSoSaoCuongHoaGlt(item.getSoSaoPhaLeCuongHoa());
         nhanVat.setHanSuDungGiapLuyenTap(item.getHanSuDung());
         nhanVat.setHanhTinhGiapLuyenTap(item.getHanhtinh());
         nhanVat.setSucManhYeuCauGiapLuyenTap(item.getSucManhYeuCau());
@@ -2336,11 +2378,12 @@ public class VeHUD {
         String motacu = nhanVat.getMoTaGiapLuyenTap();
         int[] chisocu = nhanVat.getChisoGiapLuyenTap();
         int sosaocu = nhanVat.getSoSaoGiapLuyenTap();
+        int sosaocuonghoacu = nhanVat.getSoSaoCuongHoaGlt();
         float hansudung = nhanVat.getHanSuDungGiapLuyenTap();
         String hanhtinhcu = nhanVat.getHanhTinhGiapLuyenTap();
         long sucmanhyeucaucu = nhanVat.getSucManhYeuCauGiapLuyenTap();
         LoaiItem loaiCu = LoaiItem.GIAPLUYENTAP;
-        Item giapLuyenTapCu = new Item(idCu, tenCu, loaiCu, giaplt, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, null,sosaocu,0,hansudung);
+        Item giapLuyenTapCu = new Item(idCu, tenCu, loaiCu, giaplt, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, null,sosaocu,sosaocuonghoacu,0,hansudung);
         tangchiso(chisocu);
         chisovuathao = chisocu;
         duLieuNguoiChoi.checkGiapLuyenTap(false,chisocu[8]);
@@ -2360,7 +2403,7 @@ public class VeHUD {
             String hanhtinhcu = nhanVat.getHanhTinhVanBay();
             long sucmanhyeucaucu = nhanVat.getSucManhYeuCauVanBay();
             LoaiItem loaiCu = LoaiItem.VANBAY;
-            Item vanBayCu = new Item(idCu, tenCu, loaiCu, vanbay, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, null,0,0,-1);
+            Item vanBayCu = new Item(idCu, tenCu, loaiCu, vanbay, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, null,0,0,0,-1);
 
             tangchiso(chisocu);
             danhSach.set(indexx, vanBayCu);
@@ -2370,7 +2413,7 @@ public class VeHUD {
             String motacu = "Ván bay cân đẩu vân";
             int[] chisocu = new int[] {0,0,0,0,0,0,0,0,0,0,0,0};
             LoaiItem loaiCu = LoaiItem.VANBAY;
-            Item vanBayCu = new Item(idCu, tenCu, loaiCu, vanbay, motacu, 1, chisocu,"traidat",0, null,0,0,-1);
+            Item vanBayCu = new Item(idCu, tenCu, loaiCu, vanbay, motacu, 1, chisocu,"traidat",0, null,0,0,0,-1);
 
             tangchiso(chisocu);
             danhSach.set(indexx, vanBayCu);

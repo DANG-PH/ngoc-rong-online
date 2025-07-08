@@ -129,6 +129,7 @@ public class NhanVat {
     private int[] chisoAo ;
     private int soSaoAo;
     private int soCapAo;
+    private int soSaoCuongHoaAo;
     private String hanhTinhAo;
     private long sucManhYeuCauAo;
     private String idQuan = "mac_dinh";
@@ -137,6 +138,7 @@ public class NhanVat {
     private int[] chisoQuan ;
     private int soSaoQuan;
     private int soCapQuan;
+    private int soSaoCuongHoaQuan;
     private String hanhTinhQuan;
     private long sucManhYeuCauQuan;
     private String idGang = "mac_dinh";
@@ -145,6 +147,7 @@ public class NhanVat {
     private int[] chisoGang ;
     private int soSaoGang;
     private int soCapGang;
+    private int soSaoCuongHoaGang;
     private String hanhTinhGang;
     private long sucManhYeuCauGang;
     private String idGiay = "mac_dinh";
@@ -153,6 +156,7 @@ public class NhanVat {
     private int[] chisoGiay ;
     private int soSaoGiay;
     private int soCapGiay;
+    private int soSaoCuongHoaGiay;
     private String hanhTinhGiay;
     private long sucManhYeuCauGiay;
     private String idRada = "mac_dinh";
@@ -161,6 +165,7 @@ public class NhanVat {
     private int[] chisoRada ;
     private int soSaoRada;
     private int soCapRada;
+    private int soSaoCuongHoaRada;
     private String hanhTinhRada;
     private long sucManhYeuCauRada;
     private String idGiapLuyenTap;
@@ -168,6 +173,7 @@ public class NhanVat {
     private String moTaGiapLuyenTap = "mac_dinh";
     private int[] chisoGiapLuyenTap ;
     private int soSaoGiapLuyenTap;
+    private int soSaoCuongHoaGlt;
     private float hanSuDungGiapLuyenTap;
     private String hanhTinhGiapLuyenTap;
     private long sucManhYeuCauGiapLuyenTap;
@@ -298,6 +304,13 @@ public class NhanVat {
         return sucManhYeuCauAo;
     }
 
+    public void setSoSaoCuongHoaAo(int soSao) {
+        this.soSaoCuongHoaAo =  soSao;
+    }
+
+    public int getSoSaoCuongHoaAo() {
+        return soSaoCuongHoaAo;
+    }
     // quan
     public void setIdQuan(String id) {
         this.idQuan = id;
@@ -362,7 +375,13 @@ public class NhanVat {
     public long getSucManhYeuCauQuan() {
         return sucManhYeuCauQuan;
     }
+    public void setSoSaoCuongHoaQuan(int soSao) {
+        this.soSaoCuongHoaQuan =  soSao;
+    }
 
+    public int getSoSaoCuongHoaQuan() {
+        return soSaoCuongHoaQuan;
+    }
     // gang
     public void setIdGang(String id) {
         this.idGang = id;
@@ -426,7 +445,13 @@ public class NhanVat {
     public long getSucManhYeuCauGang() {
         return sucManhYeuCauGang;
     }
+    public void setSoSaoCuongHoaGang(int soSao) {
+        this.soSaoCuongHoaGang =  soSao;
+    }
 
+    public int getSoSaoCuongHoaGang() {
+        return soSaoCuongHoaGang;
+    }
     //giay
     public void setIdGiay(String id) {
         this.idGiay = id;
@@ -489,6 +514,13 @@ public class NhanVat {
 
     public long getSucManhYeuCauGiay() {
         return sucManhYeuCauGiay;
+    }
+    public void setSoSaoCuongHoaGiay(int soSao) {
+        this.soSaoCuongHoaGiay =  soSao;
+    }
+
+    public int getSoSaoCuongHoaGiay() {
+        return soSaoCuongHoaGiay;
     }
 
     // rada
@@ -553,6 +585,13 @@ public class NhanVat {
 
     public long getSucManhYeuCauRada() {
         return sucManhYeuCauRada;
+    }
+    public void setSoSaoCuongHoaRada(int soSao) {
+        this.soSaoCuongHoaRada =  soSao;
+    }
+
+    public int getSoSaoCuongHoaRada() {
+        return soSaoCuongHoaRada;
     }
 
     // giap lt
@@ -628,6 +667,14 @@ public class NhanVat {
 
     public long getSucManhYeuCauGiapLuyenTap() {
         return sucManhYeuCauGiapLuyenTap;
+    }
+
+    public void setSoSaoCuongHoaGlt(int soSao) {
+        this.soSaoCuongHoaGlt = soSao;
+    }
+
+    public int getSoSaoCuongHoaGlt() {
+        return soSaoCuongHoaGlt ;
     }
 
     // Van Bay
