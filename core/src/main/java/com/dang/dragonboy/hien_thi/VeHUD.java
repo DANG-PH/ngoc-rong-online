@@ -554,13 +554,13 @@ public class VeHUD {
                     danhSach.remove(hangTrangDangChon-8);
                     } else {
                         switch (hangTrangDangChon){
-                            case 6 : goGiapLuyenTap(true);
-                            case 0 : goAo(false);
-                            case 1 : goQuan(false);
-                            case 2 : goGang(false);
-                            case 3 : goGiay(false);
-                            case 4 : goRada(false);
-                            case 5 : goCaiTrang(NhanVatXuLy.getDangMacCaiTrang(),false);
+                            case 6 : goGiapLuyenTap(true);break;
+                            case 0 : goAo(true);break;
+                            case 1 : goQuan(true);break;
+                            case 2 : goGang(true);break;
+                            case 3 : goGiay(true);break;
+                            case 4 : goRada(true);break;
+                            case 5 : goCaiTrang(NhanVatXuLy.getDangMacCaiTrang(),true);break;
                         }
                     }
                     DangHienPopupThongTin1 = false;
