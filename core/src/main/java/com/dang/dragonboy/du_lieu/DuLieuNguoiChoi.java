@@ -36,6 +36,12 @@ public class DuLieuNguoiChoi {
     private int capcaydau;
 
     private ArrayList<Item> hanhTrang = new ArrayList<>();
+    private ArrayList<Item> hanhTrangDangMac = new ArrayList<>(8);
+    {
+        for (int i = 0; i < 8; i++) {
+            hanhTrangDangMac.add(null);
+        }
+    }
     public void setNhanVat(NhanVat nv) {
         this.nhanVat = nv;
     }
@@ -105,6 +111,13 @@ public class DuLieuNguoiChoi {
         }
     }
 
+    public ArrayList<Item> getHanhTrangDangMac() {
+        return hanhTrangDangMac;
+    }
+
+    public void setItemVaoHanhTrangDangMac(Item item, int index) {
+        hanhTrangDangMac.set(index,item);
+    }
     public void xoaItemKhoiHanhTrang(int index) {
         hanhTrang.remove(index);
     }
