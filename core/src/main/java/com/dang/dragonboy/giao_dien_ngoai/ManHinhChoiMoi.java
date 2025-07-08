@@ -342,13 +342,13 @@ public class ManHinhChoiMoi implements Screen {
                 String nhanvat = hanhtinhVaNhanvat[hanhTinhDuocChon][nhanVatDuocChon+1];
                 switch (hanhTinhDuocChon){
                     case 0:
-                        game.setScreen(new ManHinhChoiTiep(game, tenNguoiChoi,"traidat",nhanvat));
+                        game.setScreen(new ManHinhSplash(game, new ManHinhChoiTiep(game,tenNguoiChoi,"traidat",nhanvat)));
                         break;
                     case 1:
-                        game.setScreen(new ManHinhChoiTiep(game, tenNguoiChoi,"traidat",nhanvat));
+                        game.setScreen(new ManHinhSplash(game, new ManHinhChoiTiep(game,tenNguoiChoi,"traidat",nhanvat)));
                         break;
                     case 2:
-                        game.setScreen(new ManHinhChoiTiep(game, tenNguoiChoi,"traidat",nhanvat));
+                        game.setScreen(new ManHinhSplash(game, new ManHinhChoiTiep(game,tenNguoiChoi,"traidat",nhanvat)));
                         break;
                 }
                 chuyenManHinhTaoMoi = false;
