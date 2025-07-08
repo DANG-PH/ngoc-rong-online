@@ -20,6 +20,8 @@ import com.badlogic.gdx.Gdx;
 import com.dang.dragonboy.item.Item;
 import com.dang.dragonboy.item.LoaiItem;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class VeHUD {
 
@@ -169,7 +171,7 @@ public class VeHUD {
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "avt_vip",
-            "AVATAR VIP",
+            "Avatar VIP",
             LoaiItem.AVATAR,
             new Texture("nhanvat/"+nhanVat.getHanhtinh()+"/avatar/avt_vip/dung.png"),
             "Dùng để thay đổi khuôn mặt",
@@ -430,7 +432,7 @@ public class VeHUD {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
-            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ";
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ";
         param.size = 18;
         font = generator.generateFont(param);
         param.size = 19;
@@ -446,7 +448,7 @@ public class VeHUD {
         FreeTypeFontGenerator generator2 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchinh.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param2.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
-            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ";
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ";
         param2.size = 22;
         param2.color = Color.WHITE;
         param2.borderWidth = 1f;
@@ -457,7 +459,7 @@ public class VeHUD {
         FreeTypeFontGenerator generator3 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchucnang.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param3 = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param3.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
-            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ";
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ";
         param3.size = 14;
         param3.color = new Color(94 / 255f, 86 / 255f, 74 / 255f, 1f);
         fontChucnang = generator3.generateFont(param3);
@@ -1755,23 +1757,26 @@ public class VeHUD {
     }
     void PopupHanhTrang(ShapeRenderer shapeRenderer,SpriteBatch batch, float x, float y , float width , int oHanhTrangDangChon) {
         String[] chisoduoccong = {"HP", "KI", "SD", "Chí mạng","Giáp", "ST Crit", "HP", "KI", "Sức đánh", "HP", "KI", "Sức đánh", "Giảm sát thương"};
+        Map<String, String> setkichhoat = new HashMap<>();
+        setkichhoat.put("Nappa", "(5 món +80% HP)");
+        setkichhoat.put("Songoku", "(5 món +100% Kamejoko)");
         PopupHanhTrangH = 0;
         if (itemm!=null) {
             if ("giapluyentap".equals(itemDangChon)) {
                 layout.setText(fontTenSkill, itemm.getTenItem());
-                PopupHanhTrangH += layout.height + 10;
+                PopupHanhTrangH += layout.height + 15;
                 layout.setText(fontSkillchuaco, "Hiệu lực trong " + (int) (timeMacGiapLuyenTap / 60f) + " phút");
-                PopupHanhTrangH += layout.height + 10;
+                PopupHanhTrangH += layout.height + 15;
                 for (int i = 6; i <= 12; i++) {
                     if (itemm.getChiso()[i] > 0) {
                         layout.setText(fontSkillchuaco, chisoduoccong[i] + "+" + itemm.getChiso()[i] + "%");
-                        PopupHanhTrangH += layout.height + 10;
+                        PopupHanhTrangH += layout.height + 15;
                     }
                 }
                 layout.setText(fontMotaHanhTrang, "Sức mạnh yêu cầu: " + itemm.getSucManhYeuCau());
                 PopupHanhTrangH += layout.height + 10;
                 layout.setText(font, "____________________________________");
-                PopupHanhTrangH += layout.height + 10;
+                PopupHanhTrangH += layout.height + 15;
                 layout.setText(
                     fontMotaHanhTrang,
                     itemm.getMoTa(),
@@ -1780,9 +1785,68 @@ public class VeHUD {
                     Align.left,
                     true
                 );
-                PopupHanhTrangH += layout.height + 10;
+                PopupHanhTrangH += layout.height + 14;
                 if (itemm.getSoSaoPhaLe() > 0) {
-                    PopupHanhTrangH += 50;
+                    PopupHanhTrangH += 20;
+                }
+            }
+            if ("ao".equals(itemDangChon) || "quan".equals(itemDangChon) || "giay".equals(itemDangChon) || "gang".equals(itemDangChon) || "rada".equals(itemDangChon)) {
+                layout.setText(fontTenSkill, itemm.getTenItem());
+                PopupHanhTrangH += layout.height + 15;
+                for (int i = 9; i < 12; i++ ){
+                    if (itemm.getChiso()[i] > 0) {
+                        layout.setText(fontSkillchuaco,chisoduoccong[i] + "+"+itemm.getChiso()[i]);
+                        PopupHanhTrangH += layout.height + 15;
+                    }
+                    if (itemm.getChiso()[i-6] > 0){
+                        layout.setText(fontSkillchuaco,chisoduoccong[i-6] + "+"+itemm.getChiso()[i-6]);
+                        PopupHanhTrangH += layout.height + 15;
+                    }
+                }
+
+                for (int i = 6; i < 9; i++) {
+                    if (itemm.getChiso()[i] > 0) {
+                        layout.setText(fontSkillchuaco, chisoduoccong[i] + "+" + itemm.getChiso()[i] + "%");
+                        PopupHanhTrangH += layout.height + 15;
+                    }
+                }
+                if (itemm.getSetkichhoat() != null){
+                    boolean fullSetNappa = "Nappa".equals(skha)
+                        && "Nappa".equals(skhq)
+                        && "Nappa".equals(skhg)
+                        && "Nappa".equals(skhj)
+                        && "Nappa".equals(skhrada);
+                    if (fullSetNappa) {
+                        layout.setText(fontSkillchuaco, "Set " + itemm.getSetkichhoat());
+                        PopupHanhTrangH += layout.height + 12;
+                        layout.setText(fontSkillchuaco, setkichhoat.get(itemm.getSetkichhoat()));
+                        PopupHanhTrangH += layout.height + 12;
+                        layout.setText(fontSkillchuaco, "Không thể giao dịch");
+                        PopupHanhTrangH += layout.height + 12;
+                    } else {
+                        layout.setText(fontTenSkill, "Set " + itemm.getSetkichhoat());
+                        PopupHanhTrangH += layout.height + 12;
+                        layout.setText(fontTenSkill, setkichhoat.get(itemm.getSetkichhoat()));
+                        PopupHanhTrangH += layout.height + 12;
+                        layout.setText(fontTenSkill, "Không thể giao dịch");
+                        PopupHanhTrangH += layout.height + 12;
+                    }
+                }
+                layout.setText(fontMotaHanhTrang, "Sức mạnh yêu cầu: " + itemm.getSucManhYeuCau());
+                PopupHanhTrangH += layout.height + 10;
+                layout.setText(font, "____________________________________");
+                PopupHanhTrangH += layout.height + 15;
+                layout.setText(
+                    fontMotaHanhTrang,
+                    itemm.getMoTa(),
+                    fontMotaHanhTrang.getColor(),
+                    330,
+                    Align.left,
+                    true
+                );
+                PopupHanhTrangH += layout.height + 42;
+                if (itemm.getSoSaoPhaLe() > 0) {
+                    PopupHanhTrangH += 20;
                 }
             }
             // --- VẼ BACKGROUND BẰNG SHAPERENDERER ---
@@ -1849,6 +1913,112 @@ public class VeHUD {
                 );
                 fontMotaHanhTrang.draw(batch, layout, PopupHanhTrangX + (PopupHanhTrangW - layout.width) / 2f, PopupHanhTrangY + PopupHanhTrangH - offsetY);
                 offsetY += layout.height + 30;
+
+                if (itemm.getSoSaoPhaLe() > 0) {
+                    float saoxanhW = saoxanh.getWidth() * 0.5f;
+                    float saoxanhH = saoxanh.getHeight() * 0.5f;
+                    float spacing = 40f;
+                    int soSao = itemm.getSoSaoPhaLe();
+
+                    float totalW = (soSao - 1) * spacing + saoxanhW;
+
+                    float startX = PopupHanhTrangX + (PopupHanhTrangW - totalW) / 2f;
+
+                    for (int i = 0; i < soSao; i++) {
+                        float drawX = startX + i * spacing;
+                        if (i < itemm.getSoSaoPhaLeCuongHoa()) {
+                            batch.draw(saoxanh, drawX, PopupHanhTrangY + PopupHanhTrangH - offsetY, saoxanhW, saoxanhH);
+                        } else {
+                            batch.draw(saoden, drawX, PopupHanhTrangY + PopupHanhTrangH - offsetY, saoxanhW, saoxanhH);
+                        }
+                    }
+                }
+            } else if ("ao".equals(itemDangChon) || "quan".equals(itemDangChon) || "giay".equals(itemDangChon) || "gang".equals(itemDangChon) || "rada".equals(itemDangChon)) {
+                float offsetY = 10;
+                if (itemm.getTexture() != null) {
+                    batch.draw(itemm.getTexture(), PopupHanhTrangX + 15, PopupHanhTrangY + PopupHanhTrangH - itemm.getTexture().getHeight() * 0.5f - offsetY, itemm.getTexture().getWidth() * 0.5f, itemm.getTexture().getHeight() * 0.5f);
+                    offsetY += 10;
+                }
+                if (itemm.getSoCap() > 0){
+                    fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                    layout.setText(fontTenSkill, itemm.getTenItem());
+                    fontTenSkill.draw(batch, layout, PopupHanhTrangW + PopupHanhTrangX - layout.width - 50, PopupHanhTrangY + PopupHanhTrangH - offsetY);
+                    layout.setText(fontTenSkill, "[+"+itemm.getSoCap()+"]");
+                    fontTenSkill.draw(batch, layout, PopupHanhTrangW + PopupHanhTrangX - layout.width - 15, PopupHanhTrangY + PopupHanhTrangH - offsetY);
+                    offsetY += layout.height + 12;
+                } else {
+                    fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                    layout.setText(fontTenSkill, itemm.getTenItem());
+                    fontTenSkill.draw(batch, layout, PopupHanhTrangW + PopupHanhTrangX - layout.width - 15, PopupHanhTrangY + PopupHanhTrangH - offsetY);
+                    offsetY += layout.height + 12;
+                }
+                for (int i = 9; i < 12; i++ ){
+                    if (itemm.getChiso()[i] > 0) {
+                        layout.setText(fontSkillchuaco,chisoduoccong[i] + "+"+itemm.getChiso()[i]);
+                        fontSkillchuaco.draw(batch, layout, PopupHanhTrangW + PopupHanhTrangX - layout.width - 15, PopupHanhTrangY + PopupHanhTrangH - offsetY);
+                        offsetY += layout.height + 12;
+                    }
+                    if (itemm.getChiso()[i-6] > 0){
+                        layout.setText(fontSkillchuaco,chisoduoccong[i-6] + "+"+itemm.getChiso()[i-6]);
+                        fontSkillchuaco.draw(batch, layout, PopupHanhTrangW + PopupHanhTrangX - layout.width - 15, PopupHanhTrangY + PopupHanhTrangH - offsetY);
+                        offsetY += layout.height + 12;
+                    }
+                }
+                if (itemm.getSetkichhoat() != null){
+                    boolean fullSetNappa = "Nappa".equals(skha)
+                        && "Nappa".equals(skhq)
+                        && "Nappa".equals(skhg)
+                        && "Nappa".equals(skhj)
+                        && "Nappa".equals(skhrada);
+                    if (fullSetNappa) {
+                        layout.setText(fontSkillchuaco, "Set " + itemm.getSetkichhoat());
+                        fontSkillchuaco.draw(batch, layout, PopupHanhTrangW + PopupHanhTrangX - layout.width - 15, PopupHanhTrangY + PopupHanhTrangH - offsetY);
+                        offsetY += layout.height + 12;
+                        layout.setText(fontSkillchuaco, setkichhoat.get(itemm.getSetkichhoat()));
+                        fontSkillchuaco.draw(batch, layout, PopupHanhTrangW + PopupHanhTrangX - layout.width - 15, PopupHanhTrangY + PopupHanhTrangH - offsetY);
+                        offsetY += layout.height + 12;
+                        layout.setText(fontSkillchuaco, "Không thể giao dịch");
+                        fontSkillchuaco.draw(batch, layout, PopupHanhTrangW + PopupHanhTrangX - layout.width - 15, PopupHanhTrangY + PopupHanhTrangH - offsetY);
+                        offsetY += layout.height + 12;
+                    } else {
+                        fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                        layout.setText(fontSkillchuaco, "Set " + itemm.getSetkichhoat());
+                        fontSkillchuaco.draw(batch, layout, PopupHanhTrangW + PopupHanhTrangX - layout.width - 15, PopupHanhTrangY + PopupHanhTrangH - offsetY);
+                        offsetY += layout.height + 12;
+                        layout.setText(fontTenSkill, setkichhoat.get(itemm.getSetkichhoat()));
+                        fontTenSkill.draw(batch, layout, PopupHanhTrangW + PopupHanhTrangX - layout.width - 15, PopupHanhTrangY + PopupHanhTrangH - offsetY);
+                        offsetY += layout.height + 12;
+                        layout.setText(fontSkillchuaco, "Không thể giao dịch");
+                        fontSkillchuaco.draw(batch, layout, PopupHanhTrangW + PopupHanhTrangX - layout.width - 15, PopupHanhTrangY + PopupHanhTrangH - offsetY);
+                        offsetY += layout.height + 12;
+                    }
+                }
+                for (int i = 6; i < 9; i++) {
+                    if (itemm.getChiso()[i] > 0) {
+                        layout.setText(fontSkillchuaco, chisoduoccong[i] + "+" + itemm.getChiso()[i]+"%");
+                        fontSkillchuaco.draw(batch, layout, PopupHanhTrangW + PopupHanhTrangX - layout.width - 15, PopupHanhTrangY + PopupHanhTrangH - offsetY);
+                        offsetY += layout.height + 12;
+                    }
+                }
+                layout.setText(fontMotaHanhTrang, "Sức mạnh yêu cầu: " + itemm.getSucManhYeuCau());
+                fontMotaHanhTrang.draw(batch, layout, PopupHanhTrangW + PopupHanhTrangX - layout.width - 15, PopupHanhTrangY + PopupHanhTrangH - offsetY);
+                offsetY += layout.height;
+                layout.setText(font, "____________________________________");
+                for (int i = 0; i < 2; i++) {
+                    font.draw(batch, layout, PopupHanhTrangX + (PopupHanhTrangW - layout.width) / 2f, PopupHanhTrangY + PopupHanhTrangH - offsetY - i * 1);
+                }
+                offsetY += layout.height + 25;
+
+                layout.setText(
+                    fontMotaHanhTrang,
+                    itemm.getMoTa(),
+                    fontMotaHanhTrang.getColor(),
+                    330,
+                    Align.left,
+                    true
+                );
+                fontMotaHanhTrang.draw(batch, layout, PopupHanhTrangX + (PopupHanhTrangW - layout.width) / 2f, PopupHanhTrangY + PopupHanhTrangH - offsetY);
+                offsetY += layout.height + 32;
 
                 if (itemm.getSoSaoPhaLe() > 0) {
                     float saoxanhW = saoxanh.getWidth() * 0.5f;
