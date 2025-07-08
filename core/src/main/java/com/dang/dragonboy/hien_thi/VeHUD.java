@@ -787,6 +787,17 @@ public class VeHUD {
             }
         }
         if (dangHienPopup && chucNangDangChon == 1 && !DangHienPopupThongTin1) {
+            if (vanBayDau){
+                vanbay = new Texture("vatpham/vanbay/"+"candauvan/candauvan.png");
+                nhanVat.setIdVanBay("candauvan");
+                nhanVat.setTenVanBay("Cân đẩu vân");
+                nhanVat.setMoTaVanBay("Dùng để bay không tốn KI");
+                nhanVat.setChisoVanBay(new int[] {0,0,0,0,0,0,0,0,0,0,0,0});
+                nhanVat.setHanhTinhVanBay("traidat");
+                nhanVat.setSucManhYeuCauVanBay(0);
+                Item vanBay = new Item("candauvan", "Cân đẩu vân", LoaiItem.VANBAY, vanbay, "Dùng để bay không tốn KI", 1, new int[] {0,0,0,0,0,0,0,0,0,0,0,0},"traidat",0, null,0,0,0,-1);
+                duLieuNguoiChoi.setItemVaoHanhTrangDangMac(vanBay,7);
+            }
             float viewY = 35;
             float viewHeight = 444 - 35;
             int KhoangCachItem = 49;
@@ -836,15 +847,6 @@ public class VeHUD {
                     }
                 } else {
                     ArrayList<Item> danhSach = duLieuNguoiChoi.getHanhTrangDangMac();
-                    if (vanBayDau && hangTrangDangChon==7){
-                        String idCu = "candauvan";
-                        String tenCu = "Cân đẩu vân";
-                        String motacu = "Dùng để bay không tốn KI";
-                        int[] chisocu = new int[] {0,0,0,0,0,0,0,0,0,0,0,0};
-                        LoaiItem loaiCu = LoaiItem.VANBAY;
-                        Item vanBayCu = new Item(idCu, tenCu, loaiCu, vanbay, motacu, 1, chisocu,"traidat",0, null,0,0,0,-1);
-                        duLieuNguoiChoi.setItemVaoHanhTrangDangMac(vanBayCu,7);
-                    }
                     if (danhSach.get(hangTrangDangChon) != null){
                         Item item = danhSach.get(hangTrangDangChon);
                         itemm = item;
@@ -2980,7 +2982,6 @@ public class VeHUD {
 
         // 4. Thay vào hành trang
         danhSach.set(indexx, caiTrangCu);
-
     }
 
     private void goCaiTrang(boolean laCaiTrang,boolean vut) {
@@ -3082,19 +3083,9 @@ public class VeHUD {
             long sucmanhyeucaucu = nhanVat.getSucManhYeuCauVanBay();
             LoaiItem loaiCu = LoaiItem.VANBAY;
             Item vanBayCu = new Item(idCu, tenCu, loaiCu, vanbay, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, null,0,0,0,-1);
-
-            tangchiso(chisocu);
             danhSach.set(indexx, vanBayCu);
         } else {
-            String idCu = "candauvan";
-            String tenCu = "Cân đẩu vân";
-            String motacu = "Dùng để bay không tốn KI";
-            int[] chisocu = new int[] {0,0,0,0,0,0,0,0,0,0,0,0};
-            LoaiItem loaiCu = LoaiItem.VANBAY;
-            Item vanBayCu = new Item(idCu, tenCu, loaiCu, vanbay, motacu, 1, chisocu,"traidat",0, null,0,0,0,-1);
-
-            tangchiso(chisocu);
-            danhSach.set(indexx, vanBayCu);
+            danhSach.set(indexx, duLieuNguoiChoi.getHanhTrangDangMac().get(7));
             vanBayDau = false;
         }
         duLieuNguoiChoi.setItemVaoHanhTrangDangMac(item,7);
@@ -3106,7 +3097,6 @@ public class VeHUD {
         nhanVat.setHanhTinhVanBay(item.getHanhtinh());
         nhanVat.setSucManhYeuCauVanBay(item.getSucManhYeuCau());
         nhanVat.doiVanBay(item.getId());
-        giamchiso(item.getChiso());
     }
     private void tangchiso(int[] chiso){
         duLieuNguoiChoi.tangHp(chiso[0]); // hp thường
