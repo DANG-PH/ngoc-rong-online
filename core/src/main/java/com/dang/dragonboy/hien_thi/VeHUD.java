@@ -643,8 +643,6 @@ public class VeHUD {
         shapeRenderer.end();
 
         batch.begin();
-        layout.setText(fontsm,nhanVat.getHanSuDungGiapLuyenTap()+"");
-        fontsm.draw(batch,layout,500,300);
         // ô chat (góc phải trên)
         int ochatW = 60;
         int ochatH = 60;
