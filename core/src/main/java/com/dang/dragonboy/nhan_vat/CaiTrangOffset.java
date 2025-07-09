@@ -32,7 +32,13 @@ public class CaiTrangOffset {
     private static Map<TrangThai, List<DoLechModular>> taoGokuBlack() {
         return taoLech(
             lech(0f, -1f, 0.1f, -15.4f),
-            lech(2.2f, 5.2f, 3.3f, -10f),
+            lechDiChuyen(new float[][] {
+                {2.2f, 5.2f, 3.3f, -10f},
+                {2.2f, 5.2f, 3.3f, -10f},
+                {2.2f, 5.2f, 3.3f, -10f},
+                {2.2f, 5.2f, 3.3f, -10f},
+                {2.2f, 5.2f, 3.3f, -10f}
+            }),
             lech(-4f, 6f, 0.5f, -21.5f),
             lech(-5.5f, 6.5f, -1.2f, -28f),
             lech(0f, -1f, -0.3f, -15.5f)
@@ -42,7 +48,13 @@ public class CaiTrangOffset {
     private static Map<TrangThai, List<DoLechModular>> taoGokuBlackRose() {
         return taoLech(
             lech(0f, -1f, -0.3f, -15.5f),
-            lech(2.2f, 5.2f, 3.3f, -10f),
+            lechDiChuyen(new float[][] {
+                {2.2f, 5.2f, 3.3f, -10f},
+                {2.2f, 5.2f, 3.3f, -10f},
+                {2.2f, 5.2f, 3.3f, -10f},
+                {2.2f, 5.2f, 3.3f, -10f},
+                {2.2f, 5.2f, 3.3f, -10f}
+            }),
             lech(-4f, 6f, 0.5f, -21.5f),
             lech(-5.5f, 6.5f, -1.2f, -28f),
             lech(0f, -1f, -0.3f, -15.5f)
@@ -52,7 +64,13 @@ public class CaiTrangOffset {
     private static Map<TrangThai, List<DoLechModular>> taoVegitoXeno() {
         return taoLech(
             lech(11.3f, -18.5f, 5f, -63.5f),
-            lech(18f, -4f, 7.5f, -47.5f),
+            lechDiChuyen(new float[][] {
+                {18f, -4f, 7.5f, -47.5f},
+                {18f, -4f, 7.5f, -47.5f},
+                {18f, -4f, 7.5f, -47.5f},
+                {18f, -4f, 7.5f, -47.5f},
+                {18f, -4f, 7.5f, -47.5f}
+            }),
             lech(6f, 7.5f, 0.5f, -53.5f),
             lech(-5.5f, 6.5f, -4f, -56.5f),
             lech(11.3f, -18.5f, 5f, -63.5f)
@@ -62,7 +80,13 @@ public class CaiTrangOffset {
     private static Map<TrangThai, List<DoLechModular>> taoVegitoSsj() {
         return taoLech(
             lech(0f, -2.2f, 2f, -17.3f),
-            lech(2f, 4f, 4.5f, -13.8f),
+            lechDiChuyen(new float[][] {
+                {2f, 4f, 4.5f, -13.8f},
+                {2f, 4f, 4.5f, -13.8f},
+                {2f, 4f, 4.5f, -13.8f},
+                {2f, 4f, 4.5f, -13.8f},
+                {2f, 4f, 4.5f, -13.8f}
+            }),
             lech(-1f, 7f, 0.5f, -20.8f),
             lech(-7f, 7.5f, 1f, -31.5f),
             lech(0f, -1f, -0.3f, -15.5f)
@@ -72,7 +96,13 @@ public class CaiTrangOffset {
     private static Map<TrangThai, List<DoLechModular>> taoGohanBeast() {
         return taoLech(
             lech(0f, -4f, 2.2f, -20f),
-            lech(4f, 4f, 4.5f, -13.8f),
+            lechDiChuyen(new float[][] {
+                {4f, 4f, 4.5f, -13.8f},
+                {4f, 4f, 4.5f, -13.8f},
+                {4f, 4f, 4.5f, -13.8f},
+                {4f, 4f, 4.5f, -13.8f},
+                {4f, 4f, 4.5f, -13.8f}
+            }),
             lech(6.5f, 7f, 9f, -25f),
             lech(-7f, 7.5f, 1f, -34.5f),
             lech(0f, -1f, -0.3f, -15.5f)
@@ -109,5 +139,14 @@ public class CaiTrangOffset {
             new DoLechModular(0, 0, 0, 0),
             new DoLechModular(0, 0, 0, 0)
         );
+    }
+    private static List<DoLechModular> lechDiChuyen(
+        float[][] cacFrame
+    ) {
+        List<DoLechModular> list = new ArrayList<>();
+        for (float[] frame : cacFrame) {
+            list.add(new DoLechModular(frame[0], frame[1], frame[2], frame[3]));
+        }
+        return list;
     }
 }
