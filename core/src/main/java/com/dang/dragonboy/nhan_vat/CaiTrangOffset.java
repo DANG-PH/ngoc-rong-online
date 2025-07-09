@@ -1,13 +1,11 @@
 package com.dang.dragonboy.nhan_vat;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class CaiTrangOffset {
 
-    private static final Map<String, Map<TrangThai, DoLechModular>> OFFSET_CAI_TRANG = new HashMap<>();
+    private static final Map<String, Map<TrangThai, List<DoLechModular>>> OFFSET_CAI_TRANG = new HashMap<>();
 
-    // Khởi tạo static
     static {
         OFFSET_CAI_TRANG.put("goku_black", taoGokuBlack());
         OFFSET_CAI_TRANG.put("goku_black_rose", taoGokuBlackRose());
@@ -16,70 +14,100 @@ public class CaiTrangOffset {
         OFFSET_CAI_TRANG.put("gohan_beast", taoGohanBeast());
     }
 
-    // Hàm công khai để lấy offset theo tên cải trang
-    public static Map<TrangThai, DoLechModular> getOffset(String ten) {
+    public static Map<TrangThai, List<DoLechModular>> getOffset(String ten) {
         return OFFSET_CAI_TRANG.getOrDefault(ten, getMacDinh());
     }
 
-    // mặc định
-    private static Map<TrangThai, DoLechModular> getMacDinh() {
-        Map<TrangThai, DoLechModular> macDinh = new HashMap<>();
-        DoLechModular lech = new DoLechModular(0, 0, 0, 0);
+    private static Map<TrangThai, List<DoLechModular>> getMacDinh() {
+        Map<TrangThai, List<DoLechModular>> macDinh = new HashMap<>();
+        List<DoLechModular> zero = lechChan();
         for (TrangThai tt : TrangThai.values()) {
-            macDinh.put(tt, lech);
+            macDinh.put(tt, zero);
         }
         return macDinh;
     }
 
-    // goku_black
-    private static Map<TrangThai, DoLechModular> taoGokuBlack() {
-        Map<TrangThai, DoLechModular> map = new HashMap<>();
-        map.put(TrangThai.DUNG_YEN, new DoLechModular(0f, -1f, 0.1f, -15.4f));
-        map.put(TrangThai.DI_CHUYEN, new DoLechModular(2.2f, 5.2f, 3.3f, -10f));
-        map.put(TrangThai.NHAY, new DoLechModular(-4f, 6f, 0.5f, -21.5f));
-        map.put(TrangThai.ROI, new DoLechModular(-5.5f, 6.5f, -1.2f, -28f));
-        map.put(TrangThai.BAY_NGANG, new DoLechModular(0f, -1f, -0.3f, -15.5f));
+    // ===== Các bộ cải trang =====
+
+    private static Map<TrangThai, List<DoLechModular>> taoGokuBlack() {
+        return taoLech(
+            lech(0f, -1f, 0.1f, -15.4f),
+            lech(2.2f, 5.2f, 3.3f, -10f),
+            lech(-4f, 6f, 0.5f, -21.5f),
+            lech(-5.5f, 6.5f, -1.2f, -28f),
+            lech(0f, -1f, -0.3f, -15.5f)
+        );
+    }
+
+    private static Map<TrangThai, List<DoLechModular>> taoGokuBlackRose() {
+        return taoLech(
+            lech(0f, -1f, -0.3f, -15.5f),
+            lech(2.2f, 5.2f, 3.3f, -10f),
+            lech(-4f, 6f, 0.5f, -21.5f),
+            lech(-5.5f, 6.5f, -1.2f, -28f),
+            lech(0f, -1f, -0.3f, -15.5f)
+        );
+    }
+
+    private static Map<TrangThai, List<DoLechModular>> taoVegitoXeno() {
+        return taoLech(
+            lech(11.3f, -18.5f, 5f, -63.5f),
+            lech(18f, -4f, 7.5f, -47.5f),
+            lech(6f, 7.5f, 0.5f, -53.5f),
+            lech(-5.5f, 6.5f, -4f, -56.5f),
+            lech(11.3f, -18.5f, 5f, -63.5f)
+        );
+    }
+
+    private static Map<TrangThai, List<DoLechModular>> taoVegitoSsj() {
+        return taoLech(
+            lech(0f, -2.2f, 2f, -17.3f),
+            lech(2f, 4f, 4.5f, -13.8f),
+            lech(-1f, 7f, 0.5f, -20.8f),
+            lech(-7f, 7.5f, 1f, -31.5f),
+            lech(0f, -1f, -0.3f, -15.5f)
+        );
+    }
+
+    private static Map<TrangThai, List<DoLechModular>> taoGohanBeast() {
+        return taoLech(
+            lech(0f, -4f, 2.2f, -20f),
+            lech(4f, 4f, 4.5f, -13.8f),
+            lech(6.5f, 7f, 9f, -25f),
+            lech(-7f, 7.5f, 1f, -34.5f),
+            lech(0f, -1f, -0.3f, -15.5f)
+        );
+    }
+
+    // ===== Hàm tiện ích chung =====
+
+    private static Map<TrangThai, List<DoLechModular>> taoLech(
+        List<DoLechModular> dungYen,
+        List<DoLechModular> diChuyen,
+        List<DoLechModular> nhay,
+        List<DoLechModular> roi,
+        List<DoLechModular> bayNgang
+    ) {
+        Map<TrangThai, List<DoLechModular>> map = new HashMap<>();
+        map.put(TrangThai.DUNG_YEN, dungYen);
+        map.put(TrangThai.DI_CHUYEN, diChuyen);
+        map.put(TrangThai.NHAY, nhay);
+        map.put(TrangThai.ROI, roi);
+        map.put(TrangThai.BAY_NGANG, bayNgang);
         return map;
     }
 
-    // goku_black_rose
-    private static Map<TrangThai, DoLechModular> taoGokuBlackRose() {
-        Map<TrangThai, DoLechModular> map = new HashMap<>();
-        map.put(TrangThai.DUNG_YEN, new DoLechModular(0f, -1f, -0.3f, -15.5f));
-        map.put(TrangThai.DI_CHUYEN, new DoLechModular(2.2f, 5.2f, 3.3f, -10f));
-        map.put(TrangThai.NHAY, new DoLechModular(-4f, 6f, 0.5f, -21.5f));
-        map.put(TrangThai.ROI, new DoLechModular(-5.5f, 6.5f, -1.2f, -28f));
-        map.put(TrangThai.BAY_NGANG, new DoLechModular(0f, -1f, -0.3f, -15.5f));
-        return map;
+    private static List<DoLechModular> lech(float thanX, float thanY, float dauX, float dauY) {
+        return List.of(new DoLechModular(thanX, thanY, dauX, dauY));
     }
-    // Vegito Xeno
-    private static Map<TrangThai, DoLechModular> taoVegitoXeno() {
-        Map<TrangThai, DoLechModular> map = new HashMap<>();
-        map.put(TrangThai.DUNG_YEN, new DoLechModular(11.3f, -18.5f, 5f, -63.5f));
-        map.put(TrangThai.DI_CHUYEN, new DoLechModular(18f, -4f, 7.5f, -47.5f));
-        map.put(TrangThai.NHAY, new DoLechModular(6f, 7.5f, 0.5f, -53.5f));
-        map.put(TrangThai.ROI, new DoLechModular(-5.5f, 6.5f, -4f, -56.5f));
-        map.put(TrangThai.BAY_NGANG, new DoLechModular(11.3f, -18.5f, 5f, -63.5f));
-        return map;
-    }
-    // Vegito Ssj
-    private static Map<TrangThai, DoLechModular> taoVegitoSsj() {
-        Map<TrangThai, DoLechModular> map = new HashMap<>();
-        map.put(TrangThai.DUNG_YEN, new DoLechModular(0f, -2.2f, 2f, -17.3f));
-        map.put(TrangThai.DI_CHUYEN, new DoLechModular(2f, 4f, 4.5f, -13.8f));
-        map.put(TrangThai.NHAY, new DoLechModular(-1f, 7f, 0.5f, -20.8f));
-        map.put(TrangThai.ROI, new DoLechModular(-7f, 7.5f, 1f, -31.5f));
-        map.put(TrangThai.BAY_NGANG, new DoLechModular(0f, -1f, -0.3f, -15.5f));
-        return map;
-    }
-    // Gohan Beast
-    private static Map<TrangThai, DoLechModular> taoGohanBeast() {
-        Map<TrangThai, DoLechModular> map = new HashMap<>();
-        map.put(TrangThai.DUNG_YEN, new DoLechModular(0f, -4f, 2.2f, -20f));
-        map.put(TrangThai.DI_CHUYEN, new DoLechModular(4f, 4f, 4.5f, -13.8f));
-        map.put(TrangThai.NHAY, new DoLechModular(6.5f, 7f, 9f, -25f));
-        map.put(TrangThai.ROI, new DoLechModular(-7f, 7.5f, 1f, -34.5f));
-        map.put(TrangThai.BAY_NGANG, new DoLechModular(0f, -1f, -0.3f, -15.5f));
-        return map;
+
+    private static List<DoLechModular> lechChan() {
+        return List.of(
+            new DoLechModular(0, 0, 0, 0),
+            new DoLechModular(0, 0, 0, 0),
+            new DoLechModular(0, 0, 0, 0),
+            new DoLechModular(0, 0, 0, 0),
+            new DoLechModular(0, 0, 0, 0)
+        );
     }
 }

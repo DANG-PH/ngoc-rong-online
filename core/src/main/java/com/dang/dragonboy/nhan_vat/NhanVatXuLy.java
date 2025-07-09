@@ -1,7 +1,8 @@
 package com.dang.dragonboy.nhan_vat;
 
 import com.badlogic.gdx.graphics.Texture;
-
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class NhanVatXuLy {
@@ -50,7 +51,7 @@ public class NhanVatXuLy {
         };
         Texture chan_bay = new Texture(path + "chanbay.png");
 
-        Map<TrangThai, DoLechModular> lech = CaiTrangOffset.getOffset(tenCaiTrang);
+        Map<TrangThai, List<DoLechModular>> lech = CaiTrangOffset.getOffset(tenCaiTrang);
         dangMacCaiTrang = true;
         dangMacAvatar = false;
         return new NhanVatCauHinh(
@@ -112,7 +113,7 @@ public class NhanVatXuLy {
         };
         Texture chan_bay = new Texture(quanPath + "chanbay.png");
 
-        Map<TrangThai, DoLechModular> lech = AvatarDoOffset.getOffset(avatar, ao, quan);
+        Map<TrangThai, List<DoLechModular>> lech = AvatarDoOffset.getOffset(avatar, ao, quan);
         dangMacCaiTrang = false;
         if (!checkDau.contains("_base")) {
             dangMacAvatar = true;

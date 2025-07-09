@@ -2,7 +2,8 @@ package com.dang.dragonboy.nhan_vat;
 
 import com.badlogic.gdx.graphics.Texture;
 import java.util.Map;
-
+import java.util.List;
+import java.util.ArrayList;
 public class NhanVatCauHinh {
     //avt
     public String avt;
@@ -26,7 +27,7 @@ public class NhanVatCauHinh {
     public Texture chan_bay;
 
     // Offset
-    public Map<TrangThai, DoLechModular> lechMap;
+    public Map<TrangThai, List<DoLechModular>> lechMap;
 
     // item
     public Texture ao,quan,gang,giay,rada,iconct,giaplt,vanbay;
@@ -36,7 +37,7 @@ public class NhanVatCauHinh {
         Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,
         Texture chan_dung, Texture chan_nhay, Texture chan_roi, Texture[] chan_chay,
         Texture than_bay, Texture chan_bay,
-        Map<TrangThai, DoLechModular> lechMap,
+        Map<TrangThai, List<DoLechModular>> lechMap,
         String avt,
         Texture ao, Texture quan, Texture gang, Texture giay, Texture rada, Texture iconct, Texture giaplt, Texture vanbay
     ) {

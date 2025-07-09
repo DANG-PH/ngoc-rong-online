@@ -26,7 +26,7 @@ public class NhanVat {
     public boolean dangDungDat = true;
 
     private TrangThai trangThai = TrangThai.DUNG_YEN;
-    private Map<TrangThai, DoLechModular> lechTheoTrangThai = new HashMap<>();
+    private Map<TrangThai, List<DoLechModular>> lechTheoTrangThai = new HashMap<>();
 
     // Ảnh các phần
     private String avt;
@@ -898,7 +898,7 @@ public class NhanVat {
                    Texture dau_dung, Texture dau_chay,
                    Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,
                    Texture chan_dung, Texture chan_nhay, Texture chan_roi, Texture[] chan_chay,
-                   Texture than_bay,Texture chan_bay,Map<TrangThai, DoLechModular> lechTheoTrangThai,String avt,
+                   Texture than_bay,Texture chan_bay,Map<TrangThai, List<DoLechModular>> lechTheoTrangThai,String avt,
                    Texture ao, Texture quan, Texture gang, Texture giay, Texture rada, Texture iconct, Texture giaplt, Texture vanbay,
                    int capcaydau, String hanhtinh, String nhanvat) {
         this.x = x;
@@ -939,40 +939,11 @@ public class NhanVat {
         taiAnhVanBay("candauvan"); // tùy chọn
     }
 
-    public void fixDau (Texture dau_dung, Texture dau_chay,String avt,Map<TrangThai, DoLechModular> lechTheoTrangThai,Texture iconct){
-        this.avt = avt;
-        this.dau_dung = dau_dung;
-        this.dau_chay = dau_chay;
-        this.lechTheoTrangThai = lechTheoTrangThai;
-        this.iconct = iconct;
-    }
-
-    public void fixThan ( Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,Texture than_bay,Map<TrangThai, DoLechModular> lechTheoTrangThai, Texture ao){
-        this.than_dung = than_dung;
-        this.than_nhay = than_nhay;
-        this.than_roi = than_roi;
-        this.than_chay = than_chay;
-        this.than_bay = than_bay;
-        this.lechTheoTrangThai = lechTheoTrangThai;
-        this.ao = ao;
-    }
-
-    public void fixChan ( Texture chan_dung, Texture chan_nhay, Texture chan_roi, Texture[] chan_chay,Texture chan_bay,Map<TrangThai, DoLechModular> lechTheoTrangThai, Texture quan){
-        this.chan_dung = chan_dung;
-        this.chan_nhay = chan_nhay;
-        this.chan_roi = chan_roi;
-        this.chan_chay = chan_chay;
-        this.chan_bay = chan_bay;
-        this.lechTheoTrangThai = lechTheoTrangThai;
-        this.quan = quan;
-    }
-
-
     public void fixCaiTrang
         (Texture dau_dung, Texture dau_chay,
          Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,
          Texture chan_dung, Texture chan_nhay, Texture chan_roi, Texture[] chan_chay,
-         Texture than_bay,Texture chan_bay,Map<TrangThai, DoLechModular> lechTheoTrangThai,String avt){
+         Texture than_bay,Texture chan_bay,Map<TrangThai, List<DoLechModular>> lechTheoTrangThai,String avt){
         this.avt = avt;
 
         this.dau_dung = dau_dung;
@@ -1261,11 +1232,11 @@ public class NhanVat {
                 break;
         }
         // đúng kiểu dữ liệu 2 vế và gán class LechModular để có thể truy cập thuộc tính
-        DoLechModular lech = lechTheoTrangThai.get(trangThai);
+        DoLechModular lech = layLech(lechTheoTrangThai, trangThai, frame);
         lechThanX = lech.lechThanX;
         lechThanY = lech.lechThanY;
-        lechDauX = lech.lechDauX;
-        lechDauY = lech.lechDauY;
+        lechDauX  = lech.lechDauX;
+        lechDauY  = lech.lechDauY;
         // Tính tọa độ theo hướng flip
         float chanW = chanVe.getWidth() * tiLe;
         float chanH = chanVe.getHeight() * tiLe;
@@ -1299,6 +1270,18 @@ public class NhanVat {
                 cloudW * flipCloud,
                 cloudH
             );
+        }
+    }
+    public static DoLechModular layLech(Map<TrangThai, List<DoLechModular>> map, TrangThai trangThai, int frameIndex) {
+        List<DoLechModular> ds = map.get(trangThai);
+        if (ds == null || ds.isEmpty()) {
+            return new DoLechModular(0, 0, 0, 0); // fallback nếu thiếu dữ liệu
+        }
+
+        if (trangThai == TrangThai.DI_CHUYEN) {
+            return ds.get(frameIndex % ds.size()); // vòng lặp theo frame
+        } else {
+            return ds.get(0); // chỉ có 1 frame cho trạng thái khác
         }
     }
 }
