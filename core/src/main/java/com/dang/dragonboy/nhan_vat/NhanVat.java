@@ -1190,11 +1190,11 @@ public class NhanVat {
 
         switch (ten) {
             case "phuong_hoang_lua":
-                vanBayCauHinh = new VanBayCauHinh(frames, 0.5f, false, -0f, -40f);
+                vanBayCauHinh = new VanBayCauHinh(frames, 0.5f, false, 0f, -40f);
                 break;
             case "candauvan":
             default:
-                vanBayCauHinh = new VanBayCauHinh(frames, 0.1f, true, -32f, -20f);
+                vanBayCauHinh = new VanBayCauHinh(frames, 0.1f, false, -1f, -20f);
                 break;
         }
     }

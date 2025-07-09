@@ -141,7 +141,7 @@ public class VeHUD {
             "goku_black",
             "Cải trang",
             LoaiItem.CAITRANG,
-            new Texture("nhanvat/caitrang/goku_black/dung.png"),
+            new Texture("nhanvat/caitrang/goku_black/daudung.png"),
             "Cải trang thành Goku Black",
             1,
             new int[]{0, 0, 0, 0, 0, 0, 25, 25, 25,0,0,0,  0},
@@ -157,7 +157,7 @@ public class VeHUD {
             "vegito_xeno",
             "Cải trang hợp thể",
             LoaiItem.CAITRANG,
-            new Texture("nhanvat/caitrang/vegito_xeno/dung.png"),
+            new Texture("nhanvat/caitrang/vegito_xeno/daudung.png"),
             "Cải trang thành Vegito Xeno SSJ3",
             1,
             new int[]{0, 0, 0, 20, 1010, 0, 70, 70, 70,0,0,0,  0},
@@ -170,10 +170,26 @@ public class VeHUD {
             -1
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
+            "gohan_beast",
+            "Cải trang hợp thể",
+            LoaiItem.CAITRANG,
+            new Texture("nhanvat/caitrang/gohan_beast/daudung.png"),
+            "Cải trang thành Gohan Beast",
+            1,
+            new int[]{0, 0, 0, 50, 0, 100, 100, 0, 100,0,0,0,  0},
+            nhanVat.getHanhtinh(),
+            10000000,
+            null,
+            0,
+            0,
+            0,
+            -1
+        ));
+        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "avt_vip",
             "Avatar VIP",
             LoaiItem.AVATAR,
-            new Texture("nhanvat/"+nhanVat.getHanhtinh()+"/avatar/avt_vip/dung.png"),
+            new Texture("nhanvat/"+nhanVat.getHanhtinh()+"/avatar/avt_vip/daudung.png"),
             "Dùng để thay đổi khuôn mặt",
             1,
             new int[]{0, 0, 0, 0, 10, 0, 15, 0, 15,0,0,0,  0},
@@ -601,12 +617,12 @@ public class VeHUD {
             nhanVat.giamHanSuDungGiapLuyenTap();
             timeMacGiapLuyenTap = nhanVat.getHanSuDungGiapLuyenTap();
             nhanVat.setHanSuDungGiapLuyenTap(timeMacGiapLuyenTap);
-            if (timeMacGiapLuyenTap>10f && !daCongChiMang){
+            if (timeMacGiapLuyenTap>60f && !daCongChiMang){
                 duLieuNguoiChoi.tangSatThuongChiMang(30);
                 duLieuNguoiChoi.tangChiMang(15);
                 daCongChiMang = true;
             }
-            if (daCongChiMang && timeMacGiapLuyenTap<=10f){
+            if (daCongChiMang && timeMacGiapLuyenTap<=60f){
                 duLieuNguoiChoi.giamSatThuongChiMang(30);
                 duLieuNguoiChoi.giamChiMang(15);
                 daCongChiMang = false;
@@ -1237,7 +1253,11 @@ public class VeHUD {
                 Texture tex = (hangTrangDangChon == i) ? hanh_trang_dang_mac_click : hanh_trang_dang_mac;
                 batch.draw(tex, 3, y, 344, 50);
                 if (itemNhanVat[i]!=null){
-                    batch.draw(itemNhanVat[i],3+(70-itemNhanVat[i].getWidth()*0.5f)/2f,y+(49-itemNhanVat[i].getHeight()*0.5f)/2f,itemNhanVat[i].getWidth()*0.5f,itemNhanVat[i].getHeight()*0.5f);
+                    if (itemNhanVat[i].getHeight()*0.5f < 60) {
+                        batch.draw(itemNhanVat[i], 3 + (70 - itemNhanVat[i].getWidth() * 0.5f) / 2f, y + (49 - itemNhanVat[i].getHeight() * 0.5f) / 2f, itemNhanVat[i].getWidth() * 0.5f, itemNhanVat[i].getHeight() * 0.5f);
+                    } else {
+                        batch.draw(itemNhanVat[i], 3 + (70 - itemNhanVat[i].getWidth() * 0.38f) / 2f, y + (49 - itemNhanVat[i].getHeight() * 0.38f) / 2f, itemNhanVat[i].getWidth() * 0.38f, itemNhanVat[i].getHeight() * 0.38f);
+                    }
                 }
                 String[] chisoduoccong = {"HP", "KI", "SD", "Chí mạng","Giáp", "ST Crit", "HP", "KI", "Sức đánh", "HP", "KI", "Sức đánh", "Giảm sát thương"};
                 if (item != null) {
@@ -1337,15 +1357,10 @@ public class VeHUD {
                 if (i < danhSachItem.size()) {
                     Item item = danhSachItem.get(i);
                     if (item != null) {
-                        Texture icon = item.getTexture();
-                        if (icon != null) {
-                            float iconWidth = icon.getWidth() * 0.5f;
-                            float iconHeight = icon.getHeight() * 0.5f;
-                            batch.draw(icon,
-                                3 + (70 - iconWidth) / 2f,
-                                y + (49 - iconHeight) / 2f,
-                                iconWidth,
-                                iconHeight);
+                        if (item.getTexture().getHeight()*0.5f < 60) {
+                            batch.draw(item.getTexture(), 3 + (70 - item.getTexture().getWidth() * 0.5f) / 2f, y + (49 - item.getTexture().getHeight() * 0.5f) / 2f, item.getTexture().getWidth() * 0.5f, item.getTexture().getHeight() * 0.5f);
+                        } else {
+                            batch.draw(item.getTexture(), 3 + (70 - item.getTexture().getWidth() * 0.38f) / 2f, y + (49 - item.getTexture().getHeight() * 0.38f) / 2f, item.getTexture().getWidth() * 0.38f, item.getTexture().getHeight() * 0.38f);
                         }
                         String[] chisoduoccong = {"HP", "KI", "SD", "Chí mạng","Giáp", "ST Crit", "HP", "KI", "Sức đánh", "HP", "KI", "Sức đánh", "Giảm sát thương"};
                         int kc1 = 0;
@@ -1928,6 +1943,7 @@ public class VeHUD {
 
             batch.begin();
             // --- VẼ THÔNG TIN ITEM ---
+            DecimalFormat dinhDang = new DecimalFormat("#,###");
             if ("giapluyentap".equals(itemDangChon)) {
                 float offsetY = 10;
                 if (itemm.getTexture() != null) {
@@ -1950,7 +1966,7 @@ public class VeHUD {
                         offsetY += layout.height + 12;
                     }
                 }
-                layout.setText(fontMotaHanhTrang, "Sức mạnh yêu cầu: " + itemm.getSucManhYeuCau());
+                layout.setText(fontMotaHanhTrang, "Sức mạnh yêu cầu: " + dinhDang.format(itemm.getSucManhYeuCau()));
                 fontMotaHanhTrang.draw(batch, layout, PopupHanhTrangW + PopupHanhTrangX - layout.width - 15, PopupHanhTrangY + PopupHanhTrangH - offsetY);
                 offsetY += layout.height;
                 layout.setText(font, "____________________________________");
@@ -2056,7 +2072,7 @@ public class VeHUD {
                         offsetY += layout.height + 12;
                     }
                 }
-                layout.setText(fontMotaHanhTrang, "Sức mạnh yêu cầu: " + itemm.getSucManhYeuCau());
+                layout.setText(fontMotaHanhTrang, "Sức mạnh yêu cầu: " + dinhDang.format(itemm.getSucManhYeuCau()));
                 fontMotaHanhTrang.draw(batch, layout, PopupHanhTrangW + PopupHanhTrangX - layout.width - 15, PopupHanhTrangY + PopupHanhTrangH - offsetY);
                 offsetY += layout.height;
                 layout.setText(font, "____________________________________");
@@ -2098,7 +2114,11 @@ public class VeHUD {
             } else if ("caitrang".equals(itemDangChon) || "avatar".equals(itemDangChon)) {
                 float offsetY = 10;
                 if (itemm.getTexture() != null) {
-                    batch.draw(itemm.getTexture(), PopupHanhTrangX + 15, PopupHanhTrangY + PopupHanhTrangH - itemm.getTexture().getHeight() * 0.5f - offsetY, itemm.getTexture().getWidth() * 0.5f, itemm.getTexture().getHeight() * 0.5f);
+                    if (itemm.getTexture().getHeight()*0.5f < 60) {
+                        batch.draw(itemm.getTexture(), PopupHanhTrangX + 15, PopupHanhTrangY + PopupHanhTrangH - itemm.getTexture().getHeight() * 0.5f - offsetY, itemm.getTexture().getWidth() * 0.5f, itemm.getTexture().getHeight() * 0.5f);
+                    } else {
+                        batch.draw(itemm.getTexture(), PopupHanhTrangX + 15, PopupHanhTrangY + PopupHanhTrangH - itemm.getTexture().getHeight() * 0.38f - offsetY, itemm.getTexture().getWidth() * 0.38f, itemm.getTexture().getHeight() * 0.38f);
+                    }
                     offsetY += 10;
                 }
                 fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
@@ -2116,7 +2136,7 @@ public class VeHUD {
                 layout.setText(fontSkillchuaco, "Không thể giao dịch");
                 fontSkillchuaco.draw(batch, layout, PopupHanhTrangW + PopupHanhTrangX - layout.width - 15, PopupHanhTrangY + PopupHanhTrangH - offsetY);
                 offsetY += layout.height + 12;
-                layout.setText(fontMotaHanhTrang, "Sức mạnh yêu cầu: " + itemm.getSucManhYeuCau());
+                layout.setText(fontMotaHanhTrang, "Sức mạnh yêu cầu: " + dinhDang.format(itemm.getSucManhYeuCau()));
                 fontMotaHanhTrang.draw(batch, layout, PopupHanhTrangW + PopupHanhTrangX - layout.width - 15, PopupHanhTrangY + PopupHanhTrangH - offsetY);
                 offsetY += layout.height;
                 layout.setText(font, "____________________________________");
@@ -2152,7 +2172,7 @@ public class VeHUD {
                 layout.setText(fontSkillchuaco, "Không thể giao dịch");
                 fontSkillchuaco.draw(batch, layout, PopupHanhTrangW + PopupHanhTrangX - layout.width - 15, PopupHanhTrangY + PopupHanhTrangH - offsetY);
                 offsetY += layout.height + 12;
-                layout.setText(fontMotaHanhTrang, "Sức mạnh yêu cầu: " + itemm.getSucManhYeuCau());
+                layout.setText(fontMotaHanhTrang, "Sức mạnh yêu cầu: " + dinhDang.format(itemm.getSucManhYeuCau()));
                 fontMotaHanhTrang.draw(batch, layout, PopupHanhTrangW + PopupHanhTrangX - layout.width - 15, PopupHanhTrangY + PopupHanhTrangH - offsetY);
                 offsetY += layout.height;
                 layout.setText(font, "____________________________________");

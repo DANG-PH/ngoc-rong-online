@@ -13,6 +13,7 @@ public class CaiTrangOffset {
         OFFSET_CAI_TRANG.put("goku_black_rose", taoGokuBlackRose());
         OFFSET_CAI_TRANG.put("vegito_xeno", taoVegitoXeno());
         OFFSET_CAI_TRANG.put("vegito_ssj", taoVegitoSsj());
+        OFFSET_CAI_TRANG.put("gohan_beast", taoGohanBeast());
     }
 
     // Hàm công khai để lấy offset theo tên cải trang
@@ -68,6 +69,16 @@ public class CaiTrangOffset {
         map.put(TrangThai.DI_CHUYEN, new DoLechModular(2f, 4f, 4.5f, -13.8f));
         map.put(TrangThai.NHAY, new DoLechModular(-1f, 7f, 0.5f, -20.8f));
         map.put(TrangThai.ROI, new DoLechModular(-7f, 7.5f, 1f, -31.5f));
+        map.put(TrangThai.BAY_NGANG, new DoLechModular(0f, -1f, -0.3f, -15.5f));
+        return map;
+    }
+    // Gohan Beast
+    private static Map<TrangThai, DoLechModular> taoGohanBeast() {
+        Map<TrangThai, DoLechModular> map = new HashMap<>();
+        map.put(TrangThai.DUNG_YEN, new DoLechModular(0f, -4f, 2.2f, -20f));
+        map.put(TrangThai.DI_CHUYEN, new DoLechModular(4f, 4f, 4.5f, -13.8f));
+        map.put(TrangThai.NHAY, new DoLechModular(6.5f, 7f, 9f, -25f));
+        map.put(TrangThai.ROI, new DoLechModular(-7f, 7.5f, 1f, -34.5f));
         map.put(TrangThai.BAY_NGANG, new DoLechModular(0f, -1f, -0.3f, -15.5f));
         return map;
     }

@@ -346,14 +346,10 @@ public class ManHinhChoiTiep implements Screen {
         batch.draw(dochanhtinh,670,0,400,165);
         batch.draw(caycoi2,850,-130,200,200);
         batch.setColor(50f, 50f, 50f, 0.65f);
-        batch.draw(khoi, 400, -30, 1150, 350);
-        batch.draw(khoi, 670, -30, 1150, 350);
-        batch.draw(khoi, -50, -40, 1150, 450);
-        batch.draw(khoi, -50, -20, 1150, 400);
-        batch.draw(khoi, 0, -50, 1150, 350);
-        batch.draw(khoi, -50, -50, 1150, 300);
-        batch.draw(khoi, 120, -75, 1150, 350);
-
+        for (int i = 0; i < 5; i++) {
+            batch.draw(khoi, i*287, 0, 287, 170);
+            batch.draw(khoi, -10+i*287, 0, 287, 200);
+        }
         batch.setColor(1f, 1f, 1f, 1f); // Trả về mặc định
         veNhanVatDung(batch, 400, 188 , npcdau,npcthan,npcchan,0f,8.5f,0f,-20f);
         tenNpc(font,"Ông Gôhan",400,260,40,30);

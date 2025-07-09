@@ -20,21 +20,21 @@ public class NhanVatXuLy {
         Texture gang = new Texture(itemdo+"gang/traidat/gang1.png");
         Texture giay = new Texture(itemdo+"giay/traidat/giay1.png");
         Texture rada = new Texture(itemdo+"rada/rada1.png");
-        Texture iconct = new Texture(path + "dung.png");
+        Texture iconct = new Texture(path + "daudung.png");
         Texture giaplt = new Texture(itemglt+"gltc1.png");
         Texture vanbay = new Texture(itemvanbay+"candauvan/candauvan.png");
-        Texture dau_dung = new Texture(path + "dung.png");
-        Texture dau_chay = new Texture(path + "chay.png");
+        Texture dau_dung = new Texture(path + "daudung.png");
+        Texture dau_chay = new Texture(path + "dauchay.png");
 
         Texture than_dung = new Texture(path + "thandung.png");
         Texture than_nhay = new Texture(path + "thannhay.png");
         Texture than_roi = new Texture(path + "thanroi.png");
         Texture[] than_chay = {
-            new Texture(path + "thanchay0.png"),
-            new Texture(path + "thanchay1.png"),
-            new Texture(path + "thanchay2.png"),
-            new Texture(path + "thanchay3.png"),
-            new Texture(path + "thanchay4.png")
+            new Texture(path + "thanchay (1).png"),
+            new Texture(path + "thanchay (2).png"),
+            new Texture(path + "thanchay (3).png"),
+            new Texture(path + "thanchay (4).png"),
+            new Texture(path + "thanchay (5).png")
         };
         Texture than_bay = new Texture(path + "thanbay.png");
 
@@ -42,11 +42,11 @@ public class NhanVatXuLy {
         Texture chan_nhay = new Texture(path + "channhay.png");
         Texture chan_roi = new Texture(path + "chanroi.png");
         Texture[] chan_chay = {
-            new Texture(path + "chanchay0.png"),
-            new Texture(path + "chanchay1.png"),
-            new Texture(path + "chanchay2.png"),
-            new Texture(path + "chanchay3.png"),
-            new Texture(path + "chanchay4.png")
+            new Texture(path + "chanchay (1).png"),
+            new Texture(path + "chanchay (2).png"),
+            new Texture(path + "chanchay (3).png"),
+            new Texture(path + "chanchay (4).png"),
+            new Texture(path + "chanchay (5).png")
         };
         Texture chan_bay = new Texture(path + "chanbay.png");
 
@@ -81,22 +81,22 @@ public class NhanVatXuLy {
         Texture gang = new Texture(itemdo+"gang/traidat/gang1.png");
         Texture giay = new Texture(itemdo+"giay/traidat/giay1.png");
         Texture rada = new Texture(itemdo+"rada/rada1.png");
-        Texture iconct = new Texture(avatarPath + "dung.png");
+        Texture iconct = new Texture(avatarPath + "daudung.png");
         Texture giaplt = new Texture(itemglt+"gltc1.png");
         Texture vanbay = new Texture(itemvanbay+"candauvan/candauvan.png");
 
-        Texture dau_dung = new Texture(avatarPath + "dung.png");
-        Texture dau_chay = new Texture(avatarPath + "chay.png");
+        Texture dau_dung = new Texture(avatarPath + "daudung.png");
+        Texture dau_chay = new Texture(avatarPath + "dauchay.png");
 
         Texture than_dung = new Texture(aoPath + "thandung.png");
         Texture than_nhay = new Texture(aoPath + "thannhay.png");
         Texture than_roi = new Texture(aoPath + "thanroi.png");
         Texture[] than_chay = {
-            new Texture(aoPath + "thanchay0.png"),
-            new Texture(aoPath + "thanchay1.png"),
-            new Texture(aoPath + "thanchay2.png"),
-            new Texture(aoPath + "thanchay3.png"),
-            new Texture(aoPath + "thanchay4.png")
+            new Texture(aoPath + "thanchay (1).png"),
+            new Texture(aoPath + "thanchay (2).png"),
+            new Texture(aoPath + "thanchay (3).png"),
+            new Texture(aoPath + "thanchay (4).png"),
+            new Texture(aoPath + "thanchay (5).png")
         };
         Texture than_bay = new Texture(aoPath + "thanbay.png");
 
@@ -104,11 +104,11 @@ public class NhanVatXuLy {
         Texture chan_nhay = new Texture(quanPath + "channhay.png");
         Texture chan_roi = new Texture(quanPath + "chanroi.png");
         Texture[] chan_chay = {
-            new Texture(quanPath + "chanchay0.png"),
-            new Texture(quanPath + "chanchay1.png"),
-            new Texture(quanPath + "chanchay2.png"),
-            new Texture(quanPath + "chanchay3.png"),
-            new Texture(quanPath + "chanchay4.png")
+            new Texture(quanPath + "chanchay (1).png"),
+            new Texture(quanPath + "chanchay (2).png"),
+            new Texture(quanPath + "chanchay (3).png"),
+            new Texture(quanPath + "chanchay (4).png"),
+            new Texture(quanPath + "chanchay (5).png")
         };
         Texture chan_bay = new Texture(quanPath + "chanbay.png");
 
