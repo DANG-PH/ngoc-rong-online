@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
+import com.dang.dragonboy.giao_dien_trong.ManHinhNhaBroly;
 import com.dang.dragonboy.he_thong.Main;
 import com.dang.dragonboy.giao_dien_trong.ManHinhChoiTiep;
 
@@ -168,7 +169,7 @@ public class ManHinhChoiMoi implements Screen {
         batch.begin();
         if (hanhTinhDuocChon == 1) { // Xayda
             for (int i = 0; i < 5; i++){
-                batch.draw(bautroixd,i*250,460,250,150);
+                batch.draw(bautroixd,i*255,455,255,150);
             }
             batch.draw(matrang, 750, 490, 64, 64);
         }
@@ -345,7 +346,7 @@ public class ManHinhChoiMoi implements Screen {
                         game.setScreen(new ManHinhSplash(game, new ManHinhChoiTiep(game,tenNguoiChoi,"traidat",nhanvat)));
                         break;
                     case 1:
-                        game.setScreen(new ManHinhSplash(game, new ManHinhChoiTiep(game,tenNguoiChoi,"traidat",nhanvat)));
+                        game.setScreen(new ManHinhSplash(game, new ManHinhNhaBroly(game,tenNguoiChoi,"xayda",nhanvat)));
                         break;
                     case 2:
                         game.setScreen(new ManHinhSplash(game, new ManHinhChoiTiep(game,tenNguoiChoi,"traidat",nhanvat)));

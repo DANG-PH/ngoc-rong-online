@@ -154,6 +154,22 @@ public class VeHUD {
             -1
         ));
         duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
+            "goku_black_rose",
+            "Cải trang",
+            LoaiItem.CAITRANG,
+            new Texture("nhanvat/caitrang/goku_black_rose/daudung.png"),
+            "Cải trang thành Super Black Goku",
+            1,
+            new int[]{0, 0, 0, 0, 0, 0, 45, 45, 0,0,0,0,  0},
+            nhanVat.getHanhtinh(),
+            10000000000L,
+            null,
+            0,
+            0,
+            0,
+            -1
+        ));
+        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
             "vegito_xeno",
             "Cải trang hợp thể",
             LoaiItem.CAITRANG,
