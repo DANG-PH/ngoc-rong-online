@@ -29,7 +29,7 @@ public class ThemItemTest {
             new Texture("nhanvat/caitrang/goku_black_rose/daudung.png"),
             "Cải trang thành Super Black Goku", 1,
             new int[]{0,0,0,0,0,0,45,45,45,0,0,0,0},
-            nhanVat.getHanhtinh(), 10_000_000_000L, null, 0, 0, 0, -1
+            nhanVat.getHanhtinh(), 50_000_000_000L, null, 0, 0, 0, -1
         ));
 
 //        duLieu.themItemVaoHanhTrang(new Item(
@@ -60,40 +60,40 @@ public class ThemItemTest {
             "set_cam", "Áo võ kame", LoaiItem.AO,
             new Texture("vatpham/do/traidat/set_cam/ao.png"),
             "Giúp giảm sát thương", 1,
-            new int[]{0,0,0,0,10,0,15,0,0,0,0,0,0},
-            "traidat", 150000L, "Sôngôku", 3, 3, 3, -1
+            new int[]{0,0,0,0,10,0,15,0,21,0,0,0,0},
+            "traidat", 150000L, "Sôngôku", 7, 7, 3, -1
         ));
 
         duLieu.themItemVaoHanhTrang(new Item(
             "set_cam", "Quần võ kame", LoaiItem.QUAN,
             new Texture("vatpham/do/traidat/set_cam/quan.png"),
             "Giúp tăng HP", 1,
-            new int[]{0,0,0,0,0,0,0,0,0,5000,0,0,0},
-            "traidat", 150000L, "Sôngôku", 2, 0, 0, -1
+            new int[]{0,0,0,0,0,0,0,0,21,5000,0,0,0},
+            "traidat", 150000L, "Sôngôku", 7, 7, 0, -1
         ));
 
         duLieu.themItemVaoHanhTrang(new Item(
-            "set_cam", "Găng võ kame", LoaiItem.GANG,
-            new Texture("vatpham/do/traidat/set_cam/gang.png"),
+            "set_cam", "Găng thần linh", LoaiItem.GANG,
+            new Texture("vatpham/do/traidat/set_than_linh/gang.png"),
             "Giúp tăng sức đánh", 1,
-            new int[]{0,0,0,0,0,0,0,0,0,0,0,5,0},
-            "traidat", 150000L, "Sôngôku", 0, 0, 5, -1
+            new int[]{0,0,0,0,0,0,0,0,21,0,0,9289,0},
+            "traidat", 20_000_000_000L, "Sôngôku", 7, 7, 7, -1
         ));
 
         duLieu.themItemVaoHanhTrang(new Item(
             "set_cam", "Giày võ kame", LoaiItem.GIAY,
             new Texture("vatpham/do/traidat/set_cam/giay.png"),
             "Giúp tăng MP", 1,
-            new int[]{0,0,0,0,0,0,0,0,0,0,200,0,0},
-            "traidat", 150000L, "Sôngôku", 3, 0, 2, -1
+            new int[]{0,0,0,0,0,0,0,0,21,0,200,0,0},
+            "traidat", 150000L, "Sôngôku", 7, 7, 2, -1
         ));
 
         duLieu.themItemVaoHanhTrang(new Item(
             "rada1", "Rada cấp 1", LoaiItem.RADA,
             new Texture("vatpham/do/rada/rada1.png"),
             "Giúp tăng Chí Mạng", 1,
-            new int[]{0,0,0,1,0,0,0,0,0,0,0,0,0},
-            "traidat", 15000L, "Sôngôku", 3, 0, 1, -1
+            new int[]{0,0,0,1,0,0,0,0,21,0,0,0,0},
+            "traidat", 15000L, "Sôngôku", 7, 7, 1, -1
         ));
 
         duLieu.themItemVaoHanhTrang(new Item(

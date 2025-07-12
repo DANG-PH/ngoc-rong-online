@@ -42,8 +42,17 @@ public class HUDPopupHanhTrang {
                         veHUD.PopupHanhTrangH += layout.height + 15;
                     }
                 }
-                layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
-                veHUD.PopupHanhTrangH += layout.height + 10;
+                if (veHUD.itemm.getSucManhYeuCau()>0) {
+                    if (nhanVat.getSucManh() >= veHUD.itemm.getSucManhYeuCau()) {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
+                        veHUD.PopupHanhTrangH += layout.height + 10;
+                    } else {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
+                        veHUD.PopupHanhTrangH += layout.height + 10;
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh của bạn: " + nhanVat.getSucManh());
+                        veHUD.PopupHanhTrangH += layout.height + 10;
+                    }
+                }
                 layout.setText(veHUD.font, "____________________________________");
                 veHUD.PopupHanhTrangH += layout.height + 15;
                 layout.setText(
@@ -114,8 +123,17 @@ public class HUDPopupHanhTrang {
                         veHUD.PopupHanhTrangH += layout.height + 12;
                     }
                 }
-                layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
-                veHUD.PopupHanhTrangH += layout.height + 10;
+                if (veHUD.itemm.getSucManhYeuCau()>0) {
+                    if (nhanVat.getSucManh() >= veHUD.itemm.getSucManhYeuCau()) {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
+                        veHUD.PopupHanhTrangH += layout.height + 10;
+                    } else {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
+                        veHUD.PopupHanhTrangH += layout.height + 10;
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh của bạn: " + nhanVat.getSucManh());
+                        veHUD.PopupHanhTrangH += layout.height + 10;
+                    }
+                }
                 layout.setText(veHUD.font, "____________________________________");
                 veHUD.PopupHanhTrangH += layout.height + 15;
                 layout.setText(
@@ -142,8 +160,17 @@ public class HUDPopupHanhTrang {
                 }
                 layout.setText(veHUD.fontTenSkill, "Không thể giao dịch");
                 veHUD.PopupHanhTrangH += layout.height + 12;
-                layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
-                veHUD.PopupHanhTrangH += layout.height + 10;
+                if (veHUD.itemm.getSucManhYeuCau()>0) {
+                    if (nhanVat.getSucManh() >= veHUD.itemm.getSucManhYeuCau()) {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
+                        veHUD.PopupHanhTrangH += layout.height + 10;
+                    } else {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
+                        veHUD.PopupHanhTrangH += layout.height + 10;
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh của bạn: " + nhanVat.getSucManh());
+                        veHUD.PopupHanhTrangH += layout.height + 10;
+                    }
+                }
                 layout.setText(veHUD.font, "____________________________________");
                 veHUD.PopupHanhTrangH += layout.height + 15;
                 layout.setText(
@@ -163,8 +190,17 @@ public class HUDPopupHanhTrang {
                 veHUD.PopupHanhTrangH += layout.height + 15;
                 layout.setText(veHUD.fontTenSkill, "Không thể giao dịch");
                 veHUD.PopupHanhTrangH += layout.height + 12;
-                layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
-                veHUD.PopupHanhTrangH += layout.height + 10;
+                if (veHUD.itemm.getSucManhYeuCau()>0) {
+                    if (nhanVat.getSucManh() >= veHUD.itemm.getSucManhYeuCau()) {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
+                        veHUD.PopupHanhTrangH += layout.height + 10;
+                    } else {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
+                        veHUD.PopupHanhTrangH += layout.height + 10;
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh của bạn: " + nhanVat.getSucManh());
+                        veHUD.PopupHanhTrangH += layout.height + 10;
+                    }
+                }
                 layout.setText(veHUD.font, "____________________________________");
                 veHUD.PopupHanhTrangH += layout.height + 15;
                 layout.setText(
@@ -175,7 +211,7 @@ public class HUDPopupHanhTrang {
                     Align.left,
                     true
                 );
-                veHUD.PopupHanhTrangH += layout.height + 28;
+                veHUD.PopupHanhTrangH += layout.height + 40;
             }
             // --- VẼ BACKGROUND BẰNG SHAPERENDERER ---
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -223,9 +259,20 @@ public class HUDPopupHanhTrang {
                         offsetY += layout.height + 12;
                     }
                 }
-                layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));
-                veHUD.fontMotaHanhTrang.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
-                offsetY += layout.height;
+                if (veHUD.itemm.getSucManhYeuCau()>0) {
+                    if (nhanVat.getSucManh() >= veHUD.itemm.getSucManhYeuCau()) {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));
+                        veHUD.fontMotaHanhTrang.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
+                        offsetY += layout.height;
+                    } else {
+                        layout.setText(veHUD.fontMotaHanhTrang1, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));
+                        veHUD.fontMotaHanhTrang1.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
+                        offsetY += layout.height+5;
+                        layout.setText(veHUD.fontMotaHanhTrang1, "Sức mạnh của bạn: " +  dinhDang.format(nhanVat.getSucManh()));
+                        veHUD.fontMotaHanhTrang1.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
+                        offsetY += layout.height;
+                    }
+                }
                 layout.setText(veHUD.font, "____________________________________");
                 for (int i = 0; i < 2; i++) {
                     veHUD.font.draw(batch, layout, veHUD.PopupHanhTrangX + (veHUD.PopupHanhTrangW - layout.width) / 2f, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY - i * 1);
@@ -348,9 +395,20 @@ public class HUDPopupHanhTrang {
                         offsetY += layout.height + 12;
                     }
                 }
-                layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));
-                veHUD.fontMotaHanhTrang.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
-                offsetY += layout.height;
+                if (veHUD.itemm.getSucManhYeuCau()>0) {
+                    if (nhanVat.getSucManh() >= veHUD.itemm.getSucManhYeuCau()) {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));
+                        veHUD.fontMotaHanhTrang.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
+                        offsetY += layout.height;
+                    } else {
+                        layout.setText(veHUD.fontMotaHanhTrang1, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));
+                        veHUD.fontMotaHanhTrang1.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
+                        offsetY += layout.height+5;
+                        layout.setText(veHUD.fontMotaHanhTrang1, "Sức mạnh của bạn: " +  dinhDang.format(nhanVat.getSucManh()));
+                        veHUD.fontMotaHanhTrang1.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
+                        offsetY += layout.height;
+                    }
+                }
                 layout.setText(veHUD.font, "____________________________________");
                 for (int i = 0; i < 2; i++) {
                     veHUD.font.draw(batch, layout, veHUD.PopupHanhTrangX + (veHUD.PopupHanhTrangW - layout.width) / 2f, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY - i * 1);
@@ -412,9 +470,20 @@ public class HUDPopupHanhTrang {
                 layout.setText(veHUD.fontSkillchuaco, "Không thể giao dịch");
                 veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
                 offsetY += layout.height + 12;
-                layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));
-                veHUD.fontMotaHanhTrang.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
-                offsetY += layout.height;
+                if (veHUD.itemm.getSucManhYeuCau()>0) {
+                    if (nhanVat.getSucManh() >= veHUD.itemm.getSucManhYeuCau()) {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));
+                        veHUD.fontMotaHanhTrang.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
+                        offsetY += layout.height;
+                    } else {
+                        layout.setText(veHUD.fontMotaHanhTrang1, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));
+                        veHUD.fontMotaHanhTrang1.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
+                        offsetY += layout.height+5;
+                        layout.setText(veHUD.fontMotaHanhTrang1, "Sức mạnh của bạn: " +  dinhDang.format(nhanVat.getSucManh()));
+                        veHUD.fontMotaHanhTrang1.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
+                        offsetY += layout.height;
+                    }
+                }
                 layout.setText(veHUD.font, "____________________________________");
                 for (int i = 0; i < 2; i++) {
                     veHUD.font.draw(batch, layout, veHUD.PopupHanhTrangX + (veHUD.PopupHanhTrangW - layout.width) / 2f, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY - i * 1);
@@ -448,9 +517,20 @@ public class HUDPopupHanhTrang {
                 layout.setText(veHUD.fontSkillchuaco, "Không thể giao dịch");
                 veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
                 offsetY += layout.height + 12;
-                layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));
-                veHUD.fontMotaHanhTrang.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
-                offsetY += layout.height;
+                if (veHUD.itemm.getSucManhYeuCau()>0) {
+                    if (nhanVat.getSucManh() >= veHUD.itemm.getSucManhYeuCau()) {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));
+                        veHUD.fontMotaHanhTrang.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
+                        offsetY += layout.height;
+                    } else {
+                        layout.setText(veHUD.fontMotaHanhTrang1, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));
+                        veHUD.fontMotaHanhTrang1.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
+                        offsetY += layout.height+5;
+                        layout.setText(veHUD.fontMotaHanhTrang1, "Sức mạnh của bạn: " +  dinhDang.format(nhanVat.getSucManh()));
+                        veHUD.fontMotaHanhTrang1.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
+                        offsetY += layout.height;
+                    }
+                }
                 layout.setText(veHUD.font, "____________________________________");
                 for (int i = 0; i < 2; i++) {
                     veHUD.font.draw(batch, layout, veHUD.PopupHanhTrangX + (veHUD.PopupHanhTrangW - layout.width) / 2f, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY - i * 1);

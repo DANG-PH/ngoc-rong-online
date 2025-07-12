@@ -38,7 +38,7 @@ public class VeHUD {
     public Texture oskill, oskillclick;
     public Texture nutpopup;
 
-    public BitmapFont font,fontChucnang,fontDauThan,fontNhiemVu,fontNhiemVu1,fontNhiemVuChuaLam,fontMotaNhiemVu,fontvangngoc,fontsm,fontSkilldaco,fontSkillchuaco,fontMotaSkill,fontCapSKill,fontMotaNoiTai,fontTiemNang ,fontTenSkill,fontMotaNganSkill,fontMotaNganSkill1,fontSkillchuaco1,fontMotaHanhTrang ;
+    public BitmapFont font,fontChucnang,fontDauThan,fontNhiemVu,fontNhiemVu1,fontNhiemVuChuaLam,fontMotaNhiemVu,fontvangngoc,fontsm,fontSkilldaco,fontSkillchuaco,fontMotaSkill,fontCapSKill,fontMotaNoiTai,fontTiemNang ,fontTenSkill,fontMotaNganSkill,fontMotaNganSkill1,fontSkillchuaco1,fontMotaHanhTrang,fontMotaHanhTrang1 ;
     private GlyphLayout layout;
 
     public SkillIcon[] skillIcons;
@@ -239,6 +239,8 @@ public class VeHUD {
         fontvangngoc = generator3.generateFont(param3);
         param3.color = new Color(0,0,0,1);
         fontMotaHanhTrang = generator3.generateFont(param3);
+        param3.color = new Color(0.933f, 0.502f, 0.510f, 1f);
+        fontMotaHanhTrang1 = generator3.generateFont(param3);
         param3.color = new Color(1,1,1,1);
         param3.size = 14;
         fontTiemNang = generator3.generateFont(param3);
@@ -415,7 +417,7 @@ public class VeHUD {
             nutClickTimer3 -= Gdx.graphics.getDeltaTime();
             if (nutClickTimer3 <= 0) {
                 if (nuthanhtrangchon == 1) {
-                    if (nhanVat.getHanhtinh().equals(itemm.getHanhtinh())) {
+                    if (nhanVat.getHanhtinh().equals(itemm.getHanhtinh()) && nhanVat.getSucManh()>=itemm.getSucManhYeuCau()) {
                         xulyitem.macDo(hangTrangDangChon);
                     }
                     DangHienPopupThongTin1 = false;

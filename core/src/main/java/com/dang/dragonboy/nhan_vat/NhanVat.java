@@ -82,7 +82,7 @@ public class NhanVat {
     private String nhanvat;
 
     // ==== THUỘC TÍNH GAMEPLAY ==== //
-    private long sucManh = 99_999_999_999L;
+    private long sucManh = 40_999_999_999L;
     private int theLuc = 100;
 
     private int HpGoc = 500000;
