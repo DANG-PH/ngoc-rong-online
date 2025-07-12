@@ -13,10 +13,9 @@ import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.nhan_vat.NhanVatCauHinh;
 import com.dang.dragonboy.nhan_vat.NhanVatXuLy;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
+import com.dang.dragonboy.du_lieu.ThemItemTest;
 import java.text.DecimalFormat;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.Gdx;
 import com.dang.dragonboy.item.Item;
 import com.dang.dragonboy.item.LoaiItem;
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class VeHUD {
-
+    private HUDClickHandler clickHandler;
     private DuLieuNguoiChoi duLieuNguoiChoi;
 
     private Texture saoden, saoxanh;
@@ -47,55 +46,55 @@ public class VeHUD {
 
     private Texture popupNhanVat;
     private Texture nutX;
-    private boolean dangHienPopup = false;
-    private boolean vuaMoPopup = false;
+    public boolean dangHienPopup = false;
+    public boolean vuaMoPopup = false;
     private NhanVat nhanVat;
     private Texture texAvt = null;
     private Texture nutchucnang,nutchucnangclick;
-    private int chucNangDangChon = 0;
+    public int chucNangDangChon = 0;
     private Texture vang,ngoc;
     private Texture thanhtheluc;
 
     private Texture hanh_trang,hanh_trang_click,hanh_trang_dang_mac,hanh_trang_dang_mac_click;
 
-    private float scrollY = 0f;
+    public float scrollY = 0f;
     private float maxScroll = 0f;
     private final float scrollSpeed = 30f; // số pixel cuộn mỗi lần
-    private int hangTrangDangChon = -1;
+    public int hangTrangDangChon = -1;
 
     private Texture o_noi_tai,o_noi_tai_click,o_chi_so_co_ban,o_chi_so_co_ban_click;
-    private int oChiSoDangChon = -1;
+    public int oChiSoDangChon = -1;
     private Texture[] iconchisocoban = new Texture[5];
     private Texture iconnoitai;
 
     private Texture nutvuong,nutvuongclick;
     boolean DangHienPopupThongTin = false;
     boolean DangHienPopupThongTin1 = false;
-    float TimeChoHienPopup = 0;
-    private boolean vuaMoPopupThongTin = false;
-    float PopupThongTinX = 0;
-    float PopupThongTinY = 0;
-    float PopupThongTinW = 0;
-    float PopupThongTinH = 0;
-    float PopupHanhTrangX = 0;
-    float PopupHanhTrangY = 0;
+    public float TimeChoHienPopup = 0;
+    public boolean vuaMoPopupThongTin = false;
+    public float PopupThongTinX = 0;
+    public float PopupThongTinY = 0;
+    public float PopupThongTinW = 0;
+    public float PopupThongTinH = 0;
+    public float PopupHanhTrangX = 0;
+    public float PopupHanhTrangY = 0;
     String itemDangChon;
     Item itemm = null;
-    float PopupHanhTrangW = 0;
-    float PopupHanhTrangH = 0;
+    public float PopupHanhTrangW = 0;
+    public float PopupHanhTrangH = 0;
     float nutClickTimer = 0;
     float nutClickTimer1 = 0;
     int oChiSoDangChonTamThoi = -1;
     int giaTriTangTamThoi = 0;
     long chiPhiTamThoi = 0;
-    private int nutduocchon =-1;
+    public int nutduocchon =-1;
 
-    private boolean HienPopUpGanSkill = false;
+    public boolean HienPopUpGanSkill = false;
     float TimeChoHienPopupGanSkill = 0;
     private Texture[] oSkills;
     float nutClickTimer2 = 0;
 
-    private Texture ao,quan,gang,giay,rada,iconct,giaplt,vanbay;
+    public Texture ao,quan,gang,giay,rada,iconct,giaplt,vanbay;
 
     private float dauThanRenderH= 53f;
     private String avatardangmac = "Goku_base";
@@ -107,308 +106,22 @@ public class VeHUD {
     private String skhj = "thuong";
     private String skhrada = "thuong";
     private boolean vuaMoNappa = false;
-    private boolean vanBayDau = true;
+    public boolean vanBayDau = true;
     private boolean lanDau = true;
     private int[] chisovuathao;
     private boolean dangMacGiapLuyenTap = false;
     private float timeMacGiapLuyenTap;
     private boolean daCongChiMang = false;
 
-    float nuthanhtrangchon = -1;
-    float nutClickTimer3 = 0;
+    public float nuthanhtrangchon = -1;
+    public float nutClickTimer3 = 0;
 
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
-        this.duLieuNguoiChoi = data; // truyền data vào để xử lí hud
+        this.duLieuNguoiChoi = data;
         duLieuNguoiChoi.setNhanVat(nhanVat);
-        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
-            "phuong_hoang_lua",
-            "Thú cưỡi cực VIP",
-            LoaiItem.VANBAY,
-            new Texture("vatpham/vanbay/phuong_hoang_lua/phuonghoanglua.png"),
-            "Dùng để bay và hồi phục HP, KI",
-            1,
-            new int[]{0, 0, 0, 0, 0,   0,  0,  0,  0,  0,  0,  0,  0},
-                    //hp,ki,sd,cr,giap,crd,hp%,ki%,sd%,hpg,kig,sdg,giam st
-            nhanVat.getHanhtinh(),
-            1500000,
-            null,
-            0,
-            0,
-            0,
-            -1
-        ));
-        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
-            "goku_black",
-            "Cải trang",
-            LoaiItem.CAITRANG,
-            new Texture("nhanvat/caitrang/goku_black/daudung.png"),
-            "Cải trang thành Goku Black",
-            1,
-            new int[]{0, 0, 0, 0, 0, 0, 25, 25, 25,0,0,0,  0},
-            nhanVat.getHanhtinh(),
-            1500000,
-            null,
-            0,
-            0,
-            0,
-            -1
-        ));
-        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
-            "goku_black_rose",
-            "Cải trang",
-            LoaiItem.CAITRANG,
-            new Texture("nhanvat/caitrang/goku_black_rose/daudung.png"),
-            "Cải trang thành Super Black Goku",
-            1,
-            new int[]{0, 0, 0, 0, 0, 0, 45, 45, 0,0,0,0,  0},
-            nhanVat.getHanhtinh(),
-            10000000000L,
-            null,
-            0,
-            0,
-            0,
-            -1
-        ));
-        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
-            "vegito_xeno",
-            "Cải trang hợp thể",
-            LoaiItem.CAITRANG,
-            new Texture("nhanvat/caitrang/vegito_xeno/daudung.png"),
-            "Cải trang thành Vegito Xeno SSJ3",
-            1,
-            new int[]{0, 0, 0, 20, 1010, 0, 70, 70, 70,0,0,0,  0},
-            nhanVat.getHanhtinh(),
-            1500000,
-            null,
-            0,
-            0,
-            0,
-            -1
-        ));
-        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
-            "gohan_beast",
-            "Cải trang hợp thể",
-            LoaiItem.CAITRANG,
-            new Texture("nhanvat/caitrang/gohan_beast/daudung.png"),
-            "Cải trang thành Gohan Beast",
-            1,
-            new int[]{0, 0, 0, 50, 0, 100, 100, 0, 100,0,0,0,  0},
-            nhanVat.getHanhtinh(),
-            10000000,
-            null,
-            0,
-            0,
-            0,
-            -1
-        ));
-        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
-            "avt_vip",
-            "Avatar VIP",
-            LoaiItem.AVATAR,
-            new Texture("nhanvat/"+nhanVat.getHanhtinh()+"/avatar/avt_vip/daudung.png"),
-            "Dùng để thay đổi khuôn mặt",
-            1,
-            new int[]{0, 0, 0, 0, 10, 0, 15, 0, 15,0,0,0,  0},
-            nhanVat.getHanhtinh(),
-            1500000,
-            null,
-            0,
-            0,
-            0,
-            -1
-        ));
-        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
-            "set_cam",
-            "Áo võ kame",
-            LoaiItem.AO,
-            new Texture("vatpham/do/aoquan/"+nhanVat.getHanhtinh()+"/set_cam/ao.png"),
-            "Giúp giảm sát thương",
-            1,
-            new int[]{0, 0, 0, 0, 10, 0, 15, 0, 0,0,0,0,  0},
-            "traidat",
-            150000,
-            null,
-            3,
-            3,
-            3,
-            -1
-        ));
-        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
-            "set_cam",
-            "Quần võ kame",
-            LoaiItem.QUAN,
-            new Texture("vatpham/do/aoquan/"+nhanVat.getHanhtinh()+"/set_cam/quan.png"),
-            "Giúp tăng HP",
-            1,
-            new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0,5000,0,0,  0},
-            "traidat",
-            150000,
-            null,
-            2,
-            0,
-            0,
-            -1
-        ));
-        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
-            "set_cam",
-            "Găng võ kame",
-            LoaiItem.GANG,
-            new Texture("vatpham/do/gang/"+nhanVat.getHanhtinh()+"/gang1.png"),
-            "Giúp tăng sức đánh",
-            1,
-            new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,5,  0},
-            "traidat",
-            150000,
-            null,
-            0,
-            0,
-            5,
-            -1
-        ));
-        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
-            "set_cam",
-            "Giày võ kame",
-            LoaiItem.GIAY,
-            new Texture("vatpham/do/giay/"+nhanVat.getHanhtinh()+"/giay1.png"),
-            "Giúp tăng MP",
-            1,
-            new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0,0,200,0,  0},
-            "traidat",
-            150000,
-            null,
-            3,
-            0,
-            2,
-            -1
-        ));
-        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
-            "rada1",
-            "rada cấp 1",
-            LoaiItem.RADA,
-            new Texture("vatpham/do/rada/rada1.png"),
-            "Giúp tăng Chí Mạng",
-            1,
-            new int[]{0, 0, 0, 1, 0, 0, 0, 0, 0,0,0,0,  0},
-            "traidat",
-            15000,
-            null,
-            3,
-            0,
-            1,
-            -1
-        ));
-        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
-            "set_huy_diet",
-            "Áo hủy diệt",
-            LoaiItem.AO,
-            new Texture("vatpham/do/aoquan/"+nhanVat.getHanhtinh()+"/set_huy_diet/ao.png"),
-            "Giúp giảm sát thương",
-            1,
-            new int[]{0, 0, 0, 0, 2500, 0,35, 0, 0,0,0,0,  0},
-            "traidat",
-            40_000_000_000L,
-            "Nappa",
-            7,
-            7,
-            7,
-            -1
-        ));
-        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
-            "set_huy_diet",
-            "Quần hủy diệt",
-            LoaiItem.QUAN,
-            new Texture("vatpham/do/aoquan/"+nhanVat.getHanhtinh()+"/set_huy_diet/quan.png"),
-            "Giúp tăng HP",
-            1,
-            new int[]{0, 0, 0, 0, 0, 0, 35, 0, 0,120000,0,0,  0},
-            "traidat",
-            40_000_000_000L,
-            "Nappa",
-            7,
-            7,
-            7,
-            -1
-        ));
-        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
-            "set_huy_diet",
-            "Găng hủy diệt",
-            LoaiItem.GANG,
-            new Texture("vatpham/do/gang/"+nhanVat.getHanhtinh()+"/ganghuydiet.png"),
-            "Giúp tăng sức đánh",
-            1,
-            new int[]{0, 0, 0, 0, 0, 0, 35, 0, 0,0,0,9000,  0},
-            "traidat",
-            40_000_000_000L,
-            "Nappa",
-            7,
-            7,
-            7,
-            -1
-        ));
-        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
-            "set_huy_diet",
-            "Giày hủy diệt",
-            LoaiItem.GIAY,
-            new Texture("vatpham/do/giay/"+nhanVat.getHanhtinh()+"/giayhuydiet.png"),
-            "Giúp tăng MP",
-            1,
-            new int[]{0, 0, 0, 0, 0, 0, 35, 0, 0,0,100000,0,  0},
-            "traidat",
-            40_000_000_000L,
-            "Nappa",
-            7,
-            7,
-            7,
-            -1
-        ));
-        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
-            "rada_huy_diet",
-            "Nhẫn hủy diệt",
-            LoaiItem.RADA,
-            new Texture("vatpham/do/rada/radahuydiet.png"),
-            "Giúp tăng Chí Mạng",
-            1,
-            new int[]{0, 0, 0, 20, 0, 0, 35, 0, 0,0,0,0,  0},
-            "traidat",
-            40_000_000_000L,
-            "Nappa",
-            7,
-            7,
-            7,
-            -1
-        ));
-        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
-            "glt_c3",
-            "Giáp luyện tập cấp 3",
-            LoaiItem.GIAPLUYENTAP,
-            new Texture("vatpham/vatphamgame/giapluyentap/gltc3.png"),
-            "Khi mặc vào sẽ tích lũy thời gian luyện tập, khi cởi ra sẽ tăng sức đánh 30% và Crit 15%, ST Crit 30%",
-            1,
-            new int[]{0, 0, 0, 0, 0, 0, 35, 0, 30, 0, 0, 0,  0},
-            "traidat",
-            1_000_000_000L,
-            null,
-            7,
-            7,
-            0,
-            0
-        ));
-        duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
-            "glt_c1",
-            "Giáp luyện tập cấp 1",
-            LoaiItem.GIAPLUYENTAP,
-            new Texture("vatpham/vatphamgame/giapluyentap/gltc1.png"),
-            "Khi mặc vào sẽ tích lũy thời gian luyện tập, khi cởi ra sẽ tăng sức đánh 10% và Crit 15%, ST Crit 30%",
-            1,
-            new int[]{0, 0, 0, 0, 0, 0, 25, 0, 10, 0, 0, 0,  0},
-            "traidat",
-            10_000_000L,
-            null,
-            7,
-            5,
-            0,
-            0
-        ));
+        // Gọi thêm item từ file ngoài
+        ThemItemTest.themItemTest(duLieuNguoiChoi, nhanVat);
+        clickHandler = new HUDClickHandler(this, duLieuNguoiChoi, nhanVat);
     }
     public void setSkillIcons(SkillIcon[] skillIcons) {
         this.skillIcons = skillIcons;
@@ -762,351 +475,7 @@ public class VeHUD {
         }
     }
     public void xuLyClick(int x, int y) {
-        float screenWidth = Gdx.graphics.getWidth();
-        float screenHeight = Gdx.graphics.getHeight();
-
-        // === VÙNG Ô CHAT ===
-        int ochatW = 60;
-        int ochatH = 60;
-        float ochatX = screenWidth - ochatW - 15;
-        float ochatY = screenHeight-10-ochatH;
-        if (x >= ochatX && x <= ochatX + 60 && y >= ochatY && y <= ochatY + 60) {
-            clickOChat();
-        }
-
-        // === VÙNG Ô ĐẬU THẦN ===
-        int odauthanW = 75;
-        int odauthanH = 75;
-        float odauthanX = screenWidth - odauthanW - 10;
-        float odauthanY = 10;
-        if (x >= odauthanX && x <= odauthanX + 75 && y >= odauthanY && y <= odauthanY + 75) {
-            clickODauThan();
-        }
-        // Vùng mở popup
-        float nutPopupX = 0f;
-        float nutPopupY = screenHeight / 4f * 3;
-        if (x >= nutPopupX && x <= nutPopupX + 25 && y >= nutPopupY && y <= nutPopupY + 35) {
-            hienPopupNhanVat();
-        }
-
-        if (dangHienPopup) {
-            if (vuaMoPopup) {
-                vuaMoPopup = false;
-                return;
-            }
-            // nutX để tắt popup
-            float nutXW = nutX.getWidth() * 0.5f;
-            float nutXH = nutX.getHeight() * 0.55f;
-            float nutXX = 350 - nutXW - 6;
-            float nutXY = 610 - nutXH - 2;
-            if (x >= nutXX && x <= nutXX + nutXW && y >= nutXY && y <= nutXY + nutXH) {
-                tatPopupNhanVat();
-                hangTrangDangChon = -1;
-                oChiSoDangChon = -1;
-            } else if (x > 350 && x <= 1020 && !DangHienPopupThongTin && !HienPopUpGanSkill && !DangHienPopupThongTin1) {
-                tatPopupNhanVat();
-                hangTrangDangChon = -1;
-                oChiSoDangChon = -1;
-            }
-            // cac nut chuc nang
-            for (int i = 0; i < 5; i++) {
-                if (x >= 2+i*68+3 && x <= 2+i*68+3 + 68 && y >= 450 && y <= 450 + 52){
-                    chucNangDangChon=i;
-                    scrollY = 0;
-                }
-            }
-        }
-        if (dangHienPopup && chucNangDangChon == 1 && !DangHienPopupThongTin1) {
-            if (vanBayDau){
-                vanbay = new Texture("vatpham/vanbay/"+"candauvan/candauvan.png");
-                nhanVat.setIdVanBay("candauvan");
-                nhanVat.setTenVanBay("Cân đẩu vân");
-                nhanVat.setMoTaVanBay("Dùng để bay không tốn KI");
-                nhanVat.setChisoVanBay(new int[] {0,0,0,0,0,0,0,0,0,0,0,0});
-                nhanVat.setHanhTinhVanBay("traidat");
-                nhanVat.setSucManhYeuCauVanBay(0);
-                Item vanBay = new Item("candauvan", "Cân đẩu vân", LoaiItem.VANBAY, vanbay, "Dùng để bay không tốn KI", 1, new int[] {0,0,0,0,0,0,0,0,0,0,0,0},"traidat",0, null,0,0,0,-1);
-                duLieuNguoiChoi.setItemVaoHanhTrangDangMac(vanBay,7);
-            }
-            float viewY = 35;
-            float viewHeight = 444 - 35;
-            int KhoangCachItem = 49;
-            int tongSoO = 8 + 12;
-
-            if (x >= 3 && x <= 3 + 344 && y >= viewY && y <= viewY + viewHeight) {
-                float relativeY = y - viewY;
-                float realY = scrollY + (viewHeight - relativeY);
-                int index = (int) (realY / KhoangCachItem);
-                hangTrangDangChon = index;
-                if (hangTrangDangChon >= 8) {
-                    int indexx = hangTrangDangChon - 8;
-                    ArrayList<Item> danhSach = duLieuNguoiChoi.getHanhTrang();
-                    if (indexx < danhSach.toArray().length) {
-                        Item item = danhSach.get(indexx);
-                        itemm = item;
-                        if (item.getLoai() == LoaiItem.CAITRANG) {
-                            itemDangChon = "caitrang";
-                        } else if (item.getLoai() == LoaiItem.AVATAR) {
-                            itemDangChon = "avatar";
-                        } else if (item.getLoai() == LoaiItem.GIAPLUYENTAP) {
-                            itemDangChon = "giapluyentap";
-                        } else if (item.getLoai() == LoaiItem.AO) {
-                            itemDangChon = "ao";
-                        } else if (item.getLoai() == LoaiItem.QUAN) {
-                            itemDangChon = "quan";
-                        } else if (item.getLoai() == LoaiItem.GANG) {
-                            itemDangChon = "gang";
-                        } else if (item.getLoai() == LoaiItem.GIAY) {
-                            itemDangChon = "giay";
-                        } else if (item.getLoai() == LoaiItem.RADA) {
-                            itemDangChon = "rada";
-                        } else if (item.getLoai() == LoaiItem.VANBAY) {
-                            itemDangChon = "vanbay";
-                        }
-                    } else {
-                        itemm = null;
-                    }
-                    if (itemm != null) {
-                        DangHienPopupThongTin1 = true;
-                        PopupHanhTrangX = 5;
-                        PopupHanhTrangW = 360;
-                        PopupHanhTrangY = viewY + viewHeight - (index + 1) * KhoangCachItem + scrollY;
-                        PopupHanhTrangH = 0;
-                        TimeChoHienPopup = 0.3f;
-                        vuaMoPopupThongTin = true;
-                    }
-                } else {
-                    ArrayList<Item> danhSach = duLieuNguoiChoi.getHanhTrangDangMac();
-                    if (danhSach.get(hangTrangDangChon) != null){
-                        Item item = danhSach.get(hangTrangDangChon);
-                        itemm = item;
-                        if (item.getLoai() == LoaiItem.CAITRANG) {
-                            itemDangChon = "caitrang";
-                        } else if (item.getLoai() == LoaiItem.AVATAR) {
-                            itemDangChon = "avatar";
-                        } else if (item.getLoai() == LoaiItem.GIAPLUYENTAP) {
-                            itemDangChon = "giapluyentap";
-                        } else if (item.getLoai() == LoaiItem.AO) {
-                            itemDangChon = "ao";
-                        } else if (item.getLoai() == LoaiItem.QUAN) {
-                            itemDangChon = "quan";
-                        } else if (item.getLoai() == LoaiItem.GANG) {
-                            itemDangChon = "gang";
-                        } else if (item.getLoai() == LoaiItem.GIAY) {
-                            itemDangChon = "giay";
-                        } else if (item.getLoai() == LoaiItem.RADA) {
-                            itemDangChon = "rada";
-                        } else if (item.getLoai() == LoaiItem.VANBAY) {
-                            itemDangChon = "vanbay";
-                        }
-                    } else {
-                        itemm = null;
-                    }
-                    if (itemm != null) {
-                        DangHienPopupThongTin1 = true;
-                        PopupHanhTrangX = 5;
-                        PopupHanhTrangW = 360;
-                        PopupHanhTrangY = viewY + viewHeight - (index + 1) * KhoangCachItem + scrollY;
-                        PopupHanhTrangH = 0;
-                        TimeChoHienPopup = 0.3f;
-                        vuaMoPopupThongTin = true;
-                    }
-                }
-            }
-        }
-        if (dangHienPopup && chucNangDangChon == 2 && !DangHienPopupThongTin && !HienPopUpGanSkill) {
-            float viewY = 35;
-            float viewHeight = 444 - 35;
-            int KhoangCachItem = 61;
-            int tongSoO = 15;
-
-            // Kiểm tra có click vào vùng hành trang không
-            if (x >= 3 && x <= 3 + 344 && y >= viewY && y <= viewY + viewHeight) {
-
-                // Tính tọa độ tương đối trong khung scroll
-                float relativeY = y - viewY;
-
-                // Tính vị trí click từ đỉnh danh sách cuộn
-                float realY = scrollY + (viewHeight - relativeY);
-
-                int index = (int)(realY / KhoangCachItem);
-
-                if (index >= 0 && index < tongSoO) {
-                    oChiSoDangChon = index;
-                    DangHienPopupThongTin = true;
-                    if (index >= 0 && index < 5) {
-                        PopupThongTinX = 5;
-                        PopupThongTinY = viewY + viewHeight - (index + 1) * KhoangCachItem + scrollY;
-                        PopupThongTinW = 360;
-                        PopupThongTinH = 80;
-                        TimeChoHienPopup = 0.3f;
-                        if ((PopupThongTinY-120)<0){
-                            PopupThongTinY = 125;
-                        }
-                        if ((PopupThongTinY+PopupThongTinH)>590){
-                            PopupThongTinY = 590-PopupThongTinH;
-                        }
-                        vuaMoPopupThongTin = true;
-                    } else if (index == 5) {
-                        PopupThongTinW = 600;
-                        PopupThongTinX = (1020-PopupThongTinW)/2f;
-                        PopupThongTinY = 125;
-                        PopupThongTinH = 90;
-                        TimeChoHienPopup = 0.3f;
-                        vuaMoPopupThongTin = true;
-                    } else {
-                        PopupThongTinX = 5;
-                        PopupThongTinY = viewY + viewHeight - (index + 1) * KhoangCachItem + scrollY;
-                        PopupThongTinW = 360;
-                        PopupThongTinH = 250;
-                        TimeChoHienPopup = 0.3f;
-                        if ((PopupThongTinY-120)<0){
-                            PopupThongTinY = 125;
-                        }
-                        if ((PopupThongTinY+PopupThongTinH)>590){
-                            PopupThongTinY = 590-PopupThongTinH;
-                        }
-                        vuaMoPopupThongTin = true;
-                    }
-                }
-            }
-        }
-        // popup hanh trang
-        if (DangHienPopupThongTin1) {
-            if (vuaMoPopupThongTin) {
-                vuaMoPopupThongTin = false;
-                return;
-            }
-            if (x > 0 && x <= 360 && (y > PopupHanhTrangY + PopupHanhTrangH || y < PopupHanhTrangY - 130)) {
-                DangHienPopupThongTin1 = false;
-                TimeChoHienPopup = 0;
-            } else if (x > 360 && x <= 1020) {
-                DangHienPopupThongTin1 = false;
-                TimeChoHienPopup = 0;
-            }
-        }
-        if (DangHienPopupThongTin1) {
-            float yNut = PopupHanhTrangY - 115;
-            if (hangTrangDangChon!=7){
-                if (x > 1 && x < 115 && y >= yNut && y <= yNut + PopupHanhTrangH){
-                    nutClickTimer3 = 0.3f;
-                    nuthanhtrangchon=1;
-                } else if (x > 121 && x < 115+120 && y >= yNut && y <= yNut + PopupHanhTrangH){
-                    nutClickTimer3 = 0.3f;
-                    nuthanhtrangchon=2;
-                }
-            } else {
-                if (x > 1 && x < 115 && y >= yNut && y <= yNut + PopupHanhTrangH) {
-                    nutClickTimer3 = 0.3f;
-                    nuthanhtrangchon = 3;
-                }
-            }
-        }
-        // Tắt popup thông tin
-        if (DangHienPopupThongTin) {
-            if (vuaMoPopupThongTin) {
-                vuaMoPopupThongTin = false;
-                return;
-            }
-            if (oChiSoDangChon != 5) {
-                if (x > 0 && x <= 360 && (y > PopupThongTinY + PopupThongTinH || y < PopupThongTinY - 130)) {
-                    DangHienPopupThongTin = false;
-                    TimeChoHienPopup = 0;
-                } else if (x > 360 && x <= 1020) {
-                    DangHienPopupThongTin = false;
-                    TimeChoHienPopup = 0;
-                }
-            } else {
-                if (y > PopupThongTinY + PopupThongTinH) {
-                    DangHienPopupThongTin = false;
-                    TimeChoHienPopup = 0;
-                } else if (x < PopupThongTinX || x > PopupThongTinX + PopupThongTinW) {
-                    DangHienPopupThongTin = false;
-                    TimeChoHienPopup = 0;
-                }
-            }
-        }
-        if (DangHienPopupThongTin){
-            if (oChiSoDangChon >= 0 && oChiSoDangChon < 4) {
-                int[] buocTangTheoChiSo = {20, 20, 1, 1};
-                int[] gioiHanToiDa = {550000, 550000, 25000, 3000}; // Giới hạn HP, KI, Sức đánh, Giáp
-                int buocTang = buocTangTheoChiSo[oChiSoDangChon];
-
-                int chiSoGoc = switch (oChiSoDangChon) {
-                    case 0 -> duLieuNguoiChoi.getHpGoc();
-                    case 1 -> duLieuNguoiChoi.getKiGoc();
-                    case 2 -> duLieuNguoiChoi.getSucDanhGoc();
-                    case 3 -> duLieuNguoiChoi.getGiapGoc();
-                    default -> 0;
-                };
-
-                float yNut = PopupThongTinY - 115;
-                for (int i = 0; i < 3; i++) {
-                    int soLanTang = (int) Math.pow(10, i);
-                    int giaTriTang = buocTang * soLanTang;
-                    long chiPhi = tinhChiPhiTiemNang(oChiSoDangChon, chiSoGoc, soLanTang, buocTang);
-
-                    boolean trongVungNut = (x >= 1 + i * 120 && x <= 1 + i * 120 + 114 && y >= yNut && y <= yNut + 114);
-                    boolean duTiemNang = duLieuNguoiChoi.getTiemNangNhanVat() >= chiPhi;
-                    boolean khongVuotGioiHan = chiSoGoc + giaTriTang <= gioiHanToiDa[oChiSoDangChon];
-
-                    if (trongVungNut && duTiemNang && khongVuotGioiHan) {
-                        nutClickTimer = 0.3f;
-                        oChiSoDangChonTamThoi = oChiSoDangChon;
-                        giaTriTangTamThoi = giaTriTang;
-                        chiPhiTamThoi = chiPhi;
-                        nutduocchon=i;
-                    }
-                }
-            } else if (oChiSoDangChon==4){
-                int gioiHanToiDa = 10; // Crit tối đa 10%
-                float yNut = PopupThongTinY - 115;
-                long chiPhi = tinhChiPhiTiemNang(4, duLieuNguoiChoi.getChiMangGoc(), 1, 1);
-                if (chiPhi<=0){chiPhi=10000000;}
-                boolean trongVungNut = (x >= 1  && x <= 1 + 114 && y >= yNut && y <= yNut + 114);
-                boolean duTiemNang = duLieuNguoiChoi.getTiemNangNhanVat() >= chiPhi;
-                boolean khongVuotGioiHan = duLieuNguoiChoi.getChiMangGoc() + 1 <= gioiHanToiDa;
-
-                if (trongVungNut && duTiemNang && khongVuotGioiHan) {
-                    nutClickTimer = 0.3f;
-                    oChiSoDangChonTamThoi = oChiSoDangChon;
-                    giaTriTangTamThoi = 1;
-                    chiPhiTamThoi = chiPhi;
-                }
-            } else if (oChiSoDangChon > 5 && oChiSoDangChon <= 15){
-                float yNut = PopupThongTinY - 115;
-                int capskill = duLieuNguoiChoi.getCapSkill(oChiSoDangChon-6);
-                if (capskill >= 1){
-                    if (x > 1 && x < 115 && y >= yNut && y <= yNut + PopupThongTinH){
-                        nutClickTimer1 = 0.3f;
-                        nutduocchon=1;
-                    } else if (x > 121 && x < 115+120 && y >= yNut && y <= yNut + PopupThongTinH){
-                        nutClickTimer1 = 0.3f;
-                        nutduocchon=2;
-                    }
-                }
-                else {
-                    if (x > 1 && x < 115 && y >= yNut && y <= yNut + PopupThongTinH){
-                        nutClickTimer1 = 0.3f;
-                        nutduocchon=2;
-                    }
-                }
-            }
-        }
-        if (HienPopUpGanSkill){
-            if (x < 210 || x > 210 + 4*120 + 114 ){
-                HienPopUpGanSkill = false;
-            } else if ( x >= 210 && x<=210 + 4*120 && y>120){
-                HienPopUpGanSkill = false;
-            } else {
-                for (int i = 0; i < 5; i++){
-                    if (x>=210 + i * 120 && x <= 210 + i * 120+114 && y>=5 && y<=5+114){
-                        nutClickTimer2 = 0.3f;
-                        nutduocchon = i;
-                    }
-                }
-            }
-        }
+        clickHandler.xuLyClick(x, y);
     }
 
     public void hienPopupNhanVat() {

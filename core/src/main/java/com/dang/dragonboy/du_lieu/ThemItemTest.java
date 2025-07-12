@@ -1,0 +1,156 @@
+package com.dang.dragonboy.du_lieu;
+import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
+import com.badlogic.gdx.graphics.Texture;
+import com.dang.dragonboy.nhan_vat.NhanVat;
+import com.dang.dragonboy.item.Item;
+import com.dang.dragonboy.item.LoaiItem;
+
+public class ThemItemTest {
+
+    public static void themItemTest(DuLieuNguoiChoi duLieu, NhanVat nhanVat) {
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "phuong_hoang_lua", "Thú cưỡi cực VIP", LoaiItem.VANBAY,
+            new Texture("vatpham/vanbay/phuong_hoang_lua/phuonghoanglua.png"),
+            "Dùng để bay và hồi phục HP, KI", 1,
+            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+            nhanVat.getHanhtinh(), 1500000L, null, 0, 0, 0, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "goku_black", "Cải trang", LoaiItem.CAITRANG,
+            new Texture("nhanvat/caitrang/goku_black/daudung.png"),
+            "Cải trang thành Goku Black", 1,
+            new int[]{0,0,0,0,0,0,25,25,25,0,0,0,0},
+            nhanVat.getHanhtinh(), 1500000L, null, 0, 0, 0, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "goku_black_rose", "Cải trang", LoaiItem.CAITRANG,
+            new Texture("nhanvat/caitrang/goku_black_rose/daudung.png"),
+            "Cải trang thành Super Black Goku", 1,
+            new int[]{0,0,0,0,0,0,45,45,0,0,0,0,0},
+            nhanVat.getHanhtinh(), 10_000_000_000L, null, 0, 0, 0, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "vegito_xeno", "Cải trang hợp thể", LoaiItem.CAITRANG,
+            new Texture("nhanvat/caitrang/vegito_xeno/daudung.png"),
+            "Cải trang thành Vegito Xeno SSJ3", 1,
+            new int[]{0,0,0,20,1010,0,70,70,70,0,0,0,0},
+            nhanVat.getHanhtinh(), 1500000L, null, 0, 0, 0, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "gohan_beast", "Cải trang hợp thể", LoaiItem.CAITRANG,
+            new Texture("nhanvat/caitrang/gohan_beast/daudung.png"),
+            "Cải trang thành Gohan Beast", 1,
+            new int[]{0,0,0,50,0,100,100,0,100,0,0,0,0},
+            nhanVat.getHanhtinh(), 10_000_000L, null, 0, 0, 0, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "avt_vip", "Avatar VIP", LoaiItem.AVATAR,
+            new Texture("nhanvat/" + nhanVat.getHanhtinh() + "/avatar/avt_vip/daudung.png"),
+            "Dùng để thay đổi khuôn mặt", 1,
+            new int[]{0,0,0,0,10,0,15,0,15,0,0,0,0},
+            nhanVat.getHanhtinh(), 1500000L, null, 0, 0, 0, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "set_cam", "Áo võ kame", LoaiItem.AO,
+            new Texture("vatpham/do/aoquan/" + nhanVat.getHanhtinh() + "/set_cam/ao.png"),
+            "Giúp giảm sát thương", 1,
+            new int[]{0,0,0,0,10,0,15,0,0,0,0,0,0},
+            "traidat", 150000L, null, 3, 3, 3, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "set_cam", "Quần võ kame", LoaiItem.QUAN,
+            new Texture("vatpham/do/aoquan/" + nhanVat.getHanhtinh() + "/set_cam/quan.png"),
+            "Giúp tăng HP", 1,
+            new int[]{0,0,0,0,0,0,0,0,0,5000,0,0,0},
+            "traidat", 150000L, null, 2, 0, 0, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "set_cam", "Găng võ kame", LoaiItem.GANG,
+            new Texture("vatpham/do/gang/" + nhanVat.getHanhtinh() + "/gang1.png"),
+            "Giúp tăng sức đánh", 1,
+            new int[]{0,0,0,0,0,0,0,0,0,0,0,5,0},
+            "traidat", 150000L, null, 0, 0, 5, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "set_cam", "Giày võ kame", LoaiItem.GIAY,
+            new Texture("vatpham/do/giay/" + nhanVat.getHanhtinh() + "/giay1.png"),
+            "Giúp tăng MP", 1,
+            new int[]{0,0,0,0,0,0,0,0,0,0,200,0,0},
+            "traidat", 150000L, null, 3, 0, 2, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "rada1", "Rada cấp 1", LoaiItem.RADA,
+            new Texture("vatpham/do/rada/rada1.png"),
+            "Giúp tăng Chí Mạng", 1,
+            new int[]{0,0,0,1,0,0,0,0,0,0,0,0,0},
+            "traidat", 15000L, null, 3, 0, 1, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "set_huy_diet", "Áo hủy diệt", LoaiItem.AO,
+            new Texture("vatpham/do/aoquan/" + nhanVat.getHanhtinh() + "/set_huy_diet/ao.png"),
+            "Giúp giảm sát thương", 1,
+            new int[]{0,0,0,0,2500,0,35,0,0,0,0,0,0},
+            "traidat", 40_000_000_000L, "Nappa", 7, 7, 7, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "set_huy_diet", "Quần hủy diệt", LoaiItem.QUAN,
+            new Texture("vatpham/do/aoquan/" + nhanVat.getHanhtinh() + "/set_huy_diet/quan.png"),
+            "Giúp tăng HP", 1,
+            new int[]{0,0,0,0,0,0,35,0,0,120000,0,0,0},
+            "traidat", 40_000_000_000L, "Nappa", 7, 7, 7, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "set_huy_diet", "Găng hủy diệt", LoaiItem.GANG,
+            new Texture("vatpham/do/gang/" + nhanVat.getHanhtinh() + "/ganghuydiet.png"),
+            "Giúp tăng sức đánh", 1,
+            new int[]{0,0,0,0,0,0,35,0,0,0,0,9000,0},
+            "traidat", 40_000_000_000L, "Nappa", 7, 7, 7, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "set_huy_diet", "Giày hủy diệt", LoaiItem.GIAY,
+            new Texture("vatpham/do/giay/" + nhanVat.getHanhtinh() + "/giayhuydiet.png"),
+            "Giúp tăng MP", 1,
+            new int[]{0,0,0,0,0,0,35,0,0,0,100000,0,0},
+            "traidat", 40_000_000_000L, "Nappa", 7, 7, 7, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "rada_huy_diet", "Nhẫn hủy diệt", LoaiItem.RADA,
+            new Texture("vatpham/do/rada/radahuydiet.png"),
+            "Giúp tăng Chí Mạng", 1,
+            new int[]{0,0,0,20,0,0,35,0,0,0,0,0,0},
+            "traidat", 40_000_000_000L, "Nappa", 7, 7, 7, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "glt_c3", "Giáp luyện tập cấp 3", LoaiItem.GIAPLUYENTAP,
+            new Texture("vatpham/vatphamgame/giapluyentap/gltc3.png"),
+            "Khi mặc vào sẽ tích lũy thời gian luyện tập, khi cởi ra sẽ tăng sức đánh 30% và Crit 15%, ST Crit 30%", 1,
+            new int[]{0,0,0,0,0,0,35,0,30,0,0,0,0},
+            "traidat", 1_000_000_000L, null, 7, 7, 0, 0
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "glt_c1", "Giáp luyện tập cấp 1", LoaiItem.GIAPLUYENTAP,
+            new Texture("vatpham/vatphamgame/giapluyentap/gltc1.png"),
+            "Khi mặc vào sẽ tích lũy thời gian luyện tập, khi cởi ra sẽ tăng sức đánh 10% và Crit 15%, ST Crit 30%", 1,
+            new int[]{0,0,0,0,0,0,25,0,10,0,0,0,0},
+            "traidat", 10_000_000L, null, 7, 5, 0, 0
+        ));
+    }
+}
