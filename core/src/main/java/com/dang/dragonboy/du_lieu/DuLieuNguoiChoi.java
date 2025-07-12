@@ -313,71 +313,137 @@ public class DuLieuNguoiChoi {
         this.HpNhanVat -= HpCongThemThucTeNappa;
     }
 
-    public void tangKiGoc(int KiCongThem,boolean choPhepHienThi) {
+    public void tangKiGoc(int KiCongThem, boolean choPhepHienThi) {
         int[] chisoCaiTrang = nhanVat.getChisoCaiTrang();
+        int[] chisoAo = nhanVat.getChisoAo();
+        int[] chisoQuan = nhanVat.getChisoQuan();
+        int[] chisoGang = nhanVat.getChisoGang();
+        int[] chisoGiay = nhanVat.getChisoGiay();
+        int[] chisoRada = nhanVat.getChisoRada();
+        int[] chisoGlt = nhanVat.getChisoGiapLuyenTap();
 
-        float tilePhanTramKi = 0;
+        float tileCT = 0, tileAo = 0, tileQuan = 0, tileGang = 0, tileGiay = 0, tileRada = 0, tileGlt = 0;
+
         if (NhanVatXuLy.getDangMacCaiTrang() || NhanVatXuLy.getDangMacAvatar()) {
-            tilePhanTramKi +=chisoCaiTrang[7];
+            tileCT += (chisoCaiTrang != null && chisoCaiTrang.length >= 8) ? chisoCaiTrang[7] : 0;
         }
-        int KiCongThemThucTe = Math.round(KiCongThem * (1 + tilePhanTramKi / 100f));
+        if (dangmacao) tileAo += chisoAo[7];
+        if (dangmacquan) tileQuan += chisoQuan[7];
+        if (dangmacgang) tileGang += chisoGang[7];
+        if (dangmacgiay) tileGiay += chisoGiay[7];
+        if (dangmacrada) tileRada += chisoRada[7];
+        if (checkgiapluyentap && chisoGlt != null) tileGlt += chisoGlt[7];
 
-        if (choPhepHienThi){
+        int k1 = Math.round(KiCongThem * (1 + tileCT / 100f));
+        int k2 = Math.round(k1 * (1 + tileAo / 100f));
+        int k3 = Math.round(k2 * (1 + tileQuan / 100f));
+        int k4 = Math.round(k3 * (1 + tileGang / 100f));
+        int k5 = Math.round(k4 * (1 + tileGiay / 100f));
+        int k6 = Math.round(k5 * (1 + tileRada / 100f));
+        int k7 = Math.round(k6 * (1 + tileGlt / 100f));
+
+        if (choPhepHienThi) {
             this.KiGoc += KiCongThem;
-            if (this.KiGoc >= 550000){
-                this.KiGoc = 550000;
-            }
+            if (this.KiGoc >= 550000) this.KiGoc = 550000;
         }
-        this.KiNhanVat += KiCongThemThucTe;
+        this.KiNhanVat += k7;
     }
-    public void giamKiGoc(int KiCongThem){
-        int[] chisoCaiTrang = nhanVat.getChisoCaiTrang(); // chỉ số cải trang
-        float tilePhanTramKi = 0;
-
-        // Hàm phụ cộng %Ki nếu mảng hợp lệ và có phần tử thứ 6
-        if (NhanVatXuLy.getDangMacCaiTrang() || NhanVatXuLy.getDangMacAvatar()) {
-            tilePhanTramKi += chisoCaiTrang[7];
-        }
-        // Tính HP cộng thêm thực tế
-        int KiCongThemThucTe = Math.round(KiCongThem * (1 + tilePhanTramKi / 100f));
-        // Cộng vào Ki tổng
-        this.KiNhanVat -= KiCongThemThucTe;
-    }
-    public void tangSucDanhGoc(int SucDanhCongThem,boolean choPhepHienThi) {
+    public void giamKiGoc(int KiCongThem) {
         int[] chisoCaiTrang = nhanVat.getChisoCaiTrang();
+        int[] chisoAo = nhanVat.getChisoAo();
+        int[] chisoQuan = nhanVat.getChisoQuan();
+        int[] chisoGang = nhanVat.getChisoGang();
+        int[] chisoGiay = nhanVat.getChisoGiay();
+        int[] chisoRada = nhanVat.getChisoRada();
+        int[] chisoGlt = nhanVat.getChisoGiapLuyenTap();
 
-        float tilePhanTramSucDanhCaiTrang = 0;
-        float tilePhanTramSucDanhglt = 0;
+        float tileCT = 0, tileAo = 0, tileQuan = 0, tileGang = 0, tileGiay = 0, tileRada = 0, tileGlt = 0;
+
         if (NhanVatXuLy.getDangMacCaiTrang() || NhanVatXuLy.getDangMacAvatar()) {
-            tilePhanTramSucDanhCaiTrang += chisoCaiTrang[8];
+            tileCT += (chisoCaiTrang != null && chisoCaiTrang.length >= 8) ? chisoCaiTrang[7] : 0;
         }
-        if (!checkgiapluyentap) {
-            tilePhanTramSucDanhglt += chiSoGlt;
-        }
-        int SucDanhCongThemThucTe = Math.round(SucDanhCongThem * (1 + tilePhanTramSucDanhCaiTrang / 100f));
-        int SucDanhCongThemThucTee = Math.round(SucDanhCongThemThucTe * (1 + tilePhanTramSucDanhglt/ 100f));
-        if (choPhepHienThi){
-            this.SucDanhGoc += SucDanhCongThem;
-            if (this.SucDanhGoc >= 25000){
-                this.SucDanhGoc = 25000;
-            }
-        }
-        this.SucDanhNhanVat += SucDanhCongThemThucTee;
+        if (dangmacao) tileAo += chisoAo[7];
+        if (dangmacquan) tileQuan += chisoQuan[7];
+        if (dangmacgang) tileGang += chisoGang[7];
+        if (dangmacgiay) tileGiay += chisoGiay[7];
+        if (dangmacrada) tileRada += chisoRada[7];
+        if (checkgiapluyentap && chisoGlt != null) tileGlt += chisoGlt[7];
+
+        int k1 = Math.round(KiCongThem * (1 + tileCT / 100f));
+        int k2 = Math.round(k1 * (1 + tileAo / 100f));
+        int k3 = Math.round(k2 * (1 + tileQuan / 100f));
+        int k4 = Math.round(k3 * (1 + tileGang / 100f));
+        int k5 = Math.round(k4 * (1 + tileGiay / 100f));
+        int k6 = Math.round(k5 * (1 + tileRada / 100f));
+        int k7 = Math.round(k6 * (1 + tileGlt / 100f));
+
+        this.KiNhanVat -= k7;
     }
-    public void giamSucDanhGoc(int SucDanhCongThem){
-        int[] chisoCaiTrang = nhanVat.getChisoCaiTrang(); // chỉ số cải trang
-        float tilePhanTramSucDanhCaiTrang = 0;
-        float tilePhanTramSucDanhglt = 0;
+    public void tangSucDanhGoc(int SucDanhCongThem, boolean choPhepHienThi) {
+        int[] chisoCaiTrang = nhanVat.getChisoCaiTrang();
+        int[] chisoAo = nhanVat.getChisoAo();
+        int[] chisoQuan = nhanVat.getChisoQuan();
+        int[] chisoGang = nhanVat.getChisoGang();
+        int[] chisoGiay = nhanVat.getChisoGiay();
+        int[] chisoRada = nhanVat.getChisoRada();
+        int[] chisoGlt = nhanVat.getChisoGiapLuyenTap();
+
+        float tileCT = 0, tileAo = 0, tileQuan = 0, tileGang = 0, tileGiay = 0, tileRada = 0, tileGlt = 0;
+
         if (NhanVatXuLy.getDangMacCaiTrang() || NhanVatXuLy.getDangMacAvatar()) {
-            tilePhanTramSucDanhCaiTrang += chisoCaiTrang[8];
+            tileCT += (chisoCaiTrang != null && chisoCaiTrang.length >= 9) ? chisoCaiTrang[8] : 0;
         }
-        if (!checkgiapluyentap) {
-            tilePhanTramSucDanhglt += chiSoGlt;
+        if (dangmacao) tileAo += chisoAo[8];
+        if (dangmacquan) tileQuan += chisoQuan[8];
+        if (dangmacgang) tileGang += chisoGang[8];
+        if (dangmacgiay) tileGiay += chisoGiay[8];
+        if (dangmacrada) tileRada += chisoRada[8];
+        if (!checkgiapluyentap) tileGlt += chiSoGlt;
+
+        int s1 = Math.round(SucDanhCongThem * (1 + tileCT / 100f));
+        int s2 = Math.round(s1 * (1 + tileAo / 100f));
+        int s3 = Math.round(s2 * (1 + tileQuan / 100f));
+        int s4 = Math.round(s3 * (1 + tileGang / 100f));
+        int s5 = Math.round(s4 * (1 + tileGiay / 100f));
+        int s6 = Math.round(s5 * (1 + tileRada / 100f));
+        int s7 = Math.round(s6 * (1 + tileGlt / 100f));
+
+        if (choPhepHienThi) {
+            this.SucDanhGoc += SucDanhCongThem;
+            if (this.SucDanhGoc >= 25000) this.SucDanhGoc = 25000;
         }
-        int SucDanhCongThemThucTe = Math.round(SucDanhCongThem * (1 + tilePhanTramSucDanhCaiTrang / 100f));
-        int SucDanhCongThemThucTee = Math.round(SucDanhCongThemThucTe * (1 + tilePhanTramSucDanhglt/ 100f));
-        // Cộng vào Ki tổng
-        this.SucDanhNhanVat -= SucDanhCongThemThucTee;
+        this.SucDanhNhanVat += s7;
+    }
+    public void giamSucDanhGoc(int SucDanhCongThem) {
+        int[] chisoCaiTrang = nhanVat.getChisoCaiTrang();
+        int[] chisoAo = nhanVat.getChisoAo();
+        int[] chisoQuan = nhanVat.getChisoQuan();
+        int[] chisoGang = nhanVat.getChisoGang();
+        int[] chisoGiay = nhanVat.getChisoGiay();
+        int[] chisoRada = nhanVat.getChisoRada();
+        int[] chisoGlt = nhanVat.getChisoGiapLuyenTap();
+
+        float tileCT = 0, tileAo = 0, tileQuan = 0, tileGang = 0, tileGiay = 0, tileRada = 0, tileGlt = 0;
+
+        if (NhanVatXuLy.getDangMacCaiTrang() || NhanVatXuLy.getDangMacAvatar()) {
+            tileCT += (chisoCaiTrang != null && chisoCaiTrang.length >= 9) ? chisoCaiTrang[8] : 0;
+        }
+        if (dangmacao) tileAo += chisoAo[8];
+        if (dangmacquan) tileQuan += chisoQuan[8];
+        if (dangmacgang) tileGang += chisoGang[8];
+        if (dangmacgiay) tileGiay += chisoGiay[8];
+        if (dangmacrada) tileRada += chisoRada[8];
+        if (!checkgiapluyentap) tileGlt += chiSoGlt;
+
+        int s1 = Math.round(SucDanhCongThem * (1 + tileCT / 100f));
+        int s2 = Math.round(s1 * (1 + tileAo / 100f));
+        int s3 = Math.round(s2 * (1 + tileQuan / 100f));
+        int s4 = Math.round(s3 * (1 + tileGang / 100f));
+        int s5 = Math.round(s4 * (1 + tileGiay / 100f));
+        int s6 = Math.round(s5 * (1 + tileRada / 100f));
+        int s7 = Math.round(s6 * (1 + tileGlt / 100f));
+
+        this.SucDanhNhanVat -= s7;
     }
     public void tangGiapGoc(int GiapCongThem){
         this.GiapGoc += GiapCongThem;

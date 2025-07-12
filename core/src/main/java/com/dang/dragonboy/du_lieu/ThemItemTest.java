@@ -97,42 +97,42 @@ public class ThemItemTest {
         ));
 
         duLieu.themItemVaoHanhTrang(new Item(
-            "set_huy_diet", "Áo hủy diệt", LoaiItem.AO,
-            new Texture("vatpham/do/traidat/set_huy_diet/ao.png"),
+            "set_vai_tho", "Áo vải thô", LoaiItem.AO,
+            new Texture("vatpham/do/xayda/set_vai_tho/ao.png"),
             "Giúp giảm sát thương", 1,
-            new int[]{0,0,0,0,2500,0,35,0,0,0,0,0,0},
-            "traidat", 40_000_000_000L, "Nappa", 7, 7, 7, -1
+            new int[]{0,0,0,0,3,0,35,0,0,0,0,0,0},
+            "xayda", 1000L, "Nappa", 7, 7, 7, -1
         ));
 
         duLieu.themItemVaoHanhTrang(new Item(
-            "set_huy_diet", "Quần hủy diệt", LoaiItem.QUAN,
-            new Texture("vatpham/do/traidat/set_huy_diet/quan.png"),
+            "set_than_linh", "Quần thần linh", LoaiItem.QUAN,
+            new Texture("vatpham/do/xayda/set_than_linh/quan.png"),
             "Giúp tăng HP", 1,
-            new int[]{0,0,0,0,0,0,35,0,0,120000,0,0,0},
-            "traidat", 40_000_000_000L, "Nappa", 7, 7, 7, -1
+            new int[]{0,0,0,0,0,0,35,0,0,110000,0,0,0},
+            "xayda", 20_000_000_000L, "Nappa", 7, 7, 7, -1
         ));
 
         duLieu.themItemVaoHanhTrang(new Item(
-            "set_huy_diet", "Găng hủy diệt", LoaiItem.GANG,
-            new Texture("vatpham/do/traidat/set_huy_diet/gang.png"),
+            "set_vai_tho", "Găng vải thô", LoaiItem.GANG,
+            new Texture("vatpham/do/xayda/set_vai_tho/gang.png"),
             "Giúp tăng sức đánh", 1,
-            new int[]{0,0,0,0,0,0,35,0,0,0,0,9000,0},
-            "traidat", 40_000_000_000L, "Nappa", 7, 7, 7, -1
+            new int[]{0,0,0,0,0,0,35,0,0,0,0,8,0},
+            "xayda", 40_000_000_000L, "Nappa", 7, 7, 7, -1
         ));
 
         duLieu.themItemVaoHanhTrang(new Item(
-            "set_huy_diet", "Giày hủy diệt", LoaiItem.GIAY,
-            new Texture("vatpham/do/traidat/set_huy_diet/giay.png"),
+            "set_vai_tho", "Giày vải thô", LoaiItem.GIAY,
+            new Texture("vatpham/do/xayda/set_vai_tho/giay.png"),
             "Giúp tăng MP", 1,
-            new int[]{0,0,0,0,0,0,35,0,0,0,100000,0,0},
-            "traidat", 40_000_000_000L, "Nappa", 7, 7, 7, -1
+            new int[]{0,0,0,0,0,0,35,0,0,0,10,0,0},
+            "xayda", 40_000_000_000L, "Nappa", 7, 7, 7, -1
         ));
 
         duLieu.themItemVaoHanhTrang(new Item(
-            "rada_huy_diet", "Nhẫn hủy diệt", LoaiItem.RADA,
-            new Texture("vatpham/do/traidat/set_huy_diet/rada.png"),
+            "set_than_linh", "Nhẫn thần linh", LoaiItem.RADA,
+            new Texture("vatpham/do/xayda/set_than_linh/rada.png"),
             "Giúp tăng Chí Mạng", 1,
-            new int[]{0,0,0,20,0,0,35,0,0,0,0,0,0},
+            new int[]{0,0,0,18,0,0,35,0,0,0,0,0,0},
             "xayda", 40_000_000_000L, "Nappa", 7, 7, 7, -1
         ));
 
