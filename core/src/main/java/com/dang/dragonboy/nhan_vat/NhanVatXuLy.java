@@ -16,13 +16,13 @@ public class NhanVatXuLy {
         String itemvanbay = "vatpham/vanbay/";
         String itemglt = "vatpham/vatphamgame/giapluyentap/";
 
-        Texture itemao = new Texture(itemdo+"aoquan/traidat/set_cam/ao.png");
-        Texture itemquan = new Texture(itemdo+"aoquan/traidat/set_cam/quan.png");
-        Texture gang = new Texture(itemdo+"gang/traidat/gang1.png");
-        Texture giay = new Texture(itemdo+"giay/traidat/giay1.png");
-        Texture rada = new Texture(itemdo+"rada/rada1.png");
-        Texture iconct = new Texture(path + "daudung.png");
-        Texture giaplt = new Texture(itemglt+"gltc1.png");
+//        Texture itemao = new Texture(itemdo+"aoquan/traidat/set_cam/ao.png");
+//        Texture itemquan = new Texture(itemdo+"aoquan/traidat/set_cam/quan.png");
+//        Texture gang = new Texture(itemdo+"gang/traidat/gang1.png");
+//        Texture giay = new Texture(itemdo+"giay/traidat/giay1.png");
+//        Texture rada = new Texture(itemdo+"rada/rada1.png");
+//        Texture iconct = new Texture(path + "daudung.png");
+//        Texture giaplt = new Texture(itemglt+"gltc1.png");
         Texture vanbay = new Texture(itemvanbay+"candauvan/candauvan.png");
         Texture dau_dung = new Texture(path + "daudung.png");
         Texture dau_chay = new Texture(path + "dauchay.png");
@@ -61,7 +61,7 @@ public class NhanVatXuLy {
             than_bay, chan_bay,
             lech,
             avt,
-            itemao,itemquan,gang,giay,rada,iconct,giaplt,vanbay
+            null,null,null,null,null,null,null,vanbay
         );
     }
 
@@ -77,13 +77,13 @@ public class NhanVatXuLy {
         String itemvanbay = "vatpham/vanbay/";
         String itemglt = "vatpham/vatphamgame/giapluyentap/";
 
-        Texture itemao = new Texture(itemdo+"aoquan/traidat/set_cam/ao.png");
-        Texture itemquan = new Texture(itemdo+"aoquan/traidat/set_cam/quan.png");
-        Texture gang = new Texture(itemdo+"gang/traidat/gang1.png");
-        Texture giay = new Texture(itemdo+"giay/traidat/giay1.png");
-        Texture rada = new Texture(itemdo+"rada/rada1.png");
-        Texture iconct = new Texture(avatarPath + "daudung.png");
-        Texture giaplt = new Texture(itemglt+"gltc1.png");
+//        Texture itemao = new Texture(itemdo+"aoquan/traidat/set_cam/ao.png");
+//        Texture itemquan = new Texture(itemdo+"aoquan/traidat/set_cam/quan.png");
+//        Texture gang = new Texture(itemdo+"gang/traidat/gang1.png");
+//        Texture giay = new Texture(itemdo+"giay/traidat/giay1.png");
+//        Texture rada = new Texture(itemdo+"rada/rada1.png");
+//        Texture iconct = new Texture(avatarPath + "daudung.png");
+//        Texture giaplt = new Texture(itemglt+"gltc1.png");
         Texture vanbay = new Texture(itemvanbay+"candauvan/candauvan.png");
 
         Texture dau_dung = new Texture(avatarPath + "daudung.png");
@@ -127,7 +127,7 @@ public class NhanVatXuLy {
             than_bay, chan_bay,
             lech,
             avt,
-            itemao,itemquan,gang,giay,rada,iconct,giaplt,vanbay
+            null,null,null,null,null,null,null,vanbay
         );
     }
 

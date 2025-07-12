@@ -28,7 +28,7 @@ public class HUDPopupHanhTrang {
         String[] chisoduoccong = {"HP", "KI", "SD", "Chí mạng","Giáp", "ST Crit", "HP", "KI", "Sức đánh", "HP", "KI", "Sức đánh", "Giảm sát thương"};
         Map<String, String> setkichhoat = new HashMap<>();
         setkichhoat.put("Nappa", "(5 món +80% HP)");
-        setkichhoat.put("Songoku", "(5 món +100% Kamejoko)");
+        setkichhoat.put("Sôngôku", "(5 món +100% sát thương Kamejoko)");
         veHUD.PopupHanhTrangH = 0;
         if (veHUD.itemm!=null) {
             if ("giapluyentap".equals(veHUD.itemDangChon)) {
@@ -60,6 +60,14 @@ public class HUDPopupHanhTrang {
                 }
             }
             if ("ao".equals(veHUD.itemDangChon) || "quan".equals(veHUD.itemDangChon) || "giay".equals(veHUD.itemDangChon) || "gang".equals(veHUD.itemDangChon) || "rada".equals(veHUD.itemDangChon)) {
+                if (!nhanVat.getHanhtinh().equals(veHUD.itemm.getHanhtinh())){
+                    String ht = veHUD.itemm.getHanhtinh();
+                    if (ht.equals("traidat")){ht = "Trái đất";}
+                    if (ht.equals("xayda")){ht = "Sayda";}
+                    if (ht.equals("namek")){ht = "Namếc";}
+                    layout.setText(veHUD.fontTenSkill,"Dành cho "+ht);
+                    veHUD.PopupHanhTrangH += layout.height + 15;
+                }
                 layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
                 veHUD.PopupHanhTrangH += layout.height + 15;
                 for (int i = 9; i < 12; i++ ){
@@ -85,7 +93,12 @@ public class HUDPopupHanhTrang {
                         && "Nappa".equals(veHUD.skhg)
                         && "Nappa".equals(veHUD.skhj)
                         && "Nappa".equals(veHUD.skhrada);
-                    if (fullSetNappa) {
+                    boolean fullSetSongoku = "Sôngôku".equals(veHUD.skha)
+                        && "Sôngôku".equals(veHUD.skhq)
+                        && "Sôngôku".equals(veHUD.skhg)
+                        && "Sôngôku".equals(veHUD.skhj)
+                        && "Sôngôku".equals(veHUD.skhrada);
+                    if (fullSetNappa || fullSetSongoku) {
                         layout.setText(veHUD.fontSkillchuaco, "Set " + veHUD.itemm.getSetkichhoat());
                         veHUD.PopupHanhTrangH += layout.height + 12;
                         layout.setText(veHUD.fontSkillchuaco, setkichhoat.get(veHUD.itemm.getSetkichhoat()));
@@ -255,6 +268,16 @@ public class HUDPopupHanhTrang {
                     batch.draw(veHUD.itemm.getTexture(), veHUD.PopupHanhTrangX + 15, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - veHUD.itemm.getTexture().getHeight() * 0.5f - offsetY, veHUD.itemm.getTexture().getWidth() * 0.5f, veHUD.itemm.getTexture().getHeight() * 0.5f);
                     offsetY += 10;
                 }
+                if (!nhanVat.getHanhtinh().equals(veHUD.itemm.getHanhtinh())){
+                    String ht = veHUD.itemm.getHanhtinh();
+                    if (ht.equals("traidat")){ht = "Trái đất";}
+                    if (ht.equals("xayda")){ht = "Sayda";}
+                    if (ht.equals("namek")){ht = "Namếc";}
+                    veHUD.fontTenSkill.setColor(203 / 255f, 0 / 255f, 26 / 255f, 1f);
+                    layout.setText(veHUD.fontTenSkill,"Dành cho "+ht);
+                    veHUD.fontTenSkill.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
+                    offsetY += layout.height + 12;
+                }
                 if (veHUD.itemm.getSoCap() > 0){
                     veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
                     layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
@@ -275,7 +298,11 @@ public class HUDPopupHanhTrang {
                         offsetY += layout.height + 12;
                     }
                     if (veHUD.itemm.getChiso()[i-6] > 0){
-                        layout.setText(veHUD.fontSkillchuaco,chisoduoccong[i-6] + "+"+veHUD.itemm.getChiso()[i-6]);
+                        if (i-6==4) {
+                            layout.setText(veHUD.fontSkillchuaco, chisoduoccong[i - 6] + "+" + veHUD.itemm.getChiso()[i - 6]);
+                        } else {
+                            layout.setText(veHUD.fontSkillchuaco, chisoduoccong[i - 6] + "+" + veHUD.itemm.getChiso()[i - 6]+"%");
+                        }
                         veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
                         offsetY += layout.height + 12;
                     }
@@ -286,7 +313,12 @@ public class HUDPopupHanhTrang {
                         && "Nappa".equals(veHUD.skhg)
                         && "Nappa".equals(veHUD.skhj)
                         && "Nappa".equals(veHUD.skhrada);
-                    if (fullSetNappa) {
+                    boolean fullSetSongoku = "Sôngôku".equals(veHUD.skha)
+                        && "Sôngôku".equals(veHUD.skhq)
+                        && "Sôngôku".equals(veHUD.skhg)
+                        && "Sôngôku".equals(veHUD.skhj)
+                        && "Sôngôku".equals(veHUD.skhrada);
+                    if (fullSetNappa || fullSetSongoku) {
                         layout.setText(veHUD.fontSkillchuaco, "Set " + veHUD.itemm.getSetkichhoat());
                         veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
                         offsetY += layout.height + 12;

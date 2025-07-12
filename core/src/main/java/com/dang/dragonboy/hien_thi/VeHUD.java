@@ -415,7 +415,9 @@ public class VeHUD {
             nutClickTimer3 -= Gdx.graphics.getDeltaTime();
             if (nutClickTimer3 <= 0) {
                 if (nuthanhtrangchon == 1) {
-                    xulyitem.macDo(hangTrangDangChon);
+                    if (nhanVat.getHanhtinh().equals(itemm.getHanhtinh())) {
+                        xulyitem.macDo(hangTrangDangChon);
+                    }
                     DangHienPopupThongTin1 = false;
                     TimeChoHienPopup = 0;
                 } else if (nuthanhtrangchon == 2) {
