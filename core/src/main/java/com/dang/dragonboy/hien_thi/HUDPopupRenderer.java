@@ -10,7 +10,6 @@ import com.badlogic.gdx.utils.Align;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.item.Item;
 import com.dang.dragonboy.item.LoaiItem;
-import com.dang.dragonboy.nhan_vat.NhanVat;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
