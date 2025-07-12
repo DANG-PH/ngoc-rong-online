@@ -354,39 +354,40 @@ public class HUDPopupHanhTrang {
                         offsetY += layout.height + 12;
                     }
                 }
-                if (veHUD.itemm.getSetkichhoat() != null){
-                    boolean fullSetNappa = "Nappa".equals(veHUD.skha)
-                        && "Nappa".equals(veHUD.skhq)
-                        && "Nappa".equals(veHUD.skhg)
-                        && "Nappa".equals(veHUD.skhj)
-                        && "Nappa".equals(veHUD.skhrada);
-                    boolean fullSetSongoku = "Sôngôku".equals(veHUD.skha)
-                        && "Sôngôku".equals(veHUD.skhq)
-                        && "Sôngôku".equals(veHUD.skhg)
-                        && "Sôngôku".equals(veHUD.skhj)
-                        && "Sôngôku".equals(veHUD.skhrada);
-                    if (fullSetNappa || fullSetSongoku) {
-                        layout.setText(veHUD.fontSkillchuaco, "Set " + veHUD.itemm.getSetkichhoat());
-                        veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
-                        offsetY += layout.height + 12;
-                        layout.setText(veHUD.fontSkillchuaco, setkichhoat.get(veHUD.itemm.getSetkichhoat()));
-                        veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
-                        offsetY += layout.height + 12;
-                        layout.setText(veHUD.fontSkillchuaco, "Không thể giao dịch");
-                        veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
-                        offsetY += layout.height + 12;
-                    } else {
-                        veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
-                        layout.setText(veHUD.fontSkillchuaco, "Set " + veHUD.itemm.getSetkichhoat());
-                        veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
-                        offsetY += layout.height + 12;
-                        layout.setText(veHUD.fontTenSkill, setkichhoat.get(veHUD.itemm.getSetkichhoat()));
-                        veHUD.fontTenSkill.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
-                        offsetY += layout.height + 12;
-                        layout.setText(veHUD.fontSkillchuaco, "Không thể giao dịch");
-                        veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
-                        offsetY += layout.height + 12;
+                if (veHUD.itemm.getSetkichhoat() != null) {
+                    String set = veHUD.itemm.getSetkichhoat();
+                    boolean isFullSet = false;
+
+                    if ("Nappa".equals(set)) {
+                        isFullSet = "Nappa".equals(veHUD.skha)
+                            && "Nappa".equals(veHUD.skhq)
+                            && "Nappa".equals(veHUD.skhg)
+                            && "Nappa".equals(veHUD.skhj)
+                            && "Nappa".equals(veHUD.skhrada);
+                    } else if ("Sôngôku".equals(set)) {
+                        isFullSet = "Sôngôku".equals(veHUD.skha)
+                            && "Sôngôku".equals(veHUD.skhq)
+                            && "Sôngôku".equals(veHUD.skhg)
+                            && "Sôngôku".equals(veHUD.skhj)
+                            && "Sôngôku".equals(veHUD.skhrada);
                     }
+
+                    // Hiển thị
+                    layout.setText(veHUD.fontSkillchuaco, "Set " + set);
+                    veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
+                    offsetY += layout.height + 12;
+
+                    layout.setText(isFullSet ? veHUD.fontSkillchuaco : veHUD.fontTenSkill, setkichhoat.get(set));
+                    (isFullSet ? veHUD.fontSkillchuaco : veHUD.fontTenSkill).draw(batch, layout,
+                        veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15,
+                        veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
+                    offsetY += layout.height + 12;
+
+                    layout.setText(veHUD.fontSkillchuaco, "Không thể giao dịch");
+                    veHUD.fontSkillchuaco.draw(batch, layout,
+                        veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15,
+                        veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
+                    offsetY += layout.height + 12;
                 }
                 for (int i = 6; i < 9; i++) {
                     if (veHUD.itemm.getChiso()[i] > 0) {
