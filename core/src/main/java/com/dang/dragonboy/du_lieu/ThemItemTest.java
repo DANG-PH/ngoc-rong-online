@@ -60,7 +60,7 @@ public class ThemItemTest {
             "set_cam", "Áo võ kame", LoaiItem.AO,
             new Texture("vatpham/do/traidat/set_cam/ao.png"),
             "Giúp giảm sát thương", 1,
-            new int[]{0,0,0,0,10,0,15,0,21,0,0,0,0},
+            new int[]{0,0,0,0,10,0,0,0,21,0,0,0,0},
             "traidat", 150000L, "Sôngôku", 7, 7, 3, -1
         ));
 
