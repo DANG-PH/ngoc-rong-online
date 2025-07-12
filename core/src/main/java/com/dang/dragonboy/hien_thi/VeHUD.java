@@ -26,6 +26,9 @@ public class VeHUD {
     private HUDClickHandler clickHandler;
     private HUDPopupRenderer popupRenderer;
     private HUDXulyitem xulyitem;
+    private HUDPopupThongTin popupThongTin;
+    private HUDPopupHanhTrang popupHanhTrang;
+
     private DuLieuNguoiChoi duLieuNguoiChoi;
 
     public Texture saoden, saoxanh;
@@ -126,6 +129,8 @@ public class VeHUD {
         clickHandler = new HUDClickHandler(this, duLieuNguoiChoi, nhanVat);
         popupRenderer= new HUDPopupRenderer(this, layout,duLieuNguoiChoi);
         xulyitem =  new HUDXulyitem(this, layout,duLieuNguoiChoi,nhanVat);
+        popupThongTin = new HUDPopupThongTin(this, layout,duLieuNguoiChoi,nhanVat);
+//        popupHanhTrang = new HUDPopupHanhTrang(this, layout,duLieuNguoiChoi,nhanVat);
     }
     public void setSkillIcons(SkillIcon[] skillIcons) {
         this.skillIcons = skillIcons;
@@ -307,13 +312,13 @@ public class VeHUD {
         float skillY = 25f;
 
         for (int i = 0; i < 5; i++) {
-            float x = skillBaseX + i * (20f + 45f);
+            float x = skillBaseX + i * (65f);
             Texture texSkill = (skillDangChon == i) ? oskillclick : oskill;
             batch.draw(texSkill, x, skillY, oskillW, oskillH);
 
             // icon kỹ năng
             if (oSkills[i] != null) {
-                batch.draw(oSkills[i], x + 5, skillY + 5, oskillW - 10, oskillH - 10);
+                batch.draw(oSkills[i], x + 6.9f, skillY + 6.9f, oskillW - 13.8f, oskillH - 13.8f);
             }
 
             // số kỹ năng
@@ -527,190 +532,8 @@ public class VeHUD {
             return String.valueOf(so);
         }
     }
-    void PopupThongTin(ShapeRenderer shapeRenderer,SpriteBatch batch, float x, float y , float width, float height , int oChiSoDangChon) {
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(1, 1, 1, 1);
-        shapeRenderer.rect(x, y, width, height);
-        shapeRenderer.end();
-
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.BLACK);
-        for (int i = 0; i < 2; i++) {
-            shapeRenderer.rect(x - i, y - i, width + i * 2, height + i * 2);
-        }
-        shapeRenderer.end();
-        batch.begin();
-        if (oChiSoDangChon<5){
-            if (oChiSoDangChon != 4) {
-                DecimalFormat dinhDang = new DecimalFormat("#,###");
-                String[] tenChiSo = {"HP", "KI", "SĐ", "Giáp"};
-                int[] buocTangTheoChiSo = {20, 20, 1, 1}; // mỗi lần tăng bao nhiêu cho từng chỉ số
-                int buocTang = buocTangTheoChiSo[oChiSoDangChon];
-                //xử lí text thông tin
-                String[] textChiSoCoBan2 = {
-                    dinhDang.format(duLieuNguoiChoi.getHpGoc()+1000),
-                    dinhDang.format(duLieuNguoiChoi.getKiGoc()+1000),
-                    dinhDang.format(duLieuNguoiChoi.getSucDanhGoc()*100),
-                    dinhDang.format(500000+duLieuNguoiChoi.getGiapGoc()*100000),
-                };
-                layout.setText(fontCapSKill,"Sử dụng "+textChiSoCoBan2[oChiSoDangChon]+" tiềm năng");
-                fontCapSKill.draw(batch,layout,PopupThongTinX+(PopupThongTinW- layout.width)/2f,PopupThongTinY+53);
-                layout.setText(fontCapSKill,"để tăng "+buocTang+" "+tenChiSo[oChiSoDangChon]+" gốc");
-                fontCapSKill.draw(batch,layout,PopupThongTinX+(PopupThongTinW- layout.width)/2f,PopupThongTinY+33);
-                //xử lí nút
-                float[] chiSoGocArray = {
-                    duLieuNguoiChoi.getHpGoc(),
-                    duLieuNguoiChoi.getKiGoc(),
-                    duLieuNguoiChoi.getSucDanhGoc(),
-                    duLieuNguoiChoi.getGiapGoc()
-                };
-                int chiSoGoc = (int) chiSoGocArray[oChiSoDangChon];
-                String ten = tenChiSo[oChiSoDangChon];
-
-                int[] tangGiaTri = new int[3];
-                long[] chiPhiTiemNang = new long[3];
-
-                for (int i = 0; i < 3; i++) {
-                    int soLanTang = (int) Math.pow(10, i); // x1, x10, x100
-                    tangGiaTri[i] = buocTang * soLanTang;
-                    chiPhiTiemNang[i] = tinhChiPhiTiemNang(oChiSoDangChon, chiSoGoc, soLanTang, buocTang);
-                }
-                for (int i = 0; i < 3; i++) {
-                    float nutX = 1 + i * 120;
-                    float nutY = y - 115;
-                    if (nutduocchon==i) {
-                        Texture nutVe = nutClickTimer > 0 ? nutvuongclick : nutvuong;
-                        batch.draw(nutVe , nutX, nutY, 114, 114);
-                    }
-                    else {
-                        batch.draw(nutvuong , nutX, nutY, 114, 114);
-                    }
-
-                    font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
-
-                    layout.setText(font, "Tăng");
-                    font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 30);
-
-                    layout.setText(font, tangGiaTri[i] + ten);
-                    font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 55);
-
-                    layout.setText(font, "-"+formatVangNgoc(chiPhiTiemNang[i]));
-                    font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 80);
-                }
-
-            } else {
-                layout.setText(fontCapSKill,"Sử dụng "+formatVangNgoc(30000000+(duLieuNguoiChoi.getChiMangGoc()-1)*5000000000L)+" tiềm năng");
-                fontCapSKill.draw(batch,layout,PopupThongTinX+(PopupThongTinW- layout.width)/2f,PopupThongTinY+53);
-                layout.setText(fontCapSKill,"để tăng "+1+" "+"chí mạng gốc");
-                fontCapSKill.draw(batch,layout,PopupThongTinX+(PopupThongTinW- layout.width)/2f,PopupThongTinY+33);
-                Texture nutVe = nutClickTimer > 0 ? nutvuongclick : nutvuong;
-                batch.draw(nutVe,1,y - 115, 114, 114);
-                layout.setText(font, "Tăng");
-                font.draw(batch, layout, 1 + (114 - layout.width) / 2f, y - 115 + 114 - 30);
-                layout.setText(font, "1 Crit");
-                font.draw(batch, layout, 1 + (114 - layout.width) / 2f, y - 115 + 114 - 55);
-                layout.setText(font, formatVangNgoc(30000000 + (duLieuNguoiChoi.getChiMangGoc() - 1) * 5000000000L) + "");
-                font.draw(batch, layout, 1 + (114 - layout.width) / 2f, y - 115 + 114 - 80);
-            }
-        } else if (oChiSoDangChon>5 && oChiSoDangChon <= 15) {
-            int capskill = duLieuNguoiChoi.getCapSkill(oChiSoDangChon-6);
-            if (capskill >= 1){
-                // Mo ta skill
-                fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
-                layout.setText(fontTenSkill,duLieuNguoiChoi.getTenSkill(oChiSoDangChon-6));
-                fontTenSkill.draw(batch,layout,PopupThongTinX+(PopupThongTinW- layout.width)/2f,PopupThongTinY+PopupThongTinH-23);
-
-                layout.setText(fontMotaNganSkill,duLieuNguoiChoi.getMotaSKill(oChiSoDangChon-6)[0]);
-                fontMotaNganSkill.draw(batch,layout,PopupThongTinX+(PopupThongTinW- layout.width)/2f,PopupThongTinY+PopupThongTinH-48);
-
-                layout.setText(font,"____________________________________");
-                for (int i = 0; i < 2; i++) {
-                    font.draw(batch, layout, PopupThongTinX + (PopupThongTinW - layout.width) / 2f, PopupThongTinY + PopupThongTinH - 60 - i*1);
-                }
-
-                layout.setText(fontSkilldaco,"Cấp độ: "+capskill);
-                fontSkilldaco.draw(batch,layout,PopupThongTinX + (PopupThongTinW - layout.width) / 2f,PopupThongTinY + PopupThongTinH - 95);
-
-                layout.setText(fontMotaNganSkill1,duLieuNguoiChoi.getMotaSKill(oChiSoDangChon-6)[1]);
-                fontMotaNganSkill1.draw(batch,layout,PopupThongTinX + (PopupThongTinW - layout.width) / 2f,PopupThongTinY + PopupThongTinH - 120);
-
-                layout.setText(fontMotaNganSkill1,duLieuNguoiChoi.getMotaSKill(oChiSoDangChon-6)[2]);
-                fontMotaNganSkill1.draw(batch,layout,PopupThongTinX + (PopupThongTinW - layout.width) / 2f,PopupThongTinY + PopupThongTinH - 145);
-
-                layout.setText(fontMotaNganSkill1,duLieuNguoiChoi.getMotaSKill(oChiSoDangChon-6)[3]);
-                fontMotaNganSkill1.draw(batch,layout,PopupThongTinX + (PopupThongTinW - layout.width) / 2f,PopupThongTinY + PopupThongTinH - 170);
-
-                layout.setText(font,"____________________________________");
-                for (int i = 0; i < 2; i++) {
-                    font.draw(batch, layout, PopupThongTinX + (PopupThongTinW - layout.width) / 2f, PopupThongTinY + PopupThongTinH - 182 - i*1);
-                }
-
-                layout.setText(fontTenSkill,"Đã mở khóa skill");
-                fontTenSkill.draw(batch,layout,PopupThongTinX+(PopupThongTinW- layout.width)/2f,PopupThongTinY+PopupThongTinH-217);
-
-                for (int i = 0; i < 2; i++) {
-                    float nutX = 1 + i * 120;
-                    float nutY = y - 115;
-                    if (nutduocchon == i+1) {
-                        Texture nutVe = nutClickTimer1 > 0 ? nutvuongclick : nutvuong;
-                        batch.draw(nutVe, nutX, nutY, 114, 114);
-                    } else {
-                        batch.draw(nutvuong, nutX, nutY, 114, 114);
-                    }
-
-                    font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
-                    if (i == 0) {
-                        layout.setText(font, "Gán ô");
-                        font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 40);
-
-                        layout.setText(font, "Phím tắt");
-                        font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 68);
-                    } else {
-                        layout.setText(font, "Đóng");
-                        font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 52);
-                    }
-                }
-            } else {
-                // Mo ta skill
-                fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
-                layout.setText(fontTenSkill,duLieuNguoiChoi.getTenSkill(oChiSoDangChon-6));
-                fontTenSkill.draw(batch,layout,PopupThongTinX+(PopupThongTinW- layout.width)/2f,PopupThongTinY+PopupThongTinH-23);
-
-                layout.setText(fontMotaNganSkill,duLieuNguoiChoi.getMotaSKill(oChiSoDangChon-6)[0]);
-                fontMotaNganSkill.draw(batch,layout,PopupThongTinX+(PopupThongTinW- layout.width)/2f,PopupThongTinY+PopupThongTinH-48);
-
-                layout.setText(font,"____________________________________");
-                for (int i = 0; i < 2; i++) {
-                    font.draw(batch, layout, PopupThongTinX + (PopupThongTinW - layout.width) / 2f, PopupThongTinY + PopupThongTinH - 60 - i*1);
-                }
-
-                layout.setText(fontSkilldaco,"Chưa học");
-                fontSkilldaco.draw(batch,layout,PopupThongTinX + (PopupThongTinW - layout.width) / 2f,PopupThongTinY + PopupThongTinH - 95);
-
-                layout.setText(fontSkillchuaco1,"Để học cần đủ sức mạnh");
-                fontSkillchuaco1.draw(batch,layout,PopupThongTinX + (PopupThongTinW - layout.width) / 2f,PopupThongTinY + PopupThongTinH - 120);
-
-                layout.setText(fontMotaNganSkill,duLieuNguoiChoi.getMotaSKill(oChiSoDangChon-6)[1]);
-                fontMotaNganSkill.draw(batch,layout,PopupThongTinX + (PopupThongTinW - layout.width) / 2f,PopupThongTinY + PopupThongTinH - 145);
-
-                layout.setText(fontMotaNganSkill,duLieuNguoiChoi.getMotaSKill(oChiSoDangChon-6)[2]);
-                fontMotaNganSkill.draw(batch,layout,PopupThongTinX + (PopupThongTinW - layout.width) / 2f,PopupThongTinY + PopupThongTinH - 170);
-
-                layout.setText(fontMotaNganSkill,duLieuNguoiChoi.getMotaSKill(oChiSoDangChon-6)[3]);
-                fontMotaNganSkill.draw(batch,layout,PopupThongTinX + (PopupThongTinW - layout.width) / 2f,PopupThongTinY + PopupThongTinH - 195);
-
-                layout.setText(font,"____________________________________");
-                for (int i = 0; i < 2; i++) {
-                    font.draw(batch, layout, PopupThongTinX + (PopupThongTinW - layout.width) / 2f, PopupThongTinY + PopupThongTinH - 207 - i*1);
-                }
-
-                Texture nutVe = nutClickTimer1 > 0 ? nutvuongclick : nutvuong;
-                batch.draw(nutVe,1,y - 115, 114, 114);
-                layout.setText(font, "Đóng");
-                font.draw(batch, layout, 1 + (114 - layout.width) / 2f, y - 115 + 114 - 52);
-            }
-        }
-        batch.end();
+    void PopupThongTin(ShapeRenderer shapeRenderer, SpriteBatch batch, float x, float y , float width, float height , int oChiSoDangChon) {
+        popupThongTin.PopupThongTin(shapeRenderer,batch,x,y,width,height,oChiSoDangChon);
     }
     void PopupHanhTrang(ShapeRenderer shapeRenderer,SpriteBatch batch, float x, float y , float width , int oHanhTrangDangChon) {
         String[] chisoduoccong = {"HP", "KI", "SD", "Chí mạng","Giáp", "ST Crit", "HP", "KI", "Sức đánh", "HP", "KI", "Sức đánh", "Giảm sát thương"};
