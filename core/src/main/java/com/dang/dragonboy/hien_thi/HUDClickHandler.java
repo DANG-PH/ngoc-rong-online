@@ -30,7 +30,7 @@ public class HUDClickHandler {
         float ochatX = screenWidth - ochatW - 15;
         float ochatY = screenHeight-10-ochatH;
         if (x >= ochatX && x <= ochatX + 60 && y >= ochatY && y <= ochatY + 60) {
-            if (!veHUD.dangHienPopup) {
+            if (!veHUD.dangHienPopup && !veHUD.dangHienKhungChat) {
                 veHUD.clickOChat();
             }
         }
@@ -41,7 +41,7 @@ public class HUDClickHandler {
         float odauthanX = screenWidth - odauthanW - 10;
         float odauthanY = 10;
         if (x >= odauthanX && x <= odauthanX + 75 && y >= odauthanY && y <= odauthanY + 75) {
-            if (!veHUD.dangHienPopup) {
+            if (!veHUD.dangHienPopup && !veHUD.dangHienKhungChat) {
                 veHUD.clickODauThan();
             }
         }
@@ -52,7 +52,7 @@ public class HUDClickHandler {
             veHUD.hienPopupNhanVat();
         }
 
-        if (veHUD.dangHienPopup && !veHUD.dangHienThongBao) {
+        if (veHUD.dangHienPopup && !veHUD.dangHienThongBao && !veHUD.dangHienKhungChat) {
             if (veHUD.vuaMoPopup) {
                 veHUD.vuaMoPopup = false;
                 return;

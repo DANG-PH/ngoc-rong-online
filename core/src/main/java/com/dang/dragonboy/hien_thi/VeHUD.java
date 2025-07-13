@@ -290,20 +290,14 @@ public class VeHUD {
         shapeRenderer.rect(155, screenHeight - 80 - 5 + 50 - 25, 130 * kiPercent , 25);
         shapeRenderer.end();
 
-        // RENDER SAU ẢNH ĐẬU THẦN ( trắng )
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(1f,1f,1f, 1f);
-        shapeRenderer.rect(screenWidth - 75- 10 + 10, 10 + 10, 53 , dauThanRenderH);
-        shapeRenderer.end();
-
+        if (!dangHienKhungChat) {
+            // RENDER SAU ẢNH ĐẬU THẦN ( trắng )
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(1f, 1f, 1f, 1f);
+            shapeRenderer.rect(screenWidth - 75 - 10 + 10, 10 + 10, 53, dauThanRenderH);
+            shapeRenderer.end();
+        }
         batch.begin();
-        // ô chat (góc phải trên)
-        int ochatW = 60;
-        int ochatH = 60;
-        float ochatX = screenWidth - ochatW - 15;
-        float ochatY = screenHeight-10-ochatH;
-        Texture texOChat = (thoiGianClickOChat > 0) ? ochatclick : ochat;
-        batch.draw(texOChat, ochatX, ochatY, ochatW, ochatH);
 
         // thanh HP (góc trái trên)
         int thanhhpW = 300;
@@ -311,50 +305,74 @@ public class VeHUD {
         float hpX = 5;
         float hpY = screenHeight - thanhhpH - 5;
         batch.draw(thanhhp, hpX, hpY, thanhhpW, thanhhpH);
-        // ô đậu thần (góc phải dưới)
-        int odauthanW = 75;
-        int odauthanH = 75;
-        float odauthanX = screenWidth - odauthanW - 10;
-        float odauthanY = 10;
-        Texture texODauThan = (thoiGianClickODauThan > 0) ? odauthanclick : odauthan;
-        batch.draw(texODauThan, odauthanX, odauthanY, odauthanW, odauthanH);
 
-        // ô skill (hàng ngang phía dưới)
-        int oskillW = 50;
-        int oskillH = 50;
-        float skillBaseX = 30;
-        float skillY = 25f;
+        if (!dangHienKhungChat) {
+            // ô chat (góc phải trên)
+            int ochatW = 60;
+            int ochatH = 60;
+            float ochatX = screenWidth - ochatW - 15;
+            float ochatY = screenHeight-10-ochatH;
+            Texture texOChat = (thoiGianClickOChat > 0) ? ochatclick : ochat;
+            batch.draw(texOChat, ochatX, ochatY, ochatW, ochatH);
 
-        for (int i = 0; i < 5; i++) {
-            float x = skillBaseX + i * (65f);
-            Texture texSkill = (skillDangChon == i) ? oskillclick : oskill;
-            batch.draw(texSkill, x, skillY, oskillW, oskillH);
 
-            // icon kỹ năng
-            if (oSkills[i] != null) {
-                batch.draw(oSkills[i], x + 6.9f, skillY + 6.9f, oskillW - 13.8f, oskillH - 13.8f);
+            // ô skill (hàng ngang phía dưới)
+            int oskillW = 50;
+            int oskillH = 50;
+            float skillBaseX = 30;
+            float skillY = 25f;
+
+            for (int i = 0; i < 5; i++) {
+                float x = skillBaseX + i * (65f);
+                Texture texSkill = (skillDangChon == i) ? oskillclick : oskill;
+                batch.draw(texSkill, x, skillY, oskillW, oskillH);
+
+                // icon kỹ năng
+                if (oSkills[i] != null) {
+                    batch.draw(oSkills[i], x + 6.9f, skillY + 6.9f, oskillW - 13.8f, oskillH - 13.8f);
+                }
+
+                // số kỹ năng
+                font.setColor(Color.WHITE);
+                String text = (i + 1) + "";
+                layout.setText(font, text);
+                font.draw(batch, layout, x + (oskillW - layout.width) / 2, skillY + oskillH + 15f);
             }
 
-            // số kỹ năng
-            font.setColor(Color.WHITE);
-            String text = (i + 1) + "";
-            layout.setText(font, text);
-            font.draw(batch, layout, x + (oskillW - layout.width) / 2, skillY + oskillH + 15f);
-        }
-        // nút popup thông tin nhân vật (bên trái trên)
-        float nutpopupX = 0f;
-        float nutpopupY = screenHeight / 4f *3;
-        batch.draw(nutpopup, nutpopupX, nutpopupY, 25, 35);
+            // nút popup thông tin nhân vật (bên trái trên)
+            float nutpopupX = 0f;
+            float nutpopupY = screenHeight / 4f * 3;
+            batch.draw(nutpopup, nutpopupX, nutpopupY, 25, 35);
 
+            // ô đậu thần (góc phải dưới)
+            int odauthanW = 75;
+            int odauthanH = 75;
+            float odauthanX = screenWidth - odauthanW - 10;
+            float odauthanY = 10;
+            Texture texODauThan = (thoiGianClickODauThan > 0) ? odauthanclick : odauthan;
+            batch.draw(texODauThan, odauthanX, odauthanY, odauthanW, odauthanH);
+
+            // số đậu thần
+            font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+            layout.setText(font, duLieuNguoiChoi.getSoDauThan()+"");
+            font.draw(batch, layout, odauthanX+(odauthanW- layout.width)/2f , odauthanY + 43);
+
+        }
         // Tên nhân vật ngay ở thanhhp.png
         font.setColor(0f / 255f, 83f / 255f, 37f / 255f, 1f);
         layout.setText(font, duLieuNguoiChoi.getTen());
         font.draw(batch, layout, 5+(155- layout.width)/2f, screenHeight - 80 - 5 + 50);
 
-        // số đậu thần
-        font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
-        layout.setText(font, duLieuNguoiChoi.getSoDauThan()+"");
-        font.draw(batch, layout, odauthanX+(odauthanW- layout.width)/2f , odauthanY + 43);
+        //khung chat
+        if (dangHienKhungChat) {
+            batch.end();
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+            shapeRenderer.rect((Gdx.graphics.getWidth() - 528) / 2f - 2f, 35 -1f, 528 +4f, 149 +3f);
+            shapeRenderer.end();
+            batch.begin();
+            batch.draw(khungchat,(Gdx.graphics.getWidth() - 528) / 2f,35 , 528, 149);
+        }
 
     }
 
@@ -371,7 +389,7 @@ public class VeHUD {
         }
     }
     public void chonSkill(int index) {
-        if (index >= 0 && index < 5) {
+        if (index >= 0 && index < 5 && !dangHienKhungChat) {
             skillDangChon = index;
         }
     }
