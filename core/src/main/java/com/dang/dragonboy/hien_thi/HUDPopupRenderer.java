@@ -358,6 +358,21 @@ public class HUDPopupRenderer {
                 veHUD.PopupHanhTrang(shapeRenderer,batch, veHUD.PopupHanhTrangX, veHUD.PopupHanhTrangY ,veHUD.PopupHanhTrangW ,veHUD.hangTrangDangChon);
             }
             batch.begin();
+            if (veHUD.dangHienThongBao){
+                batch.draw(veHUD.anhThongBao, (Gdx.graphics.getWidth() - 720) / 2f, 65, 720, 175);
+                layout.setText(veHUD.fontTenSkill, "Bạn có chắc muốn hủy bỏ (mất luôn)");
+                veHUD.fontTenSkill.draw(batch, layout, (Gdx.graphics.getWidth() - layout.width) / 2, 175);
+                layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem()+" ?");
+                veHUD.fontTenSkill.draw(batch, layout, (Gdx.graphics.getWidth() - layout.width) / 2, 150);
+                float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
+                float nutY = 50;
+                batch.draw(veHUD.isThongBaoOKPressed>0 && veHUD.nutduocchon==1? veHUD.nutclick : veHUD.nutdn, nutX-81, nutY, 140, 50);
+                layout.setText(veHUD.fontTenSkill, "Có");
+                veHUD.fontTenSkill.draw(batch, layout, nutX-81 + (140 - layout.width) / 2f, nutY + 30);
+                batch.draw(veHUD.isThongBaoOKPressed>0 && veHUD.nutduocchon==2? veHUD.nutclick : veHUD.nutdn, nutX+81, nutY, 140, 50);
+                layout.setText(veHUD.fontTenSkill, "Không");
+                veHUD.fontTenSkill.draw(batch, layout, nutX+81 + (140 - layout.width) / 2f, nutY + 30);
+            }
         }
 
 

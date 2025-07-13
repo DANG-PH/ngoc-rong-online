@@ -121,6 +121,10 @@ public class VeHUD {
     public float nuthanhtrangchon = -1;
     public float nutClickTimer3 = 0;
 
+    public Texture anhThongBao,nutdn,nutclick;
+    public float isThongBaoOKPressed = 0;
+    public boolean dangHienThongBao = false;
+
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data;
         duLieuNguoiChoi.setNhanVat(nhanVat);
@@ -182,6 +186,9 @@ public class VeHUD {
         iconnoitai = new Texture("kynang/iconkynang/chung/noitai.png");
         nutvuong = new Texture("hud/giaodientrong/nutvuong.png");
         nutvuongclick = new Texture("hud/giaodientrong/nutvuongclick.png");
+        anhThongBao = new Texture("hud/giaodienngoai/chung/khungthongbao.png");
+        nutdn = new Texture("hud/giaodienngoai/chung/nutdangnhap3.png");
+        nutclick = new Texture("hud/giaodienngoai/chung/nutclick2.png");
         // Load font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -423,6 +430,19 @@ public class VeHUD {
                     DangHienPopupThongTin1 = false;
                     TimeChoHienPopup = 0;
                 } else if (nuthanhtrangchon == 2) {
+                    dangHienThongBao = true;
+                    DangHienPopupThongTin1 = false;
+                    TimeChoHienPopup = 0;
+                } else if (nuthanhtrangchon == 3) {
+                    DangHienPopupThongTin1 = false;
+                    TimeChoHienPopup = 0;
+                }
+            }
+        }
+        if (isThongBaoOKPressed>0) {
+            isThongBaoOKPressed -= Gdx.graphics.getDeltaTime();
+            if (isThongBaoOKPressed <= 0) {
+                if (nutduocchon == 1) {
                     if (hangTrangDangChon >=8 ){
                         ArrayList<Item> danhSach = duLieuNguoiChoi.getHanhTrang();
                         danhSach.remove(hangTrangDangChon-8);
@@ -437,11 +457,11 @@ public class VeHUD {
                             case 5 : xulyitem.goCaiTrang(NhanVatXuLy.getDangMacCaiTrang(),true);break;
                         }
                     }
-                    DangHienPopupThongTin1 = false;
-                    TimeChoHienPopup = 0;
-                } else if (nuthanhtrangchon == 3) {
-                    DangHienPopupThongTin1 = false;
-                    TimeChoHienPopup = 0;
+                    dangHienThongBao = false;
+                    nutduocchon = -1;
+                } else if (nutduocchon == 2) {
+                    dangHienThongBao = false;
+                    nutduocchon = -1;
                 }
             }
         }

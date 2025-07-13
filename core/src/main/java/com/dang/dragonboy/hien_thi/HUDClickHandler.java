@@ -48,7 +48,7 @@ public class HUDClickHandler {
             veHUD.hienPopupNhanVat();
         }
 
-        if (veHUD.dangHienPopup) {
+        if (veHUD.dangHienPopup && !veHUD.dangHienThongBao) {
             if (veHUD.vuaMoPopup) {
                 veHUD.vuaMoPopup = false;
                 return;
@@ -75,7 +75,7 @@ public class HUDClickHandler {
                 }
             }
         }
-        if (veHUD.dangHienPopup && veHUD.chucNangDangChon == 1 && !veHUD.DangHienPopupThongTin1) {
+        if (veHUD.dangHienPopup && veHUD.chucNangDangChon == 1 && !veHUD.DangHienPopupThongTin1 && !veHUD.dangHienThongBao) {
             if (veHUD.vanBayDau){
                 veHUD.vanbay = new Texture("vatpham/vanbay/"+"candauvan/candauvan.png");
                 nhanVat.setIdVanBay("candauvan");
@@ -230,6 +230,20 @@ public class HUDClickHandler {
                 }
             }
         }
+        // Popup bỏ vật phẩm
+        if (veHUD.dangHienThongBao) {
+            float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
+            float nutY = 50;
+            if (x >= nutX-81 && x <= nutX-81 + 140 && y >= nutY && y <= nutY + 50 ) {
+                veHUD.isThongBaoOKPressed=0.3f;
+                veHUD.nutduocchon = 1;
+            }
+            if (x >= nutX+81 && x <= nutX+81 + 140 && y >= nutY && y <= nutY + 50) {
+                veHUD.isThongBaoOKPressed=0.3f;
+                veHUD.nutduocchon = 2;
+            }
+        }
+
         // popup hanh trang
         if (veHUD.DangHienPopupThongTin1) {
             if (veHUD.vuaMoPopupThongTin) {
