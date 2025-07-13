@@ -30,7 +30,9 @@ public class HUDClickHandler {
         float ochatX = screenWidth - ochatW - 15;
         float ochatY = screenHeight-10-ochatH;
         if (x >= ochatX && x <= ochatX + 60 && y >= ochatY && y <= ochatY + 60) {
-            veHUD.clickOChat();
+            if (!veHUD.dangHienPopup) {
+                veHUD.clickOChat();
+            }
         }
 
         // === VÙNG Ô ĐẬU THẦN ===
@@ -39,7 +41,9 @@ public class HUDClickHandler {
         float odauthanX = screenWidth - odauthanW - 10;
         float odauthanY = 10;
         if (x >= odauthanX && x <= odauthanX + 75 && y >= odauthanY && y <= odauthanY + 75) {
-            veHUD.clickODauThan();
+            if (!veHUD.dangHienPopup) {
+                veHUD.clickODauThan();
+            }
         }
         // Vùng mở popup
         float nutPopupX = 0f;

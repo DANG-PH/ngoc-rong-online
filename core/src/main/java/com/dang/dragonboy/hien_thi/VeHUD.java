@@ -125,6 +125,9 @@ public class VeHUD {
     public float isThongBaoOKPressed = 0;
     public boolean dangHienThongBao = false;
 
+    public Texture khungchat,duoichat;
+    public boolean dangHienKhungChat = false;
+
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data;
         duLieuNguoiChoi.setNhanVat(nhanVat);
@@ -189,6 +192,8 @@ public class VeHUD {
         anhThongBao = new Texture("hud/giaodienngoai/chung/khungthongbao.png");
         nutdn = new Texture("hud/giaodienngoai/chung/nutdangnhap3.png");
         nutclick = new Texture("hud/giaodienngoai/chung/nutclick2.png");
+        khungchat = new Texture("hud/giaodienngoai/chung/khungchat.png");
+        duoichat = new Texture("hud/giaodienngoai/chung/duoichat.png");
         // Load font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -373,6 +378,9 @@ public class VeHUD {
     public void update(float delta) {
         if (thoiGianClickOChat > 0) {
             thoiGianClickOChat -= delta;
+            if (thoiGianClickOChat<=0){
+                dangHienKhungChat = true;
+            }
         }
         if (thoiGianClickODauThan > 0) {
             thoiGianClickODauThan -= delta;
