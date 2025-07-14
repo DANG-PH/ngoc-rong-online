@@ -130,6 +130,7 @@ public class VeHUD {
     public boolean dangHienKhungChat = false;
 
     public String tinNhanChat = "";
+    public boolean dangHienTinNhanChat = false;
 
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data;
@@ -510,26 +511,54 @@ public class VeHUD {
         if (isThongBaoOKPressed>0) {
             isThongBaoOKPressed -= Gdx.graphics.getDeltaTime();
             if (isThongBaoOKPressed <= 0) {
-                if (nutduocchon == 1) {
-                    if (hangTrangDangChon >=8 ){
-                        ArrayList<Item> danhSach = duLieuNguoiChoi.getHanhTrang();
-                        danhSach.remove(hangTrangDangChon-8);
-                    } else {
-                        switch (hangTrangDangChon){
-                            case 6 : xulyitem.goGiapLuyenTap(true);break;
-                            case 0 : xulyitem.goAo(true);break;
-                            case 1 : xulyitem.goQuan(true);break;
-                            case 2 : xulyitem.goGang(true);break;
-                            case 3 : xulyitem.goGiay(true);break;
-                            case 4 : xulyitem.goRada(true);break;
-                            case 5 : xulyitem.goCaiTrang(NhanVatXuLy.getDangMacCaiTrang(),true);break;
+                if (dangHienThongBao) {
+                    if (nutduocchon == 1) {
+                        if (hangTrangDangChon >= 8) {
+                            ArrayList<Item> danhSach = duLieuNguoiChoi.getHanhTrang();
+                            danhSach.remove(hangTrangDangChon - 8);
+                        } else {
+                            switch (hangTrangDangChon) {
+                                case 6:
+                                    xulyitem.goGiapLuyenTap(true);
+                                    break;
+                                case 0:
+                                    xulyitem.goAo(true);
+                                    break;
+                                case 1:
+                                    xulyitem.goQuan(true);
+                                    break;
+                                case 2:
+                                    xulyitem.goGang(true);
+                                    break;
+                                case 3:
+                                    xulyitem.goGiay(true);
+                                    break;
+                                case 4:
+                                    xulyitem.goRada(true);
+                                    break;
+                                case 5:
+                                    xulyitem.goCaiTrang(NhanVatXuLy.getDangMacCaiTrang(), true);
+                                    break;
+                            }
+                        }
+                        dangHienThongBao = false;
+                        nutduocchon = -1;
+                    } else if (nutduocchon == 2) {
+                        dangHienThongBao = false;
+                        nutduocchon = -1;
+                    }
+                } else if (dangHienKhungChat) {
+                    if (nutduocchon == 2){
+                        dangHienKhungChat = false;
+                        nutduocchon = -1;
+                        tinNhanChat = "";
+                    } else if (nutduocchon == 1) {
+                        if (!tinNhanChat.isEmpty()){
+                            dangHienTinNhanChat = true;
+                            dangHienKhungChat = false;
+                            nutduocchon = -1;
                         }
                     }
-                    dangHienThongBao = false;
-                    nutduocchon = -1;
-                } else if (nutduocchon == 2) {
-                    dangHienThongBao = false;
-                    nutduocchon = -1;
                 }
             }
         }

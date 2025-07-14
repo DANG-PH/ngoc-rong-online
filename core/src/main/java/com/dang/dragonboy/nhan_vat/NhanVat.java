@@ -1,15 +1,19 @@
 package com.dang.dragonboy.nhan_vat;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.Map;
 import java.util.HashMap;
-import com.dang.dragonboy.nhan_vat.van_bay.VanBayCauHinh;
 
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.dang.dragonboy.nhan_vat.van_bay.VanBayCauHinh;
+import com.dang.dragonboy.hien_thi.VeHUD;
 import java.util.List;
 import java.util.ArrayList;
 import com.dang.dragonboy.xu_ly_map.HitboxDat;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 enum TrangThai {
     DUNG_YEN,
@@ -19,6 +23,8 @@ enum TrangThai {
     BAY_NGANG
 }
 public class NhanVat {
+    private ShapeRenderer shapeRenderer;
+    private VeHUD veHUD;
     public float x, y;
     private String ten;
     public float vx = 0, vy = 0;
@@ -937,6 +943,7 @@ public class NhanVat {
         this.hanhtinh = hanhtinh;
         this.nhanvat = nhanvat;
         taiAnhVanBay("candauvan"); // tùy chọn
+        shapeRenderer = new ShapeRenderer();
     }
 
     public void fixCaiTrang
@@ -1150,6 +1157,26 @@ public class NhanVat {
         return y;
     }
 
+    public float getCao() {
+        return cao;
+    }
+
+    public float getRong() {
+        return rong;
+    }
+
+    public float getGioiHanXMax() {
+        return gioiHanXMax;
+    }
+
+    public float getGioiHanYMax() {
+        return gioiHanYMax;
+    }
+
+    public void setHUD(VeHUD hud) {
+        this.veHUD = hud;
+    }
+
     private void taiAnhVanBay(String ten) {
         this.tenVanBay = ten;
         Texture[] frames = new Texture[] {
@@ -1270,6 +1297,21 @@ public class NhanVat {
                 cloudW * flipCloud,
                 cloudH
             );
+        }
+        if (veHUD.dangHienTinNhanChat) {
+            batch.end();
+            shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(1, 1, 1, 1);
+            shapeRenderer.rect(x+(rong-200)/2f, y+cao+40, 200, 75);
+            shapeRenderer.end();
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            shapeRenderer.setColor(Color.BLACK);
+            for (int i = 0; i < 2; i++) {
+                shapeRenderer.rect(x+(rong-200)/2f - i, y+cao+40 - i, 200 + i * 2, 75 + i * 2);
+            }
+            shapeRenderer.end();
+            batch.begin();
         }
     }
     public static DoLechModular layLech(Map<TrangThai, List<DoLechModular>> map, TrangThai trangThai, int frameIndex) {

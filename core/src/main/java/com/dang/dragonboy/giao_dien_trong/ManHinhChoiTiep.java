@@ -187,6 +187,7 @@ public class ManHinhChoiTiep implements Screen {
         nhanVat.doiVanBay("candauvan");
         nhanVat.setTen(tenNhanVat); // set tên nhân vật trong nhanvat.java
         hudRenderer.setNhanVat(nhanVat);// load cái này để đổi avt theo ct
+        nhanVat.setHUD(hudRenderer);
         // load du lieu nguoi dung
         int[] capSkill = new int[9];
         for (int i = 0; i < 9; i++) {
