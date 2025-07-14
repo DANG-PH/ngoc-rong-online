@@ -49,7 +49,9 @@ public class HUDClickHandler {
         float nutPopupX = 0f;
         float nutPopupY = screenHeight / 4f * 3;
         if (x >= nutPopupX && x <= nutPopupX + 25 && y >= nutPopupY && y <= nutPopupY + 35) {
-            veHUD.hienPopupNhanVat();
+            if (!veHUD.dangHienKhungChat) {
+                veHUD.hienPopupNhanVat();
+            }
         }
 
         if (veHUD.dangHienPopup && !veHUD.dangHienThongBao && !veHUD.dangHienKhungChat) {
@@ -382,6 +384,18 @@ public class HUDClickHandler {
                         veHUD.nutduocchon = i;
                     }
                 }
+            }
+        }
+        if (veHUD.dangHienKhungChat) {
+            float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
+            float nutY = 12;
+            if (x >= nutX-81 && x <= nutX-81 + 140 && y >= nutY && y <= nutY + 50 ) {
+                veHUD.isThongBaoOKPressed=0.3f;
+                veHUD.nutduocchon = 1;
+            }
+            if (x >= nutX+81 && x <= nutX+81 + 140 && y >= nutY && y <= nutY + 50) {
+                veHUD.isThongBaoOKPressed=0.3f;
+                veHUD.nutduocchon = 2;
             }
         }
     }

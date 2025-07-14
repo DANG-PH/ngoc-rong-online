@@ -87,4 +87,19 @@ public class ThaoTac extends InputAdapter {
         }
         return false;
     }
+    @Override
+    public boolean keyTyped(char character) {
+        if (hud.dangHienKhungChat) {
+            if (character == '\b') {
+                if (!hud.tinNhanChat.isEmpty()) {
+                    hud.tinNhanChat = hud.tinNhanChat.substring(0, hud.tinNhanChat.length() - 1);
+                }
+            } else if (Character.toString(character).matches("[a-zA-Z0-9 ]")) {
+                if (hud.tinNhanChat.length() < 100) {
+                    hud.tinNhanChat += character;
+                }
+            }
+        }
+        return true;
+    }
 }

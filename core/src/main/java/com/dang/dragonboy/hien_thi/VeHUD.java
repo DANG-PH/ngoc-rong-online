@@ -1,6 +1,7 @@
 package com.dang.dragonboy.hien_thi;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -38,7 +39,7 @@ public class VeHUD {
     public Texture oskill, oskillclick;
     public Texture nutpopup;
 
-    public BitmapFont font,fontChucnang,fontDauThan,fontNhiemVu,fontNhiemVu1,fontNhiemVuChuaLam,fontMotaNhiemVu,fontvangngoc,fontsm,fontSkilldaco,fontSkillchuaco,fontMotaSkill,fontCapSKill,fontMotaNoiTai,fontTiemNang ,fontTenSkill,fontMotaNganSkill,fontMotaNganSkill1,fontSkillchuaco1,fontMotaHanhTrang,fontMotaHanhTrang1 ;
+    public BitmapFont font,fontChucnang,fontDauThan,fontNhiemVu,fontNhiemVu1,fontNhiemVuChuaLam,fontMotaNhiemVu,fontvangngoc,fontsm,fontSkilldaco,fontSkillchuaco,fontMotaSkill,fontCapSKill,fontMotaNoiTai,fontTiemNang ,fontTenSkill,fontMotaNganSkill,fontMotaNganSkill1,fontSkillchuaco1,fontMotaHanhTrang,fontMotaHanhTrang1,fontText ;
     private GlyphLayout layout;
 
     public SkillIcon[] skillIcons;
@@ -128,6 +129,8 @@ public class VeHUD {
     public Texture khungchat,duoichat;
     public boolean dangHienKhungChat = false;
 
+    public String tinNhanChat = "";
+
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data;
         duLieuNguoiChoi.setNhanVat(nhanVat);
@@ -201,6 +204,7 @@ public class VeHUD {
             "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ";
         param.size = 18;
         font = generator.generateFont(param);
+        fontText = generator.generateFont(param);
         param.size = 19;
         fontTenSkill = generator.generateFont(param);
         param.color = (new Color(0.4118f, 0.4588f, 0.9137f, 1f));
@@ -372,8 +376,46 @@ public class VeHUD {
             shapeRenderer.end();
             batch.begin();
             batch.draw(khungchat,(Gdx.graphics.getWidth() - 528) / 2f,35 , 528, 149);
-        }
+            float nX = (Gdx.graphics.getWidth() - 140) / 2f;
+            float nutY = 12;
+            fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+            batch.draw(isThongBaoOKPressed>0 && nutduocchon==1? nutclick : nutdn, nX-81, nutY, 140, 48);
+            layout.setText(fontTenSkill, "OK");
+            fontTenSkill.draw(batch, layout, nX-81 + (140 - layout.width) / 2f, nutY + 29);
+            batch.draw(isThongBaoOKPressed>0 && nutduocchon==2? nutclick : nutdn, nX+81, nutY, 140, 48);
+            layout.setText(fontTenSkill, "Đóng");
+            fontTenSkill.draw(batch, layout, nX+81 + (140 - layout.width) / 2f, nutY + 29);
 
+            fontTenSkill.setColor(0f / 255f, 85f / 255f, 38f / 255f, 1f);
+            layout.setText(fontTenSkill, "Chat");
+            fontTenSkill.draw(batch, layout, (Gdx.graphics.getWidth() - 528) / 2f + 15, 35 + 115);
+
+            // Các thông số
+            float khungX = (Gdx.graphics.getWidth() - 528) / 2f + 25;
+            float khungY = 35;
+            float khungWidth = 465;
+            float khungHeight = 68;
+
+            if (tinNhanChat.isEmpty()) {
+                fontText.setColor(1.0f, 0.956f, 0.863f, 1f);
+                layout.setText(fontText, "chat");
+            } else {
+                fontText.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1f);
+                layout.setText(fontText, tinNhanChat);
+            }
+            float textWidth = layout.width;
+            float offsetX = 0;
+
+            if (textWidth > khungWidth) {
+                offsetX = textWidth - khungWidth;
+            }
+            batch.flush();
+            Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
+            Gdx.gl.glScissor((int) khungX, (int) khungY, (int) khungWidth, (int) khungHeight);
+            fontText.draw(batch, layout, khungX - offsetX, khungY + khungHeight );
+            batch.flush();
+            Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
+        }
     }
 
     public void clickOChat() {
