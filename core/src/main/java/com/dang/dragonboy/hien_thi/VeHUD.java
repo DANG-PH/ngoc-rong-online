@@ -131,6 +131,7 @@ public class VeHUD {
 
     public String tinNhanChat = "";
     public boolean dangHienTinNhanChat = false;
+    public float timeHienTinNhan = 0;
 
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data;
@@ -206,8 +207,6 @@ public class VeHUD {
         param.size = 18;
         font = generator.generateFont(param);
         fontText = generator.generateFont(param);
-        param.size = 14;
-        fontchat = generator.generateFont(param);
         param.size = 19;
         fontTenSkill = generator.generateFont(param);
         param.color = (new Color(0.4118f, 0.4588f, 0.9137f, 1f));
@@ -234,6 +233,7 @@ public class VeHUD {
         param3.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
             "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ";
         param3.size = 14;
+        fontchat = generator3.generateFont(param3);
         param3.color = new Color(94 / 255f, 86 / 255f, 74 / 255f, 1f);
         fontChucnang = generator3.generateFont(param3);
         param3.size = 16;
@@ -439,10 +439,20 @@ public class VeHUD {
         }
     }
     public void update(float delta) {
+        if (dangHienTinNhanChat) {
+            timeHienTinNhan += delta;
+            if (timeHienTinNhan >= 3f) {
+                dangHienTinNhanChat = false;
+                timeHienTinNhan = 0;
+                tinNhanChat = "";
+            }
+        }
         if (thoiGianClickOChat > 0) {
             thoiGianClickOChat -= delta;
             if (thoiGianClickOChat<=0){
-                dangHienKhungChat = true;
+                if (!dangHienTinNhanChat) {
+                    dangHienKhungChat = true;
+                }
             }
         }
         if (thoiGianClickODauThan > 0) {
