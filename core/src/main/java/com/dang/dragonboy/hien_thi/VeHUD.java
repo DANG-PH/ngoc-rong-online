@@ -39,7 +39,7 @@ public class VeHUD {
     public Texture oskill, oskillclick;
     public Texture nutpopup;
 
-    public BitmapFont font,fontChucnang,fontDauThan,fontNhiemVu,fontNhiemVu1,fontNhiemVuChuaLam,fontMotaNhiemVu,fontvangngoc,fontsm,fontSkilldaco,fontSkillchuaco,fontMotaSkill,fontCapSKill,fontMotaNoiTai,fontTiemNang ,fontTenSkill,fontMotaNganSkill,fontMotaNganSkill1,fontSkillchuaco1,fontMotaHanhTrang,fontMotaHanhTrang1,fontText ;
+    public BitmapFont font,fontChucnang,fontDauThan,fontNhiemVu,fontNhiemVu1,fontNhiemVuChuaLam,fontMotaNhiemVu,fontvangngoc,fontsm,fontSkilldaco,fontSkillchuaco,fontMotaSkill,fontCapSKill,fontMotaNoiTai,fontTiemNang ,fontTenSkill,fontchat,fontMotaNganSkill,fontMotaNganSkill1,fontSkillchuaco1,fontMotaHanhTrang,fontMotaHanhTrang1,fontText ;
     private GlyphLayout layout;
 
     public SkillIcon[] skillIcons;
@@ -206,6 +206,8 @@ public class VeHUD {
         param.size = 18;
         font = generator.generateFont(param);
         fontText = generator.generateFont(param);
+        param.size = 14;
+        fontchat = generator.generateFont(param);
         param.size = 19;
         fontTenSkill = generator.generateFont(param);
         param.color = (new Color(0.4118f, 0.4588f, 0.9137f, 1f));
