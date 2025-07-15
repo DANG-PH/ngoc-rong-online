@@ -103,6 +103,7 @@ public class HUDPopupThongTin {
                 veHUD.fontCapSKill.draw(batch,layout,veHUD.PopupThongTinX+(veHUD.PopupThongTinW- layout.width)/2f,veHUD.PopupThongTinY+33);
                 Texture nutVe = veHUD.nutClickTimer > 0 ? veHUD.nutvuongclick : veHUD.nutvuong;
                 batch.draw(nutVe,1,y - 115, 114, 114);
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
                 layout.setText(veHUD.font, "Tăng");
                 veHUD.font.draw(batch, layout, 1 + (114 - layout.width) / 2f, y - 115 + 114 - 30);
                 layout.setText(veHUD.font, "1 Crit");

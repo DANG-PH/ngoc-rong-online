@@ -485,6 +485,7 @@ public class HUDPopupRenderer {
                     else {
                         batch.draw(veHUD.nutvuong , 210 + i * 120, 5, 114, 114);
                     }
+                    veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
                     layout.setText(veHUD.font,"Vào");
                     veHUD.font.draw(batch,layout,210 + i * 120+(114- layout.width)/2f,5+114-40);
                     layout.setText(veHUD.font,"phím "+(i+1));
