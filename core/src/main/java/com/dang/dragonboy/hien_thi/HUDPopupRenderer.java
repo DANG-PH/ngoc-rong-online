@@ -1,6 +1,7 @@
 package com.dang.dragonboy.hien_thi;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -497,9 +498,63 @@ public class HUDPopupRenderer {
             layout.setText(veHUD.fontNhiemVu,"Bang hội đang phát triển!");
             veHUD.fontNhiemVu.draw(batch,layout,0+(350- layout.width)/2f,420);
         }
-        if (veHUD.chucNangDangChon == 4){
-            layout.setText(veHUD.fontNhiemVu,"Chức năng đang phát triển!");
-            veHUD.fontNhiemVu.draw(batch,layout,0+(350- layout.width)/2f,420);
+        if (veHUD.chucNangDangChon == 4 && !veHUD.dangHienGioiThieuGame){
+            String[] chucNang = {"Giới thiệu game","Mini game","Thông báo","Đệ tử","Đổi cờ","Đổi khu vực","Chat thế giới","Tài khoản","Đổi tài khoản"};
+            float viewY = 35;
+            float viewHeight = 444 - 35;
+            int KhoangCachO = 49;
+            batch.flush();
+            Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
+            Gdx.gl.glScissor(0, (int)viewY, 350, (int)viewHeight);
+            float totalHeight = 9 * KhoangCachO;
+            veHUD.maxScroll = Math.max(0, totalHeight - viewHeight);
+            float startY = viewY + viewHeight - KhoangCachO + veHUD.scrollY;
+            for (int i = 0; i < 9; i++) {
+                float y = startY - i * KhoangCachO;
+                Texture tex = (veHUD.oChiSoDangChon == i) ? veHUD.o_chi_so_co_ban_click : veHUD.o_chi_so_co_ban;
+                batch.draw(tex, 3, y, 344, 50);
+                veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.fontTenSkill,chucNang[i]);
+                veHUD.fontTenSkill.draw(batch,layout,3+(344-layout.width)/2f,y+ (48-layout.height)/2f+ layout.height);
+            }
+            batch.flush();
+            Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
+        }
+        if (veHUD.chucNangDangChon == 4 && veHUD.dangHienGioiThieuGame) {
+            float viewY = 35;
+            float viewHeight = 444 - 35;
+            batch.flush();
+            Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
+            Gdx.gl.glScissor(0, (int)viewY, 350, (int)viewHeight);
+            batch.draw(new Texture("hud/giaodienngoai/chung/icon128_1.png"),(350-115)/2f,444-115-20 + veHUD.scrollY,115,115);
+            layout.setText(
+                veHUD.font,
+                "Xin chào mọi người!\n" +
+                    "Chúng mình là Phạm Hải Đăng và Lê Đình Thành, hai sinh viên sắp bước sang năm 2 tại Học viện Công nghệ Bưu chính Viễn thông (PTIT).\n" +
+                    "\n" +
+                    "Trong thời gian rảnh, tụi mình đã cùng nhau thực hiện một dự án nhỏ — game clone Ngọc Rồng Online (Dragon Boy) — nhằm ôn lại tuổi thơ và thử sức với lập trình game từ con số 0.\n" +
+                    "\n" +
+                    "Game được phát triển bằng Java & LibGDX, với mong muốn tái hiện lại không khí săn đệ, đập sao pha lê, đi doanh trại, và những ngày vui chơi đầy kỷ niệm mà ai từng chơi Ngọc Rồng Online chắc hẳn sẽ nhớ mãi.\n" +
+                    "\n" +
+                    "Dự án vẫn đang được hoàn thiện và tiếp tục bổ sung thêm nhiều nội dung mới.\n" +
+                    "Rất mong nhận được sự ủng hộ và góp ý từ mọi người!\n" +
+                    "\n" +
+                    "Liên hệ:\n" +
+                    " Phạm Hải Đăng — dangph.ptit@gmail.com\n" +
+                    " Lê Đình Thành — thanhld.ptit@gmail.com",
+                new Color(83 / 255f, 41 / 255f, 5 / 255f, 1),
+                320,
+                Align.left,
+                true
+            );
+            float h = layout.height;
+            veHUD.font.draw(batch,layout,15,444-115-20-20 + veHUD.scrollY);
+            veHUD.maxScroll = Math.max(0, layout.height + 115 + 50 + 70 - viewHeight);
+            batch.draw(veHUD.isThongBaoOKPressed>0? veHUD.nutclick : veHUD.nutdn, (350-140)/2f, 444-115-20-20-70 - h + veHUD.scrollY, 140, 50);
+            layout.setText(veHUD.fontTenSkill, "Nhận quà");
+            veHUD.fontTenSkill.draw(batch, layout, (350-140)/2f + (140 - layout.width) / 2f, 444-115-20-20-70 -h + 30 +  veHUD.scrollY);
+            batch.flush();
+            Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
         }
     }
 }

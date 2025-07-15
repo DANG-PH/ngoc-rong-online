@@ -585,6 +585,7 @@ public class HUDPopupHanhTrang {
                 } else {
                     batch.draw(veHUD.nutvuong, nutX, nutY, 114, 114);
                 }
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
                 layout.setText(veHUD.font, "Đóng");
                 veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 52);
             }

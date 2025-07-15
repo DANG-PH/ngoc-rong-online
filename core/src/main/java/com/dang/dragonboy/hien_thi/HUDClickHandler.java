@@ -1,7 +1,10 @@
 package com.dang.dragonboy.hien_thi;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.utils.Align;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.item.Item;
@@ -10,11 +13,13 @@ import java.util.ArrayList;
 
 public class HUDClickHandler {
     private final VeHUD veHUD;
+    private GlyphLayout layout;
     private final DuLieuNguoiChoi duLieuNguoiChoi;
     private final NhanVat nhanVat;
     public Texture nutX;
     public HUDClickHandler(VeHUD veHUD, DuLieuNguoiChoi duLieuNguoiChoi, NhanVat nhanVat ) {
         this.veHUD = veHUD;
+        layout = new GlyphLayout();
         this.duLieuNguoiChoi = duLieuNguoiChoi;
         this.nhanVat = nhanVat;
         nutX = new Texture("hud/giaodientrong/nutX.png");
@@ -65,19 +70,34 @@ public class HUDClickHandler {
             float nutXX = 350 - nutXW - 6;
             float nutXY = 610 - nutXH - 2;
             if (x >= nutXX && x <= nutXX + nutXW && y >= nutXY && y <= nutXY + nutXH) {
-                veHUD.tatPopupNhanVat();
-                veHUD.hangTrangDangChon = -1;
-                veHUD.oChiSoDangChon = -1;
+                if (veHUD.dangHienGioiThieuGame) {
+                    veHUD.dangHienGioiThieuGame = false;
+                    veHUD.scrollY = 0;
+                    veHUD.oChiSoDangChon = -1;
+                } else {
+                    veHUD.tatPopupNhanVat();
+                    veHUD.hangTrangDangChon = -1;
+                    veHUD.oChiSoDangChon = -1;
+                }
             } else if (x > 350 && x <= 1020 && !veHUD.DangHienPopupThongTin && !veHUD.HienPopUpGanSkill && !veHUD.DangHienPopupThongTin1) {
-                veHUD.tatPopupNhanVat();
-                veHUD.hangTrangDangChon = -1;
-                veHUD.oChiSoDangChon = -1;
+                if (veHUD.dangHienGioiThieuGame) {
+                    veHUD.dangHienGioiThieuGame = false;
+                    veHUD.scrollY = 0;
+                    veHUD.oChiSoDangChon = -1;
+                } else {
+                    veHUD.tatPopupNhanVat();
+                    veHUD.hangTrangDangChon = -1;
+                    veHUD.oChiSoDangChon = -1;
+                }
             }
             // cac nut chuc nang
             for (int i = 0; i < 5; i++) {
                 if (x >= 2+i*68+3 && x <= 2+i*68+3 + 68 && y >= 450 && y <= 450 + 52){
                     veHUD.chucNangDangChon=i;
                     veHUD.scrollY = 0;
+                    veHUD.oChiSoDangChon = -1;
+                    veHUD.hangTrangDangChon = -1;
+                    veHUD.dangHienGioiThieuGame = false;
                 }
             }
         }
@@ -233,6 +253,60 @@ public class HUDClickHandler {
                         }
                         veHUD.vuaMoPopupThongTin = true;
                     }
+                }
+            }
+        }
+        if (veHUD.dangHienPopup && veHUD.chucNangDangChon == 4) {
+            float viewY = 35;
+            float viewHeight = 444 - 35;
+            int KhoangCachItem = 49;
+            int tongSoO = 10;
+
+            // Kiểm tra có click vào vùng không
+            if (x >= 3 && x <= 3 + 344 && y >= viewY && y <= viewY + viewHeight) {
+                // Tính tọa độ tương đối trong khung scroll
+                float relativeY = y - viewY;
+
+                // Tính vị trí click từ đỉnh danh sách cuộn
+                float realY = veHUD.scrollY + (viewHeight - relativeY);
+
+                int index = (int)(realY / KhoangCachItem);
+
+                if (index >= 0 && index < tongSoO) {
+                    veHUD.oChiSoDangChon = index;
+                    veHUD.timeDoTre = 0.3f;
+                }
+            }
+        }
+        if (veHUD.dangHienGioiThieuGame) {
+            float viewY = 35;
+            float viewHeight = 444 - 35;
+            if (x >= (350-140)/2f && x <= (350-140)/2f + 140 && y >= viewY && y <= viewY + viewHeight) {
+                layout.setText(
+                    veHUD.font,
+                    "Xin chào mọi người!\n" +
+                        "Chúng mình là Phạm Hải Đăng và Lê Đình Thành, hai sinh viên sắp bước sang năm 2 tại Học viện Công nghệ Bưu chính Viễn thông (PTIT).\n" +
+                        "\n" +
+                        "Trong thời gian rảnh, tụi mình đã cùng nhau thực hiện một dự án nhỏ — game clone Ngọc Rồng Online (Dragon Boy) — nhằm ôn lại tuổi thơ và thử sức với lập trình game từ con số 0.\n" +
+                        "\n" +
+                        "Game được phát triển bằng Java & LibGDX, với mong muốn tái hiện lại không khí săn đệ, đập sao pha lê, đi doanh trại, và những ngày vui chơi đầy kỷ niệm mà ai từng chơi Ngọc Rồng Online chắc hẳn sẽ nhớ mãi.\n" +
+                        "\n" +
+                        "Dự án vẫn đang được hoàn thiện và tiếp tục bổ sung thêm nhiều nội dung mới.\n" +
+                        "Rất mong nhận được sự ủng hộ và góp ý từ mọi người!\n" +
+                        "\n" +
+                        "Liên hệ:\n" +
+                        " Phạm Hải Đăng — dangph.ptit@gmail.com\n" +
+                        " Lê Đình Thành — thanhld.ptit@gmail.com",
+                    new Color(83 / 255f, 41 / 255f, 5 / 255f, 1),
+                    320,
+                    Align.left,
+                    true
+                );
+                float h = layout.height;
+                float nutY = 444-115-20-20-70 - h + veHUD.scrollY;
+                if (y >= nutY && y <= nutY + 50 &&
+                    x >= (350-140)/2f && x <= (350-140)/2f + 140) {
+                    veHUD.isThongBaoOKPressed = 0.3f;
                 }
             }
         }

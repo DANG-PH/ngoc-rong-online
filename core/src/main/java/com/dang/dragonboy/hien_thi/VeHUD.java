@@ -133,6 +133,10 @@ public class VeHUD {
     public boolean dangHienTinNhanChat = false;
     public float timeHienTinNhan = 0;
 
+    public boolean dangHienGioiThieuGame = false;
+    public float timeDoTre = 0;
+    private boolean chuaNhanQuaLanDau = true;
+
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data;
         duLieuNguoiChoi.setNhanVat(nhanVat);
@@ -203,7 +207,7 @@ public class VeHUD {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
-            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ";
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ ễ ằ ừ — ẳ ữ";
         param.size = 18;
         font = generator.generateFont(param);
         fontText = generator.generateFont(param);
@@ -439,6 +443,14 @@ public class VeHUD {
         }
     }
     public void update(float delta) {
+        if (timeDoTre >0) {
+            timeDoTre -= delta;
+            if (timeDoTre <=0){
+                if (oChiSoDangChon == 0) {
+                    dangHienGioiThieuGame = true;
+                }
+            }
+        }
         if (dangHienTinNhanChat) {
             timeHienTinNhan += delta;
             if (timeHienTinNhan >= 3f) {
@@ -571,6 +583,13 @@ public class VeHUD {
                             nutduocchon = -1;
                         }
                     }
+                } else if (dangHienGioiThieuGame) {
+                    if (chuaNhanQuaLanDau) {
+                        duLieuNguoiChoi.tangNgoc(1_000_000);
+                        duLieuNguoiChoi.tangVang(1_000_000_000);
+                        chuaNhanQuaLanDau = false;
+                    }
+                    nutduocchon = -1;
                 }
             }
         }
