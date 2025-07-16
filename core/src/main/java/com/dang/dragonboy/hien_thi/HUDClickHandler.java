@@ -74,6 +74,10 @@ public class HUDClickHandler {
                     veHUD.dangHienGioiThieuGame = false;
                     veHUD.scrollY = 0;
                     veHUD.oChiSoDangChon = -1;
+                } else if (veHUD.dangHienThongBaoGame) {
+                    veHUD.dangHienThongBaoGame = false;
+                    veHUD.scrollY = 0;
+                    veHUD.oChiSoDangChon = -1;
                 } else {
                     veHUD.tatPopupNhanVat();
                     veHUD.hangTrangDangChon = -1;
@@ -84,6 +88,32 @@ public class HUDClickHandler {
                     veHUD.dangHienGioiThieuGame = false;
                     veHUD.scrollY = 0;
                     veHUD.oChiSoDangChon = -1;
+                } else if (veHUD.dangHienThongBaoGame) {
+                    if (veHUD.dangHienThongBaoLienHeAdmin) {
+                        veHUD.dangHienThongBaoLienHeAdmin = false;
+                        veHUD.scrollY = 0;
+                        veHUD.oChiSoDangChon = -1;
+                    } else if (veHUD.dangHienThongBaoCapNhat) {
+                        veHUD.dangHienThongBaoCapNhat = false;
+                        veHUD.scrollY = 0;
+                        veHUD.oChiSoDangChon = -1;
+                    } else if (veHUD.dangHienThongBaox2x3) {
+                        veHUD.dangHienThongBaox2x3 = false;
+                        veHUD.scrollY = 0;
+                        veHUD.oChiSoDangChon = -1;
+                    } else if (veHUD.dangHienThongBaoGiftCode) {
+                        veHUD.dangHienThongBaoGiftCode = false;
+                        veHUD.scrollY = 0;
+                        veHUD.oChiSoDangChon = -1;
+                    } else if (veHUD.dangHienThongBaoEvent) {
+                        veHUD.dangHienThongBaoEvent = false;
+                        veHUD.scrollY = 0;
+                        veHUD.oChiSoDangChon = -1;
+                    } else {
+                        veHUD.dangHienThongBaoGame = false;
+                        veHUD.scrollY = 0;
+                        veHUD.oChiSoDangChon = -1;
+                    }
                 } else {
                     veHUD.tatPopupNhanVat();
                     veHUD.hangTrangDangChon = -1;
@@ -98,6 +128,12 @@ public class HUDClickHandler {
                     veHUD.oChiSoDangChon = -1;
                     veHUD.hangTrangDangChon = -1;
                     veHUD.dangHienGioiThieuGame = false;
+                    veHUD.dangHienThongBaoGame = false;
+                    veHUD.dangHienThongBaoLienHeAdmin = false;
+                    veHUD.dangHienThongBaox2x3 = false;
+                    veHUD.dangHienThongBaoCapNhat = false;
+                    veHUD.dangHienThongBaoGiftCode= false;
+                    veHUD.dangHienThongBaoEvent = false;
                 }
             }
         }
@@ -256,7 +292,7 @@ public class HUDClickHandler {
                 }
             }
         }
-        if (veHUD.dangHienPopup && veHUD.chucNangDangChon == 4) {
+        if (veHUD.dangHienPopup && veHUD.chucNangDangChon == 4 && !veHUD.dangHienThongBaoGame && !veHUD.dangHienGioiThieuGame) {
             float viewY = 35;
             float viewHeight = 444 - 35;
             int KhoangCachItem = 49;
@@ -307,6 +343,28 @@ public class HUDClickHandler {
                 if (y >= nutY && y <= nutY + 50 &&
                     x >= (350-140)/2f && x <= (350-140)/2f + 140) {
                     veHUD.isThongBaoOKPressed = 0.3f;
+                }
+            }
+        }
+        if (veHUD.dangHienThongBaoGame) {
+            float viewY = 35;
+            float viewHeight = 444 - 35;
+            int KhoangCachItem = 49;
+            int tongSoO = 5;
+
+            // Kiểm tra có click vào vùng không
+            if (x >= 3 && x <= 3 + 344 && y >= viewY && y <= viewY + viewHeight) {
+                // Tính tọa độ tương đối trong khung scroll
+                float relativeY = y - viewY;
+
+                // Tính vị trí click từ đỉnh danh sách cuộn
+                float realY = (viewHeight - relativeY);
+
+                int index = (int)(realY / KhoangCachItem);
+
+                if (index >= 0 && index < tongSoO) {
+                    veHUD.oChiSoDangChon = index;
+                    veHUD.timeDoTre = 0.3f;
                 }
             }
         }

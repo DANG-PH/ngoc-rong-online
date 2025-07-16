@@ -137,6 +137,13 @@ public class VeHUD {
     public float timeDoTre = 0;
     private boolean chuaNhanQuaLanDau = true;
 
+    public boolean dangHienThongBaoGame = false;
+    public boolean dangHienThongBaoLienHeAdmin = false;
+    public boolean dangHienThongBaoCapNhat = false;
+    public boolean dangHienThongBaox2x3 = false;
+    public boolean dangHienThongBaoGiftCode = false;
+    public boolean dangHienThongBaoEvent = false;
+
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data;
         duLieuNguoiChoi.setNhanVat(nhanVat);
@@ -207,7 +214,7 @@ public class VeHUD {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
-            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ ễ ằ ừ — ẳ ữ";
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ ễ ằ ừ — ẳ ữ ỗ";
         param.size = 18;
         font = generator.generateFont(param);
         fontText = generator.generateFont(param);
@@ -446,9 +453,22 @@ public class VeHUD {
         if (timeDoTre >0) {
             timeDoTre -= delta;
             if (timeDoTre <=0){
-                if (oChiSoDangChon == 0) {
-                    dangHienGioiThieuGame = true;
+                if (dangHienThongBaoGame) {
+                    switch (oChiSoDangChon) {
+                        case 0 -> dangHienThongBaoLienHeAdmin = true;
+                        case 1 -> dangHienThongBaoCapNhat = true;
+                        case 2 -> dangHienThongBaox2x3 = true;
+                        case 3 -> dangHienThongBaoGiftCode = true;
+                        case 4 -> dangHienThongBaoEvent = true;
+                    }
+                } else {
+                    if (oChiSoDangChon == 0) {
+                        dangHienGioiThieuGame = true;
+                    } else if (oChiSoDangChon == 2) {
+                        dangHienThongBaoGame = true;
+                    }
                 }
+                oChiSoDangChon = -1;
             }
         }
         if (dangHienTinNhanChat) {

@@ -498,7 +498,7 @@ public class HUDPopupRenderer {
             layout.setText(veHUD.fontNhiemVu,"Bang hội đang phát triển!");
             veHUD.fontNhiemVu.draw(batch,layout,0+(350- layout.width)/2f,420);
         }
-        if (veHUD.chucNangDangChon == 4 && !veHUD.dangHienGioiThieuGame){
+        if (veHUD.chucNangDangChon == 4 && !veHUD.dangHienGioiThieuGame && !veHUD.dangHienThongBaoGame){
             String[] chucNang = {"Giới thiệu game","Mini game","Thông báo","Đệ tử","Đổi cờ","Đổi khu vực","Chat thế giới","Tài khoản","Đổi tài khoản"};
             float viewY = 35;
             float viewHeight = 444 - 35;
@@ -553,6 +553,145 @@ public class HUDPopupRenderer {
             batch.draw(veHUD.isThongBaoOKPressed>0? veHUD.nutclick : veHUD.nutdn, (350-140)/2f, 444-115-20-20-70 - h + veHUD.scrollY, 140, 50);
             layout.setText(veHUD.fontTenSkill, "Nhận quà");
             veHUD.fontTenSkill.draw(batch, layout, (350-140)/2f + (140 - layout.width) / 2f, 444-115-20-20-70 -h + 30 +  veHUD.scrollY);
+            batch.flush();
+            Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
+        }
+        if (veHUD.chucNangDangChon == 4 && veHUD.dangHienThongBaoGame && !veHUD.dangHienThongBaoLienHeAdmin && !veHUD.dangHienThongBaoEvent && !veHUD.dangHienThongBaoCapNhat && !veHUD.dangHienThongBaoGiftCode && !veHUD.dangHienThongBaox2x3) {
+            String[] chucNang = {"Liên hệ ADMIN","Thông báo cập nhật","Thông báo x2, x3 EXP","Giftcode tân thủ","Event Sắp tới"};
+            float viewY = 35;
+            float viewHeight = 444 - 35;
+            int KhoangCachO = 49;
+            float startY = viewY + viewHeight - KhoangCachO;
+            for (int i = 0; i < 5; i++) {
+                float y = startY - i * KhoangCachO;
+                Texture tex = (veHUD.oChiSoDangChon == i) ? veHUD.o_chi_so_co_ban_click : veHUD.o_chi_so_co_ban;
+                batch.draw(tex, 3, y, 344, 50);
+                veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.fontTenSkill,chucNang[i]);
+                veHUD.fontTenSkill.draw(batch,layout,3+(344-layout.width)/2f,y+ (48-layout.height)/2f+ layout.height);
+            }
+        }
+        if (veHUD.chucNangDangChon == 4 && veHUD.dangHienThongBaoGame && veHUD.dangHienThongBaoLienHeAdmin) {
+            float viewY = 35;
+            float viewHeight = 444 - 35;
+            batch.flush();
+            Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
+            Gdx.gl.glScissor(0, (int)viewY, 350, (int)viewHeight);
+            batch.draw(new Texture("hud/giaodienngoai/chung/logogame4.png"),(350-112)/2f,444-53-20 + veHUD.scrollY,112,53);
+            layout.setText(
+                veHUD.font,
+                "Liên hệ Admin:\n" +
+                    "Phạm Hải Đăng — dangph.ptit@gmail.com\n" +
+                    "Lê Đình Thành — thanhld.ptit@gmail.com\n" +
+                    "\n" +
+                    "1, GitHub:\n" +
+                    " - github.com/DANG-PH\n" +
+                    " - github.com/lethanh23456\n" +
+                    "\n" +
+                    "2, Facebook:\n" +
+                    " - fb.com/danghaipham\n" +
+                    " - fb.com/thanh.le.326563\n" +
+                    "\n" +
+                    "3, LinkedIn:\n" +
+                    " - linkedin.com/in/danghaipham\n" +
+                    " - linkedin.com/in/ledinhthanh\n" +
+                    "\n" +
+                    "Hotline hỗ trợ: 0396.436.954 (8h - 22h hàng ngày)\n" +
+                    "Trang chủ dự án: chienbinhrongthieng.online\n" +
+                    "Fanpage: fb.com/profile.php?id=61576541835732\n" +
+                    "Zalo hỗ trợ: 0396.436.954\n",
+                new Color(83 / 255f, 41 / 255f, 5 / 255f, 1),
+                320,
+                Align.left,
+                true
+            );
+            float h = layout.height;
+            veHUD.font.draw(batch,layout,15,444-53-20-20 + veHUD.scrollY);
+            veHUD.maxScroll = Math.max(0, h + 53 + 30- viewHeight);
+            batch.flush();
+            Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
+        }
+        if (veHUD.chucNangDangChon == 4 && veHUD.dangHienThongBaoGame && veHUD.dangHienThongBaoCapNhat) {
+            float viewY = 35;
+            float viewHeight = 444 - 35;
+            batch.flush();
+            Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
+            Gdx.gl.glScissor(0, (int)viewY, 350, (int)viewHeight);
+            layout.setText(
+                veHUD.font,
+                "Vui lòng theo dõi tại trang web:"+"\n"+"chienbinhrongthieng.online",
+                new Color(83 / 255f, 41 / 255f, 5 / 255f, 1),
+                320,
+                Align.left,
+                true
+            );
+            float h = layout.height;
+            veHUD.font.draw(batch,layout,15,444-20 + veHUD.scrollY);
+            veHUD.maxScroll = Math.max(0, h + 30- viewHeight);
+            batch.flush();
+            Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
+        }
+        if (veHUD.chucNangDangChon == 4 && veHUD.dangHienThongBaoGame && veHUD.dangHienThongBaox2x3) {
+            float viewY = 35;
+            float viewHeight = 444 - 35;
+            batch.flush();
+            Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
+            Gdx.gl.glScissor(0, (int)viewY, 350, (int)viewHeight);
+            layout.setText(
+                veHUD.font,
+                "Hiện chưa có x2, x3 EXP",
+                new Color(83 / 255f, 41 / 255f, 5 / 255f, 1),
+                320,
+                Align.left,
+                true
+            );
+            float h = layout.height;
+            veHUD.font.draw(batch,layout,15,444-20 + veHUD.scrollY);
+            veHUD.maxScroll = Math.max(0, h + 30- viewHeight);
+            batch.flush();
+            Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
+        }
+        if (veHUD.chucNangDangChon == 4 && veHUD.dangHienThongBaoGame && veHUD.dangHienThongBaoGiftCode) {
+            float viewY = 35;
+            float viewHeight = 444 - 35;
+            batch.flush();
+            Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
+            Gdx.gl.glScissor(0, (int)viewY, 350, (int)viewHeight);
+            layout.setText(
+                veHUD.font,
+                "Giftcode tân thủ:"+"\n"+
+                    "HDG01\n"+
+                    "HDG02\n"+
+                    "HDG03\n"
+                ,
+                new Color(83 / 255f, 41 / 255f, 5 / 255f, 1),
+                320,
+                Align.left,
+                true
+            );
+            float h = layout.height;
+            veHUD.font.draw(batch,layout,15,444-20 + veHUD.scrollY);
+            veHUD.maxScroll = Math.max(0, h + 30- viewHeight);
+            batch.flush();
+            Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
+        }
+        if (veHUD.chucNangDangChon == 4 && veHUD.dangHienThongBaoGame && veHUD.dangHienThongBaoEvent) {
+            float viewY = 35;
+            float viewHeight = 444 - 35;
+            batch.flush();
+            Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
+            Gdx.gl.glScissor(0, (int)viewY, 350, (int)viewHeight);
+            layout.setText(
+                veHUD.font,
+                "Hiện tại chưa có Event",
+                new Color(83 / 255f, 41 / 255f, 5 / 255f, 1),
+                320,
+                Align.left,
+                true
+            );
+            float h = layout.height;
+            veHUD.font.draw(batch,layout,15,444-20 + veHUD.scrollY);
+            veHUD.maxScroll = Math.max(0, h + 30- viewHeight);
             batch.flush();
             Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
         }
