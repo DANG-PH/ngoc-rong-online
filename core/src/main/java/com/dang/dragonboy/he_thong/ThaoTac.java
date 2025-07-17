@@ -82,8 +82,15 @@ public class ThaoTac extends InputAdapter {
     public boolean scrolled(float amountX, float amountY) {
         // chỉ xử lý khi đang mở popup và chọn mục hành trang
         if (hud.isDangHienPopup() && (hud.getChucNangDangChon() == 1 || hud.getChucNangDangChon() == 2 || hud.getChucNangDangChon() == 4 || hud.getChucNangDangChon() == 3)) {
-            hud.scroll((int) amountY); // amountY là số lần lăn bánh (thường là ±1)
-            return true;
+            if (!hud.dangHienPopupDeTu) {
+                hud.scroll((int) amountY); // amountY là số lần lăn bánh (thường là ±1)
+                return true;
+            } else {
+                if (hud.dangChonHanhTrangSuPhu) {
+                    hud.scroll((int) amountY); // amountY là số lần lăn bánh (thường là ±1)
+                    return true;
+                }
+            }
         }
         return false;
     }

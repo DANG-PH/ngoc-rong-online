@@ -144,6 +144,9 @@ public class VeHUD {
     public boolean dangHienThongBaoGiftCode = false;
     public boolean dangHienThongBaoEvent = false;
 
+    public boolean dangHienPopupDeTu = false;
+    public boolean dangChonHanhTrangSuPhu = false;
+
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data;
         duLieuNguoiChoi.setNhanVat(nhanVat);
@@ -466,9 +469,12 @@ public class VeHUD {
                         dangHienGioiThieuGame = true;
                     } else if (oChiSoDangChon == 2) {
                         dangHienThongBaoGame = true;
+                    } else if (oChiSoDangChon == 3) {
+                        dangHienPopupDeTu = true;
                     }
                 }
                 oChiSoDangChon = -1;
+                scrollY = 0;
             }
         }
         if (dangHienTinNhanChat) {

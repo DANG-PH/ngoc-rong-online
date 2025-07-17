@@ -79,9 +79,11 @@ public class HUDClickHandler {
                     veHUD.scrollY = 0;
                     veHUD.oChiSoDangChon = -1;
                 } else {
-                    veHUD.tatPopupNhanVat();
-                    veHUD.hangTrangDangChon = -1;
-                    veHUD.oChiSoDangChon = -1;
+                    if (!veHUD.dangHienPopupDeTu) {
+                        veHUD.tatPopupNhanVat();
+                        veHUD.hangTrangDangChon = -1;
+                        veHUD.oChiSoDangChon = -1;
+                    }
                 }
             } else if (x > 350 && x <= 1020 && !veHUD.DangHienPopupThongTin && !veHUD.HienPopUpGanSkill && !veHUD.DangHienPopupThongTin1) {
                 if (veHUD.dangHienGioiThieuGame) {
@@ -115,29 +117,47 @@ public class HUDClickHandler {
                         veHUD.oChiSoDangChon = -1;
                     }
                 } else {
-                    veHUD.tatPopupNhanVat();
-                    veHUD.hangTrangDangChon = -1;
-                    veHUD.oChiSoDangChon = -1;
+                    if (!veHUD.dangHienPopupDeTu) {
+                        veHUD.tatPopupNhanVat();
+                        veHUD.hangTrangDangChon = -1;
+                        veHUD.oChiSoDangChon = -1;
+                    }
                 }
             }
             // cac nut chuc nang
             for (int i = 0; i < 5; i++) {
                 if (x >= 2+i*68+3 && x <= 2+i*68+3 + 68 && y >= 450 && y <= 450 + 52){
-                    veHUD.chucNangDangChon=i;
-                    veHUD.scrollY = 0;
-                    veHUD.oChiSoDangChon = -1;
-                    veHUD.hangTrangDangChon = -1;
-                    veHUD.dangHienGioiThieuGame = false;
-                    veHUD.dangHienThongBaoGame = false;
-                    veHUD.dangHienThongBaoLienHeAdmin = false;
-                    veHUD.dangHienThongBaox2x3 = false;
-                    veHUD.dangHienThongBaoCapNhat = false;
-                    veHUD.dangHienThongBaoGiftCode= false;
-                    veHUD.dangHienThongBaoEvent = false;
+                    if (!veHUD.dangHienPopupDeTu) {
+                        veHUD.chucNangDangChon = i;
+                        veHUD.scrollY = 0;
+                        veHUD.oChiSoDangChon = -1;
+                        veHUD.hangTrangDangChon = -1;
+                        veHUD.dangHienGioiThieuGame = false;
+                        veHUD.dangHienThongBaoGame = false;
+                        veHUD.dangHienThongBaoLienHeAdmin = false;
+                        veHUD.dangHienThongBaox2x3 = false;
+                        veHUD.dangHienThongBaoCapNhat = false;
+                        veHUD.dangHienThongBaoGiftCode = false;
+                        veHUD.dangHienThongBaoEvent = false;
+                    }
                 }
             }
         }
-        if (veHUD.dangHienPopup && veHUD.chucNangDangChon == 1 && !veHUD.DangHienPopupThongTin1 && !veHUD.dangHienThongBao) {
+        if (veHUD.dangHienPopupDeTu) {
+            if (x > 1020-350 && x <= 1020) {
+                veHUD.dangChonHanhTrangSuPhu = true;
+            } else {
+                veHUD.dangChonHanhTrangSuPhu = false;
+            }
+        }
+        if (veHUD.dangHienPopupDeTu && !veHUD.DangHienPopupThongTin1 && !veHUD.dangHienThongBao) {
+            if (x > 350 && x <= 1020-350) {
+                veHUD.dangHienPopupDeTu = false;
+                veHUD.scrollY = 0;
+                veHUD.oChiSoDangChon = -1;
+            }
+        }
+        if (veHUD.dangHienPopup && (veHUD.chucNangDangChon == 1 || veHUD.dangHienPopupDeTu) && !veHUD.DangHienPopupThongTin1 && !veHUD.dangHienThongBao) {
             if (veHUD.vanBayDau){
                 veHUD.vanbay = new Texture("vatpham/vanbay/"+"candauvan/candauvan.png");
                 nhanVat.setIdVanBay("candauvan");
@@ -153,8 +173,14 @@ public class HUDClickHandler {
             float viewHeight = 444 - 35;
             int KhoangCachItem = 49;
             int tongSoO = 8 + 12;
-
-            if (x >= 3 && x <= 3 + 344 && y >= viewY && y <= viewY + viewHeight) {
+            boolean duDieuKien = false;
+            if (veHUD.dangHienPopupDeTu) {
+                duDieuKien = x >= 3 + 1020-350 && x <= 3 + 344 + 1020-350 && y >= viewY && y <= viewY + viewHeight;
+            }
+            if (veHUD.chucNangDangChon == 1) {
+                duDieuKien = x >= 3 && x <= 3 + 344 && y >= viewY && y <= viewY + viewHeight;
+            }
+            if (duDieuKien) {
                 float relativeY = y - viewY;
                 float realY = veHUD.scrollY + (viewHeight - relativeY);
                 int index = (int) (realY / KhoangCachItem);
@@ -292,7 +318,7 @@ public class HUDClickHandler {
                 }
             }
         }
-        if (veHUD.dangHienPopup && veHUD.chucNangDangChon == 4 && !veHUD.dangHienThongBaoGame && !veHUD.dangHienGioiThieuGame) {
+        if (veHUD.dangHienPopup && veHUD.chucNangDangChon == 4 && !veHUD.dangHienThongBaoGame && !veHUD.dangHienGioiThieuGame && !veHUD.dangHienPopupDeTu) {
             float viewY = 35;
             float viewHeight = 444 - 35;
             int KhoangCachItem = 49;
@@ -389,25 +415,45 @@ public class HUDClickHandler {
                 return;
             }
             if (x > 0 && x <= 360 && (y > veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH || y < veHUD.PopupHanhTrangY - 130)) {
-                veHUD.DangHienPopupThongTin1 = false;
-                veHUD.TimeChoHienPopup = 0;
-            } else if (x > 360 && x <= 1020) {
-                veHUD.DangHienPopupThongTin1 = false;
-                veHUD.TimeChoHienPopup = 0;
+                if (!veHUD.dangHienPopupDeTu) {
+                    veHUD.DangHienPopupThongTin1 = false;
+                    veHUD.TimeChoHienPopup = 0;
+                }
+            } if (x > 360 && x <= 1020) {
+                if (!veHUD.dangHienPopupDeTu) {
+                    veHUD.DangHienPopupThongTin1 = false;
+                    veHUD.TimeChoHienPopup = 0;
+                }
+            } if (x > 1020 - 360 && x <= 1020 && (y > veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH || y < veHUD.PopupHanhTrangY - 130)) {
+                if (veHUD.dangHienPopupDeTu) {
+                    veHUD.DangHienPopupThongTin1 = false;
+                    veHUD.TimeChoHienPopup = 0;
+                }
+            } if (x > 0 && x <= 1020-360) {
+                if (veHUD.dangHienPopupDeTu) {
+                    veHUD.DangHienPopupThongTin1 = false;
+                    veHUD.TimeChoHienPopup = 0;
+                }
             }
         }
         if (veHUD.DangHienPopupThongTin1) {
+            float xCongThem = 0;
+            if (veHUD.dangHienPopupDeTu) {
+                xCongThem = 1020 - 360 - 10;
+            } else {
+                xCongThem = 0;
+            }
             float yNut = veHUD.PopupHanhTrangY - 115;
             if (veHUD.hangTrangDangChon!=7){
-                if (x > 1 && x < 115 && y >= yNut && y <= yNut + veHUD.PopupHanhTrangH){
+                if (x > 1 + xCongThem && x < 115 + xCongThem && y >= yNut && y <= yNut + veHUD.PopupHanhTrangH){
                     veHUD.nutClickTimer3 = 0.3f;
                     veHUD.nuthanhtrangchon=1;
-                } else if (x > 121 && x < 115+120 && y >= yNut && y <= yNut + veHUD.PopupHanhTrangH){
+                } else if (x > 121 + xCongThem && x < 115+120 + xCongThem && y >= yNut && y <= yNut + veHUD.PopupHanhTrangH){
                     veHUD.nutClickTimer3 = 0.3f;
                     veHUD.nuthanhtrangchon=2;
                 }
             } else {
-                if (x > 1 && x < 115 && y >= yNut && y <= yNut + veHUD.PopupHanhTrangH) {
+                if (x > 1 + xCongThem && x < 115 + xCongThem && y >= yNut && y <= yNut + veHUD.PopupHanhTrangH) {
                     veHUD.nutClickTimer3 = 0.3f;
                     veHUD.nuthanhtrangchon = 3;
                 }
