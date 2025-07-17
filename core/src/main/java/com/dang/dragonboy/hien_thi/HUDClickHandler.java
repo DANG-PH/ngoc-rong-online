@@ -372,7 +372,7 @@ public class HUDClickHandler {
                 }
             }
         }
-        if (veHUD.dangHienThongBaoGame) {
+        if (veHUD.dangHienThongBaoGame && !veHUD.dangHienThongBaoCapNhat && !veHUD.dangHienThongBaoEvent && !veHUD.dangHienThongBaoLienHeAdmin && !veHUD.dangHienThongBaox2x3 && !veHUD.dangHienThongBaoGiftCode) {
             float viewY = 35;
             float viewHeight = 444 - 35;
             int KhoangCachItem = 49;
@@ -433,6 +433,7 @@ public class HUDClickHandler {
                 if (veHUD.dangHienPopupDeTu) {
                     veHUD.DangHienPopupThongTin1 = false;
                     veHUD.TimeChoHienPopup = 0;
+                    veHUD.dangChonHanhTrangSuPhu = true;
                 }
             }
         }
@@ -445,15 +446,15 @@ public class HUDClickHandler {
             }
             float yNut = veHUD.PopupHanhTrangY - 115;
             if (veHUD.hangTrangDangChon!=7){
-                if (x > 1 + xCongThem && x < 115 + xCongThem && y >= yNut && y <= yNut + veHUD.PopupHanhTrangH){
+                if (x > 1 + xCongThem && x < 115 + xCongThem && y >= yNut && y <= yNut + 115){
                     veHUD.nutClickTimer3 = 0.3f;
                     veHUD.nuthanhtrangchon=1;
-                } else if (x > 121 + xCongThem && x < 115+120 + xCongThem && y >= yNut && y <= yNut + veHUD.PopupHanhTrangH){
+                } else if (x > 121 + xCongThem && x < 115+120 + xCongThem && y >= yNut && y <= yNut + 115){
                     veHUD.nutClickTimer3 = 0.3f;
                     veHUD.nuthanhtrangchon=2;
                 }
             } else {
-                if (x > 1 + xCongThem && x < 115 + xCongThem && y >= yNut && y <= yNut + veHUD.PopupHanhTrangH) {
+                if (x > 1 + xCongThem && x < 115 + xCongThem && y >= yNut && y <= yNut + 114) {
                     veHUD.nutClickTimer3 = 0.3f;
                     veHUD.nuthanhtrangchon = 3;
                 }

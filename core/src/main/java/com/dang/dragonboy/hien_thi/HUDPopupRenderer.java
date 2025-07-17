@@ -733,6 +733,7 @@ public class HUDPopupRenderer {
             batch.flush();
             Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
         }
+        // popup de tu
         if (veHUD.chucNangDangChon == 4 && veHUD.dangHienPopupDeTu) {
             if (!veHUD.dangHienPopup || veHUD.texAvt == null) return;
             //avt
@@ -750,6 +751,22 @@ public class HUDPopupRenderer {
             // → Định dạng rút gọn ngọc
             layout.setText(veHUD.fontvangngoc, ngocHienThi);
             veHUD.fontvangngoc.draw(batch, layout, 275 + 20 + 10 + 1020-350, 22);
+
+            layout.setText(veHUD.fontTenSkill,"Trang bị");
+            veHUD.fontTenSkill.draw(batch,layout,1020-350+(350- layout.width)/2f,444+35);
+            veHUD.font.setColor(1,1,1,1);
+            layout.setText(veHUD.font, duLieuNguoiChoi.getTen());
+            veHUD.font.draw(batch,layout,125 + 1020 - 350,595);
+            layout.setText(veHUD.fontsm,"Thể lực");
+            veHUD.fontsm.draw(batch,layout,125+ 1020 - 350,570);
+            batch.draw(veHUD.thanhtheluc ,125+68+ 1020 - 350,556);
+            layout.setText(veHUD.fontsm, duLieuNguoiChoi.getCapBac());
+            veHUD.fontsm.draw(batch,layout,125+ 1020 - 350,545);
+            DecimalFormat dinhDang = new DecimalFormat("#,###");
+            long sucManh = duLieuNguoiChoi.getSucManh();
+            String sucManhHienThi = dinhDang.format(sucManh);
+            layout.setText(veHUD.fontsm, "Sức mạnh: " + sucManhHienThi);
+            veHUD.fontsm.draw(batch, layout, 125+ 1020 - 350, 520);
 
             float viewY = 35;
             float viewHeight = 444 - 35;
@@ -855,7 +872,7 @@ public class HUDPopupRenderer {
                 if (i == 3 && item != null){
                     int kc = 0;
                     layout.setText(veHUD.fontCapSKill,"KI+"+item.getChiso()[10]);
-                    veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
+                    veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12 + 1020-350, y + 49 - 30);
                     kc += layout.width+1;
                     if (item.getSetkichhoat()!=null){
                         layout.setText(veHUD.fontCapSKill,",Set "+item.getSetkichhoat());
