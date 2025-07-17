@@ -194,7 +194,7 @@ public class DuLieuNguoiChoi {
         return null;
     }
 
-    public void tangSucManh(int SucManhCongThem){
+    public void tangSucManh(long SucManhCongThem){
         this.sucManh += SucManhCongThem;
     }
 

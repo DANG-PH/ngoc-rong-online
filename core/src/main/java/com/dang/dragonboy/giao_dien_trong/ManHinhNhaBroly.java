@@ -30,6 +30,7 @@ import com.dang.dragonboy.hien_thi.SkillIcon;
 import com.dang.dragonboy.xu_ly_map.MapNhaBroly;
 // dữ liệu
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
+import com.dang.dragonboy.xu_ly_map.MapNhaGohan;
 
 
 public class ManHinhNhaBroly implements Screen {
@@ -176,6 +177,7 @@ public class ManHinhNhaBroly implements Screen {
         nhanVat.doiVanBay("candauvan");
         nhanVat.setTen(tenNhanVat); // set tên nhân vật trong nhanvat.java
         hudRenderer.setNhanVat(nhanVat);// load cái này để đổi avt theo ct
+        nhanVat.setHUD(hudRenderer);
         // load du lieu nguoi dung
         int[] capSkill = new int[9];
         for (int i = 0; i < 9; i++) {
@@ -183,11 +185,11 @@ public class ManHinhNhaBroly implements Screen {
         }
         String[] tenSkill = new String[9];
         for (int i = 0; i < 9; i++) {
-            tenSkill[i] = nhanVat.getTenSkill(i+1,"hanhtinh"); // nếu skill 1-9
+            tenSkill[i] = nhanVat.getTenSkill(i+1,hanhtinh); // nếu skill 1-9
         }
         String[][] motaSkill = new String[9][];
         for (int i = 0; i < 9; i++) {
-            motaSkill[i] = nhanVat.getMotaSkill(i + 1, "hanhtinh");
+            motaSkill[i] = nhanVat.getMotaSkill(i + 1, hanhtinh);
         }
         DuLieuNguoiChoi duLieu = new DuLieuNguoiChoi(
             nhanVat.getTen(),
@@ -211,7 +213,7 @@ public class ManHinhNhaBroly implements Screen {
         hudRenderer.setDuLieuNguoiChoi(duLieu);
         capcaydau = duLieu.getCapCayDau();
         // Tạo map và load địa hình
-        MapNhaBroly map = new MapNhaBroly();
+        MapNhaGohan map = new MapNhaGohan();
         map.taiDuLieuMap();
         nhanVat.setDanhSachDat(map.LayDanhSachDat());
         nhanVat.setGioiHanToaDo(map.getChieuRongMap(), map.getChieuCaoMap());

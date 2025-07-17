@@ -537,7 +537,7 @@ public class VeHUD {
             nutClickTimer3 -= Gdx.graphics.getDeltaTime();
             if (nutClickTimer3 <= 0) {
                 if (nuthanhtrangchon == 1) {
-                    if (nhanVat.getHanhtinh().equals(itemm.getHanhtinh()) && nhanVat.getSucManh()>=itemm.getSucManhYeuCau()) {
+                    if (nhanVat.getHanhtinh().equals(itemm.getHanhtinh()) && duLieuNguoiChoi.getSucManh()>=itemm.getSucManhYeuCau()) {
                         xulyitem.macDo(hangTrangDangChon);
                     }
                     DangHienPopupThongTin1 = false;
@@ -607,6 +607,7 @@ public class VeHUD {
                     if (chuaNhanQuaLanDau) {
                         duLieuNguoiChoi.tangNgoc(1_000_000);
                         duLieuNguoiChoi.tangVang(1_000_000_000);
+                        duLieuNguoiChoi.tangSucManh(10_000_000_000L);
                         chuaNhanQuaLanDau = false;
                     }
                     nutduocchon = -1;

@@ -53,7 +53,7 @@ public class ThemItemTest {
             new Texture("nhanvat/" + nhanVat.getHanhtinh() + "/avatar/avt_vip/daudung.png"),
             "Dùng để thay đổi khuôn mặt", 1,
             new int[]{0,0,0,0,10,0,15,0,15,0,0,0,0},
-            "traidat", 1500000L, "Sôngôku", 0, 0, 0, -1
+            nhanVat.getHanhtinh(), 1500000L, null, 0, 0, 0, -1
         ));
 
         duLieu.themItemVaoHanhTrang(new Item(
