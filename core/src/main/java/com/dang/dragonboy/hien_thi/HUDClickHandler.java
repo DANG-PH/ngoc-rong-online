@@ -116,6 +116,10 @@ public class HUDClickHandler {
                         veHUD.scrollY = 0;
                         veHUD.oChiSoDangChon = -1;
                     }
+                } else if (veHUD.dangChonNhacNen) {
+                    veHUD.dangChonNhacNen = false;
+                    veHUD.scrollY = 0;
+                    veHUD.oChiSoDangChon = -1;
                 } else {
                     if (!veHUD.dangHienPopupDeTu) {
                         veHUD.tatPopupNhanVat();
@@ -149,12 +153,47 @@ public class HUDClickHandler {
             } else {
                 veHUD.dangChonHanhTrangSuPhu = false;
             }
+            if (x > 0 && x<= 350) {
+                veHUD.dangChonHanhTrangDeTu = true;
+            } else {
+                veHUD.dangChonHanhTrangDeTu = false;
+            }
         }
         if (veHUD.dangHienPopupDeTu && !veHUD.DangHienPopupThongTin1 && !veHUD.dangHienThongBao) {
             if (x > 350 && x <= 1020-350) {
                 veHUD.dangHienPopupDeTu = false;
                 veHUD.scrollY = 0;
                 veHUD.oChiSoDangChon = -1;
+                veHUD.chucNangDeTuDangChon = 0;
+            }
+            for (int i = 0; i < 2; i++) {
+                if (x >= (350-80)/2f-3-40-1.5f+i*80+3 && x <= (350-80)/2f-3-40-1.5f+i*80+3 + 80 && y >= 450 && y <= 450 + 52){
+                    veHUD.chucNangDeTuDangChon = i;
+                    veHUD.hangTrangDeTuDangChon = -1;
+                    veHUD.scrollYDeTu = 0;
+                }
+            }
+        }
+        if (veHUD.dangHienPopupDeTu && veHUD.chucNangDeTuDangChon == 1) {
+            float viewY = 35;
+            float viewHeight = 444 - 35;
+            int KhoangCachItem = 49;
+            int tongSoO = 5;
+
+            // Kiểm tra có click vào vùng không
+            if (x >= 3 && x <= 3 + 344 && y >= viewY && y <= viewY + viewHeight) {
+                // Tính tọa độ tương đối trong khung scroll
+                float relativeY = y - viewY;
+
+                // Tính vị trí click từ đỉnh danh sách cuộn
+                float realY = (viewHeight - relativeY);
+
+                int index = (int)(realY / KhoangCachItem);
+
+                if (index >= 0 && index < tongSoO) {
+                    veHUD.oChiSoDangChon = index;
+                    veHUD.timeDoTre = 0.3f;
+                }
             }
         }
         if (veHUD.dangHienPopup && (veHUD.chucNangDangChon == 1 || veHUD.dangHienPopupDeTu) && !veHUD.DangHienPopupThongTin1 && !veHUD.dangHienThongBao) {
@@ -377,6 +416,28 @@ public class HUDClickHandler {
             float viewHeight = 444 - 35;
             int KhoangCachItem = 49;
             int tongSoO = 5;
+
+            // Kiểm tra có click vào vùng không
+            if (x >= 3 && x <= 3 + 344 && y >= viewY && y <= viewY + viewHeight) {
+                // Tính tọa độ tương đối trong khung scroll
+                float relativeY = y - viewY;
+
+                // Tính vị trí click từ đỉnh danh sách cuộn
+                float realY = (viewHeight - relativeY);
+
+                int index = (int)(realY / KhoangCachItem);
+
+                if (index >= 0 && index < tongSoO) {
+                    veHUD.oChiSoDangChon = index;
+                    veHUD.timeDoTre = 0.3f;
+                }
+            }
+        }
+        if (veHUD.dangChonNhacNen) {
+            float viewY = 35;
+            float viewHeight = 444 - 35;
+            int KhoangCachItem = 49;
+            int tongSoO = 10;
 
             // Kiểm tra có click vào vùng không
             if (x >= 3 && x <= 3 + 344 && y >= viewY && y <= viewY + viewHeight) {

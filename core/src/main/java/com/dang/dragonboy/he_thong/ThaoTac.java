@@ -90,6 +90,10 @@ public class ThaoTac extends InputAdapter {
                     hud.scroll((int) amountY); // amountY là số lần lăn bánh (thường là ±1)
                     return true;
                 }
+                if (hud.dangChonHanhTrangDeTu) {
+                    hud.scrollDeTu((int) amountY); // amountY là số lần lăn bánh (thường là ±1)
+                    return true;
+                }
             }
         }
         return false;

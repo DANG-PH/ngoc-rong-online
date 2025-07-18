@@ -22,6 +22,7 @@ import com.dang.dragonboy.item.LoaiItem;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import com.badlogic.gdx.audio.Music;
 
 public class VeHUD {
     private HUDClickHandler clickHandler;
@@ -58,15 +59,19 @@ public class VeHUD {
     public Texture texAvt = null;
     public Texture nutchucnang,nutchucnangclick;
     public int chucNangDangChon = 0;
+    public int chucNangDeTuDangChon = 0;
     public Texture vang,ngoc;
     public Texture thanhtheluc;
 
     public Texture hanh_trang,hanh_trang_click,hanh_trang_dang_mac,hanh_trang_dang_mac_click;
 
     public float scrollY = 0f;
+    public float scrollYDeTu = 0f;
     public float maxScroll = 0f;
+    public float maxScrollDeTu = 0f;
     private final float scrollSpeed = 30f; // số pixel cuộn mỗi lần
     public int hangTrangDangChon = -1;
+    public int hangTrangDeTuDangChon = -1;
 
     public Texture o_noi_tai,o_noi_tai_click,o_chi_so_co_ban,o_chi_so_co_ban_click;
     public int oChiSoDangChon = -1;
@@ -101,6 +106,7 @@ public class VeHUD {
     float nutClickTimer2 = 0;
 
     public Texture ao,quan,gang,giay,rada,iconct,giaplt,vanbay;
+    public Texture aoDeTu,quanDeTu,gangDeTu,giayDeTu,radaDeTu,iconctDeTu,giapltDeTu,vanbayDeTu;
 
     private float dauThanRenderH= 53f;
     public String avatardangmac = "Goku_base";
@@ -146,6 +152,10 @@ public class VeHUD {
 
     public boolean dangHienPopupDeTu = false;
     public boolean dangChonHanhTrangSuPhu = false;
+    public boolean dangChonHanhTrangDeTu = false;
+
+    public boolean dangChonNhacNen = false;
+    public Music[] nhacNen = new Music[10];
 
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data;
@@ -171,6 +181,14 @@ public class VeHUD {
 
         // Giới hạn scroll
         scrollY = Math.max(0, Math.min(scrollY, maxScroll));
+    }
+
+    public void scrollDeTu(int amount) {
+        // amount âm là cuộn lên, dương là cuộn xuống
+        scrollYDeTu += amount * scrollSpeed;
+
+        // Giới hạn scroll
+        scrollYDeTu = Math.max(0, Math.min(scrollYDeTu, maxScrollDeTu));
     }
 
     public VeHUD(GlyphLayout layout) {
@@ -284,6 +302,25 @@ public class VeHUD {
         param3.size = 15;
         fontMotaNganSkill = generator3.generateFont(param3);
         generator3.dispose();
+
+        String[] tenFile = {
+            "", // 0 là tắt nhạc nên để trống
+            "khauthitamphi.mp3",
+            "demngayxaem.mp3",
+            "ketheoduoianhsang.mp3",
+            "thaproitudo.mp3",
+            "dieuanhbiet.mp3",
+            "dandan.mp3",
+            "saominhchuanamtaynhau.mp3",
+            "thoigiansetraloi.mp3",
+            "suthatdaboquen.mp3"
+        };
+
+        for (int i = 1; i < tenFile.length; i++) {
+            nhacNen[i] = Gdx.audio.newMusic(Gdx.files.internal("nhacnen/" + tenFile[i]));
+            nhacNen[i].setLooping(true);
+            nhacNen[i].setVolume(0.5f);
+        }
     }
 
     public void render(SpriteBatch batch) {
@@ -464,6 +501,22 @@ public class VeHUD {
                         case 3 -> dangHienThongBaoGiftCode = true;
                         case 4 -> dangHienThongBaoEvent = true;
                     }
+                } else if (dangHienPopupDeTu) {
+                    oChiSoDangChon = -1;
+                } else if (dangChonNhacNen) {
+                    if (oChiSoDangChon == 0) {
+                        for (int i = 1; i < nhacNen.length; i++) {
+                            if (nhacNen[i].isPlaying()) nhacNen[i].stop();
+                        }
+                    } else if (oChiSoDangChon >= 1 && oChiSoDangChon < nhacNen.length) {
+                        // Tắt nhạc cũ nếu có
+                        for (int i = 1; i < nhacNen.length; i++) {
+                            if (nhacNen[i].isPlaying()) nhacNen[i].stop();
+                        }
+                        // Phát nhạc mới
+                        nhacNen[oChiSoDangChon].play();
+                    }
+                    dangChonNhacNen = false;
                 } else {
                     if (oChiSoDangChon == 0) {
                         dangHienGioiThieuGame = true;
@@ -471,6 +524,10 @@ public class VeHUD {
                         dangHienThongBaoGame = true;
                     } else if (oChiSoDangChon == 3) {
                         dangHienPopupDeTu = true;
+                        scrollYDeTu = 0;
+                        hangTrangDangChon = -1;
+                    } else if (oChiSoDangChon == 7) {
+                        dangChonNhacNen = true;
                     }
                 }
                 oChiSoDangChon = -1;
@@ -757,5 +814,8 @@ public class VeHUD {
         popupNhanVat.dispose();
         nutX.dispose();
         if (texAvt != null) texAvt.dispose();
+        for (int i = 1; i < nhacNen.length; i++) {
+            if (nhacNen[i] != null) nhacNen[i].dispose();
+        }
     }
 }
