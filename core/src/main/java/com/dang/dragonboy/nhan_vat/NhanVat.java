@@ -98,7 +98,7 @@ public class NhanVat {
     private float HpNhanVat = HpGoc;
     private float KiNhanVat = KiGoc;
     private float HpHienTai = HpNhanVat*0.7f;
-    private float KiHienTai = KiNhanVat*0.9f;
+    private float KiHienTai = KiNhanVat*0.7f;
     private int SucDanhGoc = 24000;
     private float SucDanhNhanVat = SucDanhGoc;
     private int GiapGoc = 990;

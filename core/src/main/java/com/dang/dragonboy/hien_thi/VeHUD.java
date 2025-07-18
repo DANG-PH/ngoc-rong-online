@@ -3,6 +3,7 @@ package com.dang.dragonboy.hien_thi;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Align;
+import com.dang.dragonboy.du_lieu.DeTu;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.nhan_vat.NhanVatCauHinh;
 import com.dang.dragonboy.nhan_vat.NhanVatXuLy;
@@ -33,6 +35,8 @@ public class VeHUD {
 
     private DuLieuNguoiChoi duLieuNguoiChoi;
 
+    public Texture thanhhpnv,thanhkinv;
+    public TextureRegion thanhhpnv1,thanhkinv1;
     public Texture saoden, saoxanh;
     public Texture ochat, ochatclick;
     public Texture thanhhp;
@@ -61,7 +65,8 @@ public class VeHUD {
     public int chucNangDangChon = 0;
     public int chucNangDeTuDangChon = 0;
     public Texture vang,ngoc;
-    public Texture thanhtheluc;
+    public Texture thanhtheluc,thanhtheluc2;
+    public TextureRegion thanhtheluc1,thanhtheluc3;
 
     public Texture hanh_trang,hanh_trang_click,hanh_trang_dang_mac,hanh_trang_dang_mac_click;
 
@@ -106,7 +111,7 @@ public class VeHUD {
     float nutClickTimer2 = 0;
 
     public Texture ao,quan,gang,giay,rada,iconct,giaplt,vanbay;
-    public Texture aoDeTu,quanDeTu,gangDeTu,giayDeTu,radaDeTu,iconctDeTu,giapltDeTu,vanbayDeTu;
+    public Texture aoDeTu,quanDeTu,gangDeTu,giayDeTu,radaDeTu,iconctDeTu;
 
     private float dauThanRenderH= 53f;
     public String avatardangmac = "Goku_base";
@@ -167,6 +172,7 @@ public class VeHUD {
         xulyitem =  new HUDXulyitem(this, layout,duLieuNguoiChoi,nhanVat);
         popupThongTin = new HUDPopupThongTin(this, layout,duLieuNguoiChoi,nhanVat);
         popupHanhTrang = new HUDPopupHanhTrang(this, layout,duLieuNguoiChoi,nhanVat);
+        duLieuNguoiChoi.taoDeTu("Đệ tử");
     }
     public void setSkillIcons(SkillIcon[] skillIcons) {
         this.skillIcons = skillIcons;
@@ -212,6 +218,7 @@ public class VeHUD {
         vang = new Texture("hud/giaodientrong/vang.png");
         ngoc = new Texture("hud/giaodientrong/ngoc.png");
         thanhtheluc = new Texture("hud/giaodientrong/ttluc.jpg");
+        thanhtheluc2 = new Texture("hud/giaodientrong/ttluc2.jpg");
         hanh_trang = new Texture("hud/giaodientrong/ohanhtrang.jpg");
         hanh_trang_click = new Texture("hud/giaodientrong/ohanhtrangclick.jpg");
         hanh_trang_dang_mac = new Texture("hud/giaodientrong/ohanhtrangdangmac.jpg");
@@ -231,6 +238,8 @@ public class VeHUD {
         nutclick = new Texture("hud/giaodienngoai/chung/nutclick2.png");
         khungchat = new Texture("hud/giaodienngoai/chung/khungchat.png");
         duoichat = new Texture("hud/giaodienngoai/chung/duoichat.png");
+        thanhhpnv = new Texture("hud/giaodientrong/thanhhp.png");
+        thanhkinv = new Texture("hud/giaodientrong/thanhki.png");
         // Load font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -325,28 +334,16 @@ public class VeHUD {
 
     public void render(SpriteBatch batch) {
         batch.end();
+        int widthDeTu = (int)(thanhtheluc2.getWidth() * (duLieuNguoiChoi.deTu.getTheLuc()/100f));
+        thanhtheluc1 = new TextureRegion(thanhtheluc2, 0, 0, widthDeTu, thanhtheluc2.getHeight());
+        int widthSuPhu = (int)(thanhtheluc2.getWidth() * (duLieuNguoiChoi.getTheLuc()/100f));
+        thanhtheluc3 = new TextureRegion(thanhtheluc2, 0, 0, widthSuPhu, thanhtheluc2.getHeight());
+        int widthHP = (int)(thanhhpnv.getWidth() * (duLieuNguoiChoi.getHpHienTai()/duLieuNguoiChoi.getHpToiDa()));
+        thanhhpnv1= new TextureRegion(thanhhpnv, 0, 0, widthHP, thanhhpnv.getHeight());
+        int widthKI = (int)(thanhkinv.getWidth() * (duLieuNguoiChoi.getKiHienTai()/duLieuNguoiChoi.getKiToiDa()));
+        thanhkinv1= new TextureRegion(thanhkinv, 0, 0, widthKI, thanhkinv.getHeight());
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
-        // KHUNG NÂU BASE
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(78f / 255f, 47f / 255f, 31f / 255f, 1f);
-        shapeRenderer.rect(165, screenHeight - 80 - 5 + 50, 130 , 25);
-        shapeRenderer.rect(155, screenHeight - 80 - 5 + 50 - 25, 130 , 25);
-        shapeRenderer.end();
-
-        // THANH HP (đỏ)
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        float hpPercent = (float) duLieuNguoiChoi.getHpHienTai() / duLieuNguoiChoi.getHpToiDa();
-        shapeRenderer.setColor(189f / 255f, 29f / 255f, 0f / 255f, 1f);
-        shapeRenderer.rect(165, screenHeight - 80 - 5 + 50, 130 * hpPercent , 25);
-        shapeRenderer.end();
-
-        // THANH KI (xanh)
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        float kiPercent = (float) duLieuNguoiChoi.getKiHienTai() / duLieuNguoiChoi.getKiToiDa();
-        shapeRenderer.setColor(0f / 255f, 157f / 255f, 212f / 255f, 1f);
-        shapeRenderer.rect(155, screenHeight - 80 - 5 + 50 - 25, 130 * kiPercent , 25);
-        shapeRenderer.end();
 
         if (!dangHienKhungChat) {
             // RENDER SAU ẢNH ĐẬU THẦN ( trắng )
@@ -358,11 +355,13 @@ public class VeHUD {
         batch.begin();
 
         // thanh HP (góc trái trên)
-        int thanhhpW = 300;
+        int thanhhpW = 308;
         int thanhhpH = 80;
-        float hpX = 5;
-        float hpY = screenHeight - thanhhpH - 5;
+        float hpX = 0;
+        float hpY = screenHeight - thanhhpH;
         batch.draw(thanhhp, hpX, hpY, thanhhpW, thanhhpH);
+        batch.draw(thanhhpnv1,165, screenHeight - 80 - 5 + 55);
+        batch.draw(thanhkinv1,165, screenHeight - 80 - 5 + 55-20);
 
         if (!dangHienKhungChat) {
             // ô chat (góc phải trên)
@@ -419,7 +418,7 @@ public class VeHUD {
         // Tên nhân vật ngay ở thanhhp.png
         font.setColor(0f / 255f, 83f / 255f, 37f / 255f, 1f);
         layout.setText(font, duLieuNguoiChoi.getTen());
-        font.draw(batch, layout, 5+(155- layout.width)/2f, screenHeight - 80 - 5 + 50);
+        font.draw(batch, layout, 2.5f+(155- layout.width)/2f, screenHeight - 80 + 50);
 
         //khung chat
         if (dangHienKhungChat) {
@@ -502,7 +501,12 @@ public class VeHUD {
                         case 4 -> dangHienThongBaoEvent = true;
                     }
                 } else if (dangHienPopupDeTu) {
-                    oChiSoDangChon = -1;
+                    switch (oChiSoDangChon) {
+                        case 0 -> duLieuNguoiChoi.deTu.setTrangthai("Đi theo");
+                        case 1 -> duLieuNguoiChoi.deTu.setTrangthai("Bảo vệ");
+                        case 2 -> duLieuNguoiChoi.deTu.setTrangthai("Tấn công");
+                        case 3 -> duLieuNguoiChoi.deTu.setTrangthai("Về nhà");
+                    }
                 } else if (dangChonNhacNen) {
                     if (oChiSoDangChon == 0) {
                         for (int i = 1; i < nhacNen.length; i++) {

@@ -85,7 +85,8 @@ public class HUDPopupRenderer {
 
             layout.setText(veHUD.fontsm,"Thể lực");
             veHUD.fontsm.draw(batch,layout,125,570);
-            batch.draw(veHUD.thanhtheluc ,125+68,556);
+            batch.draw(veHUD.thanhtheluc ,125+68,558);
+            batch.draw(veHUD.thanhtheluc3 ,125 + 68, 558);
             layout.setText(veHUD.fontsm, duLieuNguoiChoi.getCapBac());
             veHUD.fontsm.draw(batch,layout,125,545);
             // ===== Vẽ sức mạnh =====
@@ -535,7 +536,8 @@ public class HUDPopupRenderer {
             veHUD.font.draw(batch,layout,125,595);
             layout.setText(veHUD.fontsm,"Thể lực");
             veHUD.fontsm.draw(batch,layout,125,570);
-            batch.draw(veHUD.thanhtheluc ,125+68,556);
+            batch.draw(veHUD.thanhtheluc ,125+68,558);
+            batch.draw(veHUD.thanhtheluc3 ,125 + 68, 558);
             layout.setText(veHUD.fontsm, duLieuNguoiChoi.getCapBac());
             veHUD.fontsm.draw(batch,layout,125,545);
             DecimalFormat dinhDang = new DecimalFormat("#,###");
@@ -585,7 +587,8 @@ public class HUDPopupRenderer {
             veHUD.font.draw(batch,layout,125,595);
             layout.setText(veHUD.fontsm,"Thể lực");
             veHUD.fontsm.draw(batch,layout,125,570);
-            batch.draw(veHUD.thanhtheluc ,125+68,556);
+            batch.draw(veHUD.thanhtheluc ,125+68,558);
+            batch.draw(veHUD.thanhtheluc3 ,125 + 68, 558);
             layout.setText(veHUD.fontsm, duLieuNguoiChoi.getCapBac());
             veHUD.fontsm.draw(batch,layout,125,545);
             DecimalFormat dinhDang = new DecimalFormat("#,###");
@@ -759,7 +762,8 @@ public class HUDPopupRenderer {
             veHUD.font.draw(batch, layout, 125 + 1020 - 350, 595);
             layout.setText(veHUD.fontsm, "Thể lực");
             veHUD.fontsm.draw(batch, layout, 125 + 1020 - 350, 570);
-            batch.draw(veHUD.thanhtheluc, 125 + 68 + 1020 - 350, 556);
+            batch.draw(veHUD.thanhtheluc, 125 + 68 + 1020 - 350, 558);
+            batch.draw(veHUD.thanhtheluc3 ,125 + 68 + 1020 - 350, 558);
             layout.setText(veHUD.fontsm, duLieuNguoiChoi.getCapBac());
             veHUD.fontsm.draw(batch, layout, 125 + 1020 - 350, 545);
             DecimalFormat dinhDang = new DecimalFormat("#,###");
@@ -1012,6 +1016,10 @@ public class HUDPopupRenderer {
 
             //hanh trang de tu
             batch.draw(veHUD.popupNhanVat, 0, 0, 350, 610);
+            float avtDeTuW = duLieuNguoiChoi.deTu.getAvtDeTu().getWidth() * 0.52f;
+            float avtDeTuH = duLieuNguoiChoi.deTu.getAvtDeTu().getHeight() * 0.52f;
+            batch.draw(duLieuNguoiChoi.deTu.getAvtDeTu(),0,505,avtDeTuW,avtDeTuH);
+
             // chuc nang
             String[] TextChucnangDeTu1 = {
                 "Đệ",
@@ -1030,6 +1038,23 @@ public class HUDPopupRenderer {
                 veHUD.fontChucnang.draw(batch,layout,(350-80)/2f-3-40-1.5f+i*80+3+(80- layout.width)/2f,450 + 20);
             }
             if (veHUD.chucNangDeTuDangChon == 0) {
+                // thể lực + Cấp bậc + Sức mạnh + Sức đánh
+                long sucManhDeTu = duLieuNguoiChoi.deTu.getSucManh() ;
+                String sucManhDeTuHienThi = dinhDang.format(sucManhDeTu);
+                layout.setText(veHUD.fontsm, "Sức mạnh: " + sucManhDeTuHienThi);
+                veHUD.fontsm.draw(batch, layout, 125, 595);
+
+                layout.setText(veHUD.fontsm, duLieuNguoiChoi.deTu.getCapBac());
+                veHUD.fontsm.draw(batch,layout,125,570);
+
+                layout.setText(veHUD.fontsm,"Sức đánh: "+(int)duLieuNguoiChoi.deTu.getSucDanhDeTu());
+                veHUD.fontsm.draw(batch,layout,125,545);
+
+                layout.setText(veHUD.fontsm,"Thể lực");
+                veHUD.fontsm.draw(batch,layout,125,522);
+                batch.draw(veHUD.thanhtheluc ,125+68,510);
+                batch.draw(veHUD.thanhtheluc1 ,125+68,510);
+
                 int KhoangCachItemDeTu = 61;
 
                 int soTrangBiDeTu = 6;
@@ -1063,6 +1088,18 @@ public class HUDPopupRenderer {
                 Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
             }
             if (veHUD.chucNangDeTuDangChon == 1) {
+                layout.setText(veHUD.font, "HP: "+(int)duLieuNguoiChoi.deTu.getHpHienTai()+"/"+(int)duLieuNguoiChoi.deTu.getHpToiDa());
+                veHUD.font.draw(batch,layout,125,595);
+
+                layout.setText(veHUD.font, "KI: "+(int)duLieuNguoiChoi.deTu.getKiHienTai()+"/"+(int)duLieuNguoiChoi.deTu.getKiToiDa());
+                veHUD.font.draw(batch,layout,125,570);
+
+                layout.setText(veHUD.fontsm, "Crit: "+duLieuNguoiChoi.deTu.getChiMangDeTu()+","+" Giáp: "+duLieuNguoiChoi.deTu.getGiapDeTu());
+                veHUD.fontsm.draw(batch, layout, 125, 545);
+
+                layout.setText(veHUD.fontsm,"Trạng thái: "+duLieuNguoiChoi.deTu.getTrangthai());
+                veHUD.fontsm.draw(batch, layout, 125, 520);
+
                 String[] chucNang = {"Đi theo","Bảo vệ","Tấn công","Về nhà","Hợp thể"};
                 int KhoangCachO = 49;
                 float startYTrangThaiDeTu = viewY + viewHeight - KhoangCachO;
@@ -1076,6 +1113,7 @@ public class HUDPopupRenderer {
                 }
             }
         }
+        // nhac nen
         if (veHUD.chucNangDangChon == 4 && veHUD.dangChonNhacNen) {
             String[] chucNang = {"Tắt nhạc","Khẩu thị tâm phi","Đếm ngày xa em","Kẻ theo đuổi ánh sáng","Tháp rơi tự do","Điều anh biết","DanDan Kokoro Hikareteku","Sao mình chưa nắm tay nhau","Thời gian sẽ trả lời","Sự thật đã bỏ quên"};
             float viewY = 35;

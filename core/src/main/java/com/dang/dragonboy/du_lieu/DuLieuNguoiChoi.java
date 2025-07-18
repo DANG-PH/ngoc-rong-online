@@ -5,6 +5,7 @@ import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.nhan_vat.NhanVatXuLy;
 
 public class DuLieuNguoiChoi {
+    public DeTu deTu;
     private NhanVat nhanVat;
     private String ten;
     private long sucManh;
@@ -13,12 +14,9 @@ public class DuLieuNguoiChoi {
     private int GiapNhanVat,ChiMangNhanVat;
     private int HpGoc;
     private int KiGoc;
-    private int HpGocNhanVat;
-    private int KiGocNhanVat;
     private float HpHienTai;
     private float KiHienTai;
     private int SucDanhGoc;
-    private int SucDanhGocNhanVat;
     private int GiapGoc;
     private int ChiMangGoc;
     private int SatThuongChiMang;
@@ -620,5 +618,18 @@ public class DuLieuNguoiChoi {
             checkgiapluyentap = false;
             chiSoGlt = chiso;
         }
+    }
+    public void taoDeTu(String ten) {
+        if (this.deTu == null) {
+            this.deTu = new DeTu(ten);
+        }
+    }
+
+    public DeTu getDeTu() {
+        return deTu;
+    }
+
+    public boolean coDeTu() {
+        return deTu != null;
     }
 }
