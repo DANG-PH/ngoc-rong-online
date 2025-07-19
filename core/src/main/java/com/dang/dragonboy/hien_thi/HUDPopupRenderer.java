@@ -998,21 +998,6 @@ public class HUDPopupRenderer {
                 veHUD.PopupHanhTrang(shapeRenderer, batch, veHUD.PopupHanhTrangX, veHUD.PopupHanhTrangY, veHUD.PopupHanhTrangW, veHUD.hangTrangDangChon);
             }
             batch.begin();
-            if (veHUD.dangHienThongBao) {
-                batch.draw(veHUD.anhThongBao, (Gdx.graphics.getWidth() - 720) / 2f, 65, 720, 175);
-                layout.setText(veHUD.fontTenSkill, "Bạn có chắc muốn hủy bỏ (mất luôn)");
-                veHUD.fontTenSkill.draw(batch, layout, (Gdx.graphics.getWidth() - layout.width) / 2, 175);
-                layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem() + " ?");
-                veHUD.fontTenSkill.draw(batch, layout, (Gdx.graphics.getWidth() - layout.width) / 2, 150);
-                float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
-                float nutY = 50;
-                batch.draw(veHUD.isThongBaoOKPressed > 0 && veHUD.nutduocchon == 1 ? veHUD.nutclick : veHUD.nutdn, nutX - 81, nutY, 140, 50);
-                layout.setText(veHUD.fontTenSkill, "Có");
-                veHUD.fontTenSkill.draw(batch, layout, nutX - 81 + (140 - layout.width) / 2f, nutY + 30);
-                batch.draw(veHUD.isThongBaoOKPressed > 0 && veHUD.nutduocchon == 2 ? veHUD.nutclick : veHUD.nutdn, nutX + 81, nutY, 140, 50);
-                layout.setText(veHUD.fontTenSkill, "Không");
-                veHUD.fontTenSkill.draw(batch, layout, nutX + 81 + (140 - layout.width) / 2f, nutY + 30);
-            }
 
             //hanh trang de tu
             batch.draw(veHUD.popupNhanVat, 0, 0, 350, 610);
@@ -1072,12 +1057,93 @@ public class HUDPopupRenderer {
                 Texture[] itemDeTu = {
                     veHUD.aoDeTu, veHUD.quanDeTu, veHUD.gangDeTu, veHUD.giayDeTu, veHUD.radaDeTu, veHUD.iconctDeTu
                 };
-//            ArrayList<Item> danhSachDeTuDangMac = duLieuNguoiChoi.getHanhTrangDeTuDangMac();
+                ArrayList<Item> danhSachDeTuDangMac = duLieuNguoiChoi.deTu.getHanhTrangDangMac();
                 for (int i = 0; i < soTrangBiDeTu; i++) {
-//                Item item = danhSachDeTuDangMac.get(i);
+                    Item item = danhSachDeTuDangMac.get(i);
                     float y = startYDeTu - i * KhoangCachItemDeTu;
                     Texture tex = (veHUD.hangTrangDeTuDangChon == i) ? veHUD.hanh_trang_dang_mac_click : veHUD.hanh_trang_dang_mac;
                     batch.draw(tex, 3, y, 344, 62);
+                    if (itemDeTu[i] != null) {
+                        if (itemDeTu[i].getHeight() * 0.5f < 60) {
+                            batch.draw(itemDeTu[i], 3 + (70 - itemDeTu[i].getWidth() * 0.5f) / 2f, y + (61 - itemDeTu[i].getHeight() * 0.5f) / 2f, itemDeTu[i].getWidth() * 0.5f, itemDeTu[i].getHeight() * 0.5f);
+                        } else {
+                            batch.draw(itemDeTu[i], 3 + (70 - itemDeTu[i].getWidth() * 0.38f) / 2f, y + (61 - itemDeTu[i].getHeight() * 0.38f) / 2f, itemDeTu[i].getWidth() * 0.38f, itemDeTu[i].getHeight() * 0.38f);
+                        }
+                    }
+                    String[] chisoduoccong = {"HP", "KI", "SD", "Chí mạng", "Giáp", "ST Crit", "HP", "KI", "Sức đánh", "HP", "KI", "Sức đánh", "Giảm sát thương"};
+                    if (item != null) {
+                        int kc1 = 0;
+                        layout.setText(veHUD.fontMotaSkill, item.getTenItem());
+                        veHUD.fontMotaSkill.draw(batch, layout, 3 + 70 + 12, y + 61 - 10);
+                        kc1 += layout.width + 5;
+                        if (item.getSoCap() > 0) {
+                            layout.setText(veHUD.fontMotaSkill, "[+" + item.getSoCap() + "]");
+                            veHUD.fontMotaSkill.draw(batch, layout, 3 + 70 + 12 + kc1, y + 61 - 10);
+                        }
+                    }
+                    if (i == 5 && item != null) {
+                        int kc = 0;
+                        int soChiso = 0;
+                        for (int j = 6; j <= 12; j++) {
+                            if (item.getChiso()[j] > 0) {
+                                String prefix = (soChiso == 0) ? "" : ",";
+                                layout.setText(veHUD.fontCapSKill, prefix + chisoduoccong[j] + "+" + item.getChiso()[j] + "%");
+                                veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + kc, y + 61 - 30);
+                                kc += layout.width + 1;
+                                soChiso++;
+                            }
+                        }
+                    }
+                    if (i == 0 && item != null) {
+                        int kc = 0;
+                        layout.setText(veHUD.fontCapSKill, "Giáp+" + item.getChiso()[4]);
+                        veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12, y + 61 - 30);
+                        kc += layout.width + 1;
+                        if (item.getSetkichhoat() != null) {
+                            layout.setText(veHUD.fontCapSKill, ",Set " + item.getSetkichhoat());
+                            veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + kc, y + 61 - 30);
+                        }
+                    }
+                    if (i == 1 && item != null) {
+                        int kc = 0;
+                        layout.setText(veHUD.fontCapSKill, "HP+" + item.getChiso()[9]);
+                        veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12, y + 61 - 30);
+                        kc += layout.width + 1;
+                        if (item.getSetkichhoat() != null) {
+                            layout.setText(veHUD.fontCapSKill, ",Set " + item.getSetkichhoat());
+                            veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + kc, y + 61 - 30);
+                        }
+                    }
+                    if (i == 2 && item != null) {
+                        int kc = 0;
+                        layout.setText(veHUD.fontCapSKill, "Tấn công+" + item.getChiso()[11]);
+                        veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12, y + 61 - 30);
+                        kc += layout.width + 1;
+                        if (item.getSetkichhoat() != null) {
+                            layout.setText(veHUD.fontCapSKill, ",Set " + item.getSetkichhoat());
+                            veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + kc, y + 61 - 30);
+                        }
+                    }
+                    if (i == 3 && item != null) {
+                        int kc = 0;
+                        layout.setText(veHUD.fontCapSKill, "KI+" + item.getChiso()[10]);
+                        veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12, y + 61 - 30);
+                        kc += layout.width + 1;
+                        if (item.getSetkichhoat() != null) {
+                            layout.setText(veHUD.fontCapSKill, ",Set " + item.getSetkichhoat());
+                            veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + kc, y + 61 - 30);
+                        }
+                    }
+                    if (i == 4 && item != null) {
+                        int kc = 0;
+                        layout.setText(veHUD.fontCapSKill, "Chí mạng+" + item.getChiso()[3] + "%");
+                        veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 , y + 61 - 30);
+                        kc += layout.width + 1;
+                        if (item.getSetkichhoat() != null) {
+                            layout.setText(veHUD.fontCapSKill, ",Set " + item.getSetkichhoat());
+                            veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + kc , y + 61 - 30);
+                        }
+                    }
                 }
                 for (int i = 0; i < soSkillDeTu; i++) {
                     float y = startYDeTu - (soTrangBiDeTu + i) * KhoangCachItemDeTu;
@@ -1086,8 +1152,14 @@ public class HUDPopupRenderer {
                 }
                 batch.flush();
                 Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
+                batch.end();
+                if (veHUD.DangHienPopupThongTin2 && veHUD.TimeChoHienPopup1 <= 0) {
+                    veHUD.PopupHanhTrangDeTu(shapeRenderer,batch, veHUD.PopupHanhTrangXdetu, veHUD.PopupHanhTrangYdetu ,veHUD.PopupHanhTrangWdetu ,veHUD.hangTrangDeTuDangChon);
+                }
+                batch.begin();
             }
             if (veHUD.chucNangDeTuDangChon == 1) {
+                veHUD.font.setColor(1,1,1,1);
                 layout.setText(veHUD.font, "HP: "+(int)duLieuNguoiChoi.deTu.getHpHienTai()+"/"+(int)duLieuNguoiChoi.deTu.getHpToiDa());
                 veHUD.font.draw(batch,layout,125,595);
 
@@ -1111,6 +1183,21 @@ public class HUDPopupRenderer {
                     layout.setText(veHUD.fontTenSkill,chucNang[i]);
                     veHUD.fontTenSkill.draw(batch,layout,3+(344-layout.width)/2f,y+ (48-layout.height)/2f+ layout.height);
                 }
+            }
+            if (veHUD.dangHienThongBao) {
+                batch.draw(veHUD.anhThongBao, (Gdx.graphics.getWidth() - 720) / 2f, 65, 720, 175);
+                layout.setText(veHUD.fontTenSkill, "Bạn có chắc muốn hủy bỏ (mất luôn)");
+                veHUD.fontTenSkill.draw(batch, layout, (Gdx.graphics.getWidth() - layout.width) / 2, 175);
+                layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem() + " ?");
+                veHUD.fontTenSkill.draw(batch, layout, (Gdx.graphics.getWidth() - layout.width) / 2, 150);
+                float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
+                float nutY = 50;
+                batch.draw(veHUD.isThongBaoOKPressed > 0 && veHUD.nutduocchon == 1 ? veHUD.nutclick : veHUD.nutdn, nutX - 81, nutY, 140, 50);
+                layout.setText(veHUD.fontTenSkill, "Có");
+                veHUD.fontTenSkill.draw(batch, layout, nutX - 81 + (140 - layout.width) / 2f, nutY + 30);
+                batch.draw(veHUD.isThongBaoOKPressed > 0 && veHUD.nutduocchon == 2 ? veHUD.nutclick : veHUD.nutdn, nutX + 81, nutY, 140, 50);
+                layout.setText(veHUD.fontTenSkill, "Không");
+                veHUD.fontTenSkill.draw(batch, layout, nutX + 81 + (140 - layout.width) / 2f, nutY + 30);
             }
         }
         // nhac nen

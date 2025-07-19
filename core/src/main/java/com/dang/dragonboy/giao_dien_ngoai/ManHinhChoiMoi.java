@@ -415,5 +415,23 @@ public class ManHinhChoiMoi implements Screen {
         fontText.dispose();
         bgTexture.dispose();
         muiTen.dispose();
+        matrang.dispose();
+        bautroixd.dispose();
+        sky.dispose();
+        nuixa.dispose();
+        nui.dispose();
+        nuicay.dispose();
+        nuithap.dispose();
+        cayco.dispose();
+        cayco1.dispose();
+
+        for (Texture t : mdtd) t.dispose();
+        for (Texture t : dtd) t.dispose();
+        for (Texture t : ldtd) t.dispose();
+
+        traidatchan.dispose();
+        traidatthan.dispose();
+
+        for (Texture t : dauTraiDat) t.dispose();
     }
 }

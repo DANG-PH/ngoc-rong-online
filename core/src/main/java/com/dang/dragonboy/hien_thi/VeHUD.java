@@ -15,6 +15,8 @@ import com.dang.dragonboy.du_lieu.DeTu;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.nhan_vat.NhanVatCauHinh;
 import com.dang.dragonboy.nhan_vat.NhanVatXuLy;
+import com.dang.dragonboy.nhan_vat.DeTuXuLy;
+import com.dang.dragonboy.nhan_vat.DeTuCauHinh;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.du_lieu.ThemItemTest;
 import java.text.DecimalFormat;
@@ -86,7 +88,9 @@ public class VeHUD {
     public Texture nutvuong,nutvuongclick;
     boolean DangHienPopupThongTin = false;
     boolean DangHienPopupThongTin1 = false;
+    boolean DangHienPopupThongTin2 = false;
     public float TimeChoHienPopup = 0;
+    public float TimeChoHienPopup1 = 0;
     public boolean vuaMoPopupThongTin = false;
     public float PopupThongTinX = 0;
     public float PopupThongTinY = 0;
@@ -94,10 +98,14 @@ public class VeHUD {
     public float PopupThongTinH = 0;
     public float PopupHanhTrangX = 0;
     public float PopupHanhTrangY = 0;
+    public float PopupHanhTrangXdetu = 0;
+    public float PopupHanhTrangYdetu = 0;
     String itemDangChon;
     Item itemm = null;
     public float PopupHanhTrangW = 0;
     public float PopupHanhTrangH = 0;
+    public float PopupHanhTrangWdetu = 0;
+    public float PopupHanhTrangHdetu = 0;
     float nutClickTimer = 0;
     float nutClickTimer1 = 0;
     int oChiSoDangChonTamThoi = -1;
@@ -117,11 +125,18 @@ public class VeHUD {
     public String avatardangmac = "Goku_base";
     public String aodangmac = "set_base";
     public String quandangmac = "set_base";
+    public String aodetudangmac = "set_base";
+    public String quandetudangmac = "set_base";
     public String skha = "thuong";
     public String skhq = "thuong";
     public String skhg = "thuong";
     public String skhj = "thuong";
     public String skhrada = "thuong";
+    public String skha_detu = "thuong";
+    public String skhq_detu  = "thuong";
+    public String skhg_detu  = "thuong";
+    public String skhj_detu  = "thuong";
+    public String skhrada_detu  = "thuong";
     public boolean vuaMoNappa = false;
     public boolean vanBayDau = true;
     public boolean lanDau = true;
@@ -530,6 +545,7 @@ public class VeHUD {
                         dangHienPopupDeTu = true;
                         scrollYDeTu = 0;
                         hangTrangDangChon = -1;
+                        hangTrangDeTuDangChon = -1;
                     } else if (oChiSoDangChon == 7) {
                         dangChonNhacNen = true;
                     }
@@ -603,6 +619,7 @@ public class VeHUD {
         if (nutClickTimer3 > 0){
             nutClickTimer3 -= Gdx.graphics.getDeltaTime();
             if (nutClickTimer3 <= 0) {
+                // mac do
                 if (nuthanhtrangchon == 1) {
                     if (nhanVat.getHanhtinh().equals(itemm.getHanhtinh()) && duLieuNguoiChoi.getSucManh()>=itemm.getSucManhYeuCau()) {
                         xulyitem.macDo(hangTrangDangChon);
@@ -615,6 +632,31 @@ public class VeHUD {
                     TimeChoHienPopup = 0;
                 } else if (nuthanhtrangchon == 3) {
                     DangHienPopupThongTin1 = false;
+                    TimeChoHienPopup = 0;
+                } else if (nuthanhtrangchon == 4) {
+                    if (duLieuNguoiChoi.deTu.getSucManh()>=itemm.getSucManhYeuCau()) {
+                        if (duLieuNguoiChoi.deTu.getHanhtinh().equals(itemm.getHanhtinh()) && !itemDangChon.equals("caitrang")) {
+                            xulyitem.macDoChoDe(hangTrangDangChon);
+                        } else if (itemDangChon.equals("caitrang")) {
+                            xulyitem.macDoChoDe(hangTrangDangChon);
+                        }
+                    }
+                    if (!dangHienPopupDeTu) {
+                        chucNangDangChon = 4;
+                        dangHienPopupDeTu = true;
+                        scrollY = 0;
+                        scrollYDeTu = 0;
+                    }
+                    hangTrangDangChon = -1;
+                    hangTrangDeTuDangChon = -1;
+                    DangHienPopupThongTin1 = false;
+                    TimeChoHienPopup = 0;
+                } else if (nuthanhtrangchon == 5) {
+                    xulyitem.goDoChoDe(hangTrangDeTuDangChon);
+                    DangHienPopupThongTin2 = false;
+                    TimeChoHienPopup = 0;
+                } else if (nuthanhtrangchon == 6) {
+                    DangHienPopupThongTin2 = false;
                     TimeChoHienPopup = 0;
                 }
             }
@@ -689,6 +731,9 @@ public class VeHUD {
         }
         if (DangHienPopupThongTin || DangHienPopupThongTin1){
             TimeChoHienPopup-=Gdx.graphics.getDeltaTime();
+        }
+        if (DangHienPopupThongTin2){
+            TimeChoHienPopup1-=Gdx.graphics.getDeltaTime();
         }
         if (chucNangDangChon != 2){
             DangHienPopupThongTin = false;
@@ -778,6 +823,9 @@ public class VeHUD {
     void PopupHanhTrang(ShapeRenderer shapeRenderer,SpriteBatch batch, float x, float y , float width , int oHanhTrangDangChon) {
         popupHanhTrang.PopupHanhTrang(shapeRenderer,batch,x,y,width,oHanhTrangDangChon);
     }
+    void PopupHanhTrangDeTu(ShapeRenderer shapeRenderer,SpriteBatch batch, float x, float y , float width , int oHanhTrangDangChon) {
+        popupHanhTrang.PopupHanhTrangDeTu(shapeRenderer,batch,x,y,width,oHanhTrangDangChon);
+    }
     long tinhChiPhiTiemNang(int oChiSo, int chiSoGoc, int soLanTang, int buocTang) {
         long tong = 0;
         for (int j = 1; j <= soLanTang; j++) {
@@ -806,20 +854,54 @@ public class VeHUD {
         return NhanVatXuLy.xuly_id("avatar_"+HanhTinh+"+"+TenAvatar+"+"+ao+"+"+quan);
     }
 
+    public DeTuCauHinh DoicaitrangDeTu(String TenCaiTrang){
+        return DeTuXuLy.xuly_id("caitrang_"+TenCaiTrang);
+    }
+    public DeTuCauHinh Doi_avt_ao_quan_DeTu(String HanhTinh, String TenAvatar , String ao, String quan){
+        return DeTuXuLy.xuly_id("avatar_"+HanhTinh+"+"+TenAvatar+"+"+ao+"+"+quan);
+    }
+
     public void dispose() {
-        ochat.dispose();
-        ochatclick.dispose();
-        thanhhp.dispose();
-        odauthan.dispose();
-        odauthanclick.dispose();
-        oskill.dispose();
-        oskillclick.dispose();
-        nutpopup.dispose();
-        popupNhanVat.dispose();
-        nutX.dispose();
+        Texture[] textures = {
+            saoden, saoxanh, ochat, ochatclick, thanhhp,
+            odauthan, odauthanclick, oskill, oskillclick,
+            nutpopup, popupNhanVat, nutX, nutchucnang, nutchucnangclick,
+            vang, ngoc, thanhtheluc, thanhtheluc2,
+            hanh_trang, hanh_trang_click, hanh_trang_dang_mac, hanh_trang_dang_mac_click,
+            o_chi_so_co_ban, o_chi_so_co_ban_click,
+            o_noi_tai, o_noi_tai_click, iconnoitai,
+            nutvuong, nutvuongclick, anhThongBao,
+            nutdn, nutclick, khungchat, duoichat,
+            thanhhpnv, thanhkinv
+        };
+
+        for (Texture tex : textures) {
+            if (tex != null) tex.dispose();
+        }
+
+        for (Texture icon : iconchisocoban) {
+            if (icon != null) icon.dispose();
+        }
+
         if (texAvt != null) texAvt.dispose();
+
         for (int i = 1; i < nhacNen.length; i++) {
             if (nhacNen[i] != null) nhacNen[i].dispose();
         }
+
+        BitmapFont[] fonts = {
+            font, fontText, fontTenSkill, fontSkilldaco, fontSkillchuaco, fontSkillchuaco1,
+            fontDauThan, fontchat, fontChucnang, fontNhiemVu, fontNhiemVu1, fontCapSKill,
+            fontMotaNganSkill1, fontNhiemVuChuaLam, fontMotaNhiemVu, fontMotaNoiTai,
+            fontMotaSkill, fontvangngoc, fontMotaHanhTrang, fontMotaHanhTrang1,
+            fontTiemNang, fontsm, fontMotaNganSkill
+        };
+
+        for (BitmapFont f : fonts) {
+            if (f != null) f.dispose();
+        }
+
+        if (shapeRenderer != null) shapeRenderer.dispose();
     }
+
 }

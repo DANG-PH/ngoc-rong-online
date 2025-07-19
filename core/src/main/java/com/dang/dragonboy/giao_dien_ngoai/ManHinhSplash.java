@@ -100,6 +100,7 @@ public class ManHinhSplash implements Screen {
         splashImage.dispose();
         font.dispose();
         batch.dispose();
+        logo.dispose();
     }
 
     @Override public void show() {}

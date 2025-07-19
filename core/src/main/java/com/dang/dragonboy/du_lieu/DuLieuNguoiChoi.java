@@ -2,8 +2,11 @@ package com.dang.dragonboy.du_lieu;
 import java.util.ArrayList;
 import com.dang.dragonboy.item.Item;
 import com.dang.dragonboy.nhan_vat.NhanVat;
+import com.dang.dragonboy.nhan_vat.NhanVatCauHinh;
 import com.dang.dragonboy.nhan_vat.NhanVatXuLy;
-
+import com.dang.dragonboy.nhan_vat.DeTuXuLy;
+import com.dang.dragonboy.nhan_vat.DeTuCauHinh;
+import com.badlogic.gdx.math.MathUtils;
 public class DuLieuNguoiChoi {
     public DeTu deTu;
     private NhanVat nhanVat;
@@ -51,6 +54,8 @@ public class DuLieuNguoiChoi {
     private boolean setKichHoatNappa = false;
     private boolean checkgiapluyentap = true;
     private int chiSoGlt;
+
+    private String[] danhSachHanhTinh = {"traidat","xayda","namek"};
 
     // Constructor
     public DuLieuNguoiChoi(String ten, long sucManh, int theLuc,
@@ -620,8 +625,20 @@ public class DuLieuNguoiChoi {
         }
     }
     public void taoDeTu(String ten) {
+//        String hanhtinh = danhSachHanhTinh[MathUtils.random(danhSachHanhTinh.length - 1)];
+        String hanhtinh = "xayda";
+        DeTuCauHinh config = Doi_avt_ao_quan_DeTu(hanhtinh,hanhtinh+"_base","set_base","set_base");
         if (this.deTu == null) {
-            this.deTu = new DeTu(ten);
+            this.deTu = new DeTu(
+                ten,hanhtinh,
+                nhanVat.getX(),nhanVat.getY(),
+                config.dau_dung_de_tu, config.dau_chay_de_tu,
+                config.than_dung_de_tu, config.than_nhay_de_tu, config.than_roi_de_tu, config.than_chay_de_tu,
+                config.chan_dung_de_tu, config.chan_nhay_de_tu, config.chan_roi_de_tu, config.chan_chay_de_tu,
+                config.than_bay_de_tu, config.chan_bay_de_tu,
+                config.lechMapDeTu,
+                null,null,null,null,null,null
+            );
         }
     }
 
@@ -631,5 +648,12 @@ public class DuLieuNguoiChoi {
 
     public boolean coDeTu() {
         return deTu != null;
+    }
+
+    public DeTuCauHinh DoicaitrangDeTu(String TenCaiTrang){
+        return DeTuXuLy.xuly_id("caitrang_"+TenCaiTrang);
+    }
+    public DeTuCauHinh Doi_avt_ao_quan_DeTu(String HanhTinh, String TenAvatar , String ao, String quan){
+        return DeTuXuLy.xuly_id("avatar_"+HanhTinh+"+"+TenAvatar+"+"+ao+"+"+quan);
     }
 }

@@ -2,11 +2,25 @@ package com.dang.dragonboy.du_lieu;
 
 import com.dang.dragonboy.item.Item;
 import com.badlogic.gdx.graphics.Texture;
-import java.util.ArrayList;
+
+import java.util.*;
+
 import com.badlogic.gdx.math.MathUtils;
 import com.dang.dragonboy.nhan_vat.DeTuXuLy;
+import com.dang.dragonboy.nhan_vat.DoLechModular;
+import com.dang.dragonboy.hien_thi.VeHUD;
+
+import java.util.List;
+import java.util.ArrayList;
+
+import com.dang.dragonboy.xu_ly_map.HitboxDat;
 
 public class DeTu {
+    public float x, y;
+    public float rong_de_tu, cao_de_tu;
+    private final float tiLe = 0.5f;
+    private Map<TrangThaiDeTu, List<DoLechModular>> lechTheoTrangThai = new HashMap<>();
+    private TrangThaiDeTu trangThai = TrangThaiDeTu.DUNG_YEN;
     private String ten;
     private String[] danhSachHanhTinh = {"traidat","xayda","namek"};
     private String hanhtinh;
@@ -98,10 +112,25 @@ public class DeTu {
     private boolean dangmacrada = false;
     private boolean setKichHoatNappa = false;
 
-    public DeTu(String ten) {
+    private String avtdangmac;
+
+    public Texture ao_de_tu,quan_de_tu,gang_de_tu,giay_de_tu,rada_de_tu,iconct_de_tu;
+    private Texture dau_dung, dau_chay;
+    private Texture than_dung, than_nhay, than_roi;
+    private Texture[] than_chay;
+    private Texture than_bay;
+    private Texture chan_dung, chan_nhay, chan_roi;
+    private Texture[] chan_chay;
+    private Texture chan_bay;
+
+    public DeTu(String ten, String hanhtinh, float x, float y, Texture dau_dung, Texture dau_chay,
+                Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,
+                Texture chan_dung, Texture chan_nhay, Texture chan_roi, Texture[] chan_chay,
+                Texture than_bay, Texture chan_bay, Map<TrangThaiDeTu, List<DoLechModular>> lechTheoTrangThai,
+                Texture ao, Texture quan, Texture gang, Texture giay, Texture rada, Texture iconct) {
         this.ten = ten;
 //        this.hanhtinh = danhSachHanhTinh[MathUtils.random(danhSachHanhTinh.length - 1)];
-        this.hanhtinh = "xayda";
+        this.hanhtinh = hanhtinh;
         this.sucManh = 50_000_000_000L;
         this.theLuc = 70;
         this.HpGoc = 550000;
@@ -123,6 +152,18 @@ public class DeTu {
     public Texture getAvtDeTu() {
         String Avt_lon_hay_sosinh = sucManh >= 1500000 ? "lon" : "sosinh";
         return new Texture("nhanvat/detu/"+hanhtinh+"/avt"+Avt_lon_hay_sosinh+".png");
+    }
+
+    public String getAvtDangMac() {
+        return avtdangmac;
+    }
+
+    public void setAvtDangMac(String avtdangmac) {
+        this.avtdangmac = avtdangmac ;
+    }
+
+    public String getHanhtinh() {
+        return hanhtinh;
     }
 
     public String getCapBac() {
@@ -960,5 +1001,33 @@ public class DeTu {
 
     public int getSoSaoCuongHoaRada() {
         return soSaoCuongHoaRada;
+    }
+
+
+    public void fixCaiTrang
+        (Texture dau_dung, Texture dau_chay,
+         Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,
+         Texture chan_dung, Texture chan_nhay, Texture chan_roi, Texture[] chan_chay,
+         Texture than_bay, Texture chan_bay, Map<TrangThaiDeTu, List<DoLechModular>> lechTheoTrangThai){
+
+        this.dau_dung = dau_dung;
+        this.dau_chay = dau_chay;
+        this.than_dung = than_dung;
+        this.than_nhay = than_nhay;
+        this.than_roi = than_roi;
+        this.than_chay = than_chay;
+
+        this.chan_dung = chan_dung;
+        this.chan_nhay = chan_nhay;
+        this.chan_roi = chan_roi;
+        this.chan_chay = chan_chay;
+
+        this.than_bay = than_bay;
+        this.chan_bay = chan_bay;
+
+        this.rong_de_tu = chan_dung.getWidth() * tiLe;
+        this.cao_de_tu = chan_dung.getHeight() * tiLe + than_dung.getHeight() * tiLe + dau_dung.getHeight() * 0.15f;
+
+        this.lechTheoTrangThai = lechTheoTrangThai;
     }
 }

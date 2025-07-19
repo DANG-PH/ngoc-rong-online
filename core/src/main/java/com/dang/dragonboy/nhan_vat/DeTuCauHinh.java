@@ -4,57 +4,60 @@ import com.badlogic.gdx.graphics.Texture;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
+import com.dang.dragonboy.du_lieu.DeTu;
+import com.dang.dragonboy.du_lieu.TrangThaiDeTu;
+
 public class DeTuCauHinh {
     // Đầu
-    public Texture dau_dung;
-    public Texture dau_chay;
+    public Texture dau_dung_de_tu;
+    public Texture dau_chay_de_tu;
 
     // Thân
-    public Texture than_dung;
-    public Texture than_nhay;
-    public Texture than_roi;
-    public Texture[] than_chay;
-    public Texture than_bay;
+    public Texture than_dung_de_tu;
+    public Texture than_nhay_de_tu;
+    public Texture than_roi_de_tu;
+    public Texture[] than_chay_de_tu;
+    public Texture than_bay_de_tu;
 
     // Chân
-    public Texture chan_dung;
-    public Texture chan_nhay;
-    public Texture chan_roi;
-    public Texture[] chan_chay;
-    public Texture chan_bay;
+    public Texture chan_dung_de_tu;
+    public Texture chan_nhay_de_tu;
+    public Texture chan_roi_de_tu;
+    public Texture[] chan_chay_de_tu;
+    public Texture chan_bay_de_tu;
 
     // Offset
-    public Map<TrangThai, List<DoLechModular>> lechMap;
+    public Map<TrangThaiDeTu, List<DoLechModular>> lechMapDeTu;
 
     // item
-    public Texture ao,quan,gang,giay,rada,iconct;
+    public Texture ao_de_tu,quan_de_tu,gang_de_tu,giay_de_tu,rada_de_tu,iconct_de_tu;
 
     public DeTuCauHinh(
-        Texture dau_dung, Texture dau_chay,
-        Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,
-        Texture chan_dung, Texture chan_nhay, Texture chan_roi, Texture[] chan_chay,
-        Texture than_bay, Texture chan_bay,
-        Map<TrangThai, List<DoLechModular>> lechMap,
-        Texture ao, Texture quan, Texture gang, Texture giay, Texture rada, Texture iconct
+        Texture dau_dung_de_tu, Texture dau_chay_de_tu,
+        Texture than_dung_de_tu, Texture than_nhay_de_tu, Texture than_roi_de_tu, Texture[] than_chay_de_tu,
+        Texture chan_dung_de_tu, Texture chan_nhay_de_tu, Texture chan_roi_de_tu, Texture[] chan_chay_de_tu,
+        Texture than_bay_de_tu, Texture chan_bay_de_tu,
+        Map<TrangThaiDeTu, List<DoLechModular>> lechMapDeTu,
+        Texture ao_de_tu, Texture quan_de_tu, Texture gang_de_tu, Texture giay_de_tu, Texture rada_de_tu, Texture iconct_de_tu
     ) {
-        this.dau_dung = dau_dung;
-        this.dau_chay = dau_chay;
-        this.than_dung = than_dung;
-        this.than_nhay = than_nhay;
-        this.than_roi = than_roi;
-        this.than_chay = than_chay;
-        this.than_bay = than_bay;
-        this.chan_dung = chan_dung;
-        this.chan_nhay = chan_nhay;
-        this.chan_roi = chan_roi;
-        this.chan_chay = chan_chay;
-        this.chan_bay = chan_bay;
-        this.lechMap = lechMap;
-        this.ao = ao;
-        this.quan = quan;
-        this.gang = gang;
-        this.giay = giay;
-        this.rada = rada;
-        this.iconct = iconct;
+        this.dau_dung_de_tu = dau_dung_de_tu;
+        this.dau_chay_de_tu = dau_chay_de_tu;
+        this.than_dung_de_tu = than_dung_de_tu;
+        this.than_nhay_de_tu = than_nhay_de_tu;
+        this.than_roi_de_tu = than_roi_de_tu;
+        this.than_chay_de_tu = than_chay_de_tu;
+        this.than_bay_de_tu = than_bay_de_tu;
+        this.chan_dung_de_tu = chan_dung_de_tu;
+        this.chan_nhay_de_tu = chan_nhay_de_tu;
+        this.chan_roi_de_tu = chan_roi_de_tu;
+        this.chan_chay_de_tu = chan_chay_de_tu;
+        this.chan_bay_de_tu = chan_bay_de_tu;
+        this.lechMapDeTu = lechMapDeTu;
+        this.ao_de_tu = ao_de_tu;
+        this.quan_de_tu = quan_de_tu;
+        this.gang_de_tu = gang_de_tu;
+        this.giay_de_tu = giay_de_tu;
+        this.rada_de_tu = rada_de_tu;
+        this.iconct_de_tu = iconct_de_tu;
     }
 }

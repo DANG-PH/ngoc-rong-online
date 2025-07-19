@@ -147,7 +147,7 @@ public class HUDClickHandler {
                 }
             }
         }
-        if (veHUD.dangHienPopup && (veHUD.chucNangDangChon == 1 || veHUD.dangHienPopupDeTu) && !veHUD.DangHienPopupThongTin1 && !veHUD.dangHienThongBao) {
+        if (veHUD.dangHienPopup && (veHUD.chucNangDangChon == 1 || veHUD.dangHienPopupDeTu) && !veHUD.DangHienPopupThongTin1 && !veHUD.DangHienPopupThongTin2 && !veHUD.dangHienThongBao) {
             if (veHUD.vanBayDau){
                 veHUD.vanbay = new Texture("vatpham/vanbay/"+"candauvan/candauvan.png");
                 nhanVat.setIdVanBay("candauvan");
@@ -397,8 +397,60 @@ public class HUDClickHandler {
             } else {
                 veHUD.dangChonHanhTrangDeTu = false;
             }
+            if (!veHUD.DangHienPopupThongTin1 && !veHUD.DangHienPopupThongTin2 && !veHUD.dangHienThongBao) {
+                float viewY = 35;
+                float viewHeight = 444 - 35;
+                int KhoangCachItem = 61;
+                boolean duDieuKien = false;
+                duDieuKien = x >= 3 && x <= 3 + 344 && y >= viewY && y <= viewY + viewHeight;
+                if (duDieuKien) {
+                    float relativeY = y - viewY;
+                    float realY = veHUD.scrollYDeTu + (viewHeight - relativeY);
+                    int index = (int) (realY / KhoangCachItem);
+                    if (index >= 0 && index <= 5) {
+                        veHUD.hangTrangDeTuDangChon = index;
+                        ArrayList<Item> danhSach = duLieuNguoiChoi.deTu.getHanhTrangDangMac();
+                        if (danhSach.get(veHUD.hangTrangDeTuDangChon) != null) {
+                            Item item = danhSach.get(veHUD.hangTrangDeTuDangChon);
+                            veHUD.itemm = item;
+                            if (item.getLoai() == LoaiItem.CAITRANG) {
+                                veHUD.itemDangChon = "caitrang";
+                            } else if (item.getLoai() == LoaiItem.AVATAR) {
+                                veHUD.itemDangChon = "avatar";
+                            } else if (item.getLoai() == LoaiItem.GIAPLUYENTAP) {
+                                veHUD.itemDangChon = "giapluyentap";
+                            } else if (item.getLoai() == LoaiItem.AO) {
+                                veHUD.itemDangChon = "ao";
+                            } else if (item.getLoai() == LoaiItem.QUAN) {
+                                veHUD.itemDangChon = "quan";
+                            } else if (item.getLoai() == LoaiItem.GANG) {
+                                veHUD.itemDangChon = "gang";
+                            } else if (item.getLoai() == LoaiItem.GIAY) {
+                                veHUD.itemDangChon = "giay";
+                            } else if (item.getLoai() == LoaiItem.RADA) {
+                                veHUD.itemDangChon = "rada";
+                            } else if (item.getLoai() == LoaiItem.VANBAY) {
+                                veHUD.itemDangChon = "vanbay";
+                            }
+                        } else {
+                            veHUD.itemm = null;
+                        }
+                        if (veHUD.itemm != null) {
+                            veHUD.DangHienPopupThongTin2 = true;
+                            veHUD.PopupHanhTrangXdetu = 5;
+                            veHUD.PopupHanhTrangWdetu = 360;
+                            veHUD.PopupHanhTrangYdetu = viewY + viewHeight - (index + 1) * KhoangCachItem + veHUD.scrollYDeTu;
+                            veHUD.PopupHanhTrangHdetu = 0;
+                            veHUD.TimeChoHienPopup1 = 0.3f;
+                            veHUD.vuaMoPopupThongTin = true;
+                        }
+                    } else if (index > 5 && index <= 9 ) {
+                        veHUD.hangTrangDeTuDangChon = index;
+                    }
+                }
+            }
         }
-        if (veHUD.dangHienPopupDeTu && !veHUD.DangHienPopupThongTin1 && !veHUD.dangHienThongBao) {
+        if (veHUD.dangHienPopupDeTu && !veHUD.DangHienPopupThongTin1 && !veHUD.DangHienPopupThongTin2 && !veHUD.dangHienThongBao) {
             if (x > 350 && x <= 1020-350) {
                 veHUD.dangHienPopupDeTu = false;
                 veHUD.scrollY = 0;
@@ -499,6 +551,7 @@ public class HUDClickHandler {
                     veHUD.DangHienPopupThongTin1 = false;
                     veHUD.TimeChoHienPopup = 0;
                     veHUD.dangChonHanhTrangSuPhu = true;
+                    veHUD.dangChonHanhTrangDeTu = false;
                 }
             }
         }
@@ -517,12 +570,40 @@ public class HUDClickHandler {
                 } else if (x > 121 + xCongThem && x < 115+120 + xCongThem && y >= yNut && y <= yNut + 115){
                     veHUD.nutClickTimer3 = 0.3f;
                     veHUD.nuthanhtrangchon=2;
+                } else if (x > 141 + xCongThem && x < 115 + 120*2 + xCongThem && y >= yNut && y <= yNut + 115) {
+                    veHUD.nutClickTimer3 = 0.3f;
+                    veHUD.nuthanhtrangchon=4;
                 }
             } else {
                 if (x > 1 + xCongThem && x < 115 + xCongThem && y >= yNut && y <= yNut + 114) {
                     veHUD.nutClickTimer3 = 0.3f;
                     veHUD.nuthanhtrangchon = 3;
                 }
+            }
+        }
+        if (veHUD.DangHienPopupThongTin2) {
+            if (veHUD.vuaMoPopupThongTin) {
+                veHUD.vuaMoPopupThongTin = false;
+                return;
+            }
+            if (x > 0 && x <= 360 && (y > veHUD.PopupHanhTrangYdetu + veHUD.PopupHanhTrangHdetu || y < veHUD.PopupHanhTrangYdetu - 130)) {
+                veHUD.DangHienPopupThongTin2 = false;
+                veHUD.TimeChoHienPopup = 0;
+            } if (x > 360 && x <= 1020) {
+                veHUD.DangHienPopupThongTin2 = false;
+                veHUD.TimeChoHienPopup = 0;
+                veHUD.dangChonHanhTrangSuPhu = false;
+                veHUD.dangChonHanhTrangDeTu = true;
+            }
+        }
+        if (veHUD.DangHienPopupThongTin2) {
+            float yNut = veHUD.PopupHanhTrangYdetu - 115;
+            if (x > 1 && x < 115 && y >= yNut && y <= yNut + 115){
+                veHUD.nutClickTimer3 = 0.3f;
+                veHUD.nuthanhtrangchon=5;
+            } else if (x > 121 && x < 115+120 && y >= yNut && y <= yNut + 115){
+                veHUD.nutClickTimer3 = 0.3f;
+                veHUD.nuthanhtrangchon=6;
             }
         }
         // Tắt popup thông tin
