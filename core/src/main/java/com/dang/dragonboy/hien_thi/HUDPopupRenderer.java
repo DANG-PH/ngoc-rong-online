@@ -124,12 +124,21 @@ public class HUDPopupRenderer {
         }
         if (veHUD.chucNangDangChon == 1){
             // chỉ số nhân vật
-            layout.setText(veHUD.fontsm,"HP: "+(int)duLieuNguoiChoi.getHpHienTai()+" / "+(int)duLieuNguoiChoi.getHpToiDa());
-            veHUD.fontsm.draw(batch,layout,125,595);
-            layout.setText(veHUD.fontsm,"KI: "+(int)duLieuNguoiChoi.getKiHienTai()+" / "+(int)duLieuNguoiChoi.getKiToiDa());
-            veHUD.fontsm.draw(batch,layout,125,570);
-            layout.setText(veHUD.fontsm,"Sức đánh: "+(int)duLieuNguoiChoi.getSucDanhNhanVat()+", Crit: "+duLieuNguoiChoi.getChiMangNhanVat()+"%");
-            veHUD.fontsm.draw(batch,layout,125,545);
+            if (veHUD.dangHopThe) {
+                layout.setText(veHUD.fontsm,"HP: " + (int) duLieuNguoiChoi.getHpHienTai() + " / " + (int) duLieuNguoiChoi.getHpHopThe());
+                veHUD.fontsm.draw(batch, layout, 125, 595);
+                layout.setText(veHUD.fontsm,"KI: " + (int) duLieuNguoiChoi.getKiHienTai() + " / " + (int) duLieuNguoiChoi.getKiHopThe());
+                veHUD.fontsm.draw(batch, layout, 125, 570);
+                layout.setText(veHUD.fontsm, "Sức đánh: " + (int) duLieuNguoiChoi.getSdHopThe() + ", Crit: " + duLieuNguoiChoi.getChiMangNhanVat() + "%");
+                veHUD.fontsm.draw(batch, layout, 125, 545);
+            } else {
+                layout.setText(veHUD.fontsm, "HP: " + (int) duLieuNguoiChoi.getHpHienTai() + " / " + (int) duLieuNguoiChoi.getHpToiDa());
+                veHUD.fontsm.draw(batch, layout, 125, 595);
+                layout.setText(veHUD.fontsm, "KI: " + (int) duLieuNguoiChoi.getKiHienTai() + " / " + (int) duLieuNguoiChoi.getKiToiDa());
+                veHUD.fontsm.draw(batch, layout, 125, 570);
+                layout.setText(veHUD.fontsm, "Sức đánh: " + (int) duLieuNguoiChoi.getSucDanhNhanVat() + ", Crit: " + duLieuNguoiChoi.getChiMangNhanVat() + "%");
+                veHUD.fontsm.draw(batch, layout, 125, 545);
+            }
             layout.setText(veHUD.fontsm,"Giáp: "+(int)duLieuNguoiChoi.getGiapNhanVat()+", ST Crit: "+(int)duLieuNguoiChoi.getSatThuongChiMang()+"%");
             veHUD.fontsm.draw(batch,layout,125,520);
 

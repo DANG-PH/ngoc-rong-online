@@ -10,6 +10,14 @@ public class ThemItemTest {
     public static void themItemTest(DuLieuNguoiChoi duLieu, NhanVat nhanVat) {
 
         duLieu.themItemVaoHanhTrang(new Item(
+            "bongtaic1", "Bông tai Porata", LoaiItem.BONGTAI,
+            new Texture("vatpham/vatphamgame/bongtai/bongtaic1.png"),
+            "Sử dụng để hợp thể với đệ tử", 1,
+            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+            nhanVat.getHanhtinh(), 1500000L, null, 0, 0, 0, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
             "phuong_hoang_lua", "Thú cưỡi cực VIP", LoaiItem.VANBAY,
             new Texture("vatpham/vanbay/phuong_hoang_lua/phuonghoanglua.png"),
             "Dùng để bay và hồi phục HP, KI", 1,
@@ -178,7 +186,7 @@ public class ThemItemTest {
 
         duLieu.themItemVaoHanhTrang(new Item(
             "rada1", "Rada cấp 1", LoaiItem.RADA,
-            new Texture("vatpham/do/xayda/set_than_linh/rada.png"),
+            new Texture("vatpham/do/rada/rada1.png"),
             "Giúp tăng Chí Mạng", 1,
             new int[]{0,0,0,1,0,0,35,0,0,0,0,0,0},
             "xayda", 1000L, "Nappa", 7, 7, 7, -1

@@ -138,6 +138,7 @@ public class VeHUD {
     public String skhj_detu  = "thuong";
     public String skhrada_detu  = "thuong";
     public boolean vuaMoNappa = false;
+    public boolean vuaMoDeTuNappa = false;
     public boolean vanBayDau = true;
     public boolean lanDau = true;
     public int[] chisovuathao;
@@ -176,6 +177,9 @@ public class VeHUD {
 
     public boolean dangChonNhacNen = false;
     public Music[] nhacNen = new Music[10];
+
+    public boolean dangHopThe = false;
+    public float timeChoHopThe = 0;
 
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data;
@@ -353,10 +357,23 @@ public class VeHUD {
         thanhtheluc1 = new TextureRegion(thanhtheluc2, 0, 0, widthDeTu, thanhtheluc2.getHeight());
         int widthSuPhu = (int)(thanhtheluc2.getWidth() * (duLieuNguoiChoi.getTheLuc()/100f));
         thanhtheluc3 = new TextureRegion(thanhtheluc2, 0, 0, widthSuPhu, thanhtheluc2.getHeight());
-        int widthHP = (int)(thanhhpnv.getWidth() * (duLieuNguoiChoi.getHpHienTai()/duLieuNguoiChoi.getHpToiDa()));
-        thanhhpnv1= new TextureRegion(thanhhpnv, 0, 0, widthHP, thanhhpnv.getHeight());
-        int widthKI = (int)(thanhkinv.getWidth() * (duLieuNguoiChoi.getKiHienTai()/duLieuNguoiChoi.getKiToiDa()));
-        thanhkinv1= new TextureRegion(thanhkinv, 0, 0, widthKI, thanhkinv.getHeight());
+        if (dangHopThe) {
+            int widthHP = (int) (thanhhpnv.getWidth() *
+                (duLieuNguoiChoi.getHpHienTai() / (float) duLieuNguoiChoi.getHpHopThe()));
+            thanhhpnv1 = new TextureRegion(thanhhpnv, 0, 0, widthHP, thanhhpnv.getHeight());
+
+            int widthKI = (int) (thanhkinv.getWidth() *
+                (duLieuNguoiChoi.getKiHienTai() / (float) duLieuNguoiChoi.getKiHopThe()));
+            thanhkinv1 = new TextureRegion(thanhkinv, 0, 0, widthKI, thanhkinv.getHeight());
+        } else {
+            int widthHP = (int) (thanhhpnv.getWidth() *
+                (duLieuNguoiChoi.getHpHienTai() / (float) duLieuNguoiChoi.getHpToiDa()));
+            thanhhpnv1 = new TextureRegion(thanhhpnv, 0, 0, widthHP, thanhhpnv.getHeight());
+
+            int widthKI = (int) (thanhkinv.getWidth() *
+                (duLieuNguoiChoi.getKiHienTai() / (float) duLieuNguoiChoi.getKiToiDa()));
+            thanhkinv1 = new TextureRegion(thanhkinv, 0, 0, widthKI, thanhkinv.getHeight());
+        }
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
 
@@ -622,7 +639,12 @@ public class VeHUD {
                 // mac do
                 if (nuthanhtrangchon == 1) {
                     if (nhanVat.getHanhtinh().equals(itemm.getHanhtinh()) && duLieuNguoiChoi.getSucManh()>=itemm.getSucManhYeuCau()) {
-                        xulyitem.macDo(hangTrangDangChon);
+                        if (!itemDangChon.equals("bongtai")) {
+                            xulyitem.macDo(hangTrangDangChon);
+                        }
+                        if (itemDangChon.equals("bongtai")){
+                            timeChoHopThe = 1f;
+                        }
                     }
                     DangHienPopupThongTin1 = false;
                     TimeChoHienPopup = 0;
@@ -660,6 +682,66 @@ public class VeHUD {
                     TimeChoHienPopup = 0;
                 }
             }
+        }
+        if (timeChoHopThe>0) {
+            timeChoHopThe -= Gdx.graphics.getDeltaTime();
+            if (timeChoHopThe <= 0) {
+                timeChoHopThe = 0;
+                if (!dangHopThe) {
+                    dangHopThe = true;
+                    NhanVatCauHinh c2 = Doicaitrang("vegito");
+                    nhanVat.fixCaiTrang(
+                        c2.dau_dung, c2.dau_chay,
+                        c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
+                        c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
+                        c2.than_bay, c2.chan_bay,
+                        c2.lechMap,
+                        c2.avt
+                    );
+                    texAvt = new Texture(nhanVat.doiavatar());
+                } else {
+                    dangHopThe = false;
+                    ArrayList<Item> danhSach = duLieuNguoiChoi.getHanhTrangDangMac();
+                    if (NhanVatXuLy.getDangMacCaiTrang() && !NhanVatXuLy.getDangMacAvatar() && danhSach.get(5) != null) {
+                        NhanVatCauHinh c2 = Doicaitrang(danhSach.get(5).getId());
+                        nhanVat.fixCaiTrang(
+                            c2.dau_dung, c2.dau_chay,
+                            c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
+                            c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
+                            c2.than_bay, c2.chan_bay,
+                            c2.lechMap,
+                            c2.avt
+                        );
+                        texAvt = new Texture(nhanVat.doiavatar());
+                    } else {
+                        NhanVatCauHinh c2 = Doi_avt_ao_quan(nhanVat.getHanhtinh(), avatardangmac, aodangmac, quandangmac);
+                        nhanVat.fixCaiTrang(
+                            c2.dau_dung, c2.dau_chay,
+                            c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
+                            c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
+                            c2.than_bay, c2.chan_bay,
+                            c2.lechMap,
+                            c2.avt
+                        );
+                        texAvt = new Texture(nhanVat.doiavatar());
+                    }
+                }
+            }
+        }
+        if (dangHopThe) {
+            duLieuNguoiChoi.setHpHopThe(duLieuNguoiChoi.getHpToiDa()+duLieuNguoiChoi.deTu.getHpToiDa());
+            duLieuNguoiChoi.setKiHopThe(duLieuNguoiChoi.getKiToiDa()+duLieuNguoiChoi.deTu.getKiToiDa());
+            duLieuNguoiChoi.setSdHopThe(duLieuNguoiChoi.getSucDanhNhanVat()+duLieuNguoiChoi.deTu.getSucDanhDeTu());
+        } else {
+            duLieuNguoiChoi.setHpHopThe(duLieuNguoiChoi.getHpToiDa());
+            duLieuNguoiChoi.setKiHopThe(duLieuNguoiChoi.getKiToiDa());
+            if (duLieuNguoiChoi.getHpHienTai()>duLieuNguoiChoi.getHpToiDa()){
+                duLieuNguoiChoi.setHpHienTai(duLieuNguoiChoi.getHpToiDa());
+            }
+            if (duLieuNguoiChoi.getKiHienTai()>duLieuNguoiChoi.getKiToiDa()){
+                duLieuNguoiChoi.setKiHienTai(duLieuNguoiChoi.getKiToiDa());
+            }
+            duLieuNguoiChoi.setSdHopThe(duLieuNguoiChoi.getSucDanhNhanVat());
         }
         if (isThongBaoOKPressed>0) {
             isThongBaoOKPressed -= Gdx.graphics.getDeltaTime();

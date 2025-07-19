@@ -1217,115 +1217,116 @@ public class NhanVat {
     }
 
     public void ve(SpriteBatch batch, float thoiGian) {
+        if (veHUD.timeChoHopThe == 0) {
+            float daoDong = (trangThai == TrangThai.DUNG_YEN || trangThai == TrangThai.BAY_NGANG) ? (float) Math.sin(thoiGian) * 1.08f : 0f;
 
-        float daoDong = (trangThai == TrangThai.DUNG_YEN || trangThai == TrangThai.BAY_NGANG) ? (float) Math.sin(thoiGian) * 1.08f : 0f;
+            Texture chanVe = chan_dung;
+            Texture thanVe = than_dung;
+            Texture dauVe = dau_dung;
 
-        Texture chanVe = chan_dung;
-        Texture thanVe = than_dung;
-        Texture dauVe = dau_dung;
-
-        if (trangThai == TrangThai.BAY_NGANG) {
-            timeVanBay += Gdx.graphics.getDeltaTime();
-            if (timeVanBay > 0.12f) {
-                frameVanBay = (frameVanBay + 1) % vanBayCauHinh.frames.length;
-                timeVanBay = 0;
-            }
-        }
-
-        switch (trangThai) {
-            case BAY_NGANG:
-                chanVe = chan_bay;
-                thanVe = than_bay;
-                dauVe = dau_dung;
-                break;
-            case DI_CHUYEN:
-                timeChay += Gdx.graphics.getDeltaTime(); // tăng thời gian theo deltaTime
-                if (timeChay >= 0.1f) {
-                    frame = (frame + 1) % chan_chay.length;
-                    timeChay = 0;
+            if (trangThai == TrangThai.BAY_NGANG) {
+                timeVanBay += Gdx.graphics.getDeltaTime();
+                if (timeVanBay > 0.12f) {
+                    frameVanBay = (frameVanBay + 1) % vanBayCauHinh.frames.length;
+                    timeVanBay = 0;
                 }
-                chanVe = chan_chay[frame];
-                thanVe = than_chay[frame];
-                dauVe = dau_chay;
-                break;
-            case NHAY:
-                chanVe = chan_nhay;
-                thanVe = than_nhay;
-                break;
-            case ROI:
-                chanVe = chan_roi;
-                thanVe = than_roi;
-                break;
-            case DUNG_YEN:
-            default:
-                // giữ ảnh mặc định đã gán ban đầu
-                break;
-        }
-        // đúng kiểu dữ liệu 2 vế và gán class LechModular để có thể truy cập thuộc tính
-        DoLechModular lech = layLech(lechTheoTrangThai, trangThai, frame);
-        lechThanX = lech.lechThanX;
-        lechThanY = lech.lechThanY;
-        lechDauX  = lech.lechDauX;
-        lechDauY  = lech.lechDauY;
-        // Tính tọa độ theo hướng flip
-        float chanW = chanVe.getWidth() * tiLe;
-        float chanH = chanVe.getHeight() * tiLe;
-        float thanW = thanVe.getWidth() * tiLe;
-        float thanH = thanVe.getHeight() * tiLe;
-        float dauW = dauVe.getWidth() * tiLe;
-        float dauH = dauVe.getHeight() * tiLe;
-
-        // Flip bằng scale âm nếu cần
-        float flipScale = flipX ? -1f : 1f;
-        float anchorX = flipX ? x + chanW : x;
-
-        batch.draw(chanVe, anchorX, y, chanW * flipScale, chanH);
-
-        float thanX = anchorX + (chanW / 2f - thanW / 2f) * flipScale;
-        float thanY = y + chanH + daoDong;
-        float dauX = anchorX + (chanW / 2f - dauW / 2f) * flipScale;
-        float dauY = thanY + thanH;
-        batch.draw(dauVe, dauX + lechDauX * flipScale, dauY + lechDauY, dauW * flipScale, dauH);
-        batch.draw(thanVe, thanX + lechThanX * flipScale, thanY - 10.2f + lechThanY, thanW * flipScale, thanH);
-        if (trangThai == TrangThai.BAY_NGANG) {
-            Texture cloud = vanBayCauHinh.frames[frameVanBay];
-            float cloudW = cloud.getWidth() * vanBayCauHinh.tile;
-            float cloudH = cloud.getHeight() * vanBayCauHinh.tile;
-            float flipCloud = (flipX == vanBayCauHinh.flipVanBay) ? 1f : -1f;
-
-            batch.draw(
-                cloud,
-                anchorX + (chanW / 2f - cloudW / 2f + vanBayCauHinh.offsetX) * flipCloud,
-                y + vanBayCauHinh.offsetY,
-                cloudW * flipCloud,
-                cloudH
-            );
-        }
-        if (veHUD.dangHienTinNhanChat) {
-            layout.setText(
-                veHUD.fontchat,
-                veHUD.tinNhanChat,
-                new Color(0,0,0,1),
-                180,
-                Align.center,
-                true
-            );
-            batch.end();
-            shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.setColor(1, 1, 1, 1);
-            shapeRenderer.rect(x+(rong-200)/2f, y+cao+30, 200, 36+layout.height);
-            shapeRenderer.end();
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-            shapeRenderer.setColor(Color.BLACK);
-            for (int i = 0; i < 2; i++) {
-                shapeRenderer.rect(x+(rong-200)/2f - i, y+cao+30 - i, 200 + i * 2, 36+layout.height + i * 2);
             }
-            shapeRenderer.end();
-            batch.begin();
-            float duoiX = flipX ? x + rong + 20 : x - 20;
-            batch.draw(veHUD.duoichat, duoiX, y + cao + 15, 16 * flipScale, 16);
-            veHUD.fontchat.draw(batch,layout,x+(rong-200)/2f+10f,y+cao+30+18f+layout.height);
+
+            switch (trangThai) {
+                case BAY_NGANG:
+                    chanVe = chan_bay;
+                    thanVe = than_bay;
+                    dauVe = dau_dung;
+                    break;
+                case DI_CHUYEN:
+                    timeChay += Gdx.graphics.getDeltaTime(); // tăng thời gian theo deltaTime
+                    if (timeChay >= 0.1f) {
+                        frame = (frame + 1) % chan_chay.length;
+                        timeChay = 0;
+                    }
+                    chanVe = chan_chay[frame];
+                    thanVe = than_chay[frame];
+                    dauVe = dau_chay;
+                    break;
+                case NHAY:
+                    chanVe = chan_nhay;
+                    thanVe = than_nhay;
+                    break;
+                case ROI:
+                    chanVe = chan_roi;
+                    thanVe = than_roi;
+                    break;
+                case DUNG_YEN:
+                default:
+                    // giữ ảnh mặc định đã gán ban đầu
+                    break;
+            }
+            // đúng kiểu dữ liệu 2 vế và gán class LechModular để có thể truy cập thuộc tính
+            DoLechModular lech = layLech(lechTheoTrangThai, trangThai, frame);
+            lechThanX = lech.lechThanX;
+            lechThanY = lech.lechThanY;
+            lechDauX = lech.lechDauX;
+            lechDauY = lech.lechDauY;
+            // Tính tọa độ theo hướng flip
+            float chanW = chanVe.getWidth() * tiLe;
+            float chanH = chanVe.getHeight() * tiLe;
+            float thanW = thanVe.getWidth() * tiLe;
+            float thanH = thanVe.getHeight() * tiLe;
+            float dauW = dauVe.getWidth() * tiLe;
+            float dauH = dauVe.getHeight() * tiLe;
+
+            // Flip bằng scale âm nếu cần
+            float flipScale = flipX ? -1f : 1f;
+            float anchorX = flipX ? x + chanW : x;
+
+            batch.draw(chanVe, anchorX, y, chanW * flipScale, chanH);
+
+            float thanX = anchorX + (chanW / 2f - thanW / 2f) * flipScale;
+            float thanY = y + chanH + daoDong;
+            float dauX = anchorX + (chanW / 2f - dauW / 2f) * flipScale;
+            float dauY = thanY + thanH;
+            batch.draw(dauVe, dauX + lechDauX * flipScale, dauY + lechDauY, dauW * flipScale, dauH);
+            batch.draw(thanVe, thanX + lechThanX * flipScale, thanY - 10.2f + lechThanY, thanW * flipScale, thanH);
+            if (trangThai == TrangThai.BAY_NGANG) {
+                Texture cloud = vanBayCauHinh.frames[frameVanBay];
+                float cloudW = cloud.getWidth() * vanBayCauHinh.tile;
+                float cloudH = cloud.getHeight() * vanBayCauHinh.tile;
+                float flipCloud = (flipX == vanBayCauHinh.flipVanBay) ? 1f : -1f;
+
+                batch.draw(
+                    cloud,
+                    anchorX + (chanW / 2f - cloudW / 2f + vanBayCauHinh.offsetX) * flipCloud,
+                    y + vanBayCauHinh.offsetY,
+                    cloudW * flipCloud,
+                    cloudH
+                );
+            }
+            if (veHUD.dangHienTinNhanChat) {
+                layout.setText(
+                    veHUD.fontchat,
+                    veHUD.tinNhanChat,
+                    new Color(0, 0, 0, 1),
+                    180,
+                    Align.center,
+                    true
+                );
+                batch.end();
+                shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                shapeRenderer.setColor(1, 1, 1, 1);
+                shapeRenderer.rect(x + (rong - 200) / 2f, y + cao + 30, 200, 36 + layout.height);
+                shapeRenderer.end();
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+                shapeRenderer.setColor(Color.BLACK);
+                for (int i = 0; i < 2; i++) {
+                    shapeRenderer.rect(x + (rong - 200) / 2f - i, y + cao + 30 - i, 200 + i * 2, 36 + layout.height + i * 2);
+                }
+                shapeRenderer.end();
+                batch.begin();
+                float duoiX = flipX ? x + rong + 20 : x - 20;
+                batch.draw(veHUD.duoichat, duoiX, y + cao + 15, 16 * flipScale, 16);
+                veHUD.fontchat.draw(batch, layout, x + (rong - 200) / 2f + 10f, y + cao + 30 + 18f + layout.height);
+            }
         }
     }
     public static DoLechModular layLech(Map<TrangThai, List<DoLechModular>> map, TrangThai trangThai, int frameIndex) {

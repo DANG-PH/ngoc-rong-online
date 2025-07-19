@@ -19,35 +19,37 @@ public class ThaoTac extends InputAdapter {
 
     @Override
     public boolean keyDown(int keycode) {
-        switch (keycode) {
-            case Input.Keys.LEFT:
-                nhanVat.diTrai();
-                nhanVat.setFlipTrai();
-                break;
-            case Input.Keys.RIGHT:
-                nhanVat.diPhai();
-                nhanVat.setFlipPhai();
-                break;
-            case Input.Keys.UP:
-                nhanVat.nhanNhay();
-                break;
+        if (hud.timeChoHopThe == 0) {
+            switch (keycode) {
+                case Input.Keys.LEFT:
+                    nhanVat.diTrai();
+                    nhanVat.setFlipTrai();
+                    break;
+                case Input.Keys.RIGHT:
+                    nhanVat.diPhai();
+                    nhanVat.setFlipPhai();
+                    break;
+                case Input.Keys.UP:
+                    nhanVat.nhanNhay();
+                    break;
 
-            // Bấm phím số 1–5 để chọn skill
-            case Input.Keys.NUM_1:
-                hud.chonSkill(0);
-                break;
-            case Input.Keys.NUM_2:
-                hud.chonSkill(1);
-                break;
-            case Input.Keys.NUM_3:
-                hud.chonSkill(2);
-                break;
-            case Input.Keys.NUM_4:
-                hud.chonSkill(3);
-                break;
-            case Input.Keys.NUM_5:
-                hud.chonSkill(4);
-                break;
+                // Bấm phím số 1–5 để chọn skill
+                case Input.Keys.NUM_1:
+                    hud.chonSkill(0);
+                    break;
+                case Input.Keys.NUM_2:
+                    hud.chonSkill(1);
+                    break;
+                case Input.Keys.NUM_3:
+                    hud.chonSkill(2);
+                    break;
+                case Input.Keys.NUM_4:
+                    hud.chonSkill(3);
+                    break;
+                case Input.Keys.NUM_5:
+                    hud.chonSkill(4);
+                    break;
+            }
         }
         return true;
     }

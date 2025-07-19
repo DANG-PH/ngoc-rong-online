@@ -52,8 +52,10 @@ public class NhanVatXuLy {
         Texture chan_bay = new Texture(path + "chanbay.png");
 
         Map<TrangThai, List<DoLechModular>> lech = CaiTrangOffset.getOffset(tenCaiTrang);
-        dangMacCaiTrang = true;
-        dangMacAvatar = false;
+        if (!tenCaiTrang.equals("vegito")) {
+            dangMacCaiTrang = true;
+            dangMacAvatar = false;
+        }
         return new NhanVatCauHinh(
             dau_dung, dau_chay,
             than_dung, than_nhay, than_roi, than_chay,
@@ -150,5 +152,11 @@ public class NhanVatXuLy {
     }
     public static boolean getDangMacAvatar(){
         return dangMacAvatar;
+    }
+    public static void setDangMacAvatar(boolean dangmacavt){
+        dangMacAvatar = dangmacavt;
+    }
+    public static void setDangMacCaiTrang(boolean dangmacct){
+        dangMacCaiTrang = dangmacct;
     }
 }

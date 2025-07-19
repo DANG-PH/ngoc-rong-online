@@ -11,5 +11,6 @@ public enum LoaiItem {
     CAITRANG,
     AVATAR,
     GIAPLUYENTAP,
-    VANBAY
+    VANBAY,
+    BONGTAI
 }

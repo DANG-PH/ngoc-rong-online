@@ -57,6 +57,8 @@ public class DuLieuNguoiChoi {
 
     private String[] danhSachHanhTinh = {"traidat","xayda","namek"};
 
+    private float HpHopThe,KiHopThe,SdHopThe;
+
     // Constructor
     public DuLieuNguoiChoi(String ten, long sucManh, int theLuc,
                            float HpHienTai, float HpNhanVat, int HpGoc,
@@ -457,13 +459,13 @@ public class DuLieuNguoiChoi {
         this.ChiMangNhanVat += ChiMangThem;
     }
 
-    public void tangHp(int HpCongThem){
+    public void tangHp(float HpCongThem){
         this.HpNhanVat += HpCongThem;
     }
     public void tangHpPt(int HpCongThem){ this.HpNhanVat *= (1f+HpCongThem/100f); }
     public void tangHpHienTai(int HpCongThem){
         this.HpHienTai += HpCongThem;
-        this.HpHienTai = Math.min(HpHienTai,HpNhanVat);
+        this.HpHienTai = Math.min(HpHienTai, HpHopThe);
     }
     public void tangHpPtHienTai(int HpCongThem){
         this.HpHienTai *= (1f+HpCongThem/100f);
@@ -475,7 +477,7 @@ public class DuLieuNguoiChoi {
     public void tangKiPt(int KiCongThem){ this.KiNhanVat *= (1f+KiCongThem/100f); }
     public void tangKiHienTai(int KiCongThem){
         this.KiHienTai += KiCongThem;
-        this.KiHienTai = Math.min(KiHienTai,KiNhanVat);
+        this.KiHienTai = Math.min(KiHienTai,KiHopThe);
     }
     public void tangKiPtHienTai(int KiCongThem){
         this.KiHienTai *= (1f+KiCongThem/100f);
@@ -525,7 +527,7 @@ public class DuLieuNguoiChoi {
         }
     }
 
-    public void giamHp(int Hp){
+    public void giamHp(float Hp){
         this.HpNhanVat -= Hp;
     }
     public void giamHpPt(int Hp){
@@ -571,6 +573,40 @@ public class DuLieuNguoiChoi {
     }
     public void giamDau(){
         this.soDauThan -= 1;
+    }
+
+    //setter hop the
+
+    public void setHpHopThe(float Hp) {
+        this.HpHopThe = Hp;
+    }
+
+    public float getHpHopThe() {
+        return HpHopThe;
+    }
+
+    public void setKiHopThe(float Ki) {
+        this.KiHopThe = Ki;
+    }
+
+    public float getKiHopThe() {
+        return KiHopThe;
+    }
+
+    public void setSdHopThe(float Sd) {
+        this.SdHopThe = Sd;
+    }
+
+    public float getSdHopThe() {
+        return SdHopThe;
+    }
+
+    public void setHpHienTai(float Hp) {
+        this.HpHienTai = Hp;
+    }
+
+    public void setKiHienTai(float Ki) {
+        this.KiHienTai = Ki;
     }
 
     public void dangMacAo(boolean dangmacAo){
