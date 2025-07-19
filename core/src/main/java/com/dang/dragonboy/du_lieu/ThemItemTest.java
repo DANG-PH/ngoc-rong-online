@@ -192,6 +192,46 @@ public class ThemItemTest {
             "xayda", 1000L, "Nappa", 7, 7, 7, -1
         ));
 
+        duLieu.themItemVaoHanhTrang(new Item(
+            "set_huy_diet", "Áo hủy diệt", LoaiItem.AO,
+            new Texture("vatpham/do/traidat/set_huy_diet/ao.png"),
+            "Giúp giảm sát thương", 1,
+            new int[]{0,0,0,0,2718,0,0,0,21,0,0,0,0},
+            "traidat", 40_000_000_000L, null, 7, 7, 7, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "set_huy_diet", "Quần hủy diệt", LoaiItem.QUAN,
+            new Texture("vatpham/do/traidat/set_huy_diet/quan.png"),
+            "Giúp tăng HP", 1,
+            new int[]{0,0,0,0,0,0,0,0,21,195000,0,0,0},
+            "traidat", 40_000_000_000L, null, 7, 7, 7, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "set_huy_diet", "Găng hủy diệt", LoaiItem.GANG,
+            new Texture("vatpham/do/traidat/set_huy_diet/gang.png"),
+            "Giúp tăng sức đánh", 1,
+            new int[]{0,0,0,0,0,0,0,0,21,0,0,19500,0},
+            "traidat", 40_000_000_000L, null, 7, 7, 7, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "set_huy_diet", "Giày hủy diệt", LoaiItem.GIAY,
+            new Texture("vatpham/do/traidat/set_huy_diet/giay.png"),
+            "Giúp tăng MP", 1,
+            new int[]{0,0,0,0,0,0,0,0,21,0,182000,0,0},
+            "traidat", 40_000_000_000L, null, 7, 7, 7, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "set_huy_diet", "Nhẫn hủy diệt", LoaiItem.RADA,
+            new Texture("vatpham/do/traidat/set_huy_diet/rada.png"),
+            "Giúp tăng Chí Mạng", 1,
+            new int[]{0,0,0,20,0,0,0,0,21,0,0,0,0},
+            "traidat", 40_000_000_000L, null, 7, 7, 7, -1
+        ));
+
 //        duLieu.themItemVaoHanhTrang(new Item(
 //            "glt_c1", "Giáp luyện tập cấp 1", LoaiItem.GIAPLUYENTAP,
 //            new Texture("vatpham/vatphamgame/giapluyentap/gltc1.png"),

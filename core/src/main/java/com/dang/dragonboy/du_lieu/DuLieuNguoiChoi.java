@@ -111,7 +111,7 @@ public class DuLieuNguoiChoi {
     }
 
     public void themItemVaoHanhTrang(Item item) {
-        if (hanhTrang.size() < 21) {
+        if (hanhTrang.size() < 50) {
             hanhTrang.add(item);
         }
     }
@@ -662,7 +662,7 @@ public class DuLieuNguoiChoi {
     }
     public void taoDeTu(String ten) {
 //        String hanhtinh = danhSachHanhTinh[MathUtils.random(danhSachHanhTinh.length - 1)];
-        String hanhtinh = "xayda";
+        String hanhtinh = nhanVat.getHanhtinh();
         DeTuCauHinh config = Doi_avt_ao_quan_DeTu(hanhtinh,hanhtinh+"_base","set_base","set_base");
         if (this.deTu == null) {
             this.deTu = new DeTu(

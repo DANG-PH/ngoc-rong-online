@@ -180,6 +180,9 @@ public class VeHUD {
 
     public boolean dangHopThe = false;
     public float timeChoHopThe = 0;
+    public Texture nenflash;
+    public boolean veNenFlash;
+    public Texture dautrai,dauphai,thantrai,thanphai,chantrai,chanphai;
 
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data;
@@ -259,6 +262,13 @@ public class VeHUD {
         duoichat = new Texture("hud/giaodienngoai/chung/duoichat.png");
         thanhhpnv = new Texture("hud/giaodientrong/thanhhp.png");
         thanhkinv = new Texture("hud/giaodientrong/thanhki.png");
+        nenflash = new Texture("hud/giaodientrong/nenflash.jpg");
+        dautrai = new Texture("hieuung/hieuunggame/hop_the/dautrai.png");
+        thantrai = new Texture("hieuung/hieuunggame/hop_the/thantrai.png");
+        chantrai = new Texture("hieuung/hieuunggame/hop_the/chantrai.png");
+        dauphai = new Texture("hieuung/hieuunggame/hop_the/dauphai.png");
+        thanphai = new Texture("hieuung/hieuunggame/hop_the/thanphai.png");
+        chanphai = new Texture("hieuung/hieuunggame/hop_the/chanphai.png");
         // Load font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -501,6 +511,11 @@ public class VeHUD {
             batch.flush();
             Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
         }
+        if (veNenFlash) {
+            batch.setColor(1, 1, 1, 0.8f);
+            batch.draw(nenflash,0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+            batch.setColor(1, 1, 1, 1);
+        }
     }
 
     public void clickOChat() {
@@ -643,7 +658,9 @@ public class VeHUD {
                             xulyitem.macDo(hangTrangDangChon);
                         }
                         if (itemDangChon.equals("bongtai")){
-                            timeChoHopThe = 1f;
+                            timeChoHopThe = 1.5f;
+                            dangHienPopup = false;
+                            scrollY = 0;
                         }
                     }
                     DangHienPopupThongTin1 = false;
@@ -685,8 +702,15 @@ public class VeHUD {
         }
         if (timeChoHopThe>0) {
             timeChoHopThe -= Gdx.graphics.getDeltaTime();
+            int tick = (int)(timeChoHopThe * 18);
+            if (tick % 2 == 0) {
+                veNenFlash = true;
+            } else {
+                veNenFlash = false;
+            }
             if (timeChoHopThe <= 0) {
                 timeChoHopThe = 0;
+                veNenFlash = false;
                 if (!dangHopThe) {
                     dangHopThe = true;
                     NhanVatCauHinh c2 = Doicaitrang("vegito");
@@ -699,6 +723,8 @@ public class VeHUD {
                         c2.avt
                     );
                     texAvt = new Texture(nhanVat.doiavatar());
+                    duLieuNguoiChoi.setHpHienTai(duLieuNguoiChoi.getHpToiDa()+duLieuNguoiChoi.deTu.getHpToiDa());
+                    duLieuNguoiChoi.setKiHienTai(duLieuNguoiChoi.getKiToiDa()+duLieuNguoiChoi.deTu.getKiToiDa());
                 } else {
                     dangHopThe = false;
                     ArrayList<Item> danhSach = duLieuNguoiChoi.getHanhTrangDangMac();
