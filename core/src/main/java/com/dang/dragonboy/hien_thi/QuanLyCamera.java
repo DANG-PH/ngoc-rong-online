@@ -12,7 +12,10 @@ public class QuanLyCamera {
 
     public OrthographicCamera uiCamera;
     public Viewport uiViewport;
-
+    private boolean dangKeoCamera = false;
+    private float diemBatDauX, diemBatDauY;
+    private float doLechX = 0, doLechY = 0;
+    private float doNhanCam = 1.5f; // độ nhạy kéo
     public QuanLyCamera() {
         // Camera chính
         camera = new OrthographicCamera();
@@ -42,10 +45,32 @@ public class QuanLyCamera {
         float halfWidth = camera.viewportWidth / 2;
         float halfHeight = camera.viewportHeight / 2;
 
-        float camX = Math.max(halfWidth, Math.min(x, mapWidth - halfWidth));
-        float camY = Math.max(halfHeight, Math.min(y, mapHeight - halfHeight));
+        float camX = x + (dangKeoCamera ? doLechX : 0);
+        float camY = y + (dangKeoCamera ? doLechY : 0);
+
+        // Clamp camera không vượt map
+        camX = Math.max(halfWidth, Math.min(camX, mapWidth - halfWidth));
+        camY = Math.max(halfHeight, Math.min(camY, mapHeight - halfHeight));
 
         camera.position.set(camX, camY, 0);
         camera.update();
+    }
+    public void batDauKeoCamera(int screenX, int screenY) {
+        dangKeoCamera = true;
+        diemBatDauX = screenX;
+        diemBatDauY = screenY;
+    }
+
+    public void keoCamera(int screenX, int screenY) {
+        if (dangKeoCamera) {
+            doLechX = (diemBatDauX - screenX) * doNhanCam;
+            doLechY = (screenY - diemBatDauY) * doNhanCam;
+        }
+    }
+
+    public void ketThucKeoCamera() {
+        dangKeoCamera = false;
+        doLechX = 0;
+        doLechY = 0;
     }
 }

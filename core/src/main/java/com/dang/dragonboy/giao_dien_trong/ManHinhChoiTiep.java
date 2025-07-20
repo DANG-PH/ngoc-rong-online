@@ -235,7 +235,7 @@ public class ManHinhChoiTiep implements Screen {
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(new ThaoTac(nhanVat, hudRenderer));
+        Gdx.input.setInputProcessor(new ThaoTac(nhanVat, hudRenderer,camManager));
     }
     private NhanVatCauHinh Doicaitrang(String TenCaiTrang){
         return NhanVatXuLy.xuly_id("caitrang_"+TenCaiTrang);

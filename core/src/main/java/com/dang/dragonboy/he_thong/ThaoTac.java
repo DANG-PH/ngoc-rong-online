@@ -6,15 +6,18 @@ import com.badlogic.gdx.Gdx;
 
 import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.nhan_vat.NhanVat;
+import com.dang.dragonboy.hien_thi.QuanLyCamera;
 
 public class ThaoTac extends InputAdapter {
 
     private final NhanVat nhanVat;
     private final VeHUD hud;
+    private final QuanLyCamera camera;
 
-    public ThaoTac(NhanVat nhanVat, VeHUD hud) {
+    public ThaoTac(NhanVat nhanVat, VeHUD hud,  QuanLyCamera camera) {
         this.nhanVat = nhanVat;
         this.hud = hud;
+        this.camera = camera;
     }
 
     @Override
@@ -72,12 +75,26 @@ public class ThaoTac extends InputAdapter {
     }
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        // Đảo Y vì LibGDX lấy gốc tọa độ ở dưới trái còn HUD dùng trên trái
-        int y = Gdx.graphics.getHeight() - screenY;
 
-        // Gọi xử lý click HUD
+        if (button == Input.Buttons.LEFT && !hud.dangHienPopup) {
+            camera.batDauKeoCamera(screenX, screenY);
+        }
+        return true;
+    }
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        camera.keoCamera(screenX, screenY);
+        return true;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        int y = Gdx.graphics.getHeight() - screenY;
         hud.xuLyClick(screenX, y);
 
+        if (button == Input.Buttons.LEFT) {
+            camera.ketThucKeoCamera();
+        }
         return true;
     }
     @Override
