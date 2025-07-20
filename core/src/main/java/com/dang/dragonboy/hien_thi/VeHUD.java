@@ -183,6 +183,24 @@ public class VeHUD {
     public Texture nenflash;
     public boolean veNenFlash;
     public Texture dautrai,dauphai,thantrai,thanphai,chantrai,chanphai;
+    public Texture dau1,than1,chan1,dau2,than2,chan2,dau3,than3,chan3,dau4,than4,chan4,dau5,than5,chan5,dau6,than6,chan6,than7,chan7;
+    public Texture dau1p,than1p,chan1p,dau2p,than2p,chan2p,dau3p,than3p,chan3p,dau4p,than4p,chan4p,dau5p,than5p,chan5p,dau6p,than6p,chan6p,than7p,chan7p;
+    public Texture[] chan = new Texture[6];
+    public Texture[] than = new Texture[6];
+    public Texture[] dau = new Texture[6];
+    public Texture[] chanp = new Texture[6];
+    public Texture[] thanp = new Texture[6];
+    public Texture[] daup = new Texture[6];
+    // Offset riêng cho từng bước
+    public float[] offsetX = {80f, 72f, 66f, 60f, 54f, 50f};
+    public float[] offsetThanX = {7f, 7f, 6f, -3f, -7f, 7.5f};
+    public float[] offsetThanY = {5f, 15f, 7f, 11f, 5f, 9f};
+    public float[] offsetDauX = {2f, 4f, 0f, 3f, 1f, -1f};
+    public float[] offsetDauY = {7f, 21f, 21f, 18f, 8f, 15f};
+    public boolean dangHopTheThuong = false;
+    public float timeHopTheTHuong ;
+    private Texture dauGotenks;
+    public float delayHopTheThuong,delayHopTheBongTai;
 
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data;
@@ -269,6 +287,37 @@ public class VeHUD {
         dauphai = new Texture("hieuung/hieuunggame/hop_the/dauphai.png");
         thanphai = new Texture("hieuung/hieuunggame/hop_the/thanphai.png");
         chanphai = new Texture("hieuung/hieuunggame/hop_the/chanphai.png");
+        dauGotenks = new Texture("nhanvat/caitrang/gotenks/daudung.png");
+        // Bên trái
+        dau1 = dautrai;than1  = new Texture("hieuung/hieuunggame/hop_the/1_thantrai.png");chan1 = chantrai;
+        dau2 = dautrai;than2  = new Texture("hieuung/hieuunggame/hop_the/2_thantrai.png");chan2  = new Texture("hieuung/hieuunggame/hop_the/2_chantrai.png");
+        dau3 = dautrai;than3  = new Texture("hieuung/hieuunggame/hop_the/3_thantrai.png");chan3  = new Texture("hieuung/hieuunggame/hop_the/3_chantrai.png");
+        dau4 = dauphai;than4 = new Texture("hieuung/hieuunggame/hop_the/2_thanphai.png");chan4 = new Texture("hieuung/hieuunggame/hop_the/4_chantrai.png");
+        dau5 = dauphai;than5 = new Texture("hieuung/hieuunggame/hop_the/1_thanphai.png");chan5 = chanphai;
+        dau6 = dau5;than6 = than1;chan6  = new Texture("hieuung/hieuunggame/hop_the/6_chantrai.png");
+        than7  = new Texture("hieuung/hieuunggame/hop_the/7_thantrai.png");chan7  = new Texture("hieuung/hieuunggame/hop_the/7_chantrai.png");
+        // Bên phải
+        dau1p = dauphai;than1p = new Texture("hieuung/hieuunggame/hop_the/1_thanphai.png");chan1p = chanphai;
+        dau2p = dauphai;than2p = new Texture("hieuung/hieuunggame/hop_the/2_thanphai.png");chan2p = new Texture("hieuung/hieuunggame/hop_the/2_chanphai.png");
+        dau3p = dauphai;than3p = new Texture("hieuung/hieuunggame/hop_the/3_thanphai.png");chan3p = new Texture("hieuung/hieuunggame/hop_the/3_chanphai.png");
+        dau4p = dautrai;than4p = than2;chan4p = new Texture("hieuung/hieuunggame/hop_the/4_chanphai.png");
+        dau5p = dau1;than5p = than1;chan5p = chan1;
+        dau6p = dau5p;than6p=than1p;chan6p = new Texture("hieuung/hieuunggame/hop_the/6_chanphai.png");
+        than7p = new Texture("hieuung/hieuunggame/hop_the/7_thanphai.png");chan7p = new Texture("hieuung/hieuunggame/hop_the/7_chanphai.png");
+        // Bên trái
+        dau[0] = dau1; than[0] = than1; chan[0] = chan1;
+        dau[1] = dau2; than[1] = than2; chan[1] = chan2;
+        dau[2] = dau3; than[2] = than3; chan[2] = chan3;
+        dau[3] = dau4; than[3] = than4; chan[3] = chan4;
+        dau[4] = dau5; than[4] = than5; chan[4] = chan5;
+        dau[5] = dau6; than[5] = than6; chan[5] = chan6;
+        // Bên phải
+        daup[0] = dau1p; thanp[0] = than1p; chanp[0] = chan1p;
+        daup[1] = dau2p; thanp[1] = than2p; chanp[1] = chan2p;
+        daup[2] = dau3p; thanp[2] = than3p; chanp[2] = chan3p;
+        daup[3] = dau4p; thanp[3] = than4p; chanp[3] = chan4p;
+        daup[4] = dau5p; thanp[4] = than5p; chanp[4] = chan5p;
+        daup[5] = dau6p; thanp[5] = than6p; chanp[5] = chan6p;
         // Load font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -512,9 +561,15 @@ public class VeHUD {
             Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
         }
         if (veNenFlash) {
-            batch.setColor(1, 1, 1, 0.8f);
+            batch.setColor(1, 1, 1, 0.7f);
             batch.draw(nenflash,0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
             batch.setColor(1, 1, 1, 1);
+        }
+        if (timeHopTheTHuong > 0) {
+            batch.draw(dauGotenks,50,screenHeight / 4f * 3+17.5f,dauGotenks.getWidth()*0.52f,dauGotenks.getHeight()*0.52f);
+            font.setColor(1,1,1,1);
+            layout.setText(font,(int)(timeHopTheTHuong/60f)+"'");
+            font.draw(batch,layout,68,screenHeight / 4f * 3+17.5f-7);
         }
     }
 
@@ -553,6 +608,13 @@ public class VeHUD {
                         case 1 -> duLieuNguoiChoi.deTu.setTrangthai("Bảo vệ");
                         case 2 -> duLieuNguoiChoi.deTu.setTrangthai("Tấn công");
                         case 3 -> duLieuNguoiChoi.deTu.setTrangthai("Về nhà");
+                    }
+                    if (oChiSoDangChon == 4 && !dangHopTheThuong && delayHopTheThuong == 0 && !dangHopThe) {
+                        timeChoHopThe = 3f;
+                        dangHienPopup = false;
+                        scrollY = 0;
+                        hangTrangDangChon = -1;
+                        dangHopTheThuong = true;
                     }
                 } else if (dangChonNhacNen) {
                     if (oChiSoDangChon == 0) {
@@ -657,10 +719,12 @@ public class VeHUD {
                         if (!itemDangChon.equals("bongtai")) {
                             xulyitem.macDo(hangTrangDangChon);
                         }
-                        if (itemDangChon.equals("bongtai")){
+                        if (itemDangChon.equals("bongtai") && timeHopTheTHuong == 0 && delayHopTheBongTai == 0){
                             timeChoHopThe = 1.5f;
                             dangHienPopup = false;
                             scrollY = 0;
+                            hangTrangDangChon = -1;
+                            dangHopTheThuong = false;
                         }
                     }
                     DangHienPopupThongTin1 = false;
@@ -676,15 +740,21 @@ public class VeHUD {
                     if (duLieuNguoiChoi.deTu.getSucManh()>=itemm.getSucManhYeuCau()) {
                         if (duLieuNguoiChoi.deTu.getHanhtinh().equals(itemm.getHanhtinh()) && !itemDangChon.equals("caitrang")) {
                             xulyitem.macDoChoDe(hangTrangDangChon);
+                            if (!dangHienPopupDeTu) {
+                                chucNangDangChon = 4;
+                                dangHienPopupDeTu = true;
+                                scrollY = 0;
+                                scrollYDeTu = 0;
+                            }
                         } else if (itemDangChon.equals("caitrang")) {
                             xulyitem.macDoChoDe(hangTrangDangChon);
+                            if (!dangHienPopupDeTu) {
+                                chucNangDangChon = 4;
+                                dangHienPopupDeTu = true;
+                                scrollY = 0;
+                                scrollYDeTu = 0;
+                            }
                         }
-                    }
-                    if (!dangHienPopupDeTu) {
-                        chucNangDangChon = 4;
-                        dangHienPopupDeTu = true;
-                        scrollY = 0;
-                        scrollYDeTu = 0;
                     }
                     hangTrangDangChon = -1;
                     hangTrangDeTuDangChon = -1;
@@ -713,7 +783,8 @@ public class VeHUD {
                 veNenFlash = false;
                 if (!dangHopThe) {
                     dangHopThe = true;
-                    NhanVatCauHinh c2 = Doicaitrang("vegito");
+                    String hopTheDuocChon = dangHopTheThuong ? "gotenks" : "vegito";
+                    NhanVatCauHinh c2 = Doicaitrang(hopTheDuocChon);
                     nhanVat.fixCaiTrang(
                         c2.dau_dung, c2.dau_chay,
                         c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
@@ -725,8 +796,15 @@ public class VeHUD {
                     texAvt = new Texture(nhanVat.doiavatar());
                     duLieuNguoiChoi.setHpHienTai(duLieuNguoiChoi.getHpToiDa()+duLieuNguoiChoi.deTu.getHpToiDa());
                     duLieuNguoiChoi.setKiHienTai(duLieuNguoiChoi.getKiToiDa()+duLieuNguoiChoi.deTu.getKiToiDa());
+                    if (dangHopTheThuong) {
+                        timeHopTheTHuong = 600f;
+                        dangHienPopupDeTu = false;
+                        chucNangDangChon = 1;
+                    }
                 } else {
                     dangHopThe = false;
+                    delayHopTheBongTai = 10f;
+                    delayHopTheThuong = 600f;
                     ArrayList<Item> danhSach = duLieuNguoiChoi.getHanhTrangDangMac();
                     if (NhanVatXuLy.getDangMacCaiTrang() && !NhanVatXuLy.getDangMacAvatar() && danhSach.get(5) != null) {
                         NhanVatCauHinh c2 = Doicaitrang(danhSach.get(5).getId());
@@ -768,6 +846,61 @@ public class VeHUD {
                 duLieuNguoiChoi.setKiHienTai(duLieuNguoiChoi.getKiToiDa());
             }
             duLieuNguoiChoi.setSdHopThe(duLieuNguoiChoi.getSucDanhNhanVat());
+        }
+        if (timeHopTheTHuong > 0) {
+            timeHopTheTHuong -= delta;
+            if (timeHopTheTHuong <= 1.5f) {
+                int tick = (int) (timeHopTheTHuong * 18);
+                if (tick % 2 == 0) {
+                    veNenFlash = true;
+                } else {
+                    veNenFlash = false;
+                }
+            }
+            if (timeHopTheTHuong <= 0) {
+                timeHopTheTHuong = 0;
+                veNenFlash = false;
+                dangHopTheThuong = false;
+                dangHopThe = false;
+                delayHopTheBongTai = 10f;
+                delayHopTheThuong = 600f;
+                ArrayList<Item> danhSach = duLieuNguoiChoi.getHanhTrangDangMac();
+                if (NhanVatXuLy.getDangMacCaiTrang() && !NhanVatXuLy.getDangMacAvatar() && danhSach.get(5) != null) {
+                    NhanVatCauHinh c2 = Doicaitrang(danhSach.get(5).getId());
+                    nhanVat.fixCaiTrang(
+                        c2.dau_dung, c2.dau_chay,
+                        c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
+                        c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
+                        c2.than_bay, c2.chan_bay,
+                        c2.lechMap,
+                        c2.avt
+                    );
+                    texAvt = new Texture(nhanVat.doiavatar());
+                } else {
+                    NhanVatCauHinh c2 = Doi_avt_ao_quan(nhanVat.getHanhtinh(), avatardangmac, aodangmac, quandangmac);
+                    nhanVat.fixCaiTrang(
+                        c2.dau_dung, c2.dau_chay,
+                        c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
+                        c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
+                        c2.than_bay, c2.chan_bay,
+                        c2.lechMap,
+                        c2.avt
+                    );
+                    texAvt = new Texture(nhanVat.doiavatar());
+                }
+            }
+        }
+        if (delayHopTheThuong > 0) {
+            delayHopTheThuong -= delta;
+            if (delayHopTheThuong <= 0) {
+                delayHopTheThuong = 0;
+            }
+        }
+        if (delayHopTheBongTai > 0) {
+            delayHopTheBongTai -= delta;
+            if (delayHopTheBongTai <= 0) {
+                delayHopTheBongTai = 0;
+            }
         }
         if (isThongBaoOKPressed>0) {
             isThongBaoOKPressed -= Gdx.graphics.getDeltaTime();
@@ -980,7 +1113,15 @@ public class VeHUD {
             o_noi_tai, o_noi_tai_click, iconnoitai,
             nutvuong, nutvuongclick, anhThongBao,
             nutdn, nutclick, khungchat, duoichat,
-            thanhhpnv, thanhkinv
+            thanhhpnv, thanhkinv,
+
+            // Các texture hiệu ứng hợp thể
+            nenflash,
+            dautrai, thantrai, chantrai,
+            dauphai, thanphai, chanphai,
+            dauGotenks,
+            dau1, than1, chan1, dau2, than2, chan2, dau3, than3, chan3, dau6, than6, chan6, than7, chan7,
+            dau1p, than1p, chan1p, dau2p, than2p, chan2p, dau3p, than3p, chan3p, dau6p, than6p, chan6p, than7p, chan7p
         };
 
         for (Texture tex : textures) {
@@ -1010,6 +1151,14 @@ public class VeHUD {
         }
 
         if (shapeRenderer != null) shapeRenderer.dispose();
-    }
+        for (int i = 0; i < 6; i++) {
+            if (dau[i] != null) dau[i].dispose();
+            if (than[i] != null) than[i].dispose();
+            if (chan[i] != null) chan[i].dispose();
 
+            if (daup[i] != null) daup[i].dispose();
+            if (thanp[i] != null) thanp[i].dispose();
+            if (chanp[i] != null) chanp[i].dispose();
+        }
+    }
 }

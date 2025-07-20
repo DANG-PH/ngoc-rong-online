@@ -1217,7 +1217,15 @@ public class NhanVat {
     }
 
     public void ve(SpriteBatch batch, float thoiGian) {
-        if (veHUD.timeChoHopThe == 0) {
+        boolean duDieuKien = true;
+        if (veHUD.dangHopTheThuong) {
+            if (veHUD.timeHopTheTHuong < 1.5f ){
+                duDieuKien = false;
+            } else {
+                duDieuKien = true;
+            }
+        }
+        if (veHUD.timeChoHopThe == 0 && duDieuKien) {
             float daoDong = (trangThai == TrangThai.DUNG_YEN || trangThai == TrangThai.BAY_NGANG) ? (float) Math.sin(thoiGian) * 1.08f : 0f;
 
             Texture chanVe = chan_dung;
@@ -1328,7 +1336,7 @@ public class NhanVat {
                 veHUD.fontchat.draw(batch, layout, x + (rong - 200) / 2f + 10f, y + cao + 30 + 18f + layout.height);
             }
         } else {
-            if (!veHUD.dangHopThe) {
+            if (!veHUD.dangHopThe && !veHUD.dangHopTheThuong) {
                 if (veHUD.timeChoHopThe > 1.2f) {
                     // Tính phần trăm đã đi
                     float alpha = (1.5f - veHUD.timeChoHopThe) / 0.3f;
@@ -1377,18 +1385,40 @@ public class NhanVat {
                     float dautW = veHUD.dautrai.getWidth() * 2;
                     float dautH = veHUD.dautrai.getHeight() * 2;
 
-                    // Vẽ bên trái
-                    batch.draw(veHUD.chantrai, x, y, chantW, chantH);
-                    float thantX = x + (chantW / 2f - thantW / 2f);
-                    float thantY = y + chantH;
-                    float dautX = x + (chantW / 2f - dautW / 2f);
-                    float dautY = thantY + thantH;
-                    batch.draw(veHUD.thantrai, thantX, thantY - 9.9f, thantW, thantH);
-                    batch.draw(veHUD.dautrai, dautX, dautY - 13.5f, dautW, dautH);
+                    float chanpW = veHUD.chanphai.getWidth() * 2;
+                    float chanpH = veHUD.chanphai.getHeight() * 2;
+                    float thanpW = veHUD.thanphai.getWidth() * 2;
+                    float thanpH = veHUD.thanphai.getHeight() * 2;
+                    float daupW = veHUD.dauphai.getWidth() * 2;
+                    float daupH = veHUD.dauphai.getHeight() * 2;
+                    if (!flipX) {
+                        // Vẽ bên trái
+                        batch.draw(veHUD.chantrai, x, y, chantW, chantH);
+                        float thantX = x + (chantW / 2f - thantW / 2f);
+                        float thantY = y + chantH;
+                        float dautX = x + (chantW / 2f - dautW / 2f);
+                        float dautY = thantY + thantH;
+                        batch.draw(veHUD.thantrai, thantX, thantY - 10.2f, thantW, thantH);
+                        batch.draw(veHUD.dautrai, dautX, dautY - 14f, dautW, dautH);
+                    } else {
+                        batch.draw(veHUD.chanphai, x, y, chanpW, chanpH);
+                        float thanpX = x + (chanpW / 2f - thanpW / 2f);
+                        float thanpY = y + chanpH;
+                        float daupX = x + (chanpW / 2f - daupW / 2f);
+                        float daupY = thanpY + thanpH;
+                        batch.draw(veHUD.thanphai, thanpX, thanpY - 10.2f, thanpW, thanpH);
+                        batch.draw(veHUD.dauphai, daupX, daupY - 14f, daupW, daupH);
+                    }
                 }
-            } else {
-                if (veHUD.timeChoHopThe > 0.5f && veHUD.timeChoHopThe< 1.4f) {
-                    int tick = (int)(veHUD.timeChoHopThe * 22);
+            } else if (veHUD.dangHopThe) {
+                float timeHieuUng;
+                if (veHUD.dangHopTheThuong) {
+                    timeHieuUng = veHUD.timeHopTheTHuong;
+                } else {
+                    timeHieuUng = veHUD.timeChoHopThe;
+                }
+                if (timeHieuUng > 0.5f && timeHieuUng< 1.4f) {
+                    int tick = (int)(timeHieuUng * 22);
                     if (tick % 2 == 0) {
                         float chantW = veHUD.chantrai.getWidth() * 2;
                         float chantH = veHUD.chantrai.getHeight() * 2;
@@ -1397,18 +1427,34 @@ public class NhanVat {
                         float dautW = veHUD.dautrai.getWidth() * 2;
                         float dautH = veHUD.dautrai.getHeight() * 2;
 
-                        // Vẽ bên trái
-                        batch.draw(veHUD.chantrai, x, y, chantW, chantH);
-                        float thantX = x + (chantW / 2f - thantW / 2f);
-                        float thantY = y + chantH;
-                        float dautX = x + (chantW / 2f - dautW / 2f);
-                        float dautY = thantY + thantH;
-                        batch.draw(veHUD.thantrai, thantX, thantY - 9.9f, thantW, thantH);
-                        batch.draw(veHUD.dautrai, dautX, dautY - 13.5f, dautW, dautH);
+                        float chanpW = veHUD.chanphai.getWidth() * 2;
+                        float chanpH = veHUD.chanphai.getHeight() * 2;
+                        float thanpW = veHUD.thanphai.getWidth() * 2;
+                        float thanpH = veHUD.thanphai.getHeight() * 2;
+                        float daupW = veHUD.dauphai.getWidth() * 2;
+                        float daupH = veHUD.dauphai.getHeight() * 2;
+                        if (!flipX) {
+                            // Vẽ bên trái
+                            batch.draw(veHUD.chantrai, x, y, chantW, chantH);
+                            float thantX = x + (chantW / 2f - thantW / 2f);
+                            float thantY = y + chantH;
+                            float dautX = x + (chantW / 2f - dautW / 2f);
+                            float dautY = thantY + thantH;
+                            batch.draw(veHUD.thantrai, thantX, thantY - 10.2f, thantW, thantH);
+                            batch.draw(veHUD.dautrai, dautX, dautY - 14f, dautW, dautH);
+                        } else {
+                            batch.draw(veHUD.chanphai, x, y, chanpW, chanpH);
+                            float thanpX = x + (chanpW / 2f - thanpW / 2f);
+                            float thanpY = y + chanpH;
+                            float daupX = x + (chanpW / 2f - daupW / 2f);
+                            float daupY = thanpY + thanpH;
+                            batch.draw(veHUD.thanphai, thanpX, thanpY - 10.2f, thanpW, thanpH);
+                            batch.draw(veHUD.dauphai, daupX, daupY - 14f, daupW, daupH);
+                        }
                     }
-                } else if (veHUD.timeChoHopThe <= 0.5f) {
+                } else if (timeHieuUng <= 0.5f) {
                     // Tính phần trăm đã đi
-                    float alpha = (0.5f - veHUD.timeChoHopThe) / 0.3f;
+                    float alpha = (0.5f - timeHieuUng) / 0.3f;
                     alpha = Math.min(Math.max(alpha, 0f), 1f); // đảm bảo nằm trong 0→1
 
                     // Tính vị trí hai bên chạy về x
@@ -1447,6 +1493,44 @@ public class NhanVat {
                     batch.draw(veHUD.thanphai, thanpX, thanpY - 10.2f, thanpW, thanpH);
                     batch.draw(veHUD.dauphai, daupX, daupY - 14f, daupW, daupH);
                 }
+            } else {
+                float step = 0.3f;
+                float timeMax = 3f;
+                for (int i = 0; i < 6; i++) {
+                    float start = timeMax - i*step;
+                    float end = start - step;
+                    if (veHUD.timeChoHopThe >= end && veHUD.timeChoHopThe < start) {
+                        veNhanVatHopThe(i, batch, x, y);
+                        break;
+                    }
+                }
+                if (veHUD.timeChoHopThe >= timeMax-6*step-step*3 && veHUD.timeChoHopThe <= timeMax-6*step) {
+                    float chantW = veHUD.chan7.getWidth() * 2.3f;
+                    float chantH = veHUD.chan7.getHeight() * 2.3f;
+                    float thantW = veHUD.than7.getWidth() * 2.3f;
+                    float thantH = veHUD.than7.getHeight() * 2.3f;
+
+                    float chanpW = veHUD.chan7p.getWidth() * 2.3f;
+                    float chanpH = veHUD.chan7p.getHeight() * 2.3f;
+                    float thanpW = veHUD.than7p.getWidth() * 2.3f;
+                    float thanpH = veHUD.than7p.getHeight() * 2.3f;
+
+                    float offsetx = 38.5f;
+                    float offsetThanX = -10f;
+                    float offsetThanY = 0f;
+
+                    // Vẽ bên trái
+                    batch.draw(veHUD.chan7, x - offsetx, y, chantW, chantH);
+                    float thantX = x + (chantW / 2f - thantW / 2f);
+                    float thantY = y + chantH;
+                    batch.draw(veHUD.than7, thantX - offsetx - offsetThanX, thantY - offsetThanY, thantW, thantH);
+
+                    // Vẽ bên phải
+                    batch.draw(veHUD.chan7p, x + offsetx, y, chanpW, chanpH);
+                    float thanpX = x + (chanpW / 2f - thanpW / 2f);
+                    float thanpY = y + chanpH;
+                    batch.draw(veHUD.than7p, thanpX + offsetx + offsetThanX, thanpY - offsetThanY, thanpW, thanpH);
+                }
             }
         }
     }
@@ -1461,5 +1545,44 @@ public class NhanVat {
         } else {
             return ds.get(0); // chỉ có 1 frame cho trạng thái khác
         }
+    }
+    void veNhanVatHopThe(int index, SpriteBatch batch, float x, float y) {
+        float chantW = veHUD.chan[index].getWidth() * 2;
+        float chantH = veHUD.chan[index].getHeight() * 2;
+        float thantW = veHUD.than[index].getWidth() * 2;
+        float thantH = veHUD.than[index].getHeight() * 2;
+        float dautW = veHUD.dau[index].getWidth() * 2;
+        float dautH = veHUD.dau[index].getHeight() * 2;
+
+        float chanpW = veHUD.chanp[index].getWidth() * 2;
+        float chanpH = veHUD.chanp[index].getHeight() * 2;
+        float thanpW = veHUD.thanp[index].getWidth() * 2;
+        float thanpH = veHUD.thanp[index].getHeight() * 2;
+        float daupW = veHUD.daup[index].getWidth() * 2;
+        float daupH = veHUD.daup[index].getHeight() * 2;
+
+        float offsetx = veHUD.offsetX[index];
+        float offsetThanX = veHUD.offsetThanX[index];
+        float offsetThanY = veHUD.offsetThanY[index];
+        float offsetDauX = veHUD.offsetDauX[index];
+        float offsetDauY = veHUD.offsetDauY[index];
+
+        // Vẽ bên trái
+        batch.draw(veHUD.chan[index], x - offsetx, y, chantW, chantH);
+        float thantX = x + (chantW / 2f - thantW / 2f);
+        float thantY = y + chantH;
+        float dautX = x + (chantW / 2f - dautW / 2f);
+        float dautY = thantY + thantH;
+        batch.draw(veHUD.than[index], thantX - offsetx - offsetThanX, thantY - offsetThanY, thantW, thantH);
+        batch.draw(veHUD.dau[index], dautX - offsetx - offsetDauX, dautY - offsetDauY, dautW, dautH);
+
+        // Vẽ bên phải
+        batch.draw(veHUD.chanp[index], x + offsetx, y, chanpW, chanpH);
+        float thanpX = x + (chanpW / 2f - thanpW / 2f);
+        float thanpY = y + chanpH;
+        float daupX = x + (chanpW / 2f - daupW / 2f);
+        float daupY = thanpY + thanpH;
+        batch.draw(veHUD.thanp[index], thanpX + offsetx + offsetThanX, thanpY - offsetThanY, thanpW, thanpH);
+        batch.draw(veHUD.daup[index], daupX + offsetx + offsetDauX, daupY - offsetDauY, daupW, daupH);
     }
 }

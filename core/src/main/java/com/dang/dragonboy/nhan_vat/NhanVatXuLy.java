@@ -52,7 +52,7 @@ public class NhanVatXuLy {
         Texture chan_bay = new Texture(path + "chanbay.png");
 
         Map<TrangThai, List<DoLechModular>> lech = CaiTrangOffset.getOffset(tenCaiTrang);
-        if (!tenCaiTrang.equals("vegito")) {
+        if (!tenCaiTrang.equals("vegito") && !tenCaiTrang.equals("gotenks")) {
             dangMacCaiTrang = true;
             dangMacAvatar = false;
         }
