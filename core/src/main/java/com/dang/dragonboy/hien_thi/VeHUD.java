@@ -442,6 +442,11 @@ public class VeHUD {
             shapeRenderer.setColor(1f, 1f, 1f, 1f);
             shapeRenderer.rect(screenWidth - 75 - 10 + 10, 10 + 10, 53, dauThanRenderH);
             shapeRenderer.end();
+//            Gdx.gl.glEnable(GL20.GL_BLEND);
+//            shapeRenderer.setColor(0f, 0f, 0f, 0.55f);
+//            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+//            shapeRenderer.triangle(0,  screenHeight / 4f * 3 - 10, 0,  screenHeight / 4f * 3 + 35 + 10, 25+10f, screenHeight / 4f * 3 + 17.5f);
+//            shapeRenderer.end();
         }
         batch.begin();
 
@@ -610,7 +615,7 @@ public class VeHUD {
                         case 3 -> duLieuNguoiChoi.deTu.setTrangthai("Về nhà");
                     }
                     if (oChiSoDangChon == 4 && !dangHopTheThuong && delayHopTheThuong == 0 && !dangHopThe) {
-                        timeChoHopThe = 3f;
+                        timeChoHopThe = 2f;
                         dangHienPopup = false;
                         scrollY = 0;
                         hangTrangDangChon = -1;
@@ -958,6 +963,7 @@ public class VeHUD {
                         duLieuNguoiChoi.tangNgoc(1_000_000);
                         duLieuNguoiChoi.tangVang(1_000_000_000);
                         duLieuNguoiChoi.tangSucManh(10_000_000_000L);
+                        duLieuNguoiChoi.deTu.tangSucManh(10_000_000_000L);
                         chuaNhanQuaLanDau = false;
                     }
                     nutduocchon = -1;

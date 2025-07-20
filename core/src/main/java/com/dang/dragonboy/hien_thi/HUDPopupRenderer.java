@@ -20,11 +20,13 @@ public class HUDPopupRenderer {
     private GlyphLayout layout;
     private ShapeRenderer shapeRenderer;
     private DuLieuNguoiChoi duLieuNguoiChoi;
+    private Texture dauhoicham;
     public HUDPopupRenderer(VeHUD veHUD,GlyphLayout layout,DuLieuNguoiChoi duLieuNguoiChoi) {
         shapeRenderer = new ShapeRenderer();
         this.veHUD = veHUD;
         this.layout = layout;
         this.duLieuNguoiChoi = duLieuNguoiChoi;
+        dauhoicham = new Texture("hud/giaodientrong/dauhoicham.png");
     }
 
     public void renderPopup(SpriteBatch batch) {
@@ -358,6 +360,10 @@ public class HUDPopupRenderer {
                                 layout.setText(veHUD.fontCapSKill,",Set "+item.getSetkichhoat());
                                 veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12 +kc, y + 49 - 30);
                             }
+                        }
+                        if (item.getLoai() == LoaiItem.BONGTAI){
+                            layout.setText(veHUD.fontCapSKill,item.getMoTa());
+                            veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
                         }
                     }
                 }
@@ -997,6 +1003,10 @@ public class HUDPopupRenderer {
                                 veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + kc + 1020 - 350, y + 49 - 30);
                             }
                         }
+                        if (item.getLoai() == LoaiItem.BONGTAI){
+                            layout.setText(veHUD.fontCapSKill,item.getMoTa());
+                            veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
+                        }
                     }
                 }
             }
@@ -1158,6 +1168,21 @@ public class HUDPopupRenderer {
                     float y = startYDeTu - (soTrangBiDeTu + i) * KhoangCachItemDeTu;
                     Texture tex = (veHUD.hangTrangDeTuDangChon == soTrangBiDeTu + i) ? veHUD.hanh_trang_click : veHUD.hanh_trang;
                     batch.draw(tex, 3, y, 344, 62);
+                    batch.draw(veHUD.oskill,3 + (70-56)/2f,y+(62-56)/2f,56,56);
+                    String[] sucManhYeuCau = {"0","150 triệu","1,5 tỉ","20 tỉ"};
+                    if (duLieuNguoiChoi.deTu.getTenSkill(i)!=null) {
+                        batch.draw(duLieuNguoiChoi.deTu.iconSkill.get(duLieuNguoiChoi.deTu.getTenSkill(i)),3 + (70-56)/2f+8,y+(62-56)/2f+8,56-16,56-16);
+                        layout.setText(veHUD.fontMotaNganSkill1,duLieuNguoiChoi.deTu.getTenSkill(i));
+                        veHUD.fontMotaNganSkill1.draw(batch,layout,3 + 70 + 12,y+62-12);
+                        layout.setText(veHUD.fontMotaNhiemVu,"Cấp: "+duLieuNguoiChoi.deTu.getCapSkill(i));
+                        veHUD.fontMotaNhiemVu.draw(batch,layout,3 + 70 + 12,y+62-12-20);
+                    } else {
+                        float dhcW = dauhoicham.getWidth()*0.65f;
+                        float dhcH = dauhoicham.getHeight()*0.65f;
+                        batch.draw(dauhoicham,3 + (70-56)/2f +(56-dhcW)/2f,y+(62-56)/2f + (56-dhcH)/2f ,dhcW,dhcH);
+                        layout.setText(veHUD.fontMotaNhiemVu,"Cần "+sucManhYeuCau[i]+" sức mạnh để mở");
+                        veHUD.fontMotaNhiemVu.draw(batch,layout,3 + 70 + 12,y+62-17);
+                    }
                 }
                 batch.flush();
                 Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
@@ -1168,6 +1193,7 @@ public class HUDPopupRenderer {
                 batch.begin();
             }
             if (veHUD.chucNangDeTuDangChon == 1) {
+                batch.draw(veHUD.nutX, 350 - nutXW - 6, 610 - nutXH - 2, nutXW, nutXH - 5);
                 veHUD.font.setColor(1,1,1,1);
                 layout.setText(veHUD.font, "HP: "+(int)duLieuNguoiChoi.deTu.getHpHienTai()+"/"+(int)duLieuNguoiChoi.deTu.getHpToiDa());
                 veHUD.font.draw(batch,layout,125,595);

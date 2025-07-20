@@ -83,6 +83,13 @@ public class HUDClickHandler {
                         veHUD.tatPopupNhanVat();
                         veHUD.hangTrangDangChon = -1;
                         veHUD.oChiSoDangChon = -1;
+                    } else {
+                        if (veHUD.chucNangDeTuDangChon == 1) {
+                            veHUD.dangHienPopupDeTu = false;
+                            veHUD.scrollY = 0;
+                            veHUD.oChiSoDangChon = -1;
+                            veHUD.chucNangDeTuDangChon = 0;
+                        }
                     }
                 }
             } else if (x > 350 && x <= 1020 && !veHUD.DangHienPopupThongTin && !veHUD.HienPopUpGanSkill && !veHUD.DangHienPopupThongTin1) {

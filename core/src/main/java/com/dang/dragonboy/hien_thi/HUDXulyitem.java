@@ -322,7 +322,7 @@ public class HUDXulyitem {
                     duLieuNguoiChoi.deTu.setHanhTinhAo(item.getHanhtinh());
                     duLieuNguoiChoi.deTu.setSucManhYeuCauAo(item.getSucManhYeuCau());
                     if (!DeTuXuLy.getDangMacCaiTrang()) {
-                        DeTuCauHinh c2 = veHUD.Doi_avt_ao_quan_DeTu(nhanVat.getHanhtinh(), veHUD.avatardangmac, item.getId(), veHUD.quandangmac);
+                        DeTuCauHinh c2 = veHUD.Doi_avt_ao_quan_DeTu(duLieuNguoiChoi.deTu.getHanhtinh(), duLieuNguoiChoi.deTu.getAvtDangMac(), item.getId(), veHUD.quandetudangmac);
                         duLieuNguoiChoi.deTu.fixCaiTrang(
                             c2.dau_dung_de_tu, c2.dau_chay_de_tu,
                             c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
@@ -355,7 +355,7 @@ public class HUDXulyitem {
                     duLieuNguoiChoi.deTu.setHanhTinhQuan(item.getHanhtinh());
                     duLieuNguoiChoi.deTu.setSucManhYeuCauQuan(item.getSucManhYeuCau());
                     if (!DeTuXuLy.getDangMacCaiTrang()) {
-                        DeTuCauHinh c2 = veHUD.Doi_avt_ao_quan_DeTu(nhanVat.getHanhtinh(), veHUD.avatardangmac, item.getId(), veHUD.quandangmac);
+                        DeTuCauHinh c2 = veHUD.Doi_avt_ao_quan_DeTu(duLieuNguoiChoi.deTu.getHanhtinh(), duLieuNguoiChoi.deTu.getAvtDangMac(), veHUD.aodetudangmac, item.getId());
                         duLieuNguoiChoi.deTu.fixCaiTrang(
                             c2.dau_dung_de_tu, c2.dau_chay_de_tu,
                             c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
@@ -606,7 +606,7 @@ public class HUDXulyitem {
 
         // 5. Load avatar nếu không cải trang
         if (!DeTuXuLy.getDangMacCaiTrang()) {
-            DeTuCauHinh c2 = veHUD.Doi_avt_ao_quan_DeTu(nhanVat.getHanhtinh(), duLieuNguoiChoi.deTu.getAvtDangMac(), item.getId(), veHUD.quandangmac);
+            DeTuCauHinh c2 = veHUD.Doi_avt_ao_quan_DeTu(duLieuNguoiChoi.deTu.getHanhtinh(), duLieuNguoiChoi.deTu.getAvtDangMac(), item.getId(), veHUD.quandetudangmac);
             duLieuNguoiChoi.deTu.fixCaiTrang(
                 c2.dau_dung_de_tu, c2.dau_chay_de_tu,
                 c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
@@ -656,7 +656,7 @@ public class HUDXulyitem {
 
         // 5. Cập nhật giao diện nếu không cải trang
         if (!DeTuXuLy.getDangMacCaiTrang()){
-            DeTuCauHinh c2 = veHUD.Doi_avt_ao_quan_DeTu(duLieuNguoiChoi.deTu.getHanhtinh(), duLieuNguoiChoi.deTu.getAvtDangMac(), "set_base", veHUD.quandangmac);
+            DeTuCauHinh c2 = veHUD.Doi_avt_ao_quan_DeTu(duLieuNguoiChoi.deTu.getHanhtinh(), duLieuNguoiChoi.deTu.getAvtDangMac(), "set_base", veHUD.quandetudangmac);
             duLieuNguoiChoi.deTu.fixCaiTrang(
                 c2.dau_dung_de_tu, c2.dau_chay_de_tu,
                 c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
@@ -820,7 +820,7 @@ public class HUDXulyitem {
 
         // 5. Load avatar nếu không cải trang
         if (!DeTuXuLy.getDangMacCaiTrang()) {
-            DeTuCauHinh c2 = veHUD.Doi_avt_ao_quan_DeTu(nhanVat.getHanhtinh(), duLieuNguoiChoi.deTu.getAvtDangMac(), item.getId(), veHUD.quandangmac);
+            DeTuCauHinh c2 = veHUD.Doi_avt_ao_quan_DeTu(duLieuNguoiChoi.deTu.getHanhtinh(), duLieuNguoiChoi.deTu.getAvtDangMac(),veHUD.aodetudangmac, item.getId());
             duLieuNguoiChoi.deTu.fixCaiTrang(
                 c2.dau_dung_de_tu, c2.dau_chay_de_tu,
                 c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,

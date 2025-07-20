@@ -20,6 +20,7 @@ public class DeTu {
     public float rong_de_tu, cao_de_tu;
     private final float tiLe = 0.5f;
     private Map<TrangThaiDeTu, List<DoLechModular>> lechTheoTrangThai = new HashMap<>();
+    public Map<String,Texture> iconSkill = new HashMap<>();
     private TrangThaiDeTu trangThai = TrangThaiDeTu.DUNG_YEN;
     private String ten;
     private String[] danhSachHanhTinh = {"traidat","xayda","namek"};
@@ -98,6 +99,10 @@ public class DeTu {
 
     private int[] capSkill = new int[4];  // Mặc định toàn 0
     private String[] tenSkill = new String[4];
+    private String[] danhSachSkill1 = {"Chiêu đấm Galick","Chiêu đấm Dragon","Chiêu đấm Demon"};
+    private String[] danhSachSkill2 = {"Chiêu Kamejoko","Chiêu Kamejoko","Chiêu Kamejoko"};
+    private String[] danhSachSkill3 = {"Thái Dương Hạ San","Tái tạo năng lượng","Kaioken"};
+    private String[] danhSachSkill4 = {"Biến hình","Khiên năng lượng","Đẻ trứng"};
 
     private ArrayList<Item> hanhTrangDangMac = new ArrayList<>(6);
     {
@@ -147,6 +152,34 @@ public class DeTu {
         this.ChiMangDeTu = ChiMangGoc;
         this.SatThuongChiMang = 150;
         this.TiemNangDeTu = 99999999999L;
+        iconSkill.put("Chiêu đấm Galick",new Texture("kynang/iconkynang/xayda/skill1_xayda.png"));
+        iconSkill.put("Chiêu đấm Dragon",new Texture("kynang/iconkynang/xayda/skill1_xayda.png"));
+        iconSkill.put("Chiêu đấm Demon",new Texture("kynang/iconkynang/xayda/skill1_xayda.png"));
+        iconSkill.put("Chiêu Kamejoko",new Texture("kynang/iconkynang/xayda/skill2_xayda.png"));
+        iconSkill.put("Chiêu Antomic",new Texture("kynang/iconkynang/xayda/skill2_xayda.png"));
+        iconSkill.put("Chiêu Masenko",new Texture("kynang/iconkynang/xayda/skill2_xayda.png"));
+        iconSkill.put("Thái Dương Hạ San",new Texture("kynang/iconkynang/traidat/skill3_traidat.png"));
+        iconSkill.put("Tái tạo năng lượng",new Texture("kynang/iconkynang/xayda/skill3_xayda.png"));
+        iconSkill.put("Kaioken",new Texture("kynang/iconkynang/traidat/skill4_traidat.png"));
+        iconSkill.put("Biến hình",new Texture("kynang/iconkynang/xayda/skill4_xayda.png"));
+        iconSkill.put("Khiên năng lượng",new Texture("kynang/iconkynang/xayda/skill9_xayda.png"));
+        iconSkill.put("Đẻ trứng",new Texture("kynang/iconkynang/namek/skill5_namek.png"));
+        for (int i = 0; i < 4; i++) {
+            capSkill[i]=1;
+        }
+        if (sucManh >= 0 && tenSkill[0]==null) {
+            tenSkill[0] = danhSachSkill1[MathUtils.random(danhSachSkill1.length - 1)];
+        }
+        if (sucManh >= 150_000_000 && tenSkill[1]==null) {
+            tenSkill[1] = danhSachSkill2[MathUtils.random(danhSachSkill2.length - 1)];
+        }
+        if (sucManh >= 1_500_000_000 && tenSkill[2]==null) {
+            tenSkill[2] = danhSachSkill3[MathUtils.random(danhSachSkill3.length - 1)];
+        }
+        if (sucManh >= 20_000_000_000L && tenSkill[3]==null) {
+            tenSkill[3] = danhSachSkill4[MathUtils.random(danhSachSkill4.length - 1)];
+        }
+        this.avtdangmac = this.hanhtinh+"_base";
     }
 
     public Texture getAvtDeTu() {
@@ -227,6 +260,18 @@ public class DeTu {
 
     public void tangSucManh(long SucManhCongThem){
         this.sucManh += SucManhCongThem;
+        if (sucManh >= 0 && tenSkill[0]==null) {
+            tenSkill[0] = danhSachSkill1[MathUtils.random(danhSachSkill1.length - 1)];
+        }
+        if (sucManh >= 150_000_000 && tenSkill[1]==null) {
+            tenSkill[1] = danhSachSkill2[MathUtils.random(danhSachSkill2.length - 1)];
+        }
+        if (sucManh >= 1_500_000_000 && tenSkill[2]==null) {
+            tenSkill[2] = danhSachSkill3[MathUtils.random(danhSachSkill3.length - 1)];
+        }
+        if (sucManh >= 20_000_000_000L && tenSkill[3]==null) {
+            tenSkill[3] = danhSachSkill4[MathUtils.random(danhSachSkill4.length - 1)];
+        }
     }
 
     public void tangHpGoc(int HpCongThem,boolean choPhepHienThi){

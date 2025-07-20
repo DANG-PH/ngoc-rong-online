@@ -820,7 +820,7 @@ public class NhanVat {
     public String getTenSkill(int skill,String hanhTinh){
         if ("traidat".equals(hanhTinh)){
             switch (skill){
-                case 1: return "Chiêu đấm dragon";
+                case 1: return "Chiêu đấm Dragon";
                 case 2: return "Chiêu Kamejoko";
                 case 3: return "Thái Dương Hạ San";
                 case 4: return "Kaioken";
@@ -1494,8 +1494,8 @@ public class NhanVat {
                     batch.draw(veHUD.dauphai, daupX, daupY - 14f, daupW, daupH);
                 }
             } else {
-                float step = 0.3f;
-                float timeMax = 3f;
+                float step = 0.2f;
+                float timeMax = 2f;
                 for (int i = 0; i < 6; i++) {
                     float start = timeMax - i*step;
                     float end = start - step;
