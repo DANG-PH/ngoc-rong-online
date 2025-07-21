@@ -1267,5 +1267,10 @@ public class HUDPopupRenderer {
             batch.flush();
             Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
         }
+        if (veHUD.timeGlow > 0) {
+            batch.end();
+            veHUD.veGlow(shapeRenderer, veHUD.clickX, veHUD.clickY, veHUD.timeGlow);
+            batch.begin();
+        }
     }
 }

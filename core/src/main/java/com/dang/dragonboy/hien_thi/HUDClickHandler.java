@@ -55,15 +55,18 @@ public class HUDClickHandler {
         float nutPopupY = screenHeight / 4f * 3;
         if (x >= nutPopupX && x <= nutPopupX + 25 && y >= nutPopupY && y <= nutPopupY + 35) {
             if (!veHUD.dangHienKhungChat) {
-                veHUD.hienPopupNhanVat();
+                veHUD.vuaClickMoPopup = true;
+                veHUD.clickY =  nutPopupY + 19f;
+                veHUD.clickX =  nutPopupX + 20;
+                veHUD.timeGlow = 0.2f;
             }
         }
 
         if (veHUD.dangHienPopup && !veHUD.dangHienThongBao && !veHUD.dangHienKhungChat) {
-            if (veHUD.vuaMoPopup) {
-                veHUD.vuaMoPopup = false;
-                return;
-            }
+//            if (veHUD.vuaMoPopup) {
+//                veHUD.vuaMoPopup = false;
+//                return;
+//            }
             // nutX để tắt popup
             float nutXW = nutX.getWidth() * 0.5f;
             float nutXH = nutX.getHeight() * 0.55f;
@@ -74,21 +77,31 @@ public class HUDClickHandler {
                     veHUD.dangHienGioiThieuGame = false;
                     veHUD.scrollY = 0;
                     veHUD.oChiSoDangChon = -1;
+                    veHUD.clickY = y;
+                    veHUD.clickX = x;
+                    veHUD.timeGlow = 0.3f;
                 } else if (veHUD.dangHienThongBaoGame) {
                     veHUD.dangHienThongBaoGame = false;
                     veHUD.scrollY = 0;
                     veHUD.oChiSoDangChon = -1;
+                    veHUD.clickY = y;
+                    veHUD.clickX = x;
+                    veHUD.timeGlow = 0.3f;
                 } else {
                     if (!veHUD.dangHienPopupDeTu) {
-                        veHUD.tatPopupNhanVat();
-                        veHUD.hangTrangDangChon = -1;
-                        veHUD.oChiSoDangChon = -1;
+                        veHUD.vuaClickTatPopup = true;
+                        veHUD.clickY = y;
+                        veHUD.clickX = x;
+                        veHUD.timeGlow = 0.2f;
                     } else {
                         if (veHUD.chucNangDeTuDangChon == 1) {
                             veHUD.dangHienPopupDeTu = false;
                             veHUD.scrollY = 0;
                             veHUD.oChiSoDangChon = -1;
                             veHUD.chucNangDeTuDangChon = 0;
+                            veHUD.clickY = y;
+                            veHUD.clickX = x;
+                            veHUD.timeGlow = 0.3f;
                         }
                     }
                 }
@@ -132,6 +145,8 @@ public class HUDClickHandler {
                         veHUD.tatPopupNhanVat();
                         veHUD.hangTrangDangChon = -1;
                         veHUD.oChiSoDangChon = -1;
+                        veHUD.scrollY = 0;
+                        veHUD.scrollYDeTu = 0;
                     }
                 }
             }
@@ -142,6 +157,7 @@ public class HUDClickHandler {
                         veHUD.chucNangDangChon = i;
                         veHUD.scrollY = 0;
                         veHUD.oChiSoDangChon = -1;
+                        veHUD.DangHienPopupThongTin1 = false;
                         veHUD.hangTrangDangChon = -1;
                         veHUD.dangHienGioiThieuGame = false;
                         veHUD.dangHienThongBaoGame = false;
@@ -150,6 +166,9 @@ public class HUDClickHandler {
                         veHUD.dangHienThongBaoCapNhat = false;
                         veHUD.dangHienThongBaoGiftCode = false;
                         veHUD.dangHienThongBaoEvent = false;
+                        veHUD.clickX = x;
+                        veHUD.clickY = y;
+                        veHUD.timeGlow = 0.3f;
                     }
                 }
             }
@@ -471,6 +490,9 @@ public class HUDClickHandler {
                     veHUD.chucNangDeTuDangChon = i;
                     veHUD.hangTrangDeTuDangChon = -1;
                     veHUD.scrollYDeTu = 0;
+                    veHUD.clickY = y;
+                    veHUD.clickX = x;
+                    veHUD.timeGlow = 0.3f;
                 }
             }
         }
@@ -579,9 +601,16 @@ public class HUDClickHandler {
                 } else if (x > 121 + xCongThem && x < 115+120 + xCongThem && y >= yNut && y <= yNut + 115){
                     veHUD.nutClickTimer3 = 0.3f;
                     veHUD.nuthanhtrangchon=2;
-                } else if (x > 141 + xCongThem && x < 115 + 120*2 + xCongThem && y >= yNut && y <= yNut + 115) {
+                } else if (x > 141 + xCongThem && x < 115 + 120*2 + xCongThem && y >= yNut && y <= yNut + 115 &&
+                    (veHUD.itemm.getLoai() == LoaiItem.AO ||
+                    veHUD.itemm.getLoai() == LoaiItem.QUAN ||
+                    veHUD.itemm.getLoai() == LoaiItem.GIAY ||
+                    veHUD.itemm.getLoai() == LoaiItem.GANG ||
+                    veHUD.itemm.getLoai() == LoaiItem.CAITRANG ||
+                    veHUD.itemm.getLoai() == LoaiItem.AVATAR ||
+                    veHUD.itemm.getLoai() == LoaiItem.RADA) && duLieuNguoiChoi.coDeTu()) {
                     veHUD.nutClickTimer3 = 0.3f;
-                    veHUD.nuthanhtrangchon=4;
+                    veHUD.nuthanhtrangchon = 4;
                 }
             } else {
                 if (x > 1 + xCongThem && x < 115 + xCongThem && y >= yNut && y <= yNut + 114) {

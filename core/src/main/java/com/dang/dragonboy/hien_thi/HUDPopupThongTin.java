@@ -121,7 +121,7 @@ public class HUDPopupThongTin {
 
                 layout.setText(veHUD.fontMotaNganSkill,duLieuNguoiChoi.getMotaSKill(oChiSoDangChon-6)[0]);
                 veHUD.fontMotaNganSkill.draw(batch,layout,veHUD.PopupThongTinX+(veHUD.PopupThongTinW- layout.width)/2f,veHUD.PopupThongTinY+veHUD.PopupThongTinH-48);
-
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
                 layout.setText(veHUD.font,"____________________________________");
                 for (int i = 0; i < 2; i++) {
                     veHUD.font.draw(batch, layout, veHUD.PopupThongTinX + (veHUD.PopupThongTinW - layout.width) / 2f, veHUD.PopupThongTinY + veHUD.PopupThongTinH - 60 - i*1);
@@ -139,6 +139,7 @@ public class HUDPopupThongTin {
                 layout.setText(veHUD.fontMotaNganSkill1,duLieuNguoiChoi.getMotaSKill(oChiSoDangChon-6)[3]);
                 veHUD.fontMotaNganSkill1.draw(batch,layout,veHUD.PopupThongTinX + (veHUD.PopupThongTinW - layout.width) / 2f,veHUD.PopupThongTinY + veHUD.PopupThongTinH - 170);
 
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
                 layout.setText(veHUD.font,"____________________________________");
                 for (int i = 0; i < 2; i++) {
                     veHUD.font.draw(batch, layout, veHUD.PopupThongTinX + (veHUD.PopupThongTinW - layout.width) / 2f, veHUD.PopupThongTinY + veHUD.PopupThongTinH - 182 - i*1);
@@ -177,7 +178,7 @@ public class HUDPopupThongTin {
 
                 layout.setText(veHUD.fontMotaNganSkill,duLieuNguoiChoi.getMotaSKill(oChiSoDangChon-6)[0]);
                 veHUD.fontMotaNganSkill.draw(batch,layout,veHUD.PopupThongTinX+(veHUD.PopupThongTinW- layout.width)/2f,veHUD.PopupThongTinY+veHUD.PopupThongTinH-48);
-
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
                 layout.setText(veHUD.font,"____________________________________");
                 for (int i = 0; i < 2; i++) {
                     veHUD.font.draw(batch, layout, veHUD.PopupThongTinX + (veHUD.PopupThongTinW - layout.width) / 2f, veHUD.PopupThongTinY + veHUD.PopupThongTinH - 60 - i*1);
@@ -197,7 +198,7 @@ public class HUDPopupThongTin {
 
                 layout.setText(veHUD.fontMotaNganSkill,duLieuNguoiChoi.getMotaSKill(oChiSoDangChon-6)[3]);
                 veHUD.fontMotaNganSkill.draw(batch,layout,veHUD.PopupThongTinX + (veHUD.PopupThongTinW - layout.width) / 2f,veHUD.PopupThongTinY + veHUD.PopupThongTinH - 195);
-
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
                 layout.setText(veHUD.font,"____________________________________");
                 for (int i = 0; i < 2; i++) {
                     veHUD.font.draw(batch, layout, veHUD.PopupThongTinX + (veHUD.PopupThongTinW - layout.width) / 2f, veHUD.PopupThongTinY + veHUD.PopupThongTinH - 207 - i*1);

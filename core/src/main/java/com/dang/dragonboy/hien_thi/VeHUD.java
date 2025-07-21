@@ -60,7 +60,7 @@ public class VeHUD {
     public Texture popupNhanVat;
     public Texture nutX;
     public boolean dangHienPopup = false;
-    public boolean vuaMoPopup = false;
+//    public boolean vuaMoPopup = false;
     private NhanVat nhanVat;
     public Texture texAvt = null;
     public Texture nutchucnang,nutchucnangclick;
@@ -86,9 +86,9 @@ public class VeHUD {
     public Texture iconnoitai;
 
     public Texture nutvuong,nutvuongclick;
-    boolean DangHienPopupThongTin = false;
-    boolean DangHienPopupThongTin1 = false;
-    boolean DangHienPopupThongTin2 = false;
+    public boolean DangHienPopupThongTin = false;
+    public boolean DangHienPopupThongTin1 = false;
+    public boolean DangHienPopupThongTin2 = false;
     public float TimeChoHienPopup = 0;
     public float TimeChoHienPopup1 = 0;
     public boolean vuaMoPopupThongTin = false;
@@ -201,6 +201,17 @@ public class VeHUD {
     public float timeHopTheTHuong ;
     private Texture dauGotenks;
     public float delayHopTheThuong,delayHopTheBongTai;
+
+    public float timeGlow = 0;
+    public float clickX;
+    public float clickY;
+    public boolean vuaClickTatPopup = false;
+    public boolean vuaClickMoPopup = false;
+
+    public boolean keoHanhTrang = false;
+    public boolean vuaKeoHanhTrang = false;
+    public boolean keoHanhTrangDeTu = false;
+    public boolean vuaKeoHanhTrangDeTu = false;
 
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data;
@@ -442,11 +453,11 @@ public class VeHUD {
             shapeRenderer.setColor(1f, 1f, 1f, 1f);
             shapeRenderer.rect(screenWidth - 75 - 10 + 10, 10 + 10, 53, dauThanRenderH);
             shapeRenderer.end();
-//            Gdx.gl.glEnable(GL20.GL_BLEND);
-//            shapeRenderer.setColor(0f, 0f, 0f, 0.55f);
-//            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-//            shapeRenderer.triangle(0,  screenHeight / 4f * 3 - 10, 0,  screenHeight / 4f * 3 + 35 + 10, 25+10f, screenHeight / 4f * 3 + 17.5f);
-//            shapeRenderer.end();
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            shapeRenderer.setColor(0f, 0f, 0f, 0.55f);
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.triangle(0,  screenHeight / 4f * 3 - 10, 0,  screenHeight / 4f * 3 + 38 + 10, 19+10f, screenHeight / 4f * 3 + 19f);
+            shapeRenderer.end();
         }
         batch.begin();
 
@@ -495,7 +506,7 @@ public class VeHUD {
             // nút popup thông tin nhân vật (bên trái trên)
             float nutpopupX = 0f;
             float nutpopupY = screenHeight / 4f * 3;
-            batch.draw(nutpopup, nutpopupX, nutpopupY, 25, 35);
+            batch.draw(nutpopup, nutpopupX, nutpopupY, 22, 38);
 
             // ô đậu thần (góc phải dưới)
             int odauthanW = 75;
@@ -576,6 +587,11 @@ public class VeHUD {
             layout.setText(font,(int)(timeHopTheTHuong/60f)+"'");
             font.draw(batch,layout,68,screenHeight / 4f * 3+17.5f-7);
         }
+        batch.end();
+        if (vuaClickMoPopup && timeGlow>0) {
+            veGlow(shapeRenderer,clickX,clickY,timeGlow);
+        }
+        batch.begin();
     }
 
     public void clickOChat() {
@@ -596,6 +612,24 @@ public class VeHUD {
         }
     }
     public void update(float delta) {
+        if (timeGlow > 0) {
+            timeGlow -= delta;
+            if (timeGlow <= 0) {
+                timeGlow = 0;
+                if (vuaClickTatPopup) {
+                    tatPopupNhanVat();
+                    hangTrangDangChon = -1;
+                    oChiSoDangChon = -1;
+                    vuaClickTatPopup = false;
+                    scrollY = 0;
+                    scrollYDeTu = 0;
+                }
+                if (vuaClickMoPopup) {
+                    hienPopupNhanVat();
+                    vuaClickMoPopup =false;
+                }
+            }
+        }
         if (timeDoTre >0) {
             timeDoTre -= delta;
             if (timeDoTre <=0){
@@ -1021,7 +1055,7 @@ public class VeHUD {
 
     public void hienPopupNhanVat() {
         dangHienPopup = true;
-        vuaMoPopup = true;
+//        vuaMoPopup = true;
     }
 
     public void tatPopupNhanVat() {
@@ -1166,5 +1200,27 @@ public class VeHUD {
             if (thanp[i] != null) thanp[i].dispose();
             if (chanp[i] != null) chanp[i].dispose();
         }
+    }
+    public void veGlow(ShapeRenderer shapeRenderer, float x, float y, float timeGlow) {
+        if (timeGlow <= 0) return;
+
+        Gdx.gl.glEnable(GL20.GL_BLEND); // Cho phép alpha
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+        int soVong = 10; // số vòng tròn đồng tâm
+        float banKinhGoc = 10; // bán kính nhỏ nhất
+        float maxThem = 30;    // mức tăng bán kính cho vòng lớn nhất
+        float alphaBase = Math.min(timeGlow / 0.5f, 1f); // alpha giảm theo thời gian
+
+        for (int i = 0; i < soVong; i++) {
+            float tiLe = (float) i / soVong;
+            float radius = banKinhGoc + tiLe * maxThem;
+            float alpha = (1 - tiLe) * alphaBase * 0.6f; // vòng ngoài mờ hơn
+            shapeRenderer.setColor(1f, 1f, 0f, alpha); // màu vàng, alpha mờ dần
+            shapeRenderer.circle(x, y, radius);
+        }
+
+        shapeRenderer.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 }

@@ -9,7 +9,8 @@ import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.hien_thi.QuanLyCamera;
 
 public class ThaoTac extends InputAdapter {
-
+    private int yCuKeo = 0;
+    private int yCuKeoDeTu = 0;
     private final NhanVat nhanVat;
     private final VeHUD hud;
     private final QuanLyCamera camera;
@@ -75,32 +76,103 @@ public class ThaoTac extends InputAdapter {
     }
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-
+        int y = Gdx.graphics.getHeight() - screenY;
         if (button == Input.Buttons.LEFT && !hud.dangHienPopup) {
             camera.batDauKeoCamera(screenX, screenY);
         }
+
+        if (hud.dangHienPopupDeTu) {
+            if ( screenX >= 1020 - 360 && screenX <= 1020 && y > 0 && y <= 444) {
+                hud.dangChonHanhTrangDeTu = false;
+                hud.dangChonHanhTrangSuPhu = true;
+            }
+            if ( screenX > 0 && screenX <= 350 && y > 0 && y <= 444) {
+                hud.dangChonHanhTrangDeTu = true;
+                hud.dangChonHanhTrangSuPhu = false;
+            }
+        }
+        // Kéo hành trang sư phụ bên trái (chỉ khi không mở đệ tử)
+        if (button == Input.Buttons.LEFT &&
+            (hud.getChucNangDangChon() == 1 || hud.getChucNangDangChon() == 2 || hud.getChucNangDangChon() == 4 ) &&
+            !hud.dangHienPopupDeTu &&
+            !hud.DangHienPopupThongTin1 &&
+            screenX > 0 && screenX <= 350 &&
+            y > 0 && y <= 444) {
+
+            hud.keoHanhTrang = true;
+            hud.keoHanhTrangDeTu = false;
+            yCuKeo = screenY;
+        }
+
+        // Kéo hành trang đệ tử bên trái
+        if (button == Input.Buttons.LEFT &&
+            hud.dangHienPopupDeTu &&
+            hud.dangChonHanhTrangDeTu &&
+            !hud.DangHienPopupThongTin1 &&
+            screenX > 0 && screenX <= 350 &&
+            y > 0 && y <= 444) {
+
+            hud.keoHanhTrangDeTu = true;
+            yCuKeoDeTu = screenY;
+        }
+
+        // Kéo hành trang sư phụ bên phải (chỉ khi mở popup đệ tử, và đang chọn sư phụ)
+        if (button == Input.Buttons.LEFT &&
+            hud.dangHienPopupDeTu &&
+            hud.dangChonHanhTrangSuPhu &&
+            !hud.DangHienPopupThongTin1 &&
+            screenX >= 1020 - 360 && screenX <= 1020 &&
+            y > 0 && y <= 444) {
+
+            hud.keoHanhTrang = true;
+            hud.keoHanhTrangDeTu = false;
+            yCuKeo = screenY;
+        }
+
         return true;
     }
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         camera.keoCamera(screenX, screenY);
+        if (hud.keoHanhTrang) {
+            int deltaY = screenY - yCuKeo;
+            hud.scrollY -= deltaY*1.5f;
+            // giới hạn scrollY
+            if (hud.scrollY < 0) hud.scrollY = 0;
+            if (hud.scrollY > hud.maxScroll) hud.scrollY = hud.maxScroll;
+            yCuKeo = screenY;
+            hud.vuaKeoHanhTrang = true;
+        }
+        if (hud.keoHanhTrangDeTu) {
+            int deltaY = screenY - yCuKeoDeTu;
+            hud.scrollYDeTu -= deltaY*1.5f;
+            // giới hạn scrollYDeTu
+            if (hud.scrollYDeTu < 0) hud.scrollYDeTu = 0;
+            if (hud.scrollYDeTu > hud.maxScrollDeTu) hud.scrollYDeTu = hud.maxScrollDeTu;
+            yCuKeoDeTu = screenY;
+            hud.vuaKeoHanhTrangDeTu = true;
+        }
         return true;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         int y = Gdx.graphics.getHeight() - screenY;
-        hud.xuLyClick(screenX, y);
-
+        if (!hud.vuaKeoHanhTrang && !hud.vuaKeoHanhTrangDeTu) {
+            hud.xuLyClick(screenX, y);
+        }
         if (button == Input.Buttons.LEFT) {
             camera.ketThucKeoCamera();
+            hud.keoHanhTrang = false;
+            hud.vuaKeoHanhTrang = false;
+            hud.vuaKeoHanhTrangDeTu = false;
         }
         return true;
     }
     @Override
     public boolean scrolled(float amountX, float amountY) {
         // chỉ xử lý khi đang mở popup và chọn mục hành trang
-        if (hud.isDangHienPopup() && (hud.getChucNangDangChon() == 1 || hud.getChucNangDangChon() == 2 || hud.getChucNangDangChon() == 4 || hud.getChucNangDangChon() == 3)) {
+        if (hud.isDangHienPopup() && (hud.getChucNangDangChon() == 1 || hud.getChucNangDangChon() == 2 || hud.getChucNangDangChon() == 4 || hud.getChucNangDangChon() == 3) && !hud.dangHienThongBao && !hud.DangHienPopupThongTin1 && !hud.DangHienPopupThongTin && !hud.DangHienPopupThongTin2) {
             if (!hud.dangHienPopupDeTu) {
                 hud.scroll((int) amountY); // amountY là số lần lăn bánh (thường là ±1)
                 return true;
