@@ -120,13 +120,13 @@ public class DeTu {
     private String avtdangmac;
 
     public Texture ao_de_tu,quan_de_tu,gang_de_tu,giay_de_tu,rada_de_tu,iconct_de_tu;
-    private Texture dau_dung, dau_chay;
-    private Texture than_dung, than_nhay, than_roi;
-    private Texture[] than_chay;
-    private Texture than_bay;
-    private Texture chan_dung, chan_nhay, chan_roi;
-    private Texture[] chan_chay;
-    private Texture chan_bay;
+    public Texture dau_dung, dau_chay;
+    public Texture than_dung, than_nhay, than_roi;
+    public Texture[] than_chay;
+    public Texture than_bay;
+    public Texture chan_dung, chan_nhay, chan_roi;
+    public Texture[] chan_chay;
+    public Texture chan_bay;
 
     public DeTu(String ten, String hanhtinh, float x, float y, Texture dau_dung, Texture dau_chay,
                 Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,

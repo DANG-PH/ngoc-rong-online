@@ -213,9 +213,13 @@ public class VeHUD {
     public boolean keoHanhTrangDeTu = false;
     public boolean vuaKeoHanhTrangDeTu = false;
 
+    public String trangthaide;
+    public boolean renderDeTu = false;
+
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data;
         duLieuNguoiChoi.setNhanVat(nhanVat);
+        nhanVat.setDuLieuNguoiChoi(duLieuNguoiChoi);
         // Gọi thêm item từ file ngoài
         ThemItemTest.themItemTest(duLieuNguoiChoi, nhanVat);
         clickHandler = new HUDClickHandler(this, duLieuNguoiChoi, nhanVat);
@@ -422,6 +426,11 @@ public class VeHUD {
     }
 
     public void render(SpriteBatch batch) {
+        if (!duLieuNguoiChoi.deTu.getTrangthai().equals("Về nhà") && !dangHopThe) {
+            renderDeTu = true;
+        } else {
+            renderDeTu = false;
+        }
         batch.end();
         int widthDeTu = (int)(thanhtheluc2.getWidth() * (duLieuNguoiChoi.deTu.getTheLuc()/100f));
         thanhtheluc1 = new TextureRegion(thanhtheluc2, 0, 0, widthDeTu, thanhtheluc2.getHeight());
@@ -642,11 +651,14 @@ public class VeHUD {
                         case 4 -> dangHienThongBaoEvent = true;
                     }
                 } else if (dangHienPopupDeTu) {
-                    switch (oChiSoDangChon) {
-                        case 0 -> duLieuNguoiChoi.deTu.setTrangthai("Đi theo");
-                        case 1 -> duLieuNguoiChoi.deTu.setTrangthai("Bảo vệ");
-                        case 2 -> duLieuNguoiChoi.deTu.setTrangthai("Tấn công");
-                        case 3 -> duLieuNguoiChoi.deTu.setTrangthai("Về nhà");
+                    if (oChiSoDangChon!=4) {
+                        switch (oChiSoDangChon) {
+                            case 0 -> trangthaide = "Đi theo";
+                            case 1 -> trangthaide = "Bảo vệ";
+                            case 2 -> trangthaide = "Tấn công";
+                            case 3 -> trangthaide = "Về nhà";
+                        }
+                        capNhatTrangThaiDeTu();
                     }
                     if (oChiSoDangChon == 4 && !dangHopTheThuong && delayHopTheThuong == 0 && !dangHopThe) {
                         timeChoHopThe = 2f;
@@ -842,6 +854,8 @@ public class VeHUD {
                     }
                 } else {
                     dangHopThe = false;
+                    trangthaide = "Bảo vệ";
+                    capNhatTrangThaiDeTu();
                     delayHopTheBongTai = 10f;
                     delayHopTheThuong = 600f;
                     ArrayList<Item> danhSach = duLieuNguoiChoi.getHanhTrangDangMac();
@@ -901,6 +915,8 @@ public class VeHUD {
                 veNenFlash = false;
                 dangHopTheThuong = false;
                 dangHopThe = false;
+                trangthaide = "Bảo vệ";
+                capNhatTrangThaiDeTu();
                 delayHopTheBongTai = 10f;
                 delayHopTheThuong = 600f;
                 ArrayList<Item> danhSach = duLieuNguoiChoi.getHanhTrangDangMac();
@@ -1222,5 +1238,8 @@ public class VeHUD {
 
         shapeRenderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
+    }
+    public void capNhatTrangThaiDeTu() {
+        duLieuNguoiChoi.deTu.setTrangthai(trangthaide);
     }
 }

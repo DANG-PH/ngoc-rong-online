@@ -9,6 +9,7 @@ import java.util.HashMap;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Align;
+import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.nhan_vat.van_bay.VanBayCauHinh;
 import com.dang.dragonboy.hien_thi.VeHUD;
 import java.util.List;
@@ -191,6 +192,8 @@ public class NhanVat {
     private int[] chisoVanBay;
     private String hanhTinhVanBay;
     private long sucManhYeuCauVanBay;
+
+    private DuLieuNguoiChoi duLieuNguoiChoi;
 
     // cai trang
     public void setIdCaiTrang(String id) {
@@ -1217,6 +1220,9 @@ public class NhanVat {
     }
 
     public void ve(SpriteBatch batch, float thoiGian) {
+        if (veHUD.renderDeTu) {
+            batch.draw(dau_dung,x-30,y+cao);
+        }
         boolean duDieuKien = true;
         if (veHUD.dangHopTheThuong) {
             if (veHUD.timeHopTheTHuong < 1.5f ){
@@ -1334,6 +1340,19 @@ public class NhanVat {
                 float duoiX = flipX ? x + rong + 20 : x - 20;
                 batch.draw(veHUD.duoichat, duoiX, y + cao + 15, 16 * flipScale, 16);
                 veHUD.fontchat.draw(batch, layout, x + (rong - 200) / 2f + 10f, y + cao + 30 + 18f + layout.height);
+                if (veHUD.tinNhanChat.equals("bao ve") || veHUD.tinNhanChat.equals("protect")) {
+                    veHUD.trangthaide = "Bảo vệ";
+                    veHUD.capNhatTrangThaiDeTu();
+                } else if (veHUD.tinNhanChat.equals("tan cong") || veHUD.tinNhanChat.equals("attack")) {
+                    veHUD.trangthaide = "Tấn công";
+                    veHUD.capNhatTrangThaiDeTu();
+                } else if (veHUD.tinNhanChat.equals("di theo") || veHUD.tinNhanChat.equals("follow")) {
+                    veHUD.trangthaide = "Đi theo";
+                    veHUD.capNhatTrangThaiDeTu();
+                } else if (veHUD.tinNhanChat.equals("ve nha") || veHUD.tinNhanChat.equals("go home")) {
+                    veHUD.trangthaide = "Về nhà";
+                    veHUD.capNhatTrangThaiDeTu();
+                }
             }
         } else {
             if (!veHUD.dangHopThe && !veHUD.dangHopTheThuong) {
@@ -1584,5 +1603,9 @@ public class NhanVat {
         float daupY = thanpY + thanpH;
         batch.draw(veHUD.thanp[index], thanpX + offsetx + offsetThanX, thanpY - offsetThanY, thanpW, thanpH);
         batch.draw(veHUD.daup[index], daupX + offsetx + offsetDauX, daupY - offsetDauY, daupW, daupH);
+    }
+
+    public void setDuLieuNguoiChoi(DuLieuNguoiChoi duLieuNguoiChoi) {
+        this.duLieuNguoiChoi = duLieuNguoiChoi;
     }
 }
