@@ -1,10 +1,13 @@
 package com.dang.dragonboy.du_lieu;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.Align;
 import com.dang.dragonboy.item.Item;
 import com.badlogic.gdx.graphics.Texture;
 import com.dang.dragonboy.hien_thi.VeHUD;
@@ -26,6 +29,7 @@ import com.dang.dragonboy.xu_ly_map.HitboxDat;
 
 public class DeTu {
     private GlyphLayout layout;
+    private ShapeRenderer shapeRenderer;
     public float x, y;
     public float rong_de_tu, cao_de_tu;
     private final float tiLe = 0.5f;
@@ -153,11 +157,15 @@ public class DeTu {
 
     private VeHUD veHUD;
 
+    private String tinNhanDeTuChat;
+    private float timeHienChat;
+
     public DeTu(float x, float y,String ten, String hanhtinh, Texture dau_dung, Texture dau_chay,
                 Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,
                 Texture chan_dung, Texture chan_nhay, Texture chan_roi, Texture[] chan_chay,
                 Texture than_bay, Texture chan_bay, Map<TrangThaiDeTu, List<DoLechModular>> lechTheoTrangThai,
                 Texture ao, Texture quan, Texture gang, Texture giay, Texture rada, Texture iconct) {
+        shapeRenderer = new ShapeRenderer();
         layout = new GlyphLayout();
         this.ten = ten;
 //        this.hanhtinh = danhSachHanhTinh[MathUtils.random(danhSachHanhTinh.length - 1)];
@@ -242,7 +250,8 @@ public class DeTu {
             new Texture("hieuung/hieuunggame/aura_bay/" + "3.png"),
             new Texture("hieuung/hieuunggame/aura_bay/" + "4.png")
         };
-
+        tinNhanDeTuChat = "Xin hãy thu nhận con làm đệ tử";
+        timeHienChat = 3f;
     }
 
     public Texture getAvtDeTu() {
@@ -1199,6 +1208,12 @@ public class DeTu {
                 timeVanBay = 0;
             }
         }
+        if (timeHienChat>0) {
+            timeHienChat -= delta;
+            if (timeHienChat<=0) {
+                tinNhanDeTuChat = "";
+            }
+        }
     }
 
     public void ve(SpriteBatch batch, float thoiGian) {
@@ -1299,6 +1314,33 @@ public class DeTu {
             layout.setText(fontTenDeTu,getTen());
             fontTenDeTu.draw(batch,layout,x+(rong_de_tu- layout.width)/2f,y+cao_de_tu+30);
         }
+        if (!tinNhanDeTuChat.isEmpty() && veHUD.timeChoHopThe == 0) {
+            float flipScale = flipX ? -1f : 1f;
+            layout.setText(
+                veHUD.fontchat,
+                tinNhanDeTuChat,
+                new Color(0, 0, 0, 1),
+                180,
+                Align.center,
+                true
+            );
+            batch.end();
+            shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(1, 1, 1, 1);
+            shapeRenderer.rect(x + (rong_de_tu - 200) / 2f, y +cao_de_tu + 30, 200, 36 + layout.height);
+            shapeRenderer.end();
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            shapeRenderer.setColor(Color.BLACK);
+            for (int i = 0; i < 2; i++) {
+                shapeRenderer.rect(x + (rong_de_tu - 200) / 2f - i, y +cao_de_tu + 30 - i, 200 + i * 2, 36 + layout.height + i * 2);
+            }
+            shapeRenderer.end();
+            batch.begin();
+            float duoiX = flipX ? x + rong_de_tu + 20 : x - 20;
+            batch.draw(veHUD.duoichat, duoiX, y + cao_de_tu + 15, 16 * flipScale, 16);
+            veHUD.fontchat.draw(batch, layout, x + (rong_de_tu - 200) / 2f + 10f, y + cao_de_tu + 30 + 18f + layout.height);
+        }
     }
     public static DoLechModular layLech(Map<TrangThaiDeTu, List<DoLechModular>> map, TrangThaiDeTu trangThai, int frameIndex) {
         List<DoLechModular> ds = map.get(trangThai);
@@ -1314,5 +1356,12 @@ public class DeTu {
     }
     public void setVeHUD(VeHUD veHUD) {
         this.veHUD = veHUD;
+    }
+    public void setTinNhanDeTuChat(String tinnhan, float timeHienChat) {
+        this.tinNhanDeTuChat = tinnhan;
+        this.timeHienChat = timeHienChat;
+    }
+    public float getTimeHienChat() {
+        return timeHienChat;
     }
 }

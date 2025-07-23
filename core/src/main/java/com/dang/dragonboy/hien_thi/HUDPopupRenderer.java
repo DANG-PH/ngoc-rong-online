@@ -515,7 +515,14 @@ public class HUDPopupRenderer {
             veHUD.fontNhiemVu.draw(batch,layout,0+(350- layout.width)/2f,420);
         }
         if (veHUD.chucNangDangChon == 4 && !veHUD.dangHienGioiThieuGame && !veHUD.dangHienThongBaoGame && !veHUD.dangHienPopupDeTu && !veHUD.dangChonNhacNen){
-            String[] chucNang = {"Giới thiệu game","Mini game","Thông báo","Đệ tử","Đổi cờ","Đổi khu vực","Chat thế giới","Nhạc nền","Tài khoản","Đổi tài khoản"};
+            String[] chucNang;
+            if (duLieuNguoiChoi.coDeTu()) {
+                String[] chucNangCoDe = {"Giới thiệu game", "Mini game", "Thông báo", "Đệ tử", "Đổi cờ", "Đổi khu vực", "Chat thế giới", "Nhạc nền", "Tài khoản", "Đổi tài khoản"};
+                chucNang = chucNangCoDe;
+            } else {
+                String[] chucNangKoDe = {"Giới thiệu game", "Mini game", "Thông báo", "Đổi cờ", "Đổi khu vực", "Chat thế giới", "Nhạc nền", "Tài khoản", "Đổi tài khoản"};
+                chucNang = chucNangKoDe;
+            }
             float viewY = 35;
             float viewHeight = 444 - 35;
             int KhoangCachO = 49;
@@ -531,10 +538,10 @@ public class HUDPopupRenderer {
             batch.flush();
             Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
             Gdx.gl.glScissor(0, (int)viewY, 350, (int)viewHeight);
-            float totalHeight = 10 * KhoangCachO;
+            float totalHeight = chucNang.length * KhoangCachO;
             veHUD.maxScroll = Math.max(0, totalHeight - viewHeight);
             float startY = viewY + viewHeight - KhoangCachO + veHUD.scrollY;
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < chucNang.length; i++) {
                 float y = startY - i * KhoangCachO;
                 Texture tex = (veHUD.oChiSoDangChon == i) ? veHUD.o_chi_so_co_ban_click : veHUD.o_chi_so_co_ban;
                 batch.draw(tex, 3, y, 344, 50);

@@ -233,8 +233,8 @@ public class VeHUD {
         xulyitem =  new HUDXulyitem(this, layout,duLieuNguoiChoi,nhanVat);
         popupThongTin = new HUDPopupThongTin(this, layout,duLieuNguoiChoi,nhanVat);
         popupHanhTrang = new HUDPopupHanhTrang(this, layout,duLieuNguoiChoi,nhanVat);
-        duLieuNguoiChoi.taoDeTu("Đệ tử");
-        duLieuNguoiChoi.deTu.setVeHUD(this);
+//        duLieuNguoiChoi.taoDeTu("Đệ tử");
+//        duLieuNguoiChoi.deTu.setVeHUD(this);
     }
     public void setSkillIcons(SkillIcon[] skillIcons) {
         this.skillIcons = skillIcons;
@@ -433,30 +433,38 @@ public class VeHUD {
     }
 
     public void render(SpriteBatch batch) {
-        if (!duLieuNguoiChoi.deTu.getTrangthai().equals("Về nhà") && !dangHopThe) {
-            renderDeTu = true;
-        } else {
-            renderDeTu = false;
-        }
         if (duLieuNguoiChoi.coDeTu()) {
-            timeLuuTrangThai += Gdx.graphics.getDeltaTime();
-
-            // Ghi lại vị trí của sư phụ mỗi 0.05s
-            if (timeLuuTrangThai >= 0.001f) {
-                lichSuTrangThaiChu.add(new TrangThaiChu(nhanVat.getX(), nhanVat.getY(),nhanVat.getTrangThai()));
-                timeLuuTrangThai = 0f;
+            if (!duLieuNguoiChoi.deTu.getTrangthai().equals("Về nhà") && !dangHopThe) {
+                renderDeTu = true;
+            } else {
+                if (duLieuNguoiChoi.deTu.getTrangthai().equals("Về nhà") && duLieuNguoiChoi.deTu.getTimeHienChat() > 0 && !dangHopThe) {
+                    renderDeTu = true;
+                } else {
+                    renderDeTu = false;
+                }
             }
+            if (duLieuNguoiChoi.coDeTu()) {
+                timeLuuTrangThai += Gdx.graphics.getDeltaTime();
 
-            if (lichSuTrangThaiChu.size() > 50) {
-                lichSuTrangThaiChu.removeFirst();
-            }
-            if (!lichSuTrangThaiChu.isEmpty()) {
-                duLieuNguoiChoi.deTu.capNhat(Gdx.graphics.getDeltaTime(), lichSuTrangThaiChu, 0.001f);
+                // Ghi lại vị trí của sư phụ mỗi 0.05s
+                if (timeLuuTrangThai >= 0.001f) {
+                    lichSuTrangThaiChu.add(new TrangThaiChu(nhanVat.getX(), nhanVat.getY(), nhanVat.getTrangThai()));
+                    timeLuuTrangThai = 0f;
+                }
+
+                if (lichSuTrangThaiChu.size() > 50) {
+                    lichSuTrangThaiChu.removeFirst();
+                }
+                if (!lichSuTrangThaiChu.isEmpty()) {
+                    duLieuNguoiChoi.deTu.capNhat(Gdx.graphics.getDeltaTime(), lichSuTrangThaiChu, 0.001f);
+                }
             }
         }
         batch.end();
-        int widthDeTu = (int)(thanhtheluc2.getWidth() * (duLieuNguoiChoi.deTu.getTheLuc()/100f));
-        thanhtheluc1 = new TextureRegion(thanhtheluc2, 0, 0, widthDeTu, thanhtheluc2.getHeight());
+        if (duLieuNguoiChoi.coDeTu()) {
+            int widthDeTu = (int) (thanhtheluc2.getWidth() * (duLieuNguoiChoi.deTu.getTheLuc() / 100f));
+            thanhtheluc1 = new TextureRegion(thanhtheluc2, 0, 0, widthDeTu, thanhtheluc2.getHeight());
+        }
         int widthSuPhu = (int)(thanhtheluc2.getWidth() * (duLieuNguoiChoi.getTheLuc()/100f));
         thanhtheluc3 = new TextureRegion(thanhtheluc2, 0, 0, widthSuPhu, thanhtheluc2.getHeight());
         if (dangHopThe) {
@@ -705,17 +713,27 @@ public class VeHUD {
                     }
                     dangChonNhacNen = false;
                 } else {
-                    if (oChiSoDangChon == 0) {
-                        dangHienGioiThieuGame = true;
-                    } else if (oChiSoDangChon == 2) {
-                        dangHienThongBaoGame = true;
-                    } else if (oChiSoDangChon == 3) {
-                        dangHienPopupDeTu = true;
-                        scrollYDeTu = 0;
-                        hangTrangDangChon = -1;
-                        hangTrangDeTuDangChon = -1;
-                    } else if (oChiSoDangChon == 7) {
-                        dangChonNhacNen = true;
+                    if (duLieuNguoiChoi.coDeTu()) {
+                        if (oChiSoDangChon == 0) {
+                            dangHienGioiThieuGame = true;
+                        } else if (oChiSoDangChon == 2) {
+                            dangHienThongBaoGame = true;
+                        } else if (oChiSoDangChon == 3) {
+                            dangHienPopupDeTu = true;
+                            scrollYDeTu = 0;
+                            hangTrangDangChon = -1;
+                            hangTrangDeTuDangChon = -1;
+                        } else if (oChiSoDangChon == 7) {
+                            dangChonNhacNen = true;
+                        }
+                    } else {
+                        if (oChiSoDangChon == 0) {
+                            dangHienGioiThieuGame = true;
+                        } else if (oChiSoDangChon == 2) {
+                            dangHienThongBaoGame = true;
+                        } else if (oChiSoDangChon == 6) {
+                            dangChonNhacNen = true;
+                        }
                     }
                 }
                 oChiSoDangChon = -1;
@@ -793,7 +811,7 @@ public class VeHUD {
                         if (!itemDangChon.equals("bongtai")) {
                             xulyitem.macDo(hangTrangDangChon);
                         }
-                        if (itemDangChon.equals("bongtai") && timeHopTheTHuong == 0 && delayHopTheBongTai == 0){
+                        if (itemDangChon.equals("bongtai") && timeHopTheTHuong == 0 && delayHopTheBongTai == 0 && duLieuNguoiChoi.coDeTu()){
                             timeChoHopThe = 1.5f;
                             dangHienPopup = false;
                             scrollY = 0;
@@ -821,6 +839,7 @@ public class VeHUD {
                                     scrollY = 0;
                                     scrollYDeTu = 0;
                                 }
+                                duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Cám ơn sư phụ",3f);
                             } else if (itemDangChon.equals("caitrang")) {
                                 xulyitem.macDoChoDe(hangTrangDangChon);
                                 if (!dangHienPopupDeTu) {
@@ -829,6 +848,7 @@ public class VeHUD {
                                     scrollY = 0;
                                     scrollYDeTu = 0;
                                 }
+                                duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Cám ơn sư phụ",3f);
                             }
                         }
                     }
@@ -1038,7 +1058,9 @@ public class VeHUD {
                         duLieuNguoiChoi.tangNgoc(1_000_000);
                         duLieuNguoiChoi.tangVang(1_000_000_000);
                         duLieuNguoiChoi.tangSucManh(10_000_000_000L);
-                        duLieuNguoiChoi.deTu.tangSucManh(50_000_000_000L);
+                        if (duLieuNguoiChoi.coDeTu()) {
+                            duLieuNguoiChoi.deTu.tangSucManh(50_000_000_000L);
+                        }
                         chuaNhanQuaLanDau = false;
                     }
                     nutduocchon = -1;
@@ -1266,5 +1288,14 @@ public class VeHUD {
     }
     public void capNhatTrangThaiDeTu() {
         duLieuNguoiChoi.deTu.setTrangthai(trangthaide);
+        if (trangthaide.equals("Đi theo")) {
+            duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Ok con theo sư phụ",3f);
+        } else if (trangthaide.equals("Bảo vệ")) {
+            duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Ok con sẽ bảo vệ sư phụ",3f);
+        } else if (trangthaide.equals("Tấn công")) {
+            duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Ok sư phụ để con lo cho",3f);
+        } else if (trangthaide.equals("Về nhà")) {
+            duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Ok con về, bibi sư phụ",1.5f);
+        }
     }
 }
