@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import com.badlogic.gdx.audio.Music;
+import java.util.LinkedList;
+import com.dang.dragonboy.he_thong.TrangThaiChu;
 
 public class VeHUD {
     private HUDClickHandler clickHandler;
@@ -216,6 +218,10 @@ public class VeHUD {
     public String trangthaide;
     public boolean renderDeTu = false;
 
+    LinkedList<TrangThaiChu> lichSuTrangThaiChu = new LinkedList<>();
+    float timeLuuTrangThai = 0f;
+    float delayThoiGian = 0.5f; // delay đệ tử 0.5 giây
+
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data;
         duLieuNguoiChoi.setNhanVat(nhanVat);
@@ -228,6 +234,7 @@ public class VeHUD {
         popupThongTin = new HUDPopupThongTin(this, layout,duLieuNguoiChoi,nhanVat);
         popupHanhTrang = new HUDPopupHanhTrang(this, layout,duLieuNguoiChoi,nhanVat);
         duLieuNguoiChoi.taoDeTu("Đệ tử");
+        duLieuNguoiChoi.deTu.setVeHUD(this);
     }
     public void setSkillIcons(SkillIcon[] skillIcons) {
         this.skillIcons = skillIcons;
@@ -430,6 +437,22 @@ public class VeHUD {
             renderDeTu = true;
         } else {
             renderDeTu = false;
+        }
+        if (duLieuNguoiChoi.coDeTu()) {
+            timeLuuTrangThai += Gdx.graphics.getDeltaTime();
+
+            // Ghi lại vị trí của sư phụ mỗi 0.05s
+            if (timeLuuTrangThai >= 0.001f) {
+                lichSuTrangThaiChu.add(new TrangThaiChu(nhanVat.getX(), nhanVat.getY(),nhanVat.getTrangThai()));
+                timeLuuTrangThai = 0f;
+            }
+
+            if (lichSuTrangThaiChu.size() > 50) {
+                lichSuTrangThaiChu.removeFirst();
+            }
+            if (!lichSuTrangThaiChu.isEmpty()) {
+                duLieuNguoiChoi.deTu.capNhat(Gdx.graphics.getDeltaTime(), lichSuTrangThaiChu, 0.001f);
+            }
         }
         batch.end();
         int widthDeTu = (int)(thanhtheluc2.getWidth() * (duLieuNguoiChoi.deTu.getTheLuc()/100f));
@@ -789,21 +812,23 @@ public class VeHUD {
                     TimeChoHienPopup = 0;
                 } else if (nuthanhtrangchon == 4) {
                     if (duLieuNguoiChoi.deTu.getSucManh()>=itemm.getSucManhYeuCau()) {
-                        if (duLieuNguoiChoi.deTu.getHanhtinh().equals(itemm.getHanhtinh()) && !itemDangChon.equals("caitrang")) {
-                            xulyitem.macDoChoDe(hangTrangDangChon);
-                            if (!dangHienPopupDeTu) {
-                                chucNangDangChon = 4;
-                                dangHienPopupDeTu = true;
-                                scrollY = 0;
-                                scrollYDeTu = 0;
-                            }
-                        } else if (itemDangChon.equals("caitrang")) {
-                            xulyitem.macDoChoDe(hangTrangDangChon);
-                            if (!dangHienPopupDeTu) {
-                                chucNangDangChon = 4;
-                                dangHienPopupDeTu = true;
-                                scrollY = 0;
-                                scrollYDeTu = 0;
+                        if (duLieuNguoiChoi.deTu.getSucManh() >= 1_500_000) {
+                            if (duLieuNguoiChoi.deTu.getHanhtinh().equals(itemm.getHanhtinh()) && !itemDangChon.equals("caitrang")) {
+                                xulyitem.macDoChoDe(hangTrangDangChon);
+                                if (!dangHienPopupDeTu) {
+                                    chucNangDangChon = 4;
+                                    dangHienPopupDeTu = true;
+                                    scrollY = 0;
+                                    scrollYDeTu = 0;
+                                }
+                            } else if (itemDangChon.equals("caitrang")) {
+                                xulyitem.macDoChoDe(hangTrangDangChon);
+                                if (!dangHienPopupDeTu) {
+                                    chucNangDangChon = 4;
+                                    dangHienPopupDeTu = true;
+                                    scrollY = 0;
+                                    scrollYDeTu = 0;
+                                }
                             }
                         }
                     }
@@ -1013,7 +1038,7 @@ public class VeHUD {
                         duLieuNguoiChoi.tangNgoc(1_000_000);
                         duLieuNguoiChoi.tangVang(1_000_000_000);
                         duLieuNguoiChoi.tangSucManh(10_000_000_000L);
-                        duLieuNguoiChoi.deTu.tangSucManh(10_000_000_000L);
+                        duLieuNguoiChoi.deTu.tangSucManh(50_000_000_000L);
                         chuaNhanQuaLanDau = false;
                     }
                     nutduocchon = -1;

@@ -663,11 +663,11 @@ public class DuLieuNguoiChoi {
     public void taoDeTu(String ten) {
 //        String hanhtinh = danhSachHanhTinh[MathUtils.random(danhSachHanhTinh.length - 1)];
         String hanhtinh = nhanVat.getHanhtinh();
-        DeTuCauHinh config = Doi_avt_ao_quan_DeTu(hanhtinh,hanhtinh+"_base","set_base","set_base");
+        DeTuCauHinh config = DoicaitrangDeTu("set_base_traidat");
         if (this.deTu == null) {
             this.deTu = new DeTu(
+                nhanVat.getX()-30,nhanVat.getY(),
                 ten,hanhtinh,
-                nhanVat.getX(),nhanVat.getY(),
                 config.dau_dung_de_tu, config.dau_chay_de_tu,
                 config.than_dung_de_tu, config.than_nhay_de_tu, config.than_roi_de_tu, config.than_chay_de_tu,
                 config.chan_dung_de_tu, config.chan_nhay_de_tu, config.chan_roi_de_tu, config.chan_chay_de_tu,

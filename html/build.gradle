@@ -163,8 +163,12 @@ tasks.compileGwt.dependsOn("addSource")
 tasks.draftCompileGwt.dependsOn("addSource")
 tasks.checkGwt.dependsOn("addSource")
 
-java.sourceCompatibility = JavaVersion.VERSION_11
-java.targetCompatibility = JavaVersion.VERSION_11
 sourceSets.main.java.srcDirs = [ "src/main/java/" ]
 
 eclipse.project.name = appName + "-html"
+
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(17)
+  }
+}

@@ -17,13 +17,6 @@ import java.util.ArrayList;
 import com.dang.dragonboy.xu_ly_map.HitboxDat;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
-enum TrangThai {
-    DUNG_YEN,
-    DI_CHUYEN,
-    NHAY,
-    ROI,
-    BAY_NGANG
-}
 public class NhanVat {
     private ShapeRenderer shapeRenderer;
     private GlyphLayout layout;
@@ -1221,8 +1214,9 @@ public class NhanVat {
 
     public void ve(SpriteBatch batch, float thoiGian) {
         if (veHUD.renderDeTu) {
-            batch.draw(dau_dung,x-30,y+cao);
+            duLieuNguoiChoi.deTu.ve(batch, thoiGian);
         }
+
         boolean duDieuKien = true;
         if (veHUD.dangHopTheThuong) {
             if (veHUD.timeHopTheTHuong < 1.5f ){
@@ -1607,5 +1601,16 @@ public class NhanVat {
 
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi duLieuNguoiChoi) {
         this.duLieuNguoiChoi = duLieuNguoiChoi;
+    }
+    public TrangThai getTrangThai() {
+        return this.trangThai;
+    }
+
+    public boolean getFlipX() {
+        return this.flipX;
+    }
+
+    public int getFrame() {
+        return this.frame;
     }
 }

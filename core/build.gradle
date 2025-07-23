@@ -14,4 +14,9 @@ dependencies {
     implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion";
     implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
   }
+  java {
+    toolchain {
+      languageVersion = JavaLanguageVersion.of(17)
+    }
+  }
 }

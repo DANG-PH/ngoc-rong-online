@@ -1,14 +1,23 @@
 package com.dang.dragonboy.du_lieu;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.dang.dragonboy.item.Item;
 import com.badlogic.gdx.graphics.Texture;
-
+import com.dang.dragonboy.hien_thi.VeHUD;
 import java.util.*;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.dang.dragonboy.nhan_vat.DeTuCauHinh;
 import com.dang.dragonboy.nhan_vat.DeTuXuLy;
 import com.dang.dragonboy.nhan_vat.DoLechModular;
 import com.dang.dragonboy.hien_thi.VeHUD;
+import com.dang.dragonboy.he_thong.TrangThaiChu;
+import com.dang.dragonboy.nhan_vat.TrangThai;
+import java.util.LinkedList;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -16,6 +25,7 @@ import java.util.ArrayList;
 import com.dang.dragonboy.xu_ly_map.HitboxDat;
 
 public class DeTu {
+    private GlyphLayout layout;
     public float x, y;
     public float rong_de_tu, cao_de_tu;
     private final float tiLe = 0.5f;
@@ -104,6 +114,17 @@ public class DeTu {
     private String[] danhSachSkill3 = {"Thái Dương Hạ San","Tái tạo năng lượng","Kaioken"};
     private String[] danhSachSkill4 = {"Biến hình","Khiên năng lượng","Đẻ trứng"};
 
+    private boolean flipX;
+    private int frame;
+    private float lechThanX = 0f, lechThanY = 0f;
+    private float lechDauX = 0f, lechDauY = 0f;
+    private float timeChay = 0f;
+
+    private BitmapFont fontTenDeTu;
+    private int frameVanBay = 0;
+    private float timeVanBay = 0f;
+    private Texture[] vanBayCauHinh;
+
     private ArrayList<Item> hanhTrangDangMac = new ArrayList<>(6);
     {
         for (int i = 0; i < 6; i++) {
@@ -127,16 +148,21 @@ public class DeTu {
     public Texture chan_dung, chan_nhay, chan_roi;
     public Texture[] chan_chay;
     public Texture chan_bay;
+    public float rong,cao;
+    private boolean chuaFixAvtAoQuan = true;
 
-    public DeTu(String ten, String hanhtinh, float x, float y, Texture dau_dung, Texture dau_chay,
+    private VeHUD veHUD;
+
+    public DeTu(float x, float y,String ten, String hanhtinh, Texture dau_dung, Texture dau_chay,
                 Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,
                 Texture chan_dung, Texture chan_nhay, Texture chan_roi, Texture[] chan_chay,
                 Texture than_bay, Texture chan_bay, Map<TrangThaiDeTu, List<DoLechModular>> lechTheoTrangThai,
                 Texture ao, Texture quan, Texture gang, Texture giay, Texture rada, Texture iconct) {
+        layout = new GlyphLayout();
         this.ten = ten;
 //        this.hanhtinh = danhSachHanhTinh[MathUtils.random(danhSachHanhTinh.length - 1)];
         this.hanhtinh = hanhtinh;
-        this.sucManh = 50_000_000_000L;
+        this.sucManh = 1_499_999L;
         this.theLuc = 70;
         this.HpGoc = 550000;
         this.KiGoc = 550000;
@@ -180,6 +206,43 @@ public class DeTu {
             tenSkill[3] = danhSachSkill4[MathUtils.random(danhSachSkill4.length - 1)];
         }
         this.avtdangmac = this.hanhtinh+"_base";
+        this.dau_dung = dau_dung;
+        this.dau_chay = dau_chay;
+        this.than_dung = than_dung;
+        this.than_nhay = than_nhay;
+        this.than_roi = than_roi;
+        this.than_chay = than_chay;
+
+        this.chan_dung = chan_dung;
+        this.chan_nhay = chan_nhay;
+        this.chan_roi = chan_roi;
+        this.chan_chay = chan_chay;
+
+        this.than_bay = than_bay;
+        this.chan_bay = chan_bay;
+
+        this.rong_de_tu = chan_dung.getWidth() * tiLe;
+        this.cao_de_tu = chan_dung.getHeight() * tiLe + than_dung.getHeight() * tiLe + dau_dung.getHeight() * 0.15f;
+        this.x = x;
+        this.y = y;
+
+        this.lechTheoTrangThai = lechTheoTrangThai;
+
+        FreeTypeFontGenerator generator2 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchinh.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter param2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        param2.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ Đ";
+        param2.size = 19;
+        fontTenDeTu = generator2.generateFont(param2);
+        generator2.dispose();
+
+        vanBayCauHinh = new Texture[] {
+            new Texture("hieuung/hieuunggame/aura_bay/" + "1.png"),
+            new Texture("hieuung/hieuunggame/aura_bay/" + "2.png"),
+            new Texture("hieuung/hieuunggame/aura_bay/" + "3.png"),
+            new Texture("hieuung/hieuunggame/aura_bay/" + "4.png")
+        };
+
     }
 
     public Texture getAvtDeTu() {
@@ -271,6 +334,17 @@ public class DeTu {
         }
         if (sucManh >= 20_000_000_000L && tenSkill[3]==null) {
             tenSkill[3] = danhSachSkill4[MathUtils.random(danhSachSkill4.length - 1)];
+        }
+        if (sucManh >= 1_500_000 && chuaFixAvtAoQuan) {
+            DeTuCauHinh c2 = Doi_avt_ao_quan_DeTu(hanhtinh,hanhtinh+"_base","set_base","set_base");
+            fixCaiTrang(
+                c2.dau_dung_de_tu, c2.dau_chay_de_tu,
+                c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
+                c2.chan_dung_de_tu, c2.chan_nhay_de_tu, c2.chan_roi_de_tu, c2.chan_chay_de_tu,
+                c2.than_bay_de_tu, c2.chan_bay_de_tu,
+                c2.lechMapDeTu
+            );
+            chuaFixAvtAoQuan = false;
         }
     }
 
@@ -1074,5 +1148,171 @@ public class DeTu {
         this.cao_de_tu = chan_dung.getHeight() * tiLe + than_dung.getHeight() * tiLe + dau_dung.getHeight() * 0.15f;
 
         this.lechTheoTrangThai = lechTheoTrangThai;
+    }
+    private DeTuCauHinh Doi_avt_ao_quan_DeTu(String HanhTinh, String TenAvatar , String ao, String quan){
+        return DeTuXuLy.xuly_id("avatar_"+HanhTinh+"+"+TenAvatar+"+"+ao+"+"+quan);
+    }
+    public void capNhat(float delta, LinkedList<TrangThaiChu> lichSuChu, float delayThoiGian) {
+        int indexDelay = (int)(delayThoiGian / 0.05f);
+        if (lichSuChu.size() <= indexDelay) return;
+
+        TrangThaiChu mucTieu = lichSuChu.get(indexDelay);
+        float dx = mucTieu.x - this.x;
+        float dy = mucTieu.y - this.y;
+        float tocDo = 350f;
+
+        // Giữ khoảng cách X tối thiểu
+        float absDx = Math.abs(dx);
+        float absDy = Math.abs(dy);
+        boolean quaGanX = absDx < 70f;
+        boolean quaGanY = absDy < 0f;
+
+        float targetX = this.x;
+        float targetY = mucTieu.y;
+
+        if (!quaGanX) {
+            float huongX = Math.signum(dx);
+            targetX = mucTieu.x - huongX * 70f;
+        }
+
+        dx = targetX - this.x;
+        dy = targetY - this.y;
+        float khoangCach = (float)Math.sqrt(dx * dx + dy * dy);
+
+        if (khoangCach > 0.01f) {
+            this.x += (dx / khoangCach) * tocDo * delta;
+            this.y += (dy / khoangCach) * tocDo * delta * 0.75f;
+        }
+
+        // Luôn giữ theo trạng thái mục tiêu – KHÔNG ép về DUNG_YEN
+        this.flipX = (mucTieu.x - this.x) <= 0;
+        if (mucTieu.trangThai == TrangThai.DUNG_YEN && khoangCach < 72f && Math.abs(dy)<2f) {
+            this.trangThai = TrangThaiDeTu.DUNG_YEN;
+            this.y = mucTieu.y;
+        } else {
+            this.trangThai = TrangThaiDeTu.valueOf(mucTieu.trangThai.name());
+        }
+        if (trangThai == TrangThaiDeTu.BAY_NGANG) {
+            timeVanBay += Gdx.graphics.getDeltaTime();
+            if (timeVanBay > 0.12f) {
+                frameVanBay = (frameVanBay + 1) % vanBayCauHinh.length;
+                timeVanBay = 0;
+            }
+        }
+    }
+
+    public void ve(SpriteBatch batch, float thoiGian) {
+        boolean duDieuKien = true;
+        if (veHUD.dangHopTheThuong) {
+            if (veHUD.timeHopTheTHuong < 1.5f) {
+                duDieuKien = false;
+            } else {
+                duDieuKien = true;
+            }
+        }
+        if (veHUD.timeChoHopThe == 0 && duDieuKien) {
+            float daoDong = (trangThai == TrangThaiDeTu.DUNG_YEN || trangThai == TrangThaiDeTu.BAY_NGANG) ? (float) Math.sin(thoiGian) * 1.08f : 0f;
+
+            Texture chanVe = chan_dung;
+            Texture thanVe = than_dung;
+            Texture dauVe = dau_dung;
+
+            switch (trangThai) {
+                case BAY_NGANG:
+                    chanVe = chan_bay;
+                    thanVe = than_bay;
+                    dauVe = dau_dung;
+                    break;
+                case DI_CHUYEN:
+                    timeChay += Gdx.graphics.getDeltaTime(); // tăng thời gian theo deltaTime
+                    if (timeChay >= 0.1f) {
+                        frame = (frame + 1) % chan_chay.length;
+                        timeChay = 0;
+                    }
+                    chanVe = chan_chay[frame];
+                    thanVe = than_chay[frame];
+                    dauVe = dau_chay;
+                    break;
+                case NHAY:
+                    chanVe = chan_nhay;
+                    thanVe = than_nhay;
+                    break;
+                case ROI:
+                    chanVe = chan_roi;
+                    thanVe = than_roi;
+                    break;
+                case DUNG_YEN:
+                default:
+                    // giữ ảnh mặc định đã gán ban đầu
+                    break;
+            }
+            // đúng kiểu dữ liệu 2 vế và gán class LechModular để có thể truy cập thuộc tính
+            DoLechModular lech = layLech(lechTheoTrangThai, trangThai, frame);
+            lechThanX = lech.lechThanX;
+            lechThanY = lech.lechThanY;
+            lechDauX = lech.lechDauX;
+            lechDauY = lech.lechDauY;
+            // Tính tọa độ theo hướng flip
+            float chanW = chanVe.getWidth() * tiLe;
+            float chanH = chanVe.getHeight() * tiLe;
+            float thanW = thanVe.getWidth() * tiLe;
+            float thanH = thanVe.getHeight() * tiLe;
+            float dauW = dauVe.getWidth() * tiLe;
+            float dauH = dauVe.getHeight() * tiLe;
+
+            // Flip bằng scale âm nếu cần
+            float flipScale = flipX ? -1f : 1f;
+            float anchorX = flipX ? x + chanW : x;
+            if (trangThai != TrangThaiDeTu.BAY_NGANG) {
+                batch.draw(chanVe, anchorX, y, chanW * flipScale, chanH);
+
+                float thanX = anchorX + (chanW / 2f - thanW / 2f) * flipScale;
+                float thanY = y + chanH + daoDong;
+                float dauX = anchorX + (chanW / 2f - dauW / 2f) * flipScale;
+                float dauY = thanY + thanH;
+                batch.draw(dauVe, dauX + lechDauX * flipScale, dauY + lechDauY, dauW * flipScale, dauH);
+                batch.draw(thanVe, thanX + lechThanX * flipScale, thanY - 10.2f + lechThanY, thanW * flipScale, thanH);
+            } else {
+                batch.draw(chanVe, anchorX - (thanW-30)*flipScale, y + chanH + daoDong - 10, chanW * flipScale, chanH);
+
+                float thanX = anchorX + (chanW / 2f - thanW / 2f) * flipScale;
+                float thanY = y + chanH + daoDong;
+                float dauX = anchorX + (chanW / 2f - dauW / 2f) * flipScale;
+                float dauY = thanY + thanH;
+                batch.draw(dauVe, dauX + lechDauX * flipScale, dauY + lechDauY, dauW * flipScale, dauH);
+                batch.draw(thanVe, thanX + lechThanX * flipScale, thanY - 10.2f + lechThanY, thanW * flipScale, thanH);
+
+                Texture cloud = vanBayCauHinh[frameVanBay];
+                float cloudW = cloud.getWidth() * 0.5f;
+                float cloudH = cloud.getHeight() * 0.5f;
+                float flipCloud = !flipX ? 1f : -1f;
+
+                batch.draw(
+                    cloud,
+                    anchorX - (thanW-30 + cloudW - 15)*flipScale,
+                    y + daoDong - 5f,
+                    cloudW * flipCloud,
+                    cloudH
+                );
+            }
+            fontTenDeTu.setColor(16f / 255f, 237f / 255f, 227f / 255f, 1f);
+            layout.setText(fontTenDeTu,getTen());
+            fontTenDeTu.draw(batch,layout,x+(rong_de_tu- layout.width)/2f,y+cao_de_tu+30);
+        }
+    }
+    public static DoLechModular layLech(Map<TrangThaiDeTu, List<DoLechModular>> map, TrangThaiDeTu trangThai, int frameIndex) {
+        List<DoLechModular> ds = map.get(trangThai);
+        if (ds == null || ds.isEmpty()) {
+            return new DoLechModular(0, 0, 0, 0); // fallback nếu thiếu dữ liệu
+        }
+
+        if (trangThai == TrangThaiDeTu.DI_CHUYEN) {
+            return ds.get(frameIndex % ds.size()); // vòng lặp theo frame
+        } else {
+            return ds.get(0); // chỉ có 1 frame cho trạng thái khác
+        }
+    }
+    public void setVeHUD(VeHUD veHUD) {
+        this.veHUD = veHUD;
     }
 }

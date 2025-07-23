@@ -130,7 +130,7 @@ public class CaiTrangOffset {
     private static Map<TrangThai, List<DoLechModular>> taoGotenks() {
         return taoLech(
             lech(0f, -7f, 1f, -27f),
-            lechDiChuyen(new float[][] {
+            lechDiChuyen(new float[][]{
                 {3f, 5f, 3f, -16f},
                 {3f, 5f, 3f, -16f},
                 {3f, 5f, 3f, -16f},

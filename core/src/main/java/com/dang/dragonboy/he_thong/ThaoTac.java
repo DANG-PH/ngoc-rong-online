@@ -23,7 +23,7 @@ public class ThaoTac extends InputAdapter {
 
     @Override
     public boolean keyDown(int keycode) {
-        if (hud.timeChoHopThe == 0) {
+        if (hud.timeChoHopThe == 0 && !hud.dangHienPopup) {
             switch (keycode) {
                 case Input.Keys.LEFT:
                     nhanVat.diTrai();
