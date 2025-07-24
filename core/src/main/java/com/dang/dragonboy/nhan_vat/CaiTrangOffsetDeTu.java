@@ -60,7 +60,7 @@ public class CaiTrangOffsetDeTu {
             }),
             lech(-4f, 6f, 0.5f, -21.5f),
             lech(-5.5f, 6.5f, -1.2f, -28f),
-            lech(0f, -1f, -0.3f, -15.5f)
+            lech(5f, 8f, 7f, -19f)
         );
     }
 

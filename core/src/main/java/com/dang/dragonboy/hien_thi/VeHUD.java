@@ -217,6 +217,7 @@ public class VeHUD {
 
     public String trangthaide;
     public boolean renderDeTu = false;
+    private float timeDoiDauThan = 0f;
 
     LinkedList<TrangThaiChu> lichSuTrangThaiChu = new LinkedList<>();
     float timeLuuTrangThai = 0f;
@@ -521,6 +522,10 @@ public class VeHUD {
 
         batch.end();
         if (duLieuNguoiChoi.coDeTu()) {
+            if (duLieuNguoiChoi.deTu.getTheLuc()<20 && timeDoiDauThan == 0) {
+                duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Sư phụ ơi con cần đậu thần",2f);
+                timeDoiDauThan = 12f;
+            }
             int widthDeTu = (int) (thanhtheluc2.getWidth() * (duLieuNguoiChoi.deTu.getTheLuc() / 100f));
             thanhtheluc1 = new TextureRegion(thanhtheluc2, 0, 0, widthDeTu, thanhtheluc2.getHeight());
         }
@@ -702,6 +707,10 @@ public class VeHUD {
             duLieuNguoiChoi.giamDau();
             duLieuNguoiChoi.tangHpHienTai(duLieuNguoiChoi.getDauHoiHPKI());
             duLieuNguoiChoi.tangKiHienTai(duLieuNguoiChoi.getDauHoiHPKI());
+            duLieuNguoiChoi.deTu.tangHpHienTai(duLieuNguoiChoi.getDauHoiHPKI());
+            duLieuNguoiChoi.deTu.tangKiHienTai(duLieuNguoiChoi.getDauHoiHPKI());
+            duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Cám ơn sư phụ",1f);
+            duLieuNguoiChoi.deTu.tangTheLuc(30);
             dauThanRenderH = 0f;
         }
     }
@@ -711,6 +720,12 @@ public class VeHUD {
         }
     }
     public void update(float delta) {
+        if (timeDoiDauThan > 0) {
+            timeDoiDauThan -= delta;
+            if (timeDoiDauThan <= 0) {
+                timeDoiDauThan = 0;
+            }
+        }
         if (timeGlow > 0) {
             timeGlow -= delta;
             if (timeGlow <= 0) {

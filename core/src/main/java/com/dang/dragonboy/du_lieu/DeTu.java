@@ -176,6 +176,12 @@ public class DeTu {
     private boolean diQuaPhai = true; // ban đầu chạy qua phải (theo flip ban đầu)
     boolean dangDoiFlip = false;
     boolean vuaspawn = true;
+    float timeCooldownDash = 0f;
+    final float DASH_COOLDOWN = 2.0f; // 2 giây cooldown sau mỗi lần dash
+    float x_truoc_dash;
+    float y_truoc_dash;
+    boolean flip_truoc_dash = false;
+    private Texture dau_tele,than_tele,chan_tele;
 
     public DeTu(float x, float y,boolean flipX,boolean diQuaPhai,String ten, String hanhtinh, Texture dau_dung, Texture dau_chay,
                 Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,
@@ -188,7 +194,7 @@ public class DeTu {
 //        this.hanhtinh = danhSachHanhTinh[MathUtils.random(danhSachHanhTinh.length - 1)];
         this.hanhtinh = hanhtinh;
         this.sucManh = 1_499_999L;
-        this.theLuc = 70;
+        this.theLuc = 0;
         this.HpGoc = 550000;
         this.KiGoc = 550000;
         this.HpDeTu = HpGoc;
@@ -272,6 +278,10 @@ public class DeTu {
 
         this.flipX = flipX;
         this.diQuaPhai = diQuaPhai;
+
+        dau_tele = new Texture("hieuung/hieuunggame/tele/dau.png");
+        than_tele = new Texture("hieuung/hieuunggame/tele/than.png");
+        chan_tele = new Texture("hieuung/hieuunggame/tele/chan.png");
     }
 
     public Texture getAvtDeTu() {
@@ -322,6 +332,7 @@ public class DeTu {
     public String getTen() { return ten; }
     public long getSucManh() { return sucManh; }
     public int getTheLuc() { return theLuc; }
+    public void tangTheLuc(int theLuc) { this.theLuc += theLuc; this.theLuc = Math.min(this.theLuc,100); }
     public float getHpHienTai() { return HpHienTai; }
     public float getHpToiDa() { return HpDeTu; }
     public int getHpGoc() { return HpGoc; }
@@ -1183,6 +1194,7 @@ public class DeTu {
     }
 
     public void capNhatAI(float delta, LinkedList<TrangThaiChu> lichSu, float delayGiay) {
+        timeCooldownDash -= delta;
         // Tính frame delay tương ứng
         int frameDelay = (int)(delayGiay / Gdx.graphics.getDeltaTime());
 
@@ -1405,17 +1417,71 @@ public class DeTu {
                 } else {
                     boolean matQuaySangPhai = !flipX;
                     if ((huongDi > 0 && matQuaySangPhai) || (huongDi < 0 && !matQuaySangPhai)) {
-                        vx = huongDi * tocDoDiChuyen * 0.5f;
+                        vx = huongDi * tocDoDiChuyen * 0.65f;
                     } else {
-                        vx = -huongDi * tocDoDiChuyen * 0.5f;
+                        vx = -huongDi * tocDoDiChuyen * 0.65f;
                     }
                 }
             }
+        }
+        // Dash tức thời nếu cách quá xa và cooldown đã hồi
+        if (khoangCach > 150f && timeCooldownDash <= 0) {
+            if (trangThai == TrangThaiDeTu.BAY_NGANG) {
+                trangThai = TrangThaiDeTu.ROI;
+                dangBayNgang = false;
+            }
+            float huong = Math.signum(dx); // hướng về phía sư phụ
+            x_truoc_dash = x;
+            y_truoc_dash = y;
+            flip_truoc_dash = flipX;
+            x += huong * 120f; // dịch chuyển 1 phát
+
+            flipX = huong < 0;
+
+            setTinNhanDeTuChat("Đợi con với", 1f);
+
+            // Kích hoạt lại cooldown
+            timeCooldownDash = DASH_COOLDOWN;
         }
     }
 
 
     public void ve(SpriteBatch batch, float thoiGian) {
+        if (timeCooldownDash > 1.8f && timeCooldownDash <= 2.0f) {
+            float alpha;
+            if (timeCooldownDash > 1.9f) {
+                // Fade in: 2.0 → 1.9
+                alpha = (2.0f - timeCooldownDash) / 0.1f;  // 0 → 1
+            } else {
+                // Fade out: 1.9 → 1.8
+                alpha = (timeCooldownDash - 1.8f) / 0.1f;  // 1 → 0
+            }
+            // Áp dụng alpha
+            batch.setColor(1f, 1f, 1f, alpha);
+
+            float chanW = chan_tele.getWidth() * tiLe;
+            float chanH = chan_tele.getHeight() * tiLe;
+            float thanW = than_tele.getWidth() * tiLe;
+            float thanH = than_tele.getHeight() * tiLe;
+            float dauW = dau_tele.getWidth() * tiLe;
+            float dauH = dau_tele.getHeight() * tiLe;
+
+            float flipScale = flip_truoc_dash ? -1f : 1f;
+            float anchorX = flip_truoc_dash ? x_truoc_dash + chanW : x_truoc_dash;
+
+            batch.draw(chan_tele, anchorX, y_truoc_dash + 5, chanW * flipScale, chanH);
+
+            float thanX = anchorX + (chanW / 2f - thanW / 2f - 7f) * flipScale;
+            float thanY = y_truoc_dash + chanH - 3f;
+            batch.draw(than_tele, thanX, thanY, thanW * flipScale, thanH);
+
+            float dauX = anchorX + (chanW / 2f - dauW / 2f - 1f) * flipScale;
+            float dauY = thanY + thanH - 20;
+            batch.draw(dau_tele, dauX, dauY, dauW * flipScale, dauH);
+
+            // Reset lại màu
+            batch.setColor(1f, 1f, 1f, 1f);
+        }
         boolean duDieuKien = true;
         if (veHUD.dangHopTheThuong) {
             if (veHUD.timeHopTheTHuong < 1.5f) {
@@ -1425,7 +1491,9 @@ public class DeTu {
             }
         }
         if (veHUD.timeChoHopThe == 0 && duDieuKien) {
-            float daoDong = (trangThai == TrangThaiDeTu.DUNG_YEN || trangThai == TrangThaiDeTu.BAY_NGANG) ? (float) Math.sin(thoiGian) * 1.08f : 0f;
+            float daoDong = (trangThai == TrangThaiDeTu.DUNG_YEN) ? (float) Math.sin(thoiGian) * 1.08f
+                : (trangThai == TrangThaiDeTu.BAY_NGANG) ? (float) Math.sin(thoiGian) * 3f
+                : 0f;
 
             Texture chanVe = chan_dung;
             Texture thanVe = than_dung;
