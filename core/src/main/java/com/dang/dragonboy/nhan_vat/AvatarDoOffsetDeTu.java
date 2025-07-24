@@ -44,13 +44,21 @@ public class AvatarDoOffsetDeTu {
             lechDau(-0.3f, -15.5f)
         ));
 
+        OFFSET_AVATAR.put("traidat_base", taoLech(
+            lechDau(-4.3f, -15f),
+            lechDau(3.3f, -10f,3.3f, -10f,3.3f, -10f,3.3f, -10f,3.3f, -10f),
+            lechDau(-2f, -23.5f),
+            lechDau(-3.8f, -31f),
+            lechDau(5f, -19f)
+        ));
+
         // --- ÁO ---
         OFFSET_AO.put("set_base", taoLech(
             lechThan(0f, -0.4f),
             lechThan(1.5f, 5.2f,1.5f, 5.2f,1.5f, 5.2f,1.5f, 5.2f,1.5f, 5.2f ),
             lechThan(-4f, 6f),
             lechThan(-6f, 7f ),
-            lechThan(0f, 0f)
+            lechThan(5f, 8f)
         ));
 
         OFFSET_AO.put("set_cam", taoLech(

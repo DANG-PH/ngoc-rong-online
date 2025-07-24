@@ -28,6 +28,15 @@ import java.util.ArrayList;
 import com.dang.dragonboy.xu_ly_map.HitboxDat;
 
 public class DeTu {
+    private final float delayRoi = 15f;
+    private final float trongLuc = -0.5f;
+    private final float tocDoDiChuyen = 6f;
+    private float gioiHanXMax;
+    private float gioiHanYMax;
+    private List<HitboxDat> danhSachDat = new ArrayList<>();
+    float vx, vy;
+    boolean dangDungDat, dangBayNgang, daNhay;
+    int demThoiGianBay;
     private GlyphLayout layout;
     private ShapeRenderer shapeRenderer;
     public float x, y;
@@ -152,7 +161,6 @@ public class DeTu {
     public Texture chan_dung, chan_nhay, chan_roi;
     public Texture[] chan_chay;
     public Texture chan_bay;
-    public float rong,cao;
     private boolean chuaFixAvtAoQuan = true;
 
     private VeHUD veHUD;
@@ -160,7 +168,16 @@ public class DeTu {
     private String tinNhanDeTuChat;
     private float timeHienChat;
 
-    public DeTu(float x, float y,String ten, String hanhtinh, Texture dau_dung, Texture dau_chay,
+    private float timeChoHienBay;
+    // Dùng cho hành vi di chuyển quanh sư phụ
+    private boolean diChuyenXungQuanh = false;
+    private float timeDungYen = 0f;
+    private float timeChuyenHuong = 0f;
+    private boolean diQuaPhai = true; // ban đầu chạy qua phải (theo flip ban đầu)
+    boolean dangDoiFlip = false;
+    boolean vuaspawn = true;
+
+    public DeTu(float x, float y,boolean flipX,boolean diQuaPhai,String ten, String hanhtinh, Texture dau_dung, Texture dau_chay,
                 Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,
                 Texture chan_dung, Texture chan_nhay, Texture chan_roi, Texture[] chan_chay,
                 Texture than_bay, Texture chan_bay, Map<TrangThaiDeTu, List<DoLechModular>> lechTheoTrangThai,
@@ -252,6 +269,9 @@ public class DeTu {
         };
         tinNhanDeTuChat = "Xin hãy thu nhận con làm đệ tử";
         timeHienChat = 3f;
+
+        this.flipX = flipX;
+        this.diQuaPhai = diQuaPhai;
     }
 
     public Texture getAvtDeTu() {
@@ -1161,60 +1181,239 @@ public class DeTu {
     private DeTuCauHinh Doi_avt_ao_quan_DeTu(String HanhTinh, String TenAvatar , String ao, String quan){
         return DeTuXuLy.xuly_id("avatar_"+HanhTinh+"+"+TenAvatar+"+"+ao+"+"+quan);
     }
-    public void capNhat(float delta, LinkedList<TrangThaiChu> lichSuChu, float delayThoiGian) {
-        int indexDelay = (int)(delayThoiGian / 0.05f);
-        if (lichSuChu.size() <= indexDelay) return;
 
-        TrangThaiChu mucTieu = lichSuChu.get(indexDelay);
-        float dx = mucTieu.x - this.x;
-        float dy = mucTieu.y - this.y;
-        float tocDo = 350f;
+    public void capNhatAI(float delta, LinkedList<TrangThaiChu> lichSu, float delayGiay) {
+        // Tính frame delay tương ứng
+        int frameDelay = (int)(delayGiay / Gdx.graphics.getDeltaTime());
 
-        // Giữ khoảng cách X tối thiểu
-        float absDx = Math.abs(dx);
-        float absDy = Math.abs(dy);
-        boolean quaGanX = absDx < 70f;
-        boolean quaGanY = absDy < 0f;
+        if (lichSu.size() <= frameDelay) return; // Chưa đủ dữ liệu, skip
+        // Lấy trạng thái sư phụ ở thời điểm "delay" trước
+        TrangThaiChu trangThaiDelay = lichSu.get(frameDelay);
 
-        float targetX = this.x;
-        float targetY = mucTieu.y;
+        float xSuPhu = trangThaiDelay.x;
+        float ySuPhu = trangThaiDelay.y;
+        float dx = xSuPhu - this.x;
+        float dy = ySuPhu - this.y;
+        float khoangCach = (float) Math.sqrt(dx*dx+dy*dy);
+        boolean phimTraiDangGiu = dx < -80 || (khoangCach > 120 && dx < 0);
+        boolean phimPhaiDangGiu = dx > 80 || (khoangCach > 120 && dx > 0);
+        if (vuaspawn) {
+            if (!phimPhaiDangGiu && !phimTraiDangGiu) {
+                if (dx<0) {
+                    phimTraiDangGiu = true;
+                    phimPhaiDangGiu = false;
+                } else {
+                    phimPhaiDangGiu = true;
+                    phimTraiDangGiu = false;
+                }
+                vuaspawn = false;
+            }
+        }
+        boolean phimNhayDangGiu = dy > 10f && khoangCach > 30f;
 
-        if (!quaGanX) {
-            float huongX = Math.signum(dx);
-            targetX = mucTieu.x - huongX * 70f;
+        // Xử lý bay ngang nếu cần
+        boolean giuPhimNgang = phimTraiDangGiu || phimPhaiDangGiu;
+        // Tắt chạy vòng nếu đang làm hành vi chủ động khác
+        if (giuPhimNgang || phimNhayDangGiu || khoangCach > 100f) {
+            diChuyenXungQuanh = false;
+            timeDungYen = 0;
+            timeChuyenHuong = 0;
+        }
+        if (dangDungDat && giuPhimNgang && phimNhayDangGiu) {
+            vy = 5f;
+            dangDungDat = false;
+            daNhay = true;
+            dangBayNgang = true;
+            demThoiGianBay = 0;
         }
 
-        dx = targetX - this.x;
-        dy = targetY - this.y;
-        float khoangCach = (float)Math.sqrt(dx * dx + dy * dy);
-
-        if (khoangCach > 0.01f) {
-            this.x += (dx / khoangCach) * tocDo * delta;
-            this.y += (dy / khoangCach) * tocDo * delta * 0.75f;
+        if (dangDungDat && !giuPhimNgang && phimNhayDangGiu && !daNhay) {
+            vy = 10f;
+            dangDungDat = false;
+            daNhay = true;
         }
 
-        // Luôn giữ theo trạng thái mục tiêu – KHÔNG ép về DUNG_YEN
-        this.flipX = (mucTieu.x - this.x) <= 0;
-        if (mucTieu.trangThai == TrangThai.DUNG_YEN && khoangCach < 72f && Math.abs(dy)<2f) {
-            this.trangThai = TrangThaiDeTu.DUNG_YEN;
-            this.y = mucTieu.y;
+        if (!dangDungDat) {
+            if (!dangBayNgang && giuPhimNgang && phimNhayDangGiu && Math.abs(dy) > 20f) {
+                // Cho phép bay lại giữa không trung nếu sư phụ đang bay
+                dangBayNgang = true;
+                vy = Math.signum(dy) * 4f; // đẩy nhẹ lên hoặc xuống
+                demThoiGianBay = 0;
+            }
+            if (dangBayNgang) {
+                trangThai = TrangThaiDeTu.BAY_NGANG;
+                timeChoHienBay += delta;
+                // Di chuyển ngang
+                if (phimTraiDangGiu) vx = -tocDoDiChuyen;
+                else if (phimPhaiDangGiu) vx = tocDoDiChuyen;
+                else if (!diChuyenXungQuanh) vx = 0;
+
+                // Bay lên hoặc xuống để tiệm cận sư phụ
+                if (Math.abs(dy) > 10) {
+                    vy = Math.signum(dy) * 6f;  // 3.5f là tốc độ bay lên/xuống
+                    demThoiGianBay = 0;
+                } else {
+                    vy = 0;
+                    if (!giuPhimNgang) {
+                        demThoiGianBay++;
+                    } else {
+                        demThoiGianBay = 0; // reset nếu tiếp tục bay
+                    }
+
+                    if (demThoiGianBay > delayRoi) {
+                        dangBayNgang = false;
+                    }
+                }
+            } else {
+                // Chưa bay ngang → bị rơi tự do
+                vy += trongLuc;
+
+                if (!diChuyenXungQuanh) {
+                    if (phimTraiDangGiu) vx = -tocDoDiChuyen;
+                    else if (phimPhaiDangGiu) vx = tocDoDiChuyen;
+                    else vx = 0;
+                }
+            }
         } else {
-            this.trangThai = TrangThaiDeTu.valueOf(mucTieu.trangThai.name());
+            daNhay = false;
+            dangBayNgang = false;
+            demThoiGianBay = 0;
+
+            if (!diChuyenXungQuanh) {
+                if (phimTraiDangGiu) vx = -tocDoDiChuyen;
+                else if (phimPhaiDangGiu) vx = tocDoDiChuyen;
+                else vx = 0;
+            }
+        }
+
+        // Xử lý va chạm từng bước nhỏ
+        int steps = 10;
+        float dxStep = vx / steps;
+        float dyStep = vy / steps;
+        dangDungDat = false;
+        for (int i = 0; i < steps; i++) {
+            x += dxStep;
+            for (HitboxDat dat : danhSachDat) {
+                if (dat.vaChamBenTrai(x, y, rong_de_tu, cao_de_tu)) {
+                    x = dat.x - rong_de_tu;
+                    break;
+                } else if (dat.vaChamBenPhai(x, y, rong_de_tu, cao_de_tu)) {
+                    x = dat.x + dat.width;
+                    break;
+                }
+            }
+
+            y += dyStep;
+
+            for (HitboxDat dat : danhSachDat) {
+                if (dat.vaChamTuTren(x, y, rong_de_tu, cao_de_tu, vy)) {
+                    y = dat.y + dat.height;
+                    vy = 0;
+                    dangDungDat = true;
+                    daNhay = false;
+                    break;
+                } else if (dat.vaChamTuDuoi(x, y, rong_de_tu, cao_de_tu, vy)) {
+                    y = dat.y - cao_de_tu;
+                    vy = 0;
+                    break;
+                }
+            }
+        }
+
+        // Cập nhật trạng thái
+        if (dangBayNgang) {
+            trangThai = TrangThaiDeTu.BAY_NGANG;
+        } else if (!dangDungDat) {
+            if (vy > 0) trangThai = TrangThaiDeTu.NHAY;
+            else trangThai = TrangThaiDeTu.ROI;
+            timeChoHienBay = 0;
+        }  else {
+            if (vx != 0 || diChuyenXungQuanh) {
+                trangThai = TrangThaiDeTu.DI_CHUYEN;
+            } else {
+                trangThai = TrangThaiDeTu.DUNG_YEN;
+            }
+            timeChoHienBay = 0;
+        }
+        if (!diChuyenXungQuanh) {
+            if (vx > 0) {
+                flipX = false;
+            } else if (vx < 0) {
+                flipX = true;
+            }
+        } else {
+            if (trangThai == TrangThaiDeTu.DUNG_YEN) {
+                flipX = x < xSuPhu;
+            }
         }
         if (trangThai == TrangThaiDeTu.BAY_NGANG) {
-            timeVanBay += Gdx.graphics.getDeltaTime();
-            if (timeVanBay > 0.12f) {
+            float tocDoHienTai = (float)Math.sqrt(vx * vx + vy * vy); // tốc độ tổng
+            float tocDoVay = Math.max(0.06f, 0.2f - tocDoHienTai * 0.02f);
+
+            timeVanBay += delta;
+            if (timeVanBay > tocDoVay) {
                 frameVanBay = (frameVanBay + 1) % vanBayCauHinh.length;
                 timeVanBay = 0;
             }
         }
-        if (timeHienChat>0) {
+        // Giới hạn map
+        x = Math.max(0, Math.min(x, gioiHanXMax));
+        y = Math.max(0, Math.min(y, gioiHanYMax));
+
+        if (timeHienChat > 0) {
             timeHienChat -= delta;
-            if (timeHienChat<=0) {
+            if (timeHienChat <= 0) {
                 tinNhanDeTuChat = "";
             }
         }
+
+        // === 3.1 Theo dõi thời gian đứng yên ===
+        if (!diChuyenXungQuanh && dangDungDat && vx == 0 && vy == 0 && !dangBayNgang) {
+            timeDungYen += delta;
+        } else if (!diChuyenXungQuanh) {
+            timeDungYen = 0f;
+            timeChuyenHuong = 0f;
+        }
+        // === 3.2 Kích hoạt AI chạy quanh sư phụ nếu đứng yên quá lâu ===
+        if (timeDungYen > 3f && !diChuyenXungQuanh) {
+            diChuyenXungQuanh = true;
+            setTinNhanDeTuChat("Sư phụ con sẽ bảo vệ người",2f);
+            diQuaPhai = (x < xSuPhu); // đúng hướng vị trí hiện tại
+            timeChuyenHuong = 0f;
+        }
+
+        if (diChuyenXungQuanh) {
+            float huongDi = Math.signum(xSuPhu + (diQuaPhai ? 70f : -70f)- x);
+
+            if (dangDoiFlip) {
+                vx = 0;
+                timeChuyenHuong += delta;
+                this.trangThai = TrangThaiDeTu.DUNG_YEN;
+                flipX = x < xSuPhu;
+                if (timeChuyenHuong > 2f) {
+                    diQuaPhai = x < xSuPhu;
+                    flipX = !diQuaPhai;
+                    this.trangThai = TrangThaiDeTu.DI_CHUYEN;
+                    dangDoiFlip = false;
+                    timeChuyenHuong = 0;
+                }
+            } else {
+                if (Math.abs(xSuPhu + (diQuaPhai ? 70f : -70f)- x) <= 1.5f) {
+                    dangDoiFlip = true;
+                    vx = 0;
+                    timeChuyenHuong = 0;
+                } else {
+                    boolean matQuaySangPhai = !flipX;
+                    if ((huongDi > 0 && matQuaySangPhai) || (huongDi < 0 && !matQuaySangPhai)) {
+                        vx = huongDi * tocDoDiChuyen * 0.5f;
+                    } else {
+                        vx = -huongDi * tocDoDiChuyen * 0.5f;
+                    }
+                }
+            }
+        }
     }
+
 
     public void ve(SpriteBatch batch, float thoiGian) {
         boolean duDieuKien = true;
@@ -1296,19 +1495,20 @@ public class DeTu {
                 float dauY = thanY + thanH;
                 batch.draw(dauVe, dauX + lechDauX * flipScale, dauY + lechDauY, dauW * flipScale, dauH);
                 batch.draw(thanVe, thanX + lechThanX * flipScale, thanY - 10.2f + lechThanY, thanW * flipScale, thanH);
+                if (timeChoHienBay>=0.5f) {
+                    Texture cloud = vanBayCauHinh[frameVanBay];
+                    float cloudW = cloud.getWidth() * 0.5f;
+                    float cloudH = cloud.getHeight() * 0.5f;
+                    float flipCloud = !flipX ? 1f : -1f;
 
-                Texture cloud = vanBayCauHinh[frameVanBay];
-                float cloudW = cloud.getWidth() * 0.5f;
-                float cloudH = cloud.getHeight() * 0.5f;
-                float flipCloud = !flipX ? 1f : -1f;
-
-                batch.draw(
-                    cloud,
-                    anchorX - (thanW-30 + cloudW - 15)*flipScale,
-                    y + daoDong - 5f,
-                    cloudW * flipCloud,
-                    cloudH
-                );
+                    batch.draw(
+                        cloud,
+                        anchorX - (thanW - 30 + cloudW - 15) * flipScale,
+                        y + daoDong - 5f,
+                        cloudW * flipCloud,
+                        cloudH
+                    );
+                }
             }
             fontTenDeTu.setColor(16f / 255f, 237f / 255f, 227f / 255f, 1f);
             layout.setText(fontTenDeTu,getTen());
@@ -1363,5 +1563,12 @@ public class DeTu {
     }
     public float getTimeHienChat() {
         return timeHienChat;
+    }
+    public void setDanhSachDat(List<HitboxDat> ds) {
+        this.danhSachDat = ds;
+    }
+    public void setGioiHanToaDo(float ghX, float ghy) {
+        this.gioiHanXMax = ghX;
+        this.gioiHanYMax = ghy;
     }
 }

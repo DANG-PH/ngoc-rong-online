@@ -39,8 +39,8 @@ public class VeHUD {
 
     private DuLieuNguoiChoi duLieuNguoiChoi;
 
-    public Texture thanhhpnv,thanhkinv;
-    public TextureRegion thanhhpnv1,thanhkinv1;
+    public Texture thanhhpnv, thanhkinv;
+    public TextureRegion thanhhpnv1, thanhkinv1;
     public Texture saoden, saoxanh;
     public Texture ochat, ochatclick;
     public Texture thanhhp;
@@ -48,7 +48,7 @@ public class VeHUD {
     public Texture oskill, oskillclick;
     public Texture nutpopup;
 
-    public BitmapFont font,fontChucnang,fontDauThan,fontNhiemVu,fontNhiemVu1,fontNhiemVuChuaLam,fontMotaNhiemVu,fontvangngoc,fontsm,fontSkilldaco,fontSkillchuaco,fontMotaSkill,fontCapSKill,fontMotaNoiTai,fontTiemNang ,fontTenSkill,fontchat,fontMotaNganSkill,fontMotaNganSkill1,fontSkillchuaco1,fontMotaHanhTrang,fontMotaHanhTrang1,fontText ;
+    public BitmapFont font, fontChucnang, fontDauThan, fontNhiemVu, fontNhiemVu1, fontNhiemVuChuaLam, fontMotaNhiemVu, fontvangngoc, fontsm, fontSkilldaco, fontSkillchuaco, fontMotaSkill, fontCapSKill, fontMotaNoiTai, fontTiemNang, fontTenSkill, fontchat, fontMotaNganSkill, fontMotaNganSkill1, fontSkillchuaco1, fontMotaHanhTrang, fontMotaHanhTrang1, fontText;
     private GlyphLayout layout;
 
     public SkillIcon[] skillIcons;
@@ -62,17 +62,17 @@ public class VeHUD {
     public Texture popupNhanVat;
     public Texture nutX;
     public boolean dangHienPopup = false;
-//    public boolean vuaMoPopup = false;
+    //    public boolean vuaMoPopup = false;
     private NhanVat nhanVat;
     public Texture texAvt = null;
-    public Texture nutchucnang,nutchucnangclick;
+    public Texture nutchucnang, nutchucnangclick;
     public int chucNangDangChon = 0;
     public int chucNangDeTuDangChon = 0;
-    public Texture vang,ngoc;
-    public Texture thanhtheluc,thanhtheluc2;
-    public TextureRegion thanhtheluc1,thanhtheluc3;
+    public Texture vang, ngoc;
+    public Texture thanhtheluc, thanhtheluc2;
+    public TextureRegion thanhtheluc1, thanhtheluc3;
 
-    public Texture hanh_trang,hanh_trang_click,hanh_trang_dang_mac,hanh_trang_dang_mac_click;
+    public Texture hanh_trang, hanh_trang_click, hanh_trang_dang_mac, hanh_trang_dang_mac_click;
 
     public float scrollY = 0f;
     public float scrollYDeTu = 0f;
@@ -82,12 +82,12 @@ public class VeHUD {
     public int hangTrangDangChon = -1;
     public int hangTrangDeTuDangChon = -1;
 
-    public Texture o_noi_tai,o_noi_tai_click,o_chi_so_co_ban,o_chi_so_co_ban_click;
+    public Texture o_noi_tai, o_noi_tai_click, o_chi_so_co_ban, o_chi_so_co_ban_click;
     public int oChiSoDangChon = -1;
     public Texture[] iconchisocoban = new Texture[5];
     public Texture iconnoitai;
 
-    public Texture nutvuong,nutvuongclick;
+    public Texture nutvuong, nutvuongclick;
     public boolean DangHienPopupThongTin = false;
     public boolean DangHienPopupThongTin1 = false;
     public boolean DangHienPopupThongTin2 = false;
@@ -113,17 +113,17 @@ public class VeHUD {
     int oChiSoDangChonTamThoi = -1;
     int giaTriTangTamThoi = 0;
     long chiPhiTamThoi = 0;
-    public int nutduocchon =-1;
+    public int nutduocchon = -1;
 
     public boolean HienPopUpGanSkill = false;
     float TimeChoHienPopupGanSkill = 0;
     private Texture[] oSkills;
     float nutClickTimer2 = 0;
 
-    public Texture ao,quan,gang,giay,rada,iconct,giaplt,vanbay;
-    public Texture aoDeTu,quanDeTu,gangDeTu,giayDeTu,radaDeTu,iconctDeTu;
+    public Texture ao, quan, gang, giay, rada, iconct, giaplt, vanbay;
+    public Texture aoDeTu, quanDeTu, gangDeTu, giayDeTu, radaDeTu, iconctDeTu;
 
-    private float dauThanRenderH= 53f;
+    private float dauThanRenderH = 53f;
     public String avatardangmac = "Goku_base";
     public String aodangmac = "set_base";
     public String quandangmac = "set_base";
@@ -135,10 +135,10 @@ public class VeHUD {
     public String skhj = "thuong";
     public String skhrada = "thuong";
     public String skha_detu = "thuong";
-    public String skhq_detu  = "thuong";
-    public String skhg_detu  = "thuong";
-    public String skhj_detu  = "thuong";
-    public String skhrada_detu  = "thuong";
+    public String skhq_detu = "thuong";
+    public String skhg_detu = "thuong";
+    public String skhj_detu = "thuong";
+    public String skhrada_detu = "thuong";
     public boolean vuaMoNappa = false;
     public boolean vuaMoDeTuNappa = false;
     public boolean vanBayDau = true;
@@ -151,11 +151,11 @@ public class VeHUD {
     public float nuthanhtrangchon = -1;
     public float nutClickTimer3 = 0;
 
-    public Texture anhThongBao,nutdn,nutclick;
+    public Texture anhThongBao, nutdn, nutclick;
     public float isThongBaoOKPressed = 0;
     public boolean dangHienThongBao = false;
 
-    public Texture khungchat,duoichat;
+    public Texture khungchat, duoichat;
     public boolean dangHienKhungChat = false;
 
     public String tinNhanChat = "";
@@ -184,9 +184,9 @@ public class VeHUD {
     public float timeChoHopThe = 0;
     public Texture nenflash;
     public boolean veNenFlash;
-    public Texture dautrai,dauphai,thantrai,thanphai,chantrai,chanphai;
-    public Texture dau1,than1,chan1,dau2,than2,chan2,dau3,than3,chan3,dau4,than4,chan4,dau5,than5,chan5,dau6,than6,chan6,than7,chan7;
-    public Texture dau1p,than1p,chan1p,dau2p,than2p,chan2p,dau3p,than3p,chan3p,dau4p,than4p,chan4p,dau5p,than5p,chan5p,dau6p,than6p,chan6p,than7p,chan7p;
+    public Texture dautrai, dauphai, thantrai, thanphai, chantrai, chanphai;
+    public Texture dau1, than1, chan1, dau2, than2, chan2, dau3, than3, chan3, dau4, than4, chan4, dau5, than5, chan5, dau6, than6, chan6, than7, chan7;
+    public Texture dau1p, than1p, chan1p, dau2p, than2p, chan2p, dau3p, than3p, chan3p, dau4p, than4p, chan4p, dau5p, than5p, chan5p, dau6p, than6p, chan6p, than7p, chan7p;
     public Texture[] chan = new Texture[6];
     public Texture[] than = new Texture[6];
     public Texture[] dau = new Texture[6];
@@ -200,9 +200,9 @@ public class VeHUD {
     public float[] offsetDauX = {2f, 4f, 0f, 3f, 1f, -1f};
     public float[] offsetDauY = {7f, 21f, 21f, 18f, 8f, 15f};
     public boolean dangHopTheThuong = false;
-    public float timeHopTheTHuong ;
+    public float timeHopTheTHuong;
     private Texture dauGotenks;
-    public float delayHopTheThuong,delayHopTheBongTai;
+    public float delayHopTheThuong, delayHopTheBongTai;
 
     public float timeGlow = 0;
     public float clickX;
@@ -229,13 +229,14 @@ public class VeHUD {
         // Gọi thêm item từ file ngoài
         ThemItemTest.themItemTest(duLieuNguoiChoi, nhanVat);
         clickHandler = new HUDClickHandler(this, duLieuNguoiChoi, nhanVat);
-        popupRenderer= new HUDPopupRenderer(this, layout,duLieuNguoiChoi);
-        xulyitem =  new HUDXulyitem(this, layout,duLieuNguoiChoi,nhanVat);
-        popupThongTin = new HUDPopupThongTin(this, layout,duLieuNguoiChoi,nhanVat);
-        popupHanhTrang = new HUDPopupHanhTrang(this, layout,duLieuNguoiChoi,nhanVat);
-//        duLieuNguoiChoi.taoDeTu("Đệ tử");
-//        duLieuNguoiChoi.deTu.setVeHUD(this);
+        popupRenderer = new HUDPopupRenderer(this, layout, duLieuNguoiChoi);
+        xulyitem = new HUDXulyitem(this, layout, duLieuNguoiChoi, nhanVat);
+        popupThongTin = new HUDPopupThongTin(this, layout, duLieuNguoiChoi, nhanVat);
+        popupHanhTrang = new HUDPopupHanhTrang(this, layout, duLieuNguoiChoi, nhanVat);
+        duLieuNguoiChoi.taoDeTu("Đệ tử");
+        duLieuNguoiChoi.deTu.setVeHUD(this);
     }
+
     public void setSkillIcons(SkillIcon[] skillIcons) {
         this.skillIcons = skillIcons;
         oSkills = new Texture[5];
@@ -243,6 +244,7 @@ public class VeHUD {
             oSkills[i] = skillIcons[i].icon;
         }
     }
+
     public void scroll(int amount) {
         // amount âm là cuộn lên, dương là cuộn xuống
         scrollY += amount * scrollSpeed;
@@ -285,12 +287,12 @@ public class VeHUD {
         hanh_trang_click = new Texture("hud/giaodientrong/ohanhtrangclick.jpg");
         hanh_trang_dang_mac = new Texture("hud/giaodientrong/ohanhtrangdangmac.jpg");
         hanh_trang_dang_mac_click = new Texture("hud/giaodientrong/ohanhtrangdangmacclick.jpg");
-        o_chi_so_co_ban =  new Texture("hud/giaodientrong/ochiso.png");
+        o_chi_so_co_ban = new Texture("hud/giaodientrong/ochiso.png");
         o_chi_so_co_ban_click = new Texture("hud/giaodientrong/ochisoclick.png");
         o_noi_tai = new Texture("hud/giaodientrong/onoitai.png");
         o_noi_tai_click = new Texture("hud/giaodientrong/onoitaiclick.png");
-        for (int i = 0; i < 5; i++){
-            iconchisocoban[i] = new Texture("kynang/iconkynang/chung/"+(i+1)+".png");
+        for (int i = 0; i < 5; i++) {
+            iconchisocoban[i] = new Texture("kynang/iconkynang/chung/" + (i + 1) + ".png");
         }
         iconnoitai = new Texture("kynang/iconkynang/chung/noitai.png");
         nutvuong = new Texture("hud/giaodientrong/nutvuong.png");
@@ -311,35 +313,85 @@ public class VeHUD {
         chanphai = new Texture("hieuung/hieuunggame/hop_the/chanphai.png");
         dauGotenks = new Texture("nhanvat/caitrang/gotenks/daudung.png");
         // Bên trái
-        dau1 = dautrai;than1  = new Texture("hieuung/hieuunggame/hop_the/1_thantrai.png");chan1 = chantrai;
-        dau2 = dautrai;than2  = new Texture("hieuung/hieuunggame/hop_the/2_thantrai.png");chan2  = new Texture("hieuung/hieuunggame/hop_the/2_chantrai.png");
-        dau3 = dautrai;than3  = new Texture("hieuung/hieuunggame/hop_the/3_thantrai.png");chan3  = new Texture("hieuung/hieuunggame/hop_the/3_chantrai.png");
-        dau4 = dauphai;than4 = new Texture("hieuung/hieuunggame/hop_the/2_thanphai.png");chan4 = new Texture("hieuung/hieuunggame/hop_the/4_chantrai.png");
-        dau5 = dauphai;than5 = new Texture("hieuung/hieuunggame/hop_the/1_thanphai.png");chan5 = chanphai;
-        dau6 = dau5;than6 = than1;chan6  = new Texture("hieuung/hieuunggame/hop_the/6_chantrai.png");
-        than7  = new Texture("hieuung/hieuunggame/hop_the/7_thantrai.png");chan7  = new Texture("hieuung/hieuunggame/hop_the/7_chantrai.png");
+        dau1 = dautrai;
+        than1 = new Texture("hieuung/hieuunggame/hop_the/1_thantrai.png");
+        chan1 = chantrai;
+        dau2 = dautrai;
+        than2 = new Texture("hieuung/hieuunggame/hop_the/2_thantrai.png");
+        chan2 = new Texture("hieuung/hieuunggame/hop_the/2_chantrai.png");
+        dau3 = dautrai;
+        than3 = new Texture("hieuung/hieuunggame/hop_the/3_thantrai.png");
+        chan3 = new Texture("hieuung/hieuunggame/hop_the/3_chantrai.png");
+        dau4 = dauphai;
+        than4 = new Texture("hieuung/hieuunggame/hop_the/2_thanphai.png");
+        chan4 = new Texture("hieuung/hieuunggame/hop_the/4_chantrai.png");
+        dau5 = dauphai;
+        than5 = new Texture("hieuung/hieuunggame/hop_the/1_thanphai.png");
+        chan5 = chanphai;
+        dau6 = dau5;
+        than6 = than1;
+        chan6 = new Texture("hieuung/hieuunggame/hop_the/6_chantrai.png");
+        than7 = new Texture("hieuung/hieuunggame/hop_the/7_thantrai.png");
+        chan7 = new Texture("hieuung/hieuunggame/hop_the/7_chantrai.png");
         // Bên phải
-        dau1p = dauphai;than1p = new Texture("hieuung/hieuunggame/hop_the/1_thanphai.png");chan1p = chanphai;
-        dau2p = dauphai;than2p = new Texture("hieuung/hieuunggame/hop_the/2_thanphai.png");chan2p = new Texture("hieuung/hieuunggame/hop_the/2_chanphai.png");
-        dau3p = dauphai;than3p = new Texture("hieuung/hieuunggame/hop_the/3_thanphai.png");chan3p = new Texture("hieuung/hieuunggame/hop_the/3_chanphai.png");
-        dau4p = dautrai;than4p = than2;chan4p = new Texture("hieuung/hieuunggame/hop_the/4_chanphai.png");
-        dau5p = dau1;than5p = than1;chan5p = chan1;
-        dau6p = dau5p;than6p=than1p;chan6p = new Texture("hieuung/hieuunggame/hop_the/6_chanphai.png");
-        than7p = new Texture("hieuung/hieuunggame/hop_the/7_thanphai.png");chan7p = new Texture("hieuung/hieuunggame/hop_the/7_chanphai.png");
+        dau1p = dauphai;
+        than1p = new Texture("hieuung/hieuunggame/hop_the/1_thanphai.png");
+        chan1p = chanphai;
+        dau2p = dauphai;
+        than2p = new Texture("hieuung/hieuunggame/hop_the/2_thanphai.png");
+        chan2p = new Texture("hieuung/hieuunggame/hop_the/2_chanphai.png");
+        dau3p = dauphai;
+        than3p = new Texture("hieuung/hieuunggame/hop_the/3_thanphai.png");
+        chan3p = new Texture("hieuung/hieuunggame/hop_the/3_chanphai.png");
+        dau4p = dautrai;
+        than4p = than2;
+        chan4p = new Texture("hieuung/hieuunggame/hop_the/4_chanphai.png");
+        dau5p = dau1;
+        than5p = than1;
+        chan5p = chan1;
+        dau6p = dau5p;
+        than6p = than1p;
+        chan6p = new Texture("hieuung/hieuunggame/hop_the/6_chanphai.png");
+        than7p = new Texture("hieuung/hieuunggame/hop_the/7_thanphai.png");
+        chan7p = new Texture("hieuung/hieuunggame/hop_the/7_chanphai.png");
         // Bên trái
-        dau[0] = dau1; than[0] = than1; chan[0] = chan1;
-        dau[1] = dau2; than[1] = than2; chan[1] = chan2;
-        dau[2] = dau3; than[2] = than3; chan[2] = chan3;
-        dau[3] = dau4; than[3] = than4; chan[3] = chan4;
-        dau[4] = dau5; than[4] = than5; chan[4] = chan5;
-        dau[5] = dau6; than[5] = than6; chan[5] = chan6;
+        dau[0] = dau1;
+        than[0] = than1;
+        chan[0] = chan1;
+        dau[1] = dau2;
+        than[1] = than2;
+        chan[1] = chan2;
+        dau[2] = dau3;
+        than[2] = than3;
+        chan[2] = chan3;
+        dau[3] = dau4;
+        than[3] = than4;
+        chan[3] = chan4;
+        dau[4] = dau5;
+        than[4] = than5;
+        chan[4] = chan5;
+        dau[5] = dau6;
+        than[5] = than6;
+        chan[5] = chan6;
         // Bên phải
-        daup[0] = dau1p; thanp[0] = than1p; chanp[0] = chan1p;
-        daup[1] = dau2p; thanp[1] = than2p; chanp[1] = chan2p;
-        daup[2] = dau3p; thanp[2] = than3p; chanp[2] = chan3p;
-        daup[3] = dau4p; thanp[3] = than4p; chanp[3] = chan4p;
-        daup[4] = dau5p; thanp[4] = than5p; chanp[4] = chan5p;
-        daup[5] = dau6p; thanp[5] = than6p; chanp[5] = chan6p;
+        daup[0] = dau1p;
+        thanp[0] = than1p;
+        chanp[0] = chan1p;
+        daup[1] = dau2p;
+        thanp[1] = than2p;
+        chanp[1] = chan2p;
+        daup[2] = dau3p;
+        thanp[2] = than3p;
+        chanp[2] = chan3p;
+        daup[3] = dau4p;
+        thanp[3] = than4p;
+        chanp[3] = chan4p;
+        daup[4] = dau5p;
+        thanp[4] = than5p;
+        chanp[4] = chan5p;
+        daup[5] = dau6p;
+        thanp[5] = than6p;
+        chanp[5] = chan6p;
         // Load font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -395,16 +447,16 @@ public class VeHUD {
         fontMotaNoiTai = generator3.generateFont(param3);
         param3.size = 14;
         fontMotaSkill = generator3.generateFont(param3);
-        param3.color = new Color(1,1,0,1);
+        param3.color = new Color(1, 1, 0, 1);
         fontvangngoc = generator3.generateFont(param3);
-        param3.color = new Color(0,0,0,1);
+        param3.color = new Color(0, 0, 0, 1);
         fontMotaHanhTrang = generator3.generateFont(param3);
         param3.color = new Color(0.933f, 0.502f, 0.510f, 1f);
         fontMotaHanhTrang1 = generator3.generateFont(param3);
-        param3.color = new Color(1,1,1,1);
+        param3.color = new Color(1, 1, 1, 1);
         param3.size = 14;
         fontTiemNang = generator3.generateFont(param3);
-        param3.color = new Color(1,1,0,1);
+        param3.color = new Color(1, 1, 0, 1);
         param3.size = 14;
         fontsm = generator3.generateFont(param3);
         param3.color = new Color(0x83 / 255f, 0xc6 / 255f, 0x29 / 255f, 1f);
@@ -433,33 +485,40 @@ public class VeHUD {
     }
 
     public void render(SpriteBatch batch) {
+        float deltaTime = Gdx.graphics.getDeltaTime();
+
         if (duLieuNguoiChoi.coDeTu()) {
+            // Ghi nhận trạng thái hiện tại của nhân vật
+            TrangThaiChu trangThaiMoi = new TrangThaiChu(
+                nhanVat.getX(),
+                nhanVat.getY()
+            );
+
+            // Thêm vào danh sách
+            lichSuTrangThaiChu.addFirst(trangThaiMoi);
+
+            // Giữ lại tối đa 100 phần tử (tùy bạn)
+            if (lichSuTrangThaiChu.size() > 100) {
+                lichSuTrangThaiChu.removeLast();
+            }
+
+            // Điều kiện để render đệ tử
             if (!duLieuNguoiChoi.deTu.getTrangthai().equals("Về nhà") && !dangHopThe) {
                 renderDeTu = true;
             } else {
-                if (duLieuNguoiChoi.deTu.getTrangthai().equals("Về nhà") && duLieuNguoiChoi.deTu.getTimeHienChat() > 0 && !dangHopThe) {
-                    renderDeTu = true;
-                } else {
-                    renderDeTu = false;
-                }
+                renderDeTu = duLieuNguoiChoi.deTu.getTrangthai().equals("Về nhà")
+                    && duLieuNguoiChoi.deTu.getTimeHienChat() > 0
+                    && !dangHopThe;
             }
-            if (duLieuNguoiChoi.coDeTu()) {
-                timeLuuTrangThai += Gdx.graphics.getDeltaTime();
 
-                // Ghi lại vị trí của sư phụ mỗi 0.05s
-                if (timeLuuTrangThai >= 0.001f) {
-                    lichSuTrangThaiChu.add(new TrangThaiChu(nhanVat.getX(), nhanVat.getY(), nhanVat.getTrangThai()));
-                    timeLuuTrangThai = 0f;
-                }
-
-                if (lichSuTrangThaiChu.size() > 50) {
-                    lichSuTrangThaiChu.removeFirst();
-                }
-                if (!lichSuTrangThaiChu.isEmpty()) {
-                    duLieuNguoiChoi.deTu.capNhat(Gdx.graphics.getDeltaTime(), lichSuTrangThaiChu, 0.001f);
-                }
-            }
+            // Gọi cập nhật AI dùng lịch sử
+            duLieuNguoiChoi.deTu.capNhatAI(
+                deltaTime,
+                lichSuTrangThaiChu,
+                0.35f // Delay theo giây (ví dụ 1 giây)
+            );
         }
+
         batch.end();
         if (duLieuNguoiChoi.coDeTu()) {
             int widthDeTu = (int) (thanhtheluc2.getWidth() * (duLieuNguoiChoi.deTu.getTheLuc() / 100f));
@@ -1287,7 +1346,6 @@ public class VeHUD {
         Gdx.gl.glDisable(GL20.GL_BLEND);
     }
     public void capNhatTrangThaiDeTu() {
-        duLieuNguoiChoi.deTu.setTrangthai(trangthaide);
         if (trangthaide.equals("Đi theo")) {
             duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Ok con theo sư phụ",3f);
         } else if (trangthaide.equals("Bảo vệ")) {
@@ -1295,7 +1353,10 @@ public class VeHUD {
         } else if (trangthaide.equals("Tấn công")) {
             duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Ok sư phụ để con lo cho",3f);
         } else if (trangthaide.equals("Về nhà")) {
-            duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Ok con về, bibi sư phụ",1.5f);
+            if (!duLieuNguoiChoi.deTu.getTrangthai().equals(trangthaide)) {
+                duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Ok con về, bibi sư phụ", 1.5f);
+            }
         }
+        duLieuNguoiChoi.deTu.setTrangthai(trangthaide);
     }
 }

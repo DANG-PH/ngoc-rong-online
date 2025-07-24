@@ -79,6 +79,7 @@ public class NhanVat {
 
     public void setDanhSachDat(List<HitboxDat> ds) {
         this.danhSachDat = ds;
+        duLieuNguoiChoi.deTu.setDanhSachDat(danhSachDat);
     }
     private String hanhtinh;
     private String nhanvat;
@@ -1018,6 +1019,7 @@ public class NhanVat {
     public void setGioiHanToaDo(float chieuRongMap, float chieuCaoMap) {
         this.gioiHanXMax = chieuRongMap - rong;
         this.gioiHanYMax = chieuCaoMap - cao;
+        duLieuNguoiChoi.deTu.setGioiHanToaDo(gioiHanXMax,gioiHanYMax);
     }
 
     public void capNhat() {

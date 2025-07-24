@@ -8,9 +8,8 @@ public class TrangThaiChu {
     public float y;
     public TrangThai trangThai;
 
-    public TrangThaiChu(float x, float y, TrangThai trangThai) {
+    public TrangThaiChu(float x, float y) {
         this.x = x;
         this.y = y;
-        this.trangThai = trangThai;
     }
 }

@@ -665,8 +665,15 @@ public class DuLieuNguoiChoi {
         String hanhtinh = nhanVat.getHanhtinh();
         DeTuCauHinh config = DoicaitrangDeTu("set_base_traidat");
         if (this.deTu == null) {
+            int kc = MathUtils.random(30, 80) * (MathUtils.randomBoolean() ? 1 : -1);
+            if (nhanVat.getX()+kc <= 0 || nhanVat.getX()+kc>=nhanVat.getGioiHanXMax()) {
+                kc = -kc;
+            }
+            boolean flipX = kc > 0;
+            boolean diQuaPhai = kc < 0;
             this.deTu = new DeTu(
-                nhanVat.getX()-30,nhanVat.getY(),
+                nhanVat.getX()+kc,nhanVat.getY(),
+                flipX,diQuaPhai,
                 ten,hanhtinh,
                 config.dau_dung_de_tu, config.dau_chay_de_tu,
                 config.than_dung_de_tu, config.than_nhay_de_tu, config.than_roi_de_tu, config.than_chay_de_tu,
