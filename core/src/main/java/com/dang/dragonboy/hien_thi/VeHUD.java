@@ -180,6 +180,8 @@ public class VeHUD {
     public boolean dangChonNhacNen = false;
     public Music[] nhacNen = new Music[10];
 
+    public boolean dangHienMiniGame = false;
+
     public boolean dangHopThe = false;
     public float timeChoHopThe = 0;
     public Texture nenflash;
@@ -790,6 +792,8 @@ public class VeHUD {
                     if (duLieuNguoiChoi.coDeTu()) {
                         if (oChiSoDangChon == 0) {
                             dangHienGioiThieuGame = true;
+                        } else if (oChiSoDangChon == 1) {
+                            dangHienMiniGame = true;
                         } else if (oChiSoDangChon == 2) {
                             dangHienThongBaoGame = true;
                         } else if (oChiSoDangChon == 3) {
@@ -803,6 +807,8 @@ public class VeHUD {
                     } else {
                         if (oChiSoDangChon == 0) {
                             dangHienGioiThieuGame = true;
+                        } else if (oChiSoDangChon == 1) {
+                            dangHienMiniGame = true;
                         } else if (oChiSoDangChon == 2) {
                             dangHienThongBaoGame = true;
                         } else if (oChiSoDangChon == 6) {
@@ -879,68 +885,74 @@ public class VeHUD {
         if (nutClickTimer3 > 0){
             nutClickTimer3 -= Gdx.graphics.getDeltaTime();
             if (nutClickTimer3 <= 0) {
-                // mac do
-                if (nuthanhtrangchon == 1) {
-                    if (nhanVat.getHanhtinh().equals(itemm.getHanhtinh()) && duLieuNguoiChoi.getSucManh()>=itemm.getSucManhYeuCau()) {
-                        if (!itemDangChon.equals("bongtai")) {
-                            xulyitem.macDo(hangTrangDangChon);
+                if (!dangHienMiniGame) {
+                    // mac do
+                    if (nuthanhtrangchon == 1) {
+                        if (nhanVat.getHanhtinh().equals(itemm.getHanhtinh()) && duLieuNguoiChoi.getSucManh() >= itemm.getSucManhYeuCau()) {
+                            if (!itemDangChon.equals("bongtai")) {
+                                xulyitem.macDo(hangTrangDangChon);
+                            }
+                            if (itemDangChon.equals("bongtai") && timeHopTheTHuong == 0 && delayHopTheBongTai == 0 && duLieuNguoiChoi.coDeTu()) {
+                                timeChoHopThe = 1.5f;
+                                dangHienPopup = false;
+                                scrollY = 0;
+                                hangTrangDangChon = -1;
+                                dangHopTheThuong = false;
+                            }
                         }
-                        if (itemDangChon.equals("bongtai") && timeHopTheTHuong == 0 && delayHopTheBongTai == 0 && duLieuNguoiChoi.coDeTu()){
-                            timeChoHopThe = 1.5f;
-                            dangHienPopup = false;
-                            scrollY = 0;
-                            hangTrangDangChon = -1;
-                            dangHopTheThuong = false;
-                        }
-                    }
-                    DangHienPopupThongTin1 = false;
-                    TimeChoHienPopup = 0;
-                } else if (nuthanhtrangchon == 2) {
-                    dangHienThongBao = true;
-                    DangHienPopupThongTin1 = false;
-                    TimeChoHienPopup = 0;
-                } else if (nuthanhtrangchon == 3) {
-                    DangHienPopupThongTin1 = false;
-                    TimeChoHienPopup = 0;
-                } else if (nuthanhtrangchon == 4) {
-                    if (duLieuNguoiChoi.deTu.getSucManh()>=itemm.getSucManhYeuCau()) {
-                        if (duLieuNguoiChoi.deTu.getSucManh() >= 1_500_000) {
-                            if (duLieuNguoiChoi.deTu.getHanhtinh().equals(itemm.getHanhtinh()) && !itemDangChon.equals("caitrang")) {
-                                xulyitem.macDoChoDe(hangTrangDangChon);
-                                if (!dangHienPopupDeTu) {
-                                    chucNangDangChon = 4;
-                                    dangHienPopupDeTu = true;
-                                    scrollY = 0;
-                                    scrollYDeTu = 0;
-                                }
-                                if (!duLieuNguoiChoi.deTu.getTrangthai().equals("Về nhà")) {
-                                    duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Cám ơn sư phụ", 3f);
-                                }
-                            } else if (itemDangChon.equals("caitrang")) {
-                                xulyitem.macDoChoDe(hangTrangDangChon);
-                                if (!dangHienPopupDeTu) {
-                                    chucNangDangChon = 4;
-                                    dangHienPopupDeTu = true;
-                                    scrollY = 0;
-                                    scrollYDeTu = 0;
-                                }
-                                if (!duLieuNguoiChoi.deTu.getTrangthai().equals("Về nhà")) {
-                                    duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Cám ơn sư phụ", 3f);
+                        DangHienPopupThongTin1 = false;
+                        TimeChoHienPopup = 0;
+                    } else if (nuthanhtrangchon == 2) {
+                        dangHienThongBao = true;
+                        DangHienPopupThongTin1 = false;
+                        TimeChoHienPopup = 0;
+                    } else if (nuthanhtrangchon == 3) {
+                        DangHienPopupThongTin1 = false;
+                        TimeChoHienPopup = 0;
+                    } else if (nuthanhtrangchon == 4) {
+                        if (duLieuNguoiChoi.deTu.getSucManh() >= itemm.getSucManhYeuCau()) {
+                            if (duLieuNguoiChoi.deTu.getSucManh() >= 1_500_000) {
+                                if (duLieuNguoiChoi.deTu.getHanhtinh().equals(itemm.getHanhtinh()) && !itemDangChon.equals("caitrang")) {
+                                    xulyitem.macDoChoDe(hangTrangDangChon);
+                                    if (!dangHienPopupDeTu) {
+                                        chucNangDangChon = 4;
+                                        dangHienPopupDeTu = true;
+                                        scrollY = 0;
+                                        scrollYDeTu = 0;
+                                    }
+                                    if (!duLieuNguoiChoi.deTu.getTrangthai().equals("Về nhà")) {
+                                        duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Cám ơn sư phụ", 3f);
+                                    }
+                                } else if (itemDangChon.equals("caitrang")) {
+                                    xulyitem.macDoChoDe(hangTrangDangChon);
+                                    if (!dangHienPopupDeTu) {
+                                        chucNangDangChon = 4;
+                                        dangHienPopupDeTu = true;
+                                        scrollY = 0;
+                                        scrollYDeTu = 0;
+                                    }
+                                    if (!duLieuNguoiChoi.deTu.getTrangthai().equals("Về nhà")) {
+                                        duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Cám ơn sư phụ", 3f);
+                                    }
                                 }
                             }
                         }
+                        hangTrangDangChon = -1;
+                        hangTrangDeTuDangChon = -1;
+                        DangHienPopupThongTin1 = false;
+                        TimeChoHienPopup = 0;
+                    } else if (nuthanhtrangchon == 5) {
+                        xulyitem.goDoChoDe(hangTrangDeTuDangChon);
+                        DangHienPopupThongTin2 = false;
+                        TimeChoHienPopup = 0;
+                    } else if (nuthanhtrangchon == 6) {
+                        DangHienPopupThongTin2 = false;
+                        TimeChoHienPopup = 0;
                     }
-                    hangTrangDangChon = -1;
-                    hangTrangDeTuDangChon = -1;
-                    DangHienPopupThongTin1 = false;
-                    TimeChoHienPopup = 0;
-                } else if (nuthanhtrangchon == 5) {
-                    xulyitem.goDoChoDe(hangTrangDeTuDangChon);
-                    DangHienPopupThongTin2 = false;
-                    TimeChoHienPopup = 0;
-                } else if (nuthanhtrangchon == 6) {
-                    DangHienPopupThongTin2 = false;
-                    TimeChoHienPopup = 0;
+                } else {
+                    if (nuthanhtrangchon == 2) {
+                        dangHienMiniGame = false;
+                    }
                 }
             }
         }

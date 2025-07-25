@@ -96,6 +96,7 @@ public class ThaoTac extends InputAdapter {
             (hud.getChucNangDangChon() == 1 || hud.getChucNangDangChon() == 2 || hud.getChucNangDangChon() == 4 ) &&
             !hud.dangHienPopupDeTu &&
             !hud.DangHienPopupThongTin1 &&
+            !hud.dangHienMiniGame &&
             screenX > 0 && screenX <= 350 &&
             y > 0 && y <= 444) {
 
@@ -172,7 +173,7 @@ public class ThaoTac extends InputAdapter {
     @Override
     public boolean scrolled(float amountX, float amountY) {
         // chỉ xử lý khi đang mở popup và chọn mục hành trang
-        if (hud.isDangHienPopup() && (hud.getChucNangDangChon() == 1 || hud.getChucNangDangChon() == 2 || hud.getChucNangDangChon() == 4 || hud.getChucNangDangChon() == 3) && !hud.dangHienThongBao && !hud.DangHienPopupThongTin1 && !hud.DangHienPopupThongTin && !hud.DangHienPopupThongTin2) {
+        if (hud.isDangHienPopup() && (hud.getChucNangDangChon() == 1 || hud.getChucNangDangChon() == 2 || hud.getChucNangDangChon() == 4 || hud.getChucNangDangChon() == 3) && !hud.dangHienThongBao && !hud.DangHienPopupThongTin1 && !hud.DangHienPopupThongTin && !hud.DangHienPopupThongTin2 && !hud.dangHienMiniGame) {
             if (!hud.dangHienPopupDeTu) {
                 hud.scroll((int) amountY); // amountY là số lần lăn bánh (thường là ±1)
                 return true;

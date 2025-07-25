@@ -603,6 +603,54 @@ public class HUDPopupRenderer {
             batch.flush();
             Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
         }
+
+        if (veHUD.chucNangDangChon == 4 && veHUD.dangHienMiniGame) {
+            batch.end();
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(1, 1, 1, 1);
+            shapeRenderer.rect((Gdx.graphics.getWidth() - 600) / 2f, 120, 600, 100);
+            shapeRenderer.end();
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            shapeRenderer.setColor(Color.BLACK);
+            for (int i = 0; i < 2; i++) {
+                shapeRenderer.rect((Gdx.graphics.getWidth() - 600) / 2f - i, 120 - i, 600 + i * 2, 100 + i * 2);
+            }
+            shapeRenderer.end();
+            batch.begin();
+            layout.setText(veHUD.fontMotaHanhTrang,"Kết quả giải trước: ");
+            veHUD.fontMotaHanhTrang.draw(batch,layout,(Gdx.graphics.getWidth() - 600) / 2f + (600-layout.width)/2f,120+75);
+            layout.setText(veHUD.fontMotaHanhTrang,"Tham gia với tổng giải thưởng gấp 90 lần!");
+            veHUD.fontMotaHanhTrang.draw(batch,layout,(Gdx.graphics.getWidth() - 600) / 2f + (600-layout.width)/2f,120+55);
+            layout.setText(veHUD.fontMotaHanhTrang,"Còn :"+"  "+"giây");
+            veHUD.fontMotaHanhTrang.draw(batch,layout,(Gdx.graphics.getWidth() - 600) / 2f + (600-layout.width)/2f,120+35);
+            for (int i = 0; i < 3; i++) {
+                float nutX = (Gdx.graphics.getWidth()-360)/2f + i * 120;
+                float nutY = 120 - 115;
+                if (veHUD.nuthanhtrangchon == i) {
+                    Texture nutVe = veHUD.nutClickTimer3 > 0 ? veHUD.nutvuongclick : veHUD.nutvuong;
+                    batch.draw(nutVe, nutX, nutY, 114, 114);
+                } else {
+                    batch.draw(veHUD.nutvuong, nutX, nutY, 114, 114);
+                }
+
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                if (i == 0) {
+                    layout.setText(veHUD.font, "Tham gia");
+                    veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 52);
+                } else if (i == 1) {
+                    layout.setText(veHUD.font, "Hướng");
+                    veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 27);
+                    layout.setText(veHUD.font, "dẫn");
+                    veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 52);
+                    layout.setText(veHUD.font, "thêm");
+                    veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 77);
+                } else {
+                    layout.setText(veHUD.font, "Đóng");
+                    veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 52);
+                }
+            }
+        }
+
         if (veHUD.chucNangDangChon == 4 && veHUD.dangHienThongBaoGame) {
             veHUD.font.setColor(1,1,1,1);
             layout.setText(veHUD.font, duLieuNguoiChoi.getTen());

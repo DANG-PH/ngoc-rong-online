@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import com.dang.dragonboy.xu_ly_map.HitboxDat;
 
 public class DeTu {
+    private Texture texAvtDeTu;
     private final float delayRoi = 15f;
     private final float trongLuc = -0.5f;
     private final float tocDoDiChuyen = 6f;
@@ -199,7 +200,7 @@ public class DeTu {
 //        this.hanhtinh = danhSachHanhTinh[MathUtils.random(danhSachHanhTinh.length - 1)];
         this.hanhtinh = hanhtinh;
         this.sucManh = 1_499_999L;
-        this.theLuc = 0;
+        this.theLuc = 50;
         this.HpGoc = 550000;
         this.KiGoc = 550000;
         this.HpDeTu = HpGoc;
@@ -294,8 +295,11 @@ public class DeTu {
     }
 
     public Texture getAvtDeTu() {
-        String Avt_lon_hay_sosinh = sucManh >= 1500000 ? "lon" : "sosinh";
-        return new Texture("nhanvat/detu/"+hanhtinh+"/avt"+Avt_lon_hay_sosinh+".png");
+        if (texAvtDeTu == null) {
+            String Avt_lon_hay_sosinh = sucManh >= 1500000 ? "lon" : "sosinh";
+            texAvtDeTu = new Texture("nhanvat/detu/" + hanhtinh + "/avt" + Avt_lon_hay_sosinh + ".png");
+        }
+        return texAvtDeTu;
     }
 
     public String getAvtDangMac() {
@@ -377,12 +381,15 @@ public class DeTu {
         }
         if (sucManh >= 150_000_000 && tenSkill[1]==null) {
             tenSkill[1] = danhSachSkill2[MathUtils.random(danhSachSkill2.length - 1)];
+            setTinNhanDeTuChat("Sư phụ ơi con lên cấp rồi",3f);
         }
         if (sucManh >= 1_500_000_000 && tenSkill[2]==null) {
             tenSkill[2] = danhSachSkill3[MathUtils.random(danhSachSkill3.length - 1)];
+            setTinNhanDeTuChat("Sư phụ ơi con lên cấp rồi",3f);
         }
         if (sucManh >= 20_000_000_000L && tenSkill[3]==null) {
             tenSkill[3] = danhSachSkill4[MathUtils.random(danhSachSkill4.length - 1)];
+            setTinNhanDeTuChat("Sư phụ ơi con lên cấp rồi",3f);
         }
         if (sucManh >= 1_500_000 && chuaFixAvtAoQuan) {
             DeTuCauHinh c2 = Doi_avt_ao_quan_DeTu(hanhtinh,hanhtinh+"_base","set_base","set_base");
@@ -393,6 +400,8 @@ public class DeTu {
                 c2.than_bay_de_tu, c2.chan_bay_de_tu,
                 c2.lechMapDeTu
             );
+            texAvtDeTu = new Texture("nhanvat/detu/" + hanhtinh + "/avt" + "lon" + ".png");
+            setTinNhanDeTuChat("Sư phụ ơi con lên cấp rồi",3f);
             chuaFixAvtAoQuan = false;
         }
     }
@@ -1653,5 +1662,58 @@ public class DeTu {
     public void setGioiHanToaDo(float ghX, float ghy) {
         this.gioiHanXMax = ghX;
         this.gioiHanYMax = ghy;
+    }
+    public void dispose() {
+        // Giải phóng texture modular
+        if (dau_dung != null) dau_dung.dispose();
+        if (dau_chay != null) dau_chay.dispose();
+        if (than_dung != null) than_dung.dispose();
+        if (than_nhay != null) than_nhay.dispose();
+        if (than_roi != null) than_roi.dispose();
+        if (than_chay != null) {
+            for (Texture tex : than_chay) {
+                if (tex != null) tex.dispose();
+            }
+        }
+
+        if (chan_dung != null) chan_dung.dispose();
+        if (chan_nhay != null) chan_nhay.dispose();
+        if (chan_roi != null) chan_roi.dispose();
+        if (chan_chay != null) {
+            for (Texture tex : chan_chay) {
+                if (tex != null) tex.dispose();
+            }
+        }
+
+        if (than_bay != null) than_bay.dispose();
+        if (chan_bay != null) chan_bay.dispose();
+
+        // Giải phóng texture teleport
+        if (dau_tele != null) dau_tele.dispose();
+        if (than_tele != null) than_tele.dispose();
+        if (chan_tele != null) chan_tele.dispose();
+
+        // Biến mất
+        for (Texture tex : bien_mat) {
+            if (tex != null) tex.dispose();
+        }
+
+        // Van bay
+        if (vanBayCauHinh != null) {
+            for (Texture tex : vanBayCauHinh) {
+                if (tex != null) tex.dispose();
+            }
+        }
+
+        // Giải phóng icon kỹ năng
+        for (Texture tex : iconSkill.values()) {
+            if (tex != null) tex.dispose();
+        }
+        iconSkill.clear();
+
+        // ShapeRenderer và font
+        if (shapeRenderer != null) shapeRenderer.dispose();
+        if (fontTenDeTu != null) fontTenDeTu.dispose();
+        if (texAvtDeTu != null) texAvtDeTu.dispose();
     }
 }
