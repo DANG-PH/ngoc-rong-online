@@ -182,6 +182,11 @@ public class DeTu {
     float y_truoc_dash;
     boolean flip_truoc_dash = false;
     private Texture dau_tele,than_tele,chan_tele;
+    public Texture[] bien_mat = new Texture[3];
+    public boolean hoatAnhBienMat = false;
+    public float timeHoatAnhBienMat = 0f;
+    public float x_bien_mat,y_bien_mat;
+    public boolean chuaLayToaDoBienMat = true;
 
     public DeTu(float x, float y,boolean flipX,boolean diQuaPhai,String ten, String hanhtinh, Texture dau_dung, Texture dau_chay,
                 Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,
@@ -282,6 +287,10 @@ public class DeTu {
         dau_tele = new Texture("hieuung/hieuunggame/tele/dau.png");
         than_tele = new Texture("hieuung/hieuunggame/tele/than.png");
         chan_tele = new Texture("hieuung/hieuunggame/tele/chan.png");
+
+        for (int i = 0; i < 3; i++) {
+            bien_mat[i] = new Texture("hieuung/hieuunggame/bien_mat/"+(i+1)+".png");
+        }
     }
 
     public Texture getAvtDeTu() {
@@ -1353,10 +1362,6 @@ public class DeTu {
             } else if (vx < 0) {
                 flipX = true;
             }
-        } else {
-            if (trangThai == TrangThaiDeTu.DUNG_YEN) {
-                flipX = x < xSuPhu;
-            }
         }
         if (trangThai == TrangThaiDeTu.BAY_NGANG) {
             float tocDoHienTai = (float)Math.sqrt(vx * vx + vy * vy); // tốc độ tổng
@@ -1389,19 +1394,20 @@ public class DeTu {
         // === 3.2 Kích hoạt AI chạy quanh sư phụ nếu đứng yên quá lâu ===
         if (timeDungYen > 3f && !diChuyenXungQuanh) {
             diChuyenXungQuanh = true;
-            setTinNhanDeTuChat("Sư phụ con sẽ bảo vệ người",2f);
+            if (!this.getTrangthai().equals("Về nhà")) {
+                setTinNhanDeTuChat("Sư phụ con sẽ bảo vệ người", 2f);
+            }
             diQuaPhai = (x < xSuPhu); // đúng hướng vị trí hiện tại
             timeChuyenHuong = 0f;
         }
 
         if (diChuyenXungQuanh) {
-            float huongDi = Math.signum(xSuPhu + (diQuaPhai ? 70f : -70f)- x);
+            float huongDi = Math.signum(xSuPhu + (diQuaPhai ? 70f : -70f));
 
             if (dangDoiFlip) {
                 vx = 0;
                 timeChuyenHuong += delta;
                 this.trangThai = TrangThaiDeTu.DUNG_YEN;
-                flipX = x < xSuPhu;
                 if (timeChuyenHuong > 2f) {
                     diQuaPhai = x < xSuPhu;
                     flipX = !diQuaPhai;
@@ -1410,7 +1416,7 @@ public class DeTu {
                     timeChuyenHuong = 0;
                 }
             } else {
-                if (Math.abs(xSuPhu + (diQuaPhai ? 70f : -70f)- x) <= 1.5f) {
+                if (Math.abs(xSuPhu + (diQuaPhai ? 70f : -70f)- x) <= 8f) {
                     dangDoiFlip = true;
                     vx = 0;
                     timeChuyenHuong = 0;
@@ -1437,11 +1443,20 @@ public class DeTu {
             x += huong * 120f; // dịch chuyển 1 phát
 
             flipX = huong < 0;
-
-            setTinNhanDeTuChat("Đợi con với", 1f);
+            if (!this.getTrangthai().equals("Về nhà")) {
+                setTinNhanDeTuChat("Đợi con với", 1f);;
+            }
 
             // Kích hoạt lại cooldown
             timeCooldownDash = DASH_COOLDOWN;
+        }
+        if (!veHUD.renderDeTu) {
+            if (timeHoatAnhBienMat > 0) {
+                timeHoatAnhBienMat -= delta;
+                if (timeHoatAnhBienMat <= 0) {
+                    timeHoatAnhBienMat = 0;
+                }
+            }
         }
     }
 

@@ -1215,6 +1215,22 @@ public class NhanVat {
     }
 
     public void ve(SpriteBatch batch, float thoiGian) {
+        if (!veHUD.renderDeTu && duLieuNguoiChoi.deTu.timeHoatAnhBienMat>0) {
+            if (duLieuNguoiChoi.deTu.chuaLayToaDoBienMat) {
+                duLieuNguoiChoi.deTu.x_bien_mat = duLieuNguoiChoi.deTu.x;
+                duLieuNguoiChoi.deTu.y_bien_mat = duLieuNguoiChoi.deTu.y;
+                duLieuNguoiChoi.deTu.chuaLayToaDoBienMat = false;
+            }
+            float timeMAX = 0.3f;
+            float step = timeMAX / 3;
+            for (int i = 0; i < 3; i++) {
+                float start = timeMAX - i * step;
+                float end = timeMAX - (i + 1) * step;
+                if (duLieuNguoiChoi.deTu.timeHoatAnhBienMat >= end && duLieuNguoiChoi.deTu.timeHoatAnhBienMat <= start) {
+                    batch.draw(duLieuNguoiChoi.deTu.bien_mat[i], duLieuNguoiChoi.deTu.x_bien_mat+(duLieuNguoiChoi.deTu.rong_de_tu-duLieuNguoiChoi.deTu.bien_mat[i].getWidth()*0.45f)/2f, duLieuNguoiChoi.deTu.y_bien_mat+(duLieuNguoiChoi.deTu.cao_de_tu-duLieuNguoiChoi.deTu.bien_mat[i].getHeight()*0.45f)/2f,duLieuNguoiChoi.deTu.bien_mat[i].getWidth()*0.45f,duLieuNguoiChoi.deTu.bien_mat[i].getHeight()*0.45f);
+                }
+            }
+        }
         if (veHUD.renderDeTu) {
             duLieuNguoiChoi.deTu.ve(batch, thoiGian);
         }

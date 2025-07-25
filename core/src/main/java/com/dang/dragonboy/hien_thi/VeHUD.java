@@ -220,8 +220,6 @@ public class VeHUD {
     private float timeDoiDauThan = 0f;
 
     LinkedList<TrangThaiChu> lichSuTrangThaiChu = new LinkedList<>();
-    float timeLuuTrangThai = 0f;
-    float delayThoiGian = 0.5f; // delay đệ tử 0.5 giây
 
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data;
@@ -522,7 +520,7 @@ public class VeHUD {
 
         batch.end();
         if (duLieuNguoiChoi.coDeTu()) {
-            if (duLieuNguoiChoi.deTu.getTheLuc()<20 && timeDoiDauThan == 0) {
+            if (duLieuNguoiChoi.deTu.getTheLuc()<20 && timeDoiDauThan == 0 && !duLieuNguoiChoi.deTu.getTrangthai().equals("Về nhà")) {
                 duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Sư phụ ơi con cần đậu thần",2f);
                 timeDoiDauThan = 12f;
             }
@@ -709,7 +707,9 @@ public class VeHUD {
             duLieuNguoiChoi.tangKiHienTai(duLieuNguoiChoi.getDauHoiHPKI());
             duLieuNguoiChoi.deTu.tangHpHienTai(duLieuNguoiChoi.getDauHoiHPKI());
             duLieuNguoiChoi.deTu.tangKiHienTai(duLieuNguoiChoi.getDauHoiHPKI());
-            duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Cám ơn sư phụ",1f);
+            if (!duLieuNguoiChoi.deTu.getTrangthai().equals("Về nhà")) {
+                duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Cám ơn sư phụ", 1f);
+            }
             duLieuNguoiChoi.deTu.tangTheLuc(30);
             dauThanRenderH = 0f;
         }
@@ -913,7 +913,9 @@ public class VeHUD {
                                     scrollY = 0;
                                     scrollYDeTu = 0;
                                 }
-                                duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Cám ơn sư phụ",3f);
+                                if (!duLieuNguoiChoi.deTu.getTrangthai().equals("Về nhà")) {
+                                    duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Cám ơn sư phụ", 3f);
+                                }
                             } else if (itemDangChon.equals("caitrang")) {
                                 xulyitem.macDoChoDe(hangTrangDangChon);
                                 if (!dangHienPopupDeTu) {
@@ -922,7 +924,9 @@ public class VeHUD {
                                     scrollY = 0;
                                     scrollYDeTu = 0;
                                 }
-                                duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Cám ơn sư phụ",3f);
+                                if (!duLieuNguoiChoi.deTu.getTrangthai().equals("Về nhà")) {
+                                    duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Cám ơn sư phụ", 3f);
+                                }
                             }
                         }
                     }
@@ -1368,8 +1372,10 @@ public class VeHUD {
         } else if (trangthaide.equals("Tấn công")) {
             duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Ok sư phụ để con lo cho",3f);
         } else if (trangthaide.equals("Về nhà")) {
-            if (!duLieuNguoiChoi.deTu.getTrangthai().equals(trangthaide)) {
+            if (!duLieuNguoiChoi.deTu.getTrangthai().equals(trangthaide) && !dangHopThe) {
                 duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Ok con về, bibi sư phụ", 1.5f);
+                duLieuNguoiChoi.deTu.timeHoatAnhBienMat = 0.3f;
+                duLieuNguoiChoi.deTu.chuaLayToaDoBienMat = true;
             }
         }
         duLieuNguoiChoi.deTu.setTrangthai(trangthaide);
