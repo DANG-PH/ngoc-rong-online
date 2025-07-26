@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Align;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.item.Item;
 import com.dang.dragonboy.item.LoaiItem;
+import com.dang.dragonboy.nhan_vat.NhanVat;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -20,12 +21,14 @@ public class HUDPopupRenderer {
     private GlyphLayout layout;
     private ShapeRenderer shapeRenderer;
     private DuLieuNguoiChoi duLieuNguoiChoi;
+    private NhanVat nhanVat;
     private Texture dauhoicham;
-    public HUDPopupRenderer(VeHUD veHUD,GlyphLayout layout,DuLieuNguoiChoi duLieuNguoiChoi) {
+    public HUDPopupRenderer(VeHUD veHUD, GlyphLayout layout, DuLieuNguoiChoi duLieuNguoiChoi, NhanVat nhanVat) {
         shapeRenderer = new ShapeRenderer();
         this.veHUD = veHUD;
         this.layout = layout;
         this.duLieuNguoiChoi = duLieuNguoiChoi;
+        this.nhanVat = nhanVat;
         dauhoicham = new Texture("hud/giaodientrong/dauhoicham.png");
     }
 
@@ -603,25 +606,72 @@ public class HUDPopupRenderer {
             batch.flush();
             Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
         }
-
-        if (veHUD.chucNangDangChon == 4 && veHUD.dangHienMiniGame) {
+        if (veHUD.chucNangDangChon == 4 && veHUD.dangHienChonMiniGame && !veHUD.dangHienMiniGame) {
+            float daoDong = (float) Math.sin(nhanVat.thoiGianTichLuy) * 1.3f;
+            batch.draw(veHUD.avtPetTheoHanhTinh,(Gdx.graphics.getWidth() - 600) / 2f+30,120+60+daoDong,veHUD.avtPetTheoHanhTinh.getWidth()*0.5f,veHUD.avtPetTheoHanhTinh.getHeight()*0.5f);
             batch.end();
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(1, 1, 1, 1);
-            shapeRenderer.rect((Gdx.graphics.getWidth() - 600) / 2f, 120, 600, 100);
+            shapeRenderer.rect((Gdx.graphics.getWidth() - 600) / 2f, 120, 600, 60);
             shapeRenderer.end();
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
             shapeRenderer.setColor(Color.BLACK);
             for (int i = 0; i < 2; i++) {
-                shapeRenderer.rect((Gdx.graphics.getWidth() - 600) / 2f - i, 120 - i, 600 + i * 2, 100 + i * 2);
+                shapeRenderer.rect((Gdx.graphics.getWidth() - 600) / 2f - i, 120 - i, 600 + i * 2, 60 + i * 2);
             }
             shapeRenderer.end();
             batch.begin();
-            layout.setText(veHUD.fontMotaHanhTrang,"Kết quả giải trước: ");
+            layout.setText(veHUD.fontMotaHanhTrang,"Vui lòng chọn 1 mini game!");
+            veHUD.fontMotaHanhTrang.draw(batch,layout,(Gdx.graphics.getWidth() - 600) / 2f + (600-layout.width)/2f,120+35);
+            for (int i = 0; i < 2; i++) {
+                float nutX = (Gdx.graphics.getWidth()-240)/2f + i * 120;
+                float nutY = 120 - 115;
+                if (veHUD.nuthanhtrangchon == i) {
+                    Texture nutVe = veHUD.nutClickTimer3 > 0 ? veHUD.nutvuongclick : veHUD.nutvuong;
+                    batch.draw(nutVe, nutX, nutY, 114, 114);
+                } else {
+                    batch.draw(veHUD.nutvuong, nutX, nutY, 114, 114);
+                }
+
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                if (i == 0) {
+                    layout.setText(veHUD.font, "Con số");
+                    veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 40);
+                    layout.setText(veHUD.font, "May mắn");
+                    veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 64);
+                } else if (i == 1) {
+                    layout.setText(veHUD.font, "Chẵn lẻ");
+                    veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 52);
+                }
+            }
+        }
+        if (veHUD.chucNangDangChon == 4 && veHUD.dangHienMiniGame && !veHUD.dangHienMiniGameHuongDanThem && !veHUD.dangHienMiniGameThamGia) {
+            float daoDong = (float) Math.sin(nhanVat.thoiGianTichLuy) * 1.3f;
+            batch.draw(veHUD.avtPetTheoHanhTinh,(Gdx.graphics.getWidth() - 600) / 2f+30,120+160+daoDong,veHUD.avtPetTheoHanhTinh.getWidth()*0.5f,veHUD.avtPetTheoHanhTinh.getHeight()*0.5f);
+            batch.end();
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(1, 1, 1, 1);
+            shapeRenderer.rect((Gdx.graphics.getWidth() - 600) / 2f, 120, 600, 160);
+            shapeRenderer.end();
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            shapeRenderer.setColor(Color.BLACK);
+            for (int i = 0; i < 2; i++) {
+                shapeRenderer.rect((Gdx.graphics.getWidth() - 600) / 2f - i, 120 - i, 600 + i * 2, 160 + i * 2);
+            }
+            shapeRenderer.end();
+            batch.begin();
+            DecimalFormat dinhDang = new DecimalFormat("#,###");
+            layout.setText(veHUD.fontMotaHanhTrang, "Kết quả giải trước: " + (veHUD.ketQuaGiaiTruoc == 0 ? "chưa bắt đầu" : veHUD.ketQuaGiaiTruoc));
+            veHUD.fontMotaHanhTrang.draw(batch,layout,(Gdx.graphics.getWidth() - 600) / 2f + (600-layout.width)/2f,120+135);
+            layout.setText(veHUD.fontMotaHanhTrang,"Số ngọc đang cược: "+(veHUD.soNgocCuoc==0 ? "chưa tham gia" : dinhDang.format(veHUD.soNgocCuoc)));
+            veHUD.fontMotaHanhTrang.draw(batch,layout,(Gdx.graphics.getWidth() - 600) / 2f + (600-layout.width)/2f,120+115);
+            layout.setText(veHUD.fontMotaHanhTrang,"Số may mắn đang chọn: "+(veHUD.soNguoiChoiChon==0 ? "chưa tham gia" : veHUD.soNguoiChoiChon));
+            veHUD.fontMotaHanhTrang.draw(batch,layout,(Gdx.graphics.getWidth() - 600) / 2f + (600-layout.width)/2f,120+95);
+            layout.setText(veHUD.fontMotaHanhTrang, "Số ngọc thưởng nhận gần nhất: " + (veHUD.soNgocDuocNhanGanNhat == 0 ? "chưa nhận thưởng" : dinhDang.format(veHUD.soNgocDuocNhanGanNhat)));
             veHUD.fontMotaHanhTrang.draw(batch,layout,(Gdx.graphics.getWidth() - 600) / 2f + (600-layout.width)/2f,120+75);
             layout.setText(veHUD.fontMotaHanhTrang,"Tham gia với tổng giải thưởng gấp 90 lần!");
             veHUD.fontMotaHanhTrang.draw(batch,layout,(Gdx.graphics.getWidth() - 600) / 2f + (600-layout.width)/2f,120+55);
-            layout.setText(veHUD.fontMotaHanhTrang,"Còn :"+"  "+"giây");
+            layout.setText(veHUD.fontMotaHanhTrang,"Còn :"+(int)veHUD.timeMiniGame+" giây");
             veHUD.fontMotaHanhTrang.draw(batch,layout,(Gdx.graphics.getWidth() - 600) / 2f + (600-layout.width)/2f,120+35);
             for (int i = 0; i < 3; i++) {
                 float nutX = (Gdx.graphics.getWidth()-360)/2f + i * 120;
@@ -649,6 +699,100 @@ public class HUDPopupRenderer {
                     veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 52);
                 }
             }
+        }
+
+        if (veHUD.chucNangDangChon == 4 && veHUD.dangHienMiniGame && veHUD.dangHienMiniGameThamGia) {
+            float daoDong = (float) Math.sin(nhanVat.thoiGianTichLuy) * 1.3f;
+            batch.draw(veHUD.avtPetTheoHanhTinh,(Gdx.graphics.getWidth() - 528) / 2f+30,35+149+1+daoDong,veHUD.avtPetTheoHanhTinh.getWidth()*0.5f,veHUD.avtPetTheoHanhTinh.getHeight()*0.5f);
+            batch.end();
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+            shapeRenderer.rect((Gdx.graphics.getWidth() - 528) / 2f - 2f, 35 -1f, 528 +4f, 149 +3f);
+            shapeRenderer.end();
+            batch.begin();
+            batch.draw(veHUD.khungchat,(Gdx.graphics.getWidth() - 528) / 2f,35 , 528, 149);
+            float nX = (Gdx.graphics.getWidth() - 140) / 2f;
+            float nutY = 12;
+            veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+            batch.draw(veHUD.isThongBaoOKPressed>0 && veHUD.nutduocchon==1? veHUD.nutclick : veHUD.nutdn, nX-81, nutY, 140, 48);
+            layout.setText(veHUD.fontTenSkill, "OK");
+            veHUD.fontTenSkill.draw(batch, layout, nX-81 + (140 - layout.width) / 2f, nutY + 29);
+            batch.draw(veHUD.isThongBaoOKPressed>0 && veHUD.nutduocchon==2? veHUD.nutclick : veHUD.nutdn, nX+81, nutY, 140, 48);
+            layout.setText(veHUD.fontTenSkill, "Đóng");
+            veHUD.fontTenSkill.draw(batch, layout, nX+81 + (140 - layout.width) / 2f, nutY + 29);
+
+            veHUD.fontTenSkill.setColor(0f / 255f, 85f / 255f, 38f / 255f, 1f);
+            layout.setText(veHUD.fontTenSkill, "Con số may mắn");
+            veHUD.fontTenSkill.draw(batch, layout, (Gdx.graphics.getWidth() - 528) / 2f + 15, 35 + 115);
+
+            // Các thông số
+            float khungX = (Gdx.graphics.getWidth() - 528) / 2f + 25;
+            float khungY = 35;
+            float khungWidth = 465;
+            float khungHeight = 68;
+
+            if (veHUD.soNgocNguoiChoiNhap.isEmpty()) {
+                veHUD.fontText.setColor(1.0f, 0.956f, 0.863f, 1f);
+                layout.setText(veHUD.fontText, "Nhập 'số ngọc cược' / 'số chọn (1-99)'");
+            } else {
+                veHUD.fontText.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1f);
+                layout.setText(veHUD.fontText, veHUD.soNgocNguoiChoiNhap);
+            }
+            float textWidth = layout.width;
+            float offsetX = 0;
+
+            if (textWidth > khungWidth) {
+                offsetX = textWidth - khungWidth;
+            }
+            batch.flush();
+            Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
+            Gdx.gl.glScissor((int) khungX, (int) khungY, (int) khungWidth, (int) khungHeight);
+            veHUD.fontText.draw(batch, layout, khungX - offsetX, khungY + khungHeight );
+            batch.flush();
+            Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
+        }
+
+        if (veHUD.chucNangDangChon == 4 && veHUD.dangHienMiniGame && veHUD.dangHienMiniGameHuongDanThem) {
+            layout.setText(
+                veHUD.fontMotaHanhTrang,
+                "Thời gian mini game diễn ra hằng ngày"+"\n"+
+                    "Mỗi lần chơi người chơi đặt số ngọc cược, số may mắn mà người chơi chọn"+"\n"+
+                    "Khi hết giờ, hệ thống sẽ chọn ngẫu nhiên một con số may mắn từ 1-99"+"\n"+
+                    "Nếu con số đó trùng với số người chơi chọn, hệ thống sẽ tự động cộng số ngọc về tài khoản người chơi với số ngọc x90 lần ngọc người chơi cược"+"\n"+
+                    "Bạn đã sẵn sàng?",
+                new Color(0, 0, 0, 1),
+                550,
+                Align.center,
+                true
+            );
+            float daoDong = (float) Math.sin(nhanVat.thoiGianTichLuy) * 1.3f;
+            batch.draw(veHUD.avtPetTheoHanhTinh,(Gdx.graphics.getWidth() - 600) / 2f+30,120+layout.height+35*2+daoDong,veHUD.avtPetTheoHanhTinh.getWidth()*0.5f,veHUD.avtPetTheoHanhTinh.getHeight()*0.5f);
+            batch.end();
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(1, 1, 1, 1);
+            shapeRenderer.rect((Gdx.graphics.getWidth() - 600) / 2f, 120, 600, layout.height+35*2);
+            shapeRenderer.end();
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            shapeRenderer.setColor(Color.BLACK);
+            for (int i = 0; i < 2; i++) {
+                shapeRenderer.rect((Gdx.graphics.getWidth() - 600) / 2f - i, 120 - i, 600 + i * 2, layout.height+35*2 + i * 2);
+            }
+            shapeRenderer.end();
+            batch.begin();
+            veHUD.fontMotaHanhTrang.draw(batch,layout,(Gdx.graphics.getWidth() - 600) / 2f+25,120+ layout.height+35);
+            float i = 1;
+            float nutX = (Gdx.graphics.getWidth()-360)/2f + i * 120;
+            float nutY = 120 - 115;
+            if (veHUD.nuthanhtrangchon == i) {
+                Texture nutVe = veHUD.nutClickTimer3 > 0 ? veHUD.nutvuongclick : veHUD.nutvuong;
+                batch.draw(nutVe, nutX, nutY, 114, 114);
+            } else {
+                batch.draw(veHUD.nutvuong, nutX, nutY, 114, 114);
+            }
+
+            veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+            layout.setText(veHUD.font, "OK");
+            veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 52);
         }
 
         if (veHUD.chucNangDangChon == 4 && veHUD.dangHienThongBaoGame) {

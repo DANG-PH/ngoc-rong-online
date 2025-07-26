@@ -26,6 +26,7 @@ public class NhanVat {
     public float vx = 0, vy = 0;
     public float rong, cao;
     public boolean dangDungDat = true;
+    public float thoiGianTichLuy = 0f;
 
     private TrangThai trangThai = TrangThai.DUNG_YEN;
     private Map<TrangThai, List<DoLechModular>> lechTheoTrangThai = new HashMap<>();
@@ -1215,6 +1216,7 @@ public class NhanVat {
     }
 
     public void ve(SpriteBatch batch, float thoiGian) {
+        this.thoiGianTichLuy = thoiGian;
         if (!veHUD.renderDeTu && duLieuNguoiChoi.deTu.timeHoatAnhBienMat>0) {
             if (duLieuNguoiChoi.deTu.chuaLayToaDoBienMat) {
                 duLieuNguoiChoi.deTu.x_bien_mat = duLieuNguoiChoi.deTu.x;

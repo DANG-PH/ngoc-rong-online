@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Align;
 import com.dang.dragonboy.du_lieu.DeTu;
 import com.dang.dragonboy.nhan_vat.NhanVat;
@@ -180,7 +181,16 @@ public class VeHUD {
     public boolean dangChonNhacNen = false;
     public Music[] nhacNen = new Music[10];
 
+    public boolean dangHienChonMiniGame = false;
     public boolean dangHienMiniGame = false;
+    public boolean dangHienMiniGameHuongDanThem = false;
+    public boolean dangHienMiniGameThamGia = false;
+    public float timeMiniGame = 60f;
+    public int ketQuaGiaiTruoc;
+    public int soNguoiChoiChon;
+    public int soNgocCuoc;
+    public int soNgocDuocNhanGanNhat;
+    public String soNgocNguoiChoiNhap = "";
 
     public boolean dangHopThe = false;
     public float timeChoHopThe = 0;
@@ -223,6 +233,8 @@ public class VeHUD {
 
     LinkedList<TrangThaiChu> lichSuTrangThaiChu = new LinkedList<>();
 
+    public Texture avtPetTheoHanhTinh;
+
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data;
         duLieuNguoiChoi.setNhanVat(nhanVat);
@@ -230,7 +242,7 @@ public class VeHUD {
         // Gọi thêm item từ file ngoài
         ThemItemTest.themItemTest(duLieuNguoiChoi, nhanVat);
         clickHandler = new HUDClickHandler(this, duLieuNguoiChoi, nhanVat);
-        popupRenderer = new HUDPopupRenderer(this, layout, duLieuNguoiChoi);
+        popupRenderer = new HUDPopupRenderer(this, layout, duLieuNguoiChoi,nhanVat);
         xulyitem = new HUDXulyitem(this, layout, duLieuNguoiChoi, nhanVat);
         popupThongTin = new HUDPopupThongTin(this, layout, duLieuNguoiChoi, nhanVat);
         popupHanhTrang = new HUDPopupHanhTrang(this, layout, duLieuNguoiChoi, nhanVat);
@@ -397,7 +409,7 @@ public class VeHUD {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
-            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ ễ ằ ừ — ẳ ữ ỗ";
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ ễ ằ ừ — ẳ ữ ỗ ằ ễ ỗ ừ ẵ";
         param.size = 18;
         font = generator.generateFont(param);
         fontText = generator.generateFont(param);
@@ -414,7 +426,7 @@ public class VeHUD {
         FreeTypeFontGenerator generator2 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchinh.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param2.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
-            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ";
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ ễ ằ ừ — ẳ ữ ỗ ằ ễ ỗ ừ ẵ";
         param2.size = 22;
         param2.color = Color.WHITE;
         param2.borderWidth = 1f;
@@ -425,7 +437,7 @@ public class VeHUD {
         FreeTypeFontGenerator generator3 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchucnang.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param3 = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param3.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
-            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ";
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ ễ ằ ừ — ẳ ữ ỗ ằ ễ ỗ ừ ẵ";
         param3.size = 14;
         fontchat = generator3.generateFont(param3);
         param3.color = new Color(94 / 255f, 86 / 255f, 74 / 255f, 1f);
@@ -722,6 +734,18 @@ public class VeHUD {
         }
     }
     public void update(float delta) {
+        timeMiniGame -= delta;
+        if (timeMiniGame<=0) {
+            int conSoMayMan = MathUtils.random(1, 99);
+            if (soNguoiChoiChon == conSoMayMan) {
+                duLieuNguoiChoi.tangNgoc(soNgocCuoc*90);
+                soNgocDuocNhanGanNhat = soNgocCuoc*90;
+            }
+            soNguoiChoiChon = 0;
+            soNgocCuoc = 0;
+            ketQuaGiaiTruoc = conSoMayMan;
+            timeMiniGame = 60f;
+        }
         if (timeDoiDauThan > 0) {
             timeDoiDauThan -= delta;
             if (timeDoiDauThan <= 0) {
@@ -793,7 +817,7 @@ public class VeHUD {
                         if (oChiSoDangChon == 0) {
                             dangHienGioiThieuGame = true;
                         } else if (oChiSoDangChon == 1) {
-                            dangHienMiniGame = true;
+                            dangHienChonMiniGame = true;
                         } else if (oChiSoDangChon == 2) {
                             dangHienThongBaoGame = true;
                         } else if (oChiSoDangChon == 3) {
@@ -808,7 +832,7 @@ public class VeHUD {
                         if (oChiSoDangChon == 0) {
                             dangHienGioiThieuGame = true;
                         } else if (oChiSoDangChon == 1) {
-                            dangHienMiniGame = true;
+                            dangHienChonMiniGame = true;
                         } else if (oChiSoDangChon == 2) {
                             dangHienThongBaoGame = true;
                         } else if (oChiSoDangChon == 6) {
@@ -885,7 +909,7 @@ public class VeHUD {
         if (nutClickTimer3 > 0){
             nutClickTimer3 -= Gdx.graphics.getDeltaTime();
             if (nutClickTimer3 <= 0) {
-                if (!dangHienMiniGame) {
+                if (!dangHienMiniGame && !dangHienChonMiniGame) {
                     // mac do
                     if (nuthanhtrangchon == 1) {
                         if (nhanVat.getHanhtinh().equals(itemm.getHanhtinh()) && duLieuNguoiChoi.getSucManh() >= itemm.getSucManhYeuCau()) {
@@ -949,9 +973,23 @@ public class VeHUD {
                         DangHienPopupThongTin2 = false;
                         TimeChoHienPopup = 0;
                     }
-                } else {
-                    if (nuthanhtrangchon == 2) {
-                        dangHienMiniGame = false;
+                } else if (dangHienMiniGame) {
+                    if (dangHienMiniGame && !dangHienMiniGameHuongDanThem && !dangHienMiniGameThamGia) {
+                        if (nuthanhtrangchon == 2) {
+                            dangHienMiniGame = false;
+                        } else if (nuthanhtrangchon == 1) {
+                            dangHienMiniGameHuongDanThem = true;
+                        } else {
+                            dangHienMiniGameThamGia = true;
+                        }
+                    } else if (dangHienMiniGame && dangHienMiniGameHuongDanThem && !dangHienMiniGameThamGia) {
+                        if (nuthanhtrangchon == 1) {
+                            dangHienMiniGameHuongDanThem = false;
+                        }
+                    }
+                } else if (dangHienChonMiniGame) {
+                    if (nuthanhtrangchon == 0) {
+                        dangHienMiniGame = true;
                     }
                 }
             }
@@ -1154,6 +1192,38 @@ public class VeHUD {
                         chuaNhanQuaLanDau = false;
                     }
                     nutduocchon = -1;
+                } else if (dangHienMiniGameThamGia) {
+                    if (nutduocchon == 2){
+                        dangHienMiniGameThamGia = false;
+                        nutduocchon = -1;
+                        soNgocNguoiChoiNhap = "";
+                    } else if (nutduocchon == 1) {
+                        if (!soNgocNguoiChoiNhap.isEmpty()){
+                            if (soNgocNguoiChoiNhap.contains("/") && soNgocNguoiChoiNhap.split("/").length == 2) {
+                                try {
+                                    String[] parts = soNgocNguoiChoiNhap.split("/");
+                                    int soNgoc = Integer.parseInt(parts[0].trim());
+                                    int soChon = Integer.parseInt(parts[1].trim());
+                                    if (soNgoc >= 1 && soChon>=1 && soChon <= 99 && soNgocCuoc == 0 && soNguoiChoiChon == 0 && duLieuNguoiChoi.getNgoc()>=soNgoc) {
+                                        soNgocCuoc = soNgoc;
+                                        duLieuNguoiChoi.giamNgoc(soNgoc);
+                                        soNguoiChoiChon = soChon;
+                                    }
+                                    dangHienMiniGameThamGia = false;
+                                    soNgocNguoiChoiNhap = "";
+                                    nutduocchon = -1;
+                                } catch (NumberFormatException e) {
+                                    dangHienMiniGameThamGia = false;
+                                    soNgocNguoiChoiNhap = "";
+                                    nutduocchon = -1;
+                                }
+                            } else {
+                                dangHienMiniGameThamGia = false;
+                                soNgocNguoiChoiNhap = "";
+                                nutduocchon = -1;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -1220,6 +1290,7 @@ public class VeHUD {
     }
     public void setNhanVat(NhanVat nhanVat) {
         this.nhanVat = nhanVat;
+        avtPetTheoHanhTinh = new Texture("nhanvat/npc/npc_pet/"+nhanVat.getHanhtinh()+"/avt.png");
         if (texAvt != null) texAvt.dispose(); // nếu có thì giải phóng cũ
         String path = nhanVat.doiavatar();
         texAvt = new Texture(path); // load luôn tại đây

@@ -280,6 +280,7 @@ public class ManHinhChoiTiep implements Screen {
 
         //thoi gian
         thoiGianTichLuy += delta * 15f;
+        if (thoiGianTichLuy > 1_000_000f) thoiGianTichLuy = 0f;
         timeLua += delta;
         if (timeLua > 0.12f){
             frameLua = (frameLua + 1)%lua.length;

@@ -96,7 +96,7 @@ public class ThaoTac extends InputAdapter {
             (hud.getChucNangDangChon() == 1 || hud.getChucNangDangChon() == 2 || hud.getChucNangDangChon() == 4 ) &&
             !hud.dangHienPopupDeTu &&
             !hud.DangHienPopupThongTin1 &&
-            !hud.dangHienMiniGame &&
+            !hud.dangHienChonMiniGame &&
             screenX > 0 && screenX <= 350 &&
             y > 0 && y <= 444) {
 
@@ -173,7 +173,7 @@ public class ThaoTac extends InputAdapter {
     @Override
     public boolean scrolled(float amountX, float amountY) {
         // chỉ xử lý khi đang mở popup và chọn mục hành trang
-        if (hud.isDangHienPopup() && (hud.getChucNangDangChon() == 1 || hud.getChucNangDangChon() == 2 || hud.getChucNangDangChon() == 4 || hud.getChucNangDangChon() == 3) && !hud.dangHienThongBao && !hud.DangHienPopupThongTin1 && !hud.DangHienPopupThongTin && !hud.DangHienPopupThongTin2 && !hud.dangHienMiniGame) {
+        if (hud.isDangHienPopup() && (hud.getChucNangDangChon() == 1 || hud.getChucNangDangChon() == 2 || hud.getChucNangDangChon() == 4 || hud.getChucNangDangChon() == 3) && !hud.dangHienThongBao && !hud.DangHienPopupThongTin1 && !hud.DangHienPopupThongTin && !hud.DangHienPopupThongTin2 && !hud.dangHienChonMiniGame) {
             if (!hud.dangHienPopupDeTu) {
                 hud.scroll((int) amountY); // amountY là số lần lăn bánh (thường là ±1)
                 return true;
@@ -200,6 +200,17 @@ public class ThaoTac extends InputAdapter {
             } else if (Character.toString(character).matches("[a-zA-Z0-9 ]")) {
                 if (hud.tinNhanChat.length() < 100) {
                     hud.tinNhanChat += character;
+                }
+            }
+        }
+        if (hud.dangHienMiniGameThamGia) {
+            if (character == '\b') {
+                if (!hud.soNgocNguoiChoiNhap.isEmpty()) {
+                    hud.soNgocNguoiChoiNhap = hud.soNgocNguoiChoiNhap.substring(0, hud.soNgocNguoiChoiNhap.length() - 1);
+                }
+            } else if (Character.toString(character).matches("[a-zA-Z0-9 /]")) {
+                if (hud.soNgocNguoiChoiNhap.length() < 100) {
+                    hud.soNgocNguoiChoiNhap += character;
                 }
             }
         }
