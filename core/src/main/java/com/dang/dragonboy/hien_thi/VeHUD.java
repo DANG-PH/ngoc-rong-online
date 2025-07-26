@@ -191,6 +191,15 @@ public class VeHUD {
     public int soNgocCuoc;
     public int soNgocDuocNhanGanNhat;
     public String soNgocNguoiChoiNhap = "";
+    public boolean dangHienMiniGameChanLe = false;
+    public boolean dangHienMiniGameHuongDanThemChanLe = false;
+    public boolean dangHienMiniGameThamGiaChanLe = false;
+    public float timeMiniGameChanLe = 30f;
+    public int ketQuaGiaiTruocChanLe;
+    public String NguoiChoiChonChanLe = "";
+    public int soVangCuocChanLe;
+    public int soVangDuocNhanGanNhatChanLe;
+    public String soVangNguoiChoiNhapChanLe = "";
 
     public boolean dangHopThe = false;
     public float timeChoHopThe = 0;
@@ -735,6 +744,7 @@ public class VeHUD {
     }
     public void update(float delta) {
         timeMiniGame -= delta;
+        timeMiniGameChanLe -= delta;
         if (timeMiniGame<=0) {
             int conSoMayMan = MathUtils.random(1, 99);
             if (soNguoiChoiChon == conSoMayMan) {
@@ -745,6 +755,17 @@ public class VeHUD {
             soNgocCuoc = 0;
             ketQuaGiaiTruoc = conSoMayMan;
             timeMiniGame = 60f;
+        }
+        if (timeMiniGameChanLe<=0) {
+            int conSoMayMan = MathUtils.random(1, 99);
+            if ((NguoiChoiChonChanLe.equals("chan") && conSoMayMan%2==0) || (NguoiChoiChonChanLe.equals("le") && conSoMayMan%2!=0)) {
+                duLieuNguoiChoi.tangVang((int)(soVangCuocChanLe*1.9f));
+                soVangDuocNhanGanNhatChanLe = (int)(soVangCuocChanLe*1.9f);
+            }
+            NguoiChoiChonChanLe = "";
+            soVangCuocChanLe = 0;
+            ketQuaGiaiTruocChanLe = conSoMayMan;
+            timeMiniGameChanLe = 30f;
         }
         if (timeDoiDauThan > 0) {
             timeDoiDauThan -= delta;
@@ -909,7 +930,7 @@ public class VeHUD {
         if (nutClickTimer3 > 0){
             nutClickTimer3 -= Gdx.graphics.getDeltaTime();
             if (nutClickTimer3 <= 0) {
-                if (!dangHienMiniGame && !dangHienChonMiniGame) {
+                if (!dangHienMiniGame && !dangHienChonMiniGame && !dangHienMiniGameChanLe) {
                     // mac do
                     if (nuthanhtrangchon == 1) {
                         if (nhanVat.getHanhtinh().equals(itemm.getHanhtinh()) && duLieuNguoiChoi.getSucManh() >= itemm.getSucManhYeuCau()) {
@@ -987,9 +1008,25 @@ public class VeHUD {
                             dangHienMiniGameHuongDanThem = false;
                         }
                     }
+                } else if (dangHienMiniGameChanLe) {
+                    if (dangHienMiniGameChanLe && !dangHienMiniGameHuongDanThemChanLe && !dangHienMiniGameThamGiaChanLe) {
+                        if (nuthanhtrangchon == 2) {
+                            dangHienMiniGameChanLe = false;
+                        } else if (nuthanhtrangchon == 1) {
+                            dangHienMiniGameHuongDanThemChanLe = true;
+                        } else {
+                            dangHienMiniGameThamGiaChanLe = true;
+                        }
+                    } else if (dangHienMiniGameChanLe && dangHienMiniGameHuongDanThemChanLe && !dangHienMiniGameThamGiaChanLe) {
+                        if (nuthanhtrangchon == 1) {
+                            dangHienMiniGameHuongDanThemChanLe = false;
+                        }
+                    }
                 } else if (dangHienChonMiniGame) {
                     if (nuthanhtrangchon == 0) {
                         dangHienMiniGame = true;
+                    } else if (nuthanhtrangchon == 1){
+                        dangHienMiniGameChanLe = true;
                     }
                 }
             }
@@ -1220,6 +1257,38 @@ public class VeHUD {
                             } else {
                                 dangHienMiniGameThamGia = false;
                                 soNgocNguoiChoiNhap = "";
+                                nutduocchon = -1;
+                            }
+                        }
+                    }
+                } else if (dangHienMiniGameThamGiaChanLe) {
+                    if (nutduocchon == 2){
+                        dangHienMiniGameThamGiaChanLe = false;
+                        nutduocchon = -1;
+                        soVangNguoiChoiNhapChanLe = "";
+                    } else if (nutduocchon == 1) {
+                        if (!soVangNguoiChoiNhapChanLe.isEmpty()){
+                            if (soVangNguoiChoiNhapChanLe.contains("/") && soVangNguoiChoiNhapChanLe.split("/").length == 2) {
+                                try {
+                                    String[] parts = soVangNguoiChoiNhapChanLe.split("/");
+                                    int soVang = Integer.parseInt(parts[0].trim());
+                                    String duDoan = parts[1].trim();
+                                    if (soVang >= 1 && (duDoan.equals("chan") || duDoan.equals("le")) && soVangCuocChanLe == 0 && "".equals(NguoiChoiChonChanLe) && duLieuNguoiChoi.getVang()>=soVang) {
+                                        soVangCuocChanLe = soVang;
+                                        duLieuNguoiChoi.giamVang(soVang);
+                                        NguoiChoiChonChanLe = duDoan;
+                                    }
+                                    dangHienMiniGameThamGiaChanLe = false;
+                                    soVangNguoiChoiNhapChanLe = "";
+                                    nutduocchon = -1;
+                                } catch (NumberFormatException e) {
+                                    dangHienMiniGameThamGiaChanLe = false;
+                                    soVangNguoiChoiNhapChanLe = "";
+                                    nutduocchon = -1;
+                                }
+                            } else {
+                                dangHienMiniGameThamGiaChanLe = false;
+                                soVangNguoiChoiNhapChanLe = "";
                                 nutduocchon = -1;
                             }
                         }
@@ -1463,4 +1532,19 @@ public class VeHUD {
         }
         duLieuNguoiChoi.deTu.setTrangthai(trangthaide);
     }
+    public String formatSoTrongChuoi(String chuoiGoc,DecimalFormat dinhDang) {
+        String[] tach = chuoiGoc.split("/",-1);
+
+        if (tach.length == 2) {
+            try {
+                long so = Long.parseLong(tach[0].trim());
+                return dinhDang.format(so) + "/" + tach[1];
+            } catch (NumberFormatException e) {
+                return chuoiGoc;
+            }
+        }
+
+        return chuoiGoc;
+    }
+
 }

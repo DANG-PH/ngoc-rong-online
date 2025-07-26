@@ -663,7 +663,7 @@ public class DuLieuNguoiChoi {
     public void taoDeTu(String ten) {
 //        String hanhtinh = danhSachHanhTinh[MathUtils.random(danhSachHanhTinh.length - 1)];
         String hanhtinh = nhanVat.getHanhtinh();
-        DeTuCauHinh config = DoicaitrangDeTu("set_base_traidat");
+        DeTuCauHinh config = DoicaitrangDeTu("set_base_"+hanhtinh);
         if (this.deTu == null) {
             int kc = MathUtils.random(30, 80) * (MathUtils.randomBoolean() ? 1 : -1);
             if (nhanVat.getX()+kc <= 0 || nhanVat.getX()+kc>=nhanVat.getGioiHanXMax()) {

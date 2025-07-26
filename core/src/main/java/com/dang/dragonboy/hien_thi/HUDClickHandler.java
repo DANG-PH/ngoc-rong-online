@@ -88,7 +88,28 @@ public class HUDClickHandler {
                     veHUD.clickX = x;
                     veHUD.timeGlow = 0.3f;
                 } if (veHUD.dangHienChonMiniGame) {
-                    if (veHUD.dangHienMiniGameHuongDanThem) {
+                    if (veHUD.dangHienMiniGameHuongDanThemChanLe) {
+                        veHUD.dangHienMiniGameHuongDanThemChanLe = false;
+                        veHUD.clickY = y;
+                        veHUD.clickX = x;
+                        veHUD.timeGlow = 0.2f;
+                        return;
+                    }
+                    else if (veHUD.dangHienMiniGameThamGiaChanLe) {
+                        veHUD.dangHienMiniGameThamGiaChanLe = false;
+                        veHUD.clickY = y;
+                        veHUD.clickX = x;
+                        veHUD.timeGlow = 0.2f;
+                        return;
+                    }
+                    else if (veHUD.dangHienMiniGameChanLe) {
+                        veHUD.dangHienMiniGameChanLe = false;
+                        veHUD.clickY = y;
+                        veHUD.clickX = x;
+                        veHUD.timeGlow = 0.2f;
+                        return;
+                    }
+                    else if (veHUD.dangHienMiniGameHuongDanThem) {
                         veHUD.dangHienMiniGameHuongDanThem = false;
                         veHUD.clickY = y;
                         veHUD.clickX = x;
@@ -426,7 +447,7 @@ public class HUDClickHandler {
             }
         }
         // chuc nang mini game
-        if (veHUD.dangHienChonMiniGame && !veHUD.dangHienMiniGame) {
+        if (veHUD.dangHienChonMiniGame && !veHUD.dangHienMiniGame && !veHUD.dangHienMiniGameChanLe) {
             for (int i = 0; i < 2; i++) {
                 if (x >= (Gdx.graphics.getWidth()-240)/2f + i * 120 && x <= (Gdx.graphics.getWidth()-240)/2f + i * 120 + 115 && y >= 120 - 115 && y <= 120) {
                     veHUD.nutClickTimer3 = 0.3f;
@@ -471,6 +492,47 @@ public class HUDClickHandler {
             }
         }
         if (veHUD.dangHienMiniGame && veHUD.dangHienMiniGameThamGia) {
+            float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
+            float nutY = 12;
+            if (x >= nutX-81 && x <= nutX-81 + 140 && y >= nutY && y <= nutY + 50 ) {
+                veHUD.isThongBaoOKPressed=0.3f;
+                veHUD.nutduocchon = 1;
+            }
+            if (x >= nutX+81 && x <= nutX+81 + 140 && y >= nutY && y <= nutY + 50) {
+                veHUD.isThongBaoOKPressed=0.3f;
+                veHUD.nutduocchon = 2;
+            }
+        }
+        if (veHUD.dangHienMiniGameChanLe && !veHUD.dangHienMiniGameHuongDanThemChanLe && !veHUD.dangHienMiniGameThamGiaChanLe) {
+            for (int i = 0; i < 3; i++) {
+                if (x >= (Gdx.graphics.getWidth()-360)/2f + i * 120 && x <= (Gdx.graphics.getWidth()-360)/2f + i * 120 + 115 && y >= 120 - 115 && y <= 120) {
+                    veHUD.nutClickTimer3 = 0.3f;
+                    veHUD.nuthanhtrangchon = i;
+                }
+            }
+            if (x < (Gdx.graphics.getWidth()-360)/2f || x > (Gdx.graphics.getWidth()-360)/2f + 360) {
+                veHUD.dangHienMiniGameChanLe = false;
+            } else {
+                if (y > 120) {
+                    veHUD.dangHienMiniGameChanLe = false;
+                }
+            }
+        }
+        if (veHUD.dangHienMiniGameChanLe && veHUD.dangHienMiniGameHuongDanThemChanLe) {
+            float i = 1;
+            if (x >= (Gdx.graphics.getWidth()-360)/2f + i * 120 && x <= (Gdx.graphics.getWidth()-360)/2f + i * 120 + 115 && y >= 120 - 115 && y <= 120) {
+                veHUD.nutClickTimer3 = 0.3f;
+                veHUD.nuthanhtrangchon = i;
+            }
+            if (x < (Gdx.graphics.getWidth()-360)/2f || x > (Gdx.graphics.getWidth()-360)/2f + 360) {
+                veHUD.dangHienMiniGameHuongDanThemChanLe = false;
+            } else {
+                if (y > 120) {
+                    veHUD.dangHienMiniGameHuongDanThemChanLe = false;
+                }
+            }
+        }
+        if (veHUD.dangHienMiniGameChanLe && veHUD.dangHienMiniGameThamGiaChanLe) {
             float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
             float nutY = 12;
             if (x >= nutX-81 && x <= nutX-81 + 140 && y >= nutY && y <= nutY + 50 ) {

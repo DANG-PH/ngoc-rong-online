@@ -214,6 +214,17 @@ public class ThaoTac extends InputAdapter {
                 }
             }
         }
+        if (hud.dangHienMiniGameThamGiaChanLe) {
+            if (character == '\b') {
+                if (!hud.soVangNguoiChoiNhapChanLe.isEmpty()) {
+                    hud.soVangNguoiChoiNhapChanLe = hud.soVangNguoiChoiNhapChanLe.substring(0, hud.soVangNguoiChoiNhapChanLe.length() - 1);
+                }
+            } else if (Character.toString(character).matches("[a-zA-Z0-9 /]")) {
+                if (hud.soVangNguoiChoiNhapChanLe.length() < 100) {
+                    hud.soVangNguoiChoiNhapChanLe += character;
+                }
+            }
+        }
         return true;
     }
 }
