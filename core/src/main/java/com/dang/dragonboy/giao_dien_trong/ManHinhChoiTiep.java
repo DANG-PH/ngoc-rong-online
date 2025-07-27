@@ -372,6 +372,7 @@ public class ManHinhChoiTiep implements Screen {
         batch.draw(luaa,1203,203,luaaW,luaaH);
         batch.draw(duiga,1178,205,33,24);
         nhanVat.ve(batch, thoiGianTichLuy);
+        nhanVat.veDiemCanDen(batch);
         batch.end();
         if (targetX > 410 && targetX < 850) {
             shapeRenderer.setProjectionMatrix(camManager.camera.combined);
@@ -416,7 +417,7 @@ public class ManHinhChoiTiep implements Screen {
         // Kiểm tra nếu đứng trong vùng "Làng Aru" và bấm Enter thì chuyển màn
         if (targetX > 760 && targetX < 990 && targetY >= 0 && targetY <= 400) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-                ThongTinChuyenMap info = new ThongTinChuyenMap(nhanVat, "nhagohan",hudRenderer);
+                ThongTinChuyenMap info = new ThongTinChuyenMap(nhanVat, "nhagohan",hudRenderer,camManager);
                 game.setScreen(new ManHinhSplash(game, new ManHinhLangAru(game, info)));
             }
         }

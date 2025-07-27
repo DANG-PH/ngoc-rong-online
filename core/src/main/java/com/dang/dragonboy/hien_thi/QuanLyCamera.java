@@ -16,6 +16,8 @@ public class QuanLyCamera {
     private float diemBatDauX, diemBatDauY;
     private float doLechX = 0, doLechY = 0;
     private float doNhanCam = 1.5f; // độ nhạy kéo
+    public boolean keoCamera = false;
+    public boolean vuaKeoCamera = false;
     public QuanLyCamera() {
         // Camera chính
         camera = new OrthographicCamera();
@@ -63,13 +65,26 @@ public class QuanLyCamera {
 
     public void keoCamera(int screenX, int screenY) {
         if (dangKeoCamera) {
-            doLechX = (diemBatDauX - screenX) * doNhanCam;
-            doLechY = (screenY - diemBatDauY) * doNhanCam;
+            float dx = Math.abs(screenX - diemBatDauX);
+            float dy = Math.abs(screenY - diemBatDauY);
+
+            // Chỉ khi kéo đủ xa thì mới tính là kéo camera
+            if (dx > 5 || dy > 5) {
+                doLechX = (diemBatDauX - screenX) * doNhanCam;
+                doLechY = (screenY - diemBatDauY) * doNhanCam;
+                keoCamera = true; // ← đánh dấu là đã kéo
+            }
         }
     }
 
     public void ketThucKeoCamera() {
+        if (keoCamera) {
+            vuaKeoCamera = true;
+        } else {
+            vuaKeoCamera = false;
+        }
         dangKeoCamera = false;
+        keoCamera = false;
         doLechX = 0;
         doLechY = 0;
     }

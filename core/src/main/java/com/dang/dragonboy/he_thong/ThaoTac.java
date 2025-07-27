@@ -4,6 +4,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Gdx;
 
+import com.badlogic.gdx.math.Vector3;
 import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.hien_thi.QuanLyCamera;
@@ -80,7 +81,6 @@ public class ThaoTac extends InputAdapter {
         if (button == Input.Buttons.LEFT && !hud.dangHienPopup) {
             camera.batDauKeoCamera(screenX, screenY);
         }
-
         if (hud.dangHienPopupDeTu) {
             if ( screenX >= 1020 - 360 && screenX <= 1020 && y > 0 && y <= 444) {
                 hud.dangChonHanhTrangDeTu = false;
@@ -168,6 +168,20 @@ public class ThaoTac extends InputAdapter {
             hud.vuaKeoHanhTrang = false;
             hud.vuaKeoHanhTrangDeTu = false;
         }
+        if (!hud.dangHienPopup && !hud.laClickTrenHUD(screenX, y) && !camera.vuaKeoCamera && !hud.vuaTatPopup && !hud.dangHienKhungChat) {
+            float viewportWidth = camera.camera.viewportWidth;
+            float viewportHeight = camera.camera.viewportHeight;
+
+            float camX = camera.camera.position.x;
+            float camY = camera.camera.position.y;
+
+            float worldX = camX - viewportWidth * 0.5f + screenX;
+            float worldY = camY - viewportHeight * 0.5f + y;
+
+            nhanVat.diChuyenDenMucTieu = true;
+            nhanVat.setToaDoMucTieu(worldX, worldY);
+        }
+        hud.vuaTatPopup = false;
         return true;
     }
     @Override

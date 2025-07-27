@@ -64,6 +64,7 @@ public class VeHUD {
     public Texture nutX;
     public boolean dangHienPopup = false;
     //    public boolean vuaMoPopup = false;
+    public boolean vuaTatPopup = false;
     private NhanVat nhanVat;
     public Texture texAvt = null;
     public Texture nutchucnang, nutchucnangclick;
@@ -1352,6 +1353,7 @@ public class VeHUD {
 
     public void tatPopupNhanVat() {
         dangHienPopup = false;
+        vuaTatPopup = true;
     }
 
     public boolean isDangHienPopup() {
@@ -1546,5 +1548,44 @@ public class VeHUD {
 
         return chuoiGoc;
     }
+    public boolean laClickTrenHUD(float x, float y) {
+        // === VÙNG Ô SKILL ===
+        int oskillW = 50;
+        int oskillH = 50;
+        float skillBaseX = 30;
+        float skillY = 25f;
+        for (int i = 0; i < 5; i++) {
+            float x_ve = skillBaseX + i * 65f;
+            if (x >= x_ve && x <= x_ve + oskillW && y >= skillY && y <= skillY + oskillH) {
+                return true;
+            }
+        }
 
+        // === VÙNG Ô CHAT ===
+        int ochatW = 60;
+        int ochatH = 60;
+        float ochatX = Gdx.graphics.getWidth() - ochatW - 15;
+        float ochatY = Gdx.graphics.getHeight() - 10 - ochatH;
+        if (x >= ochatX && x <= ochatX + ochatW && y >= ochatY && y <= ochatY + ochatH) {
+            return true;
+        }
+
+        // === VÙNG Ô ĐẬU THẦN ===
+        int odauthanW = 75;
+        int odauthanH = 75;
+        float odauthanX = Gdx.graphics.getWidth() - odauthanW - 10;
+        float odauthanY = 10;
+        if (x >= odauthanX && x <= odauthanX + odauthanW && y >= odauthanY && y <= odauthanY + odauthanH) {
+            return true;
+        }
+
+        // === VÙNG MỞ POPUP ===
+        float nutPopupX = 0f;
+        float nutPopupY = Gdx.graphics.getHeight() / 4f * 3;
+        if (x >= nutPopupX && x <= nutPopupX + 25 && y >= nutPopupY && y <= nutPopupY + 35) {
+            return true;
+        }
+
+        return false; // không trúng vùng nào
+    }
 }

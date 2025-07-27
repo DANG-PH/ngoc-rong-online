@@ -20,6 +20,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 public class NhanVat {
     private ShapeRenderer shapeRenderer;
     private GlyphLayout layout;
+    private SpriteBatch batch;
     private VeHUD veHUD;
     public float x, y;
     private String ten;
@@ -189,6 +190,36 @@ public class NhanVat {
     private long sucManhYeuCauVanBay;
 
     private DuLieuNguoiChoi duLieuNguoiChoi;
+
+    public boolean diChuyenDenMucTieu = false;
+    private float x_muc_tieu,y_muc_tieu;
+    boolean daNhayDeLenY = false;
+    private Texture[] clickdichuyen = new Texture[4];
+    private float thoiGianHienDiemCanDen = 0; // đếm thời gian từ lúc click
+    private boolean dangHienDiemCanDen = false;
+
+    public void setToaDoMucTieu(float x, float y) {
+        this.x_muc_tieu = x;
+        this.y_muc_tieu = y;
+        dangHienDiemCanDen = true;
+        thoiGianHienDiemCanDen = 0f;
+    }
+
+    public void veDiemCanDen(SpriteBatch batch) {
+        if (!dangHienDiemCanDen) return;
+
+        thoiGianHienDiemCanDen += Gdx.graphics.getDeltaTime();
+        if (thoiGianHienDiemCanDen > 0.5f) {
+            dangHienDiemCanDen = false;
+            return;
+        }
+        int frameIndex = (int)(thoiGianHienDiemCanDen / (0.18f/4f))%4;
+        float flipscale = flipX ? -1f : 1f;
+        if (dangDungDat && y_muc_tieu <= y+cao ) {
+            y_muc_tieu = y;
+        }
+        batch.draw(clickdichuyen[frameIndex], x_muc_tieu, y_muc_tieu,clickdichuyen[frameIndex].getWidth()*0.5f*flipscale,clickdichuyen[frameIndex].getHeight()*0.5f);
+    }
 
     // cai trang
     public void setIdCaiTrang(String id) {
@@ -945,6 +976,10 @@ public class NhanVat {
         taiAnhVanBay("candauvan"); // tùy chọn
         shapeRenderer = new ShapeRenderer();
         layout = new GlyphLayout();
+        for (int i = 0; i < 4;i++) {
+            clickdichuyen[i] = new Texture("hieuung/hieuunggame/click_di_chuyen/"+(i+1)+".png");
+        }
+        batch = new SpriteBatch();
     }
 
     public void fixCaiTrang
@@ -1024,6 +1059,82 @@ public class NhanVat {
     }
 
     public void capNhat() {
+        if (!diChuyenDenMucTieu) {
+            daNhayDeLenY = false; // reset nếu không di chuyển nữa
+        }
+        if (dangDungDat && diChuyenDenMucTieu) {
+            float x_real;
+            if (flipX) {
+                x_real = x+rong;
+            } else {
+                x_real = x;
+            }
+            boolean ganX = Math.abs(x_real - x_muc_tieu) < 10f;
+            boolean chenhLechY = Math.abs(y+cao - y_muc_tieu) > 5f;
+
+            if (!ganX) {
+                // Chưa đến gần X → đi ngang
+                if (x_real < x_muc_tieu) {
+                    setFlipPhai();
+                    phimPhaiDangGiu = true;
+                    phimTraiDangGiu = false;
+                } else {
+                    setFlipTrai();
+                    phimPhaiDangGiu = false;
+                    phimTraiDangGiu = true;
+                }
+            } else if (chenhLechY && y_muc_tieu > y + cao && !daNhayDeLenY) {
+                phimNhayDangGiu = true;
+                daNhayDeLenY = true; // chỉ nhảy một lần
+            } else {
+                // Gần đủ X và Y → dừng
+                ketThucDiChuyen();
+            }
+        }
+        if (!dangDungDat && diChuyenDenMucTieu) {
+            float x_real;
+            if (flipX) {
+                x_real = x+rong;
+            } else {
+                x_real = x;
+            }
+            boolean daDenX = Math.abs(x_real - x_muc_tieu) < 5f;
+            boolean daDenY = Math.abs(y - y_muc_tieu) < 5f;
+
+            // Nếu Y mục tiêu nằm thấp hơn hiện tại → chỉ rơi xuống, không đi ngang
+            if (!daDenY && y_muc_tieu < y) {
+                phimPhaiDangGiu = false;
+                phimTraiDangGiu = false;
+                phimNhayDangGiu = false;
+            } else {
+                // Chỉ xử lý X khi đã gần đúng Y hoặc cần bay lên để tới
+                if (!daDenX) {
+                    if (x_muc_tieu > x_real) {
+                        setFlipPhai();
+                        phimPhaiDangGiu = true;
+                        phimTraiDangGiu = false;
+                    } else {
+                        setFlipTrai();
+                        phimPhaiDangGiu = false;
+                        phimTraiDangGiu = true;
+                    }
+                } else {
+                    phimPhaiDangGiu = false;
+                    phimTraiDangGiu = false;
+                }
+
+                // Nếu chưa đến Y và mục tiêu Y cao hơn → nhảy lên
+                if (!daDenY && y_muc_tieu > y) {
+                    phimNhayDangGiu = true;
+                } else {
+                    phimNhayDangGiu = false;
+                }
+            }
+
+            if (daDenX && daDenY) {
+                ketThucDiChuyen();
+            }
+        }
         boolean giuPhimNgang = phimTraiDangGiu || phimPhaiDangGiu;
         // Nếu đang đứng trên đất và giữ trái/phải + giữ ↑ thì vào trạng thái bay ngang
         if (dangDungDat && giuPhimNgang && phimNhayDangGiu) {
@@ -1633,4 +1744,13 @@ public class NhanVat {
     public int getFrame() {
         return this.frame;
     }
+    private void ketThucDiChuyen() {
+        diChuyenDenMucTieu = false;
+        phimTraiDangGiu = false;
+        phimPhaiDangGiu = false;
+        phimNhayDangGiu = false;
+        vx = 0;
+        vy = 0;
+    }
+
 }

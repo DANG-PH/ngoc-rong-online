@@ -29,6 +29,19 @@ public class HUDClickHandler {
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
 
+        // === VÙNG Ô SKILL ===
+        int oskillW = 50;
+        int oskillH = 50;
+        float skillBaseX = 30;
+        float skillY = 25f;
+
+        for (int i = 0; i < 5; i++) {
+            float x_ve = skillBaseX + i * (65f);
+            if (x >= x_ve && x <= x_ve+oskillW && y >= skillY && y <= skillY+oskillH) {
+                veHUD.chonSkill(i);
+            }
+        }
+
         // === VÙNG Ô CHAT ===
         int ochatW = 60;
         int ochatH = 60;
