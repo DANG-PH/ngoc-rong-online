@@ -27,14 +27,32 @@ public class ThaoTac extends InputAdapter {
         if (hud.timeChoHopThe == 0 && !hud.dangHienPopup) {
             switch (keycode) {
                 case Input.Keys.LEFT:
+                    if (nhanVat.diChuyenDenMucTieu) {
+                        nhanVat.diChuyenDenMucTieu = false;
+                        nhanVat.phimTraiDangGiu = false;
+                        nhanVat.phimPhaiDangGiu = false;
+                        nhanVat.phimNhayDangGiu = false;
+                    }
                     nhanVat.diTrai();
                     nhanVat.setFlipTrai();
                     break;
                 case Input.Keys.RIGHT:
+                    if (nhanVat.diChuyenDenMucTieu) {
+                        nhanVat.diChuyenDenMucTieu = false;
+                        nhanVat.phimTraiDangGiu = false;
+                        nhanVat.phimPhaiDangGiu = false;
+                        nhanVat.phimNhayDangGiu = false;
+                    }
                     nhanVat.diPhai();
                     nhanVat.setFlipPhai();
                     break;
                 case Input.Keys.UP:
+                    if (nhanVat.diChuyenDenMucTieu) {
+                        nhanVat.diChuyenDenMucTieu = false;
+                        nhanVat.phimTraiDangGiu = false;
+                        nhanVat.phimPhaiDangGiu = false;
+                        nhanVat.phimNhayDangGiu = false;
+                    }
                     nhanVat.nhanNhay();
                     break;
 

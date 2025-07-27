@@ -59,9 +59,9 @@ public class NhanVat {
     private float demThoiGianBay = 0;
     private final float delayRoi = 15f;
 
-    private boolean phimTraiDangGiu = false;
-    private boolean phimPhaiDangGiu = false;
-    private boolean phimNhayDangGiu = false;
+    public boolean phimTraiDangGiu = false;
+    public boolean phimPhaiDangGiu = false;
+    public boolean phimNhayDangGiu = false;
 
     private boolean flipX = false;
 

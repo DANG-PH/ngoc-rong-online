@@ -21,6 +21,7 @@ import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.he_thong.TrangThaiChu;
 import com.dang.dragonboy.nhan_vat.TrangThai;
 import java.util.LinkedList;
+import com.dang.dragonboy.nhan_vat.NhanVat;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 import com.dang.dragonboy.xu_ly_map.HitboxDat;
 
 public class DeTu {
+    private NhanVat nhanVat;
     private Texture texAvtDeTu;
     private final float delayRoi = 15f;
     private final float trongLuc = -0.5f;
@@ -154,7 +156,6 @@ public class DeTu {
 
     private String avtdangmac;
 
-    public Texture ao_de_tu,quan_de_tu,gang_de_tu,giay_de_tu,rada_de_tu,iconct_de_tu;
     public Texture dau_dung, dau_chay;
     public Texture than_dung, than_nhay, than_roi;
     public Texture[] than_chay;
@@ -176,7 +177,6 @@ public class DeTu {
     private float timeChuyenHuong = 0f;
     private boolean diQuaPhai = true; // ban đầu chạy qua phải (theo flip ban đầu)
     boolean dangDoiFlip = false;
-    boolean vuaspawn = true;
     float timeCooldownDash = 0f;
     final float DASH_COOLDOWN = 2.0f; // 2 giây cooldown sau mỗi lần dash
     float x_truoc_dash;
@@ -189,15 +189,20 @@ public class DeTu {
     public float x_bien_mat,y_bien_mat;
     public boolean chuaLayToaDoBienMat = true;
 
+    float timeBayKoTienLaiGan = 0;
+    float khoangCachCu = -1;
+    private int soLanBiKet = 0;
+    private boolean camDiChuyenXungQuanh = false;
+
     public DeTu(float x, float y,boolean flipX,boolean diQuaPhai,String ten, String hanhtinh, Texture dau_dung, Texture dau_chay,
                 Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,
                 Texture chan_dung, Texture chan_nhay, Texture chan_roi, Texture[] chan_chay,
                 Texture than_bay, Texture chan_bay, Map<TrangThaiDeTu, List<DoLechModular>> lechTheoTrangThai,
-                Texture ao, Texture quan, Texture gang, Texture giay, Texture rada, Texture iconct) {
+                Texture ao, Texture quan, Texture gang, Texture giay, Texture rada, Texture iconct,NhanVat nhanVat) {
         shapeRenderer = new ShapeRenderer();
         layout = new GlyphLayout();
         this.ten = ten;
-//        this.hanhtinh = danhSachHanhTinh[MathUtils.random(danhSachHanhTinh.length - 1)];
+        this.nhanVat = nhanVat;
         this.hanhtinh = hanhtinh;
         this.sucManh = 1_499_999L;
         this.theLuc = 50;
@@ -1225,20 +1230,8 @@ public class DeTu {
         float dx = xSuPhu - this.x;
         float dy = ySuPhu - this.y;
         float khoangCach = (float) Math.sqrt(dx*dx+dy*dy);
-        boolean phimTraiDangGiu = dx < -80 || (khoangCach > 120 && dx < 0);
-        boolean phimPhaiDangGiu = dx > 80 || (khoangCach > 120 && dx > 0);
-        if (vuaspawn) {
-            if (!phimPhaiDangGiu && !phimTraiDangGiu) {
-                if (dx<0) {
-                    phimTraiDangGiu = true;
-                    phimPhaiDangGiu = false;
-                } else {
-                    phimPhaiDangGiu = true;
-                    phimTraiDangGiu = false;
-                }
-                vuaspawn = false;
-            }
-        }
+        boolean phimTraiDangGiu = dx < -80 || (khoangCach > 120 && dx < -5);
+        boolean phimPhaiDangGiu = dx > 80 || (khoangCach > 120 && dx > 5);
         boolean phimNhayDangGiu = dy > 10f && khoangCach > 30f;
 
         // Xử lý bay ngang nếu cần
@@ -1257,7 +1250,7 @@ public class DeTu {
             demThoiGianBay = 0;
         }
 
-        if (dangDungDat && !giuPhimNgang && phimNhayDangGiu && !daNhay) {
+        if (dangDungDat && !giuPhimNgang && phimNhayDangGiu && !daNhay  && Math.abs(dy) > 40f) {
             vy = 10f;
             dangDungDat = false;
             daNhay = true;
@@ -1271,6 +1264,11 @@ public class DeTu {
                 demThoiGianBay = 0;
             }
             if (dangBayNgang) {
+                if (Math.abs(x - khoangCachCu) < 5f) {
+                    timeBayKoTienLaiGan += delta;
+                } else {
+                    timeBayKoTienLaiGan = 0;
+                }
                 trangThai = TrangThaiDeTu.BAY_NGANG;
                 timeChoHienBay += delta;
                 // Di chuyển ngang
@@ -1284,7 +1282,7 @@ public class DeTu {
                     demThoiGianBay = 0;
                 } else {
                     vy = 0;
-                    if (!giuPhimNgang) {
+                    if (!giuPhimNgang && !nhanVat.phimTraiDangGiu && !nhanVat.phimPhaiDangGiu && !nhanVat.phimNhayDangGiu) {
                         demThoiGianBay++;
                     } else {
                         demThoiGianBay = 0; // reset nếu tiếp tục bay
@@ -1297,7 +1295,7 @@ public class DeTu {
             } else {
                 // Chưa bay ngang → bị rơi tự do
                 vy += trongLuc;
-
+                timeBayKoTienLaiGan = 0;
                 if (!diChuyenXungQuanh) {
                     if (phimTraiDangGiu) vx = -tocDoDiChuyen;
                     else if (phimPhaiDangGiu) vx = tocDoDiChuyen;
@@ -1308,14 +1306,14 @@ public class DeTu {
             daNhay = false;
             dangBayNgang = false;
             demThoiGianBay = 0;
-
+            timeBayKoTienLaiGan = 0;
             if (!diChuyenXungQuanh) {
                 if (phimTraiDangGiu) vx = -tocDoDiChuyen;
                 else if (phimPhaiDangGiu) vx = tocDoDiChuyen;
                 else vx = 0;
             }
         }
-
+        khoangCachCu = x;
         // Xử lý va chạm từng bước nhỏ
         int steps = 10;
         float dxStep = vx / steps;
@@ -1355,7 +1353,11 @@ public class DeTu {
             trangThai = TrangThaiDeTu.BAY_NGANG;
         } else if (!dangDungDat) {
             if (vy > 0) trangThai = TrangThaiDeTu.NHAY;
-            else trangThai = TrangThaiDeTu.ROI;
+            else {
+                if (!nhanVat.phimTraiDangGiu && !nhanVat.phimPhaiDangGiu && !nhanVat.phimNhayDangGiu) {
+                    trangThai = TrangThaiDeTu.ROI;
+                }
+            }
             timeChoHienBay = 0;
         }  else {
             if (vx != 0 || diChuyenXungQuanh) {
@@ -1373,11 +1375,11 @@ public class DeTu {
             }
         }
         if (trangThai == TrangThaiDeTu.BAY_NGANG) {
-            float tocDoHienTai = (float)Math.sqrt(vx * vx + vy * vy); // tốc độ tổng
-            float tocDoVay = Math.max(0.06f, 0.2f - tocDoHienTai * 0.02f);
+//            float tocDoHienTai = (float)Math.sqrt(vx * vx + vy * vy); // tốc độ tổng
+//            float tocDoVay = Math.max(0.06f, 0.2f - tocDoHienTai * 0.02f);
 
             timeVanBay += delta;
-            if (timeVanBay > tocDoVay) {
+            if (timeVanBay > 0.08f) {
                 frameVanBay = (frameVanBay + 1) % vanBayCauHinh.length;
                 timeVanBay = 0;
             }
@@ -1401,10 +1403,21 @@ public class DeTu {
             timeChuyenHuong = 0f;
         }
         // === 3.2 Kích hoạt AI chạy quanh sư phụ nếu đứng yên quá lâu ===
-        if (timeDungYen > 3f && !diChuyenXungQuanh) {
+        if (camDiChuyenXungQuanh) {
+            if (nhanVat.phimTraiDangGiu || nhanVat.phimPhaiDangGiu || nhanVat.phimNhayDangGiu) {
+                camDiChuyenXungQuanh = false;
+            }
+        }
+        if (timeDungYen > 3f && !diChuyenXungQuanh && !camDiChuyenXungQuanh) {
             diChuyenXungQuanh = true;
             if (!this.getTrangthai().equals("Về nhà")) {
-                setTinNhanDeTuChat("Sư phụ con sẽ bảo vệ người", 2f);
+                String[] text = {
+                    "Sư phụ con sẽ bảo vệ người",
+                    "Con sẽ không để ai làm hại sư phụ",
+                    "Đi tuần quanh đây một chút...",
+                    "Hình như có nguy hiểm gần đây..."
+                };
+                setTinNhanDeTuChat(text[MathUtils.random(text.length-1)], 2f);
             }
             diQuaPhai = (x < xSuPhu); // đúng hướng vị trí hiện tại
             timeChuyenHuong = 0f;
@@ -1430,30 +1443,85 @@ public class DeTu {
                     vx = 0;
                     timeChuyenHuong = 0;
                 } else {
-                    boolean matQuaySangPhai = !flipX;
-                    if ((huongDi > 0 && matQuaySangPhai) || (huongDi < 0 && !matQuaySangPhai)) {
-                        vx = huongDi * tocDoDiChuyen * 0.65f;
+                    // === Kiểm tra có đất phía trước và không đâm tường ===
+                    float xKiemTra = x + (diQuaPhai ? rong_de_tu + 5 : -5);
+                    float yKiemTra = y - 1; // ngay dưới chân
+                    boolean coDatPhiaTruoc = false;
+                    boolean biChanPhiaTruoc = false;
+
+                    for (HitboxDat dat : danhSachDat) {
+                        if (dat.vaChamTuTren(xKiemTra, yKiemTra, 1, 1, 0)) {
+                            coDatPhiaTruoc = true;
+                        }
+                        if (diQuaPhai && dat.vaChamBenPhai(x, y, rong_de_tu, cao_de_tu)) {
+                            biChanPhiaTruoc = true;
+                        } else if (!diQuaPhai && dat.vaChamBenTrai(x, y, rong_de_tu, cao_de_tu)) {
+                            biChanPhiaTruoc = true;
+                        }
+                    }
+                    if (!coDatPhiaTruoc && ySuPhu < y) {
+                        // Nếu đi được thì reset đếm kẹt
+                        soLanBiKet = 0;
+
+                        // Cho đi bình thường
+                        boolean matQuaySangPhai = !flipX;
+                        if ((huongDi > 0 && matQuaySangPhai) || (huongDi < 0 && !matQuaySangPhai)) {
+                            vx = huongDi * tocDoDiChuyen * 0.65f;
+                        } else {
+                            vx = -huongDi * tocDoDiChuyen * 0.65f;
+                        }
+                    } else if (!coDatPhiaTruoc || biChanPhiaTruoc) {
+                        // Nếu bị kẹt liên tục thì reset vòng chạy
+                        soLanBiKet++;
+
+                        if (soLanBiKet >= 2) {
+                            diChuyenXungQuanh = false;
+                            soLanBiKet = 0;
+                            camDiChuyenXungQuanh = true;
+                            String[] text = {
+                                "Con không qua được!",
+                                "Chỗ này bị chắn mất rồi...",
+                                "Hình như không đi tiếp được...",
+                                "Sư phụ, chỗ này bí lắm!"
+                            };
+                            setTinNhanDeTuChat(text[MathUtils.random(text.length-1)], 1.5f);
+                        } else {
+                            dangDoiFlip = true;
+                            vx = 0;
+                            timeChuyenHuong = 0;
+                        }
                     } else {
-                        vx = -huongDi * tocDoDiChuyen * 0.65f;
+                        // Nếu đi được thì reset đếm kẹt
+                        soLanBiKet = 0;
+
+                        // Cho đi bình thường
+                        boolean matQuaySangPhai = !flipX;
+                        if ((huongDi > 0 && matQuaySangPhai) || (huongDi < 0 && !matQuaySangPhai)) {
+                            vx = huongDi * tocDoDiChuyen * 0.65f;
+                        } else {
+                            vx = -huongDi * tocDoDiChuyen * 0.65f;
+                        }
                     }
                 }
             }
         }
         // Dash tức thời nếu cách quá xa và cooldown đã hồi
-        if (khoangCach > 150f && timeCooldownDash <= 0) {
+        if ((khoangCach > 150f || (timeBayKoTienLaiGan > 0.2f && nhanVat.getTrangThai() == TrangThai.DUNG_YEN)) && timeCooldownDash <= 0) {
             if (trangThai == TrangThaiDeTu.BAY_NGANG) {
                 trangThai = TrangThaiDeTu.ROI;
                 dangBayNgang = false;
             }
+            timeBayKoTienLaiGan = 0;
             float huong = Math.signum(dx); // hướng về phía sư phụ
             x_truoc_dash = x;
             y_truoc_dash = y;
             flip_truoc_dash = flipX;
             x += huong * 120f; // dịch chuyển 1 phát
-
-            flipX = huong < 0;
+            y = ySuPhu+10;
+            flipX = huong <= 0;
             if (!this.getTrangthai().equals("Về nhà")) {
-                setTinNhanDeTuChat("Đợi con với", 1f);;
+                String[] text = {"Con tới liền","Đợi con với"};
+                setTinNhanDeTuChat(text[MathUtils.random(text.length-1)], 1f);
             }
 
             // Kích hoạt lại cooldown

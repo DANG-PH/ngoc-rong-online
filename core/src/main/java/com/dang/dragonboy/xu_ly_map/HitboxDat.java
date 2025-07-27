@@ -25,7 +25,7 @@ public class HitboxDat {
             nx + nrong > x &&
             nx < x + width &&
             ny + ncao >= y &&
-            ny + ncao <= y + 5;
+            ny + ncao <= y + 7f;
     }
 
     public boolean vaChamBenPhai(float nx, float ny, float nrong, float ncao) {
