@@ -1392,7 +1392,7 @@ public class DeTu {
 //            float tocDoVay = Math.max(0.06f, 0.2f - tocDoHienTai * 0.02f);
 
             timeVanBay += delta;
-            if (timeVanBay > 0.06f) {
+            if (timeVanBay > 0.04f) {
                 frameVanBay = (frameVanBay + 1) % vanBayCauHinh.length;
                 timeVanBay = 0;
             }
@@ -1670,14 +1670,18 @@ public class DeTu {
                 batch.draw(thanVe, thanX + lechThanX * flipScale, thanY - 10.2f + lechThanY, thanW * flipScale, thanH);
                 if (timeChoHienBay>=0.5f) {
                     Texture cloud = vanBayCauHinh[frameVanBay];
-                    float cloudW = cloud.getWidth() * 0.5f;
-                    float cloudH = cloud.getHeight() * 0.5f;
+                    float tiLe = 0.5f;
+                    if (this.getSucManh()<1_500_000) {
+                        tiLe = 0.45f;
+                    }
+                    float cloudW = cloud.getWidth() * tiLe;
+                    float cloudH = cloud.getHeight() * tiLe;
                     float flipCloud = !flipX ? 1f : -1f;
 
                     batch.draw(
                         cloud,
-                        anchorX - (thanW - 30 + cloudW - 15) * flipScale,
-                        y + daoDong*1.5f - 5f,
+                        anchorX - (thanW - 30 + cloudW - 20) * flipScale,
+                        y + daoDong * 2f + chanH-(cloudH)/2f+(chanH)/2f-3f,
                         cloudW * flipCloud,
                         cloudH
                     );

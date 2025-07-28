@@ -123,7 +123,7 @@ public class CaiTrangOffset {
             }),
             lech(-1f, 7f, 1f, -29.5f),
             lech(-7f, 7.5f, 1f, -32f),
-            lech(0f, -5f, 1f, -21.8f)
+            lech(-23f, 20f, -20f, -19f)
         );
     }
 

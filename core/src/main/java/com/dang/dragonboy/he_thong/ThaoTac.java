@@ -186,7 +186,7 @@ public class ThaoTac extends InputAdapter {
             hud.vuaKeoHanhTrang = false;
             hud.vuaKeoHanhTrangDeTu = false;
         }
-        if (!hud.dangHienPopup && !hud.laClickTrenHUD(screenX, y) && !camera.vuaKeoCamera && !hud.vuaTatPopup && !hud.dangHienKhungChat) {
+        if (!hud.dangHienPopup && !hud.laClickTrenHUD(screenX, y) && !camera.vuaKeoCamera && !hud.vuaTatPopup && !hud.dangHienKhungChat && hud.timeChoHopThe == 0 ) {
             float viewportWidth = camera.camera.viewportWidth;
             float viewportHeight = camera.camera.viewportHeight;
 

@@ -176,6 +176,7 @@ public class ManHinhNhaBroly implements Screen {
         nhanVat = haidang;
         nhanVat.setTen(tenNhanVat); // set tên nhân vật trong nhanvat.java
         hudRenderer.setNhanVat(nhanVat);// load cái này để đổi avt theo ct
+        hudRenderer.setCamera(camManager);
         nhanVat.setHUD(hudRenderer);
         // load du lieu nguoi dung
         int[] capSkill = new int[9];
@@ -428,7 +429,6 @@ public class ManHinhNhaBroly implements Screen {
         batch.begin();
         hudRenderer.render(batch);
         hudRenderer.update(delta);
-        hudRenderer.renderPopup(batch);
         batch.end();
     }
     private void veNhanVatDung(SpriteBatch batch, float x, float y, Texture dau,Texture than, Texture chan ,float thanXOffset,float thanYOffset , float dauXOffset ,float dauYOffset) {

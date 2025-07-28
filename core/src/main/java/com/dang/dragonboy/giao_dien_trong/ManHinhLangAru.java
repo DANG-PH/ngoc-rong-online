@@ -105,7 +105,6 @@ public class ManHinhLangAru implements Screen {
         batch.begin();
         hud.update(delta); // cập nhật trạng thái HUD
         hud.render(batch);        // vẽ HUD
-        hud.renderPopup(batch);   // vẽ popup
         batch.end();
     }
 

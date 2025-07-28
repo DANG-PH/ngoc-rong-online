@@ -39,6 +39,7 @@ public class VeHUD {
     private HUDPopupHanhTrang popupHanhTrang;
 
     private DuLieuNguoiChoi duLieuNguoiChoi;
+    private QuanLyCamera camManager;
 
     public Texture thanhhpnv, thanhkinv;
     public TextureRegion thanhhpnv1, thanhkinv1;
@@ -164,6 +165,12 @@ public class VeHUD {
     public boolean dangHienTinNhanChat = false;
     public float timeHienTinNhan = 0;
 
+    public String tinNhanPet = "";
+    public boolean dangHienTinNhanPet = false;
+    public float timeHienTinNhanPet = 0;
+    private boolean daRoiPetXuong = false;
+    private boolean daDuocBayLen = false;
+
     public boolean dangHienGioiThieuGame = false;
     public float timeDoTre = 0;
     private boolean chuaNhanQuaLanDau = true;
@@ -245,6 +252,7 @@ public class VeHUD {
     LinkedList<TrangThaiChu> lichSuTrangThaiChu = new LinkedList<>();
 
     public Texture avtPetTheoHanhTinh;
+    public Texture[] framesPet = new Texture[2];
 
     public boolean daRanDomChatDeTu = false;
 
@@ -725,6 +733,8 @@ public class VeHUD {
             veGlow(shapeRenderer,clickX,clickY,timeGlow);
         }
         batch.begin();
+        renderPopup(batch);
+        renderPetChat(batch);
     }
 
     public void clickOChat() {
@@ -888,6 +898,21 @@ public class VeHUD {
                 daRanDomChatDeTu = false;
             }
         }
+        if (dangHienTinNhanPet) {
+            if (timeHienTinNhanPet == 2) {
+                daDuocBayLen = false;
+            }
+            timeHienTinNhanPet -= delta;
+            if (timeHienTinNhanPet <= 0) {
+                dangHienTinNhanPet = false;
+                timeHienTinNhanPet = 0;
+                daRoiPetXuong = false;
+                tinNhanPet = "";
+            }
+            if (timeHienTinNhanPet <= 0.3f  && !daDuocBayLen) {
+                daDuocBayLen = true;
+            }
+        }
         if (thoiGianClickOChat > 0) {
             thoiGianClickOChat -= delta;
             if (thoiGianClickOChat<=0){
@@ -958,6 +983,12 @@ public class VeHUD {
                                 scrollY = 0;
                                 hangTrangDangChon = -1;
                                 dangHopTheThuong = false;
+                            } else {
+                                if (delayHopTheBongTai > 0) {
+                                    dangHienTinNhanPet = true;
+                                    timeHienTinNhanPet = 2f;
+                                    tinNhanPet = "Vui lòng đợi "+(int)delayHopTheBongTai+" giây nữa";
+                                }
                             }
                         }
                         DangHienPopupThongTin1 = false;
@@ -1379,6 +1410,15 @@ public class VeHUD {
     public void setNhanVat(NhanVat nhanVat) {
         this.nhanVat = nhanVat;
         avtPetTheoHanhTinh = new Texture("nhanvat/npc/npc_pet/"+nhanVat.getHanhtinh()+"/avt.png");
+        if (!nhanVat.getTen().equals("ADMIN")) {
+            for (int i = 0; i < 2; i++) {
+                framesPet[i] = new Texture("nhanvat/npc/npc_pet/" + nhanVat.getHanhtinh() + "/" + (i + 1) + ".png");
+            }
+        } else {
+            for (int i = 0; i < 2; i++) {
+                framesPet[i] = new Texture("nhanvat/npc/npc_pet/" + "admin" + "/" + (i + 1) + ".png");
+            }
+        }
         if (texAvt != null) texAvt.dispose(); // nếu có thì giải phóng cũ
         String path = nhanVat.doiavatar();
         texAvt = new Texture(path); // load luôn tại đây
@@ -1394,6 +1434,55 @@ public class VeHUD {
     }
     public void renderPopup(SpriteBatch batch) {
         popupRenderer.renderPopup(batch);
+    }
+    public void renderPetChat(SpriteBatch batch) {
+        if (dangHienTinNhanPet) {
+            batch.setProjectionMatrix(camManager.camera.combined);
+            float offsetY;
+            if (timeHienTinNhanPet>=1.7f && !daRoiPetXuong) {
+                offsetY = (timeHienTinNhanPet-1.7f)/0.3f*Gdx.graphics.getHeight();
+            } else if (timeHienTinNhanPet<1.7f && timeHienTinNhanPet>0.3f) {
+                offsetY = 0;
+                daRoiPetXuong = true;
+            } else {
+                if (daDuocBayLen) {
+                    offsetY = (0.3f - timeHienTinNhanPet) / 0.3f * Gdx.graphics.getHeight();
+                } else {
+                    offsetY = 0;
+                }
+            }
+            layout.setText(
+                fontchat,
+                tinNhanPet,
+                new Color(0, 0, 0, 1),
+                180,
+                Align.center,
+                true
+            );
+            batch.end();
+            shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(1, 1, 1, 1);
+            float xOffset = nhanVat.getFlipX() ? 50f : -50f;
+            shapeRenderer.rect(nhanVat.getX() + (nhanVat.getRong() - 200) / 2f + xOffset, nhanVat.getY() + nhanVat.getCao() + 80 + offsetY, 200, 36 + layout.height);
+            shapeRenderer.end();
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            shapeRenderer.setColor(Color.BLACK);
+            for (int i = 0; i < 2; i++) {
+                shapeRenderer.rect(nhanVat.getX() + (nhanVat.getRong() - 200) / 2f - i + xOffset, nhanVat.getY() + nhanVat.getCao() + 80 - i + offsetY, 200 + i * 2, 36 + layout.height + i * 2);
+            }
+            shapeRenderer.end();
+            batch.begin();
+            float duoiX = nhanVat.getFlipX() ? nhanVat.getX() + nhanVat.getRong() + 20+50f : nhanVat.getX() - 20-50f;
+            float flipScale = nhanVat.getFlipX() ? -1f : 1f;
+            batch.draw(duoichat, duoiX, nhanVat.getY() + nhanVat.getCao() + 65 + offsetY, 16 * flipScale, 16);
+            fontchat.draw(batch, layout, nhanVat.getX() + (nhanVat.getRong() - 200) / 2f + xOffset + 10f, nhanVat.getY() + nhanVat.getCao() + 80 + 18f + layout.height + offsetY);
+            int index = ((int)(timeHienTinNhanPet * 10f)) % 2;
+            float daoDong = (float) Math.sin(nhanVat.thoiGianTichLuy) * 3f ;
+            batch.draw(framesPet[index],duoiX,nhanVat.getY() + nhanVat.getCao() + 10f + daoDong + offsetY,framesPet[index].getWidth()*0.5f* flipScale,framesPet[index].getHeight()*0.5f);
+            batch.setProjectionMatrix(camManager.uiCamera.combined);
+            shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+        }
     }
     public int getChucNangDangChon() {
         return chucNangDangChon;
@@ -1604,5 +1693,8 @@ public class VeHUD {
         }
 
         return false; // không trúng vùng nào
+    }
+    public void setCamera(QuanLyCamera camManager) {
+        this.camManager = camManager;
     }
 }

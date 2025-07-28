@@ -1059,7 +1059,7 @@ public class NhanVat {
     }
 
     public void capNhat() {
-        if (duLieuNguoiChoi.getKiHienTai()<=0) {
+        if (duLieuNguoiChoi.getKiHienTai()<=0 || veHUD.dangHienPopup) {
             if (dangBayNgang) {
                 phimPhaiDangGiu = false;
                 phimTraiDangGiu = false;
@@ -1400,16 +1400,16 @@ public class NhanVat {
                         timeVanBay = 0;
                     }
                     if (tenVanBay.equals("phuong_hoang_lua")) {
-                        duLieuNguoiChoi.tangKiHienTai(duLieuNguoiChoi.getKiToiDa()*0.001f);
-                        duLieuNguoiChoi.tangHpHienTai(duLieuNguoiChoi.getHpToiDa()*0.001f);
+                        duLieuNguoiChoi.tangKiHienTai(duLieuNguoiChoi.getKiToiDa()*0.0001f);
+                        duLieuNguoiChoi.tangHpHienTai(duLieuNguoiChoi.getHpToiDa()*0.00005f);
                     }
                 } else {
                     timeChoHienBay += Gdx.graphics.getDeltaTime();
-                    if (timeVanBay > 0.06f) {
+                    if (timeVanBay > 0.02f) {
                         frameVanBay = (frameVanBay + 1) % vanBayCauHinh.frames.length;
                         timeVanBay = 0;
                     }
-                    duLieuNguoiChoi.giamKiHienTai(duLieuNguoiChoi.getKiToiDa()*0.001f);
+                    duLieuNguoiChoi.giamKiHienTai(duLieuNguoiChoi.getKiToiDa()*0.0003f);
                 }
             }
 
@@ -1512,14 +1512,15 @@ public class NhanVat {
                 } else {
                     if (timeChoHienBay>=0.4f) {
                         Texture cloud = vanBayCauHinh.frames[frameVanBay];
-                        float cloudW = cloud.getWidth() * 0.5f;
-                        float cloudH = cloud.getHeight() * 0.5f;
+                        float tiLe = 0.55f;
+                        float cloudW = cloud.getWidth() * tiLe;
+                        float cloudH = cloud.getHeight() * tiLe;
                         float flipCloud = !flipX ? 1f : -1f;
 
                         batch.draw(
                             cloud,
-                            anchorX - (thanW - 30 + cloudW - 15) * flipScale,
-                            y + daoDong * 2f - 5f,
+                            anchorX - (thanW - 30 + cloudW - 20) * flipScale,
+                            y + daoDong * 2f+chanH-(cloudH)/2f+(chanH)/2f-3f,
                             cloudW * flipCloud,
                             cloudH
                         );
