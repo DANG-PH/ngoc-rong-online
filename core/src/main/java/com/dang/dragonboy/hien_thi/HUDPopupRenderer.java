@@ -192,13 +192,13 @@ public class HUDPopupRenderer {
                         veHUD.fontMotaSkill.draw(batch, layout, 3 + 70 + 12 + kc1 , y + 49 - 10);
                     }
                 }
-                if (i == 7 && veHUD.vanBayDau){
-                    layout.setText(veHUD.fontMotaSkill,"Cân đẩu vân");
-                    veHUD.fontMotaSkill.draw(batch, layout, 3 + 70 + 12, y + 49 - 10);
-                    layout.setText(veHUD.fontCapSKill,"Dùng để bay không tốn KI");
-                    veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
-                }
-                if (i == 7 && !veHUD.vanBayDau){
+//                if (i == 7 && veHUD.vanBayDau){
+//                    layout.setText(veHUD.fontMotaSkill,"Cân đẩu vân");
+//                    veHUD.fontMotaSkill.draw(batch, layout, 3 + 70 + 12, y + 49 - 10);
+//                    layout.setText(veHUD.fontCapSKill,"Dùng để bay không tốn KI");
+//                    veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
+//                }
+                if (i == 7 && item != null){
                     layout.setText(veHUD.fontCapSKill,item.getMoTa());
                     veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
                 }
@@ -1187,13 +1187,13 @@ public class HUDPopupRenderer {
                         veHUD.fontMotaSkill.draw(batch, layout, 3 + 70 + 12 + kc1 + 1020 - 350, y + 49 - 10);
                     }
                 }
-                if (i == 7 && veHUD.vanBayDau) {
-                    layout.setText(veHUD.fontMotaSkill, "Cân đẩu vân");
-                    veHUD.fontMotaSkill.draw(batch, layout, 3 + 70 + 12 + 1020 - 350, y + 49 - 10);
-                    layout.setText(veHUD.fontCapSKill, "Dùng để bay không tốn KI");
-                    veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + 1020 - 350, y + 49 - 30);
-                }
-                if (i == 7 && !veHUD.vanBayDau) {
+//                if (i == 7 && veHUD.vanBayDau) {
+//                    layout.setText(veHUD.fontMotaSkill, "Cân đẩu vân");
+//                    veHUD.fontMotaSkill.draw(batch, layout, 3 + 70 + 12 + 1020 - 350, y + 49 - 10);
+//                    layout.setText(veHUD.fontCapSKill, "Dùng để bay không tốn KI");
+//                    veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + 1020 - 350, y + 49 - 30);
+//                }
+                if (i == 7 && item != null) {
                     layout.setText(veHUD.fontCapSKill, item.getMoTa());
                     veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + 1020 - 350, y + 49 - 30);
                 }

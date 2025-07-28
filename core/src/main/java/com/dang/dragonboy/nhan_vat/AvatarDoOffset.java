@@ -17,7 +17,7 @@ public class AvatarDoOffset {
             lechDau(3.3f, -9f,3.3f, -9f,3.3f, -9f,3.3f, -9f,3.3f, -9f),
             lechDau(3f, -23.5f),
             lechDau(0.2f, -31f),
-            lechDau(-0.3f, -15.5f)
+            lechDau(12f, -22f)
         ));
         OFFSET_AVATAR.put("Krillin_base", taoLech(
             lechDau(-0.3f, -15.5f),
@@ -48,7 +48,7 @@ public class AvatarDoOffset {
             lechThan(1.5f, 5.2f,1.5f, 5.2f,1.5f, 5.2f,1.5f, 5.2f,1.5f, 5.2f ),
             lechThan(-4f, 6f),
             lechThan(-6f, 7f ),
-            lechThan(0f, 0f)
+            lechThan(5f, 8f)
         ));
 
         OFFSET_AO.put("set_cam", taoLech(

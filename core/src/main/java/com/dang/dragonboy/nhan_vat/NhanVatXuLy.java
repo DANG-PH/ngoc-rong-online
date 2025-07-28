@@ -16,14 +16,6 @@ public class NhanVatXuLy {
         String itemvanbay = "vatpham/vanbay/";
         String itemglt = "vatpham/vatphamgame/giapluyentap/";
 
-//        Texture itemao = new Texture(itemdo+"aoquan/traidat/set_cam/ao.png");
-//        Texture itemquan = new Texture(itemdo+"aoquan/traidat/set_cam/quan.png");
-//        Texture gang = new Texture(itemdo+"gang/traidat/gang1.png");
-//        Texture giay = new Texture(itemdo+"giay/traidat/giay1.png");
-//        Texture rada = new Texture(itemdo+"rada/rada1.png");
-//        Texture iconct = new Texture(path + "daudung.png");
-//        Texture giaplt = new Texture(itemglt+"gltc1.png");
-        Texture vanbay = new Texture(itemvanbay+"candauvan/candauvan.png");
         Texture dau_dung = new Texture(path + "daudung.png");
         Texture dau_chay = new Texture(path + "dauchay.png");
 
@@ -37,7 +29,7 @@ public class NhanVatXuLy {
             new Texture(path + "thanchay (4).png"),
             new Texture(path + "thanchay (5).png")
         };
-        Texture than_bay = new Texture(path + "thanbay.png");
+        Texture than_bay = new Texture(path + "thanbay1.png");
 
         Texture chan_dung = new Texture(path + "chandung.png");
         Texture chan_nhay = new Texture(path + "channhay.png");
@@ -49,7 +41,7 @@ public class NhanVatXuLy {
             new Texture(path + "chanchay (4).png"),
             new Texture(path + "chanchay (5).png")
         };
-        Texture chan_bay = new Texture(path + "chanbay.png");
+        Texture chan_bay = new Texture(path + "chanbay1.png");
 
         Map<TrangThai, List<DoLechModular>> lech = CaiTrangOffset.getOffset(tenCaiTrang);
         if (!tenCaiTrang.equals("vegito") && !tenCaiTrang.equals("gotenks")) {
@@ -63,7 +55,7 @@ public class NhanVatXuLy {
             than_bay, chan_bay,
             lech,
             avt,
-            null,null,null,null,null,null,null,vanbay
+            null,null,null,null,null,null,null,null
         );
     }
 
@@ -79,15 +71,6 @@ public class NhanVatXuLy {
         String itemvanbay = "vatpham/vanbay/";
         String itemglt = "vatpham/vatphamgame/giapluyentap/";
 
-//        Texture itemao = new Texture(itemdo+"aoquan/traidat/set_cam/ao.png");
-//        Texture itemquan = new Texture(itemdo+"aoquan/traidat/set_cam/quan.png");
-//        Texture gang = new Texture(itemdo+"gang/traidat/gang1.png");
-//        Texture giay = new Texture(itemdo+"giay/traidat/giay1.png");
-//        Texture rada = new Texture(itemdo+"rada/rada1.png");
-//        Texture iconct = new Texture(avatarPath + "daudung.png");
-//        Texture giaplt = new Texture(itemglt+"gltc1.png");
-        Texture vanbay = new Texture(itemvanbay+"candauvan/candauvan.png");
-
         Texture dau_dung = new Texture(avatarPath + "daudung.png");
         Texture dau_chay = new Texture(avatarPath + "dauchay.png");
 
@@ -101,7 +84,7 @@ public class NhanVatXuLy {
             new Texture(aoPath + "thanchay (4).png"),
             new Texture(aoPath + "thanchay (5).png")
         };
-        Texture than_bay = new Texture(aoPath + "thanbay.png");
+        Texture than_bay = new Texture(aoPath + "thanbay1.png");
 
         Texture chan_dung = new Texture(quanPath + "chandung.png");
         Texture chan_nhay = new Texture(quanPath + "channhay.png");
@@ -113,7 +96,7 @@ public class NhanVatXuLy {
             new Texture(quanPath + "chanchay (4).png"),
             new Texture(quanPath + "chanchay (5).png")
         };
-        Texture chan_bay = new Texture(quanPath + "chanbay.png");
+        Texture chan_bay = new Texture(quanPath + "chanbay1.png");
 
         Map<TrangThai, List<DoLechModular>> lech = AvatarDoOffset.getOffset(avatar, ao, quan);
         dangMacCaiTrang = false;
@@ -129,7 +112,7 @@ public class NhanVatXuLy {
             than_bay, chan_bay,
             lech,
             avt,
-            null,null,null,null,null,null,null,vanbay
+            null,null,null,null,null,null,null,null
         );
     }
 

@@ -174,7 +174,6 @@ public class ManHinhNhaBroly implements Screen {
             hanhtinh,nhanvat
         );
         nhanVat = haidang;
-        nhanVat.doiVanBay("candauvan");
         nhanVat.setTen(tenNhanVat); // set tên nhân vật trong nhanvat.java
         hudRenderer.setNhanVat(nhanVat);// load cái này để đổi avt theo ct
         nhanVat.setHUD(hudRenderer);

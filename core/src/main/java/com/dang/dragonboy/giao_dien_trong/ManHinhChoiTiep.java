@@ -164,7 +164,7 @@ public class ManHinhChoiTiep implements Screen {
             config.than_bay, config.chan_bay,
             config.lechMap,
             config.avt,
-            null,null,null,null,null,null,null,config.vanbay,
+            null,null,null,null,null,null,null,null,
             6,
             hanhtinh,nhanvat
         );
@@ -184,7 +184,6 @@ public class ManHinhChoiTiep implements Screen {
 //                c2.avt
 //            );
 //        }
-        nhanVat.doiVanBay("candauvan");
         nhanVat.setTen(tenNhanVat); // set tên nhân vật trong nhanvat.java
         hudRenderer.setNhanVat(nhanVat);// load cái này để đổi avt theo ct
         nhanVat.setHUD(hudRenderer);

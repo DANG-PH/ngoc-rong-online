@@ -240,6 +240,7 @@ public class VeHUD {
     public String trangthaide;
     public boolean renderDeTu = false;
     private float timeDoiDauThan = 0f;
+    private float timeQuanTamSuPhu = 0f;
 
     LinkedList<TrangThaiChu> lichSuTrangThaiChu = new LinkedList<>();
 
@@ -550,6 +551,10 @@ public class VeHUD {
                 duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Sư phụ ơi con cần đậu thần",2f);
                 timeDoiDauThan = 12f;
             }
+            if (duLieuNguoiChoi.getKiHienTai()==0 && timeQuanTamSuPhu == 0 && !duLieuNguoiChoi.deTu.getTrangthai().equals("Về nhà")) {
+                duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Sư phụ ơi người hết KI rồi",4f);
+                timeQuanTamSuPhu = 30f;
+            }
             int widthDeTu = (int) (thanhtheluc2.getWidth() * (duLieuNguoiChoi.deTu.getTheLuc() / 100f));
             thanhtheluc1 = new TextureRegion(thanhtheluc2, 0, 0, widthDeTu, thanhtheluc2.getHeight());
         }
@@ -774,6 +779,12 @@ public class VeHUD {
             timeDoiDauThan -= delta;
             if (timeDoiDauThan <= 0) {
                 timeDoiDauThan = 0;
+            }
+        }
+        if (timeQuanTamSuPhu > 0) {
+            timeQuanTamSuPhu -= delta;
+            if (timeQuanTamSuPhu <= 0) {
+                timeQuanTamSuPhu = 0;
             }
         }
         if (timeGlow > 0) {
@@ -1181,6 +1192,9 @@ public class VeHUD {
                             danhSach.remove(hangTrangDangChon - 8);
                         } else {
                             switch (hangTrangDangChon) {
+                                case 7:
+                                    xulyitem.goVanBay(true);
+                                    break;
                                 case 6:
                                     xulyitem.goGiapLuyenTap(true);
                                     break;

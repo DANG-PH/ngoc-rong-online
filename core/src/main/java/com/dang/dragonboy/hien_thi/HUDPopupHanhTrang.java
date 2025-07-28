@@ -635,61 +635,47 @@ public class HUDPopupHanhTrang {
             }
         }
         if (veHUD.itemm!=null) {
-            if (oHanhTrangDangChon != 7) {
-                for (int i = 0; i < 2; i++) {
-                    float nutX = 1 + i * 120 + xCongThem;
-                    float nutY = y - 115;
-                    if (veHUD.nuthanhtrangchon == i + 1) {
-                        Texture nutVe = veHUD.nutClickTimer3 > 0 ? veHUD.nutvuongclick : veHUD.nutvuong;
-                        batch.draw(nutVe, nutX, nutY, 114, 114);
-                    } else {
-                        batch.draw(veHUD.nutvuong, nutX, nutY, 114, 114);
-                    }
-
-                    veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
-                    if (i == 0) {
-                        if (oHanhTrangDangChon < 8) {
-                            layout.setText(veHUD.font, "Lấy ra");
-                            veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 52);
-                        } else {
-                            layout.setText(veHUD.font, "Sử dụng");
-                            veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 52);
-                        }
-                    } else {
-                        layout.setText(veHUD.font, "Bỏ ra");
-                        veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 52);
-                    }
-                }
-                if  (oHanhTrangDangChon >= 8 &&
-                    (veHUD.itemm.getLoai() == LoaiItem.AO ||
-                        veHUD.itemm.getLoai() == LoaiItem.QUAN ||
-                        veHUD.itemm.getLoai() == LoaiItem.GIAY ||
-                        veHUD.itemm.getLoai() == LoaiItem.GANG ||
-                        veHUD.itemm.getLoai() == LoaiItem.CAITRANG ||
-                        veHUD.itemm.getLoai() == LoaiItem.AVATAR ||
-                        veHUD.itemm.getLoai() == LoaiItem.RADA) && duLieuNguoiChoi.coDeTu()) {
-                    float nutX = 1 + 2 * 120 + xCongThem;
-                    float nutY = y - 115;
-                    if (veHUD.nuthanhtrangchon == 4) {
-                        Texture nutVe = veHUD.nutClickTimer3 > 0 ? veHUD.nutvuongclick : veHUD.nutvuong;
-                        batch.draw(nutVe, nutX, nutY, 114, 114);
-                    } else {
-                        batch.draw(veHUD.nutvuong, nutX, nutY, 114, 114);
-                    }
-                    layout.setText(veHUD.font, "Cho đệ tử");
-                    veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 52);
-                }
-            } else {
-                float nutX = 1 + xCongThem ;
+            for (int i = 0; i < 2; i++) {
+                float nutX = 1 + i * 120 + xCongThem;
                 float nutY = y - 115;
-                if (veHUD.nuthanhtrangchon == 3) {
+                if (veHUD.nuthanhtrangchon == i + 1) {
                     Texture nutVe = veHUD.nutClickTimer3 > 0 ? veHUD.nutvuongclick : veHUD.nutvuong;
                     batch.draw(nutVe, nutX, nutY, 114, 114);
                 } else {
                     batch.draw(veHUD.nutvuong, nutX, nutY, 114, 114);
                 }
+
                 veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
-                layout.setText(veHUD.font, "Đóng");
+                if (i == 0) {
+                    if (oHanhTrangDangChon < 8) {
+                        layout.setText(veHUD.font, "Lấy ra");
+                        veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 52);
+                    } else {
+                        layout.setText(veHUD.font, "Sử dụng");
+                        veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 52);
+                    }
+                } else {
+                    layout.setText(veHUD.font, "Bỏ ra");
+                    veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 52);
+                }
+            }
+            if  (oHanhTrangDangChon >= 8 &&
+                (veHUD.itemm.getLoai() == LoaiItem.AO ||
+                    veHUD.itemm.getLoai() == LoaiItem.QUAN ||
+                    veHUD.itemm.getLoai() == LoaiItem.GIAY ||
+                    veHUD.itemm.getLoai() == LoaiItem.GANG ||
+                    veHUD.itemm.getLoai() == LoaiItem.CAITRANG ||
+                    veHUD.itemm.getLoai() == LoaiItem.AVATAR ||
+                    veHUD.itemm.getLoai() == LoaiItem.RADA) && duLieuNguoiChoi.coDeTu()) {
+                float nutX = 1 + 2 * 120 + xCongThem;
+                float nutY = y - 115;
+                if (veHUD.nuthanhtrangchon == 4) {
+                    Texture nutVe = veHUD.nutClickTimer3 > 0 ? veHUD.nutvuongclick : veHUD.nutvuong;
+                    batch.draw(nutVe, nutX, nutY, 114, 114);
+                } else {
+                    batch.draw(veHUD.nutvuong, nutX, nutY, 114, 114);
+                }
+                layout.setText(veHUD.font, "Cho đệ tử");
                 veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 52);
             }
         }

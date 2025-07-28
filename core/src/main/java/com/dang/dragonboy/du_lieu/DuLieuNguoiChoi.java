@@ -467,21 +467,45 @@ public class DuLieuNguoiChoi {
         this.HpHienTai += HpCongThem;
         this.HpHienTai = Math.min(HpHienTai, HpHopThe);
     }
-    public void tangHpPtHienTai(int HpCongThem){
+    public void tangHpPtHienTai(float HpCongThem){
         this.HpHienTai *= (1f+HpCongThem/100f);
         this.HpHienTai = Math.min(HpHienTai,HpNhanVat);
+    }
+    public void tangHpHienTai(float HpCongThem){
+        this.HpHienTai += HpCongThem;
+        this.HpHienTai = Math.min(HpHienTai,HpNhanVat);
+    }
+    public void giamHpPtHienTai(float HpCongThem){
+        this.HpHienTai /= (1f+HpCongThem/100f);
+        this.HpHienTai = Math.max(HpHienTai,0);
+    }
+    public void giamHpHienTai(float Hp){
+        this.HpHienTai -= Hp;
+        this.HpHienTai = Math.max(HpHienTai,0);
     }
     public void tangKi(int KiCongThem){
         this.KiNhanVat += KiCongThem;
     }
-    public void tangKiPt(int KiCongThem){ this.KiNhanVat *= (1f+KiCongThem/100f); }
+    public void tangKiPt(float KiCongThem){ this.KiNhanVat *= (1f+KiCongThem/100f); }
     public void tangKiHienTai(int KiCongThem){
         this.KiHienTai += KiCongThem;
         this.KiHienTai = Math.min(KiHienTai,KiHopThe);
     }
-    public void tangKiPtHienTai(int KiCongThem){
+    public void tangKiPtHienTai(float KiCongThem){
         this.KiHienTai *= (1f+KiCongThem/100f);
         this.KiHienTai = Math.min(KiHienTai,KiNhanVat);
+    }
+    public void giamKiPtHienTai(float KiCongThem){
+        this.KiHienTai /= (1f+KiCongThem/100f);
+        this.KiHienTai = Math.max(KiHienTai,0);
+    }
+    public void tangKiHienTai(float KiCongThem){
+        this.KiHienTai += KiCongThem;
+        this.KiHienTai = Math.min(KiHienTai,KiNhanVat);
+    }
+    public void giamKiHienTai(float Ki){
+        this.KiHienTai -= Ki;
+        this.KiHienTai = Math.max(KiHienTai,0);
     }
     public void tangSucDanh(int SucDanhCongThem){
         this.SucDanhNhanVat += SucDanhCongThem;
@@ -536,7 +560,7 @@ public class DuLieuNguoiChoi {
     public void giamKi(int Ki){
         this.KiNhanVat -= Ki;
     }
-    public void giamKiPt(int Ki){
+    public void giamKiPt(float Ki){
         this.KiNhanVat /= (1f+Ki/100f);
     }
     public void giamSucDanh(int SucDanh){

@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Align;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
+import com.dang.dragonboy.du_lieu.TrangThaiDeTu;
 import com.dang.dragonboy.nhan_vat.van_bay.VanBayCauHinh;
 import com.dang.dragonboy.hien_thi.VeHUD;
 import java.util.List;
@@ -70,11 +71,13 @@ public class NhanVat {
     private float lechThanX = 0f, lechThanY = 0f;
     private float lechDauX = 0f, lechDauY = 0f;
 
-    private String tenVanBay = "candauvan";
+    private String tenVanBay = "base";
 
     private VanBayCauHinh vanBayCauHinh;
     private int frameVanBay = 0;
     private float timeVanBay = 0f;
+
+    public boolean dangMangVanBay = false;
 
     private float gioiHanXMax;
     private float gioiHanYMax;
@@ -198,6 +201,8 @@ public class NhanVat {
     private Texture[] clickdichuyen = new Texture[4];
     private float thoiGianHienDiemCanDen = 0; // đếm thời gian từ lúc click
     private boolean dangHienDiemCanDen = false;
+
+    private float timeChoHienBay;
 
     public void setToaDoMucTieu(float x, float y) {
         this.x_muc_tieu = x;
@@ -974,7 +979,7 @@ public class NhanVat {
         this.capcaydau = capcaydau;
         this.hanhtinh = hanhtinh;
         this.nhanvat = nhanvat;
-        taiAnhVanBay("candauvan"); // tùy chọn
+        taiAnhVanBay("base"); // tùy chọn
         shapeRenderer = new ShapeRenderer();
         layout = new GlyphLayout();
         for (int i = 0; i < 4;i++) {
@@ -1013,12 +1018,6 @@ public class NhanVat {
 
     public String doiavatar(){
         return avt;
-    }
-    public void dispose() {
-        if (avtTexture != null) {
-            avtTexture.dispose();
-            avtTexture = null;
-        }
     }
     public void diTrai() {
         phimTraiDangGiu = true;
@@ -1060,6 +1059,13 @@ public class NhanVat {
     }
 
     public void capNhat() {
+        if (duLieuNguoiChoi.getKiHienTai()<=0) {
+            if (dangBayNgang) {
+                phimPhaiDangGiu = false;
+                phimTraiDangGiu = false;
+                phimNhayDangGiu = false;
+            }
+        }
         if (!diChuyenDenMucTieu) {
             daNhayDeLenY = false; // reset nếu không di chuyển nữa
         }
@@ -1138,7 +1144,7 @@ public class NhanVat {
         }
         boolean giuPhimNgang = phimTraiDangGiu || phimPhaiDangGiu;
         // Nếu đang đứng trên đất và giữ trái/phải + giữ ↑ thì vào trạng thái bay ngang
-        if (dangDungDat && giuPhimNgang && phimNhayDangGiu) {
+        if (dangDungDat && giuPhimNgang && phimNhayDangGiu && duLieuNguoiChoi.getKiHienTai()>0) {
             vy = 5f; // nhảy nhẹ lên
             dangDungDat = false;
             daNhay = true;
@@ -1153,7 +1159,7 @@ public class NhanVat {
             daNhay = true;
         }
         if (!dangDungDat) {
-            if (giuPhimNgang && !dangBayNgang && vy < 0) {
+            if (giuPhimNgang && !dangBayNgang && vy < 0 && duLieuNguoiChoi.getKiHienTai()>0) {
                 dangBayNgang = true;
                 vy = 0; // giữ Y hiện tại khi chuyển sang bay ngang
                 demThoiGianBay = 0;
@@ -1206,12 +1212,14 @@ public class NhanVat {
             } else {
                 trangThai = TrangThai.ROI;
             }
+            timeChoHienBay = 0;
         } else {
             if (vx != 0) {
                 trangThai = TrangThai.DI_CHUYEN;
             } else {
                 trangThai = TrangThai.DUNG_YEN;
             }
+            timeChoHienBay = 0;
         }
         int steps = 10;
         float dx = vx / steps;
@@ -1293,20 +1301,34 @@ public class NhanVat {
 
     private void taiAnhVanBay(String ten) {
         this.tenVanBay = ten;
-        Texture[] frames = new Texture[] {
-            new Texture("vatpham/vanbay/" + ten + "/" + ten + "1.png"),
-            new Texture("vatpham/vanbay/" + ten + "/" + ten + "2.png"),
-            new Texture("vatpham/vanbay/" + ten + "/" + ten + "3.png"),
-            new Texture("vatpham/vanbay/" + ten + "/" + ten + "4.png")
-        };
+        Texture[] frames;
+        if (!ten.equals("base")) {
+            frames = new Texture[]{
+                new Texture("vatpham/vanbay/" + ten + "/" + ten + "1.png"),
+                new Texture("vatpham/vanbay/" + ten + "/" + ten + "2.png"),
+                new Texture("vatpham/vanbay/" + ten + "/" + ten + "3.png"),
+                new Texture("vatpham/vanbay/" + ten + "/" + ten + "4.png")
+            };
+        } else {
+            frames = new Texture[] {
+                new Texture("hieuung/hieuunggame/aura_bay/" + "1.png"),
+                new Texture("hieuung/hieuunggame/aura_bay/" + "2.png"),
+                new Texture("hieuung/hieuunggame/aura_bay/" + "3.png"),
+                new Texture("hieuung/hieuunggame/aura_bay/" + "4.png")
+            };
+        }
 
         switch (ten) {
             case "phuong_hoang_lua":
                 vanBayCauHinh = new VanBayCauHinh(frames, 0.5f, false, 0f, -40f);
                 break;
             case "candauvan":
-            default:
                 vanBayCauHinh = new VanBayCauHinh(frames, 0.1f, false, -1f, -20f);
+                break;
+            case "base":
+                vanBayCauHinh = new VanBayCauHinh(frames, 0.5f, false, -50f, -20f);
+                break;
+            default:
                 break;
         }
     }
@@ -1358,25 +1380,50 @@ public class NhanVat {
             }
         }
         if (veHUD.timeChoHopThe == 0 && duDieuKien) {
-            float daoDong = (trangThai == TrangThai.DUNG_YEN || trangThai == TrangThai.BAY_NGANG) ? (float) Math.sin(thoiGian) * 1.08f : 0f;
-
+            float daoDong;
+            if (dangMangVanBay) {
+                daoDong = (trangThai == TrangThai.DUNG_YEN || trangThai == TrangThai.BAY_NGANG) ? (float) Math.sin(thoiGian) * 1.08f : 0f;
+            } else {
+                daoDong = (trangThai == TrangThai.DUNG_YEN) ? (float) Math.sin(thoiGian) * 1.08f
+                    : (trangThai == TrangThai.BAY_NGANG) ? (float) Math.sin(thoiGian) * 5f
+                    : 0f;
+            }
             Texture chanVe = chan_dung;
             Texture thanVe = than_dung;
             Texture dauVe = dau_dung;
 
             if (trangThai == TrangThai.BAY_NGANG) {
                 timeVanBay += Gdx.graphics.getDeltaTime();
-                if (timeVanBay > 0.12f) {
-                    frameVanBay = (frameVanBay + 1) % vanBayCauHinh.frames.length;
-                    timeVanBay = 0;
+                if (dangMangVanBay) {
+                    if (timeVanBay > 0.12f) {
+                        frameVanBay = (frameVanBay + 1) % vanBayCauHinh.frames.length;
+                        timeVanBay = 0;
+                    }
+                    if (tenVanBay.equals("phuong_hoang_lua")) {
+                        duLieuNguoiChoi.tangKiHienTai(duLieuNguoiChoi.getKiToiDa()*0.001f);
+                        duLieuNguoiChoi.tangHpHienTai(duLieuNguoiChoi.getHpToiDa()*0.001f);
+                    }
+                } else {
+                    timeChoHienBay += Gdx.graphics.getDeltaTime();
+                    if (timeVanBay > 0.06f) {
+                        frameVanBay = (frameVanBay + 1) % vanBayCauHinh.frames.length;
+                        timeVanBay = 0;
+                    }
+                    duLieuNguoiChoi.giamKiHienTai(duLieuNguoiChoi.getKiToiDa()*0.001f);
                 }
             }
 
             switch (trangThai) {
                 case BAY_NGANG:
-                    chanVe = chan_bay;
-                    thanVe = than_bay;
-                    dauVe = dau_dung;
+                    if (dangMangVanBay) {
+                        chanVe = chan_dung;
+                        thanVe = than_dung;
+                        dauVe = dau_dung;
+                    } else {
+                        chanVe = chan_bay;
+                        thanVe = than_bay;
+                        dauVe = dau_dung;
+                    }
                     break;
                 case DI_CHUYEN:
                     timeChay += Gdx.graphics.getDeltaTime(); // tăng thời gian theo deltaTime
@@ -1402,7 +1449,7 @@ public class NhanVat {
                     break;
             }
             // đúng kiểu dữ liệu 2 vế và gán class LechModular để có thể truy cập thuộc tính
-            DoLechModular lech = layLech(lechTheoTrangThai, trangThai, frame);
+            DoLechModular lech = layLech(lechTheoTrangThai, trangThai, frame,dangMangVanBay);
             lechThanX = lech.lechThanX;
             lechThanY = lech.lechThanY;
             lechDauX = lech.lechDauX;
@@ -1418,28 +1465,66 @@ public class NhanVat {
             // Flip bằng scale âm nếu cần
             float flipScale = flipX ? -1f : 1f;
             float anchorX = flipX ? x + chanW : x;
+            if (trangThai != TrangThai.BAY_NGANG) {
+                batch.draw(chanVe, anchorX, y, chanW * flipScale, chanH);
 
-            batch.draw(chanVe, anchorX, y, chanW * flipScale, chanH);
+                float thanX = anchorX + (chanW / 2f - thanW / 2f) * flipScale;
+                float thanY = y + chanH + daoDong;
+                float dauX = anchorX + (chanW / 2f - dauW / 2f) * flipScale;
+                float dauY = thanY + thanH;
+                batch.draw(dauVe, dauX + lechDauX * flipScale, dauY + lechDauY, dauW * flipScale, dauH);
+                batch.draw(thanVe, thanX + lechThanX * flipScale, thanY - 10.2f + lechThanY, thanW * flipScale, thanH);
+            } else {
+                if (!dangMangVanBay) {
+                    batch.draw(chanVe, anchorX - (thanW - 30) * flipScale, y + chanH + daoDong - 10, chanW * flipScale, chanH);
 
-            float thanX = anchorX + (chanW / 2f - thanW / 2f) * flipScale;
-            float thanY = y + chanH + daoDong;
-            float dauX = anchorX + (chanW / 2f - dauW / 2f) * flipScale;
-            float dauY = thanY + thanH;
-            batch.draw(dauVe, dauX + lechDauX * flipScale, dauY + lechDauY, dauW * flipScale, dauH);
-            batch.draw(thanVe, thanX + lechThanX * flipScale, thanY - 10.2f + lechThanY, thanW * flipScale, thanH);
+                    float thanX = anchorX + (chanW / 2f - thanW / 2f) * flipScale;
+                    float thanY = y + chanH + daoDong;
+                    float dauX = anchorX + (chanW / 2f - dauW / 2f) * flipScale;
+                    float dauY = thanY + thanH;
+                    batch.draw(dauVe, dauX + lechDauX * flipScale, dauY + lechDauY, dauW * flipScale, dauH);
+                    batch.draw(thanVe, thanX + lechThanX * flipScale, thanY - 10.2f + lechThanY, thanW * flipScale, thanH);
+                } else {
+                    batch.draw(chanVe, anchorX, y, chanW * flipScale, chanH);
+
+                    float thanX = anchorX + (chanW / 2f - thanW / 2f) * flipScale;
+                    float thanY = y + chanH + daoDong;
+                    float dauX = anchorX + (chanW / 2f - dauW / 2f) * flipScale;
+                    float dauY = thanY + thanH;
+                    batch.draw(dauVe, dauX + lechDauX * flipScale, dauY + lechDauY, dauW * flipScale, dauH);
+                    batch.draw(thanVe, thanX + lechThanX * flipScale, thanY - 10.2f + lechThanY, thanW * flipScale, thanH);
+                }
+            }
             if (trangThai == TrangThai.BAY_NGANG) {
-                Texture cloud = vanBayCauHinh.frames[frameVanBay];
-                float cloudW = cloud.getWidth() * vanBayCauHinh.tile;
-                float cloudH = cloud.getHeight() * vanBayCauHinh.tile;
-                float flipCloud = (flipX == vanBayCauHinh.flipVanBay) ? 1f : -1f;
+                if (dangMangVanBay) {
+                    Texture cloud = vanBayCauHinh.frames[frameVanBay];
+                    float cloudW = cloud.getWidth() * vanBayCauHinh.tile;
+                    float cloudH = cloud.getHeight() * vanBayCauHinh.tile;
+                    float flipCloud = (flipX == vanBayCauHinh.flipVanBay) ? 1f : -1f;
 
-                batch.draw(
-                    cloud,
-                    anchorX + (chanW / 2f - cloudW / 2f + vanBayCauHinh.offsetX) * flipCloud,
-                    y + vanBayCauHinh.offsetY,
-                    cloudW * flipCloud,
-                    cloudH
-                );
+                    batch.draw(
+                        cloud,
+                        anchorX + (chanW / 2f - cloudW / 2f + vanBayCauHinh.offsetX) * flipCloud,
+                        y + vanBayCauHinh.offsetY,
+                        cloudW * flipCloud,
+                        cloudH
+                    );
+                } else {
+                    if (timeChoHienBay>=0.4f) {
+                        Texture cloud = vanBayCauHinh.frames[frameVanBay];
+                        float cloudW = cloud.getWidth() * 0.5f;
+                        float cloudH = cloud.getHeight() * 0.5f;
+                        float flipCloud = !flipX ? 1f : -1f;
+
+                        batch.draw(
+                            cloud,
+                            anchorX - (thanW - 30 + cloudW - 15) * flipScale,
+                            y + daoDong * 2f - 5f,
+                            cloudW * flipCloud,
+                            cloudH
+                        );
+                    }
+                }
             }
             if (veHUD.dangHienTinNhanChat) {
                 layout.setText(
@@ -1700,8 +1785,17 @@ public class NhanVat {
             }
         }
     }
-    public static DoLechModular layLech(Map<TrangThai, List<DoLechModular>> map, TrangThai trangThai, int frameIndex) {
-        List<DoLechModular> ds = map.get(trangThai);
+    public static DoLechModular layLech(Map<TrangThai, List<DoLechModular>> map, TrangThai trangThai, int frameIndex, boolean dangMangVanBay) {
+        List<DoLechModular> ds;
+        if (trangThai == TrangThai.BAY_NGANG) {
+            if (dangMangVanBay) {
+                ds = map.get(TrangThai.DUNG_YEN);
+            } else {
+                ds = map.get(trangThai);
+            }
+        } else {
+            ds = map.get(trangThai);
+        }
         if (ds == null || ds.isEmpty()) {
             return new DoLechModular(0, 0, 0, 0); // fallback nếu thiếu dữ liệu
         }
@@ -1774,5 +1868,55 @@ public class NhanVat {
         vx = 0;
         vy = 0;
     }
+    public void dispose() {
+        if (avtTexture != null) {
+            avtTexture.dispose();
+            avtTexture = null;
+        }
+        // Các phần thân thể
+        dau_dung.dispose();
+        dau_chay.dispose();
+        than_dung.dispose();
+        than_nhay.dispose();
+        than_roi.dispose();
+        chan_dung.dispose();
+        chan_nhay.dispose();
+        chan_roi.dispose();
+        than_bay.dispose();
+        chan_bay.dispose();
 
+        // Mảng chạy
+        for (Texture t : than_chay) {
+            t.dispose();
+        }
+        for (Texture t : chan_chay) {
+            t.dispose();
+        }
+
+        // Các item/thiết bị
+        if (ao != null) ao.dispose();
+        if (quan != null) quan.dispose();
+        if (gang != null) gang.dispose();
+        if (giay != null) giay.dispose();
+        if (rada != null) rada.dispose();
+        if (iconct != null) iconct.dispose();
+        if (giaplt != null) giaplt.dispose();
+        if (vanbay != null) vanbay.dispose();
+
+        // clickdichuyen
+        for (Texture t : clickdichuyen) {
+            t.dispose();
+        }
+
+        // vanBayCauHinh
+        if (vanBayCauHinh != null && vanBayCauHinh.frames != null) {
+            for (Texture t : vanBayCauHinh.frames) {
+                t.dispose();
+            }
+        }
+
+        // batch, shapeRenderer
+        if (batch != null) batch.dispose();
+        if (shapeRenderer != null) shapeRenderer.dispose();
+    }
 }

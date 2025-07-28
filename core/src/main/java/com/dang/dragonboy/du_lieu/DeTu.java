@@ -177,6 +177,7 @@ public class DeTu {
     private float timeChuyenHuong = 0f;
     private boolean diQuaPhai = true; // ban đầu chạy qua phải (theo flip ban đầu)
     boolean dangDoiFlip = false;
+    boolean vuaspawn = true;
     float timeCooldownDash = 0f;
     final float DASH_COOLDOWN = 2.0f; // 2 giây cooldown sau mỗi lần dash
     float x_truoc_dash;
@@ -1234,6 +1235,18 @@ public class DeTu {
         float khoangCach = (float) Math.sqrt(dx*dx+dy*dy);
         boolean phimTraiDangGiu = dx < -80 || (khoangCach > 120 && dx < -5);
         boolean phimPhaiDangGiu = dx > 80 || (khoangCach > 120 && dx > 5);
+        if (vuaspawn) {
+            if (!phimPhaiDangGiu && !phimTraiDangGiu) {
+                if (dx<0) {
+                    phimTraiDangGiu = true;
+                    phimPhaiDangGiu = false;
+                } else {
+                    phimPhaiDangGiu = true;
+                    phimTraiDangGiu = false;
+                }
+                vuaspawn = false;
+            }
+        }
         boolean phimNhayDangGiu = dy > 10f && khoangCach > 30f;
 
         // Xử lý bay ngang nếu cần
@@ -1664,7 +1677,7 @@ public class DeTu {
                     batch.draw(
                         cloud,
                         anchorX - (thanW - 30 + cloudW - 15) * flipScale,
-                        y + daoDong - 5f,
+                        y + daoDong*1.5f - 5f,
                         cloudW * flipCloud,
                         cloudH
                     );

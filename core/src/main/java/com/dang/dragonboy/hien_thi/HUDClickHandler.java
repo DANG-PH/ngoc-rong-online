@@ -237,17 +237,17 @@ public class HUDClickHandler {
             }
         }
         if (veHUD.dangHienPopup && (veHUD.chucNangDangChon == 1 || veHUD.dangHienPopupDeTu) && !veHUD.DangHienPopupThongTin1 && !veHUD.DangHienPopupThongTin2 && !veHUD.dangHienThongBao) {
-            if (veHUD.vanBayDau){
-                veHUD.vanbay = new Texture("vatpham/vanbay/"+"candauvan/candauvan.png");
-                nhanVat.setIdVanBay("candauvan");
-                nhanVat.setTenVanBay("Cân đẩu vân");
-                nhanVat.setMoTaVanBay("Dùng để bay không tốn KI");
-                nhanVat.setChisoVanBay(new int[] {0,0,0,0,0,0,0,0,0,0,0,0});
-                nhanVat.setHanhTinhVanBay("traidat");
-                nhanVat.setSucManhYeuCauVanBay(0);
-                Item vanBay = new Item("candauvan", "Cân đẩu vân", LoaiItem.VANBAY, veHUD.vanbay, "Dùng để bay không tốn KI", 1, new int[] {0,0,0,0,0,0,0,0,0,0,0,0},"traidat",0, null,0,0,0,-1);
-                duLieuNguoiChoi.setItemVaoHanhTrangDangMac(vanBay,7);
-            }
+//            if (veHUD.vanBayDau){
+//                veHUD.vanbay = new Texture("vatpham/vanbay/"+"candauvan/candauvan.png");
+//                nhanVat.setIdVanBay("candauvan");
+//                nhanVat.setTenVanBay("Cân đẩu vân");
+//                nhanVat.setMoTaVanBay("Dùng để bay không tốn KI");
+//                nhanVat.setChisoVanBay(new int[] {0,0,0,0,0,0,0,0,0,0,0,0});
+//                nhanVat.setHanhTinhVanBay("traidat");
+//                nhanVat.setSucManhYeuCauVanBay(0);
+//                Item vanBay = new Item("candauvan", "Cân đẩu vân", LoaiItem.VANBAY, veHUD.vanbay, "Dùng để bay không tốn KI", 1, new int[] {0,0,0,0,0,0,0,0,0,0,0,0},"traidat",0, null,0,0,0,-1);
+//                duLieuNguoiChoi.setItemVaoHanhTrangDangMac(vanBay,7);
+//            }
             float viewY = 35;
             float viewHeight = 444 - 35;
             int KhoangCachItem = 49;
@@ -760,29 +760,23 @@ public class HUDClickHandler {
                 xCongThem = 0;
             }
             float yNut = veHUD.PopupHanhTrangY - 115;
-            if (veHUD.hangTrangDangChon!=7){
-                if (x > 1 + xCongThem && x < 115 + xCongThem && y >= yNut && y <= yNut + 115){
-                    veHUD.nutClickTimer3 = 0.3f;
-                    veHUD.nuthanhtrangchon=1;
-                } else if (x > 121 + xCongThem && x < 115+120 + xCongThem && y >= yNut && y <= yNut + 115){
-                    veHUD.nutClickTimer3 = 0.3f;
-                    veHUD.nuthanhtrangchon=2;
-                } else if (x > 141 + xCongThem && x < 115 + 120*2 + xCongThem && y >= yNut && y <= yNut + 115 &&
-                    (veHUD.itemm.getLoai() == LoaiItem.AO ||
-                    veHUD.itemm.getLoai() == LoaiItem.QUAN ||
-                    veHUD.itemm.getLoai() == LoaiItem.GIAY ||
-                    veHUD.itemm.getLoai() == LoaiItem.GANG ||
-                    veHUD.itemm.getLoai() == LoaiItem.CAITRANG ||
-                    veHUD.itemm.getLoai() == LoaiItem.AVATAR ||
-                    veHUD.itemm.getLoai() == LoaiItem.RADA) && duLieuNguoiChoi.coDeTu()) {
-                    veHUD.nutClickTimer3 = 0.3f;
-                    veHUD.nuthanhtrangchon = 4;
-                }
-            } else {
-                if (x > 1 + xCongThem && x < 115 + xCongThem && y >= yNut && y <= yNut + 114) {
-                    veHUD.nutClickTimer3 = 0.3f;
-                    veHUD.nuthanhtrangchon = 3;
-                }
+
+            if (x > 1 + xCongThem && x < 115 + xCongThem && y >= yNut && y <= yNut + 115){
+                veHUD.nutClickTimer3 = 0.3f;
+                veHUD.nuthanhtrangchon=1;
+            } else if (x > 121 + xCongThem && x < 115+120 + xCongThem && y >= yNut && y <= yNut + 115){
+                veHUD.nutClickTimer3 = 0.3f;
+                veHUD.nuthanhtrangchon=2;
+            } else if (x > 141 + xCongThem && x < 115 + 120*2 + xCongThem && y >= yNut && y <= yNut + 115 &&
+                (veHUD.itemm.getLoai() == LoaiItem.AO ||
+                veHUD.itemm.getLoai() == LoaiItem.QUAN ||
+                veHUD.itemm.getLoai() == LoaiItem.GIAY ||
+                veHUD.itemm.getLoai() == LoaiItem.GANG ||
+                veHUD.itemm.getLoai() == LoaiItem.CAITRANG ||
+                veHUD.itemm.getLoai() == LoaiItem.AVATAR ||
+                veHUD.itemm.getLoai() == LoaiItem.RADA) && duLieuNguoiChoi.coDeTu()) {
+                veHUD.nutClickTimer3 = 0.3f;
+                veHUD.nuthanhtrangchon = 4;
             }
         }
         if (veHUD.DangHienPopupThongTin2) {
