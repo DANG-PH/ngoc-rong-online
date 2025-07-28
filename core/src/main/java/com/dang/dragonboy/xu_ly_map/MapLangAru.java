@@ -6,7 +6,7 @@ public class MapLangAru extends MapCoBan {
     public void taiDuLieuMap() {
         // Thêm nền đất chính
         danhSachDat.add(new HitboxDat(0, 0, 800, 30));
-        danhSachDat.add(new HitboxDat(800, 0, 300, 60));
+        danhSachDat.add(new HitboxDat(800, 0, 300, 110));
         danhSachDat.add(new HitboxDat(1100, 0, 400, 10));
         danhSachDat.add(new HitboxDat(500, 380, 200, 70));
 

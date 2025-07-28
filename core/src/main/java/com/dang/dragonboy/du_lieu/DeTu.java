@@ -194,6 +194,8 @@ public class DeTu {
     private int soLanBiKet = 0;
     private boolean camDiChuyenXungQuanh = false;
 
+    public boolean chuaSetTenDeTu = true;
+
     public DeTu(float x, float y,boolean flipX,boolean diQuaPhai,String ten, String hanhtinh, Texture dau_dung, Texture dau_chay,
                 Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,
                 Texture chan_dung, Texture chan_nhay, Texture chan_roi, Texture[] chan_chay,
@@ -1237,7 +1239,7 @@ public class DeTu {
         // Xử lý bay ngang nếu cần
         boolean giuPhimNgang = phimTraiDangGiu || phimPhaiDangGiu;
         // Tắt chạy vòng nếu đang làm hành vi chủ động khác
-        if (giuPhimNgang || phimNhayDangGiu || khoangCach > 100f) {
+        if (giuPhimNgang || phimNhayDangGiu || Math.abs(dx) > 100f) {
             diChuyenXungQuanh = false;
             timeDungYen = 0;
             timeChuyenHuong = 0;
@@ -1250,7 +1252,7 @@ public class DeTu {
             demThoiGianBay = 0;
         }
 
-        if (dangDungDat && !giuPhimNgang && phimNhayDangGiu && !daNhay  && Math.abs(dy) > 40f) {
+        if (dangDungDat && !giuPhimNgang && phimNhayDangGiu && !daNhay  && Math.abs(dy) > 92f) {
             vy = 10f;
             dangDungDat = false;
             daNhay = true;
@@ -1354,9 +1356,7 @@ public class DeTu {
         } else if (!dangDungDat) {
             if (vy > 0) trangThai = TrangThaiDeTu.NHAY;
             else {
-                if (!nhanVat.phimTraiDangGiu && !nhanVat.phimPhaiDangGiu && !nhanVat.phimNhayDangGiu) {
-                    trangThai = TrangThaiDeTu.ROI;
-                }
+                trangThai = TrangThaiDeTu.ROI;
             }
             timeChoHienBay = 0;
         }  else {
@@ -1379,13 +1379,13 @@ public class DeTu {
 //            float tocDoVay = Math.max(0.06f, 0.2f - tocDoHienTai * 0.02f);
 
             timeVanBay += delta;
-            if (timeVanBay > 0.08f) {
+            if (timeVanBay > 0.06f) {
                 frameVanBay = (frameVanBay + 1) % vanBayCauHinh.length;
                 timeVanBay = 0;
             }
         }
         // Giới hạn map
-        x = Math.max(0, Math.min(x, gioiHanXMax));
+        x = Math.max(-1f, Math.min(x, gioiHanXMax+1f));
         y = Math.max(0, Math.min(y, gioiHanYMax));
 
         if (timeHienChat > 0) {
@@ -1444,7 +1444,7 @@ public class DeTu {
                     timeChuyenHuong = 0;
                 } else {
                     // === Kiểm tra có đất phía trước và không đâm tường ===
-                    float xKiemTra = x + (diQuaPhai ? rong_de_tu + 5 : -5);
+                    float xKiemTra = x + (diQuaPhai ? rong_de_tu + 4 : -4);
                     float yKiemTra = y - 1; // ngay dưới chân
                     boolean coDatPhiaTruoc = false;
                     boolean biChanPhiaTruoc = false;
@@ -1584,7 +1584,7 @@ public class DeTu {
         }
         if (veHUD.timeChoHopThe == 0 && duDieuKien) {
             float daoDong = (trangThai == TrangThaiDeTu.DUNG_YEN) ? (float) Math.sin(thoiGian) * 1.08f
-                : (trangThai == TrangThaiDeTu.BAY_NGANG) ? (float) Math.sin(thoiGian) * 3f
+                : (trangThai == TrangThaiDeTu.BAY_NGANG) ? (float) Math.sin(thoiGian) * 5f
                 : 0f;
 
             Texture chanVe = chan_dung;
@@ -1599,7 +1599,7 @@ public class DeTu {
                     break;
                 case DI_CHUYEN:
                     timeChay += Gdx.graphics.getDeltaTime(); // tăng thời gian theo deltaTime
-                    if (timeChay >= 0.1f) {
+                    if (timeChay >= 0.08f) {
                         frame = (frame + 1) % chan_chay.length;
                         timeChay = 0;
                     }
@@ -1730,6 +1730,9 @@ public class DeTu {
     public void setGioiHanToaDo(float ghX, float ghy) {
         this.gioiHanXMax = ghX;
         this.gioiHanYMax = ghy;
+    }
+    public void setTenDeTu(String ten) {
+        this.ten = ten;
     }
     public void dispose() {
         // Giải phóng texture modular

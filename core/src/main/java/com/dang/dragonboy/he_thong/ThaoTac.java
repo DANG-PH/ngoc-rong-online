@@ -229,7 +229,7 @@ public class ThaoTac extends InputAdapter {
                 if (!hud.tinNhanChat.isEmpty()) {
                     hud.tinNhanChat = hud.tinNhanChat.substring(0, hud.tinNhanChat.length() - 1);
                 }
-            } else if (Character.toString(character).matches("[a-zA-Z0-9 ]")) {
+            } else if (Character.toString(character).matches("[a-zA-Z0-9 :]")) {
                 if (hud.tinNhanChat.length() < 100) {
                     hud.tinNhanChat += character;
                 }

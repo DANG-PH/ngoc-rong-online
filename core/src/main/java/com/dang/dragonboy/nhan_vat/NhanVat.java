@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.HashMap;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Align;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.nhan_vat.van_bay.VanBayCauHinh;
@@ -1221,11 +1222,11 @@ public class NhanVat {
             x += dx;
             dangDungDat = false;
             for (HitboxDat dat : danhSachDat) {
-                if (dat.vaChamBenTrai(x, y, rong, cao)) {
-                    x = dat.x - rong;
+                if (dat.vaChamBenTrai(x+5, y, rong, cao)) {
+                    x = dat.x - rong-5f;
                     break;
-                } else if (dat.vaChamBenPhai(x, y, rong, cao)) {
-                    x = dat.x + dat.width;
+                } else if (dat.vaChamBenPhai(x-5, y, rong, cao)) {
+                    x = dat.x + dat.width+5f;
                     break;
                 }
             }
@@ -1249,8 +1250,8 @@ public class NhanVat {
 
 
         // Giới hạn không cho ra khỏi bản đồ
-        float gioiHanXMin = 0;
-        x = Math.max(gioiHanXMin, Math.min(x, gioiHanXMax));
+        float gioiHanXMin = 5;
+        x = Math.max(gioiHanXMin, Math.min(x, gioiHanXMax-5));
 
         float gioiHanYMin=0;
         y =Math.max(gioiHanYMin, Math.min(y, gioiHanYMax));
@@ -1477,6 +1478,27 @@ public class NhanVat {
                 } else if (veHUD.tinNhanChat.equals("ve nha") || veHUD.tinNhanChat.equals("go home")) {
                     veHUD.trangthaide = "Về nhà";
                     veHUD.capNhatTrangThaiDeTu();
+                }
+                if (veHUD.tinNhanChat.contains("ten con la:") && !veHUD.daRanDomChatDeTu) {
+                    String[] part = veHUD.tinNhanChat.split(":",-1);
+                    String tenDeTu = part[1].trim();
+                    if (duLieuNguoiChoi.deTu.chuaSetTenDeTu) {
+                        if (!tenDeTu.isEmpty()) {
+                            duLieuNguoiChoi.deTu.setTenDeTu(tenDeTu);
+                            String[] text = {
+                                "Con xin nhận tên " + tenDeTu + " ạ, con sẽ không làm sư phụ thất vọng.",
+                                "Tên " + tenDeTu + " , đệ tử xin ghi nhớ!",
+                                "Từ nay con là " + tenDeTu + ", cám ơn sư phụ."
+                            };
+                            duLieuNguoiChoi.deTu.setTinNhanDeTuChat(text[MathUtils.random(text.length - 1)], 4f);
+                            duLieuNguoiChoi.deTu.chuaSetTenDeTu = false;
+                        } else {
+                            duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Sư phụ chưa đặt tên rõ ràng cho con...", 4f);
+                        }
+                    } else {
+                        duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Sư phụ, tên con là "+duLieuNguoiChoi.deTu.getTen()+" mà...", 4f);
+                    }
+                    veHUD.daRanDomChatDeTu = true;
                 }
             }
         } else {

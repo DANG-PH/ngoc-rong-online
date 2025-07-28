@@ -82,7 +82,7 @@ public class ManHinhLangAru implements Screen {
         shapeRenderer.end();
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(1f, 1f, 1f, 1f);
-        shapeRenderer.rect(800, 0, 300, 60);
+        shapeRenderer.rect(800, 0, 300, 110);
         shapeRenderer.end();
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(1f, 1f, 1f, 1f);
