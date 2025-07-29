@@ -1059,12 +1059,17 @@ public class NhanVat {
     }
 
     public void capNhat() {
-        if (duLieuNguoiChoi.getKiHienTai()<=0 || veHUD.dangHienPopup) {
+        if (duLieuNguoiChoi.getKiHienTai()<=0) {
             if (dangBayNgang) {
-                phimPhaiDangGiu = false;
-                phimTraiDangGiu = false;
-                phimNhayDangGiu = false;
+                dungTrai();
+                dungPhai();
+                thaNhay();
             }
+        }
+        if (veHUD.dangHienPopup) {
+            dungTrai();
+            dungPhai();
+            thaNhay();
         }
         if (!diChuyenDenMucTieu) {
             daNhayDeLenY = false; // reset nếu không di chuyển nữa

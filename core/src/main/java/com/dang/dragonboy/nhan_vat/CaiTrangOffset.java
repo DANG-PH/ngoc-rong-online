@@ -14,6 +14,8 @@ public class CaiTrangOffset {
         OFFSET_CAI_TRANG.put("gohan_beast", taoGohanBeast());
         OFFSET_CAI_TRANG.put("vegito", taoVegito());
         OFFSET_CAI_TRANG.put("gotenks", taoGotenks());
+        OFFSET_CAI_TRANG.put("xiao", taoXiao());
+        OFFSET_CAI_TRANG.put("ayaka", taoAyaka());
     }
 
     public static Map<TrangThai, List<DoLechModular>> getOffset(String ten) {
@@ -140,6 +142,38 @@ public class CaiTrangOffset {
             lech(-1f, 7f, 0f, -29.5f),
             lech(-7f, 7.5f, 0f, -32.5f),
             lech(0f, -7f, 1f, -26.5f)
+        );
+    }
+
+    private static Map<TrangThai, List<DoLechModular>> taoXiao() {
+        return taoLech(
+            lech(0f, -24f, -1.5f, -55f),
+            lechDiChuyen(new float[][] {
+                {2.2f, -23f, 2.8f, -54f},
+                {2.2f, -23f, 2.8f, -54f},
+                {2.2f, -23f, 2.8f, -54f},
+                {2.2f, -23f, 2.8f, -54f},
+                {2.2f, -23f, 2.8f, -54f}
+            }),
+            lech(-4f, -12f, 0.5f, -49f),
+            lech(-5.5f, -12f, -1.2f, -54f),
+            lech(-17f, -1f, -13f, -35f)
+        );
+    }
+
+    private static Map<TrangThai, List<DoLechModular>> taoAyaka() {
+        return taoLech(
+            lech(2f, -3f, -5f, -60f),
+            lechDiChuyen(new float[][] {
+                {2.2f, -6f, -7f, -63f},
+                {2.2f, -6f, -7f, -63f},
+                {2.2f, -6f, -7f, -63f},
+                {2.2f, -6f, -7f, -63f},
+                {2.2f, -6f, -7f, -63f}
+            }),
+            lech(0, -3f, -5f, -60f),
+            lech(-1.5f, -3f, -8f, -66f),
+            lech(0f, 10f, -4f, -47f)
         );
     }
 

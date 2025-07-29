@@ -27,7 +27,7 @@ public class DeTuXuLy {
             new Texture(path + "thanchay (4).png"),
             new Texture(path + "thanchay (5).png")
         };
-        Texture than_bay = new Texture(path + "thanbay1.png");
+        Texture than_bay = new Texture(path + "thannhay.png");
 
         Texture chan_dung = new Texture(path + "chandung.png");
         Texture chan_nhay = new Texture(path + "channhay.png");
@@ -39,7 +39,7 @@ public class DeTuXuLy {
             new Texture(path + "chanchay (4).png"),
             new Texture(path + "chanchay (5).png")
         };
-        Texture chan_bay = new Texture(path + "chanbay1.png");
+        Texture chan_bay = new Texture(path + "chanbay.png");
 
         Map<TrangThaiDeTu, List<DoLechModular>> lech = CaiTrangOffsetDeTu.getOffset(tenCaiTrang);
         if (!tenCaiTrang.contains("set_base_")) {
@@ -81,7 +81,7 @@ public class DeTuXuLy {
             new Texture(aoPath + "thanchay (4).png"),
             new Texture(aoPath + "thanchay (5).png")
         };
-        Texture than_bay = new Texture(aoPath + "thanbay1.png");
+        Texture than_bay = new Texture(aoPath + "thannhay.png");
 
         Texture chan_dung = new Texture(quanPath + "chandung.png");
         Texture chan_nhay = new Texture(quanPath + "channhay.png");
@@ -93,7 +93,7 @@ public class DeTuXuLy {
             new Texture(quanPath + "chanchay (4).png"),
             new Texture(quanPath + "chanchay (5).png")
         };
-        Texture chan_bay = new Texture(quanPath + "chanbay1.png");
+        Texture chan_bay = new Texture(quanPath + "chanbay.png");
 
         Map<TrangThaiDeTu, List<DoLechModular>> lech = AvatarDoOffsetDeTu.getOffset(avatar, ao, quan);
         dangMacCaiTrang = false;

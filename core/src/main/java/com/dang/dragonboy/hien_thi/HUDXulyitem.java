@@ -1742,11 +1742,19 @@ public class HUDXulyitem {
             duLieuNguoiChoi.giamHpPt(80); // giảm đúng 80%
             veHUD.vuaMoNappa = false;
         }
+        if ("Dũng Sĩ Trong Băng Giá".equals(setDangMac) && veHUD.vuaMoNappa) {
+            duLieuNguoiChoi.giamChiMang(40);
+            veHUD.vuaMoNappa = false;
+        }
     }
     private void huyHieuUngSetDeTu(String setDangMac) {
         if ("Nappa".equals(setDangMac) && veHUD.vuaMoDeTuNappa) {
             duLieuNguoiChoi.deTu.setNappa(false);
             duLieuNguoiChoi.deTu.giamHpPt(80); // giảm đúng 80%
+            veHUD.vuaMoDeTuNappa = false;
+        }
+        if ("Dũng Sĩ Trong Băng Giá".equals(setDangMac) && veHUD.vuaMoDeTuNappa) {
+            duLieuNguoiChoi.deTu.giamChiMang(40);
             veHUD.vuaMoDeTuNappa = false;
         }
     }
@@ -1757,9 +1765,20 @@ public class HUDXulyitem {
             && "Nappa".equals(veHUD.skhj)
             && "Nappa".equals(veHUD.skhrada);
 
+        boolean fullSetAyaka = "Dũng Sĩ Trong Băng Giá".equals(veHUD.skha)
+            && "Dũng Sĩ Trong Băng Giá".equals(veHUD.skhq)
+            && "Dũng Sĩ Trong Băng Giá".equals(veHUD.skhg)
+            && "Dũng Sĩ Trong Băng Giá".equals(veHUD.skhj)
+            && "Dũng Sĩ Trong Băng Giá".equals(veHUD.skhrada);
+
+
         if (fullSetNappa && !veHUD.vuaMoNappa) {
             duLieuNguoiChoi.setNappa(true);
             duLieuNguoiChoi.tangHpPt(80); // tăng đúng 80%
+            veHUD.vuaMoNappa = true;
+        }
+        if (fullSetAyaka && !veHUD.vuaMoNappa) {
+            duLieuNguoiChoi.tangChiMang(40);
             veHUD.vuaMoNappa = true;
         }
     }
@@ -1770,9 +1789,20 @@ public class HUDXulyitem {
             && "Nappa".equals(veHUD.skhj_detu)
             && "Nappa".equals(veHUD.skhrada_detu);
 
+        boolean fullSetAyaka = "Dũng Sĩ Trong Băng Giá".equals(veHUD.skha_detu)
+            && "Dũng Sĩ Trong Băng Giá".equals(veHUD.skhq_detu)
+            && "Dũng Sĩ Trong Băng Giá".equals(veHUD.skhg_detu)
+            && "Dũng Sĩ Trong Băng Giá".equals(veHUD.skhj_detu)
+            && "Dũng Sĩ Trong Băng Giá".equals(veHUD.skhrada_detu);
+
         if (fullSetNappa && !veHUD.vuaMoDeTuNappa) {
             duLieuNguoiChoi.deTu.setNappa(true);
             duLieuNguoiChoi.deTu.tangHpPt(80); // tăng đúng 80%
+            veHUD.vuaMoDeTuNappa = true;
+        }
+
+        if (fullSetAyaka && !veHUD.vuaMoDeTuNappa) {
+            duLieuNguoiChoi.deTu.tangChiMang(40);
             veHUD.vuaMoDeTuNappa = true;
         }
     }

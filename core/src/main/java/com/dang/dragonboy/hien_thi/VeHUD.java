@@ -430,7 +430,7 @@ public class VeHUD {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
-            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ ễ ằ ừ — ẳ ữ ỗ ằ ễ ỗ ừ ẵ ê :";
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ ễ ằ ừ — ẳ ữ ỗ ằ ễ ỗ ừ ẵ ê : ĩ";
         param.size = 18;
         font = generator.generateFont(param);
         fontText = generator.generateFont(param);
@@ -447,7 +447,7 @@ public class VeHUD {
         FreeTypeFontGenerator generator2 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchinh.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param2.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
-            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ ễ ằ ừ — ẳ ữ ỗ ằ ễ ỗ ừ ẵ ê :";
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ ễ ằ ừ — ẳ ữ ỗ ằ ễ ỗ ừ ẵ ê : ĩ";
         param2.size = 22;
         param2.color = Color.WHITE;
         param2.borderWidth = 1f;
@@ -458,7 +458,7 @@ public class VeHUD {
         FreeTypeFontGenerator generator3 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchucnang.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param3 = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param3.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
-            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ ễ ằ ừ — ẳ ữ ỗ ằ ễ ỗ ừ ẵ ê :";
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ ễ ằ ừ — ẳ ữ ỗ ằ ễ ỗ ừ ẵ ê : ĩ";
         param3.size = 14;
         fontchat = generator3.generateFont(param3);
         param3.color = new Color(94 / 255f, 86 / 255f, 74 / 255f, 1f);
@@ -975,7 +975,28 @@ public class VeHUD {
                     if (nuthanhtrangchon == 1) {
                         if (nhanVat.getHanhtinh().equals(itemm.getHanhtinh()) && duLieuNguoiChoi.getSucManh() >= itemm.getSucManhYeuCau()) {
                             if (!itemDangChon.equals("bongtai")) {
-                                xulyitem.macDo(hangTrangDangChon);
+                                boolean duDieuKien = true;
+                                if (itemm.getId().equals("set_ayaka")) {
+                                     if (duLieuNguoiChoi.getHanhTrangDangMac().get(5)==null) {
+                                         duDieuKien = false;
+                                     } else if (!duLieuNguoiChoi.getHanhTrangDangMac().get(5).getId().equals("ayaka")) {
+                                         duDieuKien = false;
+                                     } else {
+                                         duDieuKien = true;
+                                     }
+                                }
+                                if (itemm.getId().equals("ayaka")) {
+                                    if (skha.equals("Dũng Sĩ Trong Băng Giá")
+                                        ||skhq.equals("Dũng Sĩ Trong Băng Giá")
+                                        ||skhg.equals("Dũng Sĩ Trong Băng Giá")
+                                        ||skhj.equals("Dũng Sĩ Trong Băng Giá")
+                                        ||skhrada.equals("Dũng Sĩ Trong Băng Giá")){
+                                        duDieuKien = false;
+                                    }
+                                }
+                                if (duDieuKien) {
+                                    xulyitem.macDo(hangTrangDangChon);
+                                }
                             }
                             if (itemDangChon.equals("bongtai") && timeHopTheTHuong == 0 && delayHopTheBongTai == 0 && duLieuNguoiChoi.coDeTu()) {
                                 timeChoHopThe = 1.5f;
@@ -1003,16 +1024,37 @@ public class VeHUD {
                     } else if (nuthanhtrangchon == 4) {
                         if (duLieuNguoiChoi.deTu.getSucManh() >= itemm.getSucManhYeuCau()) {
                             if (duLieuNguoiChoi.deTu.getSucManh() >= 1_500_000) {
-                                if (duLieuNguoiChoi.deTu.getHanhtinh().equals(itemm.getHanhtinh()) && !itemDangChon.equals("caitrang")) {
-                                    xulyitem.macDoChoDe(hangTrangDangChon);
-                                    if (!dangHienPopupDeTu) {
-                                        chucNangDangChon = 4;
-                                        dangHienPopupDeTu = true;
-                                        scrollY = 0;
-                                        scrollYDeTu = 0;
+                                boolean duDieuKien = true;
+                                if (itemm.getId().equals("set_ayaka")) {
+                                    if (duLieuNguoiChoi.deTu.getHanhTrangDangMac().get(5)==null) {
+                                        duDieuKien = false;
+                                    } else if (!duLieuNguoiChoi.deTu.getHanhTrangDangMac().get(5).getId().equals("ayaka")) {
+                                        duDieuKien = false;
+                                    } else {
+                                        duDieuKien = true;
                                     }
-                                    if (!duLieuNguoiChoi.deTu.getTrangthai().equals("Về nhà")) {
-                                        duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Cám ơn sư phụ", 3f);
+                                }
+                                if (itemm.getId().equals("ayaka")) {
+                                    if (skha_detu.equals("Dũng Sĩ Trong Băng Giá")
+                                        ||skhq_detu.equals("Dũng Sĩ Trong Băng Giá")
+                                        ||skhg_detu.equals("Dũng Sĩ Trong Băng Giá")
+                                        ||skhj_detu.equals("Dũng Sĩ Trong Băng Giá")
+                                        ||skhrada_detu.equals("Dũng Sĩ Trong Băng Giá")){
+                                        duDieuKien = false;
+                                    }
+                                }
+                                if (duLieuNguoiChoi.deTu.getHanhtinh().equals(itemm.getHanhtinh()) && !itemDangChon.equals("caitrang")) {
+                                    if (duDieuKien) {
+                                        xulyitem.macDoChoDe(hangTrangDangChon);
+                                        if (!dangHienPopupDeTu) {
+                                            chucNangDangChon = 4;
+                                            dangHienPopupDeTu = true;
+                                            scrollY = 0;
+                                            scrollYDeTu = 0;
+                                        }
+                                        if (!duLieuNguoiChoi.deTu.getTrangthai().equals("Về nhà")) {
+                                            duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Cám ơn sư phụ", 3f);
+                                        }
                                     }
                                 } else if (itemDangChon.equals("caitrang")) {
                                     xulyitem.macDoChoDe(hangTrangDangChon);
@@ -1033,7 +1075,19 @@ public class VeHUD {
                         DangHienPopupThongTin1 = false;
                         TimeChoHienPopup = 0;
                     } else if (nuthanhtrangchon == 5) {
-                        xulyitem.goDoChoDe(hangTrangDeTuDangChon);
+                        boolean duDieuKien = true;
+                        if (itemm.getId().equals("ayaka")) {
+                            if (skha_detu.equals("Dũng Sĩ Trong Băng Giá")
+                                ||skhq_detu.equals("Dũng Sĩ Trong Băng Giá")
+                                ||skhg_detu.equals("Dũng Sĩ Trong Băng Giá")
+                                ||skhj_detu.equals("Dũng Sĩ Trong Băng Giá")
+                                ||skhrada_detu.equals("Dũng Sĩ Trong Băng Giá")){
+                                duDieuKien = false;
+                            }
+                        }
+                        if (duDieuKien) {
+                            xulyitem.goDoChoDe(hangTrangDeTuDangChon);
+                        }
                         DangHienPopupThongTin2 = false;
                         TimeChoHienPopup = 0;
                     } else if (nuthanhtrangchon == 6) {
@@ -1245,7 +1299,19 @@ public class VeHUD {
                                     xulyitem.goRada(true);
                                     break;
                                 case 5:
-                                    xulyitem.goCaiTrang(NhanVatXuLy.getDangMacCaiTrang(), true);
+                                    boolean duDieuKien = true;
+                                    if (itemm.getId().equals("ayaka")) {
+                                        if (skha.equals("Dũng Sĩ Trong Băng Giá")
+                                            ||skhq.equals("Dũng Sĩ Trong Băng Giá")
+                                            ||skhg.equals("Dũng Sĩ Trong Băng Giá")
+                                            ||skhj.equals("Dũng Sĩ Trong Băng Giá")
+                                            ||skhrada.equals("Dũng Sĩ Trong Băng Giá")){
+                                            duDieuKien = false;
+                                        }
+                                    }
+                                    if (duDieuKien) {
+                                        xulyitem.goCaiTrang(NhanVatXuLy.getDangMacCaiTrang(), true);
+                                    }
                                     break;
                             }
                         }
@@ -1410,7 +1476,7 @@ public class VeHUD {
     public void setNhanVat(NhanVat nhanVat) {
         this.nhanVat = nhanVat;
         avtPetTheoHanhTinh = new Texture("nhanvat/npc/npc_pet/"+nhanVat.getHanhtinh()+"/avt.png");
-        if (!nhanVat.getTen().equals("ADMIN")) {
+        if (!nhanVat.getTen().equals("admin")) {
             for (int i = 0; i < 2; i++) {
                 framesPet[i] = new Texture("nhanvat/npc/npc_pet/" + nhanVat.getHanhtinh() + "/" + (i + 1) + ".png");
             }
