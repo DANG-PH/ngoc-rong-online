@@ -18,6 +18,22 @@ public class ThemItemTest {
         ));
 
         duLieu.themItemVaoHanhTrang(new Item(
+            "bongtaic2", "Bông tai Porata Cấp 2", LoaiItem.BONGTAI,
+            new Texture("vatpham/vatphamgame/bongtai/bongtaic2.png"),
+            "Sử dụng để hợp thể với đệ tử và tăng tổng 10% chỉ số", 1,
+            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+            nhanVat.getHanhtinh(), 150000000L, null, 0, 0, 0, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "bongtaic3", "Bông tai Porata Cấp 3", LoaiItem.BONGTAI,
+            new Texture("vatpham/vatphamgame/bongtai/bongtaic3.png"),
+            "Sử dụng để hợp thể với đệ tử và tăng tổng 20% chỉ số", 1,
+            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+            nhanVat.getHanhtinh(), 1500000000L, null, 0, 0, 0, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
             "phuong_hoang_lua", "Thú cưỡi cực VIP", LoaiItem.VANBAY,
             new Texture("vatpham/vanbay/phuong_hoang_lua/phuonghoanglua.png"),
             "Dùng để bay và hồi phục HP, KI", 1,
@@ -64,21 +80,21 @@ public class ThemItemTest {
 //            nhanVat.getHanhtinh(), 10_000_000L, null, 0, 0, 0, -1
 //        ));
 
-        duLieu.themItemVaoHanhTrang(new Item(
-            "xiao", "Cải trang Hộ Pháp Dạ Xoa", LoaiItem.CAITRANG,
-            new Texture("nhanvat/caitrang/xiao/icon.png"),
-            "Cải trang thành Xiao - Genshin impact", 1,
-            new int[]{0,0,0,50,0,100,100,0,100,0,0,0,0},
-            nhanVat.getHanhtinh(), 9_999_999_999L, null, 0, 0, 0, -1
-        ));
-
-        duLieu.themItemVaoHanhTrang(new Item(
-            "ayaka", "Cải trang tiểu thư Kamisato", LoaiItem.CAITRANG,
-            new Texture("nhanvat/caitrang/ayaka/icon.png"),
-            "Cải trang thành Ayaka - Genshin impact", 1,
-            new int[]{0,0,0,0,0,0,40,50,60,0,0,0,0},
-            nhanVat.getHanhtinh(), 9_999_999_999L, null, 0, 0, 0, -1
-        ));
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "xiao", "Cải trang Hộ Pháp Dạ Xoa", LoaiItem.CAITRANG,
+//            new Texture("nhanvat/caitrang/xiao/icon.png"),
+//            "Cải trang thành Xiao - Genshin impact", 1,
+//            new int[]{0,0,0,50,0,100,100,0,100,0,0,0,0},
+//            nhanVat.getHanhtinh(), 9_999_999_999L, null, 0, 0, 0, -1
+//        ));
+//
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "ayaka", "Cải trang tiểu thư Kamisato", LoaiItem.CAITRANG,
+//            new Texture("nhanvat/caitrang/ayaka/icon.png"),
+//            "Cải trang thành Ayaka - Genshin impact", 1,
+//            new int[]{0,0,0,0,0,0,40,50,60,0,0,0,0},
+//            nhanVat.getHanhtinh(), 9_999_999_999L, null, 0, 0, 0, -1
+//        ));
 
         duLieu.themItemVaoHanhTrang(new Item(
             "avt_vip", "Avatar VIP", LoaiItem.AVATAR,
@@ -128,45 +144,45 @@ public class ThemItemTest {
             "traidat", 15000L, "Sôngôku", 7, 7, 1, -1
         ));
 
-        duLieu.themItemVaoHanhTrang(new Item(
-            "set_ayaka", "Nón Lý Trí", LoaiItem.AO,
-            new Texture("vatpham/do/traidat/set_ayaka/ao.png"),
-            "Giúp giảm sát thương", 1,
-            new int[]{0,0,0,0,289,0,0,0,21,0,0,0,0},
-            "traidat", 20_000_000_000L, "Dũng Sĩ Trong Băng Giá", 7, 7, 7, -1
-        ));
-
-        duLieu.themItemVaoHanhTrang(new Item(
-            "set_ayaka", "Ly Không Gian", LoaiItem.QUAN,
-            new Texture("vatpham/do/traidat/set_ayaka/quan.png"),
-            "Giúp tăng HP", 1,
-            new int[]{0,0,0,0,0,0,0,0,21,5000,0,0,0},
-            "traidat", 20_000_000_000L, "Dũng Sĩ Trong Băng Giá", 7, 7, 7, -1
-        ));
-
-        duLieu.themItemVaoHanhTrang(new Item(
-            "set_ayaka", "Cát Thời Gian", LoaiItem.GANG,
-            new Texture("vatpham/do/traidat/set_ayaka/gang.png"),
-            "Giúp tăng sức đánh", 1,
-            new int[]{0,0,0,0,0,0,0,0,21,0,0,8289,0},
-            "traidat", 20_000_000_000L, "Dũng Sĩ Trong Băng Giá", 7, 7, 7, -1
-        ));
-
-        duLieu.themItemVaoHanhTrang(new Item(
-            "set_ayaka", "Lông Vũ Tử Vong", LoaiItem.GIAY,
-            new Texture("vatpham/do/traidat/set_ayaka/giay.png"),
-            "Giúp tăng MP", 1,
-            new int[]{0,0,0,0,0,0,0,0,21,0,10000,0,0},
-            "traidat", 20_000_000_000L, "Dũng Sĩ Trong Băng Giá", 7, 7, 7, -1
-        ));
-
-        duLieu.themItemVaoHanhTrang(new Item(
-            "set_ayaka", "Hoa Sự Sống", LoaiItem.RADA,
-            new Texture("vatpham/do/traidat/set_ayaka/rada.png"),
-            "Giúp tăng Chí Mạng", 1,
-            new int[]{0,0,0,10,0,0,0,0,21,0,0,0,0},
-            "traidat", 20_000_000_000L, "Dũng Sĩ Trong Băng Giá", 7, 7, 7, -1
-        ));
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "set_ayaka", "Nón Lý Trí", LoaiItem.AO,
+//            new Texture("vatpham/do/traidat/set_ayaka/ao.png"),
+//            "Giúp giảm sát thương", 1,
+//            new int[]{0,0,0,0,289,0,0,0,21,0,0,0,0},
+//            "traidat", 20_000_000_000L, "Dũng Sĩ Trong Băng Giá", 7, 7, 7, -1
+//        ));
+//
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "set_ayaka", "Ly Không Gian", LoaiItem.QUAN,
+//            new Texture("vatpham/do/traidat/set_ayaka/quan.png"),
+//            "Giúp tăng HP", 1,
+//            new int[]{0,0,0,0,0,0,0,0,21,5000,0,0,0},
+//            "traidat", 20_000_000_000L, "Dũng Sĩ Trong Băng Giá", 7, 7, 7, -1
+//        ));
+//
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "set_ayaka", "Cát Thời Gian", LoaiItem.GANG,
+//            new Texture("vatpham/do/traidat/set_ayaka/gang.png"),
+//            "Giúp tăng sức đánh", 1,
+//            new int[]{0,0,0,0,0,0,0,0,21,0,0,8289,0},
+//            "traidat", 20_000_000_000L, "Dũng Sĩ Trong Băng Giá", 7, 7, 7, -1
+//        ));
+//
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "set_ayaka", "Lông Vũ Tử Vong", LoaiItem.GIAY,
+//            new Texture("vatpham/do/traidat/set_ayaka/giay.png"),
+//            "Giúp tăng MP", 1,
+//            new int[]{0,0,0,0,0,0,0,0,21,0,10000,0,0},
+//            "traidat", 20_000_000_000L, "Dũng Sĩ Trong Băng Giá", 7, 7, 7, -1
+//        ));
+//
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "set_ayaka", "Hoa Sự Sống", LoaiItem.RADA,
+//            new Texture("vatpham/do/traidat/set_ayaka/rada.png"),
+//            "Giúp tăng Chí Mạng", 1,
+//            new int[]{0,0,0,10,0,0,0,0,21,0,0,0,0},
+//            "traidat", 20_000_000_000L, "Dũng Sĩ Trong Băng Giá", 7, 7, 7, -1
+//        ));
 
 
         duLieu.themItemVaoHanhTrang(new Item(

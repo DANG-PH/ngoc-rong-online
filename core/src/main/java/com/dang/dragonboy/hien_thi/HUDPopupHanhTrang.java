@@ -137,10 +137,6 @@ public class HUDPopupHanhTrang {
                         veHUD.PopupHanhTrangH += layout.height + 12;
                     }
                 }
-                if (veHUD.itemm.getSetkichhoat().equals("Dũng Sĩ Trong Băng Giá")) {
-                    layout.setText(veHUD.fontSkillchuaco, "Yêu cầu mang cải trang Ayaka");
-                    veHUD.PopupHanhTrangH += layout.height + 12;
-                }
                 if (veHUD.itemm.getSucManhYeuCau()>0) {
                     if (duLieuNguoiChoi.getSucManh() >= veHUD.itemm.getSucManhYeuCau()) {
                         layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
@@ -438,13 +434,6 @@ public class HUDPopupHanhTrang {
                     offsetY += layout.height + 12;
 
                     layout.setText(veHUD.fontSkillchuaco, "Không thể giao dịch");
-                    veHUD.fontSkillchuaco.draw(batch, layout,
-                        veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15 + xCongThem,
-                        veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
-                    offsetY += layout.height + 12;
-                }
-                if (veHUD.itemm.getSetkichhoat().equals("Dũng Sĩ Trong Băng Giá")) {
-                    layout.setText(veHUD.fontSkillchuaco, "Yêu cầu mang cải trang Ayaka");
                     veHUD.fontSkillchuaco.draw(batch, layout,
                         veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15 + xCongThem,
                         veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
@@ -815,10 +804,6 @@ public class HUDPopupHanhTrang {
                         veHUD.PopupHanhTrangHdetu += layout.height + 12;
                     }
                 }
-                if (veHUD.itemm.getSetkichhoat().equals("Dũng Sĩ Trong Băng Giá")) {
-                    layout.setText(veHUD.fontSkillchuaco, "Yêu cầu mang cải trang Ayaka");
-                    veHUD.PopupHanhTrangHdetu += layout.height + 12;
-                }
                 if (veHUD.itemm.getSucManhYeuCau()>0) {
                     if (duLieuNguoiChoi.getSucManh() >= veHUD.itemm.getSucManhYeuCau()) {
                         layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
@@ -1093,13 +1078,6 @@ public class HUDPopupHanhTrang {
                     veHUD.fontSkillchuaco.draw(batch, layout,
                         veHUD.PopupHanhTrangWdetu + veHUD.PopupHanhTrangXdetu - layout.width - 15 + xCongThem,
                         veHUD.PopupHanhTrangYdetu + veHUD.PopupHanhTrangHdetu - offsetY);
-                    offsetY += layout.height + 12;
-                }
-                if (veHUD.itemm.getSetkichhoat().equals("Dũng Sĩ Trong Băng Giá")) {
-                    layout.setText(veHUD.fontSkillchuaco, "Yêu cầu mang cải trang Ayaka");
-                    veHUD.fontSkillchuaco.draw(batch, layout,
-                        veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15 + xCongThem,
-                        veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
                     offsetY += layout.height + 12;
                 }
                 for (int i = 6; i < 9; i++) {

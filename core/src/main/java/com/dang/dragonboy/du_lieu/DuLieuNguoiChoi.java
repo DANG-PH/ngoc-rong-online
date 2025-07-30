@@ -627,10 +627,12 @@ public class DuLieuNguoiChoi {
 
     public void setHpHienTai(float Hp) {
         this.HpHienTai = Hp;
+        this.HpHienTai = Math.max(0,Math.min(HpHienTai,HpHopThe));
     }
 
     public void setKiHienTai(float Ki) {
         this.KiHienTai = Ki;
+        this.KiHienTai = Math.max(0,Math.min(KiHienTai,KiHopThe));
     }
 
     public void dangMacAo(boolean dangmacAo){

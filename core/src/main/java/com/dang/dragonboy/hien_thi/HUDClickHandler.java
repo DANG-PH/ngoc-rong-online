@@ -831,7 +831,6 @@ public class HUDClickHandler {
         if (veHUD.DangHienPopupThongTin){
             if (veHUD.oChiSoDangChon >= 0 && veHUD.oChiSoDangChon < 4) {
                 int[] buocTangTheoChiSo = {20, 20, 1, 1};
-                int[] gioiHanToiDa = {550000, 550000, 25000, 3000}; // Giới hạn HP, KI, Sức đánh, Giáp
                 int buocTang = buocTangTheoChiSo[veHUD.oChiSoDangChon];
 
                 int chiSoGoc = switch (veHUD.oChiSoDangChon) {
@@ -849,10 +848,8 @@ public class HUDClickHandler {
                     long chiPhi = veHUD.tinhChiPhiTiemNang(veHUD.oChiSoDangChon, chiSoGoc, soLanTang, buocTang);
 
                     boolean trongVungNut = (x >= 1 + i * 120 && x <= 1 + i * 120 + 114 && y >= yNut && y <= yNut + 114);
-                    boolean duTiemNang = duLieuNguoiChoi.getTiemNangNhanVat() >= chiPhi;
-                    boolean khongVuotGioiHan = chiSoGoc + giaTriTang <= gioiHanToiDa[veHUD.oChiSoDangChon];
 
-                    if (trongVungNut && duTiemNang && khongVuotGioiHan) {
+                    if (trongVungNut) {
                         veHUD.nutClickTimer = 0.3f;
                         veHUD.oChiSoDangChonTamThoi = veHUD.oChiSoDangChon;
                         veHUD.giaTriTangTamThoi = giaTriTang;
@@ -866,10 +863,8 @@ public class HUDClickHandler {
                 long chiPhi = veHUD.tinhChiPhiTiemNang(4, duLieuNguoiChoi.getChiMangGoc(), 1, 1);
                 if (chiPhi<=0){chiPhi=10000000;}
                 boolean trongVungNut = (x >= 1  && x <= 1 + 114 && y >= yNut && y <= yNut + 114);
-                boolean duTiemNang = duLieuNguoiChoi.getTiemNangNhanVat() >= chiPhi;
-                boolean khongVuotGioiHan = duLieuNguoiChoi.getChiMangGoc() + 1 <= gioiHanToiDa;
 
-                if (trongVungNut && duTiemNang && khongVuotGioiHan) {
+                if (trongVungNut) {
                     veHUD.nutClickTimer = 0.3f;
                     veHUD.oChiSoDangChonTamThoi = veHUD.oChiSoDangChon;
                     veHUD.giaTriTangTamThoi = 1;

@@ -9,11 +9,14 @@ public class CaiTrangOffset {
     static {
         OFFSET_CAI_TRANG.put("goku_black", taoGokuBlack());
         OFFSET_CAI_TRANG.put("goku_black_rose", taoGokuBlackRose());
-        OFFSET_CAI_TRANG.put("vegito_xeno", taoVegitoXeno());
-        OFFSET_CAI_TRANG.put("vegito_ssj", taoVegitoSsj());
+        OFFSET_CAI_TRANG.put("bong_tai_3_xayda", taoVegitoXeno());
+        OFFSET_CAI_TRANG.put("bong_tai_3_traidat", taoVegito());
+        OFFSET_CAI_TRANG.put("bong_tai_2_xayda", taoVegitoSsj());
+        OFFSET_CAI_TRANG.put("bong_tai_2_traidat", taoVegitoSsj());
         OFFSET_CAI_TRANG.put("gohan_beast", taoGohanBeast());
-        OFFSET_CAI_TRANG.put("vegito", taoVegito());
-        OFFSET_CAI_TRANG.put("gotenks", taoGotenks());
+        OFFSET_CAI_TRANG.put("bong_tai_1_traidat", taoVegito());
+        OFFSET_CAI_TRANG.put("bong_tai_1_xayda", taoVegito());
+        OFFSET_CAI_TRANG.put("hop_the_thuong_traidat", taoGotenks());
         OFFSET_CAI_TRANG.put("xiao", taoXiao());
         OFFSET_CAI_TRANG.put("ayaka", taoAyaka());
     }
@@ -85,15 +88,15 @@ public class CaiTrangOffset {
         return taoLech(
             lech(0f, -2.2f, 2f, -17.3f),
             lechDiChuyen(new float[][] {
-                {2f, 4f, 4.5f, -13.8f},
-                {2f, 4f, 4.5f, -13.8f},
-                {2f, 4f, 4.5f, -13.8f},
-                {2f, 4f, 4.5f, -13.8f},
-                {2f, 4f, 4.5f, -13.8f}
+                {2f, 8f, 4.5f, -10f},
+                {2f, 8f, 4.5f, -10f},
+                {2f, 8f, 4.5f, -10f},
+                {2f, 8f, 4.5f, -10f},
+                {2f, 8f, 4.5f, -10f}
             }),
             lech(-1f, 7f, 0.5f, -20.8f),
             lech(-7f, 7.5f, 1f, -31.5f),
-            lech(0f, -1f, -0.3f, -15.5f)
+            lech(-23f, 20f, -18f, -15f)
         );
     }
 

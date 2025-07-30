@@ -44,7 +44,20 @@ public class NhanVatXuLy {
         Texture chan_bay = new Texture(path + "chanbay.png");
 
         Map<TrangThai, List<DoLechModular>> lech = CaiTrangOffset.getOffset(tenCaiTrang);
-        if (!tenCaiTrang.equals("vegito") && !tenCaiTrang.equals("gotenks")) {
+        if (
+            !tenCaiTrang.equals("hop_the_thuong_traidat") &&
+                !tenCaiTrang.equals("bong_tai_1_traidat") &&
+                !tenCaiTrang.equals("bong_tai_2_traidat") &&
+                !tenCaiTrang.equals("bong_tai_3_traidat") &&
+                !tenCaiTrang.equals("hop_the_thuong_xayda") &&
+                !tenCaiTrang.equals("bong_tai_1_xayda") &&
+                !tenCaiTrang.equals("bong_tai_2_xayda") &&
+                !tenCaiTrang.equals("bong_tai_3_xayda") &&
+                !tenCaiTrang.equals("hop_the_thuong_namek") &&
+                !tenCaiTrang.equals("bong_tai_1_namek") &&
+                !tenCaiTrang.equals("bong_tai_2_namek") &&
+                !tenCaiTrang.equals("bong_tai_3_namek")
+        ) {
             dangMacCaiTrang = true;
             dangMacAvatar = false;
         }
