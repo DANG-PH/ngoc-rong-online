@@ -144,11 +144,8 @@ public class VeHUD {
     public String skhrada_detu = "thuong";
     public boolean vuaMoNappa = false;
     public boolean vuaMoDeTuNappa = false;
-    public boolean vanBayDau = true;
-    public boolean lanDau = true;
-    public int[] chisovuathao;
     public boolean dangMacGiapLuyenTap = false;
-    public float timeMacGiapLuyenTap;
+    public Item itemGiapLuyenTapVuaCoi = null;
     private boolean daCongChiMang = false;
 
     public float nuthanhtrangchon = -1;
@@ -163,6 +160,7 @@ public class VeHUD {
 
     public String tinNhanChat = "";
     public boolean dangHienTinNhanChat = false;
+
     public float timeHienTinNhan = 0;
 
     public String tinNhanPet = "";
@@ -1191,8 +1189,16 @@ public class VeHUD {
                         c2.avt
                     );
                     texAvt = new Texture(nhanVat.doiavatar());
-                    duLieuNguoiChoi.setHpHienTai((duLieuNguoiChoi.getHpToiDa()+duLieuNguoiChoi.deTu.getHpToiDa())*1.2f);
-                    duLieuNguoiChoi.setKiHienTai((duLieuNguoiChoi.getKiToiDa()+duLieuNguoiChoi.deTu.getKiToiDa())*1.2f);
+                    if (bongTaiDangDung.equals("bongtaic1")) {
+                        duLieuNguoiChoi.setHpHienTai((duLieuNguoiChoi.getHpToiDa() + duLieuNguoiChoi.deTu.getHpToiDa()));
+                        duLieuNguoiChoi.setKiHienTai((duLieuNguoiChoi.getKiToiDa() + duLieuNguoiChoi.deTu.getKiToiDa()));
+                    } else if (bongTaiDangDung.equals("bongtaic2")) {
+                        duLieuNguoiChoi.setHpHienTai((duLieuNguoiChoi.getHpToiDa() + duLieuNguoiChoi.deTu.getHpToiDa()) * 1.1f);
+                        duLieuNguoiChoi.setKiHienTai((duLieuNguoiChoi.getKiToiDa() + duLieuNguoiChoi.deTu.getKiToiDa()) * 1.1f);
+                    } else if (bongTaiDangDung.equals("bongtaic3")) {
+                        duLieuNguoiChoi.setHpHienTai((duLieuNguoiChoi.getHpToiDa() + duLieuNguoiChoi.deTu.getHpToiDa()) * 1.2f);
+                        duLieuNguoiChoi.setKiHienTai((duLieuNguoiChoi.getKiToiDa() + duLieuNguoiChoi.deTu.getKiToiDa()) * 1.2f);
+                    }
                     if (dangHopTheThuong) {
                         timeHopTheTHuong = 600f;
                         dangHienPopupDeTu = false;
@@ -1255,6 +1261,74 @@ public class VeHUD {
                 duLieuNguoiChoi.setKiHienTai(duLieuNguoiChoi.getKiToiDa());
             }
             duLieuNguoiChoi.setSdHopThe(duLieuNguoiChoi.getSucDanhNhanVat());
+        }
+        if (dangMacGiapLuyenTap) {
+            duLieuNguoiChoi.getHanhTrangDangMac().get(6).tangHanSuDung();
+            nhanVat.setHanSuDungGiapLuyenTap(duLieuNguoiChoi.getHanhTrangDangMac().get(6).getHanSuDung());
+            float sdConLai;
+            switch (duLieuNguoiChoi.getHanhTrangDangMac().get(6).getId()) {
+                case "glt_c3": sdConLai = 0.7f; break;
+                case "glt_c2": sdConLai = 0.8f; break;
+                case "glt_c1": sdConLai = 0.9f; break;
+                default:       sdConLai = 1f;   break;
+            }
+            if (dangHopThe) {
+                duLieuNguoiChoi.setSdHopThe(
+                    (duLieuNguoiChoi.getSdHopThe()) * sdConLai
+                );
+            } else {
+                duLieuNguoiChoi.setSdHopThe(duLieuNguoiChoi.getSucDanhNhanVat() * sdConLai);
+            }
+            if (daCongChiMang){
+                duLieuNguoiChoi.giamSatThuongChiMang(30);
+                duLieuNguoiChoi.giamChiMang(15);
+                daCongChiMang = false;
+            }
+        } else if (itemGiapLuyenTapVuaCoi!=null) {
+            if (itemGiapLuyenTapVuaCoi.getHanSuDung()>0f) {
+                itemGiapLuyenTapVuaCoi.giamHanSuDung();
+                nhanVat.setHanSuDungGiapLuyenTap(itemGiapLuyenTapVuaCoi.getHanSuDung());
+                float sdCongThem;
+                switch (itemGiapLuyenTapVuaCoi.getId()) {
+                    case "glt_c3":
+                        sdCongThem = 1.3f;
+                        break;
+                    case "glt_c2":
+                        sdCongThem = 1.2f;
+                        break;
+                    case "glt_c1":
+                        sdCongThem = 1.1f;
+                        break;
+                    default:
+                        sdCongThem = 1f;
+                        break;
+                }
+                if (dangHopThe) {
+                    duLieuNguoiChoi.setSdHopThe(
+                        (duLieuNguoiChoi.getSdHopThe()) * sdCongThem
+                    );
+                } else {
+                    duLieuNguoiChoi.setSdHopThe(duLieuNguoiChoi.getSucDanhNhanVat() * sdCongThem);
+                }
+            } else {
+                if (dangHopThe) {
+                    duLieuNguoiChoi.setSdHopThe(
+                        (duLieuNguoiChoi.getSdHopThe())
+                    );
+                } else {
+                    duLieuNguoiChoi.setSdHopThe(duLieuNguoiChoi.getSucDanhNhanVat());
+                }
+            }
+            if (itemGiapLuyenTapVuaCoi.getHanSuDung()>60f && !daCongChiMang){
+                duLieuNguoiChoi.tangSatThuongChiMang(30);
+                duLieuNguoiChoi.tangChiMang(15);
+                daCongChiMang = true;
+            }
+            if (daCongChiMang && itemGiapLuyenTapVuaCoi.getHanSuDung()<=60f){
+                duLieuNguoiChoi.giamSatThuongChiMang(30);
+                duLieuNguoiChoi.giamChiMang(15);
+                daCongChiMang = false;
+            }
         }
         if (timeHopTheTHuong > 0) {
             timeHopTheTHuong -= delta;
@@ -1470,31 +1544,6 @@ public class VeHUD {
         if (dauThanRenderH < 53f){
             dauThanRenderH+=10.6f*Gdx.graphics.getDeltaTime();
             dauThanRenderH = Math.min(dauThanRenderH, 53f);
-        }
-
-        if (dangMacGiapLuyenTap){
-            nhanVat.tangHanSuDungGiapLuyenTap();
-            timeMacGiapLuyenTap = nhanVat.getHanSuDungGiapLuyenTap();
-            nhanVat.setHanSuDungGiapLuyenTap(timeMacGiapLuyenTap);
-            if (daCongChiMang){
-                duLieuNguoiChoi.giamSatThuongChiMang(30);
-                duLieuNguoiChoi.giamChiMang(15);
-                daCongChiMang = false;
-            }
-        } else {
-            nhanVat.giamHanSuDungGiapLuyenTap();
-            timeMacGiapLuyenTap = nhanVat.getHanSuDungGiapLuyenTap();
-            nhanVat.setHanSuDungGiapLuyenTap(timeMacGiapLuyenTap);
-            if (timeMacGiapLuyenTap>60f && !daCongChiMang){
-                duLieuNguoiChoi.tangSatThuongChiMang(30);
-                duLieuNguoiChoi.tangChiMang(15);
-                daCongChiMang = true;
-            }
-            if (daCongChiMang && timeMacGiapLuyenTap<=60f){
-                duLieuNguoiChoi.giamSatThuongChiMang(30);
-                duLieuNguoiChoi.giamChiMang(15);
-                daCongChiMang = false;
-            }
         }
     }
     public void xuLyClick(int x, int y) {

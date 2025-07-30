@@ -44,7 +44,7 @@ public class ThemItemTest {
             "glt_c3", "Giáp luyện tập cấp 3", LoaiItem.GIAPLUYENTAP,
             new Texture("vatpham/vatphamgame/giapluyentap/gltc3.png"),
             "Khi mặc vào sẽ tích lũy thời gian luyện tập, khi cởi ra sẽ tăng sức đánh 30% và Crit 15%, ST Crit 30%", 1,
-            new int[]{0,0,0,0,0,0,35,0,30,0,0,0,0},
+            new int[]{0,0,0,0,0,0,35,0,0,0,0,0,0},
             nhanVat.getHanhtinh(), 1_000_000_000L, null, 7, 7, 0, 0
         ));
 
@@ -305,12 +305,12 @@ public class ThemItemTest {
             "traidat", 40_000_000_000L, null, 7, 7, 7, -1
         ));
 
-//        duLieu.themItemVaoHanhTrang(new Item(
-//            "glt_c1", "Giáp luyện tập cấp 1", LoaiItem.GIAPLUYENTAP,
-//            new Texture("vatpham/vatphamgame/giapluyentap/gltc1.png"),
-//            "Khi mặc vào sẽ tích lũy thời gian luyện tập, khi cởi ra sẽ tăng sức đánh 10% và Crit 15%, ST Crit 30%", 1,
-//            new int[]{0,0,0,0,0,0,25,0,10,0,0,0,0},
-//            "traidat", 10_000_000L, null, 7, 5, 0, 0
-//        ));
+        duLieu.themItemVaoHanhTrang(new Item(
+            "glt_c1", "Giáp luyện tập cấp 1", LoaiItem.GIAPLUYENTAP,
+            new Texture("vatpham/vatphamgame/giapluyentap/gltc1.png"),
+            "Khi mặc vào sẽ tích lũy thời gian luyện tập, khi cởi ra nếu sẽ tăng sức đánh 10% và Crit 15%, ST Crit 30%", 1,
+            new int[]{0,0,0,0,0,0,25,0,0,0,0,0,0},
+            "traidat", 10_000_000L, null, 7, 5, 0, 0
+        ));
     }
 }

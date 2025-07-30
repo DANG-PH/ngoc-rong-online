@@ -51,9 +51,8 @@ public class DuLieuNguoiChoi {
     private boolean dangmacgang = false;
     private boolean dangmacgiay = false;
     private boolean dangmacrada = false;
+    private boolean dangmacglt = false;
     private boolean setKichHoatNappa = false;
-    private boolean checkgiapluyentap = true;
-    private int chiSoGlt;
 
     private String[] danhSachHanhTinh = {"traidat","xayda","namek"};
 
@@ -239,21 +238,21 @@ public class DuLieuNguoiChoi {
         if (dangmacrada) {
             tilePhanTramHPrada += chisoRada[6];
         }
-        if (checkgiapluyentap && chisoGlt != null) {
+        if (dangmacglt) {
             tilePhanTramHPglt += chisoGlt[6];
         }
         if (setKichHoatNappa){
             tilePhanTramHPsetkh += 80;
         }
         // Tính HP cộng thêm thực tế
-        int HpCongThemThucTeCt = Math.round(HpCongThem * (1 + tilePhanTramHPctrang/ 100f));
-        int HpCongThemThucTeAo = Math.round(HpCongThemThucTeCt* (1 + tilePhanTramHPao/ 100f));
-        int HpCongThemThucTeQuan = Math.round(HpCongThemThucTeAo* (1 + tilePhanTramHPquan/ 100f));
-        int HpCongThemThucTeGang = Math.round(HpCongThemThucTeQuan* (1 + tilePhanTramHPgang/ 100f));
-        int HpCongThemThucTeGiay = Math.round(HpCongThemThucTeGang* (1 + tilePhanTramHPgiay/ 100f));
-        int HpCongThemThucTeRada = Math.round(HpCongThemThucTeGiay* (1 + tilePhanTramHPrada/ 100f));
-        int HpCongThemThucTeGlt = Math.round(HpCongThemThucTeRada* (1 + tilePhanTramHPglt/ 100f));
-        int HpCongThemThucTeNappa = Math.round(HpCongThemThucTeGlt * (1 + tilePhanTramHPsetkh/ 100f));
+        float HpCongThemThucTeCt = HpCongThem * (1 + tilePhanTramHPctrang/ 100f);
+        float HpCongThemThucTeAo = HpCongThemThucTeCt* (1 + tilePhanTramHPao/ 100f);
+        float HpCongThemThucTeQuan = HpCongThemThucTeAo* (1 + tilePhanTramHPquan/ 100f);
+        float HpCongThemThucTeGang = HpCongThemThucTeQuan* (1 + tilePhanTramHPgang/ 100f);
+        float HpCongThemThucTeGiay = HpCongThemThucTeGang* (1 + tilePhanTramHPgiay/ 100f);
+        float HpCongThemThucTeRada = HpCongThemThucTeGiay* (1 + tilePhanTramHPrada/ 100f);
+        float HpCongThemThucTeGlt = HpCongThemThucTeRada* (1 + tilePhanTramHPglt/ 100f);
+        float HpCongThemThucTeNappa = HpCongThemThucTeGlt * (1 + tilePhanTramHPsetkh/ 100f);
         // Cộng vào HpGoc (tối đa 550000)
         if (choPhepHienThi){
             this.HpGoc += HpCongThem;
@@ -299,21 +298,21 @@ public class DuLieuNguoiChoi {
         if (dangmacrada) {
             tilePhanTramHPrada += chisoRada[6];
         }
-        if (checkgiapluyentap && chisoGlt != null ) {
+        if (dangmacglt) {
             tilePhanTramHPglt += chisoGlt[6];
         }
         if (setKichHoatNappa){
             tilePhanTramHPsetkh += 80;
         }
         // Tính HP cộng thêm thực tế
-        int HpCongThemThucTeCt = Math.round(HpCongThem * (1 + tilePhanTramHPctrang/ 100f));
-        int HpCongThemThucTeAo = Math.round(HpCongThemThucTeCt* (1 + tilePhanTramHPao/ 100f));
-        int HpCongThemThucTeQuan = Math.round(HpCongThemThucTeAo* (1 + tilePhanTramHPquan/ 100f));
-        int HpCongThemThucTeGang = Math.round(HpCongThemThucTeQuan* (1 + tilePhanTramHPgang/ 100f));
-        int HpCongThemThucTeGiay = Math.round(HpCongThemThucTeGang* (1 + tilePhanTramHPgiay/ 100f));
-        int HpCongThemThucTeRada = Math.round(HpCongThemThucTeGiay* (1 + tilePhanTramHPrada/ 100f));
-        int HpCongThemThucTeGlt = Math.round(HpCongThemThucTeRada* (1 + tilePhanTramHPglt/ 100f));
-        int HpCongThemThucTeNappa = Math.round(HpCongThemThucTeGlt * (1 + tilePhanTramHPsetkh/ 100f));
+        float HpCongThemThucTeCt = HpCongThem * (1 + tilePhanTramHPctrang/ 100f);
+        float HpCongThemThucTeAo = HpCongThemThucTeCt* (1 + tilePhanTramHPao/ 100f);
+        float HpCongThemThucTeQuan = HpCongThemThucTeAo* (1 + tilePhanTramHPquan/ 100f);
+        float HpCongThemThucTeGang = HpCongThemThucTeQuan* (1 + tilePhanTramHPgang/ 100f);
+        float HpCongThemThucTeGiay = HpCongThemThucTeGang* (1 + tilePhanTramHPgiay/ 100f);
+        float HpCongThemThucTeRada = HpCongThemThucTeGiay* (1 + tilePhanTramHPrada/ 100f);
+        float HpCongThemThucTeGlt = HpCongThemThucTeRada* (1 + tilePhanTramHPglt/ 100f);
+        float HpCongThemThucTeNappa = HpCongThemThucTeGlt * (1 + tilePhanTramHPsetkh/ 100f);
         // Cộng vào HP tổng
         this.HpNhanVat -= HpCongThemThucTeNappa;
     }
@@ -337,15 +336,15 @@ public class DuLieuNguoiChoi {
         if (dangmacgang) tileGang += chisoGang[7];
         if (dangmacgiay) tileGiay += chisoGiay[7];
         if (dangmacrada) tileRada += chisoRada[7];
-        if (checkgiapluyentap && chisoGlt != null) tileGlt += chisoGlt[7];
+        if (dangmacglt) tileGlt += chisoGlt[7];
 
-        int k1 = Math.round(KiCongThem * (1 + tileCT / 100f));
-        int k2 = Math.round(k1 * (1 + tileAo / 100f));
-        int k3 = Math.round(k2 * (1 + tileQuan / 100f));
-        int k4 = Math.round(k3 * (1 + tileGang / 100f));
-        int k5 = Math.round(k4 * (1 + tileGiay / 100f));
-        int k6 = Math.round(k5 * (1 + tileRada / 100f));
-        int k7 = Math.round(k6 * (1 + tileGlt / 100f));
+        float k1 = KiCongThem * (1 + tileCT / 100f);
+        float k2 = k1 * (1 + tileAo / 100f);
+        float k3 = k2 * (1 + tileQuan / 100f);
+        float k4 = k3 * (1 + tileGang / 100f);
+        float k5 = k4 * (1 + tileGiay / 100f);
+        float k6 = k5 * (1 + tileRada / 100f);
+        float k7 = k6 * (1 + tileGlt / 100f);
 
         if (choPhepHienThi) {
             this.KiGoc += KiCongThem;
@@ -372,15 +371,15 @@ public class DuLieuNguoiChoi {
         if (dangmacgang) tileGang += chisoGang[7];
         if (dangmacgiay) tileGiay += chisoGiay[7];
         if (dangmacrada) tileRada += chisoRada[7];
-        if (checkgiapluyentap && chisoGlt != null) tileGlt += chisoGlt[7];
+        if (dangmacglt) tileGlt += chisoGlt[7];
 
-        int k1 = Math.round(KiCongThem * (1 + tileCT / 100f));
-        int k2 = Math.round(k1 * (1 + tileAo / 100f));
-        int k3 = Math.round(k2 * (1 + tileQuan / 100f));
-        int k4 = Math.round(k3 * (1 + tileGang / 100f));
-        int k5 = Math.round(k4 * (1 + tileGiay / 100f));
-        int k6 = Math.round(k5 * (1 + tileRada / 100f));
-        int k7 = Math.round(k6 * (1 + tileGlt / 100f));
+        float k1 = KiCongThem * (1 + tileCT / 100f);
+        float k2 = k1 * (1 + tileAo / 100f);
+        float k3 = k2 * (1 + tileQuan / 100f);
+        float k4 = k3 * (1 + tileGang / 100f);
+        float k5 = k4 * (1 + tileGiay / 100f);
+        float k6 = k5 * (1 + tileRada / 100f);
+        float k7 = k6 * (1 + tileGlt / 100f);
 
         this.KiNhanVat -= k7;
     }
@@ -403,15 +402,15 @@ public class DuLieuNguoiChoi {
         if (dangmacgang) tileGang += chisoGang[8];
         if (dangmacgiay) tileGiay += chisoGiay[8];
         if (dangmacrada) tileRada += chisoRada[8];
-        if (!checkgiapluyentap) tileGlt += chiSoGlt;
+        if (dangmacglt) tileGlt += chisoGlt[8];
 
-        int s1 = Math.round(SucDanhCongThem * (1 + tileCT / 100f));
-        int s2 = Math.round(s1 * (1 + tileAo / 100f));
-        int s3 = Math.round(s2 * (1 + tileQuan / 100f));
-        int s4 = Math.round(s3 * (1 + tileGang / 100f));
-        int s5 = Math.round(s4 * (1 + tileGiay / 100f));
-        int s6 = Math.round(s5 * (1 + tileRada / 100f));
-        int s7 = Math.round(s6 * (1 + tileGlt / 100f));
+        float s1 = SucDanhCongThem * (1 + tileCT / 100f);
+        float s2 = s1 * (1 + tileAo / 100f);
+        float s3 = s2 * (1 + tileQuan / 100f);
+        float s4 = s3 * (1 + tileGang / 100f);
+        float s5 = s4 * (1 + tileGiay / 100f);
+        float s6 = s5 * (1 + tileRada / 100f);
+        float s7 = s6 * (1 + tileGlt / 100f);
 
         if (choPhepHienThi) {
             this.SucDanhGoc += SucDanhCongThem;
@@ -438,15 +437,15 @@ public class DuLieuNguoiChoi {
         if (dangmacgang) tileGang += chisoGang[8];
         if (dangmacgiay) tileGiay += chisoGiay[8];
         if (dangmacrada) tileRada += chisoRada[8];
-        if (!checkgiapluyentap) tileGlt += chiSoGlt;
+        if (dangmacglt) tileGlt += chisoGlt[8];
 
-        int s1 = Math.round(SucDanhCongThem * (1 + tileCT / 100f));
-        int s2 = Math.round(s1 * (1 + tileAo / 100f));
-        int s3 = Math.round(s2 * (1 + tileQuan / 100f));
-        int s4 = Math.round(s3 * (1 + tileGang / 100f));
-        int s5 = Math.round(s4 * (1 + tileGiay / 100f));
-        int s6 = Math.round(s5 * (1 + tileRada / 100f));
-        int s7 = Math.round(s6 * (1 + tileGlt / 100f));
+        float s1 = SucDanhCongThem * (1 + tileCT / 100f);
+        float s2 = s1 * (1 + tileAo / 100f);
+        float s3 = s2 * (1 + tileQuan / 100f);
+        float s4 = s3 * (1 + tileGang / 100f);
+        float s5 = s4 * (1 + tileGiay / 100f);
+        float s6 = s5 * (1 + tileRada / 100f);
+        float s7 = s6 * (1 + tileGlt / 100f);
 
         this.SucDanhNhanVat -= s7;
     }
@@ -627,12 +626,10 @@ public class DuLieuNguoiChoi {
 
     public void setHpHienTai(float Hp) {
         this.HpHienTai = Hp;
-        this.HpHienTai = Math.max(0,Math.min(HpHienTai,HpHopThe));
     }
 
     public void setKiHienTai(float Ki) {
         this.KiHienTai = Ki;
-        this.KiHienTai = Math.max(0,Math.min(KiHienTai,KiHopThe));
     }
 
     public void dangMacAo(boolean dangmacAo){
@@ -670,20 +667,19 @@ public class DuLieuNguoiChoi {
             dangmacrada = false;
         }
     }
+    public void dangMacGlt(boolean dangMacGlt){
+        if (dangMacGlt){
+            dangmacglt = true;
+        } else {
+            dangmacglt = false;
+        }
+    }
 
     public void setNappa(boolean duDieuKien){
         if (duDieuKien){
             setKichHoatNappa = true;
         } else {
             setKichHoatNappa = false;
-        }
-    }
-    public void checkGiapLuyenTap(boolean duDieuKien,int chiso){
-        if (duDieuKien){
-            checkgiapluyentap = true;
-        } else {
-            checkgiapluyentap = false;
-            chiSoGlt = chiso;
         }
     }
     public void taoDeTu(String ten) {

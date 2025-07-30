@@ -42,7 +42,7 @@ public class HUDPopupHanhTrang {
             if ("giapluyentap".equals(veHUD.itemDangChon)) {
                 layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
                 veHUD.PopupHanhTrangH += layout.height + 15;
-                layout.setText(veHUD.fontSkillchuaco, "Hiệu lực trong " + (int) (veHUD.timeMacGiapLuyenTap / 60f) + " phút");
+                layout.setText(veHUD.fontSkillchuaco, "Hiệu lực trong " + (veHUD.itemm.getHanSuDung() > 60f ? (int) (veHUD.itemm.getHanSuDung() / 60f) + " phút" : (int)(veHUD.itemm.getHanSuDung())+" giây"));
                 veHUD.PopupHanhTrangH += layout.height + 15;
                 for (int i = 6; i <= 12; i++) {
                     if (veHUD.itemm.getChiso()[i] > 0) {
@@ -72,7 +72,7 @@ public class HUDPopupHanhTrang {
                     Align.left,
                     true
                 );
-                veHUD.PopupHanhTrangH += layout.height + 14;
+                veHUD.PopupHanhTrangH += layout.height + 42;
                 if (veHUD.itemm.getSoSaoPhaLe() > 0) {
                     veHUD.PopupHanhTrangH += 20;
                 }
@@ -292,12 +292,12 @@ public class HUDPopupHanhTrang {
                 veHUD.fontTenSkill.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
                 offsetY += layout.height + 12;
 
-                layout.setText(veHUD.fontSkillchuaco, "Hiệu lực trong " + (int) (veHUD.timeMacGiapLuyenTap / 60f) + " phút");
+                layout.setText(veHUD.fontSkillchuaco, "Hiệu lực trong " + (veHUD.itemm.getHanSuDung() > 60f ? (int) (veHUD.itemm.getHanSuDung() / 60f) + " phút" : (int)(veHUD.itemm.getHanSuDung())+" giây"));
                 veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
                 offsetY += layout.height + 12;
 
                 for (int i = 6; i <= 12; i++) {
-                    if (veHUD.itemm.getChiso()[i] > 0 && i != 8) {
+                    if (veHUD.itemm.getChiso()[i] > 0) {
                         layout.setText(veHUD.fontSkillchuaco, chisoduoccong[i] + "+" + veHUD.itemm.getChiso()[i] + "%");
                         veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
                         offsetY += layout.height + 12;
@@ -709,7 +709,7 @@ public class HUDPopupHanhTrang {
             if ("giapluyentap".equals(veHUD.itemDangChon)) {
                 layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
                 veHUD.PopupHanhTrangHdetu += layout.height + 15;
-                layout.setText(veHUD.fontSkillchuaco, "Hiệu lực trong " + (int) (veHUD.timeMacGiapLuyenTap / 60f) + " phút");
+                layout.setText(veHUD.fontSkillchuaco, "Hiệu lực trong " + (veHUD.itemm.getHanSuDung() > 60f ? (int) (veHUD.itemm.getHanSuDung() / 60f) + " phút" : (int)(veHUD.itemm.getHanSuDung())+" giây"));
                 veHUD.PopupHanhTrangHdetu += layout.height + 15;
                 for (int i = 6; i <= 12; i++) {
                     if (veHUD.itemm.getChiso()[i] > 0) {
@@ -932,12 +932,12 @@ public class HUDPopupHanhTrang {
                 veHUD.fontTenSkill.draw(batch, layout, veHUD.PopupHanhTrangWdetu + veHUD.PopupHanhTrangXdetu - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYdetu + veHUD.PopupHanhTrangHdetu - offsetY);
                 offsetY += layout.height + 12;
 
-                layout.setText(veHUD.fontSkillchuaco, "Hiệu lực trong " + (int) (veHUD.timeMacGiapLuyenTap / 60f) + " phút");
+                layout.setText(veHUD.fontSkillchuaco, "Hiệu lực trong " + (veHUD.itemm.getHanSuDung() > 60f ? (int) (veHUD.itemm.getHanSuDung() / 60f) + " phút" : (int)(veHUD.itemm.getHanSuDung())+" giây"));
                 veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangWdetu + veHUD.PopupHanhTrangXdetu - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYdetu + veHUD.PopupHanhTrangHdetu - offsetY);
                 offsetY += layout.height + 12;
 
                 for (int i = 6; i <= 12; i++) {
-                    if (veHUD.itemm.getChiso()[i] > 0 && i != 8) {
+                    if (veHUD.itemm.getChiso()[i] > 0) {
                         layout.setText(veHUD.fontSkillchuaco, chisoduoccong[i] + "+" + veHUD.itemm.getChiso()[i] + "%");
                         veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangWdetu + veHUD.PopupHanhTrangXdetu - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYdetu + veHUD.PopupHanhTrangHdetu - offsetY);
                         offsetY += layout.height + 12;

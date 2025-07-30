@@ -238,19 +238,12 @@ public class HUDXulyitem {
                         nhanVat.setChisoGiapLuyenTap(item.getChiso());
                         nhanVat.setSoSaoGiapLuyenTap(item.getSoSaoPhaLe());
                         nhanVat.setSoSaoCuongHoaGlt(item.getSoSaoPhaLeCuongHoa());
-                        nhanVat.setHanSuDungGiapLuyenTap(veHUD.timeMacGiapLuyenTap);
+                        nhanVat.setHanSuDungGiapLuyenTap(item.getHanSuDung());
                         nhanVat.setHanhTinhGiapLuyenTap(item.getHanhtinh());
                         nhanVat.setSucManhYeuCauGiapLuyenTap(item.getSucManhYeuCau());
+                        tangchiso(item.getChiso());
+                        duLieuNguoiChoi.dangMacGlt(true);
                         veHUD.dangMacGiapLuyenTap = true;
-                        if (!veHUD.lanDau) {
-                            duLieuNguoiChoi.giamSucDanhPt(veHUD.chisovuathao[8]);
-                            duLieuNguoiChoi.tangHpPt(item.getChiso()[6]);
-                            duLieuNguoiChoi.checkGiapLuyenTap(true,0);
-                        } else {
-                            veHUD.lanDau = false;
-                            duLieuNguoiChoi.checkGiapLuyenTap(true,0);
-                            duLieuNguoiChoi.tangHpPt(item.getChiso()[6]);
-                        }
                         danhSach.remove(indexx);
                     } else {
                         macGiapLuyenTapMoi(item, indexx, danhSach);
@@ -1572,7 +1565,7 @@ public class HUDXulyitem {
         long sucmanhyeucaucu = nhanVat.getSucManhYeuCauGiapLuyenTap();
         LoaiItem loaiCu = LoaiItem.GIAPLUYENTAP;
         Item giapLuyenTapCu = new Item(idCu, tenCu, loaiCu, veHUD.giaplt, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, null,sosaocu,sosaocuonghoacu,0,hansudung);
-        duLieuNguoiChoi.giamHpPt(chisocu[6]);
+        giamchiso(chisocu);
         veHUD.giaplt = item.getTexture();
         duLieuNguoiChoi.setItemVaoHanhTrangDangMac(item,6);
         nhanVat.setIdGiapLuyenTap(item.getId());
@@ -1584,10 +1577,10 @@ public class HUDXulyitem {
         nhanVat.setHanSuDungGiapLuyenTap(item.getHanSuDung());
         nhanVat.setHanhTinhGiapLuyenTap(item.getHanhtinh());
         nhanVat.setSucManhYeuCauGiapLuyenTap(item.getSucManhYeuCau());
-        duLieuNguoiChoi.tangHpPt(item.getChiso()[6]);
-        duLieuNguoiChoi.checkGiapLuyenTap(true,0);
+        tangchiso(item.getChiso());
         danhSach.set(indexx, giapLuyenTapCu);
         veHUD.dangMacGiapLuyenTap = true;
+        duLieuNguoiChoi.dangMacGlt(true);
     }
 
 
@@ -1605,16 +1598,14 @@ public class HUDXulyitem {
         long sucmanhyeucaucu = nhanVat.getSucManhYeuCauGiapLuyenTap();
         LoaiItem loaiCu = LoaiItem.GIAPLUYENTAP;
         Item giapLuyenTapCu = new Item(idCu, tenCu, loaiCu, veHUD.giaplt, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, null,sosaocu,sosaocuonghoacu,0,hansudung);
-        tangchiso(chisocu);
-        veHUD.chisovuathao = chisocu;
-        duLieuNguoiChoi.checkGiapLuyenTap(false,chisocu[8]);
-        duLieuNguoiChoi.giamHpPt(chisocu[6]);
-        duLieuNguoiChoi.giamHpPt(chisocu[6]);
+        giamchiso(chisocu);
         if (!vut) {
             duLieuNguoiChoi.themItemVaoHanhTrang(giapLuyenTapCu);
         }
         veHUD.giaplt = null;
         veHUD.dangMacGiapLuyenTap = false;
+        duLieuNguoiChoi.dangMacGlt(false);
+        veHUD.itemGiapLuyenTapVuaCoi = giapLuyenTapCu;
     }
 
     private void macVanBayMoi(Item item, int indexx, ArrayList<Item> danhSach){

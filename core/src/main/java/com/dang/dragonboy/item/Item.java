@@ -88,6 +88,16 @@ public class Item {
 
     public long getSucManhYeuCau() { return sucManhYeuCau; }
 
+    public void tangHanSuDung() {
+        this.HanSuDung += 1/60f;
+        this.HanSuDung = Math.max(0,Math.min(this.HanSuDung,1800f));
+    }
+
+    public void giamHanSuDung() {
+        this.HanSuDung -= 1/60f;
+        this.HanSuDung = Math.max(0,Math.min(this.HanSuDung,1800f));
+    }
+
     public void suDung() {
         switch (loai) {
             case HOI_MAU:

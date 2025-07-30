@@ -137,11 +137,11 @@ public class HUDPopupRenderer {
                 layout.setText(veHUD.fontsm, "Sức đánh: " + (int) duLieuNguoiChoi.getSdHopThe() + ", Crit: " + duLieuNguoiChoi.getChiMangNhanVat() + "%");
                 veHUD.fontsm.draw(batch, layout, 125, 545);
             } else {
-                layout.setText(veHUD.fontsm, "HP: " + (int) duLieuNguoiChoi.getHpHienTai() + " / " + (int) duLieuNguoiChoi.getHpToiDa());
+                layout.setText(veHUD.fontsm,"HP: " + (int) duLieuNguoiChoi.getHpHienTai() + " / " + (int) duLieuNguoiChoi.getHpHopThe());
                 veHUD.fontsm.draw(batch, layout, 125, 595);
-                layout.setText(veHUD.fontsm, "KI: " + (int) duLieuNguoiChoi.getKiHienTai() + " / " + (int) duLieuNguoiChoi.getKiToiDa());
+                layout.setText(veHUD.fontsm,"KI: " + (int) duLieuNguoiChoi.getKiHienTai() + " / " + (int) duLieuNguoiChoi.getKiHopThe());
                 veHUD.fontsm.draw(batch, layout, 125, 570);
-                layout.setText(veHUD.fontsm, "Sức đánh: " + (int) duLieuNguoiChoi.getSucDanhNhanVat() + ", Crit: " + duLieuNguoiChoi.getChiMangNhanVat() + "%");
+                layout.setText(veHUD.fontsm, "Sức đánh: " + (int) duLieuNguoiChoi.getSdHopThe() + ", Crit: " + duLieuNguoiChoi.getChiMangNhanVat() + "%");
                 veHUD.fontsm.draw(batch, layout, 125, 545);
             }
             layout.setText(veHUD.fontsm,"Giáp: "+(int)duLieuNguoiChoi.getGiapNhanVat()+", ST Crit: "+(int)duLieuNguoiChoi.getSatThuongChiMang()+"%");
@@ -203,7 +203,7 @@ public class HUDPopupRenderer {
                     veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
                 }
                 if (i == 6 && item != null) {
-                    layout.setText(veHUD.fontCapSKill,"Hiệu lực trong " + (int) (veHUD.timeMacGiapLuyenTap / 60f) + " phút");
+                    layout.setText(veHUD.fontCapSKill,"Hiệu lực trong " + (item.getHanSuDung() > 60f ? (int) (item.getHanSuDung() / 60f) + " phút" : (int)(item.getHanSuDung())+" giây"));
                     veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
                 }
                 if (i == 5 && item != null) {
@@ -298,7 +298,7 @@ public class HUDPopupRenderer {
                             veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
                         }
                         if (item.getLoai() == LoaiItem.GIAPLUYENTAP) {
-                            layout.setText(veHUD.fontCapSKill,"Hiệu lực trong " + (int) (veHUD.timeMacGiapLuyenTap / 60f) + " phút");
+                            layout.setText(veHUD.fontCapSKill,"Hiệu lực trong " + (item.getHanSuDung() > 60f ? (int) (item.getHanSuDung() / 60f) + " phút" : (int)(item.getHanSuDung())+" giây"));
                             veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
                         }
                         if (item.getLoai() == LoaiItem.CAITRANG || item.getLoai() == LoaiItem.AVATAR) {
@@ -1198,7 +1198,7 @@ public class HUDPopupRenderer {
                     veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + 1020 - 350, y + 49 - 30);
                 }
                 if (i == 6 && item != null) {
-                    layout.setText(veHUD.fontCapSKill, "Hiệu lực trong " + (int) (veHUD.timeMacGiapLuyenTap / 60f) + " phút");
+                    layout.setText(veHUD.fontCapSKill, "Hiệu lực trong " + (item.getHanSuDung() > 60f ? (int) (item.getHanSuDung() / 60f) + " phút" : (int)(item.getHanSuDung())+" giây"));
                     veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + 1020 - 350, y + 49 - 30);
                 }
                 if (i == 5 && item != null) {
@@ -1293,7 +1293,7 @@ public class HUDPopupRenderer {
                             veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + 1020 - 350, y + 49 - 30);
                         }
                         if (item.getLoai() == LoaiItem.GIAPLUYENTAP) {
-                            layout.setText(veHUD.fontCapSKill, "Hiệu lực trong " + (int) (veHUD.timeMacGiapLuyenTap / 60f) + " phút");
+                            layout.setText(veHUD.fontCapSKill, "Hiệu lực trong " + (item.getHanSuDung() > 60f ? (int) (item.getHanSuDung() / 60f) + " phút" : (int)(item.getHanSuDung())+" giây"));
                             veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + 1020 - 350, y + 49 - 30);
                         }
                         if (item.getLoai() == LoaiItem.CAITRANG || item.getLoai() == LoaiItem.AVATAR) {
