@@ -255,6 +255,11 @@ public class VeHUD {
     public boolean daRanDomChatDeTu = false;
     public String bongTaiDangDung = "";
 
+    public String ngocRongUoc = "";
+    public boolean dangHienDieuUocRongThan = false;
+    public float timeHienRongThan = 0f;
+    public Texture[] hieuUngRongThan = new Texture[21];
+
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data;
         duLieuNguoiChoi.setNhanVat(nhanVat);
@@ -424,6 +429,9 @@ public class VeHUD {
         daup[5] = dau6p;
         thanp[5] = than6p;
         chanp[5] = chan6p;
+        for (int i = 0; i < 21; i++) {
+            hieuUngRongThan[i] = new Texture("hieuung/hieuunggame/rong_than/"+(i+1)+".png");
+        }
         // Load font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -550,7 +558,7 @@ public class VeHUD {
                 0.35f // Delay theo giây (ví dụ 1 giây)
             );
         }
-
+        chonDieuUocRongThan(batch);
         batch.end();
         if (duLieuNguoiChoi.coDeTu()) {
             if (duLieuNguoiChoi.deTu.getTheLuc()<20 && timeDoiDauThan == 0 && !duLieuNguoiChoi.deTu.getTrangthai().equals("Về nhà")) {
@@ -759,6 +767,12 @@ public class VeHUD {
         }
     }
     public void update(float delta) {
+        if (timeHienRongThan>0) {
+            timeHienRongThan-=delta;
+            if (timeHienRongThan<=0) {
+                timeHienRongThan = 0;
+            }
+        }
         timeMiniGame -= delta;
         timeMiniGameChanLe -= delta;
         if (timeMiniGame<=0) {
@@ -1052,10 +1066,13 @@ public class VeHUD {
                                     String[] idsCanTim = new String[0];
                                     if (itemm.getId().equals("nr3s")) {
                                         idsCanTim = new String[]{"nr3s", "nr4s", "nr5s", "nr6s", "nr7s"};
+                                        ngocRongUoc = "3sao";
                                     } else if (itemm.getId().equals("nr2s")) {
                                         idsCanTim = new String[]{"nr2s","nr3s", "nr4s", "nr5s", "nr6s", "nr7s"};
+                                        ngocRongUoc = "2sao";
                                     } else if (itemm.getId().equals("nr1s")) {
                                         idsCanTim = new String[]{"nr1s","nr2s","nr3s", "nr4s", "nr5s", "nr6s", "nr7s"};
+                                        ngocRongUoc = "1sao";
                                     }
                                     boolean duTatCa = true;
                                     ArrayList<Item> danhSach = duLieuNguoiChoi.getHanhTrang();
@@ -1087,10 +1104,14 @@ public class VeHUD {
                                                 }
                                             }
                                         }
+                                        dangHienDieuUocRongThan = true;
+                                        timeHienRongThan = 300f;
+                                        dangHienPopup = false;
                                     } else {
                                         dangHienTinNhanPet = true;
                                         timeHienTinNhanPet = 2f;
                                         tinNhanPet = "Không đủ ngọc rồng";
+                                        ngocRongUoc = "";
                                     }
                                 } else {
                                     dangHienTinNhanPet = true;
@@ -1902,5 +1923,29 @@ public class VeHUD {
     }
     public void setCamera(QuanLyCamera camManager) {
         this.camManager = camManager;
+    }
+    void chonDieuUocRongThan(SpriteBatch batch) {
+        if (timeHienRongThan<=0) return;
+        float timeMax = 300f;
+        float step = 0.12f;
+        if (timeHienRongThan>300f-2.52f) {
+            int tick = (int) (timeHienRongThan * 18);
+            if (tick % 2 == 0) {
+                veNenFlash = true;
+            } else {
+                veNenFlash = false;
+            }
+        } else {
+            veNenFlash = false;
+        }
+        for (int i = 0; i < 21; i++) {
+            float start = timeMax - i*step;
+            float end = start - step;
+            if (timeHienRongThan >= end && timeHienRongThan < start) {
+                batch.setProjectionMatrix(camManager.camera.combined);
+                batch.draw(hieuUngRongThan[i],nhanVat.getX()+120f-(hieuUngRongThan[i].getWidth()*0.5f/2f),nhanVat.getY()+200-(hieuUngRongThan[i].getHeight()*0.5f/2f),hieuUngRongThan[i].getWidth()*0.5f,hieuUngRongThan[i].getHeight()*0.5f);
+                batch.setProjectionMatrix(camManager.uiCamera.combined);
+            }
+        }
     }
 }

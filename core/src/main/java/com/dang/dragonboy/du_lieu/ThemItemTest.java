@@ -268,7 +268,7 @@ public class ThemItemTest {
         duLieu.themItemVaoHanhTrang(new Item(
             "nr1s", "Ngọc rồng 1 sao", LoaiItem.NGOCRONG,
             new Texture("vatpham/vatphamgame/ngocrong/nr1s.png"),
-            "Thu thập để ước rồng thần", 2,
+            "Thu thập để ước rồng thần", 1,
             new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
             "all", 0, null, 0, 0, 0, -1
         ));
@@ -276,7 +276,7 @@ public class ThemItemTest {
         duLieu.themItemVaoHanhTrang(new Item(
             "nr1s", "Ngọc rồng 1 sao", LoaiItem.NGOCRONG,
             new Texture("vatpham/vatphamgame/ngocrong/nr1s.png"),
-            "Thu thập để ước rồng thần", 3,
+            "Thu thập để ước rồng thần", 98,
             new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
             "all", 0, null, 0, 0, 0, -1
         ));
@@ -284,7 +284,7 @@ public class ThemItemTest {
         duLieu.themItemVaoHanhTrang(new Item(
             "nr2s", "Ngọc rồng 2 sao", LoaiItem.NGOCRONG,
             new Texture("vatpham/vatphamgame/ngocrong/nr2s.png"),
-            "Thu thập để ước rồng thần", 1,
+            "Thu thập để ước rồng thần", 99,
             new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
             "all", 0, null, 0, 0, 0, -1
         ));
@@ -292,7 +292,7 @@ public class ThemItemTest {
         duLieu.themItemVaoHanhTrang(new Item(
             "nr3s", "Ngọc rồng 3 sao", LoaiItem.NGOCRONG,
             new Texture("vatpham/vatphamgame/ngocrong/nr3s.png"),
-            "Thu thập để ước rồng thần", 1,
+            "Thu thập để ước rồng thần", 99,
             new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
             "all", 0, null, 0, 0, 0, -1
         ));
@@ -300,7 +300,7 @@ public class ThemItemTest {
         duLieu.themItemVaoHanhTrang(new Item(
             "nr4s", "Ngọc rồng 4 sao", LoaiItem.NGOCRONG,
             new Texture("vatpham/vatphamgame/ngocrong/nr4s.png"),
-            "Thu thập để ước rồng thần", 1,
+            "Thu thập để ước rồng thần", 99,
             new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
             "all", 0, null, 0, 0, 0, -1
         ));
@@ -308,7 +308,7 @@ public class ThemItemTest {
         duLieu.themItemVaoHanhTrang(new Item(
             "nr5s", "Ngọc rồng 5 sao", LoaiItem.NGOCRONG,
             new Texture("vatpham/vatphamgame/ngocrong/nr5s.png"),
-            "Thu thập để ước rồng thần", 1,
+            "Thu thập để ước rồng thần", 99,
             new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
             "all", 0, null, 0, 0, 0, -1
         ));
@@ -316,7 +316,7 @@ public class ThemItemTest {
         duLieu.themItemVaoHanhTrang(new Item(
             "nr6s", "Ngọc rồng 6 sao", LoaiItem.NGOCRONG,
             new Texture("vatpham/vatphamgame/ngocrong/nr6s.png"),
-            "Thu thập để ước rồng thần", 1,
+            "Thu thập để ước rồng thần", 99,
             new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
             "all", 0, null, 0, 0, 0, -1
         ));
@@ -324,7 +324,7 @@ public class ThemItemTest {
         duLieu.themItemVaoHanhTrang(new Item(
             "nr7s", "Ngọc rồng 7 sao", LoaiItem.NGOCRONG,
             new Texture("vatpham/vatphamgame/ngocrong/nr7s.png"),
-            "Thu thập để ước rồng thần", 1,
+            "Thu thập để ước rồng thần", 99,
             new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
             "all", 0, null, 0, 0, 0, -1
         ));
