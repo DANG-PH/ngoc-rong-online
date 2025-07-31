@@ -1014,8 +1014,8 @@ public class VeHUD {
                 if (!dangHienMiniGame && !dangHienChonMiniGame && !dangHienMiniGameChanLe) {
                     // mac do
                     if (nuthanhtrangchon == 1) {
-                        if (nhanVat.getHanhtinh().equals(itemm.getHanhtinh()) && duLieuNguoiChoi.getSucManh() >= itemm.getSucManhYeuCau()) {
-                            if (!itemDangChon.equals("bongtai")) {
+                        if ((nhanVat.getHanhtinh().equals(itemm.getHanhtinh()) || itemm.getHanhtinh().equals("all")) && duLieuNguoiChoi.getSucManh() >= itemm.getSucManhYeuCau()) {
+                            if (!itemDangChon.equals("bongtai") && !itemDangChon.equals("ngocrong")) {
                                 xulyitem.macDo(hangTrangDangChon);
                             }
                             if (itemDangChon.equals("bongtai")) {
@@ -1044,6 +1044,58 @@ public class VeHUD {
                                         timeHienTinNhanPet = 2f;
                                         tinNhanPet = "Bạn chưa có đệ tử";
                                     }
+                                }
+                            }
+                            if (itemDangChon.equals("ngocrong")) {
+                                if (itemm.getId().equals("nr3s") || itemm.getId().equals("nr2s") || itemm.getId().equals("nr1s")) {
+                                    System.out.print("Đã đúng id");
+                                    String[] idsCanTim = new String[0];
+                                    if (itemm.getId().equals("nr3s")) {
+                                        idsCanTim = new String[]{"nr3s", "nr4s", "nr5s", "nr6s", "nr7s"};
+                                    } else if (itemm.getId().equals("nr2s")) {
+                                        idsCanTim = new String[]{"nr2s","nr3s", "nr4s", "nr5s", "nr6s", "nr7s"};
+                                    } else if (itemm.getId().equals("nr1s")) {
+                                        idsCanTim = new String[]{"nr1s","nr2s","nr3s", "nr4s", "nr5s", "nr6s", "nr7s"};
+                                    }
+                                    boolean duTatCa = true;
+                                    ArrayList<Item> danhSach = duLieuNguoiChoi.getHanhTrang();
+                                    for (String idCanTim : idsCanTim) {
+                                        boolean timThay = false;
+                                        for (Item item : danhSach) {
+                                            if (item != null && idCanTim.equals(item.getId())) {
+                                                timThay = true;
+                                                break;
+                                            }
+                                        }
+                                        if (!timThay) {
+                                            duTatCa = false; // thiếu ít nhất 1 id
+                                            break;
+                                        }
+                                    }
+                                    if (duTatCa) {
+                                        dangHienTinNhanPet = true;
+                                        timeHienTinNhanPet = 2f;
+                                        tinNhanPet = "Bạn vừa gọi rồng thần";
+                                        for (String idCanTim : idsCanTim) {
+                                            for (Item item : danhSach) {
+                                                if (item != null && idCanTim.equals(item.getId())) {
+                                                    item.giamSoLuong(1);
+                                                    if (item.getSoLuong() == 0) {
+                                                        danhSach.remove(item);
+                                                    }
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        dangHienTinNhanPet = true;
+                                        timeHienTinNhanPet = 2f;
+                                        tinNhanPet = "Không đủ ngọc rồng";
+                                    }
+                                } else {
+                                    dangHienTinNhanPet = true;
+                                    timeHienTinNhanPet = 2f;
+                                    tinNhanPet = "Chỉ được gọi rồng bằng ngọc rồng 1, 2, 3 sao";
                                 }
                             }
                         } else if (!nhanVat.getHanhtinh().equals(itemm.getHanhtinh())) {
@@ -1075,10 +1127,7 @@ public class VeHUD {
                         if (duLieuNguoiChoi.deTu.getSucManh() >= 1_500_000) {
                             if (duLieuNguoiChoi.deTu.getSucManh() >= itemm.getSucManhYeuCau()) {
                                 boolean duDieuKien = false;
-                                if (duLieuNguoiChoi.deTu.getHanhtinh().equals(itemm.getHanhtinh()) && !itemDangChon.equals("caitrang")) {
-                                    duDieuKien = true;
-                                }
-                                if (itemDangChon.equals("caitrang")) {
+                                if (duLieuNguoiChoi.deTu.getHanhtinh().equals(itemm.getHanhtinh()) || itemm.getHanhtinh().equals("all")) {
                                     duDieuKien = true;
                                 }
                                 if (duDieuKien) {

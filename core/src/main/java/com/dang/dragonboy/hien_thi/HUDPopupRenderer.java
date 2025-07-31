@@ -293,6 +293,10 @@ public class HUDPopupRenderer {
                             layout.setText(veHUD.fontMotaSkill, "[+"+item.getSoCap()+"]");
                             veHUD.fontMotaSkill.draw(batch, layout, 3 + 70 + 12 + kc1 , y + 49 - 10);
                         }
+                        if (item.getSoLuong() > 1) {
+                            layout.setText(veHUD.fontsm, item.getSoLuong()+"");
+                            veHUD.fontsm.draw(batch, layout, 3 + (70- layout.width)-5f, y + 15f);
+                        }
                         if (item.getLoai() == LoaiItem.VANBAY){
                             layout.setText(veHUD.fontCapSKill,item.getMoTa());
                             veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
@@ -1287,6 +1291,10 @@ public class HUDPopupRenderer {
                         if (item.getSoCap() > 0) {
                             layout.setText(veHUD.fontMotaSkill, "[+" + item.getSoCap() + "]");
                             veHUD.fontMotaSkill.draw(batch, layout, 3 + 70 + 12 + kc1 + 1020 - 350, y + 49 - 10);
+                        }
+                        if (item.getSoLuong() > 1) {
+                            layout.setText(veHUD.fontsm, item.getSoLuong()+"");
+                            veHUD.fontsm.draw(batch, layout, 3 + (70- layout.width)-5f + 1020 - 350, y + 15f);
                         }
                         if (item.getLoai() == LoaiItem.VANBAY) {
                             layout.setText(veHUD.fontCapSKill, item.getMoTa());

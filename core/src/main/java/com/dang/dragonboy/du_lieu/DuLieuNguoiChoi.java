@@ -1,6 +1,7 @@
 package com.dang.dragonboy.du_lieu;
 import java.util.ArrayList;
 import com.dang.dragonboy.item.Item;
+import com.dang.dragonboy.item.LoaiItem;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.nhan_vat.NhanVatCauHinh;
 import com.dang.dragonboy.nhan_vat.NhanVatXuLy;
@@ -111,7 +112,20 @@ public class DuLieuNguoiChoi {
 
     public void themItemVaoHanhTrang(Item item) {
         if (hanhTrang.size() < 50) {
-            hanhTrang.add(item);
+            if (item.getLoai() != LoaiItem.NGOCRONG) {
+                hanhTrang.add(item);
+            } else {
+                boolean daSoHuuItem = false;
+                for (Item itemm : hanhTrang) {
+                    if (itemm.getLoai() == LoaiItem.NGOCRONG && itemm.getId() == item.getId()) {
+                        itemm.tangSoLuong(item.getSoLuong());
+                        daSoHuuItem = true;
+                    }
+                }
+                if (!daSoHuuItem) {
+                    hanhTrang.add(item);
+                }
+            }
         }
     }
 
@@ -462,17 +476,13 @@ public class DuLieuNguoiChoi {
         this.HpNhanVat += HpCongThem;
     }
     public void tangHpPt(int HpCongThem){ this.HpNhanVat *= (1f+HpCongThem/100f); }
-    public void tangHpHienTai(int HpCongThem){
-        this.HpHienTai += HpCongThem;
-        this.HpHienTai = Math.min(HpHienTai, HpHopThe);
-    }
     public void tangHpPtHienTai(float HpCongThem){
         this.HpHienTai *= (1f+HpCongThem/100f);
         this.HpHienTai = Math.min(HpHienTai,HpNhanVat);
     }
     public void tangHpHienTai(float HpCongThem){
         this.HpHienTai += HpCongThem;
-        this.HpHienTai = Math.min(HpHienTai,HpNhanVat);
+        this.HpHienTai = Math.min(HpHienTai,HpHopThe);
     }
     public void giamHpPtHienTai(float HpCongThem){
         this.HpHienTai /= (1f+HpCongThem/100f);
@@ -486,10 +496,6 @@ public class DuLieuNguoiChoi {
         this.KiNhanVat += KiCongThem;
     }
     public void tangKiPt(float KiCongThem){ this.KiNhanVat *= (1f+KiCongThem/100f); }
-    public void tangKiHienTai(int KiCongThem){
-        this.KiHienTai += KiCongThem;
-        this.KiHienTai = Math.min(KiHienTai,KiHopThe);
-    }
     public void tangKiPtHienTai(float KiCongThem){
         this.KiHienTai *= (1f+KiCongThem/100f);
         this.KiHienTai = Math.min(KiHienTai,KiNhanVat);
@@ -500,7 +506,7 @@ public class DuLieuNguoiChoi {
     }
     public void tangKiHienTai(float KiCongThem){
         this.KiHienTai += KiCongThem;
-        this.KiHienTai = Math.min(KiHienTai,KiNhanVat);
+        this.KiHienTai = Math.min(KiHienTai,KiHopThe);
     }
     public void giamKiHienTai(float Ki){
         this.KiHienTai -= Ki;

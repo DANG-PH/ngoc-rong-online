@@ -290,6 +290,8 @@ public class HUDClickHandler {
                             veHUD.itemDangChon = "vanbay";
                         } else if (item.getLoai() == LoaiItem.BONGTAI) {
                             veHUD.itemDangChon = "bongtai";
+                        } else if (item.getLoai() == LoaiItem.NGOCRONG) {
+                            veHUD.itemDangChon = "ngocrong";
                         }
                     } else {
                         veHUD.itemm = null;

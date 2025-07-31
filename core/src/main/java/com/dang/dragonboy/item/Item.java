@@ -66,6 +66,14 @@ public class Item {
         this.soLuong = soLuong;
     }
 
+    public void tangSoLuong(int soLuong) {
+        this.soLuong += soLuong;
+    }
+
+    public void giamSoLuong(int soLuong) {
+        this.soLuong -= soLuong;
+    }
+
     public int[] getChiso(){
         return chiso;
     }
