@@ -24,7 +24,7 @@ public class ThaoTac extends InputAdapter {
 
     @Override
     public boolean keyDown(int keycode) {
-        if (hud.timeChoHopThe == 0 && !hud.dangHienPopup) {
+        if (hud.timeChoHopThe == 0 && !hud.dangHienPopup && !hud.dangHienDieuUocRongThan) {
             switch (keycode) {
                 case Input.Keys.LEFT:
                     if (nhanVat.diChuyenDenMucTieu) {
@@ -186,7 +186,7 @@ public class ThaoTac extends InputAdapter {
             hud.vuaKeoHanhTrang = false;
             hud.vuaKeoHanhTrangDeTu = false;
         }
-        if (!hud.dangHienPopup && !hud.laClickTrenHUD(screenX, y) && !camera.vuaKeoCamera && !hud.vuaTatPopup && !hud.dangHienKhungChat && hud.timeChoHopThe == 0 ) {
+        if (!hud.dangHienPopup && !hud.laClickTrenHUD(screenX, y) && !camera.vuaKeoCamera && !hud.vuaTatPopup && !hud.dangHienKhungChat && hud.timeChoHopThe == 0 && !hud.dangHienDieuUocRongThan ) {
             float viewportWidth = camera.camera.viewportWidth;
             float viewportHeight = camera.camera.viewportHeight;
 

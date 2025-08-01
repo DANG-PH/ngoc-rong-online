@@ -48,7 +48,7 @@ public class HUDClickHandler {
         float ochatX = screenWidth - ochatW - 15;
         float ochatY = screenHeight-10-ochatH;
         if (x >= ochatX && x <= ochatX + 60 && y >= ochatY && y <= ochatY + 60) {
-            if (!veHUD.dangHienPopup && !veHUD.dangHienKhungChat) {
+            if (!veHUD.dangHienPopup && !veHUD.dangHienKhungChat && !(veHUD.timeHienRongThan<=300-2.1f && veHUD.timeHienRongThan>0)) {
                 veHUD.clickOChat();
             }
         }
@@ -59,7 +59,7 @@ public class HUDClickHandler {
         float odauthanX = screenWidth - odauthanW - 10;
         float odauthanY = 10;
         if (x >= odauthanX && x <= odauthanX + 75 && y >= odauthanY && y <= odauthanY + 75) {
-            if (!veHUD.dangHienPopup && !veHUD.dangHienKhungChat) {
+            if (!veHUD.dangHienPopup && !veHUD.dangHienKhungChat && !(veHUD.timeHienRongThan<=300-2.1f && veHUD.timeHienRongThan>0)) {
                 veHUD.clickODauThan();
             }
         }
@@ -67,11 +67,21 @@ public class HUDClickHandler {
         float nutPopupX = 0f;
         float nutPopupY = screenHeight / 4f * 3;
         if (x >= nutPopupX && x <= nutPopupX + 25 && y >= nutPopupY && y <= nutPopupY + 35) {
-            if (!veHUD.dangHienKhungChat) {
+            if (!veHUD.dangHienKhungChat && !(veHUD.timeHienRongThan<=300-2.1f && veHUD.timeHienRongThan>0)) {
                 veHUD.vuaClickMoPopup = true;
                 veHUD.clickY =  nutPopupY + 19f;
                 veHUD.clickX =  nutPopupX + 20;
                 veHUD.timeGlow = 0.2f;
+            }
+        }
+
+        // Vùng điều ước rồng thần
+        if (veHUD.timeHienRongThan <= 300f-2.1f && veHUD.timeHienRongThan>0){
+            for (int i = 0; i < 5; i++){
+                if (x>=210 + i * 120 && x <= 210 + i * 120+114 && y>=5 && y<=5+114){
+                    veHUD.nutClickTimer2 = 0.3f;
+                    veHUD.nutduocchon = i;
+                }
             }
         }
 

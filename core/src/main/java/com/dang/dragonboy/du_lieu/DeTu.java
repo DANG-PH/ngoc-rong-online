@@ -1751,6 +1751,25 @@ public class DeTu {
     public void setTenDeTu(String ten) {
         this.ten = ten;
     }
+    public void doiSkillDeTu(int Skill) {
+        if (tenSkill[Skill-1] != null) {
+            String[] danhSachSKill = new String[0];
+            switch (Skill) {
+                case 1:
+                    danhSachSKill = danhSachSkill1;
+                    break;
+                case 2:
+                    danhSachSKill = danhSachSkill2;
+                    break;
+                case 3:
+                    danhSachSKill = danhSachSkill3;
+                    break;
+                default:
+                    danhSachSKill = new String[0];
+            }
+            tenSkill[Skill - 1] = danhSachSKill[MathUtils.random(danhSachSKill.length - 1)];
+        }
+    }
     public void dispose() {
         // Giải phóng texture modular
         if (dau_dung != null) dau_dung.dispose();

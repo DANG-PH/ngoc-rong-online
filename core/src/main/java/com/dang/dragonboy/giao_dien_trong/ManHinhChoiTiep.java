@@ -316,14 +316,13 @@ public class ManHinhChoiTiep implements Screen {
         }
 
         batch.end();
-        if (hudRenderer.timeHienRongThan<=300-2.52f && hudRenderer.timeHienRongThan>0) {
+        if (hudRenderer.timeHienRongThan<=300-2.1f && hudRenderer.timeHienRongThan>0) {
             shapeRenderer.setProjectionMatrix(camManager.uiCamera.combined);
             Gdx.gl.glEnable(GL20.GL_BLEND);
             shapeRenderer.setColor(0f, 0f, 0f, 0.4f);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.rect(0,0,1020,610);
             shapeRenderer.end();
-            System.out.print("co ve");
             shapeRenderer.setProjectionMatrix(camManager.camera.combined);
         }
         batch.begin();

@@ -233,6 +233,10 @@ public class HUDPopupHanhTrang {
             if ("bongtai".equals(veHUD.itemDangChon)) {
                 layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
                 veHUD.PopupHanhTrangH += layout.height + 15;
+                if (veHUD.itemm.getMoTa().contains("Rồng Thần")) {
+                    layout.setText(veHUD.fontTenSkill, "Tăng 5% chỉ số");
+                    veHUD.PopupHanhTrangH += layout.height + 12;
+                }
                 if (veHUD.itemm.getSucManhYeuCau()>0) {
                     if (duLieuNguoiChoi.getSucManh() >= veHUD.itemm.getSucManhYeuCau()) {
                         layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
@@ -631,7 +635,11 @@ public class HUDPopupHanhTrang {
                 layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
                 veHUD.fontTenSkill.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
                 offsetY += layout.height + 12;
-
+                if (veHUD.itemm.getMoTa().contains("Rồng Thần")) {
+                    layout.setText(veHUD.fontSkillchuaco, "Tăng 5% chỉ số");
+                    veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
+                    offsetY += layout.height + 12;
+                }
                 if (veHUD.itemm.getSucManhYeuCau()>0) {
                     if (duLieuNguoiChoi.getSucManh() >= veHUD.itemm.getSucManhYeuCau()) {
                         layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));

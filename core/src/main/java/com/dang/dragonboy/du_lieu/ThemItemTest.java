@@ -17,29 +17,29 @@ public class ThemItemTest {
             "all", 1500000L, null, 0, 0, 0, -1
         ));
 
-        duLieu.themItemVaoHanhTrang(new Item(
-            "bongtaic2", "Bông tai Porata Cấp 2", LoaiItem.BONGTAI,
-            new Texture("vatpham/vatphamgame/bongtai/bongtaic2.png"),
-            "Sử dụng để hợp thể với đệ tử và tăng tổng 10% chỉ số", 1,
-            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
-            "all", 150000000L, null, 0, 0, 0, -1
-        ));
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "bongtaic2", "Bông tai Porata Cấp 2", LoaiItem.BONGTAI,
+//            new Texture("vatpham/vatphamgame/bongtai/bongtaic2.png"),
+//            "Sử dụng để hợp thể với đệ tử và tăng tổng 10% chỉ số", 1,
+//            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+//            "all", 150000000L, null, 0, 0, 0, -1
+//        ));
+//
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "bongtaic3", "Bông tai Porata Cấp 3", LoaiItem.BONGTAI,
+//            new Texture("vatpham/vatphamgame/bongtai/bongtaic3.png"),
+//            "Sử dụng để hợp thể với đệ tử và tăng tổng 20% chỉ số", 1,
+//            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+//            "all", 1500000000L, null, 0, 0, 0, -1
+//        ));
 
-        duLieu.themItemVaoHanhTrang(new Item(
-            "bongtaic3", "Bông tai Porata Cấp 3", LoaiItem.BONGTAI,
-            new Texture("vatpham/vatphamgame/bongtai/bongtaic3.png"),
-            "Sử dụng để hợp thể với đệ tử và tăng tổng 20% chỉ số", 1,
-            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
-            "all", 1500000000L, null, 0, 0, 0, -1
-        ));
-
-        duLieu.themItemVaoHanhTrang(new Item(
-            "phuong_hoang_lua", "Thú cưỡi cực VIP", LoaiItem.VANBAY,
-            new Texture("vatpham/vanbay/phuong_hoang_lua/phuonghoanglua.png"),
-            "Dùng để bay và hồi phục HP, KI", 1,
-            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
-            "all", 1500000L, null, 0, 0, 0, -1
-        ));
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "phuong_hoang_lua", "Thú cưỡi cực VIP", LoaiItem.VANBAY,
+//            new Texture("vatpham/vanbay/phuong_hoang_lua/phuonghoanglua.png"),
+//            "Dùng để bay và hồi phục HP, KI", 1,
+//            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+//            "all", 1500000L, null, 0, 0, 0, -1
+//        ));
         duLieu.themItemVaoHanhTrang(new Item(
             "glt_c3", "Giáp luyện tập cấp 3", LoaiItem.GIAPLUYENTAP,
             new Texture("vatpham/vatphamgame/giapluyentap/gltc3.png"),
@@ -48,21 +48,21 @@ public class ThemItemTest {
             "all", 1_000_000_000L, null, 7, 7, 0, 0
         ));
 
-        duLieu.themItemVaoHanhTrang(new Item(
-            "goku_black_rose", "Cải trang Super Black Goku", LoaiItem.CAITRANG,
-            new Texture("nhanvat/caitrang/goku_black_rose/daudung.png"),
-            "Cải trang thành Super Black Goku", 1,
-            new int[]{0,0,0,0,0,0,45,45,45,0,0,0,0},
-            "all", 50_000_000_000L, null, 0, 0, 0, -1
-        ));
-
-        duLieu.themItemVaoHanhTrang(new Item(
-            "goku_black", "Cải trang Black Goku", LoaiItem.CAITRANG,
-            new Texture("nhanvat/caitrang/goku_black/daudung.png"),
-            "Cải trang thành Super Black Goku", 1,
-            new int[]{0,0,0,0,0,0,35,35,35,0,0,0,0},
-            "all", 50_000_000_000L, null, 0, 0, 0, -1
-        ));
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "goku_black_rose", "Cải trang Super Black Goku", LoaiItem.CAITRANG,
+//            new Texture("nhanvat/caitrang/goku_black_rose/daudung.png"),
+//            "Cải trang thành Super Black Goku", 1,
+//            new int[]{0,0,0,0,0,0,45,45,45,0,0,0,0},
+//            "all", 50_000_000_000L, null, 0, 0, 0, -1
+//        ));
+//
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "goku_black", "Cải trang Black Goku", LoaiItem.CAITRANG,
+//            new Texture("nhanvat/caitrang/goku_black/daudung.png"),
+//            "Cải trang thành Super Black Goku", 1,
+//            new int[]{0,0,0,0,0,0,35,35,35,0,0,0,0},
+//            "all", 50_000_000_000L, null, 0, 0, 0, -1
+//        ));
 
 //        duLieu.themItemVaoHanhTrang(new Item(
 //            "vegito_xeno", "Cải trang Vegito Xeno", LoaiItem.CAITRANG,
@@ -96,13 +96,13 @@ public class ThemItemTest {
 //            nhanVat.getHanhtinh(), 9_999_999_999L, null, 0, 0, 0, -1
 //        ));
 
-        duLieu.themItemVaoHanhTrang(new Item(
-            "avt_vip", "Avatar VIP", LoaiItem.AVATAR,
-            new Texture("nhanvat/" + nhanVat.getHanhtinh() + "/avatar/avt_vip/daudung.png"),
-            "Dùng để thay đổi khuôn mặt", 1,
-            new int[]{0,0,0,0,10,0,15,0,15,0,0,0,0},
-            nhanVat.getHanhtinh(), 1500000L, null, 0, 0, 0, -1
-        ));
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "avt_vip", "Avatar VIP", LoaiItem.AVATAR,
+//            new Texture("nhanvat/" + nhanVat.getHanhtinh() + "/avatar/avt_vip/daudung.png"),
+//            "Dùng để thay đổi khuôn mặt", 1,
+//            new int[]{0,0,0,0,10,0,15,0,15,0,0,0,0},
+//            nhanVat.getHanhtinh(), 1500000L, null, 0, 0, 0, -1
+//        ));
 
         duLieu.themItemVaoHanhTrang(new Item(
             "set_cam", "Áo võ kame", LoaiItem.AO,
@@ -369,12 +369,12 @@ public class ThemItemTest {
             "traidat", 40_000_000_000L, null, 7, 7, 7, -1
         ));
 
-        duLieu.themItemVaoHanhTrang(new Item(
-            "glt_c1", "Giáp luyện tập cấp 1", LoaiItem.GIAPLUYENTAP,
-            new Texture("vatpham/vatphamgame/giapluyentap/gltc1.png"),
-            "Khi mặc vào sẽ tích lũy thời gian luyện tập, khi cởi ra nếu sẽ tăng sức đánh 10% và Crit 15%, ST Crit 30%", 1,
-            new int[]{0,0,0,0,0,0,25,0,0,0,0,0,0},
-            "traidat", 10_000_000L, null, 7, 5, 0, 0
-        ));
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "glt_c1", "Giáp luyện tập cấp 1", LoaiItem.GIAPLUYENTAP,
+//            new Texture("vatpham/vatphamgame/giapluyentap/gltc1.png"),
+//            "Khi mặc vào sẽ tích lũy thời gian luyện tập, khi cởi ra nếu sẽ tăng sức đánh 10% và Crit 15%, ST Crit 30%", 1,
+//            new int[]{0,0,0,0,0,0,25,0,0,0,0,0,0},
+//            "traidat", 10_000_000L, null, 7, 5, 0, 0
+//        ));
     }
 }

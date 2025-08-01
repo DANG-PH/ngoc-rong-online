@@ -254,11 +254,14 @@ public class VeHUD {
 
     public boolean daRanDomChatDeTu = false;
     public String bongTaiDangDung = "";
+    public boolean bongTaiRongThan = false;
 
     public String ngocRongUoc = "";
     public boolean dangHienDieuUocRongThan = false;
     public float timeHienRongThan = 0f;
     public Texture[] hieuUngRongThan = new Texture[21];
+    public Texture[] luaRongThan = new Texture[2];
+    public Texture[] rongThan = new Texture[9];
 
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data;
@@ -432,6 +435,12 @@ public class VeHUD {
         for (int i = 0; i < 21; i++) {
             hieuUngRongThan[i] = new Texture("hieuung/hieuunggame/rong_than/"+(i+1)+".png");
         }
+        for (int i = 0; i < 2; i++) {
+            luaRongThan[i] = new Texture("hieuung/hieuunggame/rong_than/lua_"+(i+1)+".png");
+        }
+        for (int i = 0; i < 9; i++) {
+            rongThan[i] = new Texture("hieuung/hieuunggame/rong_than/r"+(i+1)+".png");
+        }
         // Load font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -594,7 +603,7 @@ public class VeHUD {
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
 
-        if (!dangHienKhungChat) {
+        if (!dangHienKhungChat && !(timeHienRongThan<=300-2.1f && timeHienRongThan>0)) {
             // RENDER SAU ẢNH ĐẬU THẦN ( trắng )
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(1f, 1f, 1f, 1f);
@@ -617,7 +626,7 @@ public class VeHUD {
         batch.draw(thanhhpnv1,165, screenHeight - 80 - 5 + 55);
         batch.draw(thanhkinv1,165, screenHeight - 80 - 5 + 55-20);
 
-        if (!dangHienKhungChat) {
+        if (!dangHienKhungChat && !(timeHienRongThan<=300-2.1f && timeHienRongThan>0)) {
             // ô chat (góc phải trên)
             int ochatW = 60;
             int ochatH = 60;
@@ -762,15 +771,26 @@ public class VeHUD {
         }
     }
     public void chonSkill(int index) {
-        if (index >= 0 && index < 5 && !dangHienKhungChat) {
+        if (index >= 0 && index < 5 && (!dangHienKhungChat && !(timeHienRongThan<=300-2.1f && timeHienRongThan>0))) {
             skillDangChon = index;
         }
     }
     public void update(float delta) {
         if (timeHienRongThan>0) {
             timeHienRongThan-=delta;
+            if (timeHienRongThan<=1f) {
+                int tick = (int) (timeHienRongThan * 18);
+                if (tick % 2 == 0) {
+                    veNenFlash = true;
+                } else {
+                    veNenFlash = false;
+                }
+            }
             if (timeHienRongThan<=0) {
                 timeHienRongThan = 0;
+                veNenFlash = false;
+                ngocRongUoc = "";
+                dangHienDieuUocRongThan = false;
             }
         }
         timeMiniGame -= delta;
@@ -1010,16 +1030,151 @@ public class VeHUD {
         if (nutClickTimer2 > 0 ){
             nutClickTimer2 -= Gdx.graphics.getDeltaTime();
             if (nutClickTimer2 <= 0){
-                Texture skillGan = skillIcons[oChiSoDangChon - 6].icon;
-                // Xóa các ô đang chứa cùng icon
-                for (int i = 0; i < 5; i++) {
-                    if (oSkills[i] == skillGan) {
-                        oSkills[i] = null;
+                if (HienPopUpGanSkill) {
+                    Texture skillGan = skillIcons[oChiSoDangChon - 6].icon;
+                    // Xóa các ô đang chứa cùng icon
+                    for (int i = 0; i < 5; i++) {
+                        if (oSkills[i] == skillGan) {
+                            oSkills[i] = null;
+                        }
                     }
+                    // Gán vào ô được chọn
+                    oSkills[nutduocchon] = skillGan;
+                    HienPopUpGanSkill = false;
+                } else {
+                    if (ngocRongUoc.equals("1sao")) {
+                        switch (nutduocchon) {
+                            case 0:
+                                duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
+                                    "bongtaic1", "Bông tai Porata", LoaiItem.BONGTAI,
+                                    new Texture("vatpham/vatphamgame/bongtai/bongtaic1.png"),
+                                    "Sử dụng để hợp thể với đệ tử - Vật phẩm nhận từ Rồng Thần ( tăng 5% chỉ số )", 1,
+                                    new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                    "all", 1000, null, 0, 0, 0, -1
+                                ));
+                                if (duLieuNguoiChoi.coDeTu() && !dangHopThe && timeHopTheTHuong == 0 && delayHopTheBongTai == 0) {
+                                    timeChoHopThe = 1.5f;
+                                    dangHopTheThuong = false;
+                                    if (!dangHopThe) {
+                                        bongTaiDangDung = "bongtaic1";
+                                        bongTaiRongThan = true;
+                                    }
+                                    hangTrangDangChon = -1;
+                                    scrollY = 0;
+                                }
+                                break;
+                            case 1:
+                                duLieuNguoiChoi.tangNgoc(1500);
+                                break;
+                            case 2:
+                                duLieuNguoiChoi.tangSucManh(200_000_000);
+                                break;
+                            case 3:
+                                duLieuNguoiChoi.tangVang(500_000_000);
+                                break;
+                            case 4:
+                                duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
+                                    "phuong_hoang_lua", "Thú cưỡi cực VIP", LoaiItem.VANBAY,
+                                    new Texture("vatpham/vanbay/phuong_hoang_lua/phuonghoanglua.png"),
+                                    "Dùng để bay và hồi phục HP, KI", 1,
+                                    new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                    "all", 1500000L, null, 0, 0, 0, -1
+                                ));
+                                if (duLieuNguoiChoi.getSucManh() >= 1500000L) {
+                                    int viTriMoi = duLieuNguoiChoi.getHanhTrang().size() - 1;
+                                    hangTrangDangChon = viTriMoi + 8;
+                                    xulyitem.macDo(hangTrangDangChon);
+                                    hangTrangDangChon = -1;
+                                    scrollY = 0;
+                                }
+                                break;
+                        }
+                    } else if (ngocRongUoc.equals("2sao")) {
+                        switch (nutduocchon) {
+                            case 0:
+                                Item itemMoi;
+                                if (duLieuNguoiChoi.getHanhTrangDangMac().get(5) != null &&
+                                    duLieuNguoiChoi.getHanhTrangDangMac().get(5).getId().equals("goku_black")) {
+                                    // Đang mặc ct Goku Black thì nâng cấp thành SSJ Rose
+                                    xulyitem.goCaiTrang(NhanVatXuLy.getDangMacCaiTrang(), true);
+                                    itemMoi = new Item(
+                                        "goku_black_rose", "Cải trang Super Black Goku", LoaiItem.CAITRANG,
+                                        new Texture("nhanvat/caitrang/goku_black_rose/daudung.png"),
+                                        "Cải trang thành Super Black Goku", 1,
+                                        new int[]{0, 0, 0, 0, 0, 0, 45, 45, 45, 0, 0, 0, 0},
+                                        "all", 40_000_000_000L, null, 0, 0, 0, -1
+                                    );
+
+                                } else {
+                                    // Chưa có hoặc không mặc ct Goku Black thì nhận ct Black Goku
+                                    itemMoi = new Item(
+                                        "goku_black", "Cải trang Black Goku", LoaiItem.CAITRANG,
+                                        new Texture("nhanvat/caitrang/goku_black/daudung.png"),
+                                        "Cải trang thành Black Goku", 1,
+                                        new int[]{0, 0, 0, 0, 0, 0, 35, 35, 35, 0, 0, 0, 0},
+                                        "all", 40_000_000_000L, null, 0, 0, 0, -1
+                                    );
+                                }
+                                duLieuNguoiChoi.themItemVaoHanhTrang(itemMoi);
+                                if (duLieuNguoiChoi.getSucManh() >= 40_000_000_000L) {
+                                    int viTriMoi = duLieuNguoiChoi.getHanhTrang().size() - 1;
+                                    hangTrangDangChon = viTriMoi + 8;
+                                    xulyitem.macDo(hangTrangDangChon);
+                                    hangTrangDangChon = -1;
+                                    scrollY = 0;
+                                }
+                                break;
+                            case 1:
+                                duLieuNguoiChoi.tangNgoc(300);
+                                break;
+                            case 2:
+                                duLieuNguoiChoi.tangSucManh(20_000_000);
+                                break;
+                            case 3:
+                                duLieuNguoiChoi.tangVang(50_000_000);
+                                break;
+                            case 4:
+                                duLieuNguoiChoi.deTu.doiSkillDeTu(2);
+                                duLieuNguoiChoi.deTu.doiSkillDeTu(3);
+                                break;
+                        }
+                    } else if (ngocRongUoc.equals("3sao")) {
+                        switch (nutduocchon) {
+                            case 0:
+                                duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
+                                    "avt_vip", "Avatar VIP", LoaiItem.AVATAR,
+                                    new Texture("nhanvat/" + nhanVat.getHanhtinh() + "/avatar/avt_vip/daudung.png"),
+                                    "Dùng để thay đổi khuôn mặt", 1,
+                                    new int[]{0,0,0,0,10,0,15,0,15,0,0,0,0},
+                                    nhanVat.getHanhtinh(), 1500000L, null, 0, 0, 0, -1
+                                ));
+                                if (duLieuNguoiChoi.getSucManh() >= 1500000L) {
+                                    int viTriMoi = duLieuNguoiChoi.getHanhTrang().size() - 1;
+                                    hangTrangDangChon = viTriMoi + 8;
+                                    xulyitem.macDo(hangTrangDangChon);
+                                    hangTrangDangChon = -1;
+                                    scrollY = 0;
+                                }
+                                break;
+                            case 1:
+                                duLieuNguoiChoi.tangNgoc(50);
+                                break;
+                            case 2:
+                                duLieuNguoiChoi.tangSucManh(2_000_000);
+                                break;
+                            case 3:
+                                duLieuNguoiChoi.tangVang(5_000_000);
+                                break;
+                            case 4:
+                                duLieuNguoiChoi.deTu.doiSkillDeTu(1);
+                                break;
+                        }
+                    }
+                    dangHienTinNhanPet = true;
+                    timeHienTinNhanPet = 2f;
+                    tinNhanPet = "Chúc mừng bạn đã ước thành công điều ước "+(nutduocchon+1);
+                    timeHienRongThan = 1f;
                 }
-                // Gán vào ô được chọn
-                oSkills[nutduocchon] = skillGan;;
-                HienPopUpGanSkill = false;
             }
         }
         if (nutClickTimer3 > 0){
@@ -1041,6 +1196,11 @@ public class VeHUD {
                                     dangHopTheThuong = false;
                                     if (!dangHopThe) {
                                         bongTaiDangDung = itemm.getId();
+                                        if (itemm.getMoTa().contains("Rồng Thần")) {
+                                            bongTaiRongThan = true;
+                                        } else {
+                                            bongTaiRongThan = false;
+                                        }
                                     }
                                 } else {
                                     if (delayHopTheBongTai > 0) {
@@ -1067,12 +1227,15 @@ public class VeHUD {
                                     if (itemm.getId().equals("nr3s")) {
                                         idsCanTim = new String[]{"nr3s", "nr4s", "nr5s", "nr6s", "nr7s"};
                                         ngocRongUoc = "3sao";
+                                        tinNhanPet = "Bạn vừa gọi rồng thần 3 sao";
                                     } else if (itemm.getId().equals("nr2s")) {
                                         idsCanTim = new String[]{"nr2s","nr3s", "nr4s", "nr5s", "nr6s", "nr7s"};
                                         ngocRongUoc = "2sao";
+                                        tinNhanPet = "Bạn vừa gọi rồng thần 2 sao";
                                     } else if (itemm.getId().equals("nr1s")) {
                                         idsCanTim = new String[]{"nr1s","nr2s","nr3s", "nr4s", "nr5s", "nr6s", "nr7s"};
                                         ngocRongUoc = "1sao";
+                                        tinNhanPet = "Bạn vừa gọi rồng thần 1 sao";
                                     }
                                     boolean duTatCa = true;
                                     ArrayList<Item> danhSach = duLieuNguoiChoi.getHanhTrang();
@@ -1092,7 +1255,6 @@ public class VeHUD {
                                     if (duTatCa) {
                                         dangHienTinNhanPet = true;
                                         timeHienTinNhanPet = 2f;
-                                        tinNhanPet = "Bạn vừa gọi rồng thần";
                                         for (String idCanTim : idsCanTim) {
                                             for (Item item : danhSach) {
                                                 if (item != null && idCanTim.equals(item.getId())) {
@@ -1111,7 +1273,6 @@ public class VeHUD {
                                         dangHienTinNhanPet = true;
                                         timeHienTinNhanPet = 2f;
                                         tinNhanPet = "Không đủ ngọc rồng";
-                                        ngocRongUoc = "";
                                     }
                                 } else {
                                     dangHienTinNhanPet = true;
@@ -1309,9 +1470,15 @@ public class VeHUD {
         }
         if (dangHopThe) {
             if (bongTaiDangDung.equals("bongtaic1")) {
-                duLieuNguoiChoi.setHpHopThe(duLieuNguoiChoi.getHpToiDa() + duLieuNguoiChoi.deTu.getHpToiDa());
-                duLieuNguoiChoi.setKiHopThe(duLieuNguoiChoi.getKiToiDa() + duLieuNguoiChoi.deTu.getKiToiDa());
-                duLieuNguoiChoi.setSdHopThe(duLieuNguoiChoi.getSucDanhNhanVat() + duLieuNguoiChoi.deTu.getSucDanhDeTu());
+                if (bongTaiRongThan) {
+                    duLieuNguoiChoi.setHpHopThe(duLieuNguoiChoi.getHpToiDa() + duLieuNguoiChoi.deTu.getHpToiDa()*1.05f);
+                    duLieuNguoiChoi.setKiHopThe(duLieuNguoiChoi.getKiToiDa() + duLieuNguoiChoi.deTu.getKiToiDa()*1.05f);
+                    duLieuNguoiChoi.setSdHopThe(duLieuNguoiChoi.getSucDanhNhanVat() + duLieuNguoiChoi.deTu.getSucDanhDeTu()*1.05f);
+                } else {
+                    duLieuNguoiChoi.setHpHopThe(duLieuNguoiChoi.getHpToiDa() + duLieuNguoiChoi.deTu.getHpToiDa());
+                    duLieuNguoiChoi.setKiHopThe(duLieuNguoiChoi.getKiToiDa() + duLieuNguoiChoi.deTu.getKiToiDa());
+                    duLieuNguoiChoi.setSdHopThe(duLieuNguoiChoi.getSucDanhNhanVat() + duLieuNguoiChoi.deTu.getSucDanhDeTu());
+                }
             } else if(bongTaiDangDung.equals("bongtaic2")) {
                 duLieuNguoiChoi.setHpHopThe((duLieuNguoiChoi.getHpToiDa() + duLieuNguoiChoi.deTu.getHpToiDa())*1.1f);
                 duLieuNguoiChoi.setKiHopThe((duLieuNguoiChoi.getKiToiDa() + duLieuNguoiChoi.deTu.getKiToiDa())*1.1f);
@@ -1926,9 +2093,36 @@ public class VeHUD {
     }
     void chonDieuUocRongThan(SpriteBatch batch) {
         if (timeHienRongThan<=0) return;
+        float daoDong = (float) Math.sin(nhanVat.thoiGianTichLuy) ;
+        boolean flipX = nhanVat.getFlipX();
+        if (nhanVat.getGioiHanXMax()-nhanVat.getX()<150f) {
+            flipX = true;
+        }
+        if (nhanVat.getX()<150f) {
+            flipX = false;
+        }
+        float offsetX = flipX ? -120f : 120f;
+        float flipscale = flipX ? -1f : 1f;
+        // ve rong than
+        if (timeHienRongThan<=300f-2.1f) {
+            batch.setProjectionMatrix(camManager.camera.combined);
+            Texture luaDuocChon = ((int) (timeHienRongThan * 10) % 2 == 0 ? luaRongThan[0] : luaRongThan[1]);
+            batch.draw(rongThan[7],nhanVat.getX() + offsetX - luaDuocChon.getWidth()*2f/3f+(flipX ? rongThan[7].getWidth()*2f : 0),nhanVat.getY(),rongThan[7].getWidth()*2f*flipscale,rongThan[7].getHeight()*2f);
+            batch.draw(rongThan[6],nhanVat.getX() + offsetX - luaDuocChon.getWidth()*2f/3f+(flipX ? rongThan[7].getWidth()*2f + 75 : -75f),nhanVat.getY()+rongThan[7].getHeight()*2f-10f + daoDong,rongThan[6].getWidth()*2f*flipscale,rongThan[6].getHeight()*2f);
+            batch.draw(rongThan[5],nhanVat.getX() + offsetX - luaDuocChon.getWidth()*2f/3f+(flipX ? rongThan[7].getWidth()*2f + 78 : -78f),nhanVat.getY()+rongThan[7].getHeight()*2f+rongThan[6].getHeight()*2f-18f,rongThan[5].getWidth()*2f*flipscale,rongThan[5].getHeight()*2f);
+            batch.draw(rongThan[8],nhanVat.getX() + offsetX - luaDuocChon.getWidth()*2f/3f+(flipX ? rongThan[7].getWidth()*2f + 5 : -5f),nhanVat.getY()+rongThan[7].getHeight()*2f+rongThan[6].getHeight()*2f-18f +daoDong*1.1f,rongThan[8].getWidth()*2f*flipscale,rongThan[8].getHeight()*2f);
+            batch.draw(rongThan[2],nhanVat.getX() + offsetX - luaDuocChon.getWidth()*2f/3f+(flipX ? rongThan[7].getWidth()*2f + 78 : -78f),nhanVat.getY()+rongThan[7].getHeight()*2f+rongThan[6].getHeight()*2f+rongThan[5].getHeight()*2f-26f,rongThan[2].getWidth()*2f*flipscale,rongThan[2].getHeight()*2f);
+            batch.draw(rongThan[3],nhanVat.getX() + offsetX - luaDuocChon.getWidth()*2f/3f+(flipX ? rongThan[7].getWidth()*2f - 25 : 25f),nhanVat.getY()+rongThan[7].getHeight()*2f+rongThan[6].getHeight()*2f+rongThan[5].getHeight()*2f+rongThan[2].getHeight()*2f-26f,rongThan[3].getWidth()*2f*flipscale,rongThan[3].getHeight()*2f);
+            batch.draw(rongThan[1],nhanVat.getX() + offsetX - luaDuocChon.getWidth()*2f/3f+(flipX ? rongThan[7].getWidth()*2f + 147 : -147f),nhanVat.getY()+rongThan[7].getHeight()*2f+rongThan[6].getHeight()*2f+rongThan[5].getHeight()*2f-20f + daoDong*0.8f,rongThan[1].getWidth()*2f*flipscale,rongThan[1].getHeight()*2f);
+            batch.draw(rongThan[0],nhanVat.getX() + offsetX - luaDuocChon.getWidth()*2f/3f+(flipX ? rongThan[7].getWidth()*2f + 75 : -75f),nhanVat.getY()+rongThan[7].getHeight()*2f+rongThan[6].getHeight()*2f+rongThan[5].getHeight()*2f+rongThan[2].getHeight()*2f-50f + daoDong*1.2f,rongThan[0].getWidth()*2f*flipscale,rongThan[0].getHeight()*2f);
+            batch.draw(rongThan[4],nhanVat.getX() + offsetX - luaDuocChon.getWidth()*2f/3f+(flipX ? rongThan[7].getWidth()*2f + 5 : -5f),nhanVat.getY()+rongThan[7].getHeight()*2f+rongThan[6].getHeight()*2f-10f+daoDong*0.7f,rongThan[4].getWidth()*2f*flipscale,rongThan[4].getHeight()*2f);
+            batch.draw(luaDuocChon, nhanVat.getX() + offsetX - luaDuocChon.getWidth()*2f/3f, nhanVat.getY(),luaDuocChon.getWidth()*2f,luaDuocChon.getHeight()*2f);
+            batch.setProjectionMatrix(camManager.uiCamera.combined);
+        }
+        if (timeHienRongThan<=1) return;
         float timeMax = 300f;
-        float step = 0.12f;
-        if (timeHienRongThan>300f-2.52f) {
+        float step = 0.1f;
+        if (timeHienRongThan>300f-2.1f) {
             int tick = (int) (timeHienRongThan * 18);
             if (tick % 2 == 0) {
                 veNenFlash = true;
@@ -1943,9 +2137,66 @@ public class VeHUD {
             float end = start - step;
             if (timeHienRongThan >= end && timeHienRongThan < start) {
                 batch.setProjectionMatrix(camManager.camera.combined);
-                batch.draw(hieuUngRongThan[i],nhanVat.getX()+120f-(hieuUngRongThan[i].getWidth()*0.5f/2f),nhanVat.getY()+200-(hieuUngRongThan[i].getHeight()*0.5f/2f),hieuUngRongThan[i].getWidth()*0.5f,hieuUngRongThan[i].getHeight()*0.5f);
+                float halfW = hieuUngRongThan[i].getWidth() * 0.5f;
+                float halfH = hieuUngRongThan[i].getHeight() * 0.5f;
+                batch.draw(hieuUngRongThan[i], nhanVat.getX() + offsetX - halfW / 2f, nhanVat.getY() + 200f - halfH / 2f, halfW,halfH);
                 batch.setProjectionMatrix(camManager.uiCamera.combined);
             }
+        }
+        if (timeHienRongThan<=300f-2.1f) {
+            String[] listDieuUoc = new String[5];
+            if (ngocRongUoc.equals("3sao")) {
+                listDieuUoc = new String[]{"Đẹp trai"+"\n"+"nhất"+"\n"+"Vũ trụ","Giàu có \n"+"+50 \n Ngọc","+2 Tr \n Sức mạnh \n và tiềm năng","Giàu có \n +5 Tr \n Vàng","Sức Mạnh \n Đổi Skill 1 \n đệ tử"};
+            } else if (ngocRongUoc.equals("2sao")) {
+                listDieuUoc = new String[]{"Đổi cơ thể với Goku","Giàu có \n"+"+300 \n Ngọc","+20 Tr \n Sức mạnh \n và tiềm năng","Giàu có \n +50 Tr \n Vàng","Sức Mạnh \n Đổi Skill 2 và 3 \n đệ tử"};
+                if (duLieuNguoiChoi.getHanhTrangDangMac().get(5)!=null) {
+                    if (duLieuNguoiChoi.getHanhTrangDangMac().get(5).getId().equals("goku_black")) {
+                        listDieuUoc[0] = "Khai mở sức mạnh SSJ Rose";
+                    }
+                }
+            } else if (ngocRongUoc.equals("1sao")) {
+                listDieuUoc = new String[]{"Bông tai Porata \n Đặc Biệt","Giàu có \n"+"+1500 \n Ngọc","+200 Tr \n Sức mạnh \n và tiềm năng","Giàu có \n +500 Tr \n Vàng","Thú cưỡi phượng hoàng cực VIP"};
+            }
+            for (int i = 0; i < 5; i++) {
+                if (nutduocchon==i) {
+                    Texture nutVe = nutClickTimer2 > 0 ? nutvuongclick : nutvuong;
+                    batch.draw(nutVe , 210 + i * 120, 5, 114, 114);
+                }
+                else {
+                    batch.draw(nutvuong , 210 + i * 120, 5, 114, 114);
+                }
+                font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(
+                    font,
+                    listDieuUoc[i],
+                    font.getColor(),
+                    100,
+                    Align.center,
+                    true
+                );
+                font.draw(batch,layout,210 + i * 120+7f,5+(114+layout.height)/2f);
+            }
+            batch.end();
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(1f, 1f, 1f, 1f);
+            shapeRenderer.rect((Gdx.graphics.getWidth()-594)/2f, 120, 594,80);
+            shapeRenderer.end();
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            shapeRenderer.setColor(Color.BLACK);
+            for (int i = 0; i < 2; i++) {
+                shapeRenderer.rect((Gdx.graphics.getWidth()-594)/2f - i , 120 - i, 594 + i * 2, 80 + i * 2);
+            }
+            shapeRenderer.end();
+            batch.begin();
+            layout.setText(
+                fontchat,
+                "Ta sẽ ban cho ngươi một điều ước, ngươi có 5 phút, hãy suy nghĩ thật kỹ trước khi quyết định",
+                new Color(0, 0, 0, 1),
+                594-30*2f,
+                Align.center,
+                true
+            );
+            fontchat.draw(batch,layout,(Gdx.graphics.getWidth()-594)/2f+30f,120+(80+layout.height)/2f);
         }
     }
 }
