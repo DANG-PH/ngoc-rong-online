@@ -1768,6 +1768,9 @@ public class DeTu {
                     danhSachSKill = new String[0];
             }
             tenSkill[Skill - 1] = danhSachSKill[MathUtils.random(danhSachSKill.length - 1)];
+            veHUD.tinNhanPet = "Kỹ năng đệ tử đã được thay đổi thành công";
+        } else {
+            veHUD.tinNhanPet = "Sức mạnh đệ tử không đủ";
         }
     }
     public void dispose() {

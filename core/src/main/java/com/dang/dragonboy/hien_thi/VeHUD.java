@@ -259,6 +259,7 @@ public class VeHUD {
     public String ngocRongUoc = "";
     public boolean dangHienDieuUocRongThan = false;
     public float timeHienRongThan = 0f;
+    public float timeDelayUocRong = 0f;
     public Texture[] hieuUngRongThan = new Texture[21];
     public Texture[] luaRongThan = new Texture[2];
     public Texture[] rongThan = new Texture[9];
@@ -776,6 +777,12 @@ public class VeHUD {
         }
     }
     public void update(float delta) {
+        if (timeDelayUocRong>0) {
+            timeDelayUocRong-=delta;
+            if (timeDelayUocRong<=0) {
+                timeDelayUocRong = 0;
+            }
+        }
         if (timeHienRongThan>0) {
             timeHienRongThan-=delta;
             if (timeHienRongThan<=1f) {
@@ -791,6 +798,7 @@ public class VeHUD {
                 veNenFlash = false;
                 ngocRongUoc = "";
                 dangHienDieuUocRongThan = false;
+                timeDelayUocRong = 600f;
             }
         }
         timeMiniGame -= delta;
@@ -1062,15 +1070,19 @@ public class VeHUD {
                                     hangTrangDangChon = -1;
                                     scrollY = 0;
                                 }
+                                tinNhanPet = "Chúc mừng bạn đã ước thành công Bông Tai Porata Đặc Biệt";
                                 break;
                             case 1:
                                 duLieuNguoiChoi.tangNgoc(1500);
+                                tinNhanPet = "Điều ước thành hiện thực - nhận thành công 1500 ngọc";
                                 break;
                             case 2:
                                 duLieuNguoiChoi.tangSucManh(200_000_000);
+                                tinNhanPet = "Sức mạnh của bạn đã tăng thêm 200 triệu!";
                                 break;
                             case 3:
                                 duLieuNguoiChoi.tangVang(500_000_000);
+                                tinNhanPet = "Bạn nhận được 500 triệu vàng từ Rồng Thần";
                                 break;
                             case 4:
                                 duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
@@ -1087,6 +1099,7 @@ public class VeHUD {
                                     hangTrangDangChon = -1;
                                     scrollY = 0;
                                 }
+                                tinNhanPet = "Bạn đã nhận được Thú cưỡi cực VIP - Phượng Hoàng Lửa";
                                 break;
                         }
                     } else if (ngocRongUoc.equals("2sao")) {
@@ -1104,7 +1117,7 @@ public class VeHUD {
                                         new int[]{0, 0, 0, 0, 0, 0, 45, 45, 45, 0, 0, 0, 0},
                                         "all", 40_000_000_000L, null, 0, 0, 0, -1
                                     );
-
+                                    tinNhanPet = "Bạn vừa khai phá SSJ ROSE";
                                 } else {
                                     // Chưa có hoặc không mặc ct Goku Black thì nhận ct Black Goku
                                     itemMoi = new Item(
@@ -1114,6 +1127,7 @@ public class VeHUD {
                                         new int[]{0, 0, 0, 0, 0, 0, 35, 35, 35, 0, 0, 0, 0},
                                         "all", 40_000_000_000L, null, 0, 0, 0, -1
                                     );
+                                    tinNhanPet = "Bạn vừa trở thành black goku";
                                 }
                                 duLieuNguoiChoi.themItemVaoHanhTrang(itemMoi);
                                 if (duLieuNguoiChoi.getSucManh() >= 40_000_000_000L) {
@@ -1126,16 +1140,23 @@ public class VeHUD {
                                 break;
                             case 1:
                                 duLieuNguoiChoi.tangNgoc(300);
+                                tinNhanPet = "Điều ước thành hiện thực - nhận thành công 300 ngọc";
                                 break;
                             case 2:
                                 duLieuNguoiChoi.tangSucManh(20_000_000);
+                                tinNhanPet = "Sức mạnh của bạn đã tăng thêm 20 triệu!";
                                 break;
                             case 3:
                                 duLieuNguoiChoi.tangVang(50_000_000);
+                                tinNhanPet = "Bạn nhận được 50 triệu vàng từ Rồng Thần";
                                 break;
                             case 4:
-                                duLieuNguoiChoi.deTu.doiSkillDeTu(2);
-                                duLieuNguoiChoi.deTu.doiSkillDeTu(3);
+                                if (duLieuNguoiChoi.coDeTu()) {
+                                    duLieuNguoiChoi.deTu.doiSkillDeTu(2);
+                                    duLieuNguoiChoi.deTu.doiSkillDeTu(3);
+                                } else {
+                                    tinNhanPet = "Bạn chưa có đệ tử - rồng thần đã hết kiên nhẫn";
+                                }
                                 break;
                         }
                     } else if (ngocRongUoc.equals("3sao")) {
@@ -1155,24 +1176,31 @@ public class VeHUD {
                                     hangTrangDangChon = -1;
                                     scrollY = 0;
                                 }
+                                tinNhanPet = "Bạn đã trở thành người đẹp trai nhất vũ trụ!";
                                 break;
                             case 1:
                                 duLieuNguoiChoi.tangNgoc(50);
+                                tinNhanPet = "Điều ước thành hiện thực - nhận thành công 50 ngọc";
                                 break;
                             case 2:
                                 duLieuNguoiChoi.tangSucManh(2_000_000);
+                                tinNhanPet = "Sức mạnh của bạn đã tăng thêm 2 triệu!";
                                 break;
                             case 3:
                                 duLieuNguoiChoi.tangVang(5_000_000);
+                                tinNhanPet = "Bạn nhận được 5 triệu vàng từ Rồng Thần";
                                 break;
                             case 4:
-                                duLieuNguoiChoi.deTu.doiSkillDeTu(1);
+                                if (duLieuNguoiChoi.coDeTu()) {
+                                    duLieuNguoiChoi.deTu.doiSkillDeTu(1);
+                                } else {
+                                    tinNhanPet = "Bạn chưa có đệ tử - rồng thần đã hết kiên nhẫn";
+                                }
                                 break;
                         }
                     }
                     dangHienTinNhanPet = true;
                     timeHienTinNhanPet = 2f;
-                    tinNhanPet = "Chúc mừng bạn đã ước thành công điều ước "+(nutduocchon+1);
                     timeHienRongThan = 1f;
                 }
             }
@@ -1221,63 +1249,68 @@ public class VeHUD {
                                 }
                             }
                             if (itemDangChon.equals("ngocrong")) {
-                                if (itemm.getId().equals("nr3s") || itemm.getId().equals("nr2s") || itemm.getId().equals("nr1s")) {
-                                    System.out.print("Đã đúng id");
-                                    String[] idsCanTim = new String[0];
-                                    if (itemm.getId().equals("nr3s")) {
-                                        idsCanTim = new String[]{"nr3s", "nr4s", "nr5s", "nr6s", "nr7s"};
-                                        ngocRongUoc = "3sao";
-                                        tinNhanPet = "Bạn vừa gọi rồng thần 3 sao";
-                                    } else if (itemm.getId().equals("nr2s")) {
-                                        idsCanTim = new String[]{"nr2s","nr3s", "nr4s", "nr5s", "nr6s", "nr7s"};
-                                        ngocRongUoc = "2sao";
-                                        tinNhanPet = "Bạn vừa gọi rồng thần 2 sao";
-                                    } else if (itemm.getId().equals("nr1s")) {
-                                        idsCanTim = new String[]{"nr1s","nr2s","nr3s", "nr4s", "nr5s", "nr6s", "nr7s"};
-                                        ngocRongUoc = "1sao";
-                                        tinNhanPet = "Bạn vừa gọi rồng thần 1 sao";
-                                    }
-                                    boolean duTatCa = true;
-                                    ArrayList<Item> danhSach = duLieuNguoiChoi.getHanhTrang();
-                                    for (String idCanTim : idsCanTim) {
-                                        boolean timThay = false;
-                                        for (Item item : danhSach) {
-                                            if (item != null && idCanTim.equals(item.getId())) {
-                                                timThay = true;
-                                                break;
-                                            }
+                                if (timeDelayUocRong == 0 || duLieuNguoiChoi.getTen().equals("admin")) {
+                                    if (itemm.getId().equals("nr3s") || itemm.getId().equals("nr2s") || itemm.getId().equals("nr1s")) {
+                                        String[] idsCanTim = new String[0];
+                                        if (itemm.getId().equals("nr3s")) {
+                                            idsCanTim = new String[]{"nr3s", "nr4s", "nr5s", "nr6s", "nr7s"};
+                                            ngocRongUoc = "3sao";
+                                            tinNhanPet = "Bạn vừa gọi rồng thần shenron 3 sao";
+                                        } else if (itemm.getId().equals("nr2s")) {
+                                            idsCanTim = new String[]{"nr2s", "nr3s", "nr4s", "nr5s", "nr6s", "nr7s"};
+                                            ngocRongUoc = "2sao";
+                                            tinNhanPet = "Bạn vừa gọi rồng thần shenron 2 sao";
+                                        } else if (itemm.getId().equals("nr1s")) {
+                                            idsCanTim = new String[]{"nr1s", "nr2s", "nr3s", "nr4s", "nr5s", "nr6s", "nr7s"};
+                                            ngocRongUoc = "1sao";
+                                            tinNhanPet = "Bạn vừa gọi rồng thần shenron 1 sao";
                                         }
-                                        if (!timThay) {
-                                            duTatCa = false; // thiếu ít nhất 1 id
-                                            break;
-                                        }
-                                    }
-                                    if (duTatCa) {
-                                        dangHienTinNhanPet = true;
-                                        timeHienTinNhanPet = 2f;
+                                        boolean duTatCa = true;
+                                        ArrayList<Item> danhSach = duLieuNguoiChoi.getHanhTrang();
                                         for (String idCanTim : idsCanTim) {
+                                            boolean timThay = false;
                                             for (Item item : danhSach) {
                                                 if (item != null && idCanTim.equals(item.getId())) {
-                                                    item.giamSoLuong(1);
-                                                    if (item.getSoLuong() == 0) {
-                                                        danhSach.remove(item);
-                                                    }
+                                                    timThay = true;
                                                     break;
                                                 }
                                             }
+                                            if (!timThay) {
+                                                duTatCa = false; // thiếu ít nhất 1 id
+                                                break;
+                                            }
                                         }
-                                        dangHienDieuUocRongThan = true;
-                                        timeHienRongThan = 300f;
-                                        dangHienPopup = false;
+                                        if (duTatCa) {
+                                            dangHienTinNhanPet = true;
+                                            timeHienTinNhanPet = 2f;
+                                            for (String idCanTim : idsCanTim) {
+                                                for (Item item : danhSach) {
+                                                    if (item != null && idCanTim.equals(item.getId())) {
+                                                        item.giamSoLuong(1);
+                                                        if (item.getSoLuong() == 0) {
+                                                            danhSach.remove(item);
+                                                        }
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                            dangHienDieuUocRongThan = true;
+                                            timeHienRongThan = 300f;
+                                            dangHienPopup = false;
+                                        } else {
+                                            dangHienTinNhanPet = true;
+                                            timeHienTinNhanPet = 2f;
+                                            tinNhanPet = "Không đủ ngọc rồng";
+                                        }
                                     } else {
                                         dangHienTinNhanPet = true;
                                         timeHienTinNhanPet = 2f;
-                                        tinNhanPet = "Không đủ ngọc rồng";
+                                        tinNhanPet = "Chỉ được gọi rồng bằng ngọc rồng 1, 2, 3 sao";
                                     }
                                 } else {
                                     dangHienTinNhanPet = true;
                                     timeHienTinNhanPet = 2f;
-                                    tinNhanPet = "Chỉ được gọi rồng bằng ngọc rồng 1, 2, 3 sao";
+                                    tinNhanPet = "Ngọc rồng cần khôi phục trong "+(int)(timeDelayUocRong/60f)+" phút nữa";
                                 }
                             }
                         } else if (!nhanVat.getHanhtinh().equals(itemm.getHanhtinh())) {
