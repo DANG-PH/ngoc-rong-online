@@ -302,6 +302,8 @@ public class HUDClickHandler {
                             veHUD.itemDangChon = "bongtai";
                         } else if (item.getLoai() == LoaiItem.NGOCRONG) {
                             veHUD.itemDangChon = "ngocrong";
+                        } else if (item.getLoai() == LoaiItem.HUYHIEU) {
+                            veHUD.itemDangChon = "huyhieu";
                         }
                     } else {
                         veHUD.itemm = null;

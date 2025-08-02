@@ -264,6 +264,12 @@ public class VeHUD {
     public Texture[] luaRongThan = new Texture[2];
     public Texture[] rongThan = new Texture[9];
 
+    public boolean dangDungHuyHieu = false;
+    public boolean chuaSetUpAnhHuyHieu = true;
+    public Texture[] anhHuyHieu = new Texture[6];
+    public int framesHuyHieu = 0;
+    public Item huyHieuDangDung = null;
+
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data;
         duLieuNguoiChoi.setNhanVat(nhanVat);
@@ -749,6 +755,7 @@ public class VeHUD {
             veGlow(shapeRenderer,clickX,clickY,timeGlow);
         }
         batch.begin();
+        renderHuyHieu(batch);
         renderPopup(batch);
         renderPetChat(batch);
     }
@@ -1054,8 +1061,8 @@ public class VeHUD {
                         switch (nutduocchon) {
                             case 0:
                                 duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
-                                    "bongtaic1", "Bông tai Porata", LoaiItem.BONGTAI,
-                                    new Texture("vatpham/vatphamgame/bongtai/bongtaic1.png"),
+                                    "bongtaic1", "Bông tai Porata - VIP", LoaiItem.BONGTAI,
+                                    new Texture("vatpham/vatphamgame/bongtai/bongtaic1RT.png"),
                                     "Sử dụng để hợp thể với đệ tử - Vật phẩm nhận từ Rồng Thần ( tăng 5% chỉ số )", 1,
                                     new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
                                     "all", 1000, null, 0, 0, 0, -1
@@ -1212,7 +1219,7 @@ public class VeHUD {
                     // mac do
                     if (nuthanhtrangchon == 1) {
                         if ((nhanVat.getHanhtinh().equals(itemm.getHanhtinh()) || itemm.getHanhtinh().equals("all")) && duLieuNguoiChoi.getSucManh() >= itemm.getSucManhYeuCau()) {
-                            if (!itemDangChon.equals("bongtai") && !itemDangChon.equals("ngocrong")) {
+                            if (!itemDangChon.equals("bongtai") && !itemDangChon.equals("ngocrong") && !itemDangChon.equals("huyhieu")) {
                                 xulyitem.macDo(hangTrangDangChon);
                             }
                             if (itemDangChon.equals("bongtai")) {
@@ -1311,6 +1318,15 @@ public class VeHUD {
                                     dangHienTinNhanPet = true;
                                     timeHienTinNhanPet = 2f;
                                     tinNhanPet = "Ngọc rồng cần khôi phục trong "+(int)(timeDelayUocRong/60f)+" phút nữa";
+                                }
+                            }
+                            if (itemDangChon.equals("huyhieu")) {
+                                if (dangDungHuyHieu) {
+                                    dangDungHuyHieu = false;
+                                    chuaSetUpAnhHuyHieu = true;
+                                } else {
+                                    dangDungHuyHieu = true;
+                                    huyHieuDangDung = itemm;
                                 }
                             }
                         } else if (!nhanVat.getHanhtinh().equals(itemm.getHanhtinh())) {
@@ -1501,104 +1517,107 @@ public class VeHUD {
                 }
             }
         }
+        // Lấy chỉ số gốc
+        float hp = duLieuNguoiChoi.getHpToiDa();
+        float ki = duLieuNguoiChoi.getKiToiDa();
+        float sd = duLieuNguoiChoi.getSucDanhNhanVat();
+
+        // ===== BÔNG TAI =====
         if (dangHopThe) {
-            if (bongTaiDangDung.equals("bongtaic1")) {
-                if (bongTaiRongThan) {
-                    duLieuNguoiChoi.setHpHopThe(duLieuNguoiChoi.getHpToiDa() + duLieuNguoiChoi.deTu.getHpToiDa()*1.05f);
-                    duLieuNguoiChoi.setKiHopThe(duLieuNguoiChoi.getKiToiDa() + duLieuNguoiChoi.deTu.getKiToiDa()*1.05f);
-                    duLieuNguoiChoi.setSdHopThe(duLieuNguoiChoi.getSucDanhNhanVat() + duLieuNguoiChoi.deTu.getSucDanhDeTu()*1.05f);
-                } else {
-                    duLieuNguoiChoi.setHpHopThe(duLieuNguoiChoi.getHpToiDa() + duLieuNguoiChoi.deTu.getHpToiDa());
-                    duLieuNguoiChoi.setKiHopThe(duLieuNguoiChoi.getKiToiDa() + duLieuNguoiChoi.deTu.getKiToiDa());
-                    duLieuNguoiChoi.setSdHopThe(duLieuNguoiChoi.getSucDanhNhanVat() + duLieuNguoiChoi.deTu.getSucDanhDeTu());
-                }
-            } else if(bongTaiDangDung.equals("bongtaic2")) {
-                duLieuNguoiChoi.setHpHopThe((duLieuNguoiChoi.getHpToiDa() + duLieuNguoiChoi.deTu.getHpToiDa())*1.1f);
-                duLieuNguoiChoi.setKiHopThe((duLieuNguoiChoi.getKiToiDa() + duLieuNguoiChoi.deTu.getKiToiDa())*1.1f);
-                duLieuNguoiChoi.setSdHopThe((duLieuNguoiChoi.getSucDanhNhanVat() + duLieuNguoiChoi.deTu.getSucDanhDeTu())*1.1f);
-            } else if(bongTaiDangDung.equals("bongtaic3")) {
-                duLieuNguoiChoi.setHpHopThe((duLieuNguoiChoi.getHpToiDa() + duLieuNguoiChoi.deTu.getHpToiDa())*1.2f);
-                duLieuNguoiChoi.setKiHopThe((duLieuNguoiChoi.getKiToiDa() + duLieuNguoiChoi.deTu.getKiToiDa())*1.2f);
-                duLieuNguoiChoi.setSdHopThe((duLieuNguoiChoi.getSucDanhNhanVat() + duLieuNguoiChoi.deTu.getSucDanhDeTu())*1.2f);
+            hp += duLieuNguoiChoi.deTu.getHpToiDa();
+            ki += duLieuNguoiChoi.deTu.getKiToiDa();
+            sd += duLieuNguoiChoi.deTu.getSucDanhDeTu();
+
+            switch (bongTaiDangDung) {
+                case "bongtaic1":
+                    if (bongTaiRongThan) {
+                        hp += duLieuNguoiChoi.deTu.getHpToiDa() * 0.05f;
+                        ki += duLieuNguoiChoi.deTu.getKiToiDa() * 0.05f;
+                        sd += duLieuNguoiChoi.deTu.getSucDanhDeTu() * 0.05f;
+                    }
+                    break;
+                case "bongtaic2":
+                    hp *= 1.1f;
+                    ki *= 1.1f;
+                    sd *= 1.1f;
+                    break;
+                case "bongtaic3":
+                    hp *= 1.2f;
+                    ki *= 1.2f;
+                    sd *= 1.2f;
+                    break;
             }
-        } else {
-            duLieuNguoiChoi.setHpHopThe(duLieuNguoiChoi.getHpToiDa());
-            duLieuNguoiChoi.setKiHopThe(duLieuNguoiChoi.getKiToiDa());
-            if (duLieuNguoiChoi.getHpHienTai()>duLieuNguoiChoi.getHpToiDa()){
-                duLieuNguoiChoi.setHpHienTai(duLieuNguoiChoi.getHpToiDa());
-            }
-            if (duLieuNguoiChoi.getKiHienTai()>duLieuNguoiChoi.getKiToiDa()){
-                duLieuNguoiChoi.setKiHienTai(duLieuNguoiChoi.getKiToiDa());
-            }
-            duLieuNguoiChoi.setSdHopThe(duLieuNguoiChoi.getSucDanhNhanVat());
         }
+
+        // ===== HUY HIỆU =====
+        if (dangDungHuyHieu) {
+            hp *= (huyHieuDangDung.getChiso()[6] / 100f + 1);
+            ki *= (huyHieuDangDung.getChiso()[7] / 100f + 1);
+            sd *= (huyHieuDangDung.getChiso()[8] / 100f + 1);
+        }
+
+        // ===== GIÁP LUYỆN TẬP =====
         if (dangMacGiapLuyenTap) {
-            duLieuNguoiChoi.getHanhTrangDangMac().get(6).tangHanSuDung();
-            nhanVat.setHanSuDungGiapLuyenTap(duLieuNguoiChoi.getHanhTrangDangMac().get(6).getHanSuDung());
+            var giap = duLieuNguoiChoi.getHanhTrangDangMac().get(6);
+
+            // Giảm thời gian sử dụng
+            giap.tangHanSuDung();
+            nhanVat.setHanSuDungGiapLuyenTap(giap.getHanSuDung());
+
             float sdConLai;
-            switch (duLieuNguoiChoi.getHanhTrangDangMac().get(6).getId()) {
+            switch (giap.getId()) {
                 case "glt_c3": sdConLai = 0.7f; break;
                 case "glt_c2": sdConLai = 0.8f; break;
                 case "glt_c1": sdConLai = 0.9f; break;
                 default:       sdConLai = 1f;   break;
             }
-            if (dangHopThe) {
-                duLieuNguoiChoi.setSdHopThe(
-                    (duLieuNguoiChoi.getSdHopThe()) * sdConLai
-                );
-            } else {
-                duLieuNguoiChoi.setSdHopThe(duLieuNguoiChoi.getSucDanhNhanVat() * sdConLai);
-            }
-            if (daCongChiMang){
+            sd *= sdConLai;
+
+            // Hết buff chí mạng khi mặc giáp
+            if (daCongChiMang) {
                 duLieuNguoiChoi.giamSatThuongChiMang(30);
                 duLieuNguoiChoi.giamChiMang(15);
                 daCongChiMang = false;
             }
-        } else if (itemGiapLuyenTapVuaCoi!=null) {
-            if (itemGiapLuyenTapVuaCoi.getHanSuDung()>0f) {
+
+        } else if (itemGiapLuyenTapVuaCoi != null) {
+            // Giảm thời gian còn lại
+            if (itemGiapLuyenTapVuaCoi.getHanSuDung() > 0f) {
                 itemGiapLuyenTapVuaCoi.giamHanSuDung();
                 nhanVat.setHanSuDungGiapLuyenTap(itemGiapLuyenTapVuaCoi.getHanSuDung());
+
                 float sdCongThem;
                 switch (itemGiapLuyenTapVuaCoi.getId()) {
-                    case "glt_c3":
-                        sdCongThem = 1.3f;
-                        break;
-                    case "glt_c2":
-                        sdCongThem = 1.2f;
-                        break;
-                    case "glt_c1":
-                        sdCongThem = 1.1f;
-                        break;
-                    default:
-                        sdCongThem = 1f;
-                        break;
+                    case "glt_c3": sdCongThem = 1.3f; break;
+                    case "glt_c2": sdCongThem = 1.2f; break;
+                    case "glt_c1": sdCongThem = 1.1f; break;
+                    default:       sdCongThem = 1f;   break;
                 }
-                if (dangHopThe) {
-                    duLieuNguoiChoi.setSdHopThe(
-                        (duLieuNguoiChoi.getSdHopThe()) * sdCongThem
-                    );
-                } else {
-                    duLieuNguoiChoi.setSdHopThe(duLieuNguoiChoi.getSucDanhNhanVat() * sdCongThem);
-                }
-            } else {
-                if (dangHopThe) {
-                    duLieuNguoiChoi.setSdHopThe(
-                        (duLieuNguoiChoi.getSdHopThe())
-                    );
-                } else {
-                    duLieuNguoiChoi.setSdHopThe(duLieuNguoiChoi.getSucDanhNhanVat());
-                }
+                sd *= sdCongThem;
             }
-            if (itemGiapLuyenTapVuaCoi.getHanSuDung()>60f && !daCongChiMang){
+
+            // Logic tăng/giảm chí mạng
+            if (itemGiapLuyenTapVuaCoi.getHanSuDung() > 60f && !daCongChiMang) {
                 duLieuNguoiChoi.tangSatThuongChiMang(30);
                 duLieuNguoiChoi.tangChiMang(15);
                 daCongChiMang = true;
             }
-            if (daCongChiMang && itemGiapLuyenTapVuaCoi.getHanSuDung()<=60f){
+            if (daCongChiMang && itemGiapLuyenTapVuaCoi.getHanSuDung() <= 60f) {
                 duLieuNguoiChoi.giamSatThuongChiMang(30);
                 duLieuNguoiChoi.giamChiMang(15);
                 daCongChiMang = false;
             }
+        }
+
+        // ===== CẬP NHẬT CHỈ SỐ =====
+        duLieuNguoiChoi.setHpHopThe(hp);
+        duLieuNguoiChoi.setKiHopThe(ki);
+        duLieuNguoiChoi.setSdHopThe(sd);
+
+        // Giới hạn HP/KI hiện tại nếu không hợp thể
+        if (!dangHopThe) {
+            if (duLieuNguoiChoi.getHpHienTai() > hp) duLieuNguoiChoi.setHpHienTai(hp);
+            if (duLieuNguoiChoi.getKiHienTai() > ki) duLieuNguoiChoi.setKiHienTai(ki);
         }
         if (timeHopTheTHuong > 0) {
             timeHopTheTHuong -= delta;
@@ -1910,6 +1929,21 @@ public class VeHUD {
             batch.setProjectionMatrix(camManager.uiCamera.combined);
             shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
         }
+    }
+    public void renderHuyHieu(SpriteBatch batch) {
+        if (!dangDungHuyHieu) return;
+        if (chuaSetUpAnhHuyHieu) {
+            for (int i = 0; i < 6; i++) {
+                anhHuyHieu[i] = new Texture("vatpham/vatphamgame/huy_hieu/"+huyHieuDangDung.getId()+"/"+(i+1)+".png");
+            }
+            chuaSetUpAnhHuyHieu = false;
+        }
+        if ((int)(nhanVat.thoiGianTichLuy*18)%2 == 0){
+            framesHuyHieu=(framesHuyHieu+1)%anhHuyHieu.length;
+        }
+        batch.setProjectionMatrix(camManager.camera.combined);
+        batch.draw(anhHuyHieu[framesHuyHieu],nhanVat.getX()-(anhHuyHieu[framesHuyHieu].getWidth()*0.55f-nhanVat.getRong())/2f,nhanVat.getY()+nhanVat.getCao()+35f,anhHuyHieu[framesHuyHieu].getWidth()*0.55f,anhHuyHieu[framesHuyHieu].getHeight()*0.55f);
+        batch.setProjectionMatrix(camManager.uiCamera.combined);
     }
     public int getChucNangDangChon() {
         return chucNangDangChon;

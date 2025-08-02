@@ -17,6 +17,14 @@ public class ThemItemTest {
             "all", 1500000L, null, 0, 0, 0, -1
         ));
 
+        duLieu.themItemVaoHanhTrang(new Item(
+            "thien_tu", "Huy hiệu Thiên Tử", LoaiItem.HUYHIEU,
+            new Texture("vatpham/vatphamgame/huy_hieu/thien_tu/icon.png"),
+            "Thiên mệnh tại thân - Thống ngự càn khôn", 1,
+            new int[]{0,0,0,0,0,0,10,10,10,0,0,0,0},
+            "all", 10_000_000L, null, 0, 0, 0, -1
+        ));
+
 //        duLieu.themItemVaoHanhTrang(new Item(
 //            "bongtaic2", "Bông tai Porata Cấp 2", LoaiItem.BONGTAI,
 //            new Texture("vatpham/vatphamgame/bongtai/bongtaic2.png"),

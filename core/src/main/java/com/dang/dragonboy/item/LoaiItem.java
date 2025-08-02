@@ -13,5 +13,6 @@ public enum LoaiItem {
     GIAPLUYENTAP,
     VANBAY,
     BONGTAI,
-    NGOCRONG
+    NGOCRONG,
+    HUYHIEU
 }
