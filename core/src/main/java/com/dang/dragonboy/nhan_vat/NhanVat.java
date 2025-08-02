@@ -1356,6 +1356,18 @@ public class NhanVat {
 
     public void ve(SpriteBatch batch, float thoiGian) {
         this.thoiGianTichLuy = thoiGian;
+        if (veHUD.dangDungHuyHieu){
+            if (veHUD.chuaSetUpAnhHuyHieu) {
+                for (int i = 0; i < 6; i++) {
+                    veHUD.anhHuyHieu[i] = new Texture("vatpham/vatphamgame/huy_hieu/" + veHUD.huyHieuDangDung.getId() + "/" + (i + 1) + ".png");
+                }
+                veHUD.chuaSetUpAnhHuyHieu = false;
+            }
+            if ((int) (thoiGian * 18) % 2 == 0) {
+                veHUD.framesHuyHieu = (veHUD.framesHuyHieu + 1) % veHUD.anhHuyHieu.length;
+            }
+            batch.draw(veHUD.anhHuyHieu[veHUD.framesHuyHieu], x - (veHUD.anhHuyHieu[veHUD.framesHuyHieu].getWidth() * 0.55f - rong) / 2f, y + cao + 35f, veHUD.anhHuyHieu[veHUD.framesHuyHieu].getWidth() * 0.55f, veHUD.anhHuyHieu[veHUD.framesHuyHieu].getHeight() * 0.55f);
+        }
         if (!veHUD.renderDeTu && duLieuNguoiChoi.deTu.timeHoatAnhBienMat>0) {
             if (duLieuNguoiChoi.deTu.chuaLayToaDoBienMat) {
                 duLieuNguoiChoi.deTu.x_bien_mat = duLieuNguoiChoi.deTu.x;

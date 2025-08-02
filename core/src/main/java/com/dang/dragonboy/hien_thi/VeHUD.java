@@ -755,7 +755,6 @@ public class VeHUD {
             veGlow(shapeRenderer,clickX,clickY,timeGlow);
         }
         batch.begin();
-        renderHuyHieu(batch);
         renderPopup(batch);
         renderPetChat(batch);
     }
@@ -1929,21 +1928,6 @@ public class VeHUD {
             batch.setProjectionMatrix(camManager.uiCamera.combined);
             shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
         }
-    }
-    public void renderHuyHieu(SpriteBatch batch) {
-        if (!dangDungHuyHieu) return;
-        if (chuaSetUpAnhHuyHieu) {
-            for (int i = 0; i < 6; i++) {
-                anhHuyHieu[i] = new Texture("vatpham/vatphamgame/huy_hieu/"+huyHieuDangDung.getId()+"/"+(i+1)+".png");
-            }
-            chuaSetUpAnhHuyHieu = false;
-        }
-        if ((int)(nhanVat.thoiGianTichLuy*18)%2 == 0){
-            framesHuyHieu=(framesHuyHieu+1)%anhHuyHieu.length;
-        }
-        batch.setProjectionMatrix(camManager.camera.combined);
-        batch.draw(anhHuyHieu[framesHuyHieu],nhanVat.getX()-(anhHuyHieu[framesHuyHieu].getWidth()*0.55f-nhanVat.getRong())/2f,nhanVat.getY()+nhanVat.getCao()+35f,anhHuyHieu[framesHuyHieu].getWidth()*0.55f,anhHuyHieu[framesHuyHieu].getHeight()*0.55f);
-        batch.setProjectionMatrix(camManager.uiCamera.combined);
     }
     public int getChucNangDangChon() {
         return chucNangDangChon;
