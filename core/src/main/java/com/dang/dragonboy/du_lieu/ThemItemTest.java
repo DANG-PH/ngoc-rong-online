@@ -26,28 +26,60 @@ public class ThemItemTest {
         ));
 
         duLieu.themItemVaoHanhTrang(new Item(
-            "trum_cuoi", "Huy hiệu Trùm cuối", LoaiItem.HUYHIEU,
-            new Texture("vatpham/vatphamgame/huy_hieu/trum_cuoi/icon.png"),
-            "Vinh quang vô địch - Đỉnh cao sức mạnh", 1,
-            new int[]{0,0,0,5,0,5,0,0,10,0,0,0,0},
-            "all", 10_000_000L, null, 0, 0, 0, -1
+            "bo_huyet", "Bổ huyết", LoaiItem.PHUTRO,
+            new Texture("vatpham/vatphamgame/phu_tro/bo_huyet.png"),
+            "Trong vòng tối đa 10 phút +100% HP", 99,
+            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+            "all", 0, null, 0, 0, 0, -1
         ));
 
         duLieu.themItemVaoHanhTrang(new Item(
-            nhanVat.getHanhtinh()+"_toi_thuong", "Huy hiệu Tối Thượng", LoaiItem.HUYHIEU,
-            new Texture("vatpham/vatphamgame/huy_hieu/"+nhanVat.getHanhtinh()+"_toi_thuong/icon.png"),
-            "Biểu tượng của người thống trị - Sức mạnh tối thượng không ai sánh kịp", 1,
-            new int[]{0,0,0,10,0,10,0,0,0,0,0,0,0},
-            "all", 10_000_000L, null, 0, 0, 0, -1
+            "bo_khi", "Bổ khí", LoaiItem.PHUTRO,
+            new Texture("vatpham/vatphamgame/phu_tro/bo_khi.png"),
+            "Trong vòng tối đa 10 phút +100% KI", 99,
+            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+            "all", 0, null, 0, 0, 0, -1
         ));
 
         duLieu.themItemVaoHanhTrang(new Item(
-            "xayda"+"_toi_thuong", "Huy hiệu Tối Thượng", LoaiItem.HUYHIEU,
-            new Texture("vatpham/vatphamgame/huy_hieu/"+"xayda"+"_toi_thuong/icon.png"),
-            "Biểu tượng của người thống trị - Sức mạnh tối thượng không ai sánh kịp", 1,
-            new int[]{0,0,0,0,0,0,20,0,0,0,0,0,10},
-            "all", 10_000_000L, null, 0, 0, 0, -1
+            "cuong_no", "Cuồng nộ", LoaiItem.PHUTRO,
+            new Texture("vatpham/vatphamgame/phu_tro/cuong_no.png"),
+            "Trong vòng tối đa 10 phút +100% Sức đánh gốc", 99,
+            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+            "all", 0, null, 0, 0, 0, -1
         ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "giap_xen", "Giáp xên bọ hung", LoaiItem.PHUTRO,
+            new Texture("vatpham/vatphamgame/phu_tro/giap_xen.png"),
+            "Trong vòng tối đa 10 phút giảm 50% sát thương", 99,
+            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+            "all", 0, null, 0, 0, 0, -1
+        ));
+
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "trum_cuoi", "Huy hiệu Trùm cuối", LoaiItem.HUYHIEU,
+//            new Texture("vatpham/vatphamgame/huy_hieu/trum_cuoi/icon.png"),
+//            "Vinh quang vô địch - Đỉnh cao sức mạnh", 1,
+//            new int[]{0,0,0,5,0,5,0,0,10,0,0,0,0},
+//            "all", 10_000_000L, null, 0, 0, 0, -1
+//        ));
+//
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            nhanVat.getHanhtinh()+"_toi_thuong", "Huy hiệu Tối Thượng", LoaiItem.HUYHIEU,
+//            new Texture("vatpham/vatphamgame/huy_hieu/"+nhanVat.getHanhtinh()+"_toi_thuong/icon.png"),
+//            "Biểu tượng của người thống trị - Sức mạnh tối thượng không ai sánh kịp", 1,
+//            new int[]{0,0,0,10,0,10,0,0,0,0,0,0,0},
+//            "all", 10_000_000L, null, 0, 0, 0, -1
+//        ));
+//
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "xayda"+"_toi_thuong", "Huy hiệu Tối Thượng", LoaiItem.HUYHIEU,
+//            new Texture("vatpham/vatphamgame/huy_hieu/"+"xayda"+"_toi_thuong/icon.png"),
+//            "Biểu tượng của người thống trị - Sức mạnh tối thượng không ai sánh kịp", 1,
+//            new int[]{0,0,0,0,0,0,20,0,0,0,0,0,10},
+//            "all", 10_000_000L, null, 0, 0, 0, -1
+//        ));
 
 //        duLieu.themItemVaoHanhTrang(new Item(
 //            "adminHD", "Hộp quà từ Admin Hải Đăng", LoaiItem.HOPQUA,

@@ -112,12 +112,12 @@ public class DuLieuNguoiChoi {
 
     public void themItemVaoHanhTrang(Item item) {
         if (hanhTrang.size() < 50) {
-            if (item.getLoai() != LoaiItem.NGOCRONG) {
+            if (item.getLoai() != LoaiItem.NGOCRONG && item.getLoai() != LoaiItem.PHUTRO) {
                 hanhTrang.add(item);
             } else {
                 boolean daSoHuuItem = false;
                 for (Item itemm : hanhTrang) {
-                    if (itemm.getLoai() == LoaiItem.NGOCRONG && itemm.getId() == item.getId()) {
+                    if ((itemm.getLoai() == LoaiItem.NGOCRONG || item.getLoai() == LoaiItem.PHUTRO) && itemm.getId() == item.getId()) {
                         itemm.tangSoLuong(item.getSoLuong());
                         daSoHuuItem = true;
                     }
