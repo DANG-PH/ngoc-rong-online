@@ -57,7 +57,7 @@ public class DuLieuNguoiChoi {
 
     private String[] danhSachHanhTinh = {"traidat","xayda","namek"};
 
-    private float HpHopThe,KiHopThe,SdHopThe;
+    private float HpHopThe,KiHopThe,SdHopThe,ChiMangSuDung,SatThuongChiMangSuDung;
 
     // Constructor
     public DuLieuNguoiChoi(String ten, long sucManh, int theLuc,
@@ -636,6 +636,22 @@ public class DuLieuNguoiChoi {
 
     public void setKiHienTai(float Ki) {
         this.KiHienTai = Ki;
+    }
+
+    public void setChiMangSuDung(int chimang) {
+        this.ChiMangSuDung = chimang;
+    }
+
+    public void setSatThuongChiMangSuDung(int satThuongChiMang) {
+        this.SatThuongChiMangSuDung = satThuongChiMang;
+    }
+
+    public float getChiMangSuDung() {
+        return ChiMangSuDung;
+    }
+
+    public float getSatThuongChiMangSuDung() {
+        return SatThuongChiMangSuDung;
     }
 
     public void dangMacAo(boolean dangmacAo){

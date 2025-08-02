@@ -134,17 +134,17 @@ public class HUDPopupRenderer {
                 veHUD.fontsm.draw(batch, layout, 125, 595);
                 layout.setText(veHUD.fontsm,"KI: " + (int) duLieuNguoiChoi.getKiHienTai() + " / " + (int) duLieuNguoiChoi.getKiHopThe());
                 veHUD.fontsm.draw(batch, layout, 125, 570);
-                layout.setText(veHUD.fontsm, "Sức đánh: " + (int) duLieuNguoiChoi.getSdHopThe() + ", Crit: " + duLieuNguoiChoi.getChiMangNhanVat() + "%");
+                layout.setText(veHUD.fontsm, "Sức đánh: " + (int) duLieuNguoiChoi.getSdHopThe() + ", Crit: " + duLieuNguoiChoi.getChiMangSuDung() + "%");
                 veHUD.fontsm.draw(batch, layout, 125, 545);
             } else {
                 layout.setText(veHUD.fontsm,"HP: " + (int) duLieuNguoiChoi.getHpHienTai() + " / " + (int) duLieuNguoiChoi.getHpHopThe());
                 veHUD.fontsm.draw(batch, layout, 125, 595);
                 layout.setText(veHUD.fontsm,"KI: " + (int) duLieuNguoiChoi.getKiHienTai() + " / " + (int) duLieuNguoiChoi.getKiHopThe());
                 veHUD.fontsm.draw(batch, layout, 125, 570);
-                layout.setText(veHUD.fontsm, "Sức đánh: " + (int) duLieuNguoiChoi.getSdHopThe() + ", Crit: " + duLieuNguoiChoi.getChiMangNhanVat() + "%");
+                layout.setText(veHUD.fontsm, "Sức đánh: " + (int) duLieuNguoiChoi.getSdHopThe() + ", Crit: " + (int)duLieuNguoiChoi.getChiMangSuDung() + "%");
                 veHUD.fontsm.draw(batch, layout, 125, 545);
             }
-            layout.setText(veHUD.fontsm,"Giáp: "+(int)duLieuNguoiChoi.getGiapNhanVat()+", ST Crit: "+(int)duLieuNguoiChoi.getSatThuongChiMang()+"%");
+            layout.setText(veHUD.fontsm,"Giáp: "+(int)duLieuNguoiChoi.getGiapNhanVat()+", ST Crit: "+(int)duLieuNguoiChoi.getSatThuongChiMangSuDung()+"%");
             veHUD.fontsm.draw(batch,layout,125,520);
 
             // ô hành trang
@@ -175,7 +175,7 @@ public class HUDPopupRenderer {
                 Texture tex = (veHUD.hangTrangDangChon == i) ? veHUD.hanh_trang_dang_mac_click : veHUD.hanh_trang_dang_mac;
                 batch.draw(tex, 3, y, 344, 50);
                 if (itemNhanVat[i]!=null){
-                    if (itemNhanVat[i].getHeight()*0.5f < 60) {
+                    if (itemNhanVat[i].getHeight()*0.5f < 60 && itemNhanVat[i].getWidth()*0.5f < 100) {
                         batch.draw(itemNhanVat[i], 3 + (70 - itemNhanVat[i].getWidth() * 0.5f) / 2f, y + (49 - itemNhanVat[i].getHeight() * 0.5f) / 2f, itemNhanVat[i].getWidth() * 0.5f, itemNhanVat[i].getHeight() * 0.5f);
                     } else {
                         batch.draw(itemNhanVat[i], 3 + (70 - itemNhanVat[i].getWidth() * 0.38f) / 2f, y + (49 - itemNhanVat[i].getHeight() * 0.38f) / 2f, itemNhanVat[i].getWidth() * 0.38f, itemNhanVat[i].getHeight() * 0.38f);
@@ -279,7 +279,7 @@ public class HUDPopupRenderer {
                 if (i < danhSachItem.size()) {
                     Item item = danhSachItem.get(i);
                     if (item != null) {
-                        if (item.getTexture().getHeight()*0.5f < 60) {
+                        if (item.getTexture().getHeight()*0.5f < 60 && item.getTexture().getWidth()*0.5f < 100) {
                             batch.draw(item.getTexture(), 3 + (70 - item.getTexture().getWidth() * 0.5f) / 2f, y + (49 - item.getTexture().getHeight() * 0.5f) / 2f, item.getTexture().getWidth() * 0.5f, item.getTexture().getHeight() * 0.5f);
                         } else {
                             batch.draw(item.getTexture(), 3 + (70 - item.getTexture().getWidth() * 0.38f) / 2f, y + (49 - item.getTexture().getHeight() * 0.38f) / 2f, item.getTexture().getWidth() * 0.38f, item.getTexture().getHeight() * 0.38f);
@@ -1178,7 +1178,7 @@ public class HUDPopupRenderer {
                 Texture tex = (veHUD.hangTrangDangChon == i) ? veHUD.hanh_trang_dang_mac_click : veHUD.hanh_trang_dang_mac;
                 batch.draw(tex, 3 + 1020 - 350, y, 344, 50);
                 if (itemNhanVat[i] != null) {
-                    if (itemNhanVat[i].getHeight() * 0.5f < 60) {
+                    if (itemNhanVat[i].getHeight() * 0.5f < 60 && itemNhanVat[i].getWidth()*0.5f < 100) {
                         batch.draw(itemNhanVat[i], 3 + (70 - itemNhanVat[i].getWidth() * 0.5f) / 2f + 1020 - 350, y + (49 - itemNhanVat[i].getHeight() * 0.5f) / 2f, itemNhanVat[i].getWidth() * 0.5f, itemNhanVat[i].getHeight() * 0.5f);
                     } else {
                         batch.draw(itemNhanVat[i], 3 + (70 - itemNhanVat[i].getWidth() * 0.38f) / 2f + 1020 - 350, y + (49 - itemNhanVat[i].getHeight() * 0.38f) / 2f, itemNhanVat[i].getWidth() * 0.38f, itemNhanVat[i].getHeight() * 0.38f);
@@ -1282,7 +1282,7 @@ public class HUDPopupRenderer {
                 if (i < danhSachItem.size()) {
                     Item item = danhSachItem.get(i);
                     if (item != null) {
-                        if (item.getTexture().getHeight() * 0.5f < 60) {
+                        if (item.getTexture().getHeight() * 0.5f < 60 && item.getTexture().getWidth()*0.5f < 100f) {
                             batch.draw(item.getTexture(), 3 + (70 - item.getTexture().getWidth() * 0.5f) / 2f + 1020 - 350, y + (49 - item.getTexture().getHeight() * 0.5f) / 2f, item.getTexture().getWidth() * 0.5f, item.getTexture().getHeight() * 0.5f);
                         } else {
                             batch.draw(item.getTexture(), 3 + (70 - item.getTexture().getWidth() * 0.38f) / 2f + 1020 - 350, y + (49 - item.getTexture().getHeight() * 0.38f) / 2f, item.getTexture().getWidth() * 0.38f, item.getTexture().getHeight() * 0.38f);
@@ -1455,7 +1455,7 @@ public class HUDPopupRenderer {
                     Texture tex = (veHUD.hangTrangDeTuDangChon == i) ? veHUD.hanh_trang_dang_mac_click : veHUD.hanh_trang_dang_mac;
                     batch.draw(tex, 3, y, 344, 62);
                     if (itemDeTu[i] != null) {
-                        if (itemDeTu[i].getHeight() * 0.5f < 60) {
+                        if (itemDeTu[i].getHeight() * 0.5f < 60 && itemDeTu[i].getWidth() * 0.5f < 100f) {
                             batch.draw(itemDeTu[i], 3 + (70 - itemDeTu[i].getWidth() * 0.5f) / 2f, y + (61 - itemDeTu[i].getHeight() * 0.5f) / 2f, itemDeTu[i].getWidth() * 0.5f, itemDeTu[i].getHeight() * 0.5f);
                         } else {
                             batch.draw(itemDeTu[i], 3 + (70 - itemDeTu[i].getWidth() * 0.38f) / 2f, y + (61 - itemDeTu[i].getHeight() * 0.38f) / 2f, itemDeTu[i].getWidth() * 0.38f, itemDeTu[i].getHeight() * 0.38f);

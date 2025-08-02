@@ -25,6 +25,30 @@ public class ThemItemTest {
             "all", 10_000_000L, null, 0, 0, 0, -1
         ));
 
+        duLieu.themItemVaoHanhTrang(new Item(
+            "trum_cuoi", "Huy hiệu Trùm cuối", LoaiItem.HUYHIEU,
+            new Texture("vatpham/vatphamgame/huy_hieu/trum_cuoi/icon.png"),
+            "Vinh quang vô địch - Đỉnh cao sức mạnh", 1,
+            new int[]{0,0,0,5,0,5,0,0,10,0,0,0,0},
+            "all", 10_000_000L, null, 0, 0, 0, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            nhanVat.getHanhtinh()+"_toi_thuong", "Huy hiệu Tối Thượng", LoaiItem.HUYHIEU,
+            new Texture("vatpham/vatphamgame/huy_hieu/"+nhanVat.getHanhtinh()+"_toi_thuong/icon.png"),
+            "Biểu tượng của người thống trị - Sức mạnh tối thượng không ai sánh kịp", 1,
+            new int[]{0,0,0,10,0,10,0,0,0,0,0,0,0},
+            "all", 10_000_000L, null, 0, 0, 0, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "xayda"+"_toi_thuong", "Huy hiệu Tối Thượng", LoaiItem.HUYHIEU,
+            new Texture("vatpham/vatphamgame/huy_hieu/"+"xayda"+"_toi_thuong/icon.png"),
+            "Biểu tượng của người thống trị - Sức mạnh tối thượng không ai sánh kịp", 1,
+            new int[]{0,0,0,0,0,0,20,0,0,0,0,0,10},
+            "all", 10_000_000L, null, 0, 0, 0, -1
+        ));
+
 //        duLieu.themItemVaoHanhTrang(new Item(
 //            "adminHD", "Hộp quà từ Admin Hải Đăng", LoaiItem.HOPQUA,
 //            new Texture("vatpham/vatphamgame/hop_qua/adminHD.png"),

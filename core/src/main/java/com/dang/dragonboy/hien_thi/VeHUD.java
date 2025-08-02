@@ -892,7 +892,7 @@ public class VeHUD {
                     } else if (delayHopTheThuong>0) {
                         dangHienTinNhanPet = true;
                         timeHienTinNhanPet = 2f;
-                        tinNhanPet = "Cần chờ "+(int)(delayHopTheThuong/60f)+" phút nữa để hợp thể gotenks";
+                        tinNhanPet = "Cần chờ "+(int)(delayHopTheThuong/60f)+" phút nữa để hợp thể Fushion Dance";
                     }
                 } else if (dangChonNhacNen) {
                     String[] chucNang = {"Tắt nhạc","Khẩu thị tâm phi","Đếm ngày xa em","Kẻ theo đuổi ánh sáng","Tháp rơi tự do","Điều anh biết","DanDan Kokoro Hikareteku","Sao mình chưa nắm tay nhau","Thời gian sẽ trả lời","Sự thật đã bỏ quên"};
@@ -1329,6 +1329,13 @@ public class VeHUD {
                                         "all", 10_000_000L, null, 0, 0, 0, -1
                                     ));
                                     duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
+                                        nhanVat.getHanhtinh()+"_toi_thuong", "Huy hiệu Tối Thượng", LoaiItem.HUYHIEU,
+                                        new Texture("vatpham/vatphamgame/huy_hieu/"+nhanVat.getHanhtinh()+"_toi_thuong/icon.png"),
+                                        "Biểu tượng của người thống trị - Sức mạnh tối thượng không ai sánh kịp", 1,
+                                        new int[]{0,0,0,10,0,10,0,0,0,0,0,0,0},
+                                        "all", 10_000_000L, null, 0, 0, 0, -1
+                                    ));
+                                    duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
                                         "set_cam", "Áo võ kame", LoaiItem.AO,
                                         new Texture("vatpham/do/traidat/set_cam/ao.png"),
                                         "Giúp giảm sát thương", 1,
@@ -1367,9 +1374,7 @@ public class VeHUD {
                                         new int[]{0,0,0,1,0,0,0,0,21,0,0,0,0},
                                         "traidat", 15000L, "Sôngôku", 7, 7, 1, -1
                                     ));
-                                    dangHienTinNhanPet = true;
-                                    timeHienTinNhanPet = 2f;
-                                    tinNhanPet = "Bạn vừa nhận 01 set Sôngôku + Huy hiệu Thiên Tử";
+                                    tinNhanPet = "Bạn vừa nhận 01 set Sôngôku + Huy hiệu Thiên Tử + Huy hiệu Trái Đất Tối Thượng";
                                     duLieuNguoiChoi.getHanhTrang().remove(itemm);
                                 }
                                 if (itemm.getId().equals("adminTL")) {
@@ -1428,19 +1433,17 @@ public class VeHUD {
                                         new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
                                         "all", 0, null, 0, 0, 0, -1
                                     ));
-                                    dangHienTinNhanPet = true;
-                                    timeHienTinNhanPet = 2f;
                                     tinNhanPet = "Bạn vừa nhận x99 bộ Ngọc Rồng";
                                     duLieuNguoiChoi.getHanhTrang().remove(itemm);
                                 }
                                 if (itemm.getId().equals("adminDL")) {
                                     duLieuNguoiChoi.tangNgoc(1_000_000);
                                     duLieuNguoiChoi.tangVang(1_000_000_000);
-                                    dangHienTinNhanPet = true;
-                                    timeHienTinNhanPet = 2f;
                                     tinNhanPet = "Bạn vừa nhận 1 tỷ vàng và 1 triệu ngọc xanh";
                                     duLieuNguoiChoi.getHanhTrang().remove(itemm);
                                 }
+                                dangHienTinNhanPet = true;
+                                timeHienTinNhanPet = 2f;
                             }
                         } else if (!nhanVat.getHanhtinh().equals(itemm.getHanhtinh())) {
                             dangHienTinNhanPet = true;
@@ -1625,6 +1628,8 @@ public class VeHUD {
         float hp = duLieuNguoiChoi.getHpToiDa();
         float ki = duLieuNguoiChoi.getKiToiDa();
         float sd = duLieuNguoiChoi.getSucDanhNhanVat();
+        int cm = duLieuNguoiChoi.getChiMangNhanVat();
+        int stcm = duLieuNguoiChoi.getSatThuongChiMang();
 
         // ===== BÔNG TAI =====
         if (dangHopThe) {
@@ -1655,6 +1660,8 @@ public class VeHUD {
 
         // ===== HUY HIỆU =====
         if (dangDungHuyHieu) {
+            cm += huyHieuDangDung.getChiso()[3];
+            stcm += huyHieuDangDung.getChiso()[5];
             hp *= (huyHieuDangDung.getChiso()[6] / 100f + 1);
             ki *= (huyHieuDangDung.getChiso()[7] / 100f + 1);
             sd *= (huyHieuDangDung.getChiso()[8] / 100f + 1);
@@ -1717,6 +1724,8 @@ public class VeHUD {
         duLieuNguoiChoi.setHpHopThe(hp);
         duLieuNguoiChoi.setKiHopThe(ki);
         duLieuNguoiChoi.setSdHopThe(sd);
+        duLieuNguoiChoi.setChiMangSuDung(cm);
+        duLieuNguoiChoi.setSatThuongChiMangSuDung(stcm);
         if (vuaHopThe) {
             duLieuNguoiChoi.setHpHienTai(duLieuNguoiChoi.getHpHopThe());
             duLieuNguoiChoi.setKiHienTai(duLieuNguoiChoi.getKiHopThe());

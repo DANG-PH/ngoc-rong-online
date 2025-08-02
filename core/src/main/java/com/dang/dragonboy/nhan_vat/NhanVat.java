@@ -203,6 +203,7 @@ public class NhanVat {
     private boolean dangHienDiemCanDen = false;
 
     private float timeChoHienBay;
+    private float timeDoiFrames;
 
     public void setToaDoMucTieu(float x, float y) {
         this.x_muc_tieu = x;
@@ -1363,8 +1364,10 @@ public class NhanVat {
                 }
                 veHUD.chuaSetUpAnhHuyHieu = false;
             }
-            if ((int) (thoiGian * 18) % 2 == 0) {
+            timeDoiFrames+=Gdx.graphics.getDeltaTime();
+            if (timeDoiFrames>0.03f) {
                 veHUD.framesHuyHieu = (veHUD.framesHuyHieu + 1) % veHUD.anhHuyHieu.length;
+                timeDoiFrames=0;
             }
             batch.draw(veHUD.anhHuyHieu[veHUD.framesHuyHieu], x - (veHUD.anhHuyHieu[veHUD.framesHuyHieu].getWidth() * 0.55f - rong) / 2f, y + cao + 35f, veHUD.anhHuyHieu[veHUD.framesHuyHieu].getWidth() * 0.55f, veHUD.anhHuyHieu[veHUD.framesHuyHieu].getHeight() * 0.55f);
         }
