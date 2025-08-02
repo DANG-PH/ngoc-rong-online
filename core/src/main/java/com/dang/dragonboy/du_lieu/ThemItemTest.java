@@ -26,6 +26,30 @@ public class ThemItemTest {
         ));
 
 //        duLieu.themItemVaoHanhTrang(new Item(
+//            "adminHD", "Hộp quà từ Admin Hải Đăng", LoaiItem.HOPQUA,
+//            new Texture("vatpham/vatphamgame/hop_qua/adminHD.png"),
+//            "Tân binh à, chào mừng bạn đến với thế giới Ngọc Rồng Online! Món quà này là lời cảm ơn từ Admin Hải Đăng - mong nó sẽ giúp bạn khởi đầu thuận lợi và có thật nhiều kỷ niệm đáng nhớ.", 1,
+//            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+//            "all", 1000L, null, 0, 0, 0, -1
+//        ));
+//
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "adminTL", "Hộp quà từ Admin Thành Lê", LoaiItem.HOPQUA,
+//            new Texture("vatpham/vatphamgame/hop_qua/adminTL.png"),
+//            "Hoan nghênh bạn, tân binh! Admin Thành Lê gửi đến bạn món quà tân thủ như một lời chào mừng - hãy dùng nó để khởi đầu mạnh mẽ và ghi dấu hành trình của mình.", 1,
+//            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+//            "all", 1000L, null, 0, 0, 0, -1
+//        ));
+//
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "adminDL", "Hộp quà từ Admin Dũng Lê", LoaiItem.HOPQUA,
+//            new Texture("vatpham/vatphamgame/hop_qua/adminDL.png"),
+//            "Xin chào tân binh! Admin Dũng Lê gửi tặng bạn món quà đặc biệt - chúc bạn sớm khám phá trọn vẹn thế giới Ngọc Rồng Online.", 1,
+//            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+//            "all", 1000L, null, 0, 0, 0, -1
+//        ));
+
+//        duLieu.themItemVaoHanhTrang(new Item(
 //            "bongtaic2", "Bông tai Porata Cấp 2", LoaiItem.BONGTAI,
 //            new Texture("vatpham/vatphamgame/bongtai/bongtaic2.png"),
 //            "Sử dụng để hợp thể với đệ tử và tăng tổng 10% chỉ số", 1,
@@ -276,15 +300,7 @@ public class ThemItemTest {
         duLieu.themItemVaoHanhTrang(new Item(
             "nr1s", "Ngọc rồng 1 sao", LoaiItem.NGOCRONG,
             new Texture("vatpham/vatphamgame/ngocrong/nr1s.png"),
-            "Thu thập để ước rồng thần", 1,
-            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
-            "all", 0, null, 0, 0, 0, -1
-        ));
-
-        duLieu.themItemVaoHanhTrang(new Item(
-            "nr1s", "Ngọc rồng 1 sao", LoaiItem.NGOCRONG,
-            new Texture("vatpham/vatphamgame/ngocrong/nr1s.png"),
-            "Thu thập để ước rồng thần", 98,
+            "Thu thập để ước rồng thần", 99,
             new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
             "all", 0, null, 0, 0, 0, -1
         ));

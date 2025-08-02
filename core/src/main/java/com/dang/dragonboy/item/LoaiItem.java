@@ -14,5 +14,6 @@ public enum LoaiItem {
     VANBAY,
     BONGTAI,
     NGOCRONG,
-    HUYHIEU
+    HUYHIEU,
+    HOPQUA
 }

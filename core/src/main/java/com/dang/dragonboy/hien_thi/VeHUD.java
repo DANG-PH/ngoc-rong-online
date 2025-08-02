@@ -208,6 +208,7 @@ public class VeHUD {
     public String soVangNguoiChoiNhapChanLe = "";
 
     public boolean dangHopThe = false;
+    public boolean vuaHopThe = false;
     public float timeChoHopThe = 0;
     public Texture nenflash;
     public boolean veNenFlash;
@@ -590,23 +591,13 @@ public class VeHUD {
         }
         int widthSuPhu = (int)(thanhtheluc2.getWidth() * (duLieuNguoiChoi.getTheLuc()/100f));
         thanhtheluc3 = new TextureRegion(thanhtheluc2, 0, 0, widthSuPhu, thanhtheluc2.getHeight());
-        if (dangHopThe) {
-            int widthHP = (int) (thanhhpnv.getWidth() *
-                (duLieuNguoiChoi.getHpHienTai() / (float) duLieuNguoiChoi.getHpHopThe()));
-            thanhhpnv1 = new TextureRegion(thanhhpnv, 0, 0, widthHP, thanhhpnv.getHeight());
+        int widthHP = (int) (thanhhpnv.getWidth() *
+            (duLieuNguoiChoi.getHpHienTai() / duLieuNguoiChoi.getHpHopThe()));
+        thanhhpnv1 = new TextureRegion(thanhhpnv, 0, 0, widthHP, thanhhpnv.getHeight());
 
-            int widthKI = (int) (thanhkinv.getWidth() *
-                (duLieuNguoiChoi.getKiHienTai() / (float) duLieuNguoiChoi.getKiHopThe()));
-            thanhkinv1 = new TextureRegion(thanhkinv, 0, 0, widthKI, thanhkinv.getHeight());
-        } else {
-            int widthHP = (int) (thanhhpnv.getWidth() *
-                (duLieuNguoiChoi.getHpHienTai() / (float) duLieuNguoiChoi.getHpToiDa()));
-            thanhhpnv1 = new TextureRegion(thanhhpnv, 0, 0, widthHP, thanhhpnv.getHeight());
-
-            int widthKI = (int) (thanhkinv.getWidth() *
-                (duLieuNguoiChoi.getKiHienTai() / (float) duLieuNguoiChoi.getKiToiDa()));
-            thanhkinv1 = new TextureRegion(thanhkinv, 0, 0, widthKI, thanhkinv.getHeight());
-        }
+        int widthKI = (int) (thanhkinv.getWidth() *
+            (duLieuNguoiChoi.getKiHienTai() / duLieuNguoiChoi.getKiHopThe()));
+        thanhkinv1 = new TextureRegion(thanhkinv, 0, 0, widthKI, thanhkinv.getHeight());
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
 
@@ -1218,7 +1209,7 @@ public class VeHUD {
                     // mac do
                     if (nuthanhtrangchon == 1) {
                         if ((nhanVat.getHanhtinh().equals(itemm.getHanhtinh()) || itemm.getHanhtinh().equals("all")) && duLieuNguoiChoi.getSucManh() >= itemm.getSucManhYeuCau()) {
-                            if (!itemDangChon.equals("bongtai") && !itemDangChon.equals("ngocrong") && !itemDangChon.equals("huyhieu")) {
+                            if (!itemDangChon.equals("bongtai") && !itemDangChon.equals("ngocrong") && !itemDangChon.equals("huyhieu") && !itemDangChon.equals("hopqua")) {
                                 xulyitem.macDo(hangTrangDangChon);
                             }
                             if (itemDangChon.equals("bongtai")) {
@@ -1326,6 +1317,129 @@ public class VeHUD {
                                 } else {
                                     dangDungHuyHieu = true;
                                     huyHieuDangDung = itemm;
+                                }
+                            }
+                            if (itemDangChon.equals("hopqua")) {
+                                if (itemm.getId().equals("adminHD")) {
+                                    duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
+                                        "thien_tu", "Huy hiệu Thiên Tử", LoaiItem.HUYHIEU,
+                                        new Texture("vatpham/vatphamgame/huy_hieu/thien_tu/icon.png"),
+                                        "Thiên mệnh tại thân - Thống ngự càn khôn", 1,
+                                        new int[]{0, 0, 0, 0, 0, 0, 10, 10, 10, 0, 0, 0, 0},
+                                        "all", 10_000_000L, null, 0, 0, 0, -1
+                                    ));
+                                    duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
+                                        "set_cam", "Áo võ kame", LoaiItem.AO,
+                                        new Texture("vatpham/do/traidat/set_cam/ao.png"),
+                                        "Giúp giảm sát thương", 1,
+                                        new int[]{0,0,0,0,10,0,0,0,21,0,0,0,0},
+                                        "traidat", 150000L, "Sôngôku", 7, 7, 3, -1
+                                    ));
+
+                                    duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
+                                        "set_cam", "Quần võ kame", LoaiItem.QUAN,
+                                        new Texture("vatpham/do/traidat/set_cam/quan.png"),
+                                        "Giúp tăng HP", 1,
+                                        new int[]{0,0,0,0,0,0,0,0,21,5000,0,0,0},
+                                        "traidat", 150000L, "Sôngôku", 7, 7, 0, -1
+                                    ));
+
+                                    duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
+                                        "set_cam", "Găng thần linh", LoaiItem.GANG,
+                                        new Texture("vatpham/do/traidat/set_than_linh/gang.png"),
+                                        "Giúp tăng sức đánh", 1,
+                                        new int[]{0,0,0,0,0,0,0,0,21,0,0,9289,0},
+                                        "traidat", 20_000_000_000L, "Sôngôku", 7, 7, 7, -1
+                                    ));
+
+                                    duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
+                                        "set_cam", "Giày võ kame", LoaiItem.GIAY,
+                                        new Texture("vatpham/do/traidat/set_cam/giay.png"),
+                                        "Giúp tăng MP", 1,
+                                        new int[]{0,0,0,0,0,0,0,0,21,0,200,0,0},
+                                        "traidat", 150000L, "Sôngôku", 7, 7, 2, -1
+                                    ));
+
+                                    duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
+                                        "rada1", "Rada cấp 1", LoaiItem.RADA,
+                                        new Texture("vatpham/do/rada/rada1.png"),
+                                        "Giúp tăng Chí Mạng", 1,
+                                        new int[]{0,0,0,1,0,0,0,0,21,0,0,0,0},
+                                        "traidat", 15000L, "Sôngôku", 7, 7, 1, -1
+                                    ));
+                                    dangHienTinNhanPet = true;
+                                    timeHienTinNhanPet = 2f;
+                                    tinNhanPet = "Bạn vừa nhận 01 set Sôngôku + Huy hiệu Thiên Tử";
+                                    duLieuNguoiChoi.getHanhTrang().remove(itemm);
+                                }
+                                if (itemm.getId().equals("adminTL")) {
+                                    duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
+                                        "nr1s", "Ngọc rồng 1 sao", LoaiItem.NGOCRONG,
+                                        new Texture("vatpham/vatphamgame/ngocrong/nr1s.png"),
+                                        "Thu thập để ước rồng thần", 99,
+                                        new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                        "all", 0, null, 0, 0, 0, -1
+                                    ));
+
+                                    duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
+                                        "nr2s", "Ngọc rồng 2 sao", LoaiItem.NGOCRONG,
+                                        new Texture("vatpham/vatphamgame/ngocrong/nr2s.png"),
+                                        "Thu thập để ước rồng thần", 99,
+                                        new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                        "all", 0, null, 0, 0, 0, -1
+                                    ));
+
+                                    duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
+                                        "nr3s", "Ngọc rồng 3 sao", LoaiItem.NGOCRONG,
+                                        new Texture("vatpham/vatphamgame/ngocrong/nr3s.png"),
+                                        "Thu thập để ước rồng thần", 99,
+                                        new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                        "all", 0, null, 0, 0, 0, -1
+                                    ));
+
+                                    duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
+                                        "nr4s", "Ngọc rồng 4 sao", LoaiItem.NGOCRONG,
+                                        new Texture("vatpham/vatphamgame/ngocrong/nr4s.png"),
+                                        "Thu thập để ước rồng thần", 99,
+                                        new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                        "all", 0, null, 0, 0, 0, -1
+                                    ));
+
+                                    duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
+                                        "nr5s", "Ngọc rồng 5 sao", LoaiItem.NGOCRONG,
+                                        new Texture("vatpham/vatphamgame/ngocrong/nr5s.png"),
+                                        "Thu thập để ước rồng thần", 99,
+                                        new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                        "all", 0, null, 0, 0, 0, -1
+                                    ));
+
+                                    duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
+                                        "nr6s", "Ngọc rồng 6 sao", LoaiItem.NGOCRONG,
+                                        new Texture("vatpham/vatphamgame/ngocrong/nr6s.png"),
+                                        "Thu thập để ước rồng thần", 99,
+                                        new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                        "all", 0, null, 0, 0, 0, -1
+                                    ));
+
+                                    duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
+                                        "nr7s", "Ngọc rồng 7 sao", LoaiItem.NGOCRONG,
+                                        new Texture("vatpham/vatphamgame/ngocrong/nr7s.png"),
+                                        "Thu thập để ước rồng thần", 99,
+                                        new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                        "all", 0, null, 0, 0, 0, -1
+                                    ));
+                                    dangHienTinNhanPet = true;
+                                    timeHienTinNhanPet = 2f;
+                                    tinNhanPet = "Bạn vừa nhận x99 bộ Ngọc Rồng";
+                                    duLieuNguoiChoi.getHanhTrang().remove(itemm);
+                                }
+                                if (itemm.getId().equals("adminDL")) {
+                                    duLieuNguoiChoi.tangNgoc(1_000_000);
+                                    duLieuNguoiChoi.tangVang(1_000_000_000);
+                                    dangHienTinNhanPet = true;
+                                    timeHienTinNhanPet = 2f;
+                                    tinNhanPet = "Bạn vừa nhận 1 tỷ vàng và 1 triệu ngọc xanh";
+                                    duLieuNguoiChoi.getHanhTrang().remove(itemm);
                                 }
                             }
                         } else if (!nhanVat.getHanhtinh().equals(itemm.getHanhtinh())) {
@@ -1457,6 +1571,7 @@ public class VeHUD {
                 veNenFlash = false;
                 if (!dangHopThe) {
                     dangHopThe = true;
+                    vuaHopThe = true;
                     String hopTheDuocChon = dangHopTheThuong ? "hop_the_thuong_"+nhanVat.getHanhtinh() : (bongTaiDangDung.equals("bongtaic1") ? "bong_tai_1_"+nhanVat.getHanhtinh() : bongTaiDangDung.equals("bongtaic2") ? "bong_tai_2_"+nhanVat.getHanhtinh() : "bong_tai_3_"+nhanVat.getHanhtinh() );
                     NhanVatCauHinh c2 = Doicaitrang(hopTheDuocChon);
                     nhanVat.fixCaiTrang(
@@ -1468,16 +1583,6 @@ public class VeHUD {
                         c2.avt
                     );
                     texAvt = new Texture(nhanVat.doiavatar());
-                    if (bongTaiDangDung.equals("bongtaic1")) {
-                        duLieuNguoiChoi.setHpHienTai((duLieuNguoiChoi.getHpToiDa() + duLieuNguoiChoi.deTu.getHpToiDa()));
-                        duLieuNguoiChoi.setKiHienTai((duLieuNguoiChoi.getKiToiDa() + duLieuNguoiChoi.deTu.getKiToiDa()));
-                    } else if (bongTaiDangDung.equals("bongtaic2")) {
-                        duLieuNguoiChoi.setHpHienTai((duLieuNguoiChoi.getHpToiDa() + duLieuNguoiChoi.deTu.getHpToiDa()) * 1.1f);
-                        duLieuNguoiChoi.setKiHienTai((duLieuNguoiChoi.getKiToiDa() + duLieuNguoiChoi.deTu.getKiToiDa()) * 1.1f);
-                    } else if (bongTaiDangDung.equals("bongtaic3")) {
-                        duLieuNguoiChoi.setHpHienTai((duLieuNguoiChoi.getHpToiDa() + duLieuNguoiChoi.deTu.getHpToiDa()) * 1.2f);
-                        duLieuNguoiChoi.setKiHienTai((duLieuNguoiChoi.getKiToiDa() + duLieuNguoiChoi.deTu.getKiToiDa()) * 1.2f);
-                    }
                     if (dangHopTheThuong) {
                         timeHopTheTHuong = 600f;
                         dangHienPopupDeTu = false;
@@ -1612,6 +1717,11 @@ public class VeHUD {
         duLieuNguoiChoi.setHpHopThe(hp);
         duLieuNguoiChoi.setKiHopThe(ki);
         duLieuNguoiChoi.setSdHopThe(sd);
+        if (vuaHopThe) {
+            duLieuNguoiChoi.setHpHienTai(duLieuNguoiChoi.getHpHopThe());
+            duLieuNguoiChoi.setKiHienTai(duLieuNguoiChoi.getKiHopThe());
+            vuaHopThe = false;
+        }
 
         // Giới hạn HP/KI hiện tại nếu không hợp thể
         if (!dangHopThe) {
