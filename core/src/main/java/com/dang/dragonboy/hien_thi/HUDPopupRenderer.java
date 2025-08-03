@@ -376,6 +376,10 @@ public class HUDPopupRenderer {
                             layout.setText(veHUD.fontCapSKill,item.getMoTa());
                             veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
                         }
+                        if (item.getLoai() == LoaiItem.DEOLUNG) {
+                            layout.setText(veHUD.fontCapSKill,item.getMoTa());
+                            veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
+                        }
                     }
                 }
             }
@@ -1373,11 +1377,15 @@ public class HUDPopupRenderer {
                         }
                         if (item.getLoai() == LoaiItem.BONGTAI){
                             layout.setText(veHUD.fontCapSKill,item.getMoTa());
-                            veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
+                            veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12 + 1020 - 350, y + 49 - 30);
                         }
                         if (item.getLoai() == LoaiItem.HUYHIEU) {
                             layout.setText(veHUD.fontCapSKill,item.getMoTa());
-                            veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
+                            veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12 + 1020 - 350, y + 49 - 30);
+                        }
+                        if (item.getLoai() == LoaiItem.DEOLUNG) {
+                            layout.setText(veHUD.fontCapSKill,item.getMoTa());
+                            veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12 + 1020 - 350, y + 49 - 30);
                         }
                     }
                 }

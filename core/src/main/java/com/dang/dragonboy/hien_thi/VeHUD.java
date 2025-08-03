@@ -271,6 +271,12 @@ public class VeHUD {
     public int framesHuyHieu = 0;
     public Item huyHieuDangDung = null;
 
+    public boolean dangDungDeoLung = false;
+    public boolean chuaSetUpAnhDeoLung = true;
+    public Texture[] anhDeoLung = new Texture[2];
+    public int framesDeoLung = 0;
+    public Item deoLungDangDung = null;
+
     private Texture boHuyet, boKhi, cuongNo, giapXen;
     public boolean dangDungBoHuyet = false;
     public float timeDungBoHuyet = 0f;
@@ -744,11 +750,6 @@ public class VeHUD {
             batch.flush();
             Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
         }
-        if (veNenFlash) {
-            batch.setColor(1, 1, 1, 0.7f);
-            batch.draw(nenflash,0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
-            batch.setColor(1, 1, 1, 1);
-        }
         ArrayList<Texture> itemCanVe = new ArrayList<>();
         ArrayList<Float> timeTungItem = new ArrayList<>();
         if (dangDungBoHuyet) {
@@ -781,6 +782,11 @@ public class VeHUD {
             layout.setText(font,(int)(float)(timeTungItem.get(i)/60f) +"'");
             font.draw(batch,layout,xVeItem+(itemCanVe.get(i).getWidth()*0.52f-layout.width)/2f,screenHeight / 4f * 3+17.5f-7);
             xVeItem += 50;
+        }
+        if (veNenFlash) {
+            batch.setColor(1, 1, 1, 0.7f);
+            batch.draw(nenflash,0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+            batch.setColor(1, 1, 1, 1);
         }
         batch.end();
         if (vuaClickMoPopup && timeGlow>0) {
@@ -1278,7 +1284,7 @@ public class VeHUD {
                     // mac do
                     if (nuthanhtrangchon == 1) {
                         if ((nhanVat.getHanhtinh().equals(itemm.getHanhtinh()) || itemm.getHanhtinh().equals("all")) && duLieuNguoiChoi.getSucManh() >= itemm.getSucManhYeuCau()) {
-                            if (!itemDangChon.equals("bongtai") && !itemDangChon.equals("ngocrong") && !itemDangChon.equals("huyhieu") && !itemDangChon.equals("hopqua") && !itemDangChon.equals("phutro")) {
+                            if (!itemDangChon.equals("bongtai") && !itemDangChon.equals("ngocrong") && !itemDangChon.equals("huyhieu") && !itemDangChon.equals("hopqua") && !itemDangChon.equals("phutro") && !itemDangChon.equals("deolung")) {
                                 xulyitem.macDo(hangTrangDangChon);
                             }
                             if (itemDangChon.equals("bongtai")) {
@@ -1539,6 +1545,15 @@ public class VeHUD {
                                     duLieuNguoiChoi.getHanhTrang().remove(itemm);
                                 }
                             }
+                            if (itemDangChon.equals("deolung")) {
+                                if (dangDungDeoLung) {
+                                    dangDungDeoLung = false;
+                                    chuaSetUpAnhDeoLung = true;
+                                } else {
+                                    dangDungDeoLung = true;
+                                    deoLungDangDung = itemm;
+                                }
+                            }
                         } else if (!nhanVat.getHanhtinh().equals(itemm.getHanhtinh())) {
                             dangHienTinNhanPet = true;
                             timeHienTinNhanPet = 2f;
@@ -1729,6 +1744,7 @@ public class VeHUD {
         }
         int cm = duLieuNguoiChoi.getChiMangNhanVat();
         int stcm = duLieuNguoiChoi.getSatThuongChiMang();
+        int giamSatThuong = duLieuNguoiChoi.getGiamSatThuongNhanVat();
 
         // ===== BÔNG TAI =====
         if (dangHopThe) {
@@ -1771,9 +1787,25 @@ public class VeHUD {
         if (dangDungHuyHieu) {
             cm += huyHieuDangDung.getChiso()[3];
             stcm += huyHieuDangDung.getChiso()[5];
+            giamSatThuong += huyHieuDangDung.getChiso()[12];
             hp *= (huyHieuDangDung.getChiso()[6] / 100f + 1);
             ki *= (huyHieuDangDung.getChiso()[7] / 100f + 1);
             sd *= (huyHieuDangDung.getChiso()[8] / 100f + 1);
+        }
+
+        // ===== ĐEO LƯNG =====
+        if (dangDungDeoLung) {
+            cm += deoLungDangDung.getChiso()[3];
+            stcm += deoLungDangDung.getChiso()[5];
+            giamSatThuong += deoLungDangDung.getChiso()[12];
+            hp *= (deoLungDangDung.getChiso()[6] / 100f + 1);
+            ki *= (deoLungDangDung.getChiso()[7] / 100f + 1);
+            sd *= (deoLungDangDung.getChiso()[8] / 100f + 1);
+            if (deoLungDangDung.getId().equals("luoi_hai") && duLieuNguoiChoi.getHanhTrangDangMac().get(5) != null && duLieuNguoiChoi.getHanhTrangDangMac().get(5).getId().equals("goku_black_rose")) {
+                hp*=1.04f;
+                ki*=1.04f;
+                sd*=1.04f;
+            }
         }
 
         // ===== GIÁP LUYỆN TẬP =====
@@ -1835,6 +1867,7 @@ public class VeHUD {
         duLieuNguoiChoi.setSdHopThe(sd);
         duLieuNguoiChoi.setChiMangSuDung(cm);
         duLieuNguoiChoi.setSatThuongChiMangSuDung(stcm);
+        duLieuNguoiChoi.setGiamSatThuongSuDung(giamSatThuong);
         if (vuaHopThe) {
             duLieuNguoiChoi.setHpHienTai(duLieuNguoiChoi.getHpHopThe());
             duLieuNguoiChoi.setKiHienTai(duLieuNguoiChoi.getKiHopThe());

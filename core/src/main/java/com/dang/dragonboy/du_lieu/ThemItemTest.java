@@ -18,6 +18,62 @@ public class ThemItemTest {
         ));
 
         duLieu.themItemVaoHanhTrang(new Item(
+            "luoi_hai", "Lưỡi Hái Thời Không", LoaiItem.DEOLUNG,
+            new Texture("vatpham/vatphamgame/deo_lung/luoi_hai/icon.png"),
+            "Lưỡi hái mang sức mạnh xé tan thời không. [Hiệu ứng] Khi trang bị cùng Black Goku Rose: +4% Sức đánh, HP, KI.", 1,
+            new int[]{0,0,0,0,0,0,20,0,0,0,0,0,10},
+            "all", 10_000_000L, null, 0, 0, 0, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "canh_doi", "Cánh Dơi Dracula", LoaiItem.DEOLUNG,
+            new Texture("vatpham/vatphamgame/deo_lung/canh_doi/icon.png"),
+            "Đôi cánh dơi huyền bí.", 1,
+            new int[]{0,0,0,0,0,0,5,15,5,0,0,0,0},
+            "all", 10_000_000L, null, 0, 0, 0, -1
+        ));
+
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "canh_ac_quy", "Cánh Ác Quỷ", LoaiItem.DEOLUNG,
+//            new Texture("vatpham/vatphamgame/deo_lung/canh_ac_quy/icon.png"),
+//            "Cánh ác quỷ tỏa ra khí tức u tối.", 1,
+//            new int[]{0,0,0,5,0,10,0,0,0,0,0,0,0},
+//            "all", 10_000_000L, null, 0, 0, 0, -1
+//        ));
+
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "kiem", "Kiếm Thánh Z", LoaiItem.DEOLUNG,
+//            new Texture("vatpham/vatphamgame/deo_lung/kiem/icon.png"),
+//            "Thanh kiếm huyền thoại của Future Trunks.", 1,
+//            new int[]{0,0,0,0,0,15,0,0,15,0,0,0,0},
+//            "all", 10_000_000L, null, 0, 0, 0, -1
+//        ));
+//
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "hoa", "Bó Hoa Hồng", LoaiItem.DEOLUNG,
+//            new Texture("vatpham/vatphamgame/deo_lung/hoa/icon.png"),
+//            "Bó hoa chứa nguồn sức mạnh huyền ảo.", 1,
+//            new int[]{0,0,0,0,0,0,5,5,15,0,0,0,0},
+//            "all", 10_000_000L, null, 0, 0, 0, -1
+//        ));
+//
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "canh_thien_su", "Cánh Thiên Sứ", LoaiItem.DEOLUNG,
+//            new Texture("vatpham/vatphamgame/deo_lung/canh_thien_su/icon.png"),
+//            "Đôi cánh của thiên sứ, thuần khiết và sáng ngời.", 1,
+//            new int[]{0,0,0,5,0,0,0,0,5,0,0,0,0},
+//            "all", 10_000_000L, null, 0, 0, 0, -1
+//        ));
+//
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "canh_thien_than", "Cánh Thiên Thần", LoaiItem.DEOLUNG,
+//            new Texture("vatpham/vatphamgame/deo_lung/canh_thien_than/icon.png"),
+//            "Đôi cánh tỏa sáng rực rỡ của thiên thần.", 1,
+//            new int[]{0,0,0,0,0,0,8,8,0,0,0,0,0},
+//            "all", 10_000_000L, null, 0, 0, 0, -1
+//        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
             "thien_tu", "Huy hiệu Thiên Tử", LoaiItem.HUYHIEU,
             new Texture("vatpham/vatphamgame/huy_hieu/thien_tu/icon.png"),
             "Thiên mệnh tại thân - Thống ngự càn khôn", 1,
@@ -25,37 +81,37 @@ public class ThemItemTest {
             "all", 10_000_000L, null, 0, 0, 0, -1
         ));
 
-        duLieu.themItemVaoHanhTrang(new Item(
-            "bo_huyet", "Bổ huyết", LoaiItem.PHUTRO,
-            new Texture("vatpham/vatphamgame/phu_tro/bo_huyet.png"),
-            "Trong vòng tối đa 10 phút +100% HP", 99,
-            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
-            "all", 0, null, 0, 0, 0, -1
-        ));
-
-        duLieu.themItemVaoHanhTrang(new Item(
-            "bo_khi", "Bổ khí", LoaiItem.PHUTRO,
-            new Texture("vatpham/vatphamgame/phu_tro/bo_khi.png"),
-            "Trong vòng tối đa 10 phút +100% KI", 99,
-            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
-            "all", 0, null, 0, 0, 0, -1
-        ));
-
-        duLieu.themItemVaoHanhTrang(new Item(
-            "cuong_no", "Cuồng nộ", LoaiItem.PHUTRO,
-            new Texture("vatpham/vatphamgame/phu_tro/cuong_no.png"),
-            "Trong vòng tối đa 10 phút +100% Sức đánh gốc", 99,
-            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
-            "all", 0, null, 0, 0, 0, -1
-        ));
-
-        duLieu.themItemVaoHanhTrang(new Item(
-            "giap_xen", "Giáp xên bọ hung", LoaiItem.PHUTRO,
-            new Texture("vatpham/vatphamgame/phu_tro/giap_xen.png"),
-            "Trong vòng tối đa 10 phút giảm 50% sát thương", 99,
-            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
-            "all", 0, null, 0, 0, 0, -1
-        ));
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "bo_huyet", "Bổ huyết", LoaiItem.PHUTRO,
+//            new Texture("vatpham/vatphamgame/phu_tro/bo_huyet.png"),
+//            "Trong vòng tối đa 10 phút +100% HP", 99,
+//            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+//            "all", 0, null, 0, 0, 0, -1
+//        ));
+//
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "bo_khi", "Bổ khí", LoaiItem.PHUTRO,
+//            new Texture("vatpham/vatphamgame/phu_tro/bo_khi.png"),
+//            "Trong vòng tối đa 10 phút +100% KI", 99,
+//            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+//            "all", 0, null, 0, 0, 0, -1
+//        ));
+//
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "cuong_no", "Cuồng nộ", LoaiItem.PHUTRO,
+//            new Texture("vatpham/vatphamgame/phu_tro/cuong_no.png"),
+//            "Trong vòng tối đa 10 phút +100% Sức đánh gốc", 99,
+//            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+//            "all", 0, null, 0, 0, 0, -1
+//        ));
+//
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "giap_xen", "Giáp xên bọ hung", LoaiItem.PHUTRO,
+//            new Texture("vatpham/vatphamgame/phu_tro/giap_xen.png"),
+//            "Trong vòng tối đa 10 phút giảm 50% sát thương", 99,
+//            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+//            "all", 0, null, 0, 0, 0, -1
+//        ));
 
 //        duLieu.themItemVaoHanhTrang(new Item(
 //            "trum_cuoi", "Huy hiệu Trùm cuối", LoaiItem.HUYHIEU,

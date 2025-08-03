@@ -16,5 +16,6 @@ public enum LoaiItem {
     NGOCRONG,
     HUYHIEU,
     HOPQUA,
-    PHUTRO
+    PHUTRO,
+    DEOLUNG
 }

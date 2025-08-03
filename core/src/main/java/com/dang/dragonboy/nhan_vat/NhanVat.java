@@ -203,7 +203,7 @@ public class NhanVat {
     private boolean dangHienDiemCanDen = false;
 
     private float timeChoHienBay;
-    private float timeDoiFrames;
+    private float timeDoiFramesHuyHieu,timeDoiFramesDeoLung;
 
     public void setToaDoMucTieu(float x, float y) {
         this.x_muc_tieu = x;
@@ -1356,21 +1356,15 @@ public class NhanVat {
     }
 
     public void ve(SpriteBatch batch, float thoiGian) {
-        this.thoiGianTichLuy = thoiGian;
-        if (veHUD.dangDungHuyHieu){
-            if (veHUD.chuaSetUpAnhHuyHieu) {
-                for (int i = 0; i < 6; i++) {
-                    veHUD.anhHuyHieu[i] = new Texture("vatpham/vatphamgame/huy_hieu/" + veHUD.huyHieuDangDung.getId() + "/" + (i + 1) + ".png");
-                }
-                veHUD.chuaSetUpAnhHuyHieu = false;
+        boolean duDieuKien = true;
+        if (veHUD.dangHopTheThuong) {
+            if (veHUD.timeHopTheTHuong < 1.5f ){
+                duDieuKien = false;
+            } else {
+                duDieuKien = true;
             }
-            timeDoiFrames+=Gdx.graphics.getDeltaTime();
-            if (timeDoiFrames>0.03f) {
-                veHUD.framesHuyHieu = (veHUD.framesHuyHieu + 1) % veHUD.anhHuyHieu.length;
-                timeDoiFrames=0;
-            }
-            batch.draw(veHUD.anhHuyHieu[veHUD.framesHuyHieu], x - (veHUD.anhHuyHieu[veHUD.framesHuyHieu].getWidth() * 0.55f - rong) / 2f, y + cao + 35f, veHUD.anhHuyHieu[veHUD.framesHuyHieu].getWidth() * 0.55f, veHUD.anhHuyHieu[veHUD.framesHuyHieu].getHeight() * 0.55f);
         }
+        this.thoiGianTichLuy = thoiGian;
         if (!veHUD.renderDeTu && duLieuNguoiChoi.deTu.timeHoatAnhBienMat>0) {
             if (duLieuNguoiChoi.deTu.chuaLayToaDoBienMat) {
                 duLieuNguoiChoi.deTu.x_bien_mat = duLieuNguoiChoi.deTu.x;
@@ -1387,27 +1381,54 @@ public class NhanVat {
                 }
             }
         }
+
+        float daoDong;
+        if (dangMangVanBay) {
+            daoDong = (trangThai == TrangThai.DUNG_YEN || trangThai == TrangThai.BAY_NGANG) ? (float) Math.sin(thoiGian) * 1.08f : 0f;
+        } else {
+            daoDong = (trangThai == TrangThai.DUNG_YEN) ? (float) Math.sin(thoiGian) * 1.08f
+                : (trangThai == TrangThai.BAY_NGANG) ? (float) Math.sin(thoiGian) * 5f
+                : 0f;
+        }
+
+        if (veHUD.dangDungHuyHieu && veHUD.timeChoHopThe == 0 && duDieuKien){
+            if (veHUD.chuaSetUpAnhHuyHieu) {
+                for (int i = 0; i < 6; i++) {
+                    veHUD.anhHuyHieu[i] = new Texture("vatpham/vatphamgame/huy_hieu/" + veHUD.huyHieuDangDung.getId() + "/" + (i + 1) + ".png");
+                }
+                veHUD.chuaSetUpAnhHuyHieu = false;
+            }
+            timeDoiFramesHuyHieu+=Gdx.graphics.getDeltaTime();
+            if (timeDoiFramesHuyHieu>0.03f) {
+                veHUD.framesHuyHieu = (veHUD.framesHuyHieu + 1) % veHUD.anhHuyHieu.length;
+                timeDoiFramesHuyHieu=0;
+            }
+            batch.draw(veHUD.anhHuyHieu[veHUD.framesHuyHieu], x - (veHUD.anhHuyHieu[veHUD.framesHuyHieu].getWidth() * 0.55f - rong) / 2f, y + cao + 35f + daoDong, veHUD.anhHuyHieu[veHUD.framesHuyHieu].getWidth() * 0.55f, veHUD.anhHuyHieu[veHUD.framesHuyHieu].getHeight() * 0.55f);
+        }
+
         if (veHUD.renderDeTu) {
             duLieuNguoiChoi.deTu.ve(batch, thoiGian);
         }
 
-        boolean duDieuKien = true;
-        if (veHUD.dangHopTheThuong) {
-            if (veHUD.timeHopTheTHuong < 1.5f ){
-                duDieuKien = false;
-            } else {
-                duDieuKien = true;
+        if (veHUD.dangDungDeoLung && veHUD.timeChoHopThe == 0 && duDieuKien && !(trangThai == TrangThai.BAY_NGANG && !dangMangVanBay) && !(trangThai == TrangThai.DI_CHUYEN)){
+            if (veHUD.chuaSetUpAnhDeoLung) {
+                for (int i = 0; i < 2; i++) {
+                    veHUD.anhDeoLung[i] = new Texture("vatpham/vatphamgame/deo_lung/" + veHUD.deoLungDangDung.getId() + "/" + (i + 1) + ".png");
+                }
+                veHUD.chuaSetUpAnhDeoLung = false;
             }
+            timeDoiFramesDeoLung+=Gdx.graphics.getDeltaTime();
+            if (timeDoiFramesDeoLung>0.2f) {
+                veHUD.framesDeoLung = (veHUD.framesDeoLung + 1) % veHUD.anhDeoLung.length;
+                timeDoiFramesDeoLung=0;
+            }
+            float offsetY = 0;
+            float flipScale = flipX ? -1f : 1f;
+            if (trangThai == TrangThai.ROI) offsetY = 10f;
+            float anchorX = flipX ? x + rong  + (veHUD.anhDeoLung[veHUD.framesDeoLung].getWidth() * 0.45f)*4.5f/10f-(rong/10f) : x  - (veHUD.anhDeoLung[veHUD.framesDeoLung].getWidth() * 0.45f)*4.5f/10f+(rong/10f);
+            batch.draw(veHUD.anhDeoLung[veHUD.framesDeoLung], anchorX, y+daoDong+(cao/3f)-25f + offsetY, veHUD.anhDeoLung[veHUD.framesDeoLung].getWidth() * 0.45f * flipScale, veHUD.anhDeoLung[veHUD.framesDeoLung].getHeight() * 0.45f);
         }
         if (veHUD.timeChoHopThe == 0 && duDieuKien) {
-            float daoDong;
-            if (dangMangVanBay) {
-                daoDong = (trangThai == TrangThai.DUNG_YEN || trangThai == TrangThai.BAY_NGANG) ? (float) Math.sin(thoiGian) * 1.08f : 0f;
-            } else {
-                daoDong = (trangThai == TrangThai.DUNG_YEN) ? (float) Math.sin(thoiGian) * 1.08f
-                    : (trangThai == TrangThai.BAY_NGANG) ? (float) Math.sin(thoiGian) * 5f
-                    : 0f;
-            }
             Texture chanVe = chan_dung;
             Texture thanVe = than_dung;
             Texture dauVe = dau_dung;
