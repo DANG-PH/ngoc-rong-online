@@ -134,7 +134,7 @@ public class HUDPopupRenderer {
                 veHUD.fontsm.draw(batch, layout, 125, 595);
                 layout.setText(veHUD.fontsm,"KI: " + (int) duLieuNguoiChoi.getKiHienTai() + " / " + (int) duLieuNguoiChoi.getKiHopThe());
                 veHUD.fontsm.draw(batch, layout, 125, 570);
-                layout.setText(veHUD.fontsm, "Sức đánh: " + (int) duLieuNguoiChoi.getSdHopThe() + ", Crit: " + duLieuNguoiChoi.getChiMangSuDung() + "%");
+                layout.setText(veHUD.fontsm, "Sức đánh: " + (int) duLieuNguoiChoi.getSdHopThe() + ", Crit: " + (int)duLieuNguoiChoi.getChiMangSuDung() + "%");
                 veHUD.fontsm.draw(batch, layout, 125, 545);
             } else {
                 layout.setText(veHUD.fontsm,"HP: " + (int) duLieuNguoiChoi.getHpHienTai() + " / " + (int) duLieuNguoiChoi.getHpHopThe());

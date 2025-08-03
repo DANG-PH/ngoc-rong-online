@@ -271,6 +271,16 @@ public class VeHUD {
     public int framesHuyHieu = 0;
     public Item huyHieuDangDung = null;
 
+    private Texture boHuyet, boKhi, cuongNo, giapXen;
+    public boolean dangDungBoHuyet = false;
+    public float timeDungBoHuyet = 0f;
+    public boolean dangDungBoKhi = false;
+    public float timeDungBoKhi = 0f;
+    public boolean dangDungCuongNo = false;
+    public float timeDungCuongNo = 0f;
+    public boolean dangDungGiapXen = false;
+    public float timeDungGiapXen = 0f;
+
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data;
         duLieuNguoiChoi.setNhanVat(nhanVat);
@@ -449,6 +459,10 @@ public class VeHUD {
         for (int i = 0; i < 9; i++) {
             rongThan[i] = new Texture("hieuung/hieuunggame/rong_than/r"+(i+1)+".png");
         }
+        boHuyet = new Texture("vatpham/vatphamgame/phu_tro/bo_huyet.png");
+        boKhi = new Texture("vatpham/vatphamgame/phu_tro/bo_khi.png");
+        cuongNo = new Texture("vatpham/vatphamgame/phu_tro/cuong_no.png");
+        giapXen = new Texture("vatpham/vatphamgame/phu_tro/giap_xen.png");
         // Load font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -735,11 +749,38 @@ public class VeHUD {
             batch.draw(nenflash,0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
             batch.setColor(1, 1, 1, 1);
         }
+        ArrayList<Texture> itemCanVe = new ArrayList<>();
+        ArrayList<Float> timeTungItem = new ArrayList<>();
+        if (dangDungBoHuyet) {
+            itemCanVe.add(boHuyet);
+            timeTungItem.add(timeDungBoHuyet);
+        }
+        if (dangDungBoKhi) {
+            itemCanVe.add(boKhi);
+            timeTungItem.add(timeDungBoKhi);
+        }
+        if (dangDungCuongNo) {
+            itemCanVe.add(cuongNo);
+            timeTungItem.add(timeDungCuongNo);
+        }
+        if (dangDungGiapXen) {
+            itemCanVe.add(giapXen);
+            timeTungItem.add(timeDungGiapXen);
+        }
+        float xVeItem = 40;
         if (timeHopTheTHuong > 0) {
-            batch.draw(dauGotenks,50,screenHeight / 4f * 3+17.5f,dauGotenks.getWidth()*0.52f,dauGotenks.getHeight()*0.52f);
+            batch.draw(dauGotenks,40,screenHeight / 4f * 3+17.5f,dauGotenks.getWidth()*0.52f,dauGotenks.getHeight()*0.52f);
             font.setColor(1,1,1,1);
             layout.setText(font,(int)(timeHopTheTHuong/60f)+"'");
-            font.draw(batch,layout,68,screenHeight / 4f * 3+17.5f-7);
+            font.draw(batch,layout,58,screenHeight / 4f * 3+17.5f-7);
+            xVeItem += dauGotenks.getWidth()*0.52f+10;
+        }
+        for (int i = 0; i < itemCanVe.size(); i++) {
+            batch.draw(itemCanVe.get(i),xVeItem,screenHeight / 4f * 3+17.5f,itemCanVe.get(i).getWidth()*0.52f,itemCanVe.get(i).getHeight()*0.52f);
+            font.setColor(1,1,1,1);
+            layout.setText(font,(int)(float)(timeTungItem.get(i)/60f) +"'");
+            font.draw(batch,layout,xVeItem+(itemCanVe.get(i).getWidth()*0.52f-layout.width)/2f,screenHeight / 4f * 3+17.5f-7);
+            xVeItem += 50;
         }
         batch.end();
         if (vuaClickMoPopup && timeGlow>0) {
@@ -774,6 +815,34 @@ public class VeHUD {
         }
     }
     public void update(float delta) {
+        if (timeDungBoHuyet>0) {
+            timeDungBoHuyet-=delta;
+            if(timeDungBoHuyet<=0) {
+                timeDungBoHuyet = 0;
+                dangDungBoHuyet = false;
+            }
+        }
+        if (timeDungBoKhi>0) {
+            timeDungBoKhi-=delta;
+            if(timeDungBoKhi<=0) {
+                timeDungBoKhi = 0;
+                dangDungBoKhi = false;
+            }
+        }
+        if (timeDungCuongNo>0) {
+            timeDungCuongNo-=delta;
+            if(timeDungCuongNo<=0) {
+                timeDungCuongNo = 0;
+                dangDungCuongNo = false;
+            }
+        }
+        if (timeDungGiapXen>0) {
+            timeDungGiapXen-=delta;
+            if(timeDungGiapXen<=0) {
+                timeDungGiapXen = 0;
+                dangDungGiapXen = false;
+            }
+        }
         if (timeDelayUocRong>0) {
             timeDelayUocRong-=delta;
             if (timeDelayUocRong<=0) {
@@ -1209,7 +1278,7 @@ public class VeHUD {
                     // mac do
                     if (nuthanhtrangchon == 1) {
                         if ((nhanVat.getHanhtinh().equals(itemm.getHanhtinh()) || itemm.getHanhtinh().equals("all")) && duLieuNguoiChoi.getSucManh() >= itemm.getSucManhYeuCau()) {
-                            if (!itemDangChon.equals("bongtai") && !itemDangChon.equals("ngocrong") && !itemDangChon.equals("huyhieu") && !itemDangChon.equals("hopqua")) {
+                            if (!itemDangChon.equals("bongtai") && !itemDangChon.equals("ngocrong") && !itemDangChon.equals("huyhieu") && !itemDangChon.equals("hopqua") && !itemDangChon.equals("phutro")) {
                                 xulyitem.macDo(hangTrangDangChon);
                             }
                             if (itemDangChon.equals("bongtai")) {
@@ -1445,6 +1514,31 @@ public class VeHUD {
                                 dangHienTinNhanPet = true;
                                 timeHienTinNhanPet = 2f;
                             }
+                            if (itemDangChon.equals("phutro")) {
+                                if (itemm.getId().equals("bo_huyet")) {
+                                    dangDungBoHuyet = true;
+                                    timeDungBoHuyet = 600f;
+                                    itemm.giamSoLuong(1);
+                                }
+                                if (itemm.getId().equals("bo_khi")) {
+                                    dangDungBoKhi = true;
+                                    timeDungBoKhi = 600f;
+                                    itemm.giamSoLuong(1);
+                                }
+                                if (itemm.getId().equals("cuong_no")) {
+                                    dangDungCuongNo = true;
+                                    timeDungCuongNo = 600f;
+                                    itemm.giamSoLuong(1);
+                                }
+                                if (itemm.getId().equals("giap_xen")) {
+                                    dangDungGiapXen = true;
+                                    timeDungGiapXen = 600f;
+                                    itemm.giamSoLuong(1);
+                                }
+                                if (itemm.getSoLuong() == 0) {
+                                    duLieuNguoiChoi.getHanhTrang().remove(itemm);
+                                }
+                            }
                         } else if (!nhanVat.getHanhtinh().equals(itemm.getHanhtinh())) {
                             dangHienTinNhanPet = true;
                             timeHienTinNhanPet = 2f;
@@ -1627,7 +1721,12 @@ public class VeHUD {
         // Lấy chỉ số gốc
         float hp = duLieuNguoiChoi.getHpToiDa();
         float ki = duLieuNguoiChoi.getKiToiDa();
-        float sd = duLieuNguoiChoi.getSucDanhNhanVat();
+        float sd;
+        if (!dangDungCuongNo) {
+            sd = duLieuNguoiChoi.getSucDanhNhanVat();
+        } else {
+            sd = duLieuNguoiChoi.getSucDanhNhanVat()*2;
+        }
         int cm = duLieuNguoiChoi.getChiMangNhanVat();
         int stcm = duLieuNguoiChoi.getSatThuongChiMang();
 
@@ -1640,9 +1739,9 @@ public class VeHUD {
             switch (bongTaiDangDung) {
                 case "bongtaic1":
                     if (bongTaiRongThan) {
-                        hp += duLieuNguoiChoi.deTu.getHpToiDa() * 0.05f;
-                        ki += duLieuNguoiChoi.deTu.getKiToiDa() * 0.05f;
-                        sd += duLieuNguoiChoi.deTu.getSucDanhDeTu() * 0.05f;
+                        hp *= 1.05f;
+                        ki *= 1.05f;
+                        sd *= 1.05f;
                     }
                     break;
                 case "bongtaic2":
@@ -1656,6 +1755,16 @@ public class VeHUD {
                     sd *= 1.2f;
                     break;
             }
+        }
+
+        // ===== Bổ Huyết =====
+        if (dangDungBoHuyet) {
+            hp *= 2;
+        }
+
+        // ===== Bổ Khí =====
+        if (dangDungBoKhi) {
+            ki *= 2;
         }
 
         // ===== HUY HIỆU =====

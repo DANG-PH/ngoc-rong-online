@@ -209,7 +209,7 @@ public class ThemItemTest {
         ));
 
         duLieu.themItemVaoHanhTrang(new Item(
-            "set_cam", "Găng thần linh", LoaiItem.GANG,
+            "set_than_linh", "Găng thần linh", LoaiItem.GANG,
             new Texture("vatpham/do/traidat/set_than_linh/gang.png"),
             "Giúp tăng sức đánh", 1,
             new int[]{0,0,0,0,0,0,0,0,21,0,0,9289,0},
