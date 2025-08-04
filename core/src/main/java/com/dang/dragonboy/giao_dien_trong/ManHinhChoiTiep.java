@@ -319,7 +319,11 @@ public class ManHinhChoiTiep implements Screen {
         if (hudRenderer.timeHienRongThan<=300-2.1f && hudRenderer.timeHienRongThan>0) {
             shapeRenderer.setProjectionMatrix(camManager.uiCamera.combined);
             Gdx.gl.glEnable(GL20.GL_BLEND);
-            shapeRenderer.setColor(0f, 0f, 0f, 0.4f);
+            if (hudRenderer.ngocRongUoc.equals("1saoden")) {
+                shapeRenderer.setColor(0f, 0f, 0f, 0.6f);
+            } else {
+                shapeRenderer.setColor(0f, 0f, 0f, 0.5f);
+            }
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.rect(0,0,1020,610);
             shapeRenderer.end();

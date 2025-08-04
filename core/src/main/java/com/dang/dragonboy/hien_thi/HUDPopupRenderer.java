@@ -154,7 +154,7 @@ public class HUDPopupRenderer {
 
             int soTrangBi = 8;
             ArrayList<Item> danhSachItem = duLieuNguoiChoi.getHanhTrang();
-            int soKhac = 42;
+            int soKhac = 50;
             int tongSoTrangBi = soTrangBi + soKhac;
 
             float totalHeight = tongSoTrangBi * KhoangCachItem;
@@ -1161,7 +1161,7 @@ public class HUDPopupRenderer {
 
             int soTrangBi = 8;
             ArrayList<Item> danhSachItem = duLieuNguoiChoi.getHanhTrang();
-            int soKhac = 48;
+            int soKhac = 50;
             int tongSoTrangBi = soTrangBi + soKhac;
 
             float totalHeight = tongSoTrangBi * KhoangCachItem;

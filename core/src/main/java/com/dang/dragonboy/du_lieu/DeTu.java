@@ -126,7 +126,7 @@ public class DeTu {
     private int[] capSkill = new int[4];  // Mặc định toàn 0
     private String[] tenSkill = new String[4];
     private String[] danhSachSkill1 = {"Chiêu đấm Galick","Chiêu đấm Dragon","Chiêu đấm Demon"};
-    private String[] danhSachSkill2 = {"Chiêu Kamejoko","Chiêu Kamejoko","Chiêu Kamejoko"};
+    private String[] danhSachSkill2 = {"Chiêu Kamejoko","Chiêu Antomic","Chiêu Masenko"};
     private String[] danhSachSkill3 = {"Thái Dương Hạ San","Tái tạo năng lượng","Kaioken"};
     private String[] danhSachSkill4 = {"Biến hình","Khiên năng lượng","Đẻ trứng"};
 
@@ -1763,6 +1763,9 @@ public class DeTu {
                     break;
                 case 3:
                     danhSachSKill = danhSachSkill3;
+                    break;
+                case 4:
+                    danhSachSKill = danhSachSkill4;
                     break;
                 default:
                     danhSachSKill = new String[0];

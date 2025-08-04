@@ -2,6 +2,7 @@ package com.dang.dragonboy.du_lieu;
 import java.util.ArrayList;
 import com.dang.dragonboy.item.Item;
 import com.dang.dragonboy.item.LoaiItem;
+import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.nhan_vat.NhanVatCauHinh;
 import com.dang.dragonboy.nhan_vat.NhanVatXuLy;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.math.MathUtils;
 public class DuLieuNguoiChoi {
     public DeTu deTu;
     private NhanVat nhanVat;
+    private VeHUD veHUD;
     private String ten;
     private long sucManh;
     private int theLuc;
@@ -126,6 +128,10 @@ public class DuLieuNguoiChoi {
                     hanhTrang.add(item);
                 }
             }
+        } else {
+            veHUD.tinNhanPet = "Cần ít nhất 1 ô trống";
+            veHUD.dangHienTinNhanPet = true;
+            veHUD.timeHienTinNhanPet = 2f;
         }
     }
 
@@ -752,5 +758,8 @@ public class DuLieuNguoiChoi {
     }
     public DeTuCauHinh Doi_avt_ao_quan_DeTu(String HanhTinh, String TenAvatar , String ao, String quan){
         return DeTuXuLy.xuly_id("avatar_"+HanhTinh+"+"+TenAvatar+"+"+ao+"+"+quan);
+    }
+    public void setVeHUD(VeHUD veHUD) {
+        this.veHUD = veHUD;
     }
 }
