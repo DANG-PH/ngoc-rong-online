@@ -734,6 +734,8 @@ public class DuLieuNguoiChoi {
                 config.lechMapDeTu,
                 null,null,null,null,null,null,nhanVat
             );
+            deTu.setDanhSachDat(nhanVat.danhSachDat);
+            deTu.setGioiHanToaDo(nhanVat.getGioiHanXMax(), nhanVat.getGioiHanYMax());
         }
     }
 

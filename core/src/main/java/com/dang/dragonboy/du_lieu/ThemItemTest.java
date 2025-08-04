@@ -17,13 +17,13 @@ public class ThemItemTest {
             "all", 1500000L, null, 0, 0, 0, -1
         ));
 
-        duLieu.themItemVaoHanhTrang(new Item(
-            "luoi_hai", "Lưỡi Hái Thời Không", LoaiItem.DEOLUNG,
-            new Texture("vatpham/vatphamgame/deo_lung/luoi_hai/icon.png"),
-            "Lưỡi hái mang sức mạnh xé tan thời không. [Hiệu ứng] Khi trang bị cùng Black Goku Rose: +4% Sức đánh, HP, KI.", 1,
-            new int[]{0,0,0,0,0,0,20,0,0,0,0,0,10},
-            "all", 10_000_000L, null, 0, 0, 0, -1
-        ));
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "luoi_hai", "Lưỡi Hái Thời Không", LoaiItem.DEOLUNG,
+//            new Texture("vatpham/vatphamgame/deo_lung/luoi_hai/icon.png"),
+//            "Lưỡi hái mang sức mạnh xé tan thời không. [Hiệu ứng] Khi trang bị cùng Black Goku Rose: +4% Sức đánh, HP, KI.", 1,
+//            new int[]{0,0,0,0,0,0,20,0,0,0,0,0,10},
+//            "all", 10_000_000L, null, 0, 0, 0, -1
+//        ));
 
         duLieu.themItemVaoHanhTrang(new Item(
             "canh_doi", "Cánh Dơi Dracula", LoaiItem.DEOLUNG,
@@ -120,7 +120,7 @@ public class ThemItemTest {
 //            new int[]{0,0,0,5,0,5,0,0,10,0,0,0,0},
 //            "all", 10_000_000L, null, 0, 0, 0, -1
 //        ));
-//
+
 //        duLieu.themItemVaoHanhTrang(new Item(
 //            nhanVat.getHanhtinh()+"_toi_thuong", "Huy hiệu Tối Thượng", LoaiItem.HUYHIEU,
 //            new Texture("vatpham/vatphamgame/huy_hieu/"+nhanVat.getHanhtinh()+"_toi_thuong/icon.png"),
@@ -461,6 +461,62 @@ public class ThemItemTest {
             "nr7s", "Ngọc rồng 7 sao", LoaiItem.NGOCRONG,
             new Texture("vatpham/vatphamgame/ngocrong/nr7s.png"),
             "Thu thập để ước rồng thần", 99,
+            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+            "all", 0, null, 0, 0, 0, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "nr1sd", "Ngọc rồng đen 1 sao", LoaiItem.NGOCRONG,
+            new Texture("vatpham/vatphamgame/ngocrongden/nr1sd.png"),
+            "Thu thập đủ 7 viên để triệu hồi Rồng Thần Hắc Ám.", 99,
+            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+            "all", 0, null, 0, 0, 0, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "nr2sd", "Ngọc rồng đen 2 sao", LoaiItem.NGOCRONG,
+            new Texture("vatpham/vatphamgame/ngocrongden/nr2sd.png"),
+            "Thu thập đủ 7 viên để triệu hồi Rồng Thần Hắc Ám.", 99,
+            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+            "all", 0, null, 0, 0, 0, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "nr3sd", "Ngọc rồng đen 3 sao", LoaiItem.NGOCRONG,
+            new Texture("vatpham/vatphamgame/ngocrongden/nr3sd.png"),
+            "Thu thập đủ 7 viên để triệu hồi Rồng Thần Hắc Ám.", 99,
+            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+            "all", 0, null, 0, 0, 0, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "nr4sd", "Ngọc rồng đen 4 sao", LoaiItem.NGOCRONG,
+            new Texture("vatpham/vatphamgame/ngocrongden/nr4sd.png"),
+            "Thu thập đủ 7 viên để triệu hồi Rồng Thần Hắc Ám.", 99,
+            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+            "all", 0, null, 0, 0, 0, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "nr5sd", "Ngọc rồng đen 5 sao", LoaiItem.NGOCRONG,
+            new Texture("vatpham/vatphamgame/ngocrongden/nr5sd.png"),
+            "Thu thập đủ 7 viên để triệu hồi Rồng Thần Hắc Ám.", 99,
+            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+            "all", 0, null, 0, 0, 0, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "nr6sd", "Ngọc rồng đen 6 sao", LoaiItem.NGOCRONG,
+            new Texture("vatpham/vatphamgame/ngocrongden/nr6sd.png"),
+            "Thu thập đủ 7 viên để triệu hồi Rồng Thần Hắc Ám.", 99,
+            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+            "all", 0, null, 0, 0, 0, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "nr7sd", "Ngọc rồng đen 7 sao", LoaiItem.NGOCRONG,
+            new Texture("vatpham/vatphamgame/ngocrongden/nr7sd.png"),
+            "Thu thập đủ 7 viên để triệu hồi Rồng Thần Hắc Ám.", 99,
             new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
             "all", 0, null, 0, 0, 0, -1
         ));

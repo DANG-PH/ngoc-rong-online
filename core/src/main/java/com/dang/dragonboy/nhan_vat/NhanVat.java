@@ -81,11 +81,13 @@ public class NhanVat {
 
     private float gioiHanXMax;
     private float gioiHanYMax;
-    private List<HitboxDat> danhSachDat = new ArrayList<>();
+    public List<HitboxDat> danhSachDat = new ArrayList<>();
 
     public void setDanhSachDat(List<HitboxDat> ds) {
         this.danhSachDat = ds;
-        duLieuNguoiChoi.deTu.setDanhSachDat(danhSachDat);
+        if (duLieuNguoiChoi.coDeTu()) {
+            duLieuNguoiChoi.deTu.setDanhSachDat(danhSachDat);
+        }
     }
     private String hanhtinh;
     private String nhanvat;
@@ -1056,7 +1058,9 @@ public class NhanVat {
     public void setGioiHanToaDo(float chieuRongMap, float chieuCaoMap) {
         this.gioiHanXMax = chieuRongMap - rong;
         this.gioiHanYMax = chieuCaoMap - cao;
-        duLieuNguoiChoi.deTu.setGioiHanToaDo(gioiHanXMax,gioiHanYMax);
+        if (duLieuNguoiChoi.coDeTu()) {
+            duLieuNguoiChoi.deTu.setGioiHanToaDo(gioiHanXMax, gioiHanYMax);
+        }
     }
 
     public void capNhat() {
@@ -1365,19 +1369,21 @@ public class NhanVat {
             }
         }
         this.thoiGianTichLuy = thoiGian;
-        if (!veHUD.renderDeTu && duLieuNguoiChoi.deTu.timeHoatAnhBienMat>0) {
-            if (duLieuNguoiChoi.deTu.chuaLayToaDoBienMat) {
-                duLieuNguoiChoi.deTu.x_bien_mat = duLieuNguoiChoi.deTu.x;
-                duLieuNguoiChoi.deTu.y_bien_mat = duLieuNguoiChoi.deTu.y;
-                duLieuNguoiChoi.deTu.chuaLayToaDoBienMat = false;
-            }
-            float timeMAX = 0.3f;
-            float step = timeMAX / 3;
-            for (int i = 0; i < 3; i++) {
-                float start = timeMAX - i * step;
-                float end = timeMAX - (i + 1) * step;
-                if (duLieuNguoiChoi.deTu.timeHoatAnhBienMat >= end && duLieuNguoiChoi.deTu.timeHoatAnhBienMat <= start) {
-                    batch.draw(duLieuNguoiChoi.deTu.bien_mat[i], duLieuNguoiChoi.deTu.x_bien_mat+(duLieuNguoiChoi.deTu.rong_de_tu-duLieuNguoiChoi.deTu.bien_mat[i].getWidth()*0.45f)/2f, duLieuNguoiChoi.deTu.y_bien_mat+(duLieuNguoiChoi.deTu.cao_de_tu-duLieuNguoiChoi.deTu.bien_mat[i].getHeight()*0.45f)/2f,duLieuNguoiChoi.deTu.bien_mat[i].getWidth()*0.45f,duLieuNguoiChoi.deTu.bien_mat[i].getHeight()*0.45f);
+        if (duLieuNguoiChoi.coDeTu()) {
+            if (!veHUD.renderDeTu && duLieuNguoiChoi.deTu.timeHoatAnhBienMat > 0) {
+                if (duLieuNguoiChoi.deTu.chuaLayToaDoBienMat) {
+                    duLieuNguoiChoi.deTu.x_bien_mat = duLieuNguoiChoi.deTu.x;
+                    duLieuNguoiChoi.deTu.y_bien_mat = duLieuNguoiChoi.deTu.y;
+                    duLieuNguoiChoi.deTu.chuaLayToaDoBienMat = false;
+                }
+                float timeMAX = 0.3f;
+                float step = timeMAX / 3;
+                for (int i = 0; i < 3; i++) {
+                    float start = timeMAX - i * step;
+                    float end = timeMAX - (i + 1) * step;
+                    if (duLieuNguoiChoi.deTu.timeHoatAnhBienMat >= end && duLieuNguoiChoi.deTu.timeHoatAnhBienMat <= start) {
+                        batch.draw(duLieuNguoiChoi.deTu.bien_mat[i], duLieuNguoiChoi.deTu.x_bien_mat + (duLieuNguoiChoi.deTu.rong_de_tu - duLieuNguoiChoi.deTu.bien_mat[i].getWidth() * 0.45f) / 2f, duLieuNguoiChoi.deTu.y_bien_mat + (duLieuNguoiChoi.deTu.cao_de_tu - duLieuNguoiChoi.deTu.bien_mat[i].getHeight() * 0.45f) / 2f, duLieuNguoiChoi.deTu.bien_mat[i].getWidth() * 0.45f, duLieuNguoiChoi.deTu.bien_mat[i].getHeight() * 0.45f);
+                    }
                 }
             }
         }
@@ -1405,9 +1411,10 @@ public class NhanVat {
             }
             batch.draw(veHUD.anhHuyHieu[veHUD.framesHuyHieu], x - (veHUD.anhHuyHieu[veHUD.framesHuyHieu].getWidth() * 0.55f - rong) / 2f, y + cao + 35f + daoDong, veHUD.anhHuyHieu[veHUD.framesHuyHieu].getWidth() * 0.55f, veHUD.anhHuyHieu[veHUD.framesHuyHieu].getHeight() * 0.55f);
         }
-
-        if (veHUD.renderDeTu) {
-            duLieuNguoiChoi.deTu.ve(batch, thoiGian);
+        if (duLieuNguoiChoi.coDeTu()) {
+            if (veHUD.renderDeTu) {
+                duLieuNguoiChoi.deTu.ve(batch, thoiGian);
+            }
         }
 
         if (veHUD.dangDungDeoLung && veHUD.timeChoHopThe == 0 && duDieuKien && !(trangThai == TrangThai.BAY_NGANG && !dangMangVanBay) && !(trangThai == TrangThai.DI_CHUYEN)){
@@ -1593,39 +1600,41 @@ public class NhanVat {
                 float duoiX = flipX ? x + rong + 20 : x - 20;
                 batch.draw(veHUD.duoichat, duoiX, y + cao + 15, 16 * flipScale, 16);
                 veHUD.fontchat.draw(batch, layout, x + (rong - 200) / 2f + 10f, y + cao + 30 + 18f + layout.height);
-                if (veHUD.tinNhanChat.equals("bao ve") || veHUD.tinNhanChat.equals("protect")) {
-                    veHUD.trangthaide = "Bảo vệ";
-                    veHUD.capNhatTrangThaiDeTu();
-                } else if (veHUD.tinNhanChat.equals("tan cong") || veHUD.tinNhanChat.equals("attack")) {
-                    veHUD.trangthaide = "Tấn công";
-                    veHUD.capNhatTrangThaiDeTu();
-                } else if (veHUD.tinNhanChat.equals("di theo") || veHUD.tinNhanChat.equals("follow")) {
-                    veHUD.trangthaide = "Đi theo";
-                    veHUD.capNhatTrangThaiDeTu();
-                } else if (veHUD.tinNhanChat.equals("ve nha") || veHUD.tinNhanChat.equals("go home")) {
-                    veHUD.trangthaide = "Về nhà";
-                    veHUD.capNhatTrangThaiDeTu();
-                }
-                if (veHUD.tinNhanChat.contains("ten con la:") && !veHUD.daRanDomChatDeTu) {
-                    String[] part = veHUD.tinNhanChat.split(":",-1);
-                    String tenDeTu = part[1].trim();
-                    if (duLieuNguoiChoi.deTu.chuaSetTenDeTu) {
-                        if (!tenDeTu.isEmpty()) {
-                            duLieuNguoiChoi.deTu.setTenDeTu(tenDeTu);
-                            String[] text = {
-                                "Con xin nhận tên " + tenDeTu + " ạ, con sẽ không làm sư phụ thất vọng.",
-                                "Tên " + tenDeTu + " , đệ tử xin ghi nhớ!",
-                                "Từ nay con là " + tenDeTu + ", cám ơn sư phụ."
-                            };
-                            duLieuNguoiChoi.deTu.setTinNhanDeTuChat(text[MathUtils.random(text.length - 1)], 4f);
-                            duLieuNguoiChoi.deTu.chuaSetTenDeTu = false;
-                        } else {
-                            duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Sư phụ chưa đặt tên rõ ràng cho con...", 4f);
-                        }
-                    } else {
-                        duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Sư phụ, tên con là "+duLieuNguoiChoi.deTu.getTen()+" mà...", 4f);
+                if (duLieuNguoiChoi.coDeTu()) {
+                    if (veHUD.tinNhanChat.equals("bao ve") || veHUD.tinNhanChat.equals("protect")) {
+                        veHUD.trangthaide = "Bảo vệ";
+                        veHUD.capNhatTrangThaiDeTu();
+                    } else if (veHUD.tinNhanChat.equals("tan cong") || veHUD.tinNhanChat.equals("attack")) {
+                        veHUD.trangthaide = "Tấn công";
+                        veHUD.capNhatTrangThaiDeTu();
+                    } else if (veHUD.tinNhanChat.equals("di theo") || veHUD.tinNhanChat.equals("follow")) {
+                        veHUD.trangthaide = "Đi theo";
+                        veHUD.capNhatTrangThaiDeTu();
+                    } else if (veHUD.tinNhanChat.equals("ve nha") || veHUD.tinNhanChat.equals("go home")) {
+                        veHUD.trangthaide = "Về nhà";
+                        veHUD.capNhatTrangThaiDeTu();
                     }
-                    veHUD.daRanDomChatDeTu = true;
+                    if (veHUD.tinNhanChat.contains("ten con la:") && !veHUD.daRanDomChatDeTu) {
+                        String[] part = veHUD.tinNhanChat.split(":", -1);
+                        String tenDeTu = part[1].trim();
+                        if (duLieuNguoiChoi.deTu.chuaSetTenDeTu) {
+                            if (!tenDeTu.isEmpty()) {
+                                duLieuNguoiChoi.deTu.setTenDeTu(tenDeTu);
+                                String[] text = {
+                                    "Con xin nhận tên " + tenDeTu + " ạ, con sẽ không làm sư phụ thất vọng.",
+                                    "Tên " + tenDeTu + " , đệ tử xin ghi nhớ!",
+                                    "Từ nay con là " + tenDeTu + ", cám ơn sư phụ."
+                                };
+                                duLieuNguoiChoi.deTu.setTinNhanDeTuChat(text[MathUtils.random(text.length - 1)], 4f);
+                                duLieuNguoiChoi.deTu.chuaSetTenDeTu = false;
+                            } else {
+                                duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Sư phụ chưa đặt tên rõ ràng cho con...", 4f);
+                            }
+                        } else {
+                            duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Sư phụ, tên con là " + duLieuNguoiChoi.deTu.getTen() + " mà...", 4f);
+                        }
+                        veHUD.daRanDomChatDeTu = true;
+                    }
                 }
             }
         } else {
