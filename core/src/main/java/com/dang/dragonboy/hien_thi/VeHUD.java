@@ -13,11 +13,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Align;
 import com.dang.dragonboy.du_lieu.DeTu;
-import com.dang.dragonboy.nhan_vat.NhanVat;
-import com.dang.dragonboy.nhan_vat.NhanVatCauHinh;
-import com.dang.dragonboy.nhan_vat.NhanVatXuLy;
-import com.dang.dragonboy.nhan_vat.DeTuXuLy;
-import com.dang.dragonboy.nhan_vat.DeTuCauHinh;
+import com.dang.dragonboy.nhan_vat.*;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.du_lieu.ThemItemTest;
 import java.text.DecimalFormat;
@@ -486,7 +482,7 @@ public class VeHUD {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
-            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ ễ ằ ừ — ẳ ữ ỗ ằ ễ ỗ ừ ẵ ê : ĩ";
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ ễ ằ ừ — ẳ ữ ỗ ằ ễ ỗ ừ ẵ ê : ĩ ≤";
         param.size = 18;
         font = generator.generateFont(param);
         fontText = generator.generateFont(param);
@@ -503,7 +499,7 @@ public class VeHUD {
         FreeTypeFontGenerator generator2 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchinh.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param2.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
-            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ ễ ằ ừ — ẳ ữ ỗ ằ ễ ỗ ừ ẵ ê : ĩ";
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ ễ ằ ừ — ẳ ữ ỗ ằ ễ ỗ ừ ẵ ê : ĩ ≤";
         param2.size = 22;
         param2.color = Color.WHITE;
         param2.borderWidth = 1f;
@@ -514,7 +510,7 @@ public class VeHUD {
         FreeTypeFontGenerator generator3 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchucnang.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param3 = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param3.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
-            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ ễ ằ ừ — ẳ ữ ỗ ằ ễ ỗ ừ ẵ ê : ĩ";
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ ễ ằ ừ — ẳ ữ ỗ ằ ễ ỗ ừ ẵ ê : ĩ ≤";
         param3.size = 14;
         fontchat = generator3.generateFont(param3);
         param3.color = new Color(94 / 255f, 86 / 255f, 74 / 255f, 1f);
@@ -1956,6 +1952,46 @@ public class VeHUD {
                 ki*=1.04f;
                 sd*=1.04f;
             }
+            if (deoLungDangDung.getId().equals("canh_doi") && duLieuNguoiChoi.getHpHienTai()<=duLieuNguoiChoi.getHpHopThe()*0.5f) {
+                cm += 10;
+            }
+            if (deoLungDangDung.getId().equals("canh_ac_quy")) {
+                if (duLieuNguoiChoi.getKiHienTai()>duLieuNguoiChoi.getKiHopThe()*0.8f) {
+                    cm += 5;
+                }
+                if (dangDungHuyHieu && huyHieuDangDung.getId().equals("trum_cuoi")) {
+                    cm += 5;
+                    stcm += 10;
+                }
+            }
+            if (deoLungDangDung.getId().equals("kiem") && duLieuNguoiChoi.getHpHienTai()<=duLieuNguoiChoi.getHpHopThe()*0.4f) {
+                sd*=1.15f;
+            }
+            if (deoLungDangDung.getId().equals("hoa")) {
+                float xacSuat = 0.000586f;
+                if (dangDungHuyHieu && huyHieuDangDung.getId().equals("thien_tu")) {
+                    xacSuat*=2;
+                }
+                if (Math.random()<xacSuat) {
+                    duLieuNguoiChoi.tangHpHienTai(duLieuNguoiChoi.getHpHopThe()*0.02f);
+                }
+            }
+            if (deoLungDangDung.getId().equals("canh_thien_su")) {
+                if (nhanVat.getTrangThai() == TrangThai.BAY_NGANG) {
+                    giamSatThuong+=5;
+                }
+                if (duLieuNguoiChoi.getHanhTrangDangMac().get(7) != null && duLieuNguoiChoi.getHanhTrangDangMac().get(7).getId().equals("phuong_hoang_lua")) {
+                    giamSatThuong+=10;
+                }
+            }
+            if (deoLungDangDung.getId().equals("canh_thien_than")) {
+                if (duLieuNguoiChoi.getHpHienTai() == duLieuNguoiChoi.getHpHopThe()) {
+                    sd*=1.1f;
+                }
+                if (duLieuNguoiChoi.getKiHienTai()<=duLieuNguoiChoi.getKiHopThe()*0.2f) {
+                    stcm+=10;
+                }
+            }
         }
 
         // ===== GIÁP LUYỆN TẬP =====
@@ -2024,11 +2060,10 @@ public class VeHUD {
             vuaHopThe = false;
         }
 
-        // Giới hạn HP/KI hiện tại nếu không hợp thể
-        if (!dangHopThe) {
-            if (duLieuNguoiChoi.getHpHienTai() > hp) duLieuNguoiChoi.setHpHienTai(hp);
-            if (duLieuNguoiChoi.getKiHienTai() > ki) duLieuNguoiChoi.setKiHienTai(ki);
-        }
+        // Giới hạn HP/KI hiện tại
+        if (duLieuNguoiChoi.getHpHienTai() > hp) duLieuNguoiChoi.setHpHienTai(hp);
+        if (duLieuNguoiChoi.getKiHienTai() > ki) duLieuNguoiChoi.setKiHienTai(ki);
+
         if (timeHopTheTHuong > 0) {
             timeHopTheTHuong -= delta;
             if (timeHopTheTHuong <= 1.5f) {
@@ -2698,43 +2733,43 @@ public class VeHUD {
             new Item("luoi_hai", "Lưỡi Hái Thời Không", LoaiItem.DEOLUNG,
                 new Texture("vatpham/vatphamgame/deo_lung/luoi_hai/icon.png"),
                 "Lưỡi hái mang sức mạnh xé tan thời không. [Hiệu ứng] Khi trang bị cùng Black Goku Rose: +4% Sức đánh, HP, KI.", 1,
-                new int[]{0,0,0,0,0,0,20,0,0,0,0,0,10},
+                new int[]{0,0,0,0,0,0,1,1,1,0,0,0,0},
                 "all", 10_000_000L, null, 0, 0, 0, -1),
 
             new Item("canh_doi", "Cánh Dơi Dracula", LoaiItem.DEOLUNG,
                 new Texture("vatpham/vatphamgame/deo_lung/canh_doi/icon.png"),
-                "Đôi cánh dơi huyền bí.", 1,
-                new int[]{0,0,0,0,0,0,5,15,5,0,0,0,0},
+                "Đôi cánh dơi huyền bí. [Hiệu ứng] Khi HP ≤ 50%: +10% Chí mạng.", 1,
+                new int[]{0,0,0,1,0,0,0,0,1,0,0,0,0},
                 "all", 10_000_000L, null, 0, 0, 0, -1),
 
             new Item("canh_ac_quy", "Cánh Ác Quỷ", LoaiItem.DEOLUNG,
                 new Texture("vatpham/vatphamgame/deo_lung/canh_ac_quy/icon.png"),
-                "Cánh ác quỷ tỏa ra khí tức u tối.", 1,
-                new int[]{0,0,0,5,0,10,0,0,0,0,0,0,0},
+                "Cánh ác quỷ tỏa ra khí tức u tối. [Hiệu ứng] KI > 80%: +5% Chí mạng. Nếu trang bị cùng Huy Hiệu Trùm Cuối: +5% Chí mạng, +10% Sát thương chí mạng.", 1,
+                new int[]{0,0,0,1,0,1,0,0,0,0,0,0,0},
                 "all", 10_000_000L, null, 0, 0, 0, -1),
 
             new Item("kiem", "Kiếm Thánh Z", LoaiItem.DEOLUNG,
                 new Texture("vatpham/vatphamgame/deo_lung/kiem/icon.png"),
-                "Thanh kiếm huyền thoại của Future Trunks.", 1,
-                new int[]{0,0,0,0,0,15,0,0,15,0,0,0,0},
+                "Thanh kiếm huyền thoại của Future Trunks. [Hiệu ứng] Khi HP ≤ 40%: +15% Sức đánh.", 1,
+                new int[]{0,0,0,0,0,1,0,0,1,0,0,0,0},
                 "all", 10_000_000L, null, 0, 0, 0, -1),
 
             new Item("hoa", "Bó Hoa Hồng", LoaiItem.DEOLUNG,
                 new Texture("vatpham/vatphamgame/deo_lung/hoa/icon.png"),
-                "Bó hoa chứa nguồn sức mạnh huyền ảo.", 1,
-                new int[]{0,0,0,0,0,0,5,5,15,0,0,0,0},
+                "Bó hoa chứa nguồn sức mạnh huyền ảo. [Hiệu ứng] Mỗi 3s có 10% cơ hội hồi 2% HP tối đa (x2 tỷ lệ nếu trang bị Huy Hiệu Thiên Tử).", 1,
+                new int[]{0,0,0,0,0,0,1,0,1,0,0,0,1},
                 "all", 10_000_000L, null, 0, 0, 0, -1),
 
             new Item("canh_thien_su", "Cánh Thiên Sứ", LoaiItem.DEOLUNG,
                 new Texture("vatpham/vatphamgame/deo_lung/canh_thien_su/icon.png"),
-                "Đôi cánh của thiên sứ, thuần khiết và sáng ngời.", 1,
-                new int[]{0,0,0,5,0,0,0,0,5,0,0,0,0},
+                "Đôi cánh của thiên sứ, thuần khiết và sáng ngời. [Hiệu ứng] Khi bay ngang: giảm sát thương nhận vào 5%. Nếu cưỡi Phượng Hoàng Lửa: giảm thêm 10% sát thương.", 1,
+                new int[]{0,0,0,0,0,0,1,0,0,0,0,0,1},
                 "all", 10_000_000L, null, 0, 0, 0, -1),
 
             new Item("canh_thien_than", "Cánh Thiên Thần", LoaiItem.DEOLUNG,
                 new Texture("vatpham/vatphamgame/deo_lung/canh_thien_than/icon.png"),
-                "Đôi cánh tỏa sáng rực rỡ của thiên thần.", 1,
-                new int[]{0,0,0,0,0,0,8,8,0,0,0,0,0},
+                "Đôi cánh tỏa sáng rực rỡ của thiên thần. [Hiệu ứng] Khi HP đầy: +10% Sức đánh. Khi KI ≤ 20%: +10% Sát thương chí mạng.", 1,
+                new int[]{0,0,0,1,0,0,0,1,1,0,0,0,0},
                 "all", 10_000_000L, null, 0, 0, 0, -1)
         };
 
