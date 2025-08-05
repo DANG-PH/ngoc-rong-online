@@ -272,9 +272,15 @@ public class VeHUD {
 
     public boolean dangDungDeoLung = false;
     public boolean chuaSetUpAnhDeoLung = true;
-    public Texture[] anhDeoLung = new Texture[2];
+    public Texture[] anhDeoLung = new Texture[4];
     public int framesDeoLung = 0;
     public Item deoLungDangDung = null;
+
+    public boolean dangDungAura = false;
+    public boolean chuaSetUpAnhAura = true;
+    public Texture[] anhAura = new Texture[4];
+    public int framesAura = 0;
+    public Item auraDangDung = null;
 
     private Texture boHuyet, boKhi, cuongNo, giapXen;
     public boolean dangDungBoHuyet = false;
@@ -1700,6 +1706,15 @@ public class VeHUD {
                                     deoLungDangDung = itemm;
                                 }
                             }
+                            if (itemDangChon.equals("aura")) {
+                                if (dangDungAura) {
+                                    dangDungAura = false;
+                                    chuaSetUpAnhAura = true;
+                                } else {
+                                    dangDungAura = true;
+                                    auraDangDung = itemm;
+                                }
+                            }
                         } else if (!nhanVat.getHanhtinh().equals(itemm.getHanhtinh())) {
                             dangHienTinNhanPet = true;
                             timeHienTinNhanPet = 2f;
@@ -1994,6 +2009,49 @@ public class VeHUD {
             }
         }
 
+        // ===== AURA =====
+        if (dangDungAura) {
+            cm += auraDangDung.getChiso()[3];
+            stcm += auraDangDung.getChiso()[5];
+            giamSatThuong += auraDangDung.getChiso()[12];
+            hp *= (auraDangDung.getChiso()[6] / 100f + 1);
+            ki *= (auraDangDung.getChiso()[7] / 100f + 1);
+            sd *= (auraDangDung.getChiso()[8] / 100f + 1);
+            if (auraDangDung.getId().equals("tan_hon_rong_namek")) {
+                int tongHpDangMac = 0;
+                int tongSucDanhDangMac = 0;
+                for (int i = 0; i < 5; i++) {
+                    if (duLieuNguoiChoi.getHanhTrangDangMac().get(i) != null) {
+                        tongHpDangMac += duLieuNguoiChoi.getHanhTrangDangMac().get(i).getChiso()[6];
+                        tongSucDanhDangMac += duLieuNguoiChoi.getHanhTrangDangMac().get(i).getChiso()[8];
+                    }
+                }
+                if (tongSucDanhDangMac*5f/3f > tongHpDangMac) {
+                    if (duLieuNguoiChoi.getKiHienTai()>duLieuNguoiChoi.getKiHopThe()*0.7f) {
+                        sd *= 1.1f;
+                    }
+                    if (duLieuNguoiChoi.getKiHienTai()<duLieuNguoiChoi.getKiHopThe()*0.2f) {
+                        cm += 10;
+                    }
+                } else if (tongSucDanhDangMac*5f/3f < tongHpDangMac) {
+                    if (duLieuNguoiChoi.getKiHienTai()>duLieuNguoiChoi.getKiHopThe()*0.7f) {
+                        hp *= 1.1f;
+                    }
+                    if (duLieuNguoiChoi.getKiHienTai()<duLieuNguoiChoi.getKiHopThe()*0.2f) {
+                        giamSatThuong += 10;
+                    }
+                } else {
+                    if (duLieuNguoiChoi.getKiHienTai()>duLieuNguoiChoi.getKiHopThe()*0.7f) {
+                        sd *= 1.05f;
+                        hp *= 1.05f;
+                    }
+                    if (duLieuNguoiChoi.getKiHienTai()<duLieuNguoiChoi.getKiHopThe()*0.2f) {
+                        cm += 5;
+                        giamSatThuong += 5;
+                    }
+                }
+            }
+        }
         // ===== GIÁP LUYỆN TẬP =====
         if (dangMacGiapLuyenTap) {
             var giap = duLieuNguoiChoi.getHanhTrangDangMac().get(6);
@@ -2492,6 +2550,46 @@ public class VeHUD {
             if (thanp[i] != null) thanp[i].dispose();
             if (chanp[i] != null) chanp[i].dispose();
         }
+        if (anhAura != null) {
+            for (Texture tex : anhAura) {
+                if (tex != null) tex.dispose();
+            }
+            anhAura = null;
+        }
+
+        Texture[] itemTextures = {
+            ao, quan, gang, giay, rada, iconct, giaplt, vanbay,
+            aoDeTu, quanDeTu, gangDeTu, giayDeTu, radaDeTu, iconctDeTu,
+            boHuyet, boKhi, cuongNo, giapXen,
+            avtPetTheoHanhTinh
+        };
+
+        for (Texture tex : itemTextures) {
+            if (tex != null) tex.dispose();
+        }
+
+        // Dispose các hiệu ứng rồng và pet
+        if (rongThan != null) {
+            for (Texture tex : rongThan) if (tex != null) tex.dispose();
+        }
+        if (rongThanDen != null) {
+            for (Texture tex : rongThanDen) if (tex != null) tex.dispose();
+        }
+        if (luaRongThan != null) {
+            for (Texture tex : luaRongThan) if (tex != null) tex.dispose();
+        }
+        if (luaRongThanDen != null) {
+            for (Texture tex : luaRongThanDen) if (tex != null) tex.dispose();
+        }
+        if (setRongThanDen != null) {
+            for (Texture tex : setRongThanDen) if (tex != null) tex.dispose();
+        }
+        if (hieuUngRongThan != null) {
+            for (Texture tex : hieuUngRongThan) if (tex != null) tex.dispose();
+        }
+        if (framesPet != null) {
+            for (Texture tex : framesPet) if (tex != null) tex.dispose();
+        }
     }
     public void veGlow(ShapeRenderer shapeRenderer, float x, float y, float timeGlow) {
         if (timeGlow <= 0) return;
@@ -2772,7 +2870,6 @@ public class VeHUD {
                 new int[]{0,0,0,1,0,0,0,1,1,0,0,0,0},
                 "all", 10_000_000L, null, 0, 0, 0, -1)
         };
-
         // Random chọn item
         Item itemDuocChon = danhSachItem[MathUtils.random(danhSachItem.length - 1)];
         switch (itemDuocChon.getId()) {
@@ -2795,9 +2892,9 @@ public class VeHUD {
             }
         }
         switch (soChiSoCanCong) {
-            case 1: chiSoRandomMax = 30;break;
-            case 2: chiSoRandomMax = 15;break;
-            case 3: chiSoRandomMax = 10;break;
+            case 1: chiSoRandomMax = 15;break;
+            case 2: chiSoRandomMax = 10;break;
+            case 3: chiSoRandomMax = 5;break;
             default: chiSoRandomMax = 1;break;
         }
         for (int i = 0; i < stats.length; i++) {
@@ -2856,9 +2953,9 @@ public class VeHUD {
             }
         }
         switch (soChiSoCanCong) {
-            case 1: chiSoRandomMax = 30;break;
-            case 2: chiSoRandomMax = 15;break;
-            case 3: chiSoRandomMax = 10;break;
+            case 1: chiSoRandomMax = 15;break;
+            case 2: chiSoRandomMax = 10;break;
+            case 3: chiSoRandomMax = 5;break;
             default: chiSoRandomMax = 1;break;
         }
         for (int i = 0; i < stats.length; i++) {

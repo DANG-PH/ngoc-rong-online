@@ -310,6 +310,8 @@ public class HUDClickHandler {
                             veHUD.itemDangChon = "phutro";
                         } else if (item.getLoai() == LoaiItem.DEOLUNG) {
                             veHUD.itemDangChon = "deolung";
+                        } else if (item.getLoai() == LoaiItem.AURA) {
+                            veHUD.itemDangChon = "aura";
                         }
                     } else {
                         veHUD.itemm = null;

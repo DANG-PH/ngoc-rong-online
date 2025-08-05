@@ -78,7 +78,7 @@ public class ManHinhMenu implements Screen {
                 if (mouseX >= btnX && mouseX <= btnX + btnWidth &&
                     mouseY >= btnY && mouseY <= btnY + btnHeight) {
                     nutDangDuocBam[i] = true;
-                    nutClickTimer = 0.2f;
+                    nutClickTimer = 0.1f;
                     nutDuocChon = i;
                 }
             }

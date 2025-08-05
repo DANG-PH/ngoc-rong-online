@@ -17,6 +17,22 @@ public class ThemItemTest {
             "all", 1500000L, null, 0, 0, 0, -1
         ));
 
+        duLieu.themItemVaoHanhTrang(new Item(
+            "tan_hon_rong_namek", "Aura Long Hồn Thượng Giới", LoaiItem.AURA,
+            new Texture("vatpham/vatphamgame/aura/tan_hon_rong_namek/icon.png"),
+            "Di vật tối thượng lưu lạc từ cõi Thượng Giới, kết tinh linh hồn bất diệt của Rồng Thần. [Hiệu ứng] KI > 70%: +10% Sức đánh hoặc +10% HP tùy trang bị. KI < 20%: +10% Chí mạng hoặc +10% Giảm sát thương tùy trang bị. Nếu không có trang bị phù hợp các hiệu ứng được chia đều", 1,
+            new int[]{0,0,0,8,0,8,8,0,0,0,0,0,8},
+            "all", 10_000_000L, null, 0, 0, 0, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "tieu_doi_truong", "Aura Tiểu Đội Trưởng", LoaiItem.AURA,
+            new Texture("vatpham/vatphamgame/aura/tieu_doi_truong/icon.png"),
+            "Đang Phát Triển", 1,
+            new int[]{0,0,0,0,0,0,10,10,10,0,0,0,0},
+            "all", 10_000_000L, null, 0, 0, 0, -1
+        ));
+
 //        duLieu.themItemVaoHanhTrang(new Item(
 //            "luoi_hai", "Lưỡi Hái Thời Không", LoaiItem.DEOLUNG,
 //            new Texture("vatpham/vatphamgame/deo_lung/luoi_hai/icon.png"),

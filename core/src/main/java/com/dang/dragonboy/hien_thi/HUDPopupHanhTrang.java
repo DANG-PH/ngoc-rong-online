@@ -355,7 +355,7 @@ public class HUDPopupHanhTrang {
                 );
                 veHUD.PopupHanhTrangH += layout.height + 50;
             }
-            if ("deolung".equals(veHUD.itemDangChon)) {
+            if ("deolung".equals(veHUD.itemDangChon) || "aura".equals(veHUD.itemDangChon)) {
                 layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
                 veHUD.PopupHanhTrangH += layout.height + 15;
                 for (int i = 0; i <= 12; i++) {
@@ -941,7 +941,7 @@ public class HUDPopupHanhTrang {
                 );
                 veHUD.fontMotaHanhTrang.draw(batch, layout, veHUD.PopupHanhTrangX + (veHUD.PopupHanhTrangW - layout.width) / 2f + xCongThem, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
                 offsetY += layout.height + 30;
-            } else if ("deolung".equals(veHUD.itemDangChon)) {
+            } else if ("deolung".equals(veHUD.itemDangChon) || "aura".equals(veHUD.itemDangChon)) {
                 float offsetY = 10;
                 if (veHUD.itemm.getTexture() != null) {
                     batch.draw(veHUD.itemm.getTexture(), veHUD.PopupHanhTrangX + 15 + xCongThem, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - veHUD.itemm.getTexture().getHeight() * 0.5f - offsetY, veHUD.itemm.getTexture().getWidth() * 0.5f, veHUD.itemm.getTexture().getHeight() * 0.5f);

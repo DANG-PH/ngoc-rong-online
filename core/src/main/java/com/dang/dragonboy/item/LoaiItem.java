@@ -17,5 +17,6 @@ public enum LoaiItem {
     HUYHIEU,
     HOPQUA,
     PHUTRO,
-    DEOLUNG
+    DEOLUNG,
+    AURA
 }

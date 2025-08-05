@@ -205,7 +205,8 @@ public class NhanVat {
     private boolean dangHienDiemCanDen = false;
 
     private float timeChoHienBay;
-    private float timeDoiFramesHuyHieu,timeDoiFramesDeoLung;
+    private float timeDoiFramesHuyHieu,timeDoiFramesDeoLung,timeDoiFramesAura;
+    private Texture[] auraChan = new Texture[4];
 
     public void setToaDoMucTieu(float x, float y) {
         this.x_muc_tieu = x;
@@ -988,6 +989,9 @@ public class NhanVat {
         for (int i = 0; i < 4;i++) {
             clickdichuyen[i] = new Texture("hieuung/hieuunggame/click_di_chuyen/"+(i+1)+".png");
         }
+        for (int i = 0; i < 4;i++) {
+            auraChan[i] = new Texture("vatpham/vatphamgame/aura/chan/"+(i+1)+".png");
+        }
         batch = new SpriteBatch();
     }
 
@@ -1397,7 +1401,7 @@ public class NhanVat {
                 : 0f;
         }
 
-        if (veHUD.dangDungHuyHieu && veHUD.timeChoHopThe == 0 && duDieuKien){
+        if (veHUD.dangDungHuyHieu && veHUD.timeChoHopThe == 0 && duDieuKien && !(veHUD.dangDungAura && veHUD.auraDangDung.getId().equals("tan_hon_rong_namek"))){
             if (veHUD.chuaSetUpAnhHuyHieu) {
                 for (int i = 0; i < 6; i++) {
                     veHUD.anhHuyHieu[i] = new Texture("vatpham/vatphamgame/huy_hieu/" + veHUD.huyHieuDangDung.getId() + "/" + (i + 1) + ".png");
@@ -1416,23 +1420,55 @@ public class NhanVat {
                 duLieuNguoiChoi.deTu.ve(batch, thoiGian);
             }
         }
-
+        if (veHUD.dangDungAura && veHUD.timeChoHopThe == 0 && duDieuKien && !(trangThai == TrangThai.BAY_NGANG && !dangMangVanBay) && !(trangThai == TrangThai.DI_CHUYEN)){
+            float offsetX = 0;
+            float offsetY = 0;
+            float tiLe = 0;
+            if (veHUD.auraDangDung.getId().equals("tan_hon_rong_namek")) {
+                offsetX = 12f;
+                if (trangThai == TrangThai.ROI) offsetY = 10f;
+                tiLe = 0.5f;
+            }
+            if (veHUD.auraDangDung.getId().equals("tieu_doi_truong")) {
+                offsetX = 5f;
+                offsetY = 25f;
+                if (trangThai == TrangThai.ROI) offsetY = 35f;
+                tiLe = 0.5f;
+            }
+            if (veHUD.chuaSetUpAnhAura) {
+                for (int i = 0; i < 4; i++) {
+                    veHUD.anhAura[i] = new Texture("vatpham/vatphamgame/aura/" + veHUD.auraDangDung.getId() + "/" + (i + 1) + ".png");
+                }
+                veHUD.chuaSetUpAnhAura = false;
+            }
+            timeDoiFramesAura+=Gdx.graphics.getDeltaTime();
+            float timeDoiFrames = 0.1f;
+            if (timeDoiFramesAura>timeDoiFrames) {
+                veHUD.framesAura = (veHUD.framesAura + 1) % veHUD.anhAura.length;
+                timeDoiFramesAura=0;
+            }
+            float flipScale = flipX ? -1f : 1f;
+            float anchorX = flipX ? x + rong  + (veHUD.anhAura[veHUD.framesAura].getWidth() * tiLe)*4.5f/10f-(rong/10f) - offsetX : x  - (veHUD.anhAura[veHUD.framesAura].getWidth() * tiLe)*4.5f/10f+(rong/10f) + offsetX;
+            batch.draw(veHUD.anhAura[veHUD.framesAura], anchorX, y+daoDong+(cao/3f)-25f + offsetY, veHUD.anhAura[veHUD.framesAura].getWidth() * tiLe * flipScale, veHUD.anhAura[veHUD.framesAura].getHeight() * tiLe);
+        }
         if (veHUD.dangDungDeoLung && veHUD.timeChoHopThe == 0 && duDieuKien && !(trangThai == TrangThai.BAY_NGANG && !dangMangVanBay) && !(trangThai == TrangThai.DI_CHUYEN)){
             if (veHUD.chuaSetUpAnhDeoLung) {
-                for (int i = 0; i < 2; i++) {
+                for (int i = 0; i < 4; i++) {
                     veHUD.anhDeoLung[i] = new Texture("vatpham/vatphamgame/deo_lung/" + veHUD.deoLungDangDung.getId() + "/" + (i + 1) + ".png");
                 }
                 veHUD.chuaSetUpAnhDeoLung = false;
             }
             timeDoiFramesDeoLung+=Gdx.graphics.getDeltaTime();
-            if (timeDoiFramesDeoLung>0.2f) {
+            float timeDoiFrames = 0.2f;
+            if (timeDoiFramesDeoLung>timeDoiFrames) {
                 veHUD.framesDeoLung = (veHUD.framesDeoLung + 1) % veHUD.anhDeoLung.length;
                 timeDoiFramesDeoLung=0;
             }
+            float offsetX = 0;
             float offsetY = 0;
             float flipScale = flipX ? -1f : 1f;
             if (trangThai == TrangThai.ROI) offsetY = 10f;
-            float anchorX = flipX ? x + rong  + (veHUD.anhDeoLung[veHUD.framesDeoLung].getWidth() * 0.45f)*4.5f/10f-(rong/10f) : x  - (veHUD.anhDeoLung[veHUD.framesDeoLung].getWidth() * 0.45f)*4.5f/10f+(rong/10f);
+            float anchorX = flipX ? x + rong  + (veHUD.anhDeoLung[veHUD.framesDeoLung].getWidth() * 0.45f)*4.5f/10f-(rong/10f) - offsetX : x  - (veHUD.anhDeoLung[veHUD.framesDeoLung].getWidth() * 0.45f)*4.5f/10f+(rong/10f) + offsetX;
             batch.draw(veHUD.anhDeoLung[veHUD.framesDeoLung], anchorX, y+daoDong+(cao/3f)-25f + offsetY, veHUD.anhDeoLung[veHUD.framesDeoLung].getWidth() * 0.45f * flipScale, veHUD.anhDeoLung[veHUD.framesDeoLung].getHeight() * 0.45f);
         }
         if (veHUD.timeChoHopThe == 0 && duDieuKien) {
@@ -1835,6 +1871,13 @@ public class NhanVat {
                 }
             }
         }
+        if (veHUD.dangDungAura && veHUD.timeChoHopThe == 0 && duDieuKien && trangThai == TrangThai.DUNG_YEN) {
+            float tiLe = 0.35f;
+            if (veHUD.dangHopThe) tiLe = 0.4f;
+            float flipScale = flipX ? -1f : 1f;
+            float anchorX2 = flipX ? x + rong + (auraChan[veHUD.framesAura].getWidth()*tiLe-rong)/2f : x - (auraChan[veHUD.framesAura].getWidth()*tiLe-rong)/2f;
+            batch.draw(auraChan[veHUD.framesAura], anchorX2, y, auraChan[veHUD.framesAura].getWidth() * tiLe * flipScale, auraChan[veHUD.framesAura].getHeight() * tiLe);
+        }
     }
     public static DoLechModular layLech(Map<TrangThai, List<DoLechModular>> map, TrangThai trangThai, int frameIndex, boolean dangMangVanBay) {
         List<DoLechModular> ds;
@@ -1920,6 +1963,7 @@ public class NhanVat {
         vy = 0;
     }
     public void dispose() {
+        if (veHUD != null) veHUD.dispose();
         if (avtTexture != null) {
             avtTexture.dispose();
             avtTexture = null;
@@ -1956,6 +2000,11 @@ public class NhanVat {
 
         // clickdichuyen
         for (Texture t : clickdichuyen) {
+            t.dispose();
+        }
+
+        // auraChan
+        for (Texture t : auraChan) {
             t.dispose();
         }
 
