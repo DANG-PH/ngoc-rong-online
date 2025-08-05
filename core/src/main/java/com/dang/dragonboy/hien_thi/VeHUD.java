@@ -1146,38 +1146,24 @@ public class VeHUD {
                     if (ngocRongUoc.equals("1sao")) {
                         switch (nutduocchon) {
                             case 0:
-                                Item itemMoi;
-                                if (duLieuNguoiChoi.getHanhTrangDangMac().get(5) != null &&
-                                    duLieuNguoiChoi.getHanhTrangDangMac().get(5).getId().equals("goku_black")) {
-                                    // Đang mặc ct Goku Black thì nâng cấp thành SSJ Rose
-                                    xulyitem.goCaiTrang(NhanVatXuLy.getDangMacCaiTrang(), true);
-                                    itemMoi = new Item(
-                                        "goku_black_rose", "Cải trang Super Black Goku", LoaiItem.CAITRANG,
-                                        new Texture("nhanvat/caitrang/goku_black_rose/daudung.png"),
-                                        "Cải trang thành Super Black Goku", 1,
-                                        new int[]{0, 0, 0, 0, 0, 0, 45, 45, 45, 0, 0, 0, 0},
-                                        "all", 40_000_000_000L, null, 0, 0, 0, -1
-                                    );
-                                    tinNhanPet = "Bạn vừa khai phá SSJ ROSE";
-                                } else {
-                                    // Chưa có hoặc không mặc ct Goku Black thì nhận ct Black Goku
-                                    itemMoi = new Item(
-                                        "goku_black", "Cải trang Black Goku", LoaiItem.CAITRANG,
-                                        new Texture("nhanvat/caitrang/goku_black/daudung.png"),
-                                        "Cải trang thành Black Goku", 1,
-                                        new int[]{0, 0, 0, 0, 0, 0, 35, 35, 35, 0, 0, 0, 0},
-                                        "all", 40_000_000_000L, null, 0, 0, 0, -1
-                                    );
-                                    tinNhanPet = "Bạn vừa trở thành black goku";
-                                }
-                                duLieuNguoiChoi.themItemVaoHanhTrang(itemMoi);
-                                if (duLieuNguoiChoi.getSucManh() >= 40_000_000_000L) {
-                                    int viTriMoi = duLieuNguoiChoi.getHanhTrang().size() - 1;
-                                    hangTrangDangChon = viTriMoi + 8;
-                                    xulyitem.macDo(hangTrangDangChon);
+                                duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
+                                    "bongtaic1", "Bông tai Porata - VIP", LoaiItem.BONGTAI,
+                                    new Texture("vatpham/vatphamgame/bongtai/bongtaic1RT.png"),
+                                    "Sử dụng để hợp thể với đệ tử - Vật phẩm nhận từ Rồng Thần ( tăng 5% chỉ số )", 1,
+                                    new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                    "all", 1000, null, 0, 0, 0, -1
+                                ));
+                                if (duLieuNguoiChoi.coDeTu() && !dangHopThe && timeHopTheTHuong == 0 && delayHopTheBongTai == 0) {
+                                    timeChoHopThe = 1.5f;
+                                    dangHopTheThuong = false;
+                                    if (!dangHopThe) {
+                                        bongTaiDangDung = "bongtaic1";
+                                        bongTaiRongThan = true;
+                                    }
                                     hangTrangDangChon = -1;
                                     scrollY = 0;
                                 }
+                                tinNhanPet = "Chúc mừng bạn đã ước thành công Bông Tai Porata Đặc Biệt";
                                 break;
                             case 1:
                                 duLieuNguoiChoi.tangNgoc(1500);
@@ -1294,24 +1280,38 @@ public class VeHUD {
                     } else if (ngocRongUoc.equals("1saoden")) {
                         switch (nutduocchon) {
                             case 0:
-                                duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
-                                    "bongtaic1", "Bông tai Porata - VIP", LoaiItem.BONGTAI,
-                                    new Texture("vatpham/vatphamgame/bongtai/bongtaic1RT.png"),
-                                    "Sử dụng để hợp thể với đệ tử - Vật phẩm nhận từ Rồng Thần ( tăng 5% chỉ số )", 1,
-                                    new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
-                                    "all", 1000, null, 0, 0, 0, -1
-                                ));
-                                if (duLieuNguoiChoi.coDeTu() && !dangHopThe && timeHopTheTHuong == 0 && delayHopTheBongTai == 0) {
-                                    timeChoHopThe = 1.5f;
-                                    dangHopTheThuong = false;
-                                    if (!dangHopThe) {
-                                        bongTaiDangDung = "bongtaic1";
-                                        bongTaiRongThan = true;
-                                    }
+                                Item itemMoi;
+                                if (duLieuNguoiChoi.getHanhTrangDangMac().get(5) != null &&
+                                    duLieuNguoiChoi.getHanhTrangDangMac().get(5).getId().equals("goku_black")) {
+                                    // Đang mặc ct Goku Black thì nâng cấp thành SSJ Rose
+                                    xulyitem.goCaiTrang(NhanVatXuLy.getDangMacCaiTrang(), true);
+                                    itemMoi = new Item(
+                                        "goku_black_rose", "Cải trang Super Black Goku", LoaiItem.CAITRANG,
+                                        new Texture("nhanvat/caitrang/goku_black_rose/daudung.png"),
+                                        "Cải trang thành Super Black Goku", 1,
+                                        new int[]{0, 0, 0, 0, 0, 0, 45, 45, 45, 0, 0, 0, 0},
+                                        "all", 40_000_000_000L, null, 0, 0, 0, -1
+                                    );
+                                    tinNhanPet = "Bạn vừa khai phá SSJ ROSE";
+                                } else {
+                                    // Chưa có hoặc không mặc ct Goku Black thì nhận ct Black Goku
+                                    itemMoi = new Item(
+                                        "goku_black", "Cải trang Black Goku", LoaiItem.CAITRANG,
+                                        new Texture("nhanvat/caitrang/goku_black/daudung.png"),
+                                        "Cải trang thành Black Goku", 1,
+                                        new int[]{0, 0, 0, 0, 0, 0, 35, 35, 35, 0, 0, 0, 0},
+                                        "all", 40_000_000_000L, null, 0, 0, 0, -1
+                                    );
+                                    tinNhanPet = "Bạn vừa trở thành black goku";
+                                }
+                                duLieuNguoiChoi.themItemVaoHanhTrang(itemMoi);
+                                if (duLieuNguoiChoi.getSucManh() >= 40_000_000_000L) {
+                                    int viTriMoi = duLieuNguoiChoi.getHanhTrang().size() - 1;
+                                    hangTrangDangChon = viTriMoi + 8;
+                                    xulyitem.macDo(hangTrangDangChon);
                                     hangTrangDangChon = -1;
                                     scrollY = 0;
                                 }
-                                tinNhanPet = "Chúc mừng bạn đã ước thành công Bông Tai Porata Đặc Biệt";
                                 break;
                             case 1:
                                 duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
@@ -1342,14 +1342,42 @@ public class VeHUD {
                                 }
                                 break;
                             case 3:
-                                duLieuNguoiChoi.themItemVaoHanhTrang(randomDeoLung());
-                                if (duLieuNguoiChoi.getSucManh() >= 10_000_000L && duLieuNguoiChoi.getHanhTrang().get(duLieuNguoiChoi.getHanhTrang().size() - 1).getLoai() == LoaiItem.DEOLUNG) {
-                                    if (dangDungDeoLung) {
-                                        dangDungDeoLung = false;
-                                        chuaSetUpAnhDeoLung = true;
+                                String[] danhSachId = {"luoi_hai","canh_doi","canh_ac_quy","canh_thien_than","canh_thien_su","hoa","kiem"};
+                                boolean duTatCa = true;
+                                ArrayList<Item> danhSach = duLieuNguoiChoi.getHanhTrang();
+                                for (String idCanTim : danhSachId) {
+                                    boolean timThay = false;
+                                    for (Item item : danhSach) {
+                                        if (item != null && idCanTim.equals(item.getId())) {
+                                            timThay = true;
+                                            break;
+                                        }
                                     }
-                                    dangDungDeoLung = true;
-                                    deoLungDangDung = duLieuNguoiChoi.getHanhTrang().get(duLieuNguoiChoi.getHanhTrang().size() - 1);
+                                    if (!timThay) {
+                                        duTatCa = false; // thiếu ít nhất 1 id
+                                        break;
+                                    }
+                                }
+                                if (duTatCa) {
+                                    duLieuNguoiChoi.themItemVaoHanhTrang(randomAura());
+                                    if (duLieuNguoiChoi.getSucManh() >= 10_000_000L && duLieuNguoiChoi.getHanhTrang().get(duLieuNguoiChoi.getHanhTrang().size() - 1).getLoai() == LoaiItem.AURA) {
+                                        if (dangDungAura) {
+                                            dangDungAura = false;
+                                            chuaSetUpAnhAura = true;
+                                        }
+                                        dangDungAura = true;
+                                        auraDangDung = duLieuNguoiChoi.getHanhTrang().get(duLieuNguoiChoi.getHanhTrang().size() - 1);
+                                    }
+                                } else {
+                                    duLieuNguoiChoi.themItemVaoHanhTrang(randomDeoLung());
+                                    if (duLieuNguoiChoi.getSucManh() >= 10_000_000L && duLieuNguoiChoi.getHanhTrang().get(duLieuNguoiChoi.getHanhTrang().size() - 1).getLoai() == LoaiItem.DEOLUNG) {
+                                        if (dangDungDeoLung) {
+                                            dangDungDeoLung = false;
+                                            chuaSetUpAnhDeoLung = true;
+                                        }
+                                        dangDungDeoLung = true;
+                                        deoLungDangDung = duLieuNguoiChoi.getHanhTrang().get(duLieuNguoiChoi.getHanhTrang().size() - 1);
+                                    }
                                 }
                                 break;
                             case 4:
@@ -2759,14 +2787,9 @@ public class VeHUD {
             } else if (ngocRongUoc.equals("2sao")) {
                 listDieuUoc = new String[]{"Đẹp trai"+"\n"+"nhất"+"\n"+"Vũ trụ","Giàu có \n"+"+300 \n Ngọc","+20 Tr \n Sức mạnh \n và tiềm năng","Giàu có \n +50 Tr \n Vàng","Sức Mạnh \n Đổi Skill 2 và 3 \n đệ tử"};
             } else if (ngocRongUoc.equals("1sao")) {
-                listDieuUoc = new String[]{"Đổi cơ thể với Goku","Giàu có \n"+"+1500 \n Ngọc","+200 Tr \n Sức mạnh \n và tiềm năng","Giàu có \n +500 Tr \n Vàng","x1 Ngọc Rồng Đen Ngẫu Nhiên"};
-                if (duLieuNguoiChoi.getHanhTrangDangMac().get(5)!=null) {
-                    if (duLieuNguoiChoi.getHanhTrangDangMac().get(5).getId().equals("goku_black")) {
-                        listDieuUoc[0] = "Khai mở sức mạnh SSJ Rose";
-                    }
-                }
+                listDieuUoc = new String[]{"Bông tai Porata \n Đặc Biệt","Giàu có \n"+"+1500 \n Ngọc","+200 Tr \n Sức mạnh \n và tiềm năng","Giàu có \n +500 Tr \n Vàng","x1 Ngọc Rồng Đen Ngẫu Nhiên"};
             } else if (ngocRongUoc.equals("1saoden")) {
-                listDieuUoc = new String[]{"Bông tai Porata \n Đặc Biệt","Thú cưỡi phượng hoàng cực VIP","Danh hiệu VIP ngẫu nhiên","Vật phẩm đeo lưng ngẫu nhiên","Sở Hữu Đệ Tử"};
+                listDieuUoc = new String[]{"Đổi cơ thể với Goku","Thú cưỡi phượng hoàng cực VIP","Danh hiệu VIP ngẫu nhiên","Vật phẩm đeo lưng ngẫu nhiên","Sở Hữu Đệ Tử"};
                 if (duLieuNguoiChoi.coDeTu()) {
                     if (duLieuNguoiChoi.deTu.getSucManh()<1_500_000_000L) {
                         listDieuUoc[4] = "+150 Tr \n Sức mạnh \n và tiềm năng \n Đệ tử";
@@ -2776,6 +2799,28 @@ public class VeHUD {
                         listDieuUoc[4] = "Sức Mạnh \n Đổi Skill 4 \n đệ tử";
                     }
                 }
+                if (duLieuNguoiChoi.getHanhTrangDangMac().get(5)!=null) {
+                    if (duLieuNguoiChoi.getHanhTrangDangMac().get(5).getId().equals("goku_black")) {
+                        listDieuUoc[0] = "Khai mở sức mạnh SSJ Rose";
+                    }
+                }
+                String[] danhSachId = {"luoi_hai","canh_doi","canh_ac_quy","canh_thien_than","canh_thien_su","hoa","kiem"};
+                boolean duTatCa = true;
+                ArrayList<Item> danhSach = duLieuNguoiChoi.getHanhTrang();
+                for (String idCanTim : danhSachId) {
+                    boolean timThay = false;
+                    for (Item item : danhSach) {
+                        if (item != null && idCanTim.equals(item.getId())) {
+                            timThay = true;
+                            break;
+                        }
+                    }
+                    if (!timThay) {
+                        duTatCa = false; // thiếu ít nhất 1 id
+                        break;
+                    }
+                }
+                if (duTatCa) listDieuUoc[3] = "AURA VIP ngẫu nhiên";
             }
             for (int i = 0; i < 5; i++) {
                 if (nutduocchon==i) {
@@ -2956,6 +3001,55 @@ public class VeHUD {
             case 1: chiSoRandomMax = 15;break;
             case 2: chiSoRandomMax = 10;break;
             case 3: chiSoRandomMax = 5;break;
+            default: chiSoRandomMax = 1;break;
+        }
+        for (int i = 0; i < stats.length; i++) {
+            if (stats[i] > 0) {
+                stats[i] = MathUtils.random(1,chiSoRandomMax);
+            }
+        }
+        // Trả về item mới với chỉ số random
+        return itemDuocChon;
+    }
+    public Item randomAura() {
+        // Danh sách item các vật phẩm đeo lưng
+        Item[] danhSachItem = new Item[]{
+            new Item(
+                "tan_hon_rong_namek", "Aura Long Hồn Thượng Giới", LoaiItem.AURA,
+                new Texture("vatpham/vatphamgame/aura/tan_hon_rong_namek/icon.png"),
+                "Di vật tối thượng lưu lạc từ cõi Thượng Giới, kết tinh linh hồn bất diệt của Rồng Thần. [Hiệu ứng] KI > 70%: +10% Sức đánh hoặc +10% HP tùy trang bị. KI < 20%: +10% Chí mạng hoặc +10% Giảm sát thương tùy trang bị. Nếu không có trang bị phù hợp các hiệu ứng được chia đều", 1,
+                new int[]{0,0,0,8,0,8,8,0,0,0,0,0,8},
+                "all", 10_000_000L, null, 0, 0, 0, -1),
+
+            new Item(
+                "tieu_doi_truong", "Aura Tiểu Đội Trưởng", LoaiItem.AURA,
+                new Texture("vatpham/vatphamgame/aura/tieu_doi_truong/icon.png"),
+                "Đang Phát Triển", 1,
+                new int[]{0,0,0,0,0,0,10,10,10,0,0,0,0},
+                "all", 10_000_000L, null, 0, 0, 0, -1)
+        };
+
+        // Random chọn item
+        Item itemDuocChon = danhSachItem[MathUtils.random(danhSachItem.length - 1)];
+        switch (itemDuocChon.getId()) {
+            case "thien_tu": tinNhanPet = "Bạn vừa nhận Aura Long Hồn Thượng Giới (VIP).";break;
+            case "trum_cuoi": tinNhanPet = "Bạn vừa nhận Aura Tiểu Đội Trưởng (VIP).";break;
+            default: tinNhanPet = "Bạn đã nhận thành công Aura.";
+        }
+        // random lại các ô > 0
+        int[] stats = itemDuocChon.getChiso();
+        int soChiSoCanCong = 0;
+        int chiSoRandomMax = 1;
+        for (int i = 0; i < stats.length; i++) {
+            if (stats[i] > 0) {
+                soChiSoCanCong += 1;
+            }
+        }
+        switch (soChiSoCanCong) {
+            case 1: chiSoRandomMax = 25;break;
+            case 2: chiSoRandomMax = 20;break;
+            case 3: chiSoRandomMax = 15;break;
+            case 4: chiSoRandomMax = 10;break;
             default: chiSoRandomMax = 1;break;
         }
         for (int i = 0; i < stats.length; i++) {

@@ -1401,7 +1401,7 @@ public class NhanVat {
                 : 0f;
         }
 
-        if (veHUD.dangDungHuyHieu && veHUD.timeChoHopThe == 0 && duDieuKien && !(veHUD.dangDungAura && veHUD.auraDangDung.getId().equals("tan_hon_rong_namek"))){
+        if (veHUD.dangDungHuyHieu && veHUD.timeChoHopThe == 0 && duDieuKien && !(veHUD.dangDungAura)){
             if (veHUD.chuaSetUpAnhHuyHieu) {
                 for (int i = 0; i < 6; i++) {
                     veHUD.anhHuyHieu[i] = new Texture("vatpham/vatphamgame/huy_hieu/" + veHUD.huyHieuDangDung.getId() + "/" + (i + 1) + ".png");
