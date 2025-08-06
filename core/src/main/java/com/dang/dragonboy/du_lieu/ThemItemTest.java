@@ -1,13 +1,23 @@
 package com.dang.dragonboy.du_lieu;
+import com.badlogic.gdx.math.MathUtils;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.badlogic.gdx.graphics.Texture;
+import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.item.Item;
 import com.dang.dragonboy.item.LoaiItem;
 
 public class ThemItemTest {
+    private VeHUD veHUD;
+    private NhanVat nhanVat;
+    private DuLieuNguoiChoi duLieu;
 
-    public static void themItemTest(DuLieuNguoiChoi duLieu, NhanVat nhanVat) {
+    public ThemItemTest(DuLieuNguoiChoi duLieu, NhanVat nhanVat, VeHUD veHUD) {
+        this.veHUD = veHUD;
+        this.nhanVat = nhanVat;
+        this.duLieu = duLieu;
+    }
+    public void themItemTest() {
 
         duLieu.themItemVaoHanhTrang(new Item(
             "bongtaic1", "Bông tai Porata", LoaiItem.BONGTAI,
@@ -28,7 +38,7 @@ public class ThemItemTest {
         duLieu.themItemVaoHanhTrang(new Item(
             "tieu_doi_truong", "Aura Tiểu Đội Trưởng", LoaiItem.AURA,
             new Texture("vatpham/vatphamgame/aura/tieu_doi_truong/icon.png"),
-            "Đang Phát Triển", 1,
+            "Hào quang thủ lĩnh. [Hiệu ứng] Đứng yên: +10% HP tối đa. Di chuyển hoặc tấn công: +10% Sức đánh.", 1,
             new int[]{0,0,0,0,0,0,10,10,10,0,0,0,0},
             "all", 10_000_000L, null, 0, 0, 0, -1
         ));
@@ -584,5 +594,195 @@ public class ThemItemTest {
 //            new int[]{0,0,0,0,0,0,25,0,0,0,0,0,0},
 //            "traidat", 10_000_000L, null, 7, 5, 0, 0
 //        ));
+    }
+    public Item randomDeoLung() {
+        // Danh sách item các vật phẩm đeo lưng
+        Item[] danhSachItem = new Item[]{
+            new Item("luoi_hai", "Lưỡi Hái Thời Không", LoaiItem.DEOLUNG,
+                new Texture("vatpham/vatphamgame/deo_lung/luoi_hai/icon.png"),
+                "Lưỡi hái mang sức mạnh xé tan thời không. [Hiệu ứng] Khi trang bị cùng Black Goku Rose: +4% Sức đánh, HP, KI.", 1,
+                new int[]{0,0,0,0,0,0,1,1,1,0,0,0,0},
+                "all", 10_000_000L, null, 0, 0, 0, -1),
+
+            new Item("canh_doi", "Cánh Dơi Dracula", LoaiItem.DEOLUNG,
+                new Texture("vatpham/vatphamgame/deo_lung/canh_doi/icon.png"),
+                "Đôi cánh dơi huyền bí. [Hiệu ứng] Khi HP ≤ 50%: +10% Chí mạng.", 1,
+                new int[]{0,0,0,1,0,0,0,0,1,0,0,0,0},
+                "all", 10_000_000L, null, 0, 0, 0, -1),
+
+            new Item("canh_ac_quy", "Cánh Ác Quỷ", LoaiItem.DEOLUNG,
+                new Texture("vatpham/vatphamgame/deo_lung/canh_ac_quy/icon.png"),
+                "Cánh ác quỷ tỏa ra khí tức u tối. [Hiệu ứng] KI > 80%: +5% Chí mạng. Nếu trang bị cùng Huy Hiệu Trùm Cuối: +5% Chí mạng, +10% Sát thương chí mạng.", 1,
+                new int[]{0,0,0,1,0,1,0,0,0,0,0,0,0},
+                "all", 10_000_000L, null, 0, 0, 0, -1),
+
+            new Item("kiem", "Kiếm Thánh Z", LoaiItem.DEOLUNG,
+                new Texture("vatpham/vatphamgame/deo_lung/kiem/icon.png"),
+                "Thanh kiếm huyền thoại của Future Trunks. [Hiệu ứng] Khi HP ≤ 40%: +15% Sức đánh.", 1,
+                new int[]{0,0,0,0,0,1,0,0,1,0,0,0,0},
+                "all", 10_000_000L, null, 0, 0, 0, -1),
+
+            new Item("hoa", "Bó Hoa Hồng", LoaiItem.DEOLUNG,
+                new Texture("vatpham/vatphamgame/deo_lung/hoa/icon.png"),
+                "Bó hoa chứa nguồn sức mạnh huyền ảo. [Hiệu ứng] Mỗi 3s có 10% cơ hội hồi 2% HP tối đa (x2 tỷ lệ nếu trang bị Huy Hiệu Thiên Tử).", 1,
+                new int[]{0,0,0,0,0,0,1,0,1,0,0,0,1},
+                "all", 10_000_000L, null, 0, 0, 0, -1),
+
+            new Item("canh_thien_su", "Cánh Thiên Sứ", LoaiItem.DEOLUNG,
+                new Texture("vatpham/vatphamgame/deo_lung/canh_thien_su/icon.png"),
+                "Đôi cánh của thiên sứ, thuần khiết và sáng ngời. [Hiệu ứng] Khi bay ngang: giảm sát thương nhận vào 5%. Nếu cưỡi Phượng Hoàng Lửa: giảm thêm 10% sát thương.", 1,
+                new int[]{0,0,0,0,0,0,1,0,0,0,0,0,1},
+                "all", 10_000_000L, null, 0, 0, 0, -1),
+
+            new Item("canh_thien_than", "Cánh Thiên Thần", LoaiItem.DEOLUNG,
+                new Texture("vatpham/vatphamgame/deo_lung/canh_thien_than/icon.png"),
+                "Đôi cánh tỏa sáng rực rỡ của thiên thần. [Hiệu ứng] Khi HP đầy: +10% Sức đánh. Khi KI ≤ 20%: +10% Sát thương chí mạng.", 1,
+                new int[]{0,0,0,1,0,0,0,1,1,0,0,0,0},
+                "all", 10_000_000L, null, 0, 0, 0, -1)
+        };
+        // Random chọn item
+        Item itemDuocChon = danhSachItem[MathUtils.random(danhSachItem.length - 1)];
+        switch (itemDuocChon.getId()) {
+            case "luoi_hai": veHUD.tinNhanPet = "Bạn đã nhận thành công Lưỡi Hái Thời Không.";break;
+            case "canh_doi": veHUD.tinNhanPet = "Bạn đã nhận thành công Cánh Dơi Dracula.";break;
+            case "canh_ac_quy": veHUD.tinNhanPet = "Bạn đã nhận thành công Cánh Ác Quỷ.";break;
+            case "kiem": veHUD.tinNhanPet = "Bạn đã nhận thành công Kiếm Thánh Z.";break;
+            case "hoa": veHUD.tinNhanPet = "Bạn đã nhận thành công Bó Hoa Hồng.";break;
+            case "canh_thien_su": veHUD.tinNhanPet = "Bạn đã nhận thành công Cánh Thiên Sứ.";break;
+            case "canh_thien_than": veHUD.tinNhanPet = "Bạn đã nhận thành công Cánh Thiên Thần.";break;
+            default: veHUD.tinNhanPet = "Bạn đã nhận thành công vật phẩm đeo lưng.";
+        }
+        // random lại các ô > 0
+        int[] stats = itemDuocChon.getChiso();
+        int soChiSoCanCong = 0;
+        int chiSoRandomMax = 1;
+        for (int i = 0; i < stats.length; i++) {
+            if (stats[i] > 0) {
+                soChiSoCanCong += 1;
+            }
+        }
+        switch (soChiSoCanCong) {
+            case 1: chiSoRandomMax = 15;break;
+            case 2: chiSoRandomMax = 10;break;
+            case 3: chiSoRandomMax = 5;break;
+            default: chiSoRandomMax = 1;break;
+        }
+        for (int i = 0; i < stats.length; i++) {
+            if (stats[i] > 0) {
+                stats[i] = MathUtils.random(1,chiSoRandomMax);
+            }
+        }
+        // Trả về item mới với chỉ số random
+        return itemDuocChon;
+    }
+    public Item randomHuyHieu() {
+        // Danh sách item các vật phẩm đeo lưng
+        Item[] danhSachItem = new Item[]{
+            new Item(
+                "thien_tu", "Huy hiệu Thiên Tử", LoaiItem.HUYHIEU,
+                new Texture("vatpham/vatphamgame/huy_hieu/thien_tu/icon.png"),
+                "Thiên mệnh tại thân - Thống ngự càn khôn", 1,
+                new int[]{0,0,0,0,0,0,10,10,10,0,0,0,0},
+                "all", 10_000_000L, null, 0, 0, 0, -1),
+            new Item(
+                "trum_cuoi", "Huy hiệu Trùm cuối", LoaiItem.HUYHIEU,
+                new Texture("vatpham/vatphamgame/huy_hieu/trum_cuoi/icon.png"),
+                "Vinh quang vô địch - Đỉnh cao sức mạnh", 1,
+                new int[]{0,0,0,5,0,5,0,0,10,0,0,0,0},
+                "all", 10_000_000L, null, 0, 0, 0, -1),
+            new Item(
+                nhanVat.getHanhtinh()+"_toi_thuong", "Huy hiệu Tối Thượng", LoaiItem.HUYHIEU,
+                new Texture("vatpham/vatphamgame/huy_hieu/"+nhanVat.getHanhtinh()+"_toi_thuong/icon.png"),
+                "Biểu tượng của người thống trị - Sức mạnh tối thượng không ai sánh kịp", 1,
+                new int[]{0,0,0,10,0,10,0,0,0,0,0,0,0},
+                "all", 10_000_000L, null, 0, 0, 0, -1),
+            new Item(
+                "xayda"+"_toi_thuong", "Huy hiệu Tối Thượng", LoaiItem.HUYHIEU,
+                new Texture("vatpham/vatphamgame/huy_hieu/"+"xayda"+"_toi_thuong/icon.png"),
+                "Biểu tượng của người thống trị - Sức mạnh tối thượng không ai sánh kịp", 1,
+                new int[]{0,0,0,0,0,0,20,0,0,0,0,0,10},
+                "all", 10_000_000L, null, 0, 0, 0, -1),
+        };
+
+        // Random chọn item
+        Item itemDuocChon = danhSachItem[MathUtils.random(danhSachItem.length - 1)];
+        switch (itemDuocChon.getId()) {
+            case "thien_tu": veHUD.tinNhanPet = "Bạn đã nhận thành công Danh Hiệu Thiên Tử.";break;
+            case "trum_cuoi": veHUD.tinNhanPet = "Bạn đã nhận thành công Danh Hiệu Trùm Cuối.";break;
+            case "traidat_toi_thuong": veHUD.tinNhanPet = "Bạn đã nhận thành công Danh Hiệu Trái Đất Tối Thượng.";break;
+            case "xayda_toi_thuong": veHUD.tinNhanPet = "Bạn đã nhận thành công Danh Hiệu Saiyan Tối Thượng.";break;
+            default: veHUD.tinNhanPet = "Bạn đã nhận thành công Danh Hiệu.";
+        }
+        // random lại các ô > 0
+        int[] stats = itemDuocChon.getChiso();
+        int soChiSoCanCong = 0;
+        int chiSoRandomMax = 1;
+        for (int i = 0; i < stats.length; i++) {
+            if (stats[i] > 0) {
+                soChiSoCanCong += 1;
+            }
+        }
+        switch (soChiSoCanCong) {
+            case 1: chiSoRandomMax = 15;break;
+            case 2: chiSoRandomMax = 10;break;
+            case 3: chiSoRandomMax = 5;break;
+            default: chiSoRandomMax = 1;break;
+        }
+        for (int i = 0; i < stats.length; i++) {
+            if (stats[i] > 0) {
+                stats[i] = MathUtils.random(1,chiSoRandomMax);
+            }
+        }
+        // Trả về item mới với chỉ số random
+        return itemDuocChon;
+    }
+    public Item randomAura() {
+        // Danh sách item các vật phẩm đeo lưng
+        Item[] danhSachItem = new Item[]{
+            new Item(
+                "tan_hon_rong_namek", "Aura Long Hồn Thượng Giới", LoaiItem.AURA,
+                new Texture("vatpham/vatphamgame/aura/tan_hon_rong_namek/icon.png"),
+                "Di vật tối thượng lưu lạc từ cõi Thượng Giới, kết tinh linh hồn bất diệt của Rồng Thần. [Hiệu ứng] KI > 70%: +10% Sức đánh hoặc +10% HP tùy trang bị. KI < 20%: +10% Chí mạng hoặc +10% Giảm sát thương tùy trang bị. Nếu không có trang bị phù hợp các hiệu ứng được chia đều", 1,
+                new int[]{0,0,0,8,0,8,8,0,0,0,0,0,8},
+                "all", 10_000_000L, null, 0, 0, 0, -1),
+
+            new Item(
+                "tieu_doi_truong", "Aura Tiểu Đội Trưởng", LoaiItem.AURA,
+                new Texture("vatpham/vatphamgame/aura/tieu_doi_truong/icon.png"),
+                "Hào quang thủ lĩnh. [Hiệu ứng] Đứng yên: +10% HP tối đa. Di chuyển hoặc tấn công: +10% Sức đánh.", 1,
+                new int[]{0,0,0,0,0,0,10,10,10,0,0,0,0},
+                "all", 10_000_000L, null, 0, 0, 0, -1)
+        };
+
+        // Random chọn item
+        Item itemDuocChon = danhSachItem[MathUtils.random(danhSachItem.length - 1)];
+        switch (itemDuocChon.getId()) {
+            case "thien_tu": veHUD.tinNhanPet = "Bạn vừa nhận Aura Long Hồn Thượng Giới (VIP).";break;
+            case "trum_cuoi": veHUD.tinNhanPet = "Bạn vừa nhận Aura Tiểu Đội Trưởng (VIP).";break;
+            default: veHUD.tinNhanPet = "Bạn đã nhận thành công Aura.";
+        }
+        // random lại các ô > 0
+        int[] stats = itemDuocChon.getChiso();
+        int soChiSoCanCong = 0;
+        int chiSoRandomMax = 1;
+        for (int i = 0; i < stats.length; i++) {
+            if (stats[i] > 0) {
+                soChiSoCanCong += 1;
+            }
+        }
+        switch (soChiSoCanCong) {
+            case 1: chiSoRandomMax = 25;break;
+            case 2: chiSoRandomMax = 20;break;
+            case 3: chiSoRandomMax = 15;break;
+            case 4: chiSoRandomMax = 10;break;
+            default: chiSoRandomMax = 1;break;
+        }
+        for (int i = 0; i < stats.length; i++) {
+            if (stats[i] > 0) {
+                stats[i] = MathUtils.random(1,chiSoRandomMax);
+            }
+        }
+        // Trả về item mới với chỉ số random
+        return itemDuocChon;
     }
 }

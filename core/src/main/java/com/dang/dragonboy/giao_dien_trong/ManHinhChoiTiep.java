@@ -79,12 +79,15 @@ public class ManHinhChoiTiep implements Screen {
     //HUD
     private VeHUD hudRenderer;
 
-    public ManHinhChoiTiep(Main game , String tenNhanVat, String hanhtinh ,String nhanvat) {
+    public ManHinhChoiTiep(Main game , String tenNhanVat, String hanhtinh ,String nhanvat, ThongTinChuyenMap info) {
         this.game = game;
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
-
-        camManager = new QuanLyCamera();
+        if (info==null) {
+            camManager = new QuanLyCamera();
+        } else {
+            camManager = info.camManager;
+        }
 
         layout = new GlyphLayout();
 
@@ -150,25 +153,26 @@ public class ManHinhChoiTiep implements Screen {
 
         ruongdo = new Texture("map/"+hanhtinh+"/chung/trangtri/ruongdo.png");
         nhagohan = new Texture("map/"+hanhtinh+"/chung/nhacua/nhacua2_earth.png");
-        hudRenderer = new VeHUD(layout);
-        // load skill + thuộc tính nhân vật
-        SkillIcon[] traidatIcons = loadSkillIcons(hanhtinh);
-        hudRenderer.setSkillIcons(traidatIcons);
-        //NhanVatCauHinh config = Doi_avt_ao_quan(hanhtinh,nhanvat+"_base","set_cam","set_cam") ;
-        NhanVatCauHinh config = Doi_avt_ao_quan(hanhtinh,nhanvat+"_base","set_base","set_base");
-        NhanVat haidang = new NhanVat(
-            100, 175,
-            config.dau_dung, config.dau_chay,
-            config.than_dung, config.than_nhay, config.than_roi, config.than_chay,
-            config.chan_dung, config.chan_nhay, config.chan_roi, config.chan_chay,
-            config.than_bay, config.chan_bay,
-            config.lechMap,
-            config.avt,
-            null,null,null,null,null,null,null,null,
-            6,
-            hanhtinh,nhanvat
-        );
-        nhanVat = haidang;
+        if (info == null) {
+            hudRenderer = new VeHUD(layout);
+            // load skill + thuộc tính nhân vật
+            SkillIcon[] traidatIcons = loadSkillIcons(hanhtinh);
+            hudRenderer.setSkillIcons(traidatIcons);
+            //NhanVatCauHinh config = Doi_avt_ao_quan(hanhtinh,nhanvat+"_base","set_cam","set_cam") ;
+            NhanVatCauHinh config = Doi_avt_ao_quan(hanhtinh, nhanvat + "_base", "set_base", "set_base");
+            NhanVat haidang = new NhanVat(
+                100, 175,
+                config.dau_dung, config.dau_chay,
+                config.than_dung, config.than_nhay, config.than_roi, config.than_chay,
+                config.chan_dung, config.chan_nhay, config.chan_roi, config.chan_chay,
+                config.than_bay, config.chan_bay,
+                config.lechMap,
+                config.avt,
+                null, null, null, null, null, null, null, null,
+                6,
+                hanhtinh, nhanvat
+            );
+            nhanVat = haidang;
 //        NhanVatCauHinh c2 = Doi_avt_ao_quan(hanhtinh,nhanvat+"_base","set_huy_diet","set_cam");
 //        if (!NhanVatXuLy.getDangMacCaiTrang()){
 //            nhanVat.fixDau(c2.dau_dung, c2.dau_chay,c2.avt,c2.lechMap,c2.iconct);
@@ -184,44 +188,48 @@ public class ManHinhChoiTiep implements Screen {
 //                c2.avt
 //            );
 //        }
-        nhanVat.setTen(tenNhanVat); // set tên nhân vật trong nhanvat.java
-        hudRenderer.setNhanVat(nhanVat);// load cái này để đổi avt theo ct
-        hudRenderer.setCamera(camManager);
-        nhanVat.setHUD(hudRenderer);
-        // load du lieu nguoi dung
-        int[] capSkill = new int[9];
-        for (int i = 0; i < 9; i++) {
-            capSkill[i] = nhanVat.getCapSkill(i + 1); // nếu skill 1-9
+            nhanVat.setTen(tenNhanVat); // set tên nhân vật trong nhanvat.java
+            hudRenderer.setNhanVat(nhanVat);// load cái này để đổi avt theo ct
+            hudRenderer.setCamera(camManager);
+            nhanVat.setHUD(hudRenderer);
+            // load du lieu nguoi dung
+            int[] capSkill = new int[9];
+            for (int i = 0; i < 9; i++) {
+                capSkill[i] = nhanVat.getCapSkill(i + 1); // nếu skill 1-9
+            }
+            String[] tenSkill = new String[9];
+            for (int i = 0; i < 9; i++) {
+                tenSkill[i] = nhanVat.getTenSkill(i + 1, hanhtinh); // nếu skill 1-9
+            }
+            String[][] motaSkill = new String[9][];
+            for (int i = 0; i < 9; i++) {
+                motaSkill[i] = nhanVat.getMotaSkill(i + 1, hanhtinh);
+            }
+            DuLieuNguoiChoi duLieu = new DuLieuNguoiChoi(
+                nhanVat.getTen(),
+                nhanVat.getSucManh(),
+                nhanVat.getTheLuc(),
+                nhanVat.getHpHienTai(), nhanVat.getHpToiDa(), nhanVat.getHpGoc(),
+                nhanVat.getKiHienTai(), nhanVat.getKiToiDa(), nhanVat.getKiGoc(),
+                nhanVat.getSucDanhGoc(), nhanVat.getGiapGoc(),
+                nhanVat.getSucDanhNhanVat(), nhanVat.getGiapNhanVat(),
+                nhanVat.getChiMangGoc(), nhanVat.getChiMangNhanVat(),
+                nhanVat.getSatThuongChiMang(),
+                nhanVat.getTiemNangNhanVat(), nhanVat.getDiemSoiDongNhanVat(),
+                nhanVat.getSoDauThan(),
+                nhanVat.getVang(),
+                nhanVat.getNgoc(),
+                nhanVat.getCapBac(),
+                capSkill, tenSkill, motaSkill,
+                nhanVat.getCapcaydau(),
+                nhanVat.getGiamSatThuongNhanVat()
+            );
+            hudRenderer.setDuLieuNguoiChoi(duLieu);
+        } else {
+            this.hudRenderer = info.hud;
+            this.nhanVat = info.nhanVat;
         }
-        String[] tenSkill = new String[9];
-        for (int i = 0; i < 9; i++) {
-            tenSkill[i] = nhanVat.getTenSkill(i+1,hanhtinh); // nếu skill 1-9
-        }
-        String[][] motaSkill = new String[9][];
-        for (int i = 0; i < 9; i++) {
-            motaSkill[i] = nhanVat.getMotaSkill(i + 1, hanhtinh);
-        }
-        DuLieuNguoiChoi duLieu = new DuLieuNguoiChoi(
-            nhanVat.getTen(),
-            nhanVat.getSucManh(),
-            nhanVat.getTheLuc(),
-            nhanVat.getHpHienTai(), nhanVat.getHpToiDa(), nhanVat.getHpGoc(),
-            nhanVat.getKiHienTai(), nhanVat.getKiToiDa(), nhanVat.getKiGoc(),
-            nhanVat.getSucDanhGoc(), nhanVat.getGiapGoc(),
-            nhanVat.getSucDanhNhanVat(),nhanVat.getGiapNhanVat(),
-            nhanVat.getChiMangGoc(), nhanVat.getChiMangNhanVat(),
-            nhanVat.getSatThuongChiMang(),
-            nhanVat.getTiemNangNhanVat(),nhanVat.getDiemSoiDongNhanVat(),
-            nhanVat.getSoDauThan(),
-            nhanVat.getVang(),
-            nhanVat.getNgoc(),
-            nhanVat.getCapBac(),
-            capSkill,tenSkill,motaSkill,
-            nhanVat.getCapcaydau(),
-            nhanVat.getGiamSatThuongNhanVat()
-        );
-        hudRenderer.setDuLieuNguoiChoi(duLieu);
-        capcaydau = duLieu.getCapCayDau();
+        capcaydau = nhanVat.getCapcaydau();
         // Tạo map và load địa hình
         MapNhaGohan map = new MapNhaGohan();
         map.taiDuLieuMap();
@@ -518,5 +526,6 @@ public class ManHinhChoiTiep implements Screen {
         for (Texture tex : ldtd) tex.dispose();
         for (Texture tex : lua) tex.dispose();
         for (Texture tex : caccaydau) tex.dispose();
+        hudRenderer.dispose();
     }
 }

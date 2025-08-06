@@ -97,7 +97,7 @@ public class ManHinhMenu implements Screen {
 
             switch (nutDuocChon) {
                 case 0:
-                    nextScreen = new ManHinhSplash(game,new ManHinhChoiTiep(game,"admin","traidat","Goku"));
+                    nextScreen = new ManHinhSplash(game,new ManHinhChoiTiep(game,"admin","traidat","Goku",null));
                     break;
                 case 1:
                     nextScreen = new ManHinhChoiMoi(game);

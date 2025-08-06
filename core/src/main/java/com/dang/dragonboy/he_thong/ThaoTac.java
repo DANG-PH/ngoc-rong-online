@@ -111,7 +111,7 @@ public class ThaoTac extends InputAdapter {
         }
         // Kéo hành trang sư phụ bên trái (chỉ khi không mở đệ tử)
         if (button == Input.Buttons.LEFT &&
-            (hud.getChucNangDangChon() == 1 || hud.getChucNangDangChon() == 2 || hud.getChucNangDangChon() == 4 ) &&
+            (hud.chucNangDangChon == 1 || hud.chucNangDangChon == 2 || hud.chucNangDangChon == 4 ) &&
             !hud.dangHienPopupDeTu &&
             !hud.DangHienPopupThongTin1 &&
             !hud.dangHienChonMiniGame &&
@@ -186,7 +186,7 @@ public class ThaoTac extends InputAdapter {
             hud.vuaKeoHanhTrang = false;
             hud.vuaKeoHanhTrangDeTu = false;
         }
-        if (!hud.dangHienPopup && !hud.laClickTrenHUD(screenX, y) && !camera.vuaKeoCamera && !hud.vuaTatPopup && !hud.dangHienKhungChat && hud.timeChoHopThe == 0 && !hud.dangHienDieuUocRongThan ) {
+        if (!hud.dangHienPopup && !laClickTrenHUD(screenX, y) && !camera.vuaKeoCamera && !hud.vuaTatPopup && !hud.dangHienKhungChat && hud.timeChoHopThe == 0 && !hud.dangHienDieuUocRongThan ) {
             float viewportWidth = camera.camera.viewportWidth;
             float viewportHeight = camera.camera.viewportHeight;
 
@@ -205,7 +205,7 @@ public class ThaoTac extends InputAdapter {
     @Override
     public boolean scrolled(float amountX, float amountY) {
         // chỉ xử lý khi đang mở popup và chọn mục hành trang
-        if (hud.isDangHienPopup() && (hud.getChucNangDangChon() == 1 || hud.getChucNangDangChon() == 2 || hud.getChucNangDangChon() == 4 || hud.getChucNangDangChon() == 3) && !hud.dangHienThongBao && !hud.DangHienPopupThongTin1 && !hud.DangHienPopupThongTin && !hud.DangHienPopupThongTin2 && !hud.dangHienChonMiniGame) {
+        if (hud.dangHienPopup && (hud.chucNangDangChon == 1 || hud.chucNangDangChon == 2 || hud.chucNangDangChon == 4 || hud.chucNangDangChon == 3) && !hud.dangHienThongBao && !hud.DangHienPopupThongTin1 && !hud.DangHienPopupThongTin && !hud.DangHienPopupThongTin2 && !hud.dangHienChonMiniGame) {
             if (!hud.dangHienPopupDeTu) {
                 hud.scroll((int) amountY); // amountY là số lần lăn bánh (thường là ±1)
                 return true;
@@ -258,5 +258,45 @@ public class ThaoTac extends InputAdapter {
             }
         }
         return true;
+    }
+    public boolean laClickTrenHUD(float x, float y) {
+        // === VÙNG Ô SKILL ===
+        int oskillW = 50;
+        int oskillH = 50;
+        float skillBaseX = 30;
+        float skillY = 25f;
+        for (int i = 0; i < 5; i++) {
+            float x_ve = skillBaseX + i * 65f;
+            if (x >= x_ve && x <= x_ve + oskillW && y >= skillY && y <= skillY + oskillH) {
+                return true;
+            }
+        }
+
+        // === VÙNG Ô CHAT ===
+        int ochatW = 60;
+        int ochatH = 60;
+        float ochatX = Gdx.graphics.getWidth() - ochatW - 15;
+        float ochatY = Gdx.graphics.getHeight() - 10 - ochatH;
+        if (x >= ochatX && x <= ochatX + ochatW && y >= ochatY && y <= ochatY + ochatH) {
+            return true;
+        }
+
+        // === VÙNG Ô ĐẬU THẦN ===
+        int odauthanW = 75;
+        int odauthanH = 75;
+        float odauthanX = Gdx.graphics.getWidth() - odauthanW - 10;
+        float odauthanY = 10;
+        if (x >= odauthanX && x <= odauthanX + odauthanW && y >= odauthanY && y <= odauthanY + odauthanH) {
+            return true;
+        }
+
+        // === VÙNG MỞ POPUP ===
+        float nutPopupX = 0f;
+        float nutPopupY = Gdx.graphics.getHeight() / 4f * 3;
+        if (x >= nutPopupX && x <= nutPopupX + 25 && y >= nutPopupY && y <= nutPopupY + 35) {
+            return true;
+        }
+
+        return false; // không trúng vùng nào
     }
 }

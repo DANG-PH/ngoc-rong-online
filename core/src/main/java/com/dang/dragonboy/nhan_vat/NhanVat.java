@@ -1639,16 +1639,16 @@ public class NhanVat {
                 if (duLieuNguoiChoi.coDeTu()) {
                     if (veHUD.tinNhanChat.equals("bao ve") || veHUD.tinNhanChat.equals("protect")) {
                         veHUD.trangthaide = "Bảo vệ";
-                        veHUD.capNhatTrangThaiDeTu();
+                        duLieuNguoiChoi.deTu.capNhatTrangThaiDeTu();
                     } else if (veHUD.tinNhanChat.equals("tan cong") || veHUD.tinNhanChat.equals("attack")) {
                         veHUD.trangthaide = "Tấn công";
-                        veHUD.capNhatTrangThaiDeTu();
+                        duLieuNguoiChoi.deTu.capNhatTrangThaiDeTu();
                     } else if (veHUD.tinNhanChat.equals("di theo") || veHUD.tinNhanChat.equals("follow")) {
                         veHUD.trangthaide = "Đi theo";
-                        veHUD.capNhatTrangThaiDeTu();
+                        duLieuNguoiChoi.deTu.capNhatTrangThaiDeTu();
                     } else if (veHUD.tinNhanChat.equals("ve nha") || veHUD.tinNhanChat.equals("go home")) {
                         veHUD.trangthaide = "Về nhà";
-                        veHUD.capNhatTrangThaiDeTu();
+                        duLieuNguoiChoi.deTu.capNhatTrangThaiDeTu();
                     }
                     if (veHUD.tinNhanChat.contains("ten con la:") && !veHUD.daRanDomChatDeTu) {
                         String[] part = veHUD.tinNhanChat.split(":", -1);

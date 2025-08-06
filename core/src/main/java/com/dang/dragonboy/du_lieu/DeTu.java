@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import com.dang.dragonboy.xu_ly_map.HitboxDat;
 
 public class DeTu {
+    private DuLieuNguoiChoi duLieuNguoiChoi;
     private NhanVat nhanVat;
     private Texture texAvtDeTu;
     private final float delayRoi = 15f;
@@ -196,14 +197,17 @@ public class DeTu {
     private boolean camDiChuyenXungQuanh = false;
 
     public boolean chuaSetTenDeTu = true;
+    private float timeDoiDauThan = 0f;
+    private float timeQuanTamSuPhu = 0f;
 
     public DeTu(float x, float y,boolean flipX,boolean diQuaPhai,String ten, String hanhtinh, Texture dau_dung, Texture dau_chay,
                 Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,
                 Texture chan_dung, Texture chan_nhay, Texture chan_roi, Texture[] chan_chay,
                 Texture than_bay, Texture chan_bay, Map<TrangThaiDeTu, List<DoLechModular>> lechTheoTrangThai,
-                Texture ao, Texture quan, Texture gang, Texture giay, Texture rada, Texture iconct,NhanVat nhanVat) {
+                Texture ao, Texture quan, Texture gang, Texture giay, Texture rada, Texture iconct,NhanVat nhanVat,DuLieuNguoiChoi duLieuNguoiChoi) {
         shapeRenderer = new ShapeRenderer();
         layout = new GlyphLayout();
+        this.duLieuNguoiChoi = duLieuNguoiChoi;
         this.ten = ten;
         this.nhanVat = nhanVat;
         this.hanhtinh = hanhtinh;
@@ -1548,6 +1552,26 @@ public class DeTu {
                 }
             }
         }
+        if (timeDoiDauThan > 0) {
+            timeDoiDauThan -= delta;
+            if (timeDoiDauThan <= 0) {
+                timeDoiDauThan = 0;
+            }
+        }
+        if (timeQuanTamSuPhu > 0) {
+            timeQuanTamSuPhu -= delta;
+            if (timeQuanTamSuPhu <= 0) {
+                timeQuanTamSuPhu = 0;
+            }
+        }
+        if (getTheLuc()<20 && timeDoiDauThan == 0 && !getTrangthai().equals("Về nhà")) {
+            setTinNhanDeTuChat("Sư phụ ơi con cần đậu thần",2f);
+            timeDoiDauThan = 12f;
+        }
+        if (duLieuNguoiChoi.getKiHienTai()==0 && timeQuanTamSuPhu == 0 && !getTrangthai().equals("Về nhà")) {
+            setTinNhanDeTuChat("Sư phụ ơi người hết KI rồi",4f);
+            timeQuanTamSuPhu = 30f;
+        }
     }
 
 
@@ -1775,6 +1799,22 @@ public class DeTu {
         } else {
             veHUD.tinNhanPet = "Sức mạnh đệ tử không đủ";
         }
+    }
+    public void capNhatTrangThaiDeTu() {
+        if (veHUD.trangthaide.equals("Đi theo")) {
+            setTinNhanDeTuChat("Ok con theo sư phụ",3f);
+        } else if (veHUD.trangthaide.equals("Bảo vệ")) {
+            setTinNhanDeTuChat("Ok con sẽ bảo vệ sư phụ",3f);
+        } else if (veHUD.trangthaide.equals("Tấn công")) {
+            setTinNhanDeTuChat("Ok sư phụ để con lo cho",3f);
+        } else if (veHUD.trangthaide.equals("Về nhà")) {
+            if (!getTrangthai().equals(veHUD.trangthaide) && !veHUD.dangHopThe) {
+                setTinNhanDeTuChat("Ok con về, bibi sư phụ", 1.5f);
+                timeHoatAnhBienMat = 0.3f;
+                chuaLayToaDoBienMat = true;
+            }
+        }
+        setTrangthai(veHUD.trangthaide);
     }
     public void dispose() {
         // Giải phóng texture modular
