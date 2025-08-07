@@ -10,7 +10,7 @@ import com.dang.dragonboy.he_thong.Main;
 
 public class ManHinhKhoiDong implements Screen {
     private Main game; // ko có dòng này thì biến ko thể xài setScreen
-    private Texture logogame,logoptit1,logoptit2,logochu1,logochu2;
+    private Texture logogame,logoptit1,logoptit2,logochu1,logochu2,nen;
     private SpriteBatch batch;
     private float thoiGian = 0f;
     //bắt buộc phải truyền kiểu class Main vào vì java là nn lập trình tĩnh , bên kia this ko cần vì nằm trong class main rồi
@@ -21,6 +21,7 @@ public class ManHinhKhoiDong implements Screen {
         logoptit2 = new Texture("hud/giaodienngoai/chung/logoptit2.png");
         logochu1 = new Texture("hud/giaodienngoai/chung/logochu1.png");
         logochu2 = new Texture("hud/giaodienngoai/chung/logochu2.png");
+        nen = new Texture("hud/giaodienngoai/chung/nen.png");
         batch = new SpriteBatch();
     }
 
@@ -77,22 +78,32 @@ public class ManHinhKhoiDong implements Screen {
 //
 //        Gdx.gl.glClearColor(1, 1, 1, 1);
 //        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//        if (thoiGian>3f) {
-//            float alpha;
-//            if (thoiGian <= 4.5f) {
-//                alpha = 1 - (4.5f - thoiGian) / 1.5f;
+//        if (thoiGian>2.5f) {
+//            float alpha = 0;
+//            if (thoiGian > 3f) {
+//                if (thoiGian <= 4f) {
+//                    alpha = 1 - (4f - thoiGian) / 1f;
+//                } else {
+//                    alpha = 1;
+//                }
+//            }
+//            float alphanen;
+//            if (thoiGian <= 3f) {
+//                alphanen = 1 - (3f - thoiGian) / 0.5f;
 //            } else {
-//                alpha = 1;
+//                alphanen = 1;
 //            }
 //            batch.begin();
 //            float scaledWidth1 = logoptit1.getWidth()*0.24f;
 //            float scaledHeight1 = logoptit1.getHeight()*0.24f;
-//            float x1 = (Gdx.graphics.getWidth() - scaledWidth1) / 2f - 200f;
+//            float x1 = (Gdx.graphics.getWidth() - scaledWidth1) / 2f - 200f-150f;
 //            float y1 = (Gdx.graphics.getHeight() - scaledHeight1) / 2f + 40f;
 //            float scaledWidth2 = logoptit2.getWidth();
 //            float scaledHeight2 = logoptit2.getHeight();
-//            float x2 = (Gdx.graphics.getWidth() - scaledWidth2) / 2f + 200f;
-//            float y2 = (Gdx.graphics.getHeight() - scaledHeight2) / 2f + 30f;
+//            float x2 = (Gdx.graphics.getWidth() - scaledWidth2) / 2f + 200f-240f;
+//            float y2 = (Gdx.graphics.getHeight() - scaledHeight2) / 2f + 33f;
+//            batch.setColor(1,1,1,alphanen);
+//            batch.draw(nen,(1020-nen.getWidth()*0.677f),0,nen.getWidth()*0.677f,nen.getHeight()*0.677f);
 //            batch.setColor(1f, 1f, 1f, alpha);
 //            batch.draw(logoptit1, x1, y1, scaledWidth1, scaledHeight1);
 //            batch.draw(logochu1,  x1+(scaledWidth1-logochu1.getWidth()*0.40f)/2f, y1-35,logochu1.getWidth()*0.40f,logochu1.getHeight()*0.40f);
@@ -101,16 +112,16 @@ public class ManHinhKhoiDong implements Screen {
 //            batch.setColor(1f, 1f, 1f, 1f);
 //            batch.end();
 //
-//            if (thoiGian > 6f) {
+//            if (thoiGian > 5f) {
 //                game.setScreen(new ManHinhSplash(game));
 //            }
 //        } else {
 //            float alpha;
-//            if (thoiGian<=3f && thoiGian>2.2f) {
-//                alpha = (3f-thoiGian)/0.8f;
+//            if (thoiGian<=2.5f && thoiGian>2f) {
+//                alpha = (2.5f-thoiGian)/0.5f;
 //            } else {
-//                if (thoiGian<0.8f) {
-//                    alpha = 1-(0.8f-thoiGian)/0.8f;
+//                if (thoiGian<0.5f) {
+//                    alpha = 1-(0.5f-thoiGian)/0.5f;
 //                } else {
 //                    alpha = 1;
 //                }
@@ -147,5 +158,6 @@ public class ManHinhKhoiDong implements Screen {
         logoptit2.dispose();
         logochu1.dispose();
         logochu2.dispose();
+        nen.dispose();
     }
 }

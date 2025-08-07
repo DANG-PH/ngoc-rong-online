@@ -129,9 +129,7 @@ public class DuLieuNguoiChoi {
                 }
             }
         } else {
-            veHUD.tinNhanPet = "Cần ít nhất 1 ô trống";
-            veHUD.dangHienTinNhanPet = true;
-            veHUD.timeHienTinNhanPet = 2f;
+            veHUD.setTinNhanPet("Cần ít nhất 1 ô trống",2f);
         }
     }
 

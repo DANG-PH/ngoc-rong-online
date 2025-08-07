@@ -3,11 +3,12 @@ package com.dang.dragonboy.he_thong;
 import com.badlogic.gdx.Game;
 
 import com.dang.dragonboy.giao_dien_ngoai.ManHinhKhoiDong;
+import com.dang.dragonboy.giao_dien_trong.ManHinhChoiTiep;
 
 public class Main extends Game {
     @Override
     public void create() {
-        this.setScreen(new ManHinhKhoiDong(this));
+        this.setScreen(new ManHinhChoiTiep(this,"admin","traidat","Goku",null));
     }
 
     @Override

@@ -798,7 +798,7 @@ public class HUDClickHandler {
                 veHUD.itemm.getLoai() == LoaiItem.AVATAR ||
                 veHUD.itemm.getLoai() == LoaiItem.RADA) && duLieuNguoiChoi.coDeTu()) {
                 veHUD.nutClickTimer3 = 0.3f;
-                veHUD.nuthanhtrangchon = 4;
+                veHUD.nuthanhtrangchon = 3;
             }
         }
         if (veHUD.DangHienPopupThongTin2) {
@@ -820,10 +820,10 @@ public class HUDClickHandler {
             float yNut = veHUD.PopupHanhTrangYdetu - 115;
             if (x > 1 && x < 115 && y >= yNut && y <= yNut + 115){
                 veHUD.nutClickTimer3 = 0.3f;
-                veHUD.nuthanhtrangchon=5;
+                veHUD.nuthanhtrangchon=4;
             } else if (x > 121 && x < 115+120 && y >= yNut && y <= yNut + 115){
                 veHUD.nutClickTimer3 = 0.3f;
-                veHUD.nuthanhtrangchon=6;
+                veHUD.nuthanhtrangchon=5;
             }
         }
         // Tắt popup thông tin

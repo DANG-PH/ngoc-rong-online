@@ -19,9 +19,7 @@ public class HUDThoiGianMiniGame {
             if (veHUD.soNguoiChoiChon == conSoMayMan) {
                 duLieuNguoiChoi.tangNgoc(veHUD.soNgocCuoc*90);
                 veHUD.soNgocDuocNhanGanNhat = veHUD.soNgocCuoc*90;
-                veHUD.dangHienTinNhanPet = true;
-                veHUD.timeHienTinNhanPet = 2f;
-                veHUD.tinNhanPet = "Chúc mừng người chơi "+duLieuNguoiChoi.getTen()+" đã may mắn nhận được "+veHUD.formatVangNgoc(veHUD.soNgocCuoc*90)+" ngọc xanh từ tính năng Mini Game";
+                veHUD.setTinNhanPet("Chúc mừng người chơi "+duLieuNguoiChoi.getTen()+" đã may mắn nhận được "+veHUD.formatVangNgoc(veHUD.soNgocCuoc*90)+" ngọc xanh từ tính năng Mini Game",2f);
             }
             veHUD.soNguoiChoiChon = 0;
             veHUD.soNgocCuoc = 0;
@@ -35,7 +33,7 @@ public class HUDThoiGianMiniGame {
                 veHUD.soVangDuocNhanGanNhatChanLe = (int)(veHUD.soVangCuocChanLe*1.9f);
                 veHUD.dangHienTinNhanPet = true;
                 veHUD.timeHienTinNhanPet = 2f;
-                veHUD.tinNhanPet = "Chúc mừng người chơi "+duLieuNguoiChoi.getTen()+" đã may mắn nhận được "+veHUD.formatVangNgoc((int)(veHUD.soVangCuocChanLe*1.9f))+" vàng từ tính năng Mini Game";
+                veHUD.setTinNhanPet("Chúc mừng người chơi "+duLieuNguoiChoi.getTen()+" đã may mắn nhận được "+veHUD.formatVangNgoc((int)(veHUD.soVangCuocChanLe*1.9f))+" vàng từ tính năng Mini Game",2f);
             }
             veHUD.NguoiChoiChonChanLe = "";
             veHUD.soVangCuocChanLe = 0;
