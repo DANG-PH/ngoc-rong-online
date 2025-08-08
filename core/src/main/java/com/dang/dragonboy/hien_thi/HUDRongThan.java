@@ -74,6 +74,7 @@ public class HUDRongThan {
                 veHUD.veNenFlash = false;
                 veHUD.ngocRongUoc = "";
                 veHUD.dangHienDieuUocRongThan = false;
+                veHUD.daUocRongThan = false;
                 veHUD.timeDelayUocRong = 600f;
             }
         }

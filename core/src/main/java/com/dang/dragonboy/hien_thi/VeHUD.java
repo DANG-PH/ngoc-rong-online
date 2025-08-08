@@ -258,6 +258,7 @@ public class VeHUD {
     public boolean dangHienDieuUocRongThan = false;
     public float timeHienRongThan = 0f;
     public float timeDelayUocRong = 0f;
+    public boolean daUocRongThan = false;
 
     public boolean dangDungHuyHieu = false;
     public boolean chuaSetUpAnhHuyHieu = true;
@@ -1007,7 +1008,10 @@ public class VeHUD {
                     oSkills[nutduocchon] = skillGan;
                     HienPopUpGanSkill = false;
                 } else {
-                    themItemTest.themQuaTuDieuUocRongThan();
+                    if (!daUocRongThan) {
+                        themItemTest.themQuaTuDieuUocRongThan();
+                        daUocRongThan = true;
+                    }
                 }
             }
         }

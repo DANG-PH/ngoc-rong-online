@@ -76,7 +76,7 @@ public class HUDClickHandler {
         }
 
         // Vùng điều ước rồng thần
-        if (veHUD.timeHienRongThan <= 300f-2.1f && veHUD.timeHienRongThan>0){
+        if (veHUD.timeHienRongThan <= 300f-2.1f && veHUD.timeHienRongThan>0 && !veHUD.daUocRongThan){
             for (int i = 0; i < 5; i++){
                 if (x>=210 + i * 120 && x <= 210 + i * 120+114 && y>=5 && y<=5+114){
                     veHUD.nutClickTimer2 = 0.3f;
