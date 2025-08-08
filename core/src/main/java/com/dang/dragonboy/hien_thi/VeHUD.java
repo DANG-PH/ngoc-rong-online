@@ -1780,6 +1780,9 @@ public class VeHUD {
         DangHienPopupThongTin1 = false;
         TimeChoHienPopup = 0;
     }
+    public DuLieuNguoiChoi getDuLieuNguoiChoi() {
+        return duLieuNguoiChoi;
+    }
     public void dispose() {
         Texture[] textures = {
             saoden, saoxanh, ochat, ochatclick, thanhhp,

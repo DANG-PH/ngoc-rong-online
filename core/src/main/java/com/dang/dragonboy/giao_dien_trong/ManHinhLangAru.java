@@ -34,6 +34,7 @@ public class ManHinhLangAru implements Screen {
     private QuanLyCamera camManager;
     private float rongMap,caoMap;
 
+    private Texture mapLangAru,mapLangAruSau;
     private Texture sky, nuixa, nui, nuicay, nuithap;
     private Texture[] mdtd = new Texture[5];
     private Texture[] dtd = new Texture[3];
@@ -53,8 +54,8 @@ public class ManHinhLangAru implements Screen {
         this.game = game;
         this.thongtin =  thongtin;
         if ("nhagohan".equals(thongtin.mapTruoc)){
-            thongtin.nhanVat.datToaDo(500,300);
-            thongtin.nhanVat.setflip("phai");
+            thongtin.nhanVat.datToaDo(675,175);
+            thongtin.hud.getDuLieuNguoiChoi().deTu.datToaDo(675+(thongtin.nhanVat.getFlipX()? 50f : -50f),175);
         }
         nhanVat = thongtin.nhanVat;
         hud = thongtin.hud;
@@ -89,6 +90,9 @@ public class ManHinhLangAru implements Screen {
 
         cayco = new Texture("map/"+"traidat"+ "/chung/cayco/" + "cayco3_" + "traidat" + ".png");
         cayco1 = new Texture("map/"+"traidat"+ "/chung/cayco/"  + "cayco5_" + "traidat" + ".png");
+
+        mapLangAru = new Texture("map/"+"traidat"+"/lang_aru/maparu.png");
+        mapLangAruSau = new Texture("map/"+"traidat"+"/lang_aru/maparusau.png");
 
         for (int i = 0; i < 5; i++) {
             mdtd[i] = new Texture("map/"+"traidat"+ "/chung/dat/"  + "matdat_" + "traidat" + (i + 1) + ".png");
@@ -133,7 +137,7 @@ public class ManHinhLangAru implements Screen {
         shapeRenderer.setColor(5 / 255f, 194 / 255f, 168 / 255f, 1);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(25 / 255f, 176 / 255f, 248 / 255f, 1); // Trái đất
-        shapeRenderer.rect(0, 460, 1420, 800);
+        shapeRenderer.rect(0, 460, 2542, 800);
         shapeRenderer.end();
 
         batch.setProjectionMatrix(camManager.camera.combined);
@@ -142,19 +146,19 @@ public class ManHinhLangAru implements Screen {
         float camOffsetY = camManager.getOffsetY();
 
         // Layer 1: Sky + nuixa
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 10; i++) {
             float skyY = 310 + camOffsetY * 0.95f;
             batch.draw(sky, i * 255, skyY, 255, 150);
             batch.draw(nuixa, i * 255, skyY, 255, 150);
         }
 
         // Layer 2: Nui
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 9; i++) {
             float nuiY = 280 + camOffsetY * 0.85f;
             batch.draw(nui, i * 510, nuiY, 510, 170);
         }
         // Layer 3: Nuicay & Nuithap
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 10; i++) {
             float nuicayY = 200 + camOffsetY * 0.75f;
             batch.draw(nuicay, i * 340, nuicayY, 340, 190);
         }
@@ -163,10 +167,10 @@ public class ManHinhLangAru implements Screen {
         shapeRenderer.setColor(22f / 255f, 118f / 255f, 21f / 255f, 1f);
         shapeRenderer.setProjectionMatrix(camManager.camera.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.rect(0, nuiY - 100, 1420, 100); // nằm ngay dưới ảnh
+        shapeRenderer.rect(0, nuiY - 100, 2542, 100); // nằm ngay dưới ảnh
         shapeRenderer.end();
         batch.begin();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 10; i++) {
             float nuithapY = 130 + camOffsetY * 0.5f;
             batch.draw(nuithap, i * 340, nuithapY, 340, 190);
         }
@@ -175,7 +179,7 @@ public class ManHinhLangAru implements Screen {
         shapeRenderer.setColor(23f / 255f, 94f / 255f, 28f / 255f, 1f);
         shapeRenderer.setProjectionMatrix(camManager.camera.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.rect(0, nuiTY - 100, 1420, 100); // nằm ngay dưới ảnh
+        shapeRenderer.rect(0, nuiTY - 500, 2542, 500); // nằm ngay dưới ảnh
         shapeRenderer.end();
         batch.begin();
         batch.end();
@@ -195,29 +199,9 @@ public class ManHinhLangAru implements Screen {
         batch.begin();
 
         //background gần
-        for (int i = 0; i < 7; i++) {
-            for (int j = 0; j < 5; j++) {
-                batch.draw(mdtd[j], j * 50 + i * 250, 150, 50, 50);
-            }
-        }
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 3; j++) {
-                batch.draw(dtd[j], j * 50 + i * 150, 100, 50, 50);
-                batch.draw(ldtd[j], j * 50 + i * 150, 75, 50, 50);
-                batch.draw(ldtd[2-j], j * 50 + i * 150, 25, 50, 50);
-                batch.draw(ldtd[2-j], j * 50 + i * 150, 0, 50, 50);
-            }
-        }
+        batch.draw(mapLangAru,-96f,-38,mapLangAru.getWidth()/2f,mapLangAru.getHeight()/2f);
         for (int i = 0; i < 3; i++) {
             batch.draw(light,150+i*(600*1.1f+180),515,600*1.1f,500*1.1f);
-        }
-        scrollX_khoi -= 40 * delta;
-        scrollX_khoi1 -= 45 * delta;
-        if (scrollX_khoi <= -287) scrollX_khoi += 287;
-        if (scrollX_khoi1 <= -287) scrollX_khoi1 += 287;
-        for (int i = 0; i < 5; i++) {
-            batch.draw(khoi, i*287 + scrollX_khoi, 0, 287, 140);
-            batch.draw(khoi, -10+i*287 + scrollX_khoi1, 0, 287, 160);
         }
         batch.draw(cui_dot_lua,240,170,66,48);
         Texture luaa = lua[frameLua];
@@ -226,28 +210,42 @@ public class ManHinhLangAru implements Screen {
         batch.draw(luaa,273,190,luaaW,luaaH);
         nhanVat.ve(batch, thoiGianTichLuy);
         nhanVat.veDiemCanDen(batch);
+        batch.draw(mapLangAruSau,-96f,-38,mapLangAruSau.getWidth()/2f,mapLangAruSau.getHeight()/2f);
         batch.end();
-        if (nhanVat.getX()> 610 && nhanVat.getX()< 1060) {
+        if (nhanVat.getX()> 410 && nhanVat.getX()< 860) {
             shapeRenderer.setProjectionMatrix(camManager.camera.combined);
             Gdx.gl.glEnable(GL20.GL_BLEND); // Câu lệnh để pha alpha tùy ý
 
             shapeRenderer.setColor(0f, 0f, 0f, 0.5f);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.rect(760, 300, 230, 60);
+            shapeRenderer.rect(560, 300, 230, 60);
             shapeRenderer.end();
 
             batch.begin();
             layout.setText(fontDauThan,"Nhà Gôhan");
-            fontDauThan.draw(batch,layout,760+(230-layout.width)/2f,250+65+20);
+            fontDauThan.draw(batch,layout,560+(230-layout.width)/2f,250+65+20);
             batch.end();
         }
         batch.begin();
         // Kiểm tra nếu đứng trong vùng "Làng Aru" và bấm Enter thì chuyển màn
-        if (nhanVat.getX() > 760 && nhanVat.getX() < 990 && nhanVat.getY() >= 0 && nhanVat.getY() <= 400) {
+        if (nhanVat.getX() > 560 && nhanVat.getX() < 790 && nhanVat.getY() >= 0 && nhanVat.getY() <= 400) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
                 ThongTinChuyenMap info = new ThongTinChuyenMap(nhanVat, "langaru",hud,camManager);
                 game.setScreen(new ManHinhSplash(game, new ManHinhChoiTiep(game,nhanVat.getTen(),nhanVat.getHanhtinh(),nhanVat.getNhanvat(),info)));
             }
+        }
+        float offsetX = camManager.getOffsetX();
+        batch.draw(caycoi1,650-offsetX*0.5f,-90);
+        batch.draw(caycoi1,800-offsetX*0.5f,-40);
+        batch.draw(caycoi1,1600-offsetX*0.5f,-40);
+        batch.draw(caycoi1,2100-offsetX*0.5f,-90);
+        scrollX_khoi -= 40 * delta;
+        scrollX_khoi1 -= 45 * delta;
+        if (scrollX_khoi <= -287) scrollX_khoi += 287;
+        if (scrollX_khoi1 <= -287) scrollX_khoi1 += 287;
+        for (int i = 0; i < 10; i++) {
+            batch.draw(khoi, i*287 + scrollX_khoi, 0, 287, 140);
+            batch.draw(khoi, -10+i*287 + scrollX_khoi1, 0, 287, 160);
         }
         batch.end();
 

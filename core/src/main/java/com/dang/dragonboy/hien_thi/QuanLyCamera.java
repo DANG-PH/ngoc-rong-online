@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class QuanLyCamera {
     private float camYBanDau = -1f;
+    private float camXBanDau = -1f;
     public OrthographicCamera camera;
     public Viewport viewport;
 
@@ -41,6 +42,12 @@ public class QuanLyCamera {
             camYBanDau = camera.position.y;
         }
         return camera.position.y - camYBanDau;
+    }
+    public float getOffsetX() {
+        if (camXBanDau < 0) {
+            camXBanDau = camera.position.x;
+        }
+        return camera.position.x - camXBanDau;
     }
 
     public void updateMainCamera(float x, float y, float mapWidth, float mapHeight) {

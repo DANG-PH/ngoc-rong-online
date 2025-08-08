@@ -228,6 +228,10 @@ public class ManHinhChoiTiep implements Screen {
         } else {
             this.hudRenderer = info.hud;
             this.nhanVat = info.nhanVat;
+            if ("langaru".equals(info.mapTruoc)){
+                info.nhanVat.datToaDo(875,175);
+                info.hud.getDuLieuNguoiChoi().deTu.datToaDo(875+(nhanVat.getFlipX()? 50f : -50f),175);
+            }
         }
         capcaydau = nhanVat.getCapcaydau();
         // Tạo map và load địa hình

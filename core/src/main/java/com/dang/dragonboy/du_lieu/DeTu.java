@@ -1816,6 +1816,10 @@ public class DeTu {
         }
         setTrangthai(veHUD.trangthaide);
     }
+    public void datToaDo(float x, float y) {
+        this.x = x;
+        this.y = y;
+    }
     public void dispose() {
         // Giải phóng texture modular
         if (dau_dung != null) dau_dung.dispose();
