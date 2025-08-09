@@ -33,6 +33,10 @@ public class ManHinhChonMayChu implements Screen {
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
         layout = new GlyphLayout();
+    }
+
+    @Override
+    public void show() {
 
         sky = new Texture("hud/giaodienngoai/"+"traidat"+ "/" + "sky_" + "traidat" + ".png");
         nuixa = new Texture("hud/giaodienngoai/"+"traidat"+ "/" + "nuixa_" + "traidat" + ".png");
@@ -56,9 +60,6 @@ public class ManHinhChonMayChu implements Screen {
         fontText = generator.generateFont(param);
         generator.dispose();
     }
-
-    @Override
-    public void show() {}
 
     @Override
     public void render(float delta) {

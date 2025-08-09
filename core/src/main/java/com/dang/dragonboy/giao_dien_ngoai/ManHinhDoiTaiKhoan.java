@@ -46,7 +46,9 @@ public class ManHinhDoiTaiKhoan implements Screen {
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
         layout = new GlyphLayout();
+    }
 
+    @Override public void show() {
         sky = new Texture("hud/giaodienngoai/"+"traidat"+ "/" + "sky_" + "traidat" + ".png");
         nuixa = new Texture("hud/giaodienngoai/"+"traidat"+ "/" + "nuixa_" + "traidat" + ".png");
         nui = new Texture("hud/giaodienngoai/" + "traidat" + "/" + "nui_" + "traidat" + ".png");
@@ -102,8 +104,6 @@ public class ManHinhDoiTaiKhoan implements Screen {
             }
         });
     }
-
-    @Override public void show() {}
 
     @Override
     public void render(float delta) {

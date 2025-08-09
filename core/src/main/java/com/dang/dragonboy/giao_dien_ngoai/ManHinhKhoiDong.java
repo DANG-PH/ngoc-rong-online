@@ -16,17 +16,18 @@ public class ManHinhKhoiDong implements Screen {
     //bắt buộc phải truyền kiểu class Main vào vì java là nn lập trình tĩnh , bên kia this ko cần vì nằm trong class main rồi
     public ManHinhKhoiDong(Main game) {
         this.game = game; //ko có dòng này thì game của class = null nên setScreen ko có tác dụng phải gán để các file sau còn xài được render và các thứ của hàm Main
+        batch = new SpriteBatch();
+    }
+
+    @Override
+    public void show() {
         logogame = new Texture("hud/giaodienngoai/chung/logogame.png");
         logoptit1 = new Texture("hud/giaodienngoai/chung/logoptit1.png");
         logoptit2 = new Texture("hud/giaodienngoai/chung/logoptit2.png");
         logochu1 = new Texture("hud/giaodienngoai/chung/logochu1.png");
         logochu2 = new Texture("hud/giaodienngoai/chung/logochu2.png");
         nen = new Texture("hud/giaodienngoai/chung/nen.png");
-        batch = new SpriteBatch();
     }
-
-    @Override
-    public void show() {}
 
     @Override
     public void render(float delta) {

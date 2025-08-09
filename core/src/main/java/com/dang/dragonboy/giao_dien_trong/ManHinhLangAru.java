@@ -73,6 +73,11 @@ public class ManHinhLangAru implements Screen {
         this.caoMap = map.getChieuCaoMap();
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
+        layout = new GlyphLayout();
+    }
+
+    @Override
+    public void show() {
         // Font có viền đen dành riêng cho dòng chữ "Đậu thần cấp ..."
         FreeTypeFontGenerator generator2 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchinh.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -84,7 +89,6 @@ public class ManHinhLangAru implements Screen {
         param2.borderColor = new Color(0.4f, 0.4f, 0.4f, 1f);
         fontDauThan = generator2.generateFont(param2);
         generator2.dispose();
-        layout = new GlyphLayout();
 
         sky = new Texture("hud/giaodienngoai/"+"traidat"+ "/" + "sky_" + "traidat" + ".png");
         nuixa = new Texture("hud/giaodienngoai/"+"traidat"+ "/" + "nuixa_" + "traidat" + ".png");
@@ -118,9 +122,6 @@ public class ManHinhLangAru implements Screen {
         light = new Texture("hieuung/hieuungmap/light.png");
         khoi = new Texture("hieuung/hieuungmap/khoimay.png");
     }
-
-    @Override
-    public void show() {}
 
     @Override
     public void render(float delta) {

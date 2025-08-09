@@ -66,43 +66,6 @@ public class ManHinhChoiMoi implements Screen {
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
         layout = new GlyphLayout();
-
-        // Load font
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        param.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
-            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ";
-        param.size = 18;
-        font = generator.generateFont(param);
-        param.size = 17;
-        fontText = generator.generateFont(param);
-        generator.dispose();
-
-        nutdn = new Texture("hud/giaodienngoai/chung/nutdangnhap3.png");
-        nutclick = new Texture("hud/giaodienngoai/chung/nutclick2.png");
-        muiTen = new Texture("hud/giaodienngoai/chung/muitenvang.png");
-        bgTexture = new Texture("hud/giaodienngoai/chung/input.png");
-        matrang = new Texture("hud/giaodienngoai/xayda/matrang.png");
-        bautroixd = new Texture("hud/giaodienngoai/xayda/bautroixayda.jpg");
-        capNhatTaiNguyenTheoHanhTinh();
-
-        Gdx.input.setInputProcessor(new InputAdapter() {
-            @Override
-            public boolean keyTyped(char character) {
-                if (oNhapDuocChon) {
-                    if (character == '\b') {
-                        if (!tenNguoiChoi.isEmpty()) {
-                            tenNguoiChoi = tenNguoiChoi.substring(0, tenNguoiChoi.length() - 1);
-                        }
-                    } else if (Character.toString(character).matches("[a-zA-Z0-9 ăâđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ]")) {
-                        if (tenNguoiChoi.length() < 20) {
-                            tenNguoiChoi += character;
-                        }
-                    }
-                }
-                return true;
-            }
-        });
     }
 
     private void capNhatTaiNguyenTheoHanhTinh() {
@@ -400,7 +363,43 @@ public class ManHinhChoiMoi implements Screen {
         batch.draw(traidatthan, thanX, thanY - 10.2f, thanW, thanH);
     }
 
-    @Override public void show() {}
+    @Override public void show() {
+        Gdx.input.setInputProcessor(new InputAdapter() {
+            @Override
+            public boolean keyTyped(char character) {
+                if (oNhapDuocChon) {
+                    if (character == '\b') {
+                        if (!tenNguoiChoi.isEmpty()) {
+                            tenNguoiChoi = tenNguoiChoi.substring(0, tenNguoiChoi.length() - 1);
+                        }
+                    } else if (Character.toString(character).matches("[a-zA-Z0-9 ăâđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ]")) {
+                        if (tenNguoiChoi.length() < 20) {
+                            tenNguoiChoi += character;
+                        }
+                    }
+                }
+                return true;
+            }
+        });
+        // Load font
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        param.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ";
+        param.size = 18;
+        font = generator.generateFont(param);
+        param.size = 17;
+        fontText = generator.generateFont(param);
+        generator.dispose();
+
+        nutdn = new Texture("hud/giaodienngoai/chung/nutdangnhap3.png");
+        nutclick = new Texture("hud/giaodienngoai/chung/nutclick2.png");
+        muiTen = new Texture("hud/giaodienngoai/chung/muitenvang.png");
+        bgTexture = new Texture("hud/giaodienngoai/chung/input.png");
+        matrang = new Texture("hud/giaodienngoai/xayda/matrang.png");
+        bautroixd = new Texture("hud/giaodienngoai/xayda/bautroixayda.jpg");
+        capNhatTaiNguyenTheoHanhTinh();
+    }
     @Override public void resize(int width, int height) {}
     @Override public void pause() {}
     @Override public void resume() {}

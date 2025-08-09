@@ -33,17 +33,6 @@ public class ManHinhSplash implements Screen {
         this.game = game;
         this.manHinhTiepTheo = manHinhTiepTheo;
         this.hienLogoVaChu = hienLogoVaChu;
-
-        splashImage = new Texture("hud/giaodienngoai/chung/nr5s.png");
-        logo = new Texture("hud/giaodienngoai/chung/chuberong.png");
-
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 14;
-        parameter.characters = "Xóa dữ liệu ờ abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?., ";
-        font = generator.generateFont(parameter);
-        generator.dispose();
-
         layout = new GlyphLayout();
         batch = new SpriteBatch();
     }
@@ -103,7 +92,17 @@ public class ManHinhSplash implements Screen {
         logo.dispose();
     }
 
-    @Override public void show() {}
+    @Override public void show() {
+        splashImage = new Texture("hud/giaodienngoai/chung/nr5s.png");
+        logo = new Texture("hud/giaodienngoai/chung/chuberong.png");
+
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 14;
+        parameter.characters = "Xóa dữ liệu ờ abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?., ";
+        font = generator.generateFont(parameter);
+        generator.dispose();
+    }
     @Override public void resize(int width, int height) {}
     @Override public void pause() {}
     @Override public void resume() {}

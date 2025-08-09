@@ -36,33 +36,6 @@ public class ManHinhMenu implements Screen {
         this.mayChu = (mayChu != null) ? mayChu : 1; // Nếu null thì mặc định là 1
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
-
-        sky = new Texture("hud/giaodienngoai/"+"traidat"+ "/" + "sky_" + "traidat" + ".png");
-        nuixa = new Texture("hud/giaodienngoai/"+"traidat"+ "/" + "nuixa_" + "traidat" + ".png");
-        nui = new Texture("hud/giaodienngoai/" + "traidat" + "/" + "nui_" + "traidat" + ".png");
-        nuicay = new Texture("hud/giaodienngoai/"+"traidat"+ "/" + "nuicay_" + "traidat" + ".png");
-        nuithap = new Texture("hud/giaodienngoai/"+"traidat"+ "/" + "nuithap_" + "traidat" + ".png");
-
-        logo = new Texture("hud/giaodienngoai/chung/chuberong.png");
-        nutdn = new Texture("hud/giaodienngoai/chung/nutdangnhap2.png");
-        nutclick = new Texture("hud/giaodienngoai/chung/nutclick.png");
-
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 18;
-        parameter.characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?., Xóa dữ liệu Đă ậ ở ớ ổ à ả á ế ủ vũ trụ ơ :";
-        font = generator.generateFont(parameter);
-        parameter.size = 14;
-        fontSplash = generator.generateFont(parameter);
-        generator.dispose();
-
-        FreeTypeFontGenerator genThuong = new FreeTypeFontGenerator(Gdx.files.internal("font/fontthuong.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter paramThuong = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        paramThuong.size = 25;
-        paramThuong.characters = parameter.characters;
-        fontThuong = genThuong.generateFont(paramThuong);
-        genThuong.dispose();
-
         layout = new GlyphLayout();
     }
 
@@ -183,7 +156,33 @@ public class ManHinhMenu implements Screen {
         font.dispose(); fontSplash.dispose(); fontThuong.dispose();
     }
 
-    @Override public void show() {}
+    @Override public void show() {
+        sky = new Texture("hud/giaodienngoai/"+"traidat"+ "/" + "sky_" + "traidat" + ".png");
+        nuixa = new Texture("hud/giaodienngoai/"+"traidat"+ "/" + "nuixa_" + "traidat" + ".png");
+        nui = new Texture("hud/giaodienngoai/" + "traidat" + "/" + "nui_" + "traidat" + ".png");
+        nuicay = new Texture("hud/giaodienngoai/"+"traidat"+ "/" + "nuicay_" + "traidat" + ".png");
+        nuithap = new Texture("hud/giaodienngoai/"+"traidat"+ "/" + "nuithap_" + "traidat" + ".png");
+
+        logo = new Texture("hud/giaodienngoai/chung/chuberong.png");
+        nutdn = new Texture("hud/giaodienngoai/chung/nutdangnhap2.png");
+        nutclick = new Texture("hud/giaodienngoai/chung/nutclick.png");
+
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 18;
+        parameter.characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?., Xóa dữ liệu Đă ậ ở ớ ổ à ả á ế ủ vũ trụ ơ :";
+        font = generator.generateFont(parameter);
+        parameter.size = 14;
+        fontSplash = generator.generateFont(parameter);
+        generator.dispose();
+
+        FreeTypeFontGenerator genThuong = new FreeTypeFontGenerator(Gdx.files.internal("font/fontthuong.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter paramThuong = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        paramThuong.size = 25;
+        paramThuong.characters = parameter.characters;
+        fontThuong = genThuong.generateFont(paramThuong);
+        genThuong.dispose();
+    }
     @Override public void resize(int width, int height) {}
     @Override public void pause() {}
     @Override public void resume() {}
