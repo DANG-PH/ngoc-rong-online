@@ -48,6 +48,30 @@ public class ThemItemTest {
             "all", 10_000_000L, null, 0, 0, 0, -1
         ));
 
+        duLieu.themItemVaoHanhTrang(new Item(
+            "gay_nhu_y", "Gậy Như Ý", LoaiItem.DEOLUNG,
+            new Texture("vatpham/vatphamgame/deo_lung/gay_nhu_y/icon.png"),
+            "Gậy Như Ý của Son Goku.", 1,
+            new int[]{0,0,0,0,0,0,10,10,10,0,0,0,0},
+            "all", 10_000_000L, null, 0, 0, 0, -1
+        ));
+
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "dao", "Lưỡi Hái Thời Không", LoaiItem.DEOLUNG,
+//            new Texture("vatpham/vatphamgame/deo_lung/dao/icon.png"),
+//            "Lưỡi hái mang sức mạnh xé tan thời không. [Hiệu ứng] Khi trang bị cùng Black Goku Rose: +4% Sức đánh, HP, KI.", 1,
+//            new int[]{0,0,0,0,0,0,20,0,0,0,0,0,10},
+//            "all", 10_000_000L, null, 0, 0, 0, -1
+//        ));
+//
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "kiem_vip", "Lưỡi Hái Thời Không", LoaiItem.DEOLUNG,
+//            new Texture("vatpham/vatphamgame/deo_lung/kiem_vip/icon.png"),
+//            "Lưỡi hái mang sức mạnh xé tan thời không. [Hiệu ứng] Khi trang bị cùng Black Goku Rose: +4% Sức đánh, HP, KI.", 1,
+//            new int[]{0,0,0,0,0,0,20,0,0,0,0,0,10},
+//            "all", 10_000_000L, null, 0, 0, 0, -1
+//        ));
+
 //        duLieu.themItemVaoHanhTrang(new Item(
 //            "luoi_hai", "Lưỡi Hái Thời Không", LoaiItem.DEOLUNG,
 //            new Texture("vatpham/vatphamgame/deo_lung/luoi_hai/icon.png"),

@@ -216,7 +216,7 @@ public class ManHinhNhaBroly implements Screen {
         MapNhaGohan map = new MapNhaGohan();
         map.taiDuLieuMap();
         nhanVat.setDanhSachDat(map.LayDanhSachDat());
-        nhanVat.setGioiHanToaDo(map.getChieuRongMap(), map.getChieuCaoMap());
+        nhanVat.setGioiHanToaDo(map.getChieuRongMap(), map.getChieuCaoMap(),5,0);
         npcdau = new Texture("nhanvat/npc/ong_gohan/dau.png");
         npcthan = new Texture("nhanvat/npc/ong_gohan/than.png");
         npcchan = new Texture("nhanvat/npc/ong_gohan/chan.png");
@@ -248,7 +248,7 @@ public class ManHinhNhaBroly implements Screen {
         float targetY = nhanVat.getY();
 
         // Giới hạn camera trong vùng bản đồ (1420x760)
-        camManager.updateMainCamera(nhanVat.getX(), nhanVat.getY(), 1420, 760);
+        camManager.updateMainCamera(nhanVat.getX(), nhanVat.getY(), 1420, 7600,0,0);
         batch.setProjectionMatrix(camManager.camera.combined);
         shapeRenderer.setColor(5 / 255f, 194 / 255f, 168 / 255f, 1);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);

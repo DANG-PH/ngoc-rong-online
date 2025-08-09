@@ -268,7 +268,7 @@ public class VeHUD {
 
     public boolean dangDungDeoLung = false;
     public boolean chuaSetUpAnhDeoLung = true;
-    public Texture[] anhDeoLung = new Texture[4];
+    public Texture[] anhDeoLung;
     public int framesDeoLung = 0;
     public Item deoLungDangDung = null;
 
@@ -1753,6 +1753,7 @@ public class VeHUD {
             if (itemDangChon.equals("deolung")) {
                 if (dangDungDeoLung) {
                     dangDungDeoLung = false;
+                    framesDeoLung = 0;
                     chuaSetUpAnhDeoLung = true;
                 } else {
                     dangDungDeoLung = true;

@@ -16,17 +16,16 @@ import com.dang.dragonboy.he_thong.Main;
 import com.dang.dragonboy.he_thong.ThongTinChuyenMap;
 import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.nhan_vat.NhanVat;
-import com.dang.dragonboy.xu_ly_map.MapLangAru;
+import com.dang.dragonboy.xu_ly_map.MapDoiHoaCuc;
 import com.dang.dragonboy.hien_thi.QuanLyCamera;
 
 
-public class ManHinhLangAru implements Screen {
+public class ManHinhDoiHoaCuc implements Screen {
     private Main game;
     private ShapeRenderer shapeRenderer;
     private ThongTinChuyenMap thongtin;
     private SpriteBatch batch;
-    private Texture nen;
-    private BitmapFont font, fontText , fontDauThan;
+    private BitmapFont fontDauThan;
     private GlyphLayout layout;
     private float thoiGianTichLuy = 0;
     private NhanVat nhanVat;
@@ -34,38 +33,27 @@ public class ManHinhLangAru implements Screen {
     private QuanLyCamera camManager;
     private float rongMap,caoMap;
 
-    private Texture mapLangAru,mapLangAruSau;
+    private Texture mapDoiHoaCuc,mapDoiHoaCucSau,mapDoiHoaCucSau1;
     private Texture sky, nuixa, nui, nuicay, nuithap;
     private Texture[] mdtd = new Texture[5];
     private Texture[] dtd = new Texture[3];
     private Texture[] ldtd = new Texture[3];
-    private Texture dochanhtinh;
-    private Texture cayco, cayco1;
-    private Texture caycoi1,caycoi2;
     private Texture light;
     private Texture khoi;
     private float scrollX_khoi = 0,scrollX_khoi1 = 0;
-    private Texture cui_dot_lua;
-    private Texture[] lua =  new Texture[4];
-    private int frameLua = 0;
-    private float timeLua = 0f;
 
-    public ManHinhLangAru(Main game, ThongTinChuyenMap thongtin) {
+    public ManHinhDoiHoaCuc(Main game, ThongTinChuyenMap thongtin) {
         this.game = game;
         this.thongtin =  thongtin;
-        if ("nhagohan".equals(thongtin.mapTruoc)){
-            thongtin.nhanVat.datToaDo(675,175);
-            thongtin.hud.getDuLieuNguoiChoi().deTu.datToaDo(675+(thongtin.nhanVat.getFlipX()? 50f : -50f),175);
-        }
-        if ("doihoacuc".equals(thongtin.mapTruoc)){
-            thongtin.nhanVat.datToaDo(2390,175);
-            thongtin.hud.getDuLieuNguoiChoi().deTu.datToaDo(2390+(thongtin.nhanVat.getFlipX()? 50f : -50f),175);
+        if ("langaru".equals(thongtin.mapTruoc)){
+            thongtin.nhanVat.datToaDo(5,175);
+            thongtin.hud.getDuLieuNguoiChoi().deTu.datToaDo(5+(thongtin.nhanVat.getFlipX()? 50f : -50f),175);
         }
         nhanVat = thongtin.nhanVat;
         hud = thongtin.hud;
         camManager = thongtin.camManager;
         // Tạo map và load địa hình
-        MapLangAru map = new MapLangAru();
+        MapDoiHoaCuc map = new MapDoiHoaCuc();
         map.taiDuLieuMap();
         nhanVat.setDanhSachDat(map.LayDanhSachDat());
         nhanVat.setGioiHanToaDo(map.getChieuRongMap(), map.getChieuCaoMap(),5,0);
@@ -92,28 +80,9 @@ public class ManHinhLangAru implements Screen {
         nuicay = new Texture("hud/giaodienngoai/"+"traidat"+ "/" + "nuicay_" + "traidat" + ".png");
         nuithap = new Texture("hud/giaodienngoai/"+"traidat"+ "/" + "nuithap_" + "traidat" + ".png");
 
-        cayco = new Texture("map/"+"traidat"+ "/chung/cayco/" + "cayco3_" + "traidat" + ".png");
-        cayco1 = new Texture("map/"+"traidat"+ "/chung/cayco/"  + "cayco5_" + "traidat" + ".png");
-
-        mapLangAru = new Texture("map/"+"traidat"+"/lang_aru/maparu.png");
-        mapLangAruSau = new Texture("map/"+"traidat"+"/lang_aru/maparusau.png");
-
-        for (int i = 0; i < 5; i++) {
-            mdtd[i] = new Texture("map/"+"traidat"+ "/chung/dat/"  + "matdat_" + "traidat" + (i + 1) + ".png");
-        }
-        for (int i = 0; i < 3; i++) {
-            dtd[i] = new Texture("map/"+"traidat"+ "/chung/dat/"  + "dat_" + "traidat"+ (i + 1) + ".png");
-            ldtd[i] = new Texture("map/"+"traidat"+ "/chung/dat/"  + "longdat_" + "traidat"+ (i + 1) + ".png");
-        }
-        dochanhtinh = new Texture("map/"+"traidat"+ "/chung/dat/"  + "doc_" + "traidat" + ".png");
-
-        caycoi1 = new Texture("map/"+"traidat"+ "/chung/caycoi/"  + "caycoi1_"+"traidat" + ".png") ;
-        caycoi2 = new Texture("map/"+"traidat"+ "/chung/caycoi/" + "caycoi2_"+"traidat" + ".png");
-
-        cui_dot_lua = new Texture("map/"+"traidat"+"/chung/trangtri/cuinuongduiga.png");
-        for (int i = 0; i < 4; i++) {
-            lua[i] = new Texture( "hieuung/hieuungmap/lua"+(i+1)+".png");
-        }
+        mapDoiHoaCuc = new Texture("map/"+"traidat"+"/doi_hoa_cuc/doihoacuc.png");
+        mapDoiHoaCucSau = new Texture("map/"+"traidat"+"/doi_hoa_cuc/doihoacucsau.png");
+        mapDoiHoaCucSau1 = new Texture("map/"+"traidat"+"/doi_hoa_cuc/doihoacuctruoc.png");
 
         light = new Texture("hieuung/hieuungmap/light.png");
         khoi = new Texture("hieuung/hieuungmap/khoimay.png");
@@ -128,12 +97,7 @@ public class ManHinhLangAru implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         thoiGianTichLuy += delta * 15f;
         if (thoiGianTichLuy > 1_000_000f) thoiGianTichLuy = 0f;
-        timeLua += delta;
-        if (timeLua > 0.12f){
-            frameLua = (frameLua + 1)%lua.length;
-            timeLua = 0;
-        }
-        camManager.updateMainCamera(nhanVat.getX(), nhanVat.getY(), rongMap, caoMap,0,38);
+        camManager.updateMainCamera(nhanVat.getX(), nhanVat.getY(), rongMap, caoMap,0,38+96);
 
         nhanVat.capNhat();
         float camOffsetY = camManager.getOffsetY();
@@ -141,7 +105,7 @@ public class ManHinhLangAru implements Screen {
         shapeRenderer.setColor(5 / 255f, 194 / 255f, 168 / 255f, 1);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(25 / 255f, 176 / 255f, 248 / 255f, 1); // Trái đất
-        shapeRenderer.rect(0, 300 + camOffsetY, 2542, 800);
+        shapeRenderer.rect(0, 300 + camOffsetY, 3000, 800);
         shapeRenderer.end();
 
         batch.setProjectionMatrix(camManager.camera.combined);
@@ -149,7 +113,7 @@ public class ManHinhLangAru implements Screen {
         // background xa
 
         // Layer 1: Sky + nuixa
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 12; i++) {
             float skyY = 310 + camOffsetY * 0.95f;
             batch.draw(sky, i * 255, skyY, 255, 150);
             batch.draw(nuixa, i * 255, skyY, 255, 150);
@@ -161,7 +125,7 @@ public class ManHinhLangAru implements Screen {
             batch.draw(nui, i * 510, nuiY, 510, 170);
         }
         // Layer 3: Nuicay & Nuithap
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 12; i++) {
             float nuicayY = 200 + camOffsetY * 0.75f;
             batch.draw(nuicay, i * 340, nuicayY, 340, 190);
         }
@@ -170,7 +134,7 @@ public class ManHinhLangAru implements Screen {
         shapeRenderer.setColor(22f / 255f, 118f / 255f, 21f / 255f, 1f);
         shapeRenderer.setProjectionMatrix(camManager.camera.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.rect(0, nuiY - 100, 2542, 100); // nằm ngay dưới ảnh
+        shapeRenderer.rect(0, nuiY - 100, 3000, 100); // nằm ngay dưới ảnh
         shapeRenderer.end();
         batch.begin();
         for (int i = 0; i < 10; i++) {
@@ -182,7 +146,7 @@ public class ManHinhLangAru implements Screen {
         shapeRenderer.setColor(23f / 255f, 94f / 255f, 28f / 255f, 1f);
         shapeRenderer.setProjectionMatrix(camManager.camera.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.rect(0, nuiTY - 500, 2542, 500); // nằm ngay dưới ảnh
+        shapeRenderer.rect(0, nuiTY - 500, 3000, 500); // nằm ngay dưới ảnh
         shapeRenderer.end();
         batch.begin();
         batch.end();
@@ -202,18 +166,17 @@ public class ManHinhLangAru implements Screen {
         batch.begin();
 
         //background gần
-        batch.draw(mapLangAru,-96f,-38,mapLangAru.getWidth()/2f,mapLangAru.getHeight()/2f);
+        batch.draw(mapDoiHoaCuc,0,-38-96,mapDoiHoaCuc.getWidth()/2f,mapDoiHoaCuc.getHeight()/2f);
         for (int i = 0; i < 3; i++) {
             batch.draw(light,150+i*(600*1.1f+180),515,600*1.1f,500*1.1f);
         }
-        batch.draw(cui_dot_lua,240,170,66,48);
-        Texture luaa = lua[frameLua];
-        float luaaW = luaa.getWidth() * 0.5f;
-        float luaaH = luaa.getHeight() * 0.5f;
-        batch.draw(luaa,273,190,luaaW,luaaH);
         nhanVat.ve(batch, thoiGianTichLuy);
         nhanVat.veDiemCanDen(batch);
-        batch.draw(mapLangAruSau,-96f,-38,mapLangAruSau.getWidth()/2f,mapLangAruSau.getHeight()/2f);
+
+        float offsetX = camManager.getOffsetX();
+        batch.draw(mapDoiHoaCucSau,0,-38-96,mapDoiHoaCucSau.getWidth()/2f,mapDoiHoaCucSau.getHeight()/2f);
+        batch.draw(mapDoiHoaCucSau1,0-offsetX*0.5f-100f,-38-96-50f,mapDoiHoaCucSau1.getWidth()/2f,mapDoiHoaCucSau1.getHeight()/2f);
+
         batch.end();
 
         renderCacMap();
@@ -221,18 +184,14 @@ public class ManHinhLangAru implements Screen {
         checkQuaMap();
 
         batch.begin();
-        float offsetX = camManager.getOffsetX();
-        batch.draw(caycoi1,650-offsetX*0.5f,-90);
-        batch.draw(caycoi1,800-offsetX*0.5f,-40);
-        batch.draw(caycoi1,1600-offsetX*0.5f,-40);
-        batch.draw(caycoi1,2100-offsetX*0.5f,-90);
+
         scrollX_khoi -= 40 * delta;
         scrollX_khoi1 -= 45 * delta;
         if (scrollX_khoi <= -287) scrollX_khoi += 287;
         if (scrollX_khoi1 <= -287) scrollX_khoi1 += 287;
-        for (int i = 0; i < 10; i++) {
-            batch.draw(khoi, i*287 + scrollX_khoi, -38, 287, 140+38);
-            batch.draw(khoi, -10+i*287 + scrollX_khoi1, -38, 287, 160+38);
+        for (int i = 0; i < 14; i++) {
+            batch.draw(khoi, i*287 + scrollX_khoi, -38-96, 287, 200);
+            batch.draw(khoi, -10+i*287 + scrollX_khoi1,-38-96, 287, 220);
         }
         batch.end();
 
@@ -244,74 +203,34 @@ public class ManHinhLangAru implements Screen {
     }
 
     public void renderCacMap() {
-        float xNhaGohan = 560;
-        float xDoiHoaCuc = 2160;
-        float xVachNuiAru = 10;
-        if (nhanVat.getX()> xNhaGohan-150 && nhanVat.getX()< xNhaGohan-150+450) {
+        float xLangAru = 10;
+        if (nhanVat.getX()> xLangAru-150 && nhanVat.getX()< xLangAru-150+450) {
             shapeRenderer.setProjectionMatrix(camManager.camera.combined);
             Gdx.gl.glEnable(GL20.GL_BLEND); // Câu lệnh để pha alpha tùy ý
 
             shapeRenderer.setColor(0f, 0f, 0f, 0.5f);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.rect(xNhaGohan, 300, 230, 60);
+            shapeRenderer.rect(xLangAru, 300, 230, 60);
             shapeRenderer.end();
 
             batch.begin();
-            layout.setText(fontDauThan,"Nhà Gôhan");
-            fontDauThan.draw(batch,layout,xNhaGohan+(230-layout.width)/2f,250+65+20);
+            layout.setText(fontDauThan,"Làng Aru");
+            fontDauThan.draw(batch,layout,xLangAru+(230-layout.width)/2f,250+65+20);
             batch.end();
         }
-        if (nhanVat.getX()> xDoiHoaCuc-150 && nhanVat.getX()< xDoiHoaCuc-150+450) {
-            shapeRenderer.setProjectionMatrix(camManager.camera.combined);
-            Gdx.gl.glEnable(GL20.GL_BLEND); // Câu lệnh để pha alpha tùy ý
-
-            shapeRenderer.setColor(0f, 0f, 0f, 0.5f);
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.rect(xDoiHoaCuc, 300, 230, 60);
-            shapeRenderer.end();
-
-            batch.begin();
-            layout.setText(fontDauThan,"Đồi hoa cúc");
-            fontDauThan.draw(batch,layout,xDoiHoaCuc+(230-layout.width)/2f,250+65+20);
-            batch.end();
-        }
-        if (nhanVat.getX()> xVachNuiAru-150 && nhanVat.getX()< xVachNuiAru-150+450) {
-            shapeRenderer.setProjectionMatrix(camManager.camera.combined);
-            Gdx.gl.glEnable(GL20.GL_BLEND); // Câu lệnh để pha alpha tùy ý
-
-            shapeRenderer.setColor(0f, 0f, 0f, 0.5f);
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.rect(xVachNuiAru, 300, 230, 60);
-            shapeRenderer.end();
-
-            batch.begin();
-            layout.setText(fontDauThan,"Vách núi aru");
-            fontDauThan.draw(batch,layout,xVachNuiAru+(230-layout.width)/2f,250+65+20);
-            batch.end();
-        }
-        batch.begin();
-        // Kiểm tra nếu đứng trong vùng "Làng Aru" và bấm Enter thì chuyển màn
-        if (nhanVat.getX() > 560 && nhanVat.getX() < 790 && nhanVat.getY() >= 0 && nhanVat.getY() <= 400) {
-            if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-                ThongTinChuyenMap info = new ThongTinChuyenMap(nhanVat, "langaru",hud,camManager);
-                game.setScreen(new ManHinhSplash(game, new ManHinhChoiTiep(game,nhanVat.getTen(),nhanVat.getHanhtinh(),nhanVat.getNhanvat(),info)));
-            }
-        }
-        batch.end();
     }
     public void setLaiToaDoNhanVat() {
-        if (nhanVat.getX()>2300 && nhanVat.getY()<300) {
-            nhanVat.setGioiHanToaDo(rongMap+70,caoMap,5,0);
-        } else if (nhanVat.getX()<100 && nhanVat.getY()<300) {
+        if (nhanVat.getX()<100 && nhanVat.getY()<300) {
             nhanVat.setGioiHanToaDo(rongMap,caoMap,-65,0);
         } else {
             nhanVat.setGioiHanToaDo(rongMap,caoMap,5,0);
         }
     }
+
     public void checkQuaMap() {
-        if (nhanVat.getX()>2405 && nhanVat.getY()<300) {
-            ThongTinChuyenMap info = new ThongTinChuyenMap(nhanVat, "langaru",hud,camManager);
-            game.setScreen(new ManHinhSplash(game, new ManHinhDoiHoaCuc(game, info)));
+        if (nhanVat.getX()<-5-nhanVat.getRong() && nhanVat.getY()<300) {
+            ThongTinChuyenMap info = new ThongTinChuyenMap(nhanVat, "doihoacuc",hud,camManager);
+            game.setScreen(new ManHinhSplash(game, new ManHinhLangAru(game, info)));
         }
     }
 

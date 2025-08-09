@@ -19,6 +19,7 @@ public class QuanLyCamera {
     private float doNhanCam = 1.5f; // độ nhạy kéo
     public boolean keoCamera = false;
     public boolean vuaKeoCamera = false;
+    private float camXKhiBatDau, camYKhiBatDau;
     public QuanLyCamera() {
         // Camera chính
         camera = new OrthographicCamera();
@@ -50,24 +51,37 @@ public class QuanLyCamera {
         return camera.position.x - camXBanDau;
     }
 
-    public void updateMainCamera(float x, float y, float mapWidth, float mapHeight) {
-        float halfWidth = camera.viewportWidth / 2;
-        float halfHeight = camera.viewportHeight / 2;
-
-        float camX = x + (dangKeoCamera ? doLechX : 0);
-        float camY = y + (dangKeoCamera ? doLechY : 0);
-
-        // Clamp camera không vượt map
-        camX = Math.max(halfWidth, Math.min(camX, mapWidth - halfWidth));
-        camY = Math.max(halfHeight, Math.min(camY, mapHeight - halfHeight));
-
-        camera.position.set(camX, camY, 0);
-        camera.update();
-    }
     public void batDauKeoCamera(int screenX, int screenY) {
         dangKeoCamera = true;
         diemBatDauX = screenX;
         diemBatDauY = screenY;
+        camXKhiBatDau = camera.position.x; // lưu vị trí camera hiện tại
+        camYKhiBatDau = camera.position.y;
+    }
+
+    public void updateMainCamera(float x, float y, float mapWidth, float mapHeight, float vuotKeoX, float vuotKeoY) {
+        float halfWidth = camera.viewportWidth / 2;
+        float halfHeight = camera.viewportHeight / 2;
+
+        float camX, camY;
+
+        if (dangKeoCamera) {
+            // Khi kéo -> tính từ vị trí camera lúc bắt đầu kéo
+            camX = camXKhiBatDau + doLechX;
+            camY = camYKhiBatDau + doLechY;
+
+            // Cho phép vượt giới hạn
+            camX = Math.max(halfWidth - vuotKeoX, Math.min(camX, mapWidth - halfWidth));
+            camY = Math.max(halfHeight - vuotKeoY, Math.min(camY, mapHeight - halfHeight));
+
+        } else {
+            // Bình thường: camera theo nhân vật
+            camX = Math.max(halfWidth, Math.min(x, mapWidth - halfWidth));
+            camY = Math.max(halfHeight, Math.min(y, mapHeight - halfHeight));
+        }
+
+        camera.position.set(camX, camY, 0);
+        camera.update();
     }
 
     public void keoCamera(int screenX, int screenY) {
@@ -75,11 +89,10 @@ public class QuanLyCamera {
             float dx = Math.abs(screenX - diemBatDauX);
             float dy = Math.abs(screenY - diemBatDauY);
 
-            // Chỉ khi kéo đủ xa thì mới tính là kéo camera
             if (dx > 5 || dy > 5) {
                 doLechX = (diemBatDauX - screenX) * doNhanCam;
                 doLechY = (screenY - diemBatDauY) * doNhanCam;
-                keoCamera = true; // ← đánh dấu là đã kéo
+                keoCamera = true;
             }
         }
     }

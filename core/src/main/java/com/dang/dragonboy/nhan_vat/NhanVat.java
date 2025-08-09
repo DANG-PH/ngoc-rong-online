@@ -79,8 +79,8 @@ public class NhanVat {
 
     public boolean dangMangVanBay = false;
 
-    private float gioiHanXMax;
-    private float gioiHanYMax;
+    private float gioiHanXMax,gioiHanXMin;
+    private float gioiHanYMax,gioiHanYMin;
     public List<HitboxDat> danhSachDat = new ArrayList<>();
 
     public void setDanhSachDat(List<HitboxDat> ds) {
@@ -1059,9 +1059,11 @@ public class NhanVat {
         phimNhayDangGiu = false;
     }
 
-    public void setGioiHanToaDo(float chieuRongMap, float chieuCaoMap) {
+    public void setGioiHanToaDo(float chieuRongMap, float chieuCaoMap,float gioiHanXMin,float gioiHanYMin) {
         this.gioiHanXMax = chieuRongMap - rong;
         this.gioiHanYMax = chieuCaoMap - cao;
+        this.gioiHanXMin = gioiHanXMin;
+        this.gioiHanYMin = gioiHanYMin;
         if (duLieuNguoiChoi.coDeTu()) {
             duLieuNguoiChoi.deTu.setGioiHanToaDo(gioiHanXMax, gioiHanYMax);
         }
@@ -1272,10 +1274,8 @@ public class NhanVat {
 
 
         // Giới hạn không cho ra khỏi bản đồ
-        float gioiHanXMin = 5;
         x = Math.max(gioiHanXMin, Math.min(x, gioiHanXMax-5));
 
-        float gioiHanYMin=0;
         y =Math.max(gioiHanYMin, Math.min(y, gioiHanYMax));
     }
     public void setFlipTrai() {
@@ -1452,8 +1452,14 @@ public class NhanVat {
             batch.draw(veHUD.anhAura[veHUD.framesAura], anchorX, y+daoDong+(cao/3f)-25f + offsetY, veHUD.anhAura[veHUD.framesAura].getWidth() * tiLe * flipScale, veHUD.anhAura[veHUD.framesAura].getHeight() * tiLe);
         }
         if (veHUD.dangDungDeoLung && veHUD.timeChoHopThe == 0 && duDieuKien && !(trangThai == TrangThai.BAY_NGANG && !dangMangVanBay) && !(trangThai == TrangThai.DI_CHUYEN)){
+            int soAnh = 2;
+            switch (veHUD.deoLungDangDung.getId()) {
+                case "dao" : soAnh = 8; break;
+                case  "kiem_vip" : soAnh = 7; break;
+            }
             if (veHUD.chuaSetUpAnhDeoLung) {
-                for (int i = 0; i < 4; i++) {
+                veHUD.anhDeoLung = new Texture[soAnh];
+                for (int i = 0; i < soAnh; i++) {
                     veHUD.anhDeoLung[i] = new Texture("vatpham/vatphamgame/deo_lung/" + veHUD.deoLungDangDung.getId() + "/" + (i + 1) + ".png");
                 }
                 veHUD.chuaSetUpAnhDeoLung = false;
@@ -1461,7 +1467,7 @@ public class NhanVat {
             timeDoiFramesDeoLung+=Gdx.graphics.getDeltaTime();
             float timeDoiFrames = 0.2f;
             if (timeDoiFramesDeoLung>timeDoiFrames) {
-                veHUD.framesDeoLung = (veHUD.framesDeoLung + 1) % veHUD.anhDeoLung.length;
+                veHUD.framesDeoLung = (veHUD.framesDeoLung + 1) % soAnh;
                 timeDoiFramesDeoLung=0;
             }
             float offsetX = 0;

@@ -10,7 +10,7 @@ public class MapLangAru extends MapCoBan {
 //        danhSachDat.add(new HitboxDat(1100, 0, 400, 10));
 //        danhSachDat.add(new HitboxDat(500, 380, 200, 70));
 
-        danhSachDat.add(new HitboxDat(0, 175, 2400, 0));
+        danhSachDat.add(new HitboxDat(-70, -38, 2540, 175+38));
 
         // Thêm bục cao trong map
 //        danhSachDat.add(new HitboxDat(400, 300, 120, 10));
