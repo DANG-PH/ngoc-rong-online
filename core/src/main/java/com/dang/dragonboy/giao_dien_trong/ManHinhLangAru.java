@@ -138,6 +138,7 @@ public class ManHinhLangAru implements Screen {
 
         nhanVat.capNhat();
         float camOffsetY = camManager.getOffsetY();
+        float camOffsetX = camManager.getOffsetX();
         shapeRenderer.setProjectionMatrix(camManager.camera.combined);
         shapeRenderer.setColor(5 / 255f, 194 / 255f, 168 / 255f, 1);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -152,19 +153,19 @@ public class ManHinhLangAru implements Screen {
         // Layer 1: Sky + nuixa
         for (int i = 0; i < 10; i++) {
             float skyY = 310 + camOffsetY * 0.95f;
-            batch.draw(sky, i * 255, skyY, 255, 150);
-            batch.draw(nuixa, i * 255, skyY, 255, 150);
+            batch.draw(sky, i * 255 + camOffsetX*0.95f, skyY, 255, 150);
+            batch.draw(nuixa, i * 255 + camOffsetX*0.95f, skyY, 255, 150);
         }
 
         // Layer 2: Nui
         for (int i = 0; i < 9; i++) {
             float nuiY = 280 + camOffsetY * 0.85f;
-            batch.draw(nui, i * 510, nuiY, 510, 170);
+            batch.draw(nui, i * 510 + camOffsetX*0.9f, nuiY, 510, 170);
         }
         // Layer 3: Nuicay & Nuithap
         for (int i = 0; i < 10; i++) {
             float nuicayY = 200 + camOffsetY * 0.75f;
-            batch.draw(nuicay, i * 340, nuicayY, 340, 190);
+            batch.draw(nuicay, i * 340 + camOffsetX*0.8f, nuicayY, 340, 190);
         }
         batch.end();
         float nuiY = 200 + camOffsetY * 0.75f; // Y của ảnh núi
@@ -176,7 +177,7 @@ public class ManHinhLangAru implements Screen {
         batch.begin();
         for (int i = 0; i < 10; i++) {
             float nuithapY = 130 + camOffsetY * 0.5f;
-            batch.draw(nuithap, i * 340, nuithapY, 340, 190);
+            batch.draw(nuithap, i * 340 + camOffsetX*0.65f, nuithapY, 340, 190);
         }
         batch.end();
         float nuiTY = 130 + camOffsetY * 0.5f; // Y của ảnh núi
@@ -222,11 +223,10 @@ public class ManHinhLangAru implements Screen {
         checkQuaMap();
 
         batch.begin();
-        float offsetX = camManager.getOffsetX();
-        batch.draw(caycoi1,650-offsetX*0.5f,-90);
-        batch.draw(caycoi1,800-offsetX*0.5f,-40);
-        batch.draw(caycoi1,1600-offsetX*0.5f,-40);
-        batch.draw(caycoi1,2100-offsetX*0.5f,-90);
+        batch.draw(caycoi1,650-camOffsetX*0.5f,-90);
+        batch.draw(caycoi1,800-camOffsetX*0.5f,-40);
+        batch.draw(caycoi1,1600-camOffsetX*0.5f,-40);
+        batch.draw(caycoi1,2100-camOffsetX*0.5f,-90);
         scrollX_khoi -= 40 * delta;
         scrollX_khoi1 -= 45 * delta;
         if (scrollX_khoi <= -287) scrollX_khoi += 287;

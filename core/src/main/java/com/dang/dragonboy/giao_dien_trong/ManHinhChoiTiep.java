@@ -306,26 +306,27 @@ public class ManHinhChoiTiep implements Screen {
         batch.begin();
         // background xa
         float camOffsetY = camManager.getOffsetY();
+        float camOffsetX = camManager.getOffsetX();
 
         // Layer 1: Sky + nuixa
         for (int i = 0; i < 6; i++) {
             float skyY = 310 + camOffsetY * 1.0f;
-            batch.draw(sky, i * 255, skyY, 255, 150);
-            batch.draw(nuixa, i * 255, skyY, 255, 150);
+            batch.draw(sky, i * 255 + camOffsetX*0.95f, skyY, 255, 150);
+            batch.draw(nuixa, i * 255 + camOffsetX*0.95f, skyY, 255, 150);
         }
 
         // Layer 2: Nui
         for (int i = 0; i < 4; i++) {
             float nuiY = 280 + camOffsetY * 0.8f;
-            batch.draw(nui, i * 510, nuiY, 510, 170);
+            batch.draw(nui, i * 510 + camOffsetX*0.9f, nuiY, 510, 170);
         }
 
         // Layer 3: Nuicay & Nuithap
         for (int i = 0; i < 5; i++) {
             float nuicayY = 215 + camOffsetY * 0.5f;
             float nuithapY = 145 + camOffsetY * 0.3f;
-            batch.draw(nuicay, i * 340, nuicayY, 340, 190);
-            batch.draw(nuithap, i * 340, nuithapY, 340, 190);
+            batch.draw(nuicay, i * 340 + camOffsetX*0.8f, nuicayY, 340, 190);
+            batch.draw(nuithap, i * 340 + camOffsetX*0.65f, nuithapY, 340, 190);
         }
 
         batch.end();

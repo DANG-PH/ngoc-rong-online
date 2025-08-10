@@ -34,7 +34,7 @@ public class ManHinhDoiHoaCuc implements Screen {
     private float rongMap,caoMap;
 
     private Texture mapDoiHoaCuc,mapDoiHoaCucSau,mapDoiHoaCucSau1;
-    private Texture sky, nuixa, nui, nuicay, nuithap;
+    private Texture sky, nuixa, nui, nuicay, nuithap, thapkirin;
     private Texture[] mdtd = new Texture[5];
     private Texture[] dtd = new Texture[3];
     private Texture[] ldtd = new Texture[3];
@@ -83,6 +83,7 @@ public class ManHinhDoiHoaCuc implements Screen {
         nui = new Texture("hud/giaodienngoai/"+"traidat"+ "/" + "nui_" +"traidat" + ".png");
         nuicay = new Texture("hud/giaodienngoai/"+"traidat"+ "/" + "nuicay_" + "traidat" + ".png");
         nuithap = new Texture("hud/giaodienngoai/"+"traidat"+ "/" + "nuithap_" + "traidat" + ".png");
+        thapkirin = new Texture("map/traidat/doi_hoa_cuc/thapkirin.png");
 
         mapDoiHoaCuc = new Texture("map/"+"traidat"+"/doi_hoa_cuc/doihoacuc.png");
         mapDoiHoaCucSau = new Texture("map/"+"traidat"+"/doi_hoa_cuc/doihoacucsau.png");
@@ -101,7 +102,10 @@ public class ManHinhDoiHoaCuc implements Screen {
         camManager.updateMainCamera(nhanVat.getX(), nhanVat.getY(), rongMap, caoMap,0,38+96);
 
         nhanVat.capNhat();
+
         float camOffsetY = camManager.getOffsetY();
+        float camOffsetX = camManager.getOffsetX();
+
         shapeRenderer.setProjectionMatrix(camManager.camera.combined);
         shapeRenderer.setColor(5 / 255f, 194 / 255f, 168 / 255f, 1);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -116,19 +120,23 @@ public class ManHinhDoiHoaCuc implements Screen {
         // Layer 1: Sky + nuixa
         for (int i = 0; i < 12; i++) {
             float skyY = 310 + camOffsetY * 0.95f;
-            batch.draw(sky, i * 255, skyY, 255, 150);
-            batch.draw(nuixa, i * 255, skyY, 255, 150);
+            batch.draw(sky, i * 255 + camOffsetX*0.98f, skyY, 255, 150);
+            batch.draw(nuixa, i * 255 + camOffsetX*0.98f, skyY, 255, 150);
         }
 
-        // Layer 2: Nui
+        // Layer 2: Nui + thap Kirin
         for (int i = 0; i < 9; i++) {
             float nuiY = 280 + camOffsetY * 0.85f;
-            batch.draw(nui, i * 510, nuiY, 510, 170);
+            batch.draw(nui, i * 510 + camOffsetX*0.95f, nuiY, 510, 170);
+        }
+        for (int i = 0; i < 9; i++) {
+            float kirinY = 250 + camOffsetY * 0.85f;
+            batch.draw(thapkirin,600 + camOffsetX*0.95f,kirinY+i*(thapkirin.getHeight()*0.5f),thapkirin.getWidth()*0.5f,thapkirin.getHeight()*0.5f);
         }
         // Layer 3: Nuicay & Nuithap
         for (int i = 0; i < 12; i++) {
             float nuicayY = 200 + camOffsetY * 0.75f;
-            batch.draw(nuicay, i * 340, nuicayY, 340, 190);
+            batch.draw(nuicay, i * 340 + camOffsetX*0.9f, nuicayY, 340, 190);
         }
         batch.end();
         float nuiY = 200 + camOffsetY * 0.75f; // Y của ảnh núi
@@ -140,7 +148,7 @@ public class ManHinhDoiHoaCuc implements Screen {
         batch.begin();
         for (int i = 0; i < 10; i++) {
             float nuithapY = 130 + camOffsetY * 0.5f;
-            batch.draw(nuithap, i * 340, nuithapY, 340, 190);
+            batch.draw(nuithap, i * 340 + camOffsetX*0.8f, nuithapY, 340, 190);
         }
         batch.end();
         float nuiTY = 130 + camOffsetY * 0.5f; // Y của ảnh núi
@@ -174,9 +182,8 @@ public class ManHinhDoiHoaCuc implements Screen {
         nhanVat.ve(batch, thoiGianTichLuy);
         nhanVat.veDiemCanDen(batch);
 
-        float offsetX = camManager.getOffsetX();
         batch.draw(mapDoiHoaCucSau,0,-38-96,mapDoiHoaCucSau.getWidth()/2f,mapDoiHoaCucSau.getHeight()/2f);
-        batch.draw(mapDoiHoaCucSau1,0-offsetX*0.5f-100f,-38-96-50f,mapDoiHoaCucSau1.getWidth()/2f,mapDoiHoaCucSau1.getHeight()/2f);
+        batch.draw(mapDoiHoaCucSau1,0-camOffsetX*0.5f-100f,-38-96-50f,mapDoiHoaCucSau1.getWidth()/2f,mapDoiHoaCucSau1.getHeight()/2f);
 
         batch.end();
 
