@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
 import com.dang.dragonboy.giao_dien_trong.ManHinhNhaBroly;
 import com.dang.dragonboy.he_thong.Main;
-import com.dang.dragonboy.giao_dien_trong.ManHinhChoiTiep;
+import com.dang.dragonboy.giao_dien_trong.ManHinhNhaGohan;
 
 public class ManHinhMenu implements Screen {
     private Main game;
@@ -70,7 +70,7 @@ public class ManHinhMenu implements Screen {
 
             switch (nutDuocChon) {
                 case 0:
-                    nextScreen = new ManHinhSplash(game,new ManHinhChoiTiep(game,"admin","traidat","Goku",null));
+                    nextScreen = new ManHinhSplash(game,new ManHinhNhaGohan(game,"admin","traidat","Goku",null));
                     break;
                 case 1:
                     nextScreen = new ManHinhChoiMoi(game);

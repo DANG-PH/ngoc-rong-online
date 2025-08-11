@@ -13,7 +13,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
 import com.dang.dragonboy.giao_dien_trong.ManHinhNhaBroly;
 import com.dang.dragonboy.he_thong.Main;
-import com.dang.dragonboy.giao_dien_trong.ManHinhChoiTiep;
+import com.dang.dragonboy.giao_dien_trong.ManHinhNhaGohan;
 
 public class ManHinhChoiMoi implements Screen {
 
@@ -306,13 +306,13 @@ public class ManHinhChoiMoi implements Screen {
                 String nhanvat = hanhtinhVaNhanvat[hanhTinhDuocChon][nhanVatDuocChon+1];
                 switch (hanhTinhDuocChon){
                     case 0:
-                        game.setScreen(new ManHinhSplash(game, new ManHinhChoiTiep(game,tenNguoiChoi,"traidat",nhanvat,null)));
+                        game.setScreen(new ManHinhSplash(game, new ManHinhNhaGohan(game,tenNguoiChoi,"traidat",nhanvat,null)));
                         break;
                     case 1:
                         game.setScreen(new ManHinhSplash(game, new ManHinhNhaBroly(game,tenNguoiChoi,"xayda",nhanvat)));
                         break;
                     case 2:
-                        game.setScreen(new ManHinhSplash(game, new ManHinhChoiTiep(game,tenNguoiChoi,"traidat",nhanvat,null)));
+                        game.setScreen(new ManHinhSplash(game, new ManHinhNhaGohan(game,tenNguoiChoi,"traidat",nhanvat,null)));
                         break;
                 }
                 chuyenManHinhTaoMoi = false;

@@ -26,13 +26,12 @@ import com.dang.dragonboy.nhan_vat.NhanVatXuLy;
 import com.dang.dragonboy.hien_thi.QuanLyCamera;
 import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.hien_thi.SkillIcon;
-import com.dang.dragonboy.xu_ly_map.MapLangAru;
 import com.dang.dragonboy.xu_ly_map.MapNhaGohan;
 // dữ liệu
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 
 
-public class ManHinhChoiTiep implements Screen {
+public class ManHinhNhaGohan implements Screen {
     //quan trong
     private Main game;
     private NhanVat nhanVat;
@@ -79,7 +78,7 @@ public class ManHinhChoiTiep implements Screen {
     //HUD
     private VeHUD hudRenderer;
 
-    public ManHinhChoiTiep(Main game , String tenNhanVat, String hanhtinh ,String nhanvat, ThongTinChuyenMap info) {
+    public ManHinhNhaGohan(Main game , String tenNhanVat, String hanhtinh , String nhanvat, ThongTinChuyenMap info) {
         this.game = game;
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
