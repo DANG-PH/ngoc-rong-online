@@ -13,6 +13,10 @@ public class NpcTaiAnh {
         dau  = new Texture("nhanvat/npc/" + npcName + "/dau.png");
     }
 
+    public Texture getDau() { return dau; }
+    public Texture getThan() { return than; }
+    public Texture getChan() { return chan; }
+
     public void dispose() {
         chan.dispose();
         than.dispose();

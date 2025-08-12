@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.Input;
+import java.util.List;
+import java.util.Map;
 
 //He thong
 import com.dang.dragonboy.he_thong.Main;
@@ -29,6 +31,11 @@ import com.dang.dragonboy.hien_thi.SkillIcon;
 import com.dang.dragonboy.xu_ly_map.MapNhaGohan;
 // dữ liệu
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
+//xu ly map
+import com.dang.dragonboy.xu_ly_map.npc.Npc;
+import com.dang.dragonboy.xu_ly_map.npc.NpcTaiAnh;
+import com.dang.dragonboy.xu_ly_map.npc.NpcOffset;
+import com.dang.dragonboy.xu_ly_map.npc.DuLieuOffsetNpc;
 
 
 public class ManHinhNhaGohan implements Screen {
@@ -74,6 +81,9 @@ public class ManHinhNhaGohan implements Screen {
     private int HanhTinhDuocChon;
     private float thoiGianTichLuy = 0;
 
+    private MapNhaGohan map;
+    private List<Npc> danhSachNpc;
+    private Map<String, NpcTaiAnh> npcTaiAnhMap;
 
     //HUD
     private VeHUD hudRenderer;
@@ -172,10 +182,8 @@ public class ManHinhNhaGohan implements Screen {
         }
         capcaydau = nhanVat.getCapcaydau();
         // Tạo map và load địa hình
-        MapNhaGohan map = new MapNhaGohan();
+        map = new MapNhaGohan();
         map.taiDuLieuMap();
-        nhanVat.setDanhSachDat(map.LayDanhSachDat());
-        nhanVat.setGioiHanToaDo(map.getChieuRongMap(), map.getChieuCaoMap(),5,0);
     }
 
     @Override
@@ -245,9 +253,17 @@ public class ManHinhNhaGohan implements Screen {
         ruongdo = new Texture("map/"+"traidat"+"/chung/trangtri/ruongdo.png");
         nhagohan = new Texture("map/"+"traidat"+"/chung/nhacua/nhacua2_earth.png");
 
-        npcdau = new Texture("nhanvat/npc/ong_gohan/dau.png");
-        npcthan = new Texture("nhanvat/npc/ong_gohan/than.png");
-        npcchan = new Texture("nhanvat/npc/ong_gohan/chan.png");
+        nhanVat.setDanhSachDat(map.LayDanhSachDat());
+        nhanVat.setGioiHanToaDo(map.getChieuRongMap(), map.getChieuCaoMap(),5,0);
+
+        this.danhSachNpc = map.LayDanhSachNpc();
+        this.npcTaiAnhMap = map.getNpcTaiAnhMap();
+        for (Npc npc : danhSachNpc) {
+            NpcTaiAnh taiAnhNpc = npcTaiAnhMap.get(npc.getTen());
+            NpcOffset offsetNpc = map.getNpcOffset(npc.getTen());
+            npc.setNpcTaiAnh(taiAnhNpc);
+            npc.setNpcOffset(offsetNpc);
+        }
     }
     private NhanVatCauHinh Doicaitrang(String TenCaiTrang){
         return NhanVatXuLy.xuly_id("caitrang_"+TenCaiTrang);
@@ -376,14 +392,16 @@ public class ManHinhNhaGohan implements Screen {
         batch.draw(caycoi2,630,-80,200,200);
         batch.draw(dochanhtinh,670,0,400,165);
         batch.draw(caycoi2,850,-130,200,200);
-        batch.setColor(50f, 50f, 50f, 0.65f);
+
         for (int i = 0; i < 5; i++) {
             batch.draw(khoi, i*287, 0, 287, 170);
             batch.draw(khoi, -10+i*287, 0, 287, 200);
         }
-        batch.setColor(1f, 1f, 1f, 1f); // Trả về mặc định
-        veNhanVatDung(batch, 400, 188 , npcdau,npcthan,npcchan,0f,8.5f,0f,-20f);
-        tenNpc(font,"Ông Gôhan",400,260,40,30);
+
+        for (Npc npc : danhSachNpc) {
+            npc.ve(batch,thoiGianTichLuy);
+        }
+
         // cây đậu + đùi gà + lửa + củi
         float caydauW = caccaydau[capcaydau].getWidth() * 0.5f;
         float caydauH = caccaydau[capcaydau].getHeight() * 0.48f;
@@ -457,28 +475,7 @@ public class ManHinhNhaGohan implements Screen {
         hudRenderer.update(delta);
         batch.end();
     }
-    private void veNhanVatDung(SpriteBatch batch, float x, float y, Texture dau,Texture than, Texture chan ,float thanXOffset,float thanYOffset , float dauXOffset ,float dauYOffset) {
-        float doDaoDong = (float) Math.sin(thoiGianTichLuy) * 1.08f;
-        float scale = 0.5f;
 
-        float chanW = chan.getWidth() * scale;
-        float chanH = chan.getHeight() * scale;
-        float thanW = than.getWidth() * scale;
-        float thanH = than.getHeight() * scale;
-        float dauW = dau.getWidth() * scale;
-        float dauH = dau.getHeight() * scale;
-
-        batch.draw(chan, x, y, chanW, chanH);
-
-        float thanX = x + chanW / 2f - thanW / 2f;
-        float thanY = y + chanH + doDaoDong;
-
-        float dauX = x + chanW / 2f - dauW / 2f;
-        float dauY = thanY + thanH;
-
-        batch.draw(dau, dauX + dauXOffset, dauY + dauYOffset, dauW, dauH);
-        batch.draw(than, thanX + thanXOffset, thanY - 10.2f + thanYOffset, thanW, thanH);
-    }
     private void tenNpc(BitmapFont font,String ten,float toadoX,float toadoY, float width,float height){
         layout.setText(font,ten);
         drawText(font, ten, toadoX + (width - layout.width) / 2, toadoY + height, Color.YELLOW);
@@ -522,9 +519,9 @@ public class ManHinhNhaGohan implements Screen {
         nhagohan.dispose();
         cui_dot_lua.dispose();
         duiga.dispose();
-        npcdau.dispose();
-        npcthan.dispose();
-        npcchan.dispose();
+        for (NpcTaiAnh npcTaiAnhItem : npcTaiAnhMap.values()) {
+            npcTaiAnhItem.dispose();
+        }
 
         for (Texture tex : mdtd) tex.dispose();
         for (Texture tex : dtd) tex.dispose();

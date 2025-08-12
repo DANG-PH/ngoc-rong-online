@@ -10,7 +10,7 @@ public class MapNhaGohan extends MapCoBan {
     public void taiDuLieuMap() {
         danhSachDat.add(new HitboxDat(0, 0, 1420, 175));
 
-        Npc gohan = new Npc("onggohan", 500, 300);
+        Npc gohan = new Npc("ong_gohan", 400, 188);
         danhSachNpc.add(gohan);
 
         // Lấy offset từ file DuLieuOffsetNpc

@@ -13,4 +13,10 @@ public class NpcOffset {
         this.chanX = chanX;
         this.chanY = chanY;
     }
+    public float getOffsetX() { return chanX; }
+    public float getOffsetY() { return chanY; }
+    public float getDauXOffset() { return dauX; }
+    public float getDauYOffset() { return dauY; }
+    public float getThanXOffset() { return thanX; }
+    public float getThanYOffset() { return thanY; }
 }

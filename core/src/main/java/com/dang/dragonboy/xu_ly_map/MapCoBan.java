@@ -19,12 +19,20 @@ public abstract class MapCoBan {
         return danhSachDat;
     }
 
+    public List<Npc> LayDanhSachNpc() {
+        return danhSachNpc;
+    }
+
     public NpcTaiAnh getNpcTaiAnh(String ten) {
         return npcTaiAnhMap.get(ten);
     }
 
+    public Map<String, NpcTaiAnh> getNpcTaiAnhMap() {
+        return npcTaiAnhMap;
+    }
+
     public NpcOffset getNpcOffset(String ten) {
-        return npcOffsetMap.getOrDefault(ten, new NpcOffset(0, 0, 0, 0, 0, 0));
+        return npcOffsetMap.get(ten);
     }
 
     // Map nào cũng phải có hàm này để load dữ liệu
