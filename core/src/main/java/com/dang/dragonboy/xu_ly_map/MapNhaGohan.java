@@ -8,16 +8,11 @@ public class MapNhaGohan extends MapCoBan {
 
     @Override
     public void taiDuLieuMap() {
+        // them dat chinh
         danhSachDat.add(new HitboxDat(0, 0, 1420, 175));
-
-        Npc gohan = new Npc("ong_gohan", 400, 188);
-        danhSachNpc.add(gohan);
-
-        // Lấy offset từ file DuLieuOffsetNpc
-        npcOffsetMap.put("ong_gohan", DuLieuOffsetNpc.get("ong_gohan"));
-
-        // Load ảnh
-        npcTaiAnhMap.put("ong_gohan", new NpcTaiAnh("ong_gohan"));
+        // them npc
+        themNpc("ong_gohan",400,188);
+        themNpc("admin_haidang",900,188);
     }
 
     @Override

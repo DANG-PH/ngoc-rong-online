@@ -3,6 +3,7 @@ package com.dang.dragonboy.xu_ly_map;
 import com.dang.dragonboy.xu_ly_map.npc.Npc;
 import com.dang.dragonboy.xu_ly_map.npc.NpcOffset;
 import com.dang.dragonboy.xu_ly_map.npc.NpcTaiAnh;
+import com.dang.dragonboy.xu_ly_map.npc.DuLieuOffsetNpc;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,13 @@ public abstract class MapCoBan {
 
     public NpcOffset getNpcOffset(String ten) {
         return npcOffsetMap.get(ten);
+    }
+
+    public void themNpc(String tenNpc, float x, float y) {
+        Npc npc = new Npc(tenNpc, x, y);
+        danhSachNpc.add(npc);
+        npcOffsetMap.put(tenNpc, DuLieuOffsetNpc.get(tenNpc));
+        npcTaiAnhMap.put(tenNpc, new NpcTaiAnh(tenNpc));
     }
 
     // Map nào cũng phải có hàm này để load dữ liệu

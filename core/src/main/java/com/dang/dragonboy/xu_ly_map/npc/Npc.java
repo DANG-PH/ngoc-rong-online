@@ -99,6 +99,7 @@ public class Npc {
     public void setTenTiengVietNpc() {
         switch (ten) {
             case "ong_gohan" -> tenTiengVietNpc = "Ông Gôhan";
+            case "admin_haidang" -> tenTiengVietNpc = "Admin Hải Đăng";
             default -> tenTiengVietNpc = "";
         }
     }

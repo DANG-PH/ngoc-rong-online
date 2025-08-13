@@ -32,47 +32,47 @@ public class ManHinhKhoiDong implements Screen {
     @Override
     public void render(float delta) {
         // dùng bình thường để test game
-        thoiGian += delta;
-
-        Gdx.gl.glClearColor(1, 1, 1, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        batch.begin();
-        float scaledWidth = logogame.getWidth();
-        float scaledHeight = logogame.getHeight();
-        float x = (Gdx.graphics.getWidth() - scaledWidth) / 2f;
-        float y = (Gdx.graphics.getHeight() - scaledHeight) / 2f;
-        batch.draw(logogame, x, y, scaledWidth, scaledHeight);
-        batch.end();
-
-        if (thoiGian > 2f) {
-            game.setScreen(new ManHinhSplash(game));
-        }
-
-        // Dùng khi phát hành
 //        thoiGian += delta;
 //
 //        Gdx.gl.glClearColor(1, 1, 1, 1);
 //        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//        float alpha;
-//        if (thoiGian<=0.8f) {
-//            alpha = 1-(0.8f-thoiGian)/0.8f;
-//        } else {
-//            alpha = 1;
-//        }
+//
 //        batch.begin();
 //        float scaledWidth = logogame.getWidth();
 //        float scaledHeight = logogame.getHeight();
 //        float x = (Gdx.graphics.getWidth() - scaledWidth) / 2f;
 //        float y = (Gdx.graphics.getHeight() - scaledHeight) / 2f;
-//        batch.setColor(1f, 1f, 1f, alpha);
 //        batch.draw(logogame, x, y, scaledWidth, scaledHeight);
-//        batch.setColor(1f, 1f, 1f, 1f);
 //        batch.end();
 //
-//        if (thoiGian > 3f) {
+//        if (thoiGian > 2f) {
 //            game.setScreen(new ManHinhSplash(game));
 //        }
+
+        // Dùng khi phát hành
+        thoiGian += delta;
+
+        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        float alpha;
+        if (thoiGian<=0.8f) {
+            alpha = 1-(0.8f-thoiGian)/0.8f;
+        } else {
+            alpha = 1;
+        }
+        batch.begin();
+        float scaledWidth = logogame.getWidth();
+        float scaledHeight = logogame.getHeight();
+        float x = (Gdx.graphics.getWidth() - scaledWidth) / 2f;
+        float y = (Gdx.graphics.getHeight() - scaledHeight) / 2f;
+        batch.setColor(1f, 1f, 1f, alpha);
+        batch.draw(logogame, x, y, scaledWidth, scaledHeight);
+        batch.setColor(1f, 1f, 1f, 1f);
+        batch.end();
+
+        if (thoiGian > 3f) {
+            game.setScreen(new ManHinhSplash(game));
+        }
 
         // Dùng khi show dự án
 //        thoiGian += delta;
