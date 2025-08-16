@@ -247,13 +247,13 @@ public class ThemItemTest {
             "all", 1_000_000_000L, null, 7, 7, 0, 0
         ));
 
-//        duLieu.themItemVaoHanhTrang(new Item(
-//            "goku_black_rose", "Cải trang Super Black Goku", LoaiItem.CAITRANG,
-//            new Texture("nhanvat/caitrang/goku_black_rose/daudung.png"),
-//            "Cải trang thành Super Black Goku", 1,
-//            new int[]{0,0,0,0,0,0,45,45,45,0,0,0,0},
-//            "all", 50_000_000_000L, null, 0, 0, 0, -1
-//        ));
+        duLieu.themItemVaoHanhTrang(new Item(
+            "goku_black_rose", "Cải trang Super Black Goku", LoaiItem.CAITRANG,
+            new Texture("nhanvat/caitrang/goku_black_rose/daudung.png"),
+            "Cải trang thành Super Black Goku", 1,
+            new int[]{0,0,0,0,0,0,45,45,45,0,0,0,0},
+            "all", 50_000_000_000L, null, 0, 0, 0, -1
+        ));
 //
 //        duLieu.themItemVaoHanhTrang(new Item(
 //            "goku_black", "Cải trang Black Goku", LoaiItem.CAITRANG,

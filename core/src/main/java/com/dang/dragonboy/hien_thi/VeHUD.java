@@ -220,6 +220,11 @@ public class VeHUD {
     public float timeSauBienKhi = 0;
     public boolean vuaBienKhi = false;
 
+    public final float timeTtnlMax = 10f;
+    public float timeTtnl = 0f;
+    public float timeCoolDownTtnl = 0f;
+    public float hpHoiTtnl, KiHoiTtnl;
+
     public Texture dautrai, dauphai, thantrai, thanphai, chantrai, chanphai;
     public Texture dau1, than1, chan1, dau2, than2, chan2, dau3, than3, chan3, dau4, than4, chan4, dau5, than5, chan5, dau6, than6, chan6, than7, chan7;
     public Texture dau1p, than1p, chan1p, dau2p, than2p, chan2p, dau3p, than3p, chan3p, dau4p, than4p, chan4p, dau5p, than5p, chan5p, dau6p, than6p, chan6p, than7p, chan7p;
@@ -1901,6 +1906,8 @@ public class VeHUD {
                     auraDangDung = itemm;
                 }
             }
+        } else if (duLieuNguoiChoi.getSucManh() < itemm.getSucManhYeuCau()) {
+            setTinNhanPet("Bạn cần thêm "+formatVangNgoc(itemm.getSucManhYeuCau()-duLieuNguoiChoi.getSucManh())+" sức mạnh nữa",2f);
         } else if (!nhanVat.getHanhtinh().equals(itemm.getHanhtinh())) {
             String ht;
             switch (itemm.getHanhtinh()) {
@@ -1910,8 +1917,6 @@ public class VeHUD {
                 default: ht = "";
             }
             setTinNhanPet("Đồ này dành cho hành tinh "+ht,2f);
-        } else if (duLieuNguoiChoi.getSucManh() < itemm.getSucManhYeuCau()) {
-            setTinNhanPet("Bạn cần thêm "+formatVangNgoc(itemm.getSucManhYeuCau()-duLieuNguoiChoi.getSucManh())+" sức mạnh nữa",2f);
         }
         DangHienPopupThongTin1 = false;
         TimeChoHienPopup = 0;

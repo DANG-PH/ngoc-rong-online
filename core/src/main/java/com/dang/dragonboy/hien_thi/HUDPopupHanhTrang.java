@@ -1036,7 +1036,7 @@ public class HUDPopupHanhTrang {
                     veHUD.itemm.getLoai() == LoaiItem.RADA) && duLieuNguoiChoi.coDeTu()) {
                 float nutX = 1 + 2 * 120 + xCongThem;
                 float nutY = y - 115;
-                if (veHUD.nuthanhtrangchon == 4) {
+                if (veHUD.nuthanhtrangchon == 3) {
                     Texture nutVe = veHUD.nutClickTimer3 > 0 ? veHUD.nutvuongclick : veHUD.nutvuong;
                     batch.draw(nutVe, nutX, nutY, 114, 114);
                 } else {
@@ -1604,7 +1604,7 @@ public class HUDPopupHanhTrang {
             for (int i = 0; i < 2; i++) {
                 float nutX = 1 + i * 120 + xCongThem;
                 float nutY = y - 115;
-                if (veHUD.nuthanhtrangchon == i + 5) {
+                if (veHUD.nuthanhtrangchon == i+4) {
                     Texture nutVe = veHUD.nutClickTimer3 > 0 ? veHUD.nutvuongclick : veHUD.nutvuong;
                     batch.draw(nutVe, nutX, nutY, 114, 114);
                 } else {

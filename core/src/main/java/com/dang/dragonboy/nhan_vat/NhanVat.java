@@ -46,6 +46,10 @@ public class NhanVat {
     private Texture[] chan_chay;
     private Texture chan_bay;
 
+    private Texture[] ttnl = new Texture[4];
+    private Texture[] bom = new Texture[2];
+    private int frameTtnl = 0, frameBom = 0;
+
     // Cho animation chạy
     private int frame = 0;
     private float timeChay = 0f;
@@ -206,7 +210,7 @@ public class NhanVat {
     private boolean dangHienDiemCanDen = false;
 
     private float timeChoHienBay;
-    private float timeDoiFramesHuyHieu,timeDoiFramesDeoLung,timeDoiFramesAura;
+    private float timeDoiFramesHuyHieu,timeDoiFramesDeoLung,timeDoiFramesAura,timeDoiFramesTtnl = 0f,timeDoiFramesQckk;
     private Texture[] auraChan = new Texture[4];
 
     public void setToaDoMucTieu(float x, float y) {
@@ -997,6 +1001,12 @@ public class NhanVat {
         for (int i = 0; i < 4;i++) {
             auraChan[i] = new Texture("vatpham/vatphamgame/aura/chan/"+(i+1)+".png");
         }
+        for (int i = 0; i < 4;i++) {
+            ttnl[i] = new Texture("hieuung/hieuunggame/bien_khi/ttnl"+(i+1)+".png");
+        }
+        for (int i = 0; i < 2;i++) {
+            bom[i] = new Texture("hieuung/hieuunggame/bien_khi/bom"+(i+1)+".png");
+        }
         batch = new SpriteBatch();
     }
 
@@ -1079,7 +1089,7 @@ public class NhanVat {
 
     public void capNhat() {
 //        if (1==1) {
-//            trangThai = TrangThai.DI_CHUYEN;
+//            trangThai = TrangThai.GONG;
 //            flipX = false;
 //            return;
 //        }
@@ -1098,9 +1108,9 @@ public class NhanVat {
             diChuyenDenMucTieu = false;
         }
         if (veHUD.timeChoBienKhi > 0) {
-            if (veHUD.timeChoBienKhi>1.6f) {
+            if (veHUD.timeChoBienKhi>1.25f) {
                 trangThai = TrangThai.GONG;
-            } else if (veHUD.timeChoBienKhi>1.4f) {
+            } else if (veHUD.timeChoBienKhi>1f) {
                 trangThai = TrangThai.THU;
             } else {
                 trangThai = TrangThai.GONG;
@@ -1739,6 +1749,21 @@ public class NhanVat {
                     }
                 }
             }
+            if (veHUD.timeChoBienKhi > 0) {
+                int tick = (int)(veHUD.timeChoBienKhi * 10);
+                int tick1 = (int)(veHUD.timeChoBienKhi * 15);
+                if (tick1 % 2 == 0) {
+                    veQckk(batch, x + chanW / 2f, y + cao / 2f);
+                }
+                if (tick % 2 == 0) {
+                    veTaiTaoNangLuong(batch,x+chanW/2f,y);
+                }
+            }
+            if (veHUD.timeSauBienKhi < 0.6f && veHUD.timeSauBienKhi > 0) {
+                if (veHUD.timeSauBienKhi > 0.35f) {
+                    veTaiTaoNangLuong(batch,x+chanW/2f,y);
+                }
+            }
         } else {
             if (!veHUD.dangHopThe && !veHUD.dangHopTheThuong) {
                 if (veHUD.timeChoHopThe > 1.2f) {
@@ -2029,6 +2054,26 @@ public class NhanVat {
         vx = 0;
         vy = 0;
     }
+
+    public void veTaiTaoNangLuong(SpriteBatch batch,float x, float y) {
+        timeDoiFramesTtnl += Gdx.graphics.getDeltaTime();
+        if (timeDoiFramesTtnl > 0.06f) {
+            frameTtnl = (frameTtnl+1)%ttnl.length;
+            timeDoiFramesTtnl = 0;
+        }
+        batch.draw(ttnl[frameTtnl],x-ttnl[frameTtnl].getWidth()*0.55f/2f,y,ttnl[frameTtnl].getWidth()*0.55f,ttnl[frameTtnl].getHeight()*0.55f);
+    }
+    public void veQckk(SpriteBatch batch,float x, float y) {
+        timeDoiFramesQckk += Gdx.graphics.getDeltaTime();
+        if (timeDoiFramesQckk > 0.1f) {
+            frameBom = (frameBom+1)%bom.length;
+            timeDoiFramesQckk = 0;
+        }
+        batch.setColor(1,1,1,0.9f);
+        batch.draw(bom[frameBom],x-bom[frameBom].getWidth()*0.5f/2f,y-bom[frameBom].getHeight()*0.5f/2f,bom[frameBom].getWidth()*0.5f,bom[frameBom].getHeight()*0.5f);
+        batch.setColor(1,1,1,1f);
+    }
+
     public void dispose() {
         if (veHUD != null) veHUD.dispose();
         if (avtTexture != null) {
@@ -2074,6 +2119,15 @@ public class NhanVat {
         for (Texture t : auraChan) {
             t.dispose();
         }
+
+        for (Texture t : ttnl) {
+            t.dispose();
+        }
+
+        for (Texture t : bom) {
+            t.dispose();
+        }
+
 
         // vanBayCauHinh
         if (vanBayCauHinh != null && vanBayCauHinh.frames != null) {
