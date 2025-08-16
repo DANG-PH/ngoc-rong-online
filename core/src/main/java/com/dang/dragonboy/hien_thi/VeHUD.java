@@ -213,6 +213,7 @@ public class VeHUD {
     public float timeChoBienKhi = 0;
     public boolean dangBienKhi = false;
     public float timeBienKhi = 0f;
+    public final float timeBienKhiMAX = 10f;
     public float timeCoolDownBienKhi = 0f;
     public float sucDanhTangBienKhi = 0f;
     public float hpTangBienKhi = 0f;
@@ -770,6 +771,10 @@ public class VeHUD {
         }
         ArrayList<Texture> itemCanVe = new ArrayList<>();
         ArrayList<Float> timeTungItem = new ArrayList<>();
+        if (dangBienKhi) {
+            itemCanVe.add(skillIcons[3].icon);
+            timeTungItem.add(timeBienKhi);
+        }
         if (dangDungBoHuyet) {
             itemCanVe.add(boHuyet);
             timeTungItem.add(timeDungBoHuyet);
@@ -797,7 +802,7 @@ public class VeHUD {
         for (int i = 0; i < itemCanVe.size(); i++) {
             batch.draw(itemCanVe.get(i),xVeItem,screenHeight / 4f * 3+17.5f,itemCanVe.get(i).getWidth()*0.52f,itemCanVe.get(i).getHeight()*0.52f);
             font.setColor(1,1,1,1);
-            layout.setText(font,(int)(float)(timeTungItem.get(i)/60f) +"'");
+            layout.setText(font,(float) timeTungItem.get(i) >= 60f ? (int)(float)(timeTungItem.get(i)/60f) +"'" : (int)(float)(timeTungItem.get(i))+"s");
             font.draw(batch,layout,xVeItem+(itemCanVe.get(i).getWidth()*0.52f-layout.width)/2f,screenHeight / 4f * 3+17.5f-7);
             xVeItem += 50;
         }
@@ -1148,7 +1153,7 @@ public class VeHUD {
                 timeChoBienKhi = 0;
                 dangBienKhi = true;
                 vuaBienKhi = true;
-                timeBienKhi = 10f;
+                timeBienKhi = timeBienKhiMAX;
                 timeCoolDownBienKhi = 20;
                 sucDanhTangBienKhi = 30+10*nhanVat.getCapSkill(3+1);
                 hpTangBienKhi = 30+10*nhanVat.getCapSkill(3+1);

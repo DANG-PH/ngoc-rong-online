@@ -6,14 +6,14 @@ import com.dang.dragonboy.giao_dien_ngoai.ManHinhKhoiDong;
 import com.dang.dragonboy.giao_dien_trong.ManHinhNhaGohan;
 
 public class Main extends Game {
-    @Override
-    public void create() {
-        this.setScreen(new ManHinhNhaGohan(this,"admin","traidat","Goku",null));
-    }
 //    @Override
 //    public void create() {
-//        this.setScreen(new ManHinhKhoiDong(this));
+//        this.setScreen(new ManHinhNhaGohan(this,"admin","traidat","Goku",null));
 //    }
+    @Override
+    public void create() {
+        this.setScreen(new ManHinhKhoiDong(this));
+    }
 
     @Override
     public void render() {

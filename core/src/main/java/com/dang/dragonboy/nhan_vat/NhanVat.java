@@ -51,7 +51,7 @@ public class NhanVat {
     private float timeChay = 0f;
 
     private final float trongLuc = -0.5f;
-    private final float tocDoDiChuyen = 7f;
+    private float tocDoDiChuyen = 7f;
     private final float doCaoDat = 175f;
 
     private final float tiLe = 0.5f;
@@ -1105,13 +1105,18 @@ public class NhanVat {
             }
             return;
         }
-        if (veHUD.timeBienKhi > 9.7f) { // chinh time o day, sau la 199.7f
+        if (veHUD.timeBienKhi > veHUD.timeBienKhiMAX - 0.3f) {
             trangThai = TrangThai.GONG;
             return;
         }
         if (veHUD.timeBienKhi < 0.15f && veHUD.timeBienKhi > 0) {
             trangThai = TrangThai.THU;
             return;
+        }
+        if (veHUD.dangBienKhi) {
+            tocDoDiChuyen = 9.5f;
+        } else {
+            tocDoDiChuyen = 7f;
         }
         if (veHUD.timeSauBienKhi < 0.6f && veHUD.timeSauBienKhi > 0) {
             if (veHUD.timeSauBienKhi > 0.35f) {
@@ -1556,7 +1561,9 @@ public class NhanVat {
                     break;
                 case DI_CHUYEN:
                     timeChay += Gdx.graphics.getDeltaTime(); // tăng thời gian theo deltaTime
-                    if (timeChay >= 0.1f) {
+                    float timeDoiFrames = 0.1f;
+                    if (veHUD.dangBienKhi) timeDoiFrames = 0.06f;
+                    if (timeChay >= timeDoiFrames) {
                         frame = (frame + 1) % chan_chay.length;
                         timeChay = 0;
                     }
