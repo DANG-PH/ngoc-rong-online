@@ -153,7 +153,7 @@ public class AvatarDoOffsetDeTu {
     private static List<DoLechModular> lechDau(float... values) {
         List<DoLechModular> list = new ArrayList<>();
         for (int i = 0; i < values.length; i += 2) {
-            list.add(new DoLechModular(0f, 0f, values[i], values[i + 1]));
+            list.add(new DoLechModular(0f, 0f, values[i], values[i + 1],0,0));
         }
         return list;
     }
@@ -161,18 +161,18 @@ public class AvatarDoOffsetDeTu {
     private static List<DoLechModular> lechThan(float... values) {
         List<DoLechModular> list = new ArrayList<>();
         for (int i = 0; i < values.length; i += 2) {
-            list.add(new DoLechModular(values[i], values[i + 1], 0f, 0f));
+            list.add(new DoLechModular(values[i], values[i + 1], 0f, 0f,0,0));
         }
         return list;
     }
 
     private static List<DoLechModular> lechChan() {
         return List.of(
-            new DoLechModular(0f, 0f, 0f, 0f),
-            new DoLechModular(0f, 0f, 0f, 0f),
-            new DoLechModular(0f, 0f, 0f, 0f),
-            new DoLechModular(0f, 0f, 0f, 0f),
-            new DoLechModular(0f, 0f, 0f, 0f)
+            new DoLechModular(0f, 0f, 0f, 0f,0,0),
+            new DoLechModular(0f, 0f, 0f, 0f,0,0),
+            new DoLechModular(0f, 0f, 0f, 0f,0,0),
+            new DoLechModular(0f, 0f, 0f, 0f,0,0),
+            new DoLechModular(0f, 0f, 0f, 0f,0,0)
         );
     }
 }

@@ -229,7 +229,7 @@ public class ManHinhDoiHoaCuc implements Screen {
     }
     public void setLaiToaDoNhanVat() {
         if (nhanVat.getX()<100 && nhanVat.getY()<300) {
-            nhanVat.setGioiHanToaDo(rongMap,caoMap,-65,0);
+            nhanVat.setGioiHanToaDo(rongMap,caoMap,-200,0);
         } else {
             nhanVat.setGioiHanToaDo(rongMap,caoMap,5,0);
         }

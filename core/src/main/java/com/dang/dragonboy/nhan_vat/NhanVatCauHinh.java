@@ -18,6 +18,7 @@ public class NhanVatCauHinh {
     public Texture than_roi;
     public Texture[] than_chay;
     public Texture than_bay;
+    public Texture than_thu;
 
     // Chân
     public Texture chan_dung;
@@ -25,6 +26,7 @@ public class NhanVatCauHinh {
     public Texture chan_roi;
     public Texture[] chan_chay;
     public Texture chan_bay;
+    public Texture chan_gong;
 
     // Offset
     public Map<TrangThai, List<DoLechModular>> lechMap;
@@ -37,6 +39,7 @@ public class NhanVatCauHinh {
         Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,
         Texture chan_dung, Texture chan_nhay, Texture chan_roi, Texture[] chan_chay,
         Texture than_bay, Texture chan_bay,
+        Texture chan_gong, Texture than_thu,
         Map<TrangThai, List<DoLechModular>> lechMap,
         String avt,
         Texture ao, Texture quan, Texture gang, Texture giay, Texture rada, Texture iconct, Texture giaplt, Texture vanbay
@@ -49,11 +52,13 @@ public class NhanVatCauHinh {
         this.than_roi = than_roi;
         this.than_chay = than_chay;
         this.than_bay = than_bay;
+        this.than_thu = than_thu;
         this.chan_dung = chan_dung;
         this.chan_nhay = chan_nhay;
         this.chan_roi = chan_roi;
         this.chan_chay = chan_chay;
         this.chan_bay = chan_bay;
+        this.chan_gong = chan_gong;
         this.lechMap = lechMap;
         this.ao = ao;
         this.quan = quan;

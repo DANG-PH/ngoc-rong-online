@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Align;
 import com.dang.dragonboy.nhan_vat.*;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
@@ -17,10 +16,9 @@ import com.dang.dragonboy.du_lieu.ThemItemTest;
 import java.text.DecimalFormat;
 import com.badlogic.gdx.graphics.GL20;
 import com.dang.dragonboy.item.Item;
-import com.dang.dragonboy.item.LoaiItem;
+
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
 import com.badlogic.gdx.audio.Music;
 import java.util.LinkedList;
 import com.dang.dragonboy.he_thong.TrangThaiChu;
@@ -53,11 +51,11 @@ public class VeHUD {
     public BitmapFont font, fontChucnang, fontDauThan, fontNhiemVu, fontNhiemVu1, fontNhiemVuChuaLam, fontMotaNhiemVu, fontvangngoc, fontsm, fontSkilldaco, fontSkillchuaco, fontMotaSkill, fontCapSKill, fontMotaNoiTai, fontTiemNang, fontTenSkill, fontchat, fontMotaNganSkill, fontMotaNganSkill1, fontSkillchuaco1, fontMotaHanhTrang, fontMotaHanhTrang1, fontText;
     private GlyphLayout layout;
 
-    public SkillIcon[] skillIcons;
+    public SkillNhanVat[] skillIcons;
 
     private float thoiGianClickOChat = 0;
     private float thoiGianClickODauThan = 0;
-    private int skillDangChon = -1; // -1: chưa chọn
+    public int skillDangChon = -1; // -1: chưa chọn
 
     private ShapeRenderer shapeRenderer;
 
@@ -120,7 +118,7 @@ public class VeHUD {
 
     public boolean HienPopUpGanSkill = false;
     float TimeChoHienPopupGanSkill = 0;
-    private Texture[] oSkills;
+    private int[] oSkills;
     float nutClickTimer2 = 0;
 
     public Texture ao, quan, gang, giay, rada, iconct, giaplt, vanbay;
@@ -211,6 +209,16 @@ public class VeHUD {
     public float timeChoHopThe = 0;
     public Texture nenflash;
     public boolean veNenFlash;
+
+    public float timeChoBienKhi = 0;
+    public boolean dangBienKhi = false;
+    public float timeBienKhi = 0f;
+    public float timeCoolDownBienKhi = 0f;
+    public float sucDanhTangBienKhi = 0f;
+    public float hpTangBienKhi = 0f;
+    public float timeSauBienKhi = 0;
+    public boolean vuaBienKhi = false;
+
     public Texture dautrai, dauphai, thantrai, thanphai, chantrai, chanphai;
     public Texture dau1, than1, chan1, dau2, than2, chan2, dau3, than3, chan3, dau4, than4, chan4, dau5, than5, chan5, dau6, than6, chan6, than7, chan7;
     public Texture dau1p, than1p, chan1p, dau2p, than2p, chan2p, dau3p, than3p, chan3p, dau4p, than4p, chan4p, dau5p, than5p, chan5p, dau6p, than6p, chan6p, than7p, chan7p;
@@ -315,11 +323,11 @@ public class VeHUD {
         this.camManager = camManager;
     }
 
-    public void setSkillIcons(SkillIcon[] skillIcons) {
+    public void setSkillIcons(SkillNhanVat[] skillIcons) {
         this.skillIcons = skillIcons;
-        oSkills = new Texture[5];
+        oSkills = new int[5];
         for (int i = 0; i < oSkills.length; i++) {
-            oSkills[i] = skillIcons[i].icon;
+            oSkills[i] = i;
         }
     }
 
@@ -662,8 +670,22 @@ public class VeHUD {
                 batch.draw(texSkill, x, skillY, oskillW, oskillH);
 
                 // icon kỹ năng
-                if (oSkills[i] != null) {
-                    batch.draw(oSkills[i], x + 6.9f, skillY + 6.9f, oskillW - 13.8f, oskillH - 13.8f);
+                if (oSkills[i] != -1) {
+                    batch.draw(skillIcons[oSkills[i]].icon, x + 6.9f, skillY + 6.9f, oskillW - 13.8f, oskillH - 13.8f);
+                    if (oSkills[i] == 3 && timeCoolDownBienKhi>0) {
+                        batch.end();
+                        Gdx.gl.glEnable(GL20.GL_BLEND);
+                        shapeRenderer.setColor(0f, 0f, 0f, 0.45f);
+                        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                        shapeRenderer.rect(x + 6.9f,skillY + 6.9f,oskillW - 13.8f,(oskillH - 13.8f)*timeCoolDownBienKhi/20);
+                        shapeRenderer.end();
+                        batch.begin();
+                    }
+                    if (oSkills[i] == 3 && timeChoBienKhi > 0 ) {
+                        batch.end();
+                        veGlow.veGlow(shapeRenderer,x + 6.9f+(oskillW - 13.8f)/2f,skillY + 6.9f+(oskillH - 13.8f)/2f,2f);
+                        batch.begin();
+                    }
                 }
 
                 // số kỹ năng
@@ -820,6 +842,14 @@ public class VeHUD {
     public void chonSkill(int index) {
         if (index >= 0 && index < 5 && (!dangHienKhungChat && !(timeHienRongThan<=300-2.1f && timeHienRongThan>0))) {
             skillDangChon = index;
+        }
+    }
+    public void dungSkill(int index) {
+        if (index >= 0 && index < 5 && (!dangHienKhungChat && !(timeHienRongThan<=300-2.1f && timeHienRongThan>0))) {
+            if (oSkills[index] == 3 && timeCoolDownBienKhi == 0 && duLieuNguoiChoi.getKiHienTai()>=duLieuNguoiChoi.getKiHopThe()*0.1f && !dangBienKhi && timeChoBienKhi==0) {
+                timeChoBienKhi = 2f;
+                duLieuNguoiChoi.giamKiHienTai(duLieuNguoiChoi.getKiHopThe()*0.1f);
+            }
         }
     }
     public void update(float delta) {
@@ -997,15 +1027,14 @@ public class VeHUD {
             nutClickTimer2 -= Gdx.graphics.getDeltaTime();
             if (nutClickTimer2 <= 0){
                 if (HienPopUpGanSkill) {
-                    Texture skillGan = skillIcons[oChiSoDangChon - 6].icon;
                     // Xóa các ô đang chứa cùng icon
                     for (int i = 0; i < 5; i++) {
-                        if (oSkills[i] == skillGan) {
-                            oSkills[i] = null;
+                        if (oSkills[i] == oChiSoDangChon - 6) {
+                            oSkills[i] = -1;
                         }
                     }
                     // Gán vào ô được chọn
-                    oSkills[nutduocchon] = skillGan;
+                    oSkills[nutduocchon] = oChiSoDangChon - 6;
                     HienPopUpGanSkill = false;
                 } else {
                     if (!daUocRongThan) {
@@ -1112,6 +1141,94 @@ public class VeHUD {
                 }
             }
         }
+
+        if (timeChoBienKhi > 0) {
+            timeChoBienKhi -= delta;
+            if (timeChoBienKhi <= 0) {
+                timeChoBienKhi = 0;
+                dangBienKhi = true;
+                vuaBienKhi = true;
+                timeBienKhi = 10f;
+                timeCoolDownBienKhi = 20;
+                sucDanhTangBienKhi = 30+10*nhanVat.getCapSkill(3+1);
+                hpTangBienKhi = 30+10*nhanVat.getCapSkill(3+1);
+                NhanVatCauHinh c2 = Doicaitrang("khi_"+nhanVat.getCapSkill(3+1));
+                nhanVat.fixCaiTrang(
+                    c2.dau_dung, c2.dau_chay,
+                    c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
+                    c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
+                    c2.than_bay, c2.chan_bay,
+                    c2.chan_gong,c2.than_thu,
+                    c2.lechMap,
+                    c2.avt
+                );
+                texAvt = new Texture(nhanVat.doiavatar());
+            }
+        }
+
+        if (timeBienKhi > 0) {
+            timeBienKhi -= delta;
+            if (timeBienKhi <= 0) {
+                dangBienKhi = false;
+                timeSauBienKhi = 0.6f;
+                if (dangHopThe) {
+                    String hopTheDuocChon = dangHopTheThuong ? "hop_the_thuong_"+nhanVat.getHanhtinh() : (bongTaiDangDung.equals("bongtaic1") ? "bong_tai_1_"+nhanVat.getHanhtinh() : bongTaiDangDung.equals("bongtaic2") ? "bong_tai_2_"+nhanVat.getHanhtinh() : "bong_tai_3_"+nhanVat.getHanhtinh() );
+                    NhanVatCauHinh c2 = Doicaitrang(hopTheDuocChon);
+                    nhanVat.fixCaiTrang(
+                        c2.dau_dung, c2.dau_chay,
+                        c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
+                        c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
+                        c2.than_bay, c2.chan_bay,
+                        c2.chan_gong,c2.than_thu,
+                        c2.lechMap,
+                        c2.avt
+                    );
+                    texAvt = new Texture(nhanVat.doiavatar());
+                } else {
+                    ArrayList<Item> danhSach = duLieuNguoiChoi.getHanhTrangDangMac();
+                    if (NhanVatXuLy.getDangMacCaiTrang() && !NhanVatXuLy.getDangMacAvatar() && danhSach.get(5) != null) {
+                        NhanVatCauHinh c2 = Doicaitrang(danhSach.get(5).getId());
+                        nhanVat.fixCaiTrang(
+                            c2.dau_dung, c2.dau_chay,
+                            c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
+                            c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
+                            c2.than_bay, c2.chan_bay,
+                            c2.chan_gong,c2.than_thu,
+                            c2.lechMap,
+                            c2.avt
+                        );
+                        texAvt = new Texture(nhanVat.doiavatar());
+                    } else {
+                        NhanVatCauHinh c2 = Doi_avt_ao_quan(nhanVat.getHanhtinh(), avatardangmac, aodangmac, quandangmac);
+                        nhanVat.fixCaiTrang(
+                            c2.dau_dung, c2.dau_chay,
+                            c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
+                            c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
+                            c2.than_bay, c2.chan_bay,
+                            c2.chan_gong,c2.than_thu,
+                            c2.lechMap,
+                            c2.avt
+                        );
+                        texAvt = new Texture(nhanVat.doiavatar());
+                    }
+                }
+            }
+        }
+
+        if (timeCoolDownBienKhi>0) {
+            timeCoolDownBienKhi -= delta;
+            if (timeCoolDownBienKhi <= 0) {
+                timeCoolDownBienKhi = 0;
+            }
+        }
+
+        if (timeSauBienKhi>0) {
+            timeSauBienKhi -= delta;
+            if (timeSauBienKhi <= 0) {
+                timeSauBienKhi = 0;
+            }
+        }
+
         if (timeChoHopThe>0) {
             timeChoHopThe -= Gdx.graphics.getDeltaTime();
             int tick = (int)(timeChoHopThe * 18);
@@ -1126,17 +1243,20 @@ public class VeHUD {
                 if (!dangHopThe) {
                     dangHopThe = true;
                     vuaHopThe = true;
-                    String hopTheDuocChon = dangHopTheThuong ? "hop_the_thuong_"+nhanVat.getHanhtinh() : (bongTaiDangDung.equals("bongtaic1") ? "bong_tai_1_"+nhanVat.getHanhtinh() : bongTaiDangDung.equals("bongtaic2") ? "bong_tai_2_"+nhanVat.getHanhtinh() : "bong_tai_3_"+nhanVat.getHanhtinh() );
-                    NhanVatCauHinh c2 = Doicaitrang(hopTheDuocChon);
-                    nhanVat.fixCaiTrang(
-                        c2.dau_dung, c2.dau_chay,
-                        c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
-                        c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
-                        c2.than_bay, c2.chan_bay,
-                        c2.lechMap,
-                        c2.avt
-                    );
-                    texAvt = new Texture(nhanVat.doiavatar());
+                    if (!dangBienKhi) {
+                        String hopTheDuocChon = dangHopTheThuong ? "hop_the_thuong_" + nhanVat.getHanhtinh() : (bongTaiDangDung.equals("bongtaic1") ? "bong_tai_1_" + nhanVat.getHanhtinh() : bongTaiDangDung.equals("bongtaic2") ? "bong_tai_2_" + nhanVat.getHanhtinh() : "bong_tai_3_" + nhanVat.getHanhtinh());
+                        NhanVatCauHinh c2 = Doicaitrang(hopTheDuocChon);
+                        nhanVat.fixCaiTrang(
+                            c2.dau_dung, c2.dau_chay,
+                            c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
+                            c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
+                            c2.than_bay, c2.chan_bay,
+                            c2.chan_gong,c2.than_thu,
+                            c2.lechMap,
+                            c2.avt
+                        );
+                        texAvt = new Texture(nhanVat.doiavatar());
+                    }
                     if (dangHopTheThuong) {
                         timeHopTheTHuong = 600f;
                         dangHienPopupDeTu = false;
@@ -1148,29 +1268,33 @@ public class VeHUD {
                     duLieuNguoiChoi.deTu.capNhatTrangThaiDeTu();
                     delayHopTheBongTai = 10f;
                     delayHopTheThuong = 600f;
-                    ArrayList<Item> danhSach = duLieuNguoiChoi.getHanhTrangDangMac();
-                    if (NhanVatXuLy.getDangMacCaiTrang() && !NhanVatXuLy.getDangMacAvatar() && danhSach.get(5) != null) {
-                        NhanVatCauHinh c2 = Doicaitrang(danhSach.get(5).getId());
-                        nhanVat.fixCaiTrang(
-                            c2.dau_dung, c2.dau_chay,
-                            c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
-                            c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
-                            c2.than_bay, c2.chan_bay,
-                            c2.lechMap,
-                            c2.avt
-                        );
-                        texAvt = new Texture(nhanVat.doiavatar());
-                    } else {
-                        NhanVatCauHinh c2 = Doi_avt_ao_quan(nhanVat.getHanhtinh(), avatardangmac, aodangmac, quandangmac);
-                        nhanVat.fixCaiTrang(
-                            c2.dau_dung, c2.dau_chay,
-                            c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
-                            c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
-                            c2.than_bay, c2.chan_bay,
-                            c2.lechMap,
-                            c2.avt
-                        );
-                        texAvt = new Texture(nhanVat.doiavatar());
+                    if (!dangBienKhi) {
+                        ArrayList<Item> danhSach = duLieuNguoiChoi.getHanhTrangDangMac();
+                        if (NhanVatXuLy.getDangMacCaiTrang() && !NhanVatXuLy.getDangMacAvatar() && danhSach.get(5) != null) {
+                            NhanVatCauHinh c2 = Doicaitrang(danhSach.get(5).getId());
+                            nhanVat.fixCaiTrang(
+                                c2.dau_dung, c2.dau_chay,
+                                c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
+                                c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
+                                c2.than_bay, c2.chan_bay,
+                                c2.chan_gong,c2.than_thu,
+                                c2.lechMap,
+                                c2.avt
+                            );
+                            texAvt = new Texture(nhanVat.doiavatar());
+                        } else {
+                            NhanVatCauHinh c2 = Doi_avt_ao_quan(nhanVat.getHanhtinh(), avatardangmac, aodangmac, quandangmac);
+                            nhanVat.fixCaiTrang(
+                                c2.dau_dung, c2.dau_chay,
+                                c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
+                                c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
+                                c2.than_bay, c2.chan_bay,
+                                c2.chan_gong,c2.than_thu,
+                                c2.lechMap,
+                                c2.avt
+                            );
+                            texAvt = new Texture(nhanVat.doiavatar());
+                        }
                     }
                 }
             }
@@ -1205,6 +1329,7 @@ public class VeHUD {
                         c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
                         c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
                         c2.than_bay, c2.chan_bay,
+                        c2.chan_gong,c2.than_thu,
                         c2.lechMap,
                         c2.avt
                     );
@@ -1216,6 +1341,7 @@ public class VeHUD {
                         c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
                         c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
                         c2.than_bay, c2.chan_bay,
+                        c2.chan_gong,c2.than_thu,
                         c2.lechMap,
                         c2.avt
                     );

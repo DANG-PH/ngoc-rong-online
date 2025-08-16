@@ -302,9 +302,9 @@ public class ManHinhLangAru implements Screen {
     }
     public void setLaiToaDoNhanVat() {
         if (nhanVat.getX()>2300 && nhanVat.getY()<300) {
-            nhanVat.setGioiHanToaDo(rongMap+70,caoMap,5,0);
+            nhanVat.setGioiHanToaDo(rongMap+200,caoMap,5,0);
         } else if (nhanVat.getX()<100 && nhanVat.getY()<300) {
-            nhanVat.setGioiHanToaDo(rongMap,caoMap,-65,0);
+            nhanVat.setGioiHanToaDo(rongMap,caoMap,5-200,0);
         } else {
             nhanVat.setGioiHanToaDo(rongMap,caoMap,5,0);
         }

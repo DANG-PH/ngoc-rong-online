@@ -270,7 +270,7 @@ public class DeTu {
         this.than_bay = than_bay;
         this.chan_bay = chan_bay;
 
-        this.rong_de_tu = chan_dung.getWidth() * tiLe;
+        this.rong_de_tu = than_dung.getWidth() * tiLe;
         this.cao_de_tu = chan_dung.getHeight() * tiLe + than_dung.getHeight() * tiLe + dau_dung.getHeight() * 0.15f;
         this.x = x;
         this.y = y;
@@ -1214,7 +1214,7 @@ public class DeTu {
         this.than_bay = than_bay;
         this.chan_bay = chan_bay;
 
-        this.rong_de_tu = chan_dung.getWidth() * tiLe;
+        this.rong_de_tu = than_dung.getWidth() * tiLe;
         this.cao_de_tu = chan_dung.getHeight() * tiLe + than_dung.getHeight() * tiLe + dau_dung.getHeight() * 0.15f;
 
         this.lechTheoTrangThai = lechTheoTrangThai;
@@ -1402,8 +1402,8 @@ public class DeTu {
             }
         }
         // Giới hạn map
-        x = Math.max(-1f, Math.min(x, gioiHanXMax+1f));
-        y = Math.max(0, Math.min(y, gioiHanYMax));
+        x = Math.max(0, Math.min(x, gioiHanXMax-rong_de_tu));
+        y = Math.max(0, Math.min(y, gioiHanYMax-cao_de_tu));
 
         if (timeHienChat > 0) {
             timeHienChat -= delta;
@@ -1673,7 +1673,7 @@ public class DeTu {
 
             // Flip bằng scale âm nếu cần
             float flipScale = flipX ? -1f : 1f;
-            float anchorX = flipX ? x + chanW : x;
+            float anchorX = flipX ? x + rong_de_tu : x;
             if (trangThai != TrangThaiDeTu.BAY_NGANG) {
                 batch.draw(chanVe, anchorX, y, chanW * flipScale, chanH);
 
@@ -1746,7 +1746,7 @@ public class DeTu {
     public static DoLechModular layLech(Map<TrangThaiDeTu, List<DoLechModular>> map, TrangThaiDeTu trangThai, int frameIndex) {
         List<DoLechModular> ds = map.get(trangThai);
         if (ds == null || ds.isEmpty()) {
-            return new DoLechModular(0, 0, 0, 0); // fallback nếu thiếu dữ liệu
+            return new DoLechModular(0, 0, 0, 0,0,0); // fallback nếu thiếu dữ liệu
         }
 
         if (trangThai == TrangThaiDeTu.DI_CHUYEN) {

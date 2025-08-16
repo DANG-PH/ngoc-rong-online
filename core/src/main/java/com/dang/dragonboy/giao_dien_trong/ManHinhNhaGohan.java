@@ -27,7 +27,7 @@ import com.dang.dragonboy.nhan_vat.NhanVatXuLy;
 //HUD
 import com.dang.dragonboy.hien_thi.QuanLyCamera;
 import com.dang.dragonboy.hien_thi.VeHUD;
-import com.dang.dragonboy.hien_thi.SkillIcon;
+import com.dang.dragonboy.hien_thi.SkillNhanVat;
 import com.dang.dragonboy.xu_ly_map.MapNhaGohan;
 // dữ liệu
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
@@ -35,7 +35,6 @@ import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.xu_ly_map.npc.Npc;
 import com.dang.dragonboy.xu_ly_map.npc.NpcTaiAnh;
 import com.dang.dragonboy.xu_ly_map.npc.NpcOffset;
-import com.dang.dragonboy.xu_ly_map.npc.DuLieuOffsetNpc;
 
 
 public class ManHinhNhaGohan implements Screen {
@@ -103,7 +102,7 @@ public class ManHinhNhaGohan implements Screen {
         if (info == null) {
             hudRenderer = new VeHUD(layout);
             // load skill + thuộc tính nhân vật
-            SkillIcon[] traidatIcons = loadSkillIcons(hanhtinh);
+            SkillNhanVat[] traidatIcons = loadSkillIcons("xayda");
             hudRenderer.setSkillIcons(traidatIcons);
             //NhanVatCauHinh config = Doi_avt_ao_quan(hanhtinh,nhanvat+"_base","set_cam","set_cam") ;
             NhanVatCauHinh config = Doi_avt_ao_quan(hanhtinh, nhanvat + "_base", "set_base", "set_base");
@@ -113,6 +112,7 @@ public class ManHinhNhaGohan implements Screen {
                 config.than_dung, config.than_nhay, config.than_roi, config.than_chay,
                 config.chan_dung, config.chan_nhay, config.chan_roi, config.chan_chay,
                 config.than_bay, config.chan_bay,
+                config.chan_gong,config.than_thu,
                 config.lechMap,
                 config.avt,
                 null, null, null, null, null, null, null, null,
@@ -146,11 +146,11 @@ public class ManHinhNhaGohan implements Screen {
             }
             String[] tenSkill = new String[9];
             for (int i = 0; i < 9; i++) {
-                tenSkill[i] = nhanVat.getTenSkill(i + 1, hanhtinh); // nếu skill 1-9
+                tenSkill[i] = nhanVat.getTenSkill(i + 1, "xayda"); // nếu skill 1-9
             }
             String[][] motaSkill = new String[9][];
             for (int i = 0; i < 9; i++) {
-                motaSkill[i] = nhanVat.getMotaSkill(i + 1, hanhtinh);
+                motaSkill[i] = nhanVat.getMotaSkill(i + 1, "xayda");
             }
             DuLieuNguoiChoi duLieu = new DuLieuNguoiChoi(
                 nhanVat.getTen(),
@@ -480,11 +480,11 @@ public class ManHinhNhaGohan implements Screen {
         layout.setText(font,ten);
         drawText(font, ten, toadoX + (width - layout.width) / 2, toadoY + height, Color.YELLOW);
     }
-    private SkillIcon[] loadSkillIcons(String hanhTinh) {
-        SkillIcon[] skillIcons = new SkillIcon[9];
+    private SkillNhanVat[] loadSkillIcons(String hanhTinh) {
+        SkillNhanVat[] skillIcons = new SkillNhanVat[9];
         for (int i = 0; i < 9; i++) {
             String path = "kynang/iconkynang/"+hanhTinh+"/skill" + (i + 1) + "_" + hanhTinh.toLowerCase() + ".png";
-            skillIcons[i] = new SkillIcon(path);
+            skillIcons[i] = new SkillNhanVat(path);
         }
         return skillIcons;
     }

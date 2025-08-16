@@ -24,7 +24,7 @@ public class ThaoTac extends InputAdapter {
 
     @Override
     public boolean keyDown(int keycode) {
-        if (hud.timeChoHopThe == 0 && !hud.dangHienPopup && !hud.dangHienDieuUocRongThan) {
+        if (hud.timeChoHopThe == 0 && !hud.dangHienPopup && !hud.dangHienDieuUocRongThan && hud.timeChoBienKhi == 0) {
             switch (keycode) {
                 case Input.Keys.LEFT:
                     if (nhanVat.diChuyenDenMucTieu) {
@@ -58,19 +58,39 @@ public class ThaoTac extends InputAdapter {
 
                 // Bấm phím số 1–5 để chọn skill
                 case Input.Keys.NUM_1:
-                    hud.chonSkill(0);
+                    if (hud.skillDangChon == 0) {
+                        hud.dungSkill(0);
+                    } else {
+                        hud.chonSkill(0);
+                    }
                     break;
                 case Input.Keys.NUM_2:
-                    hud.chonSkill(1);
+                    if (hud.skillDangChon == 1) {
+                        hud.dungSkill(1);
+                    } else {
+                        hud.chonSkill(1);
+                    }
                     break;
                 case Input.Keys.NUM_3:
-                    hud.chonSkill(2);
+                    if (hud.skillDangChon == 2) {
+                        hud.dungSkill(2);
+                    } else {
+                        hud.chonSkill(2);
+                    }
                     break;
                 case Input.Keys.NUM_4:
-                    hud.chonSkill(3);
+                    if (hud.skillDangChon == 3) {
+                        hud.dungSkill(3);
+                    } else {
+                        hud.chonSkill(3);
+                    }
                     break;
                 case Input.Keys.NUM_5:
-                    hud.chonSkill(4);
+                    if (hud.skillDangChon == 4) {
+                        hud.dungSkill(4);
+                    } else {
+                        hud.chonSkill(4);
+                    }
                     break;
             }
         }
@@ -186,7 +206,7 @@ public class ThaoTac extends InputAdapter {
             hud.vuaKeoHanhTrang = false;
             hud.vuaKeoHanhTrangDeTu = false;
         }
-        if (!hud.dangHienPopup && !laClickTrenHUD(screenX, y) && !camera.vuaKeoCamera && !hud.vuaTatPopup && !hud.dangHienKhungChat && hud.timeChoHopThe == 0 && !hud.dangHienDieuUocRongThan ) {
+        if (!hud.dangHienPopup && hud.timeChoBienKhi == 0 && !laClickTrenHUD(screenX, y) && !camera.vuaKeoCamera && !hud.vuaTatPopup && !hud.dangHienKhungChat && hud.timeChoHopThe == 0 && !hud.dangHienDieuUocRongThan ) {
             float viewportWidth = camera.camera.viewportWidth;
             float viewportHeight = camera.camera.viewportHeight;
 

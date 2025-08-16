@@ -41,8 +41,8 @@ public class NhanVat {
     private Texture dau_dung, dau_chay;
     private Texture than_dung, than_nhay, than_roi;
     private Texture[] than_chay;
-    private Texture than_bay;
-    private Texture chan_dung, chan_nhay, chan_roi;
+    private Texture than_bay,than_thu;
+    private Texture chan_dung, chan_nhay, chan_roi,chan_gong;
     private Texture[] chan_chay;
     private Texture chan_bay;
 
@@ -70,6 +70,7 @@ public class NhanVat {
     // Offset để tùy chỉnh vị trí đầu/thân theo trạng thái
     private float lechThanX = 0f, lechThanY = 0f;
     private float lechDauX = 0f, lechDauY = 0f;
+    private float lechChanX = 0f, lechChanY = 0f;
 
     private String tenVanBay = "base";
 
@@ -121,7 +122,7 @@ public class NhanVat {
     private int CapSkill1 = 7;
     private int CapSkill2 = 6;
     private int CapSkill3 = 5;
-    private int CapSkill4 = 4;
+    private int CapSkill4 = 7;
     private int CapSkill5 = 3;
     private int CapSkill6 = 2;
     private int CapSkill7 = 1;
@@ -945,7 +946,7 @@ public class NhanVat {
                    Texture dau_dung, Texture dau_chay,
                    Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,
                    Texture chan_dung, Texture chan_nhay, Texture chan_roi, Texture[] chan_chay,
-                   Texture than_bay,Texture chan_bay,Map<TrangThai, List<DoLechModular>> lechTheoTrangThai,String avt,
+                   Texture than_bay,Texture chan_bay,Texture chan_gong, Texture than_thu, Map<TrangThai, List<DoLechModular>> lechTheoTrangThai,String avt,
                    Texture ao, Texture quan, Texture gang, Texture giay, Texture rada, Texture iconct, Texture giaplt, Texture vanbay,
                    int capcaydau, String hanhtinh, String nhanvat) {
         this.x = x;
@@ -976,7 +977,10 @@ public class NhanVat {
         this.than_bay = than_bay;
         this.chan_bay = chan_bay;
 
-        this.rong = chan_dung.getWidth() * tiLe;
+        this.chan_gong = chan_gong;
+        this.than_thu = than_thu;
+
+        this.rong = than_dung.getWidth() * tiLe;
         this.cao = chan_dung.getHeight() * tiLe + than_dung.getHeight() * tiLe + dau_dung.getHeight() * 0.15f;
 
         this.lechTheoTrangThai = lechTheoTrangThai;
@@ -999,7 +1003,7 @@ public class NhanVat {
         (Texture dau_dung, Texture dau_chay,
          Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,
          Texture chan_dung, Texture chan_nhay, Texture chan_roi, Texture[] chan_chay,
-         Texture than_bay,Texture chan_bay,Map<TrangThai, List<DoLechModular>> lechTheoTrangThai,String avt){
+         Texture than_bay,Texture chan_bay,Texture chan_gong,Texture than_thu,Map<TrangThai, List<DoLechModular>> lechTheoTrangThai,String avt){
         this.avt = avt;
 
         this.dau_dung = dau_dung;
@@ -1017,9 +1021,11 @@ public class NhanVat {
         this.than_bay = than_bay;
         this.chan_bay = chan_bay;
 
-        this.rong = chan_dung.getWidth() * tiLe;
-        this.cao = chan_dung.getHeight() * tiLe + than_dung.getHeight() * tiLe + dau_dung.getHeight() * 0.15f;
+        this.chan_gong = chan_gong;
+        this.than_thu = than_thu;
 
+        this.rong = than_dung.getWidth() * tiLe;
+        this.cao = chan_dung.getHeight() * tiLe + than_dung.getHeight() * tiLe + dau_dung.getHeight() * 0.15f;
         this.lechTheoTrangThai = lechTheoTrangThai;
     }
 
@@ -1060,8 +1066,8 @@ public class NhanVat {
     }
 
     public void setGioiHanToaDo(float chieuRongMap, float chieuCaoMap,float gioiHanXMin,float gioiHanYMin) {
-        this.gioiHanXMax = chieuRongMap - rong;
-        this.gioiHanYMax = chieuCaoMap - cao;
+        this.gioiHanXMax = chieuRongMap;
+        this.gioiHanYMax = chieuCaoMap;
         this.gioiHanXMin = gioiHanXMin;
         this.gioiHanYMin = gioiHanYMin;
         if (duLieuNguoiChoi.coDeTu()) {
@@ -1070,17 +1076,50 @@ public class NhanVat {
     }
 
     public void capNhat() {
+//        if (1==1) {
+//            trangThai = TrangThai.DI_CHUYEN;
+//            flipX = false;
+//            return;
+//        }
         if (duLieuNguoiChoi.getKiHienTai()<=0) {
             if (dangBayNgang) {
                 dungTrai();
                 dungPhai();
                 thaNhay();
+                diChuyenDenMucTieu = false;
             }
         }
-        if (veHUD.dangHienPopup) {
+        if (veHUD.dangHienPopup || veHUD.timeChoBienKhi > 0) {
             dungTrai();
             dungPhai();
             thaNhay();
+            diChuyenDenMucTieu = false;
+        }
+        if (veHUD.timeChoBienKhi > 0) {
+            if (veHUD.timeChoBienKhi>1.6f) {
+                trangThai = TrangThai.GONG;
+            } else if (veHUD.timeChoBienKhi>1.4f) {
+                trangThai = TrangThai.THU;
+            } else {
+                trangThai = TrangThai.GONG;
+            }
+            return;
+        }
+        if (veHUD.timeBienKhi > 9.7f) { // chinh time o day, sau la 199.7f
+            trangThai = TrangThai.GONG;
+            return;
+        }
+        if (veHUD.timeBienKhi < 0.15f && veHUD.timeBienKhi > 0) {
+            trangThai = TrangThai.THU;
+            return;
+        }
+        if (veHUD.timeSauBienKhi < 0.6f && veHUD.timeSauBienKhi > 0) {
+            if (veHUD.timeSauBienKhi > 0.35f) {
+                trangThai = TrangThai.THU;
+            } else {
+                trangThai = TrangThai.GONG;
+            }
+            return;
         }
         if (!diChuyenDenMucTieu) {
             daNhayDeLenY = false; // reset nếu không di chuyển nữa
@@ -1246,11 +1285,11 @@ public class NhanVat {
             x += dx;
             dangDungDat = false;
             for (HitboxDat dat : danhSachDat) {
-                if (dat.vaChamBenTrai(x+5, y, rong, cao)) {
-                    x = dat.x - rong-5f;
+                if (dat.vaChamBenTrai(x, y, rong, cao)) {
+                    x = dat.x - rong;
                     break;
-                } else if (dat.vaChamBenPhai(x-5, y, rong, cao)) {
-                    x = dat.x + dat.width+5f;
+                } else if (dat.vaChamBenPhai(x, y, rong, cao)) {
+                    x = dat.x + dat.width;
                     break;
                 }
             }
@@ -1274,9 +1313,9 @@ public class NhanVat {
 
 
         // Giới hạn không cho ra khỏi bản đồ
-        x = Math.max(gioiHanXMin, Math.min(x, gioiHanXMax-5));
+        x = Math.max(gioiHanXMin, Math.min(x, gioiHanXMax-rong));
 
-        y =Math.max(gioiHanYMin, Math.min(y, gioiHanYMax));
+        y =Math.max(gioiHanYMin, Math.min(y, gioiHanYMax-cao));
     }
     public void setFlipTrai() {
         flipX = true;
@@ -1533,6 +1572,14 @@ public class NhanVat {
                     chanVe = chan_roi;
                     thanVe = than_roi;
                     break;
+                case THU:
+                    chanVe = chan_gong;
+                    thanVe = than_thu;
+                    break;
+                case GONG:
+                    chanVe = chan_gong;
+                    thanVe = than_nhay;
+                    break;
                 case DUNG_YEN:
                 default:
                     // giữ ảnh mặc định đã gán ban đầu
@@ -1544,6 +1591,9 @@ public class NhanVat {
             lechThanY = lech.lechThanY;
             lechDauX = lech.lechDauX;
             lechDauY = lech.lechDauY;
+            lechChanX = lech.lechChanX;
+            lechChanY = lech.lechChanY;
+
             // Tính tọa độ theo hướng flip
             float chanW = chanVe.getWidth() * tiLe;
             float chanH = chanVe.getHeight() * tiLe;
@@ -1554,9 +1604,10 @@ public class NhanVat {
 
             // Flip bằng scale âm nếu cần
             float flipScale = flipX ? -1f : 1f;
-            float anchorX = flipX ? x + chanW : x;
+            float anchorX = flipX ? x + rong : x;
+            float offsetChanX = flipX ? -lechChanX :  lechChanX;
             if (trangThai != TrangThai.BAY_NGANG) {
-                batch.draw(chanVe, anchorX, y, chanW * flipScale, chanH);
+                batch.draw(chanVe, anchorX + offsetChanX, y + lechChanY, chanW * flipScale, chanH);
 
                 float thanX = anchorX + (chanW / 2f - thanW / 2f) * flipScale;
                 float thanY = y + chanH + daoDong;
@@ -1897,7 +1948,7 @@ public class NhanVat {
             ds = map.get(trangThai);
         }
         if (ds == null || ds.isEmpty()) {
-            return new DoLechModular(0, 0, 0, 0); // fallback nếu thiếu dữ liệu
+            return new DoLechModular(0, 0, 0, 0,0,0); // fallback nếu thiếu dữ liệu
         }
 
         if (trangThai == TrangThai.DI_CHUYEN) {

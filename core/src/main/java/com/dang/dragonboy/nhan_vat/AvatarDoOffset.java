@@ -17,13 +17,17 @@ public class AvatarDoOffset {
             lechDau(3.3f, -9f,3.3f, -9f,3.3f, -9f,3.3f, -9f,3.3f, -9f),
             lechDau(3f, -23.5f),
             lechDau(0.2f, -31f),
-            lechDau(12f, -22f)
+            lechDau(12f, -22f),
+            lechDau(6f, -15.5f),
+            lechDau(6f, -22f)
         ));
         OFFSET_AVATAR.put("Krillin_base", taoLech(
             lechDau(-0.3f, -15.5f),
             lechDau(3.3f, -9f,3.3f, -9f,3.3f, -9f,3.3f, -9f,3.3f, -9f),
             lechDau(3f, -23.5f),
             lechDau(0.2f, -31f),
+            lechDau(-0.3f, -15.5f),
+            lechDau(-0.3f, -15.5f),
             lechDau(-0.3f, -15.5f)
         ));
         OFFSET_AVATAR.put("Yamcha_base", taoLech(
@@ -31,6 +35,8 @@ public class AvatarDoOffset {
             lechDau(3.3f, -14.5f,3.3f, -14.5f,3.3f, -14.5f,3.3f, -14.5f,3.3f, -14.5f),
             lechDau(3f, -29f),
             lechDau(0.2f, -36.5f),
+            lechDau(-0.3f, -21f),
+            lechDau(-0.3f, -21f),
             lechDau(-0.3f, -21f)
         ));
 
@@ -39,7 +45,9 @@ public class AvatarDoOffset {
             lechDau( 3.3f, -9f,3.3f, -9f,3.3f, -9f,3.3f, -9f,3.3f, -9f),
             lechDau( 1f, -23.5f),
             lechDau(-3.2f, -31f),
-            lechDau(-0.3f, -15.5f)
+            lechDau(-0.3f, -15.5f),
+            lechDau(-2f, -13.5f),
+            lechDau(-2f, -13.5f)
         ));
 
         // --- ÁO ---
@@ -48,7 +56,9 @@ public class AvatarDoOffset {
             lechThan(1.5f, 5.2f,1.5f, 5.2f,1.5f, 5.2f,1.5f, 5.2f,1.5f, 5.2f ),
             lechThan(-4f, 6f),
             lechThan(-6f, 7f ),
-            lechThan(5f, 8f)
+            lechThan(5f, 8f),
+            lechThan(8f, 8f),
+            lechThan(-1f, 8f)
         ));
 
         OFFSET_AO.put("set_cam", taoLech(
@@ -56,7 +66,9 @@ public class AvatarDoOffset {
             lechThan(1.5f, 5.2f,1.5f, 5.2f,1.5f, 5.2f,1.5f, 5.2f,1.5f, 5.2f ),
             lechThan(-4f, 6f),
             lechThan(-5.5f, 6.5f ),
-            lechThan(5f, 8f)
+            lechThan(5f, 8f),
+            lechThan(0f, 0f),
+            lechThan(0f, 0f)
         ));
 
         OFFSET_AO.put("set_huy_diet", taoLech(
@@ -64,7 +76,9 @@ public class AvatarDoOffset {
             lechThan(1.5f, 7f,1.5f, 7f,1.5f, 7f,1.5f, 7f,1.5f, 7f),
             lechThan(0f, 2f),
             lechThan(-4f, 2f),
-            lechThan(-1f, 4f)
+            lechThan(-1f, 4f),
+            lechThan(-1f, 3.5f),
+            lechThan(-1f, 3.5f)
         ));
 
         // --- QUẦN ---
@@ -73,10 +87,14 @@ public class AvatarDoOffset {
             lechChan(),
             lechChan(),
             lechChan(),
+            lechChan(),
+            lechChan(),
             lechChan()
         ));
 
         OFFSET_QUAN.put("set_huy_diet", taoLech(
+            lechChan(),
+            lechChan(),
             lechChan(),
             lechChan(),
             lechChan(),
@@ -118,7 +136,9 @@ public class AvatarDoOffset {
         List<DoLechModular> diChuyen,
         List<DoLechModular> nhay,
         List<DoLechModular> roi,
-        List<DoLechModular> bayNgang
+        List<DoLechModular> bayNgang,
+        List<DoLechModular> thu,
+        List<DoLechModular> gong
     ) {
         Map<TrangThai, List<DoLechModular>> map = new HashMap<>();
         map.put(TrangThai.DUNG_YEN, dungYen);
@@ -126,6 +146,8 @@ public class AvatarDoOffset {
         map.put(TrangThai.NHAY, nhay);
         map.put(TrangThai.ROI, roi);
         map.put(TrangThai.BAY_NGANG, bayNgang);
+        map.put(TrangThai.THU, thu);
+        map.put(TrangThai.GONG, gong);
         return map;
     }
 
@@ -143,7 +165,7 @@ public class AvatarDoOffset {
     private static List<DoLechModular> lechDau(float... values) {
         List<DoLechModular> list = new ArrayList<>();
         for (int i = 0; i < values.length; i += 2) {
-            list.add(new DoLechModular(0f, 0f, values[i], values[i + 1]));
+            list.add(new DoLechModular(0f, 0f, values[i], values[i + 1],0,0));
         }
         return list;
     }
@@ -151,18 +173,18 @@ public class AvatarDoOffset {
     private static List<DoLechModular> lechThan(float... values) {
         List<DoLechModular> list = new ArrayList<>();
         for (int i = 0; i < values.length; i += 2) {
-            list.add(new DoLechModular(values[i], values[i + 1], 0f, 0f));
+            list.add(new DoLechModular(values[i], values[i + 1], 0f, 0f,0,0));
         }
         return list;
     }
 
     private static List<DoLechModular> lechChan() {
         return List.of(
-            new DoLechModular(0f, 0f, 0f, 0f),
-            new DoLechModular(0f, 0f, 0f, 0f),
-            new DoLechModular(0f, 0f, 0f, 0f),
-            new DoLechModular(0f, 0f, 0f, 0f),
-            new DoLechModular(0f, 0f, 0f, 0f)
+            new DoLechModular(0f, 0f, 0f, 0f,0,0),
+            new DoLechModular(0f, 0f, 0f, 0f,0,0),
+            new DoLechModular(0f, 0f, 0f, 0f,0,0),
+            new DoLechModular(0f, 0f, 0f, 0f,0,0),
+            new DoLechModular(0f, 0f, 0f, 0f,0,0)
         );
     }
 }

@@ -56,6 +56,10 @@ public class HUDTinhToanChiSo {
                     break;
             }
         }
+        if (veHUD.dangBienKhi) {
+            hp *= 1+veHUD.hpTangBienKhi/100f;
+            sd *= 1+veHUD.sucDanhTangBienKhi/100f;
+        }
 
         // ===== Bổ Huyết =====
         if (veHUD.dangDungBoHuyet) {
@@ -230,6 +234,9 @@ public class HUDTinhToanChiSo {
         duLieuNguoiChoi.setHpHopThe(hp);
         duLieuNguoiChoi.setKiHopThe(ki);
         duLieuNguoiChoi.setSdHopThe(sd);
+        if (veHUD.dangBienKhi) {
+            cm = 110;
+        }
         duLieuNguoiChoi.setChiMangSuDung(cm);
         duLieuNguoiChoi.setSatThuongChiMangSuDung(stcm);
         duLieuNguoiChoi.setGiamSatThuongSuDung(giamSatThuong);
@@ -237,6 +244,10 @@ public class HUDTinhToanChiSo {
             duLieuNguoiChoi.setHpHienTai(duLieuNguoiChoi.getHpHopThe());
             duLieuNguoiChoi.setKiHienTai(duLieuNguoiChoi.getKiHopThe());
             veHUD.vuaHopThe = false;
+        }
+        if (veHUD.vuaBienKhi) {
+            duLieuNguoiChoi.tangHpHienTai(duLieuNguoiChoi.getHpHopThe()/(1+veHUD.hpTangBienKhi/100f));
+            veHUD.vuaBienKhi = false;
         }
         // Giới hạn HP/KI hiện tại
         if (duLieuNguoiChoi.getHpHienTai() > hp) duLieuNguoiChoi.setHpHienTai(hp);

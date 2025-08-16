@@ -25,9 +25,8 @@ import com.dang.dragonboy.nhan_vat.NhanVatXuLy;
 //HUD
 import com.dang.dragonboy.hien_thi.QuanLyCamera;
 import com.dang.dragonboy.hien_thi.VeHUD;
-import com.dang.dragonboy.hien_thi.SkillIcon;
+import com.dang.dragonboy.hien_thi.SkillNhanVat;
 //import com.dang.dragonboy.xu_ly_map.MapLangKakarot;
-import com.dang.dragonboy.xu_ly_map.MapNhaBroly;
 // dữ liệu
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.xu_ly_map.MapNhaGohan;
@@ -157,7 +156,7 @@ public class ManHinhNhaBroly implements Screen {
         nhagohan = new Texture("map/"+hanhtinh+"/chung/nhacua/nhacua1_"+hanhtinh+".png");
         hudRenderer = new VeHUD(layout);
         // load skill + thuộc tính nhân vật
-        SkillIcon[] traidatIcons = loadSkillIcons(hanhtinh);
+        SkillNhanVat[] traidatIcons = loadSkillIcons(hanhtinh);
         hudRenderer.setSkillIcons(traidatIcons);
         //NhanVatCauHinh config = Doi_avt_ao_quan(hanhtinh,nhanvat+"_base","set_cam","set_cam") ;
         NhanVatCauHinh config = Doi_avt_ao_quan(hanhtinh,nhanvat+"_base","set_base","set_base");
@@ -167,6 +166,7 @@ public class ManHinhNhaBroly implements Screen {
             config.than_dung, config.than_nhay, config.than_roi, config.than_chay,
             config.chan_dung, config.chan_nhay, config.chan_roi, config.chan_chay,
             config.than_bay, config.chan_bay,
+            config.chan_gong,config.than_thu,
             config.lechMap,
             config.avt,
             null,null,null,null,null,null,null,config.vanbay,
@@ -457,11 +457,11 @@ public class ManHinhNhaBroly implements Screen {
         layout.setText(font,ten);
         drawText(font, ten, toadoX + (width - layout.width) / 2, toadoY + height, Color.YELLOW);
     }
-    private SkillIcon[] loadSkillIcons(String hanhTinh) {
-        SkillIcon[] skillIcons = new SkillIcon[9];
+    private SkillNhanVat[] loadSkillIcons(String hanhTinh) {
+        SkillNhanVat[] skillIcons = new SkillNhanVat[9];
         for (int i = 0; i < 9; i++) {
             String path = "kynang/iconkynang/"+hanhTinh+"/skill" + (i + 1) + "_" + hanhTinh.toLowerCase() + ".png";
-            skillIcons[i] = new SkillIcon(path);
+            skillIcons[i] = new SkillNhanVat(path);
         }
         return skillIcons;
     }

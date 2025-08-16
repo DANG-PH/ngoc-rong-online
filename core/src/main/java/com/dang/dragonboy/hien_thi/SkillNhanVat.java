@@ -2,10 +2,10 @@ package com.dang.dragonboy.hien_thi;
 
 import com.badlogic.gdx.graphics.Texture;
 
-public class SkillIcon {
+public class SkillNhanVat {
     public Texture icon;
 
-    public SkillIcon(String path) {
+    public SkillNhanVat(String path) {
         this.icon = new Texture(path);
     }
 

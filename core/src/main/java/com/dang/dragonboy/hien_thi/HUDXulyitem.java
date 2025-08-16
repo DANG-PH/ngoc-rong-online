@@ -76,13 +76,14 @@ public class HUDXulyitem {
                             NhanVatXuLy.setDangMacAvatar(true);
                             NhanVatXuLy.setDangMacCaiTrang(false);
                         }
-                        if (!veHUD.dangHopThe) {
+                        if (!veHUD.dangHopThe && !veHUD.dangBienKhi) {
                             NhanVatCauHinh c2 = laCaiTrang ? veHUD.Doicaitrang(item.getId()) : veHUD.Doi_avt_ao_quan(nhanVat.getHanhtinh(), item.getId(), veHUD.aodangmac, veHUD.quandangmac);
                             nhanVat.fixCaiTrang(
                                 c2.dau_dung, c2.dau_chay,
                                 c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
                                 c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
                                 c2.than_bay, c2.chan_bay,
+                                c2.chan_gong,c2.than_thu,
                                 c2.lechMap,
                                 c2.avt
                             );
@@ -109,13 +110,14 @@ public class HUDXulyitem {
                         nhanVat.setSoSaoCuongHoaAo(item.getSoSaoPhaLeCuongHoa());
                         nhanVat.setHanhTinhAo(item.getHanhtinh());
                         nhanVat.setSucManhYeuCauAo(item.getSucManhYeuCau());
-                        if (!NhanVatXuLy.getDangMacCaiTrang() && !veHUD.dangHopThe) {
+                        if (!NhanVatXuLy.getDangMacCaiTrang() && !veHUD.dangHopThe && !veHUD.dangBienKhi) {
                             NhanVatCauHinh c2 = veHUD.Doi_avt_ao_quan(nhanVat.getHanhtinh(), veHUD.avatardangmac, item.getId(), veHUD.quandangmac);
                             nhanVat.fixCaiTrang(
                                 c2.dau_dung, c2.dau_chay,
                                 c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
                                 c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
                                 c2.than_bay, c2.chan_bay,
+                                c2.chan_gong,c2.than_thu,
                                 c2.lechMap,
                                 c2.avt
                             );
@@ -143,13 +145,14 @@ public class HUDXulyitem {
                         nhanVat.setSoSaoCuongHoaQuan(item.getSoSaoPhaLeCuongHoa());
                         nhanVat.setHanhTinhQuan(item.getHanhtinh());
                         nhanVat.setSucManhYeuCauQuan(item.getSucManhYeuCau());
-                        if (!NhanVatXuLy.getDangMacCaiTrang() && !veHUD.dangHopThe) {
+                        if (!NhanVatXuLy.getDangMacCaiTrang() && !veHUD.dangHopThe && !veHUD.dangBienKhi) {
                             NhanVatCauHinh c2 = veHUD.Doi_avt_ao_quan(nhanVat.getHanhtinh(), veHUD.avatardangmac, veHUD.aodangmac, item.getId());
                             nhanVat.fixCaiTrang(
                                 c2.dau_dung, c2.dau_chay,
                                 c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
                                 c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
                                 c2.than_bay, c2.chan_bay,
+                                c2.chan_gong,c2.than_thu,
                                 c2.lechMap,
                                 c2.avt
                             );
@@ -505,13 +508,14 @@ public class HUDXulyitem {
         nhanVat.setSucManhYeuCauAo(item.getSucManhYeuCau());
 
         // 5. Load avatar nếu không cải trang
-        if (!NhanVatXuLy.getDangMacCaiTrang() && !veHUD.dangHopThe) {
+        if (!NhanVatXuLy.getDangMacCaiTrang() && !veHUD.dangHopThe && !veHUD.dangBienKhi) {
             NhanVatCauHinh c2 = veHUD.Doi_avt_ao_quan(nhanVat.getHanhtinh(), veHUD.avatardangmac, item.getId(), veHUD.quandangmac);
             nhanVat.fixCaiTrang(
                 c2.dau_dung, c2.dau_chay,
                 c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
                 c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
                 c2.than_bay, c2.chan_bay,
+                c2.chan_gong,c2.than_thu,
                 c2.lechMap,
                 c2.avt
             );
@@ -556,13 +560,14 @@ public class HUDXulyitem {
         veHUD.aodangmac = "set_base";
 
         // 5. Cập nhật giao diện nếu không cải trang
-        if (!NhanVatXuLy.getDangMacCaiTrang() && !veHUD.dangHopThe){
+        if (!NhanVatXuLy.getDangMacCaiTrang() && !veHUD.dangHopThe && !veHUD.dangBienKhi){
             NhanVatCauHinh c2 = veHUD.Doi_avt_ao_quan(nhanVat.getHanhtinh(), veHUD.avatardangmac, "set_base", veHUD.quandangmac);
             nhanVat.fixCaiTrang(
                 c2.dau_dung, c2.dau_chay,
                 c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
                 c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
                 c2.than_bay, c2.chan_bay,
+                c2.chan_gong,c2.than_thu,
                 c2.lechMap,
                 c2.avt
             );
@@ -719,13 +724,14 @@ public class HUDXulyitem {
         nhanVat.setSucManhYeuCauQuan(item.getSucManhYeuCau());
 
         // 5. Load avatar nếu không cải trang
-        if (!NhanVatXuLy.getDangMacCaiTrang() && !veHUD.dangHopThe) {
+        if (!NhanVatXuLy.getDangMacCaiTrang() && !veHUD.dangHopThe && !veHUD.dangBienKhi) {
             NhanVatCauHinh c2 = veHUD.Doi_avt_ao_quan(nhanVat.getHanhtinh(), veHUD.avatardangmac, veHUD.aodangmac, item.getId());
             nhanVat.fixCaiTrang(
                 c2.dau_dung, c2.dau_chay,
                 c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
                 c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
                 c2.than_bay, c2.chan_bay,
+                c2.chan_gong,c2.than_thu,
                 c2.lechMap,
                 c2.avt
             );
@@ -770,13 +776,14 @@ public class HUDXulyitem {
         veHUD.quandangmac = "set_base";
 
         // 5. Cập nhật giao diện nếu không cải trang
-        if (!NhanVatXuLy.getDangMacCaiTrang() && !veHUD.dangHopThe) {
+        if (!NhanVatXuLy.getDangMacCaiTrang() && !veHUD.dangHopThe && !veHUD.dangBienKhi) {
             NhanVatCauHinh c2 = veHUD.Doi_avt_ao_quan(nhanVat.getHanhtinh(), veHUD.avatardangmac, veHUD.aodangmac, "set_base");
             nhanVat.fixCaiTrang(
                 c2.dau_dung, c2.dau_chay,
                 c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
                 c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
                 c2.than_bay, c2.chan_bay,
+                c2.chan_gong,c2.than_thu,
                 c2.lechMap,
                 c2.avt
             );
@@ -1422,7 +1429,7 @@ public class HUDXulyitem {
             NhanVatXuLy.setDangMacCaiTrang(false);
         }
         // 3. Load config cải trang mới
-        if (!veHUD.dangHopThe) {
+        if (!veHUD.dangHopThe && !veHUD.dangBienKhi) {
             NhanVatCauHinh c2 = laCaiTrangMoi
                 ? veHUD.Doicaitrang(item.getId())
                 : veHUD.Doi_avt_ao_quan(nhanVat.getHanhtinh(), item.getId(), veHUD.aodangmac, veHUD.quandangmac);
@@ -1431,6 +1438,7 @@ public class HUDXulyitem {
                 c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
                 c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
                 c2.than_bay, c2.chan_bay,
+                c2.chan_gong,c2.than_thu,
                 c2.lechMap,
                 c2.avt
             );
@@ -1510,13 +1518,14 @@ public class HUDXulyitem {
         }
         NhanVatXuLy.setDangMacAvatar(false);
         NhanVatXuLy.setDangMacCaiTrang(false);
-        if (!veHUD.dangHopThe) {
+        if (!veHUD.dangHopThe && !veHUD.dangBienKhi) {
             NhanVatCauHinh c2 = veHUD.Doi_avt_ao_quan(nhanVat.getHanhtinh(), nhanVat.getNhanvat() + "_base", veHUD.aodangmac, veHUD.quandangmac);
             nhanVat.fixCaiTrang(
                 c2.dau_dung, c2.dau_chay,
                 c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
                 c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
                 c2.than_bay, c2.chan_bay,
+                c2.chan_gong,c2.than_thu,
                 c2.lechMap,
                 c2.avt
             );

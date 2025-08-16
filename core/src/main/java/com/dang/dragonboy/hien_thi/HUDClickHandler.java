@@ -38,7 +38,11 @@ public class HUDClickHandler {
         for (int i = 0; i < 5; i++) {
             float x_ve = skillBaseX + i * (65f);
             if (x >= x_ve && x <= x_ve+oskillW && y >= skillY && y <= skillY+oskillH) {
-                veHUD.chonSkill(i);
+                if (veHUD.skillDangChon == i) {
+                    veHUD.dungSkill(i);
+                } else {
+                    veHUD.chonSkill(i);
+                }
             }
         }
 
