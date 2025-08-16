@@ -27,7 +27,7 @@ public class NhanVat {
     public float x, y;
     private String ten;
     public float vx = 0, vy = 0;
-    public float rong, cao;
+    public float rong, cao, rong_chan;
     public boolean dangDungDat = true;
     public float thoiGianTichLuy = 0f;
 
@@ -981,6 +981,7 @@ public class NhanVat {
         this.than_thu = than_thu;
 
         this.rong = than_dung.getWidth() * tiLe;
+        this.rong_chan = chan_dung.getWidth() * tiLe;
         this.cao = chan_dung.getHeight() * tiLe + than_dung.getHeight() * tiLe + dau_dung.getHeight() * 0.15f;
 
         this.lechTheoTrangThai = lechTheoTrangThai;
@@ -1025,6 +1026,7 @@ public class NhanVat {
         this.than_thu = than_thu;
 
         this.rong = than_dung.getWidth() * tiLe;
+        this.rong_chan = chan_dung.getWidth() * tiLe;
         this.cao = chan_dung.getHeight() * tiLe + than_dung.getHeight() * tiLe + dau_dung.getHeight() * 0.15f;
         this.lechTheoTrangThai = lechTheoTrangThai;
     }
@@ -1495,7 +1497,7 @@ public class NhanVat {
             float anchorX = flipX ? x + rong  + (veHUD.anhAura[veHUD.framesAura].getWidth() * tiLe)*4.5f/10f-(rong/10f) - offsetX : x  - (veHUD.anhAura[veHUD.framesAura].getWidth() * tiLe)*4.5f/10f+(rong/10f) + offsetX;
             batch.draw(veHUD.anhAura[veHUD.framesAura], anchorX, y+daoDong+(cao/3f)-25f + offsetY, veHUD.anhAura[veHUD.framesAura].getWidth() * tiLe * flipScale, veHUD.anhAura[veHUD.framesAura].getHeight() * tiLe);
         }
-        if (veHUD.dangDungDeoLung && veHUD.timeChoHopThe == 0 && duDieuKien && !(trangThai == TrangThai.BAY_NGANG && !dangMangVanBay) && !(trangThai == TrangThai.DI_CHUYEN)){
+        if (veHUD.dangDungDeoLung && veHUD.timeChoHopThe == 0 && duDieuKien && !(trangThai == TrangThai.BAY_NGANG && !dangMangVanBay) && !(trangThai == TrangThai.DI_CHUYEN) && !(trangThai == TrangThai.GONG) && !(trangThai == TrangThai.THU)){
             int soAnh = 2;
             switch (veHUD.deoLungDangDung.getId()) {
                 case "dao" : soAnh = 8; break;
@@ -1938,8 +1940,9 @@ public class NhanVat {
         if (veHUD.dangDungAura && veHUD.timeChoHopThe == 0 && duDieuKien && trangThai == TrangThai.DUNG_YEN) {
             float tiLe = 0.35f;
             if (veHUD.dangHopThe) tiLe = 0.4f;
+            if (veHUD.dangBienKhi) tiLe = 0.55f;
             float flipScale = flipX ? -1f : 1f;
-            float anchorX2 = flipX ? x + rong + (auraChan[veHUD.framesAura].getWidth()*tiLe-rong)/2f : x - (auraChan[veHUD.framesAura].getWidth()*tiLe-rong)/2f;
+            float anchorX2 = flipX ? x + rong + (auraChan[veHUD.framesAura].getWidth()*tiLe-rong_chan)/2f : x - (auraChan[veHUD.framesAura].getWidth()*tiLe-rong_chan)/2f;
             batch.draw(auraChan[veHUD.framesAura], anchorX2, y, auraChan[veHUD.framesAura].getWidth() * tiLe * flipScale, auraChan[veHUD.framesAura].getHeight() * tiLe);
         }
     }
