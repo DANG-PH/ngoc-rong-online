@@ -18,5 +18,6 @@ public enum LoaiItem {
     HOPQUA,
     PHUTRO,
     DEOLUNG,
-    AURA
+    AURA,
+    NANGSKILL
 }

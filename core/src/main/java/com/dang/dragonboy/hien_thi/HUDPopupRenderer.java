@@ -368,15 +368,12 @@ public class HUDPopupRenderer {
                                 veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12 +kc, y + 49 - 30);
                             }
                         }
-                        if (item.getLoai() == LoaiItem.BONGTAI){
-                            layout.setText(veHUD.fontCapSKill,item.getMoTa());
-                            veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
-                        }
-                        if (item.getLoai() == LoaiItem.HUYHIEU) {
-                            layout.setText(veHUD.fontCapSKill,item.getMoTa());
-                            veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
-                        }
-                        if (item.getLoai() == LoaiItem.DEOLUNG || item.getLoai() == LoaiItem.AURA) {
+                        if (item.getLoai() == LoaiItem.DEOLUNG ||
+                            item.getLoai() == LoaiItem.AURA ||
+                            item.getLoai() == LoaiItem.HUYHIEU ||
+                            item.getLoai() == LoaiItem.BONGTAI ||
+                            item.getLoai() == LoaiItem.NANGSKILL
+                        ) {
                             layout.setText(veHUD.fontCapSKill,item.getMoTa());
                             veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
                         }
@@ -1375,15 +1372,12 @@ public class HUDPopupRenderer {
                                 veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + kc + 1020 - 350, y + 49 - 30);
                             }
                         }
-                        if (item.getLoai() == LoaiItem.BONGTAI){
-                            layout.setText(veHUD.fontCapSKill,item.getMoTa());
-                            veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12 + 1020 - 350, y + 49 - 30);
-                        }
-                        if (item.getLoai() == LoaiItem.HUYHIEU) {
-                            layout.setText(veHUD.fontCapSKill,item.getMoTa());
-                            veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12 + 1020 - 350, y + 49 - 30);
-                        }
-                        if (item.getLoai() == LoaiItem.DEOLUNG || item.getLoai() == LoaiItem.AURA) {
+                        if (item.getLoai() == LoaiItem.DEOLUNG ||
+                            item.getLoai() == LoaiItem.AURA ||
+                            item.getLoai() == LoaiItem.HUYHIEU ||
+                            item.getLoai() == LoaiItem.BONGTAI ||
+                            item.getLoai() == LoaiItem.NANGSKILL
+                        ) {
                             layout.setText(veHUD.fontCapSKill,item.getMoTa());
                             veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12 + 1020 - 350, y + 49 - 30);
                         }

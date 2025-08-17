@@ -114,12 +114,12 @@ public class DuLieuNguoiChoi {
 
     public void themItemVaoHanhTrang(Item item) {
         if (hanhTrang.size() < 50) {
-            if (item.getLoai() != LoaiItem.NGOCRONG && item.getLoai() != LoaiItem.PHUTRO) {
+            if (item.getLoai() != LoaiItem.NGOCRONG && item.getLoai() != LoaiItem.PHUTRO && item.getLoai() != LoaiItem.NANGSKILL) {
                 hanhTrang.add(item);
             } else {
                 boolean daSoHuuItem = false;
                 for (Item itemm : hanhTrang) {
-                    if ((itemm.getLoai() == LoaiItem.NGOCRONG || item.getLoai() == LoaiItem.PHUTRO) && itemm.getId() == item.getId()) {
+                    if ((itemm.getLoai() == LoaiItem.NGOCRONG || item.getLoai() == LoaiItem.PHUTRO || item.getLoai() == LoaiItem.NANGSKILL) && itemm.getId() == item.getId()) {
                         itemm.tangSoLuong(item.getSoLuong());
                         daSoHuuItem = true;
                     }
@@ -555,8 +555,8 @@ public class DuLieuNguoiChoi {
     }
 
     public void tangCapSkill(int i) {
-        if (i >= 1 && i <= 9 && capSkill[i - 1] < 7) {
-            capSkill[i - 1]++;
+        if (i >= 0 && i < 9 && capSkill[i] < 7) {
+            capSkill[i]++;
         }
     }
 

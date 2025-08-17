@@ -105,8 +105,8 @@ public class NhanVat {
     private int KiGoc = 500000;
     private float HpNhanVat = HpGoc;
     private float KiNhanVat = KiGoc;
-    private float HpHienTai = HpNhanVat*0.7f;
-    private float KiHienTai = KiNhanVat*0.7f;
+    private float HpHienTai = HpNhanVat*0.1f;
+    private float KiHienTai = KiNhanVat*0.1f;
     private int SucDanhGoc = 24000;
     private float SucDanhNhanVat = SucDanhGoc;
     private int GiapGoc = 990;
@@ -125,8 +125,8 @@ public class NhanVat {
     private String capBac = "Thần Xayda cấp 9+99.99%";
     private int CapSkill1 = 7;
     private int CapSkill2 = 6;
-    private int CapSkill3 = 5;
-    private int CapSkill4 = 7;
+    private int CapSkill3 = 7;
+    private int CapSkill4 = 0;
     private int CapSkill5 = 3;
     private int CapSkill6 = 2;
     private int CapSkill7 = 1;
@@ -919,15 +919,15 @@ public class NhanVat {
             }
         } else if ("xayda".equals(hanhTinh)) {
             switch (skill){
-                case 1: return new String[]{"Tấn công cận chiến","Tăng sức đánh: "+(100+10*CapSkill1)+"%","KI tiêu hao: "+(10*CapSkill1),"Hồi chiêu: "+0.5+"s"};
-                case 2: return new String[]{"Bắn xa nhờ năng lượng","Tăng sức đánh :"+(150+20*CapSkill2)+"%","KI tiêu hao: "+(300+100*CapSkill2),"Hồi chiêu: 2.2s"};
-                case 3: return new String[]{"Tái tạo lại HP và MP đang có","Tự tái tạo HP MP "+(3+1*CapSkill3)+"%/s","KI tiêu hao: 0%","Hồi chiêu: "+(60-5*CapSkill3)+"s"};
-                case 4: return new String[]{"Biến hình thành khỉ","Tăng sức đánh, HP và tốc độ","KI tiêu hao: 10%","Hồi chiêu: "+(500-20*CapSkill4)+"s"};
+                case 1: return new String[]{"Tấn công cận chiến","Tăng sức đánh: "+(100+10*duLieuNguoiChoi.getCapSkill(0))+"%","KI tiêu hao: "+(10*duLieuNguoiChoi.getCapSkill(0)),"Hồi chiêu: "+0.5+"s"};
+                case 2: return new String[]{"Bắn xa nhờ năng lượng","Tăng sức đánh :"+(150+20*duLieuNguoiChoi.getCapSkill(1))+"%","KI tiêu hao: "+(300+100*duLieuNguoiChoi.getCapSkill(1)),"Hồi chiêu: 2.2s"};
+                case 3: return new String[]{"Tái tạo lại HP và MP đang có","Tự tái tạo HP MP "+(3+1*duLieuNguoiChoi.getCapSkill(2))+"%/s","KI tiêu hao: 0%","Hồi chiêu: "+(60-5*duLieuNguoiChoi.getCapSkill(2))+"s"};
+                case 4: return new String[]{"Biến hình thành khỉ","Tăng sức đánh, HP và tốc độ","KI tiêu hao: 10%","Hồi chiêu: "+(500-20*duLieuNguoiChoi.getCapSkill(3))+"s"};
                 case 5: return new String[]{"Tự phát nổ","Hy sinh, gây sát thương lớn cho kẻ thù","KI tiêu hao: 50%","Hồi chiêu: 120s"};
-                case 6: return new String[]{"Huýt sáo","Tăng tạm thời "+(30+10*CapSkill6)+"%HP cho mọi người","KI tiêu hao: 20","Hồi chiêu: 180s"};
-                case 7: return new String[]{"Trói","Trói kẻ thù","KI tiêu hao: 32000","Hồi chiêu: "+(70-5*CapSkill7)+"s"};
-                case 8: return new String[]{"Cađíc liên hoàn chưởng","Tăng sức đánh: "+(550+CapSkill8*50)+"%","KI tiêu hao: 80%","Hồi chiêu: 170s"};
-                case 9: return new String[]{"Khiên năng lượng","Vô hiệu các đòn tấn công","KI tiêu hao: 33%","Hồi chiêu: "+(175-10*CapSkill9)+"s"};
+                case 6: return new String[]{"Huýt sáo","Tăng tạm thời "+(30+10*duLieuNguoiChoi.getCapSkill(5))+"%HP cho mọi người","KI tiêu hao: 20","Hồi chiêu: 180s"};
+                case 7: return new String[]{"Trói","Trói kẻ thù","KI tiêu hao: 32000","Hồi chiêu: "+(70-5*duLieuNguoiChoi.getCapSkill(6))+"s"};
+                case 8: return new String[]{"Cađíc liên hoàn chưởng","Tăng sức đánh: "+(550+duLieuNguoiChoi.getCapSkill(7)*50)+"%","KI tiêu hao: 80%","Hồi chiêu: 170s"};
+                case 9: return new String[]{"Khiên năng lượng","Vô hiệu các đòn tấn công","KI tiêu hao: 33%","Hồi chiêu: "+(175-10*duLieuNguoiChoi.getCapSkill(8))+"s"};
                 default: return new String[]{""};
             }
         } else {
@@ -1132,6 +1132,22 @@ public class NhanVat {
         }
         if (veHUD.timeSauBienKhi < 0.6f && veHUD.timeSauBienKhi > 0) {
             if (veHUD.timeSauBienKhi > 0.35f) {
+                trangThai = TrangThai.THU;
+            } else {
+                trangThai = TrangThai.GONG;
+            }
+            return;
+        }
+        if (!dangDungDat) {
+            veHUD.huyTtnl();
+        }
+        if (veHUD.timeTtnl < 8f) {
+            if (phimTraiDangGiu || phimNhayDangGiu || phimPhaiDangGiu) {
+                veHUD.huyTtnl();
+            }
+        }
+        if (veHUD.dangTtnl) {
+            if (veHUD.timeTtnl > veHUD.timeTtnlMax-0.3f) {
                 trangThai = TrangThai.THU;
             } else {
                 trangThai = TrangThai.GONG;
@@ -1687,6 +1703,26 @@ public class NhanVat {
                     }
                 }
             }
+            if (veHUD.timeChoBienKhi > 0) {
+                int tick = (int)(veHUD.timeChoBienKhi * 10);
+                int tick1 = (int)(veHUD.timeChoBienKhi * 15);
+                if (tick1 % 2 == 0) {
+                    veQckk(batch,x + rong/2f+5f*flipScale, y + cao / 2f);
+                }
+                if (tick % 2 == 0) {
+                    veTaiTaoNangLuong(batch,x + rong/2f+5f*flipScale,y);
+                }
+            }
+            if (veHUD.timeSauBienKhi < 0.6f && veHUD.timeSauBienKhi > 0) {
+                if (veHUD.timeSauBienKhi > 0.35f) {
+                    veTaiTaoNangLuong(batch,x + rong/2f+5f*flipScale,y);
+                }
+            }
+            if (veHUD.dangTtnl) {
+                float offsetX = 5f;
+                if (veHUD.dangBienKhi) offsetX = -5f;
+                veTaiTaoNangLuong(batch,x + rong/2f+offsetX*flipScale,y);
+            }
             if (veHUD.dangHienTinNhanChat) {
                 layout.setText(
                     veHUD.fontchat,
@@ -1747,21 +1783,6 @@ public class NhanVat {
                         }
                         veHUD.daRanDomChatDeTu = true;
                     }
-                }
-            }
-            if (veHUD.timeChoBienKhi > 0) {
-                int tick = (int)(veHUD.timeChoBienKhi * 10);
-                int tick1 = (int)(veHUD.timeChoBienKhi * 15);
-                if (tick1 % 2 == 0) {
-                    veQckk(batch, x + chanW / 2f, y + cao / 2f);
-                }
-                if (tick % 2 == 0) {
-                    veTaiTaoNangLuong(batch,x+chanW/2f,y);
-                }
-            }
-            if (veHUD.timeSauBienKhi < 0.6f && veHUD.timeSauBienKhi > 0) {
-                if (veHUD.timeSauBienKhi > 0.35f) {
-                    veTaiTaoNangLuong(batch,x+chanW/2f,y);
                 }
             }
         } else {
@@ -2061,7 +2082,9 @@ public class NhanVat {
             frameTtnl = (frameTtnl+1)%ttnl.length;
             timeDoiFramesTtnl = 0;
         }
-        batch.draw(ttnl[frameTtnl],x-ttnl[frameTtnl].getWidth()*0.55f/2f,y,ttnl[frameTtnl].getWidth()*0.55f,ttnl[frameTtnl].getHeight()*0.55f);
+        float tl = 0.5f;
+        if (veHUD.dangBienKhi || veHUD.dangHopThe) tl = 0.55f;
+        batch.draw(ttnl[frameTtnl],x-ttnl[frameTtnl].getWidth()*tl/2f,y,ttnl[frameTtnl].getWidth()*tl,ttnl[frameTtnl].getHeight()*tl);
     }
     public void veQckk(SpriteBatch batch,float x, float y) {
         timeDoiFramesQckk += Gdx.graphics.getDeltaTime();

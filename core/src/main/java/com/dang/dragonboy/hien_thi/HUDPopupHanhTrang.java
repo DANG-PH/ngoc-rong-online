@@ -390,6 +390,35 @@ public class HUDPopupHanhTrang {
                 );
                 veHUD.PopupHanhTrangH += layout.height + 28;
             }
+            if ("nangskill".equals(veHUD.itemDangChon)) {
+                layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
+                veHUD.PopupHanhTrangH += layout.height + 15;
+                layout.setText(veHUD.fontTenSkill, "Không thể giao dịch");
+                veHUD.PopupHanhTrangH += layout.height + 12;
+                if (veHUD.itemm.getSucManhYeuCau()>0) {
+                    if (duLieuNguoiChoi.getSucManh() >= veHUD.itemm.getSucManhYeuCau()) {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
+                        veHUD.PopupHanhTrangH += layout.height + 10;
+                    } else {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
+                        veHUD.PopupHanhTrangH += layout.height + 10;
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh của bạn: " + duLieuNguoiChoi.getSucManh());
+                        veHUD.PopupHanhTrangH += layout.height + 10;
+                    }
+                }
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.font, "____________________________________");
+                veHUD.PopupHanhTrangH += layout.height + 15;
+                layout.setText(
+                    veHUD.fontMotaHanhTrang,
+                    veHUD.itemm.getMoTa(),
+                    veHUD.fontMotaHanhTrang.getColor(),
+                    330,
+                    Align.left,
+                    true
+                );
+                veHUD.PopupHanhTrangH += layout.height + 40;
+            }
             // --- VẼ BACKGROUND BẰNG SHAPERENDERER ---
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(1, 1, 1, 1);
@@ -963,6 +992,53 @@ public class HUDPopupHanhTrang {
                         offsetY += layout.height + 12;
                     }
                 }
+                layout.setText(veHUD.fontSkillchuaco, "Không thể giao dịch");
+                veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
+                offsetY += layout.height + 12;
+
+                if (veHUD.itemm.getSucManhYeuCau()>0) {
+                    if (duLieuNguoiChoi.getSucManh() >= veHUD.itemm.getSucManhYeuCau()) {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));
+                        veHUD.fontMotaHanhTrang.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
+                        offsetY += layout.height;
+                    } else {
+                        layout.setText(veHUD.fontMotaHanhTrang1, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));
+                        veHUD.fontMotaHanhTrang1.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
+                        offsetY += layout.height+5;
+                        layout.setText(veHUD.fontMotaHanhTrang1, "Sức mạnh của bạn: " +  dinhDang.format(duLieuNguoiChoi.getSucManh()));
+                        veHUD.fontMotaHanhTrang1.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
+                        offsetY += layout.height;
+                    }
+                }
+
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.font, "____________________________________");
+                for (int i = 0; i < 2; i++) {
+                    veHUD.font.draw(batch, layout, veHUD.PopupHanhTrangX + (veHUD.PopupHanhTrangW - layout.width) / 2f + xCongThem, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY - i * 1);
+                }
+                offsetY += layout.height + 25;
+
+                layout.setText(
+                    veHUD.fontMotaHanhTrang,
+                    veHUD.itemm.getMoTa(),
+                    veHUD.fontMotaHanhTrang.getColor(),
+                    330,
+                    Align.left,
+                    true
+                );
+                veHUD.fontMotaHanhTrang.draw(batch, layout, veHUD.PopupHanhTrangX + (veHUD.PopupHanhTrangW - layout.width) / 2f + xCongThem, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
+                offsetY += layout.height + 30;
+            } else if ("nangskill".equals(veHUD.itemDangChon)) {
+                float offsetY = 10;
+                if (veHUD.itemm.getTexture() != null) {
+                    batch.draw(veHUD.itemm.getTexture(), veHUD.PopupHanhTrangX + 15 + xCongThem, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - veHUD.itemm.getTexture().getHeight() * 0.5f - offsetY, veHUD.itemm.getTexture().getWidth() * 0.5f, veHUD.itemm.getTexture().getHeight() * 0.5f);
+                    offsetY += 10;
+                }
+                veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
+                veHUD.fontTenSkill.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
+                offsetY += layout.height + 12;
+
                 layout.setText(veHUD.fontSkillchuaco, "Không thể giao dịch");
                 veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangW + veHUD.PopupHanhTrangX - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH - offsetY);
                 offsetY += layout.height + 12;

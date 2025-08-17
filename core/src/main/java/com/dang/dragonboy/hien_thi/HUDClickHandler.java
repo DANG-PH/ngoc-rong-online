@@ -316,6 +316,8 @@ public class HUDClickHandler {
                             veHUD.itemDangChon = "deolung";
                         } else if (item.getLoai() == LoaiItem.AURA) {
                             veHUD.itemDangChon = "aura";
+                        } else if (item.getLoai() == LoaiItem.NANGSKILL) {
+                            veHUD.itemDangChon = "nangskill";
                         }
                     } else {
                         veHUD.itemm = null;

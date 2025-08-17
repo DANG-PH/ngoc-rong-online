@@ -20,7 +20,13 @@ public class CaiTrangOffset {
         OFFSET_CAI_TRANG.put("xiao", taoXiao());
         OFFSET_CAI_TRANG.put("ayaka", taoAyaka());
         OFFSET_CAI_TRANG.put("broly_lssj", taoBrolyLssj());
-        OFFSET_CAI_TRANG.put("khi_7", taoKhi7());
+        OFFSET_CAI_TRANG.put("khi_7", taoKhi7(0,0));
+        OFFSET_CAI_TRANG.put("khi_6", taoKhi7(0,0));
+        OFFSET_CAI_TRANG.put("khi_5", taoKhi7(0,0));
+        OFFSET_CAI_TRANG.put("khi_4", taoKhi7(-7,3));
+        OFFSET_CAI_TRANG.put("khi_3", taoKhi7(14,10));
+        OFFSET_CAI_TRANG.put("khi_2", taoKhi7(12.9f,6));
+        OFFSET_CAI_TRANG.put("khi_1", taoKhi7(12.9f,6));
     }
 
     public static Map<TrangThai, List<DoLechModular>> getOffset(String ten) {
@@ -218,21 +224,21 @@ public class CaiTrangOffset {
         );
     }
 
-    private static Map<TrangThai, List<DoLechModular>> taoKhi7() {
+    private static Map<TrangThai, List<DoLechModular>> taoKhi7(float offsetDauY, float offsetDauX) {
         return taoLech(
-            lech(1f, -5f, -6f, -54f,0,0),
+            lech(1f, -5f, -6f+offsetDauX, -54f+offsetDauY,0,0),
             lechDiChuyen(new float[][] {
-                {3f  , -2f, 10f, -49.5f, 0  , 0},
-                {-18f-29f, -4f, -19f, -53.5f, -20-29f, 0},
-                {-1f-39f  , -18f, -29f, -65.5f, -20-39f, 0},
-                {-33f-33f, -15f, -23f, -77.5f, -20-33f, 0},
-                {3f-29f  , -5f, -19f, -53.5f, -20-29f  , 0},
+                {3f  , -2f, 10f+offsetDauX, -49.5f+offsetDauY, 0  , 0},
+                {-18f-29f, -4f, -19f+offsetDauX, -53.5f+offsetDauY, -20-29f, 0},
+                {-1f-39f  , -18f, -29f+offsetDauX, -65.5f+offsetDauY, -20-39f, 0},
+                {-33f-33f, -15f, -23f+offsetDauX, -77.5f+offsetDauY, -20-33f, 0},
+                {3f-29f  , -5f, -19f+offsetDauX, -53.5f+offsetDauY, -20-29f  , 0},
             }),
-            lech(3f, 1f, 1f, -48.5f,0,0),
-            lech(-3f, 2f, -12f, -67f,0,0),
-            lech(-26f, 20f, -28f, -29.5f,0,0),
-            lech(5f, -1f, 0f, -53f,0,0),
-            lech(0f, -1f, -2f, -50.5f,0,0)
+            lech(3f, 1f, 1f+offsetDauX, -48.5f+offsetDauY,0,0),
+            lech(-3f, 2f, -12f+offsetDauX, -67f+offsetDauY,0,0),
+            lech(-26f, 20f, -28f+offsetDauX, -29.5f+offsetDauY,0,0),
+            lech(5f, -1f, 0f+offsetDauX, -53f+offsetDauY,0,0),
+            lech(0f, -1f, -2f+offsetDauX, -50.5f+offsetDauY,0,0)
         );
     }
 

@@ -56,6 +56,14 @@ public class ThemItemTest {
             "all", 10_000_000L, null, 0, 0, 0, -1
         ));
 
+        duLieu.themItemVaoHanhTrang(new Item(
+            "khi", "Nâng Cấp Hóa Khỉ Khổng lồ", LoaiItem.NANGSKILL,
+            new Texture("vatpham/vatphamgame/nang_skill/khi.png"),
+            "Sử dụng để nâng cấp kỹ năng Biến Hình.", 8,
+            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+            "all", 10_000_000L, null, 0, 0, 0, -1
+        ));
+
 //        duLieu.themItemVaoHanhTrang(new Item(
 //            "dao", "Lưỡi Hái Thời Không", LoaiItem.DEOLUNG,
 //            new Texture("vatpham/vatphamgame/deo_lung/dao/icon.png"),
@@ -128,13 +136,13 @@ public class ThemItemTest {
 //            "all", 10_000_000L, null, 0, 0, 0, -1
 //        ));
 
-        //        duLieu.themItemVaoHanhTrang(new Item(
-//            "bo_huyet", "Bổ huyết", LoaiItem.PHUTRO,
-//            new Texture("vatpham/vatphamgame/phu_tro/bo_huyet.png"),
-//            "Trong vòng tối đa 10 phút +100% HP", 99,
-//            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
-//            "all", 0, null, 0, 0, 0, -1
-//        ));
+        duLieu.themItemVaoHanhTrang(new Item(
+            "bo_huyet", "Bổ huyết", LoaiItem.PHUTRO,
+            new Texture("vatpham/vatphamgame/phu_tro/bo_huyet.png"),
+            "Trong vòng tối đa 10 phút +100% HP", 99,
+            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+            "all", 0, null, 0, 0, 0, -1
+        ));
 //
 //        duLieu.themItemVaoHanhTrang(new Item(
 //            "bo_khi", "Bổ khí", LoaiItem.PHUTRO,
@@ -144,13 +152,13 @@ public class ThemItemTest {
 //            "all", 0, null, 0, 0, 0, -1
 //        ));
 //
-//        duLieu.themItemVaoHanhTrang(new Item(
-//            "cuong_no", "Cuồng nộ", LoaiItem.PHUTRO,
-//            new Texture("vatpham/vatphamgame/phu_tro/cuong_no.png"),
-//            "Trong vòng tối đa 10 phút +100% Sức đánh gốc", 99,
-//            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
-//            "all", 0, null, 0, 0, 0, -1
-//        ));
+        duLieu.themItemVaoHanhTrang(new Item(
+            "cuong_no", "Cuồng nộ", LoaiItem.PHUTRO,
+            new Texture("vatpham/vatphamgame/phu_tro/cuong_no.png"),
+            "Trong vòng tối đa 10 phút +100% Sức đánh gốc", 99,
+            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+            "all", 0, null, 0, 0, 0, -1
+        ));
 //
 //        duLieu.themItemVaoHanhTrang(new Item(
 //            "giap_xen", "Giáp xên bọ hung", LoaiItem.PHUTRO,

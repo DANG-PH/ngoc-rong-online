@@ -237,6 +237,31 @@ public class HUDTinhToanChiSo {
         if (veHUD.dangBienKhi) {
             cm = 110;
         }
+        if (veHUD.dangTtnl) {
+            veHUD.timeNhayLanTiepTtnl += delta;
+            veHUD.timeThongBaoHoiPhucTtnl += delta;
+            if (veHUD.timeNhayLanTiepTtnl >= 1f) {
+                veHUD.timeNhayLanTiepTtnl = 0;
+                duLieuNguoiChoi.tangHpHienTai(duLieuNguoiChoi.getHpHopThe()*veHUD.hpHoiTtnl/100f);
+                duLieuNguoiChoi.tangKiHienTai(duLieuNguoiChoi.getKiHopThe()*veHUD.KiHoiTtnl/100f);
+            }
+            if (duLieuNguoiChoi.getKiHienTai() == duLieuNguoiChoi.getKiHopThe() && duLieuNguoiChoi.getHpHienTai() == duLieuNguoiChoi.getHpHopThe()) {
+                veHUD.huyTtnl();
+            }
+            if (veHUD.timeThongBaoHoiPhucTtnl >= 4.5f) {
+                veHUD.timeThongBaoHoiPhucTtnl = 0f;
+                veHUD.dangHienTinNhanChat = true;
+                float ptHpHt = duLieuNguoiChoi.getHpHienTai()/duLieuNguoiChoi.getHpHopThe()*100f;
+                float ptKiHt = duLieuNguoiChoi.getKiHienTai()/duLieuNguoiChoi.getKiHopThe()*100f;
+                if (ptHpHt < ptKiHt) {
+                    veHUD.tinNhanChat = "Phục hồi năng lượng\n" + (int)ptHpHt +"% HP";
+                } else if (ptHpHt > ptKiHt) {
+                    veHUD.tinNhanChat = "Phục hồi năng lượng\n" + (int)ptKiHt +"% KI";
+                } else {
+                    veHUD.tinNhanChat = "Phục hồi năng lượng\n" + (int)ptKiHt +"%";
+                }
+            }
+        }
         duLieuNguoiChoi.setChiMangSuDung(cm);
         duLieuNguoiChoi.setSatThuongChiMangSuDung(stcm);
         duLieuNguoiChoi.setGiamSatThuongSuDung(giamSatThuong);
