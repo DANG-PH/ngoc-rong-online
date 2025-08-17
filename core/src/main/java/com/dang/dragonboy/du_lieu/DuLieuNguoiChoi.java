@@ -216,6 +216,16 @@ public class DuLieuNguoiChoi {
         return null;
     }
 
+    public void capNhatMotaSkill(int index) {
+        if (index >= 0 && index < motaSkill.length) {
+            if (nhanVat.getHanhtinh().equals("xayda") || nhanVat.getTen().equals("admin")) {
+                switch (index) {
+                    case 3: motaSkill[3] = new String[]{"Biến hình thành khỉ","Tăng sức đánh, HP và tốc độ","KI tiêu hao: 10%","Hồi chiêu: "+(500-20*this.getCapSkill(3))+"s"};
+                }
+            }
+        }
+    }
+
     public void tangSucManh(long SucManhCongThem){
         this.sucManh += SucManhCongThem;
     }
@@ -555,7 +565,7 @@ public class DuLieuNguoiChoi {
     }
 
     public void tangCapSkill(int i) {
-        if (i >= 0 && i < 9 && capSkill[i] < 7) {
+        if (i >= 0 && i < 9 && (capSkill[i] < 7 || capSkill[i] < 8 && i == 3)) {
             capSkill[i]++;
         }
     }

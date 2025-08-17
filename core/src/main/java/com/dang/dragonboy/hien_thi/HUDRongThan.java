@@ -153,6 +153,9 @@ public class HUDRongThan {
                 listDieuUoc = new String[]{"Đẹp trai"+"\n"+"nhất"+"\n"+"Vũ trụ","Giàu có \n"+"+300 \n Ngọc","+20 Tr \n Sức mạnh \n và tiềm năng","Giàu có \n +50 Tr \n Vàng","Sức Mạnh \n Đổi Skill 2 và 3 \n đệ tử"};
             } else if (veHUD.ngocRongUoc.equals("1sao")) {
                 listDieuUoc = new String[]{"Bông tai Porata \n Đặc Biệt","Giàu có \n"+"+1500 \n Ngọc","+200 Tr \n Sức mạnh \n và tiềm năng","Giàu có \n +500 Tr \n Vàng","x1 Ngọc Rồng Đen Ngẫu Nhiên"};
+                if (duLieuNguoiChoi.getSucManh() >= 50_000_000_000L && duLieuNguoiChoi.getCapSkill(3) == 7) {
+                    listDieuUoc[2] = "Sức Mạnh \n Nâng cấp Skill 4\n Lên cấp 8";
+                }
             } else if (veHUD.ngocRongUoc.equals("1saoden")) {
                 listDieuUoc = new String[]{"Đổi cơ thể với Goku","Thú cưỡi phượng hoàng cực VIP","Danh hiệu VIP ngẫu nhiên","Vật phẩm đeo lưng ngẫu nhiên","Sở Hữu Đệ Tử"};
                 if (duLieuNguoiChoi.coDeTu()) {

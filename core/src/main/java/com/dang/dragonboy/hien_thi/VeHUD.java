@@ -336,7 +336,11 @@ public class VeHUD {
         this.skillIcons = skillIcons;
         oSkills = new int[5];
         for (int i = 0; i < oSkills.length; i++) {
-            oSkills[i] = i;
+            if (nhanVat.getCapSkill(i+1) > 0) {
+                oSkills[i] = i;
+            } else {
+                oSkills[i] = -1;
+            }
         }
     }
 
@@ -1906,14 +1910,16 @@ public class VeHUD {
                 if (itemm.getId().equals("khi")) {
                     if (duLieuNguoiChoi.getCapSkill(3) < 7) {
                         duLieuNguoiChoi.tangCapSkill(3);
+                        duLieuNguoiChoi.capNhatMotaSkill(3);
                         itemm.giamSoLuong(1);
                         if (itemm.getSoLuong() == 0) {
                             duLieuNguoiChoi.getHanhTrang().remove(itemm);
                         }
                         huyBienKhi();
                         timeCoolDownBienKhi = 0;
+                        setTinNhanPet("Kỹ năng Biến Hình đạt cấp "+duLieuNguoiChoi.getCapSkill(3),2f);
                     } else {
-                        setTinNhanPet("Kỹ năng đã đạt cấp tối đa",2f);
+                        setTinNhanPet("Bạn cần ước rồng thần để tiếp tục nâng kỹ năng",2f);
                     }
                 }
             }

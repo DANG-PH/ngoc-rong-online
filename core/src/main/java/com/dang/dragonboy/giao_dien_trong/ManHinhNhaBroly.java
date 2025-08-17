@@ -156,8 +156,6 @@ public class ManHinhNhaBroly implements Screen {
         nhagohan = new Texture("map/"+hanhtinh+"/chung/nhacua/nhacua1_"+hanhtinh+".png");
         hudRenderer = new VeHUD(layout);
         // load skill + thuộc tính nhân vật
-        SkillNhanVat[] traidatIcons = loadSkillIcons(hanhtinh);
-        hudRenderer.setSkillIcons(traidatIcons);
         //NhanVatCauHinh config = Doi_avt_ao_quan(hanhtinh,nhanvat+"_base","set_cam","set_cam") ;
         NhanVatCauHinh config = Doi_avt_ao_quan(hanhtinh,nhanvat+"_base","set_base","set_base");
         NhanVat haidang = new NhanVat(
@@ -178,6 +176,8 @@ public class ManHinhNhaBroly implements Screen {
         hudRenderer.setNhanVat(nhanVat);// load cái này để đổi avt theo ct
         hudRenderer.setCamera(camManager);
         nhanVat.setHUD(hudRenderer);
+        SkillNhanVat[] traidatIcons = loadSkillIcons(hanhtinh);
+        hudRenderer.setSkillIcons(traidatIcons);
         // load du lieu nguoi dung
         int[] capSkill = new int[9];
         for (int i = 0; i < 9; i++) {

@@ -964,9 +964,25 @@ public class ThemItemTest {
                     veHUD.setTinNhanPet("Điều ước thành hiện thực - nhận thành công 1500 ngọc",2f);
                     break;
                 case 2:
-                    duLieu.tangSucManh(200_000_000);
-                    duLieu.tangTiemNang(200_000_000);
-                    veHUD.setTinNhanPet("Sức mạnh của bạn đã tăng thêm 200 triệu!",2f);
+                    if (duLieu.getSucManh() < 50_000_000_000L || duLieu.getCapSkill(3) != 7) {
+                        duLieu.tangSucManh(200_000_000);
+                        duLieu.tangTiemNang(200_000_000);
+                        veHUD.setTinNhanPet("Sức mạnh của bạn đã tăng thêm 200 triệu!", 2f);
+                    } else {
+                        if (duLieu.getCapSkill(3) == 7) {
+                            duLieu.tangCapSkill(3);
+                            veHUD.setTinNhanPet("Điều ước thành hiện thực - nâng thành công cấp skill!", 2f);
+                            if (nhanVat.getHanhtinh().equals("xayda") || nhanVat.getTen().equals("admin")) {
+                                if (veHUD.dangBienKhi) {
+                                    veHUD.huyBienKhi();
+                                    veHUD.timeChoBienKhi = 2f;
+                                } else {
+                                    veHUD.timeChoBienKhi = 2f;
+                                }
+                            }
+                            duLieu.capNhatMotaSkill(3);
+                        }
+                    }
                     break;
                 case 3:
                     duLieu.tangVang(500_000_000);

@@ -919,15 +919,15 @@ public class NhanVat {
             }
         } else if ("xayda".equals(hanhTinh)) {
             switch (skill){
-                case 1: return new String[]{"Tấn công cận chiến","Tăng sức đánh: "+(100+10*duLieuNguoiChoi.getCapSkill(0))+"%","KI tiêu hao: "+(10*duLieuNguoiChoi.getCapSkill(0)),"Hồi chiêu: "+0.5+"s"};
-                case 2: return new String[]{"Bắn xa nhờ năng lượng","Tăng sức đánh :"+(150+20*duLieuNguoiChoi.getCapSkill(1))+"%","KI tiêu hao: "+(300+100*duLieuNguoiChoi.getCapSkill(1)),"Hồi chiêu: 2.2s"};
-                case 3: return new String[]{"Tái tạo lại HP và MP đang có","Tự tái tạo HP MP "+(3+1*duLieuNguoiChoi.getCapSkill(2))+"%/s","KI tiêu hao: 0%","Hồi chiêu: "+(60-5*duLieuNguoiChoi.getCapSkill(2))+"s"};
-                case 4: return new String[]{"Biến hình thành khỉ","Tăng sức đánh, HP và tốc độ","KI tiêu hao: 10%","Hồi chiêu: "+(500-20*duLieuNguoiChoi.getCapSkill(3))+"s"};
+                case 1: return new String[]{"Tấn công cận chiến","Tăng sức đánh: "+(100+10*CapSkill1)+"%","KI tiêu hao: "+(10*CapSkill1),"Hồi chiêu: "+0.5+"s"};
+                case 2: return new String[]{"Bắn xa nhờ năng lượng","Tăng sức đánh :"+(150+20*CapSkill2)+"%","KI tiêu hao: "+(300+100*CapSkill2),"Hồi chiêu: 2.2s"};
+                case 3: return new String[]{"Tái tạo lại HP và MP đang có","Tự tái tạo HP MP "+(3+1*CapSkill3)+"%/s","KI tiêu hao: 0%","Hồi chiêu: "+(60-5*CapSkill3)+"s"};
+                case 4: return new String[]{"Biến hình thành khỉ","Tăng sức đánh, HP và tốc độ","KI tiêu hao: 10%","Hồi chiêu: "+(500-20*CapSkill4)+"s"};
                 case 5: return new String[]{"Tự phát nổ","Hy sinh, gây sát thương lớn cho kẻ thù","KI tiêu hao: 50%","Hồi chiêu: 120s"};
-                case 6: return new String[]{"Huýt sáo","Tăng tạm thời "+(30+10*duLieuNguoiChoi.getCapSkill(5))+"%HP cho mọi người","KI tiêu hao: 20","Hồi chiêu: 180s"};
-                case 7: return new String[]{"Trói","Trói kẻ thù","KI tiêu hao: 32000","Hồi chiêu: "+(70-5*duLieuNguoiChoi.getCapSkill(6))+"s"};
-                case 8: return new String[]{"Cađíc liên hoàn chưởng","Tăng sức đánh: "+(550+duLieuNguoiChoi.getCapSkill(7)*50)+"%","KI tiêu hao: 80%","Hồi chiêu: 170s"};
-                case 9: return new String[]{"Khiên năng lượng","Vô hiệu các đòn tấn công","KI tiêu hao: 33%","Hồi chiêu: "+(175-10*duLieuNguoiChoi.getCapSkill(8))+"s"};
+                case 6: return new String[]{"Huýt sáo","Tăng tạm thời "+(30+10*CapSkill6)+"%HP cho mọi người","KI tiêu hao: 20","Hồi chiêu: 180s"};
+                case 7: return new String[]{"Trói","Trói kẻ thù","KI tiêu hao: 32000","Hồi chiêu: "+(70-5*CapSkill7)+"s"};
+                case 8: return new String[]{"Cađíc liên hoàn chưởng","Tăng sức đánh: "+(550+CapSkill8*50)+"%","KI tiêu hao: 80%","Hồi chiêu: 170s"};
+                case 9: return new String[]{"Khiên năng lượng","Vô hiệu các đòn tấn công","KI tiêu hao: 33%","Hồi chiêu: "+(175-10*CapSkill9)+"s"};
                 default: return new String[]{""};
             }
         } else {

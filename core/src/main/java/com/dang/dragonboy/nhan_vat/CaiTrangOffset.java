@@ -27,6 +27,7 @@ public class CaiTrangOffset {
         OFFSET_CAI_TRANG.put("khi_3", taoKhi7(14,10));
         OFFSET_CAI_TRANG.put("khi_2", taoKhi7(12.9f,6));
         OFFSET_CAI_TRANG.put("khi_1", taoKhi7(12.9f,6));
+        OFFSET_CAI_TRANG.put("khi_8", taoKhi7(-2,1));
     }
 
     public static Map<TrangThai, List<DoLechModular>> getOffset(String ten) {
