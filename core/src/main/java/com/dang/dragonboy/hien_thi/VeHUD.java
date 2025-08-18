@@ -1953,12 +1953,12 @@ public class VeHUD {
                             }
                             huyBienKhi();
                             timeCoolDownBienKhi = 0;
-                            setTinNhanPet("Kỹ năng Biến Hình đạt cấp "+duLieuNguoiChoi.getCapSkill(3),2f);
+                            setTinNhanPet("Kỹ năng Biến Hình đạt cấp " + duLieuNguoiChoi.getCapSkill(3), 2f);
                         } else {
-                            setTinNhanPet("Bạn cần ước rồng thần để tiếp tục nâng kỹ năng",2f);
+                            setTinNhanPet("Bạn cần ước rồng thần để tiếp tục nâng kỹ năng", 2f);
                         }
                         break;
-                    case "huytsao" :
+                    case "huytsao":
                         if (duLieuNguoiChoi.getCapSkill(5) < 7) {
                             duLieuNguoiChoi.tangCapSkill(5);
                             duLieuNguoiChoi.capNhatMotaSkill(5);
@@ -1969,12 +1969,12 @@ public class VeHUD {
                             timeHuytSao = 0;
                             dangHuytSao = false;
                             timeCoolDownHuytSao = 0;
-                            setTinNhanPet("Kỹ năng Huýt Sáo đạt cấp "+duLieuNguoiChoi.getCapSkill(5),2f);
+                            setTinNhanPet("Kỹ năng Huýt Sáo đạt cấp " + duLieuNguoiChoi.getCapSkill(5), 2f);
                         } else {
-                            setTinNhanPet("Kỹ năng đã đạt cấp tối đa",2f);
+                            setTinNhanPet("Kỹ năng đã đạt cấp tối đa", 2f);
                         }
                         break;
-                    case "ttnl" :
+                    case "ttnl":
                         if (duLieuNguoiChoi.getCapSkill(2) < 7) {
                             duLieuNguoiChoi.tangCapSkill(2);
                             duLieuNguoiChoi.capNhatMotaSkill(2);
@@ -1984,9 +1984,36 @@ public class VeHUD {
                             }
                             huyTtnl();
                             timeCoolDownTtnl = 0;
-                            setTinNhanPet("Tái tạo năng lượng đạt cấp "+duLieuNguoiChoi.getCapSkill(2),2f);
+                            setTinNhanPet("Tái tạo năng lượng đạt cấp " + duLieuNguoiChoi.getCapSkill(2), 2f);
                         } else {
-                            setTinNhanPet("Kỹ năng đã đạt cấp tối đa",2f);
+                            setTinNhanPet("Kỹ năng đã đạt cấp tối đa", 2f);
+                        }
+                        break;
+                    case "skill1_de":
+                    case "skill2_de":
+                    case "skill3_de":
+                    case "skill4_de":
+                        if (duLieuNguoiChoi.coDeTu()) {
+                            int skillIndex = Integer.parseInt(itemm.getId().substring(5, 6)) - 1;
+                            long[] sucManhYeuCau = {0, 150_000_000L, 1_500_000_000, 20_000_000_000L};
+                            if (duLieuNguoiChoi.deTu.getCapSkill(skillIndex) < 7 && duLieuNguoiChoi.deTu.getSucManh() >= sucManhYeuCau[skillIndex]) {
+                                duLieuNguoiChoi.deTu.tangCapSkill(skillIndex);
+                                itemm.giamSoLuong(1);
+                                if (itemm.getSoLuong() == 0) {
+                                    duLieuNguoiChoi.getHanhTrang().remove(itemm);
+                                }
+                                setTinNhanPet("Kỹ năng " + (skillIndex + 1) + " đạt cấp "
+                                    + duLieuNguoiChoi.deTu.getCapSkill(skillIndex), 2f);
+                                duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Cám ơn sư phụ", 2f);
+                            } else {
+                                if (duLieuNguoiChoi.deTu.getCapSkill(skillIndex) >= 7) {
+                                    setTinNhanPet("Kỹ năng đệ tử " + (skillIndex + 1) + " đã đạt cấp tối đa", 2f);
+                                } else {
+                                    setTinNhanPet("Đệ tử cần "+formatVangNgoc(sucManhYeuCau[skillIndex] - duLieuNguoiChoi.deTu.getSucManh())+" sức mạnh nữa",2f);
+                                }
+                            }
+                        } else {
+                            setTinNhanPet("Bạn chưa có đệ tử", 2f);
                         }
                         break;
                 }

@@ -56,28 +56,60 @@ public class ThemItemTest {
             "all", 10_000_000L, null, 0, 0, 0, -1
         ));
 
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "khi", "Nâng Cấp Hóa Khỉ Khổng lồ", LoaiItem.NANGSKILL,
+//            new Texture("vatpham/vatphamgame/nang_skill/khi.png"),
+//            "Sử dụng để nâng cấp kỹ năng Biến Hình.", 8,
+//            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+//            "all", 10_000_000L, null, 0, 0, 0, -1
+//        ));
+//
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "huytsao", "Nâng Cấp Kỹ Năng Huýt Sáo", LoaiItem.NANGSKILL,
+//            new Texture("vatpham/vatphamgame/nang_skill/huytsao.png"),
+//            "Sử dụng để nâng cấp kỹ năng huýt sáo.", 8,
+//            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+//            "all", 200_000_000L, null, 0, 0, 0, -1
+//        ));
+//
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "ttnl", "Nâng Cấp Tái Tạo Năng Lượng", LoaiItem.NANGSKILL,
+//            new Texture("vatpham/vatphamgame/nang_skill/ttnl.png"),
+//            "Sử dụng để nâng cấp kỹ năng tái tạo năng lượng.", 8,
+//            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+//            "all", 1_500_000L, null, 0, 0, 0, -1
+//        ));
+
         duLieu.themItemVaoHanhTrang(new Item(
-            "khi", "Nâng Cấp Hóa Khỉ Khổng lồ", LoaiItem.NANGSKILL,
-            new Texture("vatpham/vatphamgame/nang_skill/khi.png"),
-            "Sử dụng để nâng cấp kỹ năng Biến Hình.", 8,
+            "skill4_de", "Nâng Cấp Kỹ Năng 4 Đệ Tử", LoaiItem.NANGSKILL,
+            new Texture("vatpham/vatphamgame/nang_skill_de_tu/skill4.png"),
+            "Sử dụng để nâng cấp kỹ năng 4 đệ tử.", 8,
             new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
-            "all", 10_000_000L, null, 0, 0, 0, -1
+            "all", 1500000L, null, 0, 0, 0, -1
         ));
 
         duLieu.themItemVaoHanhTrang(new Item(
-            "huytsao", "Nâng Cấp Kỹ Năng Huýt Sáo", LoaiItem.NANGSKILL,
-            new Texture("vatpham/vatphamgame/nang_skill/huytsao.png"),
-            "Sử dụng để nâng cấp kỹ năng huýt sáo.", 8,
+            "skill3_de", "Nâng Cấp Kỹ Năng 3 Đệ Tử", LoaiItem.NANGSKILL,
+            new Texture("vatpham/vatphamgame/nang_skill_de_tu/skill3.png"),
+            "Sử dụng để nâng cấp kỹ năng 3 đệ tử.", 8,
             new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
-            "all", 200_000_000L, null, 0, 0, 0, -1
+            "all", 1500000L, null, 0, 0, 0, -1
         ));
 
         duLieu.themItemVaoHanhTrang(new Item(
-            "ttnl", "Nâng Cấp Tái Tạo Năng Lượng", LoaiItem.NANGSKILL,
-            new Texture("vatpham/vatphamgame/nang_skill/ttnl.png"),
-            "Sử dụng để nâng cấp kỹ năng tái tạo năng lượng.", 8,
+            "skill2_de", "Nâng Cấp Kỹ Năng 2 Đệ Tử", LoaiItem.NANGSKILL,
+            new Texture("vatpham/vatphamgame/nang_skill_de_tu/skill2.png"),
+            "Sử dụng để nâng cấp kỹ năng 2 đệ tử.", 8,
             new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
-            "all", 1_500_000L, null, 0, 0, 0, -1
+            "all", 1500000L, null, 0, 0, 0, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "skill1_de", "Nâng Cấp Kỹ Năng 1 Đệ Tử", LoaiItem.NANGSKILL,
+            new Texture("vatpham/vatphamgame/nang_skill_de_tu/skill1.png"),
+            "Sử dụng để nâng cấp kỹ năng 1 đệ tử.", 8,
+            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+            "all", 1500000L, null, 0, 0, 0, -1
         ));
 
 //        duLieu.themItemVaoHanhTrang(new Item(
@@ -1065,6 +1097,8 @@ public class ThemItemTest {
                     if (duLieu.coDeTu()) {
                         duLieu.deTu.doiSkillDeTu(2);
                         duLieu.deTu.doiSkillDeTu(3);
+                        duLieu.deTu.setCapSkillDeTu(1,1);
+                        duLieu.deTu.setCapSkillDeTu(2,1);
                     } else {
                         veHUD.setTinNhanPet("Bạn chưa có đệ tử - rồng thần đã hết kiên nhẫn",2f);
                     }
@@ -1106,6 +1140,7 @@ public class ThemItemTest {
                 case 4:
                     if (duLieu.coDeTu()) {
                         duLieu.deTu.doiSkillDeTu(1);
+                        duLieu.deTu.setCapSkillDeTu(0,1);
                     } else {
                         veHUD.setTinNhanPet("Bạn chưa có đệ tử - rồng thần đã hết kiên nhẫn",2f);
                     }

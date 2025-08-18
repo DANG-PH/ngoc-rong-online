@@ -128,10 +128,10 @@ public class NhanVat {
     private String capBac = "Thần Xayda cấp 9+99.99%";
     private int CapSkill1 = 7;
     private int CapSkill2 = 6;
-    private int CapSkill3 = 0;
-    private int CapSkill4 = 0;
+    private int CapSkill3 = 7;
+    private int CapSkill4 = 8;
     private int CapSkill5 = 3;
-    private int CapSkill6 = 0;
+    private int CapSkill6 = 7;
     private int CapSkill7 = 1;
     private int CapSkill8 = 0;
     private int CapSkill9 = 7;

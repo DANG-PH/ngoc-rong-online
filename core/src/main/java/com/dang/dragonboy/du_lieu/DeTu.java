@@ -698,8 +698,14 @@ public class DeTu {
     }
 
     public void tangCapSkill(int i) {
-        if (i >= 1 && i <= 4 && capSkill[i - 1] < 7) {
-            capSkill[i - 1]++;
+        if (i >= 0 && i < 4 && capSkill[i] < 7) {
+            capSkill[i]++;
+        }
+    }
+
+    public void setCapSkillDeTu(int indexSkill, int cap) {
+        if (indexSkill >= 0 && indexSkill < 4 && cap < 7) {
+            capSkill[indexSkill] = cap;
         }
     }
 
