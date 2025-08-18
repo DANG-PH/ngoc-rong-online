@@ -57,7 +57,7 @@ public class VeHUD {
     private float thoiGianClickODauThan = 0;
     public int skillDangChon = -1; // -1: chưa chọn
 
-    private ShapeRenderer shapeRenderer;
+    public ShapeRenderer shapeRenderer;
 
     public Texture popupNhanVat;
     public Texture nutX;
@@ -227,6 +227,11 @@ public class VeHUD {
     public float hpHoiTtnl, KiHoiTtnl;
     public float timeNhayLanTiepTtnl = 1f;
     public float timeThongBaoHoiPhucTtnl = 0f;
+
+    public boolean dangHuytSao = false;
+    public float timeHuytSao = 0f;
+    public float timeCoolDownHuytSao = 0f;
+    public float hpTangHuytSao;
 
     public Texture dautrai, dauphai, thantrai, thanphai, chantrai, chanphai;
     public Texture dau1, than1, chan1, dau2, than2, chan2, dau3, than3, chan3, dau4, than4, chan4, dau5, than5, chan5, dau6, than6, chan6, than7, chan7;
@@ -703,12 +708,16 @@ public class VeHUD {
                         shapeRenderer.end();
                         batch.begin();
                     }
-                    if (oSkills[i] == 3 && timeChoBienKhi > 0 ) {
+                    if (oSkills[i] == 5 && timeCoolDownHuytSao>0) {
                         batch.end();
-                        veGlow.veGlow(shapeRenderer,x + 6.9f+(oskillW - 13.8f)/2f,skillY + 6.9f+(oskillH - 13.8f)/2f,2f);
+                        Gdx.gl.glEnable(GL20.GL_BLEND);
+                        shapeRenderer.setColor(0f, 0f, 0f, 0.4f);
+                        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                        shapeRenderer.rect(x + 6.9f,skillY + 6.9f,oskillW - 13.8f,(oskillH - 13.8f)*timeCoolDownHuytSao/180f);
+                        shapeRenderer.end();
                         batch.begin();
                     }
-                    if (oSkills[i] == 2 && timeTtnl > 9.8f) {
+                    if (oSkills[i] == 3 && timeChoBienKhi > 0 ) {
                         batch.end();
                         veGlow.veGlow(shapeRenderer,x + 6.9f+(oskillW - 13.8f)/2f,skillY + 6.9f+(oskillH - 13.8f)/2f,2f);
                         batch.begin();
@@ -801,6 +810,10 @@ public class VeHUD {
             itemCanVe.add(skillIcons[3].icon);
             timeTungItem.add(timeBienKhi);
         }
+        if (dangHuytSao) {
+            itemCanVe.add(skillIcons[5].icon);
+            timeTungItem.add(timeHuytSao);
+        }
         if (dangDungBoHuyet) {
             itemCanVe.add(boHuyet);
             timeTungItem.add(timeDungBoHuyet);
@@ -842,7 +855,7 @@ public class VeHUD {
             batch.setColor(1, 1, 1, 1);
         }
         batch.end();
-        if (vuaClickMoPopup && timeGlow>0) {
+        if (timeGlow>0) {
             veGlow.veGlow(shapeRenderer,clickX,clickY,timeGlow);
         }
         batch.begin();
@@ -887,6 +900,13 @@ public class VeHUD {
                 dangTtnl = true;
                 hpHoiTtnl = 3+1*duLieuNguoiChoi.getCapSkill(2);
                 KiHoiTtnl = 3+1*duLieuNguoiChoi.getCapSkill(2);
+            }
+            if (oSkills[index] == 5 && timeCoolDownHuytSao == 0) {
+                timeHuytSao = 10+5*duLieuNguoiChoi.getCapSkill(5);
+                timeCoolDownHuytSao = 180f;
+                dangHuytSao = true;
+                nhanVat.chuaSetTimeHuytSao = true;
+                hpTangHuytSao = (30+10*duLieuNguoiChoi.getCapSkill(5));
             }
         }
     }
@@ -1236,6 +1256,21 @@ public class VeHUD {
             timeCoolDownTtnl -= delta;
             if (timeCoolDownTtnl <= 0) {
                 timeCoolDownTtnl = 0;
+            }
+        }
+
+        if (timeHuytSao>0) {
+            timeHuytSao -= delta;
+            if (timeHuytSao <= 0) {
+                timeHuytSao = 0;
+                dangHuytSao = false;
+            }
+        }
+
+        if (timeCoolDownHuytSao>0) {
+            timeCoolDownHuytSao -= delta;
+            if (timeCoolDownHuytSao <= 0) {
+                timeCoolDownHuytSao = 0;
             }
         }
 
@@ -1907,20 +1942,53 @@ public class VeHUD {
                 }
             }
             if (itemDangChon.equals("nangskill")) {
-                if (itemm.getId().equals("khi")) {
-                    if (duLieuNguoiChoi.getCapSkill(3) < 7) {
-                        duLieuNguoiChoi.tangCapSkill(3);
-                        duLieuNguoiChoi.capNhatMotaSkill(3);
-                        itemm.giamSoLuong(1);
-                        if (itemm.getSoLuong() == 0) {
-                            duLieuNguoiChoi.getHanhTrang().remove(itemm);
+                switch (itemm.getId()) {
+                    case "khi":
+                        if (duLieuNguoiChoi.getCapSkill(3) < 7) {
+                            duLieuNguoiChoi.tangCapSkill(3);
+                            duLieuNguoiChoi.capNhatMotaSkill(3);
+                            itemm.giamSoLuong(1);
+                            if (itemm.getSoLuong() == 0) {
+                                duLieuNguoiChoi.getHanhTrang().remove(itemm);
+                            }
+                            huyBienKhi();
+                            timeCoolDownBienKhi = 0;
+                            setTinNhanPet("Kỹ năng Biến Hình đạt cấp "+duLieuNguoiChoi.getCapSkill(3),2f);
+                        } else {
+                            setTinNhanPet("Bạn cần ước rồng thần để tiếp tục nâng kỹ năng",2f);
                         }
-                        huyBienKhi();
-                        timeCoolDownBienKhi = 0;
-                        setTinNhanPet("Kỹ năng Biến Hình đạt cấp "+duLieuNguoiChoi.getCapSkill(3),2f);
-                    } else {
-                        setTinNhanPet("Bạn cần ước rồng thần để tiếp tục nâng kỹ năng",2f);
-                    }
+                        break;
+                    case "huytsao" :
+                        if (duLieuNguoiChoi.getCapSkill(5) < 7) {
+                            duLieuNguoiChoi.tangCapSkill(5);
+                            duLieuNguoiChoi.capNhatMotaSkill(5);
+                            itemm.giamSoLuong(1);
+                            if (itemm.getSoLuong() == 0) {
+                                duLieuNguoiChoi.getHanhTrang().remove(itemm);
+                            }
+                            timeHuytSao = 0;
+                            dangHuytSao = false;
+                            timeCoolDownHuytSao = 0;
+                            setTinNhanPet("Kỹ năng Huýt Sáo đạt cấp "+duLieuNguoiChoi.getCapSkill(5),2f);
+                        } else {
+                            setTinNhanPet("Kỹ năng đã đạt cấp tối đa",2f);
+                        }
+                        break;
+                    case "ttnl" :
+                        if (duLieuNguoiChoi.getCapSkill(2) < 7) {
+                            duLieuNguoiChoi.tangCapSkill(2);
+                            duLieuNguoiChoi.capNhatMotaSkill(2);
+                            itemm.giamSoLuong(1);
+                            if (itemm.getSoLuong() == 0) {
+                                duLieuNguoiChoi.getHanhTrang().remove(itemm);
+                            }
+                            huyTtnl();
+                            timeCoolDownTtnl = 0;
+                            setTinNhanPet("Tái tạo năng lượng đạt cấp "+duLieuNguoiChoi.getCapSkill(2),2f);
+                        } else {
+                            setTinNhanPet("Kỹ năng đã đạt cấp tối đa",2f);
+                        }
+                        break;
                 }
             }
         } else if (duLieuNguoiChoi.getSucManh() < itemm.getSucManhYeuCau()) {

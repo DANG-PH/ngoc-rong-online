@@ -43,6 +43,11 @@ public class HUDClickHandler {
                 } else {
                     veHUD.chonSkill(i);
                 }
+                if (!veHUD.dangHienPopup) {
+                    veHUD.clickY = skillY + oskillH / 2f;
+                    veHUD.clickX = x_ve + oskillW / 2f;
+                    veHUD.timeGlow = 0.2f;
+                }
             }
         }
 

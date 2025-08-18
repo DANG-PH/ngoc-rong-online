@@ -529,5 +529,6 @@ public class ManHinhNhaGohan implements Screen {
         for (Texture tex : lua) tex.dispose();
         for (Texture tex : caccaydau) tex.dispose();
         hudRenderer.dispose();
+        nhanVat.dispose();
     }
 }

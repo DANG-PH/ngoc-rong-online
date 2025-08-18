@@ -64,6 +64,22 @@ public class ThemItemTest {
             "all", 10_000_000L, null, 0, 0, 0, -1
         ));
 
+        duLieu.themItemVaoHanhTrang(new Item(
+            "huytsao", "Nâng Cấp Kỹ Năng Huýt Sáo", LoaiItem.NANGSKILL,
+            new Texture("vatpham/vatphamgame/nang_skill/huytsao.png"),
+            "Sử dụng để nâng cấp kỹ năng huýt sáo.", 8,
+            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+            "all", 200_000_000L, null, 0, 0, 0, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "ttnl", "Nâng Cấp Tái Tạo Năng Lượng", LoaiItem.NANGSKILL,
+            new Texture("vatpham/vatphamgame/nang_skill/ttnl.png"),
+            "Sử dụng để nâng cấp kỹ năng tái tạo năng lượng.", 8,
+            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+            "all", 1_500_000L, null, 0, 0, 0, -1
+        ));
+
 //        duLieu.themItemVaoHanhTrang(new Item(
 //            "dao", "Lưỡi Hái Thời Không", LoaiItem.DEOLUNG,
 //            new Texture("vatpham/vatphamgame/deo_lung/dao/icon.png"),
@@ -168,21 +184,21 @@ public class ThemItemTest {
 //            "all", 0, null, 0, 0, 0, -1
 //        ));
 
-//        duLieu.themItemVaoHanhTrang(new Item(
-//            "thien_tu", "Huy hiệu Thiên Tử", LoaiItem.HUYHIEU,
-//            new Texture("vatpham/vatphamgame/huy_hieu/thien_tu/icon.png"),
-//            "Thiên mệnh tại thân - Thống ngự càn khôn", 1,
-//            new int[]{0,0,0,0,0,0,10,10,10,0,0,0,0},
-//            "all", 10_000_000L, null, 0, 0, 0, -1
-//        ));
-//
         duLieu.themItemVaoHanhTrang(new Item(
-            "trum_cuoi", "Huy hiệu Trùm cuối", LoaiItem.HUYHIEU,
-            new Texture("vatpham/vatphamgame/huy_hieu/trum_cuoi/icon.png"),
-            "Vinh quang vô địch - Đỉnh cao sức mạnh", 1,
-            new int[]{0,0,0,5,0,5,0,0,10,0,0,0,0},
+            "thien_tu", "Huy hiệu Thiên Tử", LoaiItem.HUYHIEU,
+            new Texture("vatpham/vatphamgame/huy_hieu/thien_tu/icon.png"),
+            "Thiên mệnh tại thân - Thống ngự càn khôn", 1,
+            new int[]{0,0,0,0,0,0,10,10,10,0,0,0,0},
             "all", 10_000_000L, null, 0, 0, 0, -1
         ));
+//
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "trum_cuoi", "Huy hiệu Trùm cuối", LoaiItem.HUYHIEU,
+//            new Texture("vatpham/vatphamgame/huy_hieu/trum_cuoi/icon.png"),
+//            "Vinh quang vô địch - Đỉnh cao sức mạnh", 1,
+//            new int[]{0,0,0,5,0,5,0,0,10,0,0,0,0},
+//            "all", 10_000_000L, null, 0, 0, 0, -1
+//        ));
 //
 //        duLieu.themItemVaoHanhTrang(new Item(
 //            nhanVat.getHanhtinh()+"_toi_thuong", "Huy hiệu Tối Thượng", LoaiItem.HUYHIEU,
@@ -260,7 +276,15 @@ public class ThemItemTest {
             new Texture("nhanvat/caitrang/goku_black_rose/daudung.png"),
             "Cải trang thành Super Black Goku", 1,
             new int[]{0,0,0,0,0,0,45,45,45,0,0,0,0},
-            "all", 50_000_000_000L, null, 0, 0, 0, -1
+            "all", 40_000_000_000L, null, 0, 0, 0, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "goku_black_rose", "Cải trang Super Black Goku", LoaiItem.CAITRANG,
+            new Texture("nhanvat/caitrang/goku_black_rose/daudung.png"),
+            "Cải trang thành Super Black Goku", 1,
+            new int[]{0,0,0,0,0,0,45,45,45,0,0,0,0},
+            "all", 40_000_000_000L, null, 0, 0, 0, -1
         ));
 //
 //        duLieu.themItemVaoHanhTrang(new Item(

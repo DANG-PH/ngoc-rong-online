@@ -48,7 +48,10 @@ public class NhanVat {
 
     private Texture[] ttnl = new Texture[4];
     private Texture[] bom = new Texture[2];
-    private int frameTtnl = 0, frameBom = 0;
+    private Texture[] saoDo = new Texture[3];
+    private Texture[] saoXanh = new Texture[3];
+    private Texture[] saoVang = new Texture[2];
+    private int frameTtnl = 0, frameBom = 0, frameSaoXanh, frameSaoDo, frameSaoVang;
 
     // Cho animation chạy
     private int frame = 0;
@@ -125,10 +128,10 @@ public class NhanVat {
     private String capBac = "Thần Xayda cấp 9+99.99%";
     private int CapSkill1 = 7;
     private int CapSkill2 = 6;
-    private int CapSkill3 = 7;
+    private int CapSkill3 = 0;
     private int CapSkill4 = 0;
     private int CapSkill5 = 3;
-    private int CapSkill6 = 2;
+    private int CapSkill6 = 0;
     private int CapSkill7 = 1;
     private int CapSkill8 = 0;
     private int CapSkill9 = 7;
@@ -210,7 +213,8 @@ public class NhanVat {
     private boolean dangHienDiemCanDen = false;
 
     private float timeChoHienBay;
-    private float timeDoiFramesHuyHieu,timeDoiFramesDeoLung,timeDoiFramesAura,timeDoiFramesTtnl = 0f,timeDoiFramesQckk;
+    private float timeDoiFramesHuyHieu,timeDoiFramesDeoLung,timeDoiFramesAura,timeDoiFramesTtnl,timeDoiFramesQckk,timeHieuUngHuytSao;
+    public boolean chuaSetTimeHuytSao = true;
     private Texture[] auraChan = new Texture[4];
 
     public void setToaDoMucTieu(float x, float y) {
@@ -921,7 +925,7 @@ public class NhanVat {
             switch (skill){
                 case 1: return new String[]{"Tấn công cận chiến","Tăng sức đánh: "+(100+10*CapSkill1)+"%","KI tiêu hao: "+(10*CapSkill1),"Hồi chiêu: "+0.5+"s"};
                 case 2: return new String[]{"Bắn xa nhờ năng lượng","Tăng sức đánh :"+(150+20*CapSkill2)+"%","KI tiêu hao: "+(300+100*CapSkill2),"Hồi chiêu: 2.2s"};
-                case 3: return new String[]{"Tái tạo lại HP và MP đang có","Tự tái tạo HP MP "+(3+1*CapSkill3)+"%/s","KI tiêu hao: 0%","Hồi chiêu: "+(60-5*CapSkill3)+"s"};
+                case 3: return new String[]{"Tái tạo lại HP và MP đang có","Tự tái tạo HP MP "+(3+1*CapSkill3)+"%/s","KI tiêu hao: 0%","Hồi chiêu: "+"20s"};
                 case 4: return new String[]{"Biến hình thành khỉ","Tăng sức đánh, HP và tốc độ","KI tiêu hao: 10%","Hồi chiêu: "+(500-20*CapSkill4)+"s"};
                 case 5: return new String[]{"Tự phát nổ","Hy sinh, gây sát thương lớn cho kẻ thù","KI tiêu hao: 50%","Hồi chiêu: 120s"};
                 case 6: return new String[]{"Huýt sáo","Tăng tạm thời "+(30+10*CapSkill6)+"%HP cho mọi người","KI tiêu hao: 20","Hồi chiêu: 180s"};
@@ -1006,6 +1010,15 @@ public class NhanVat {
         }
         for (int i = 0; i < 2;i++) {
             bom[i] = new Texture("hieuung/hieuunggame/bien_khi/bom"+(i+1)+".png");
+        }
+        for (int i = 0; i < 3;i++) {
+            saoDo[i] = new Texture("hieuung/hieuunggame/huyt_sao/do"+(i+1)+".png");
+        }
+        for (int i = 0; i < 3;i++) {
+            saoXanh[i] = new Texture("hieuung/hieuunggame/huyt_sao/xanh"+(i+1)+".png");
+        }
+        for (int i = 0; i < 2;i++) {
+            saoVang[i] = new Texture("hieuung/hieuunggame/huyt_sao/vang"+(i+1)+".png");
         }
         batch = new SpriteBatch();
     }
@@ -1723,6 +1736,9 @@ public class NhanVat {
                 if (veHUD.dangBienKhi) offsetX = -5f;
                 veTaiTaoNangLuong(batch,x + rong/2f+offsetX*flipScale,y);
             }
+            if (veHUD.dangHuytSao) {
+                veHuytSao(batch);
+            }
             if (veHUD.dangHienTinNhanChat) {
                 layout.setText(
                     veHUD.fontchat,
@@ -2097,6 +2113,65 @@ public class NhanVat {
         batch.setColor(1,1,1,1f);
     }
 
+    public void veHuytSao(SpriteBatch batch) {
+        if (chuaSetTimeHuytSao) {
+            timeHieuUngHuytSao = 0.9f;
+            chuaSetTimeHuytSao = false;
+        }
+
+        float x_sao_base = x + rong / 2f - 10;
+        float y_sao_base = y + cao + 10f;
+        float tiLe = 0.5f;
+
+        timeHieuUngHuytSao -= Gdx.graphics.getDeltaTime();
+        if (timeHieuUngHuytSao < 0) timeHieuUngHuytSao = 0;
+
+        float t = timeHieuUngHuytSao % 0.3f;
+
+        if (t >= 0.25f && t < 0.3f) {
+            batch.draw(saoDo[0], x_sao_base, y_sao_base,
+                saoDo[0].getWidth()*tiLe, saoDo[0].getHeight()*tiLe);
+        }
+        else if (t >= 0.2f && t < 0.25f) {
+            batch.draw(saoDo[0], x_sao_base, y_sao_base+5f,
+                saoDo[0].getWidth()*tiLe, saoDo[0].getHeight()*tiLe);
+            batch.draw(saoXanh[0], x_sao_base+25f, y_sao_base-12f,
+                saoXanh[0].getWidth()*tiLe, saoXanh[0].getHeight()*tiLe);
+        }
+        else if (t >= 0.15f && t < 0.2f) {
+            batch.draw(saoDo[1], x_sao_base, y_sao_base+5f,
+                saoDo[1].getWidth()*tiLe, saoDo[1].getHeight()*tiLe);
+            batch.draw(saoXanh[0], x_sao_base+25f, y_sao_base-12f,
+                saoXanh[0].getWidth()*tiLe, saoXanh[0].getHeight()*tiLe);
+            batch.draw(saoVang[0], x_sao_base+45f, y_sao_base-21f,
+                saoVang[0].getWidth()*tiLe, saoVang[0].getHeight()*tiLe);
+        }
+        else if (t >= 0.1f && t < 0.15f) {
+            batch.draw(saoDo[1], x_sao_base, y_sao_base+8f,
+                saoDo[1].getWidth()*tiLe, saoDo[1].getHeight()*tiLe);
+            batch.draw(saoXanh[1], x_sao_base+20f, y_sao_base-9f,
+                saoXanh[1].getWidth()*tiLe, saoXanh[1].getHeight()*tiLe);
+            batch.draw(saoVang[0], x_sao_base+50f, y_sao_base-21f,
+                saoVang[0].getWidth()*tiLe, saoVang[0].getHeight()*tiLe);
+        }
+        else if (t >= 0.05f && t < 0.1f) {
+            batch.draw(saoDo[2], x_sao_base-5f, y_sao_base+3f,
+                saoDo[2].getWidth()*tiLe, saoDo[2].getHeight()*tiLe);
+            batch.draw(saoXanh[2], x_sao_base+15f, y_sao_base-14f,
+                saoXanh[2].getWidth()*tiLe, saoXanh[2].getHeight()*tiLe);
+            batch.draw(saoVang[1], x_sao_base+60f, y_sao_base-19f,
+                saoVang[1].getWidth()*tiLe, saoVang[1].getHeight()*tiLe);
+        }
+        else if (t > 0f && t < 0.05f) {
+            batch.draw(saoDo[2], x_sao_base-15f, y_sao_base-13f,
+                saoDo[2].getWidth()*tiLe, saoDo[2].getHeight()*tiLe);
+            batch.draw(saoXanh[2], x_sao_base+13f, y_sao_base-9f,
+                saoXanh[2].getWidth()*tiLe, saoXanh[2].getHeight()*tiLe);
+            batch.draw(saoVang[1], x_sao_base+63f, y_sao_base-14f,
+                saoVang[1].getWidth()*tiLe, saoVang[1].getHeight()*tiLe);
+        }
+    }
+
     public void dispose() {
         if (veHUD != null) veHUD.dispose();
         if (avtTexture != null) {
@@ -2148,6 +2223,18 @@ public class NhanVat {
         }
 
         for (Texture t : bom) {
+            t.dispose();
+        }
+
+        for (Texture t : saoDo) {
+            t.dispose();
+        }
+
+        for (Texture t : saoXanh) {
+            t.dispose();
+        }
+
+        for (Texture t : saoVang) {
             t.dispose();
         }
 

@@ -220,7 +220,15 @@ public class DuLieuNguoiChoi {
         if (index >= 0 && index < motaSkill.length) {
             if (nhanVat.getHanhtinh().equals("xayda") || nhanVat.getTen().equals("admin")) {
                 switch (index) {
-                    case 3: motaSkill[3] = new String[]{"Biến hình thành khỉ","Tăng sức đánh, HP và tốc độ","KI tiêu hao: 10%","Hồi chiêu: "+(500-20*this.getCapSkill(3))+"s"};
+                    case 3:
+                        motaSkill[3] = new String[]{"Biến hình thành khỉ","Tăng sức đánh, HP và tốc độ","KI tiêu hao: 10%","Hồi chiêu: "+(500-20*this.getCapSkill(3))+"s"};
+                        break;
+                    case 2:
+                        motaSkill[2] = new String[]{"Tái tạo lại HP và MP đang có","Tự tái tạo HP MP "+(3+1*this.getCapSkill(2))+"%/s","KI tiêu hao: 0%","Hồi chiêu: "+"20s"};
+                        break;
+                    case 5:
+                        motaSkill[5] = new String[]{"Huýt sáo","Tăng tạm thời "+(30+10*this.getCapSkill(5))+"%HP cho mọi người","KI tiêu hao: 20","Hồi chiêu: 180s"};
+                        break;
                 }
             }
         }

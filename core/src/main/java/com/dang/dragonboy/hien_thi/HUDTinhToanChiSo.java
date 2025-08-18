@@ -230,6 +230,11 @@ public class HUDTinhToanChiSo {
             }
         }
 
+        // ===== DÙNG SKILL =====
+        if (veHUD.dangHuytSao) {
+            hp *= 1 + veHUD.hpTangHuytSao/100f;
+        }
+
         // ===== CẬP NHẬT CHỈ SỐ =====
         duLieuNguoiChoi.setHpHopThe(hp);
         duLieuNguoiChoi.setKiHopThe(ki);

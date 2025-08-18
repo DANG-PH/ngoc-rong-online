@@ -67,8 +67,8 @@ public class AvatarDoOffset {
             lechThan(-4f, 6f),
             lechThan(-5.5f, 6.5f ),
             lechThan(5f, 8f),
-            lechThan(0f, 0f),
-            lechThan(0f, 0f)
+            lechThan(8f, 8f),
+            lechThan(-1f, 8f)
         ));
 
         OFFSET_AO.put("set_huy_diet", taoLech(
