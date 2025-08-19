@@ -2005,6 +2005,7 @@ public class VeHUD {
                                 setTinNhanPet("Kỹ năng " + (skillIndex + 1) + " đạt cấp "
                                     + duLieuNguoiChoi.deTu.getCapSkill(skillIndex), 2f);
                                 duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Cám ơn sư phụ", 2f);
+                                if (skillIndex == 3 && duLieuNguoiChoi.deTu.getTenSkill(3).equals("Biến hình")) duLieuNguoiChoi.deTu.timeCoolDownBienKhi = 0;
                             } else {
                                 if (duLieuNguoiChoi.deTu.getCapSkill(skillIndex) >= 7) {
                                     setTinNhanPet("Kỹ năng đệ tử " + (skillIndex + 1) + " đã đạt cấp tối đa", 2f);

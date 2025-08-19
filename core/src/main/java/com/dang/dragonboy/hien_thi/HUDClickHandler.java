@@ -38,15 +38,17 @@ public class HUDClickHandler {
         for (int i = 0; i < 5; i++) {
             float x_ve = skillBaseX + i * (65f);
             if (x >= x_ve && x <= x_ve+oskillW && y >= skillY && y <= skillY+oskillH) {
-                if (veHUD.skillDangChon == i) {
-                    veHUD.dungSkill(i);
-                } else {
-                    veHUD.chonSkill(i);
-                }
                 if (!veHUD.dangHienPopup) {
-                    veHUD.clickY = skillY + oskillH / 2f;
-                    veHUD.clickX = x_ve + oskillW / 2f;
-                    veHUD.timeGlow = 0.2f;
+                    if (veHUD.skillDangChon == i) {
+                        veHUD.dungSkill(i);
+                    } else {
+                        veHUD.chonSkill(i);
+                    }
+                    if (!veHUD.dangHienPopup) {
+                        veHUD.clickY = skillY + oskillH / 2f;
+                        veHUD.clickX = x_ve + oskillW / 2f;
+                        veHUD.timeGlow = 0.2f;
+                    }
                 }
             }
         }

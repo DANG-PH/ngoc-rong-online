@@ -5,5 +5,7 @@ public enum TrangThaiDeTu {
     DI_CHUYEN,
     NHAY,
     ROI,
-    BAY_NGANG
+    BAY_NGANG,
+    THU,
+    GONG
 }

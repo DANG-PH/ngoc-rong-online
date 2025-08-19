@@ -66,7 +66,8 @@ public class NhanVatXuLy {
                 !tenCaiTrang.equals("khi_4") &&
                 !tenCaiTrang.equals("khi_5") &&
                 !tenCaiTrang.equals("khi_6") &&
-                !tenCaiTrang.equals("khi_7")
+                !tenCaiTrang.equals("khi_7") &&
+                !tenCaiTrang.equals("khi_8")
         ) {
             dangMacCaiTrang = true;
             dangMacAvatar = false;

@@ -1425,7 +1425,7 @@ public class HUDPopupRenderer {
                 layout.setText(veHUD.fontsm, duLieuNguoiChoi.deTu.getCapBac());
                 veHUD.fontsm.draw(batch,layout,125,570);
 
-                layout.setText(veHUD.fontsm,"Sức đánh: "+(int)duLieuNguoiChoi.deTu.getSucDanhDeTu());
+                layout.setText(veHUD.fontsm,"Sức đánh: "+(int)duLieuNguoiChoi.deTu.getSdHopThe());
                 veHUD.fontsm.draw(batch,layout,125,545);
 
                 layout.setText(veHUD.fontsm,"Thể lực");
@@ -1569,13 +1569,13 @@ public class HUDPopupRenderer {
             if (veHUD.chucNangDeTuDangChon == 1) {
                 batch.draw(veHUD.nutX, 350 - nutXW - 6, 610 - nutXH - 2, nutXW, nutXH - 5);
                 veHUD.font.setColor(1,1,1,1);
-                layout.setText(veHUD.font, "HP: "+(int)duLieuNguoiChoi.deTu.getHpHienTai()+"/"+(int)duLieuNguoiChoi.deTu.getHpToiDa());
+                layout.setText(veHUD.font, "HP: "+(int)duLieuNguoiChoi.deTu.getHpHienTai()+"/"+(int)duLieuNguoiChoi.deTu.getHpHopThe());
                 veHUD.font.draw(batch,layout,125,595);
 
-                layout.setText(veHUD.font, "KI: "+(int)duLieuNguoiChoi.deTu.getKiHienTai()+"/"+(int)duLieuNguoiChoi.deTu.getKiToiDa());
+                layout.setText(veHUD.font, "KI: "+(int)duLieuNguoiChoi.deTu.getKiHienTai()+"/"+(int)duLieuNguoiChoi.deTu.getKiHopThe());
                 veHUD.font.draw(batch,layout,125,570);
 
-                layout.setText(veHUD.fontsm, "Crit: "+duLieuNguoiChoi.deTu.getChiMangDeTu()+","+" Giáp: "+duLieuNguoiChoi.deTu.getGiapDeTu());
+                layout.setText(veHUD.fontsm, "Crit: "+(int)duLieuNguoiChoi.deTu.getChiMangSuDung()+"%,"+" Giáp: "+duLieuNguoiChoi.deTu.getGiapDeTu());
                 veHUD.fontsm.draw(batch, layout, 125, 545);
 
                 layout.setText(veHUD.fontsm,"Trạng thái: "+duLieuNguoiChoi.deTu.getTrangthai());

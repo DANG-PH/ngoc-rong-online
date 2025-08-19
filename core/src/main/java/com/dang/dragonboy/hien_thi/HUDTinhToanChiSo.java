@@ -30,11 +30,22 @@ public class HUDTinhToanChiSo {
         int stcm = duLieuNguoiChoi.getSatThuongChiMang();
         int giamSatThuong = duLieuNguoiChoi.getGiamSatThuongNhanVat();
 
+        float hp_de = 0,ki_de = 0,sd_de = 0;
+        int cm_de = 0,stcm_de = 0,giamSatThuong_de = 0;
+        if (duLieuNguoiChoi.coDeTu()) {
+            hp_de = duLieuNguoiChoi.deTu.getHpToiDa();
+            ki_de = duLieuNguoiChoi.deTu.getKiToiDa();
+            sd_de = duLieuNguoiChoi.deTu.getSucDanhDeTu();
+            cm_de = duLieuNguoiChoi.deTu.getChiMangDeTu();
+            stcm_de = duLieuNguoiChoi.deTu.getSatThuongChiMang();
+            giamSatThuong_de = duLieuNguoiChoi.deTu.getGiamSatThuongDeTu();
+        }
+
         // ===== BÔNG TAI =====
         if (veHUD.dangHopThe) {
-            hp += duLieuNguoiChoi.deTu.getHpToiDa();
-            ki += duLieuNguoiChoi.deTu.getKiToiDa();
-            sd += duLieuNguoiChoi.deTu.getSucDanhDeTu();
+            hp += hp_de;
+            ki += ki_de;
+            sd += sd_de;
 
             switch (veHUD.bongTaiDangDung) {
                 case "bongtaic1":
@@ -59,6 +70,11 @@ public class HUDTinhToanChiSo {
         if (veHUD.dangBienKhi) {
             hp *= 1+veHUD.hpTangBienKhi/100f;
             sd *= 1+veHUD.sucDanhTangBienKhi/100f;
+        }
+
+        if (duLieuNguoiChoi.coDeTu() && duLieuNguoiChoi.deTu.dangBienKhi) {
+            hp_de *= 1+duLieuNguoiChoi.deTu.hpTangBienKhi/100f;
+            sd_de *= 1+duLieuNguoiChoi.deTu.sucDanhTangBienKhi/100f;
         }
 
         // ===== Bổ Huyết =====
@@ -236,11 +252,22 @@ public class HUDTinhToanChiSo {
         }
 
         // ===== CẬP NHẬT CHỈ SỐ =====
+        //suphu
         duLieuNguoiChoi.setHpHopThe(hp);
         duLieuNguoiChoi.setKiHopThe(ki);
         duLieuNguoiChoi.setSdHopThe(sd);
+        //detu
+        duLieuNguoiChoi.deTu.setHpHopThe(hp_de);
+        duLieuNguoiChoi.deTu.setKiHopThe(ki_de);
+        duLieuNguoiChoi.deTu.setSdHopThe(sd_de);
+        // skill
         if (veHUD.dangBienKhi) {
             cm = 110;
+        }
+        if (duLieuNguoiChoi.coDeTu()) {
+            if (duLieuNguoiChoi.deTu.dangBienKhi) {
+                cm_de = 110;
+            }
         }
         if (veHUD.dangTtnl) {
             veHUD.timeNhayLanTiepTtnl += delta;
@@ -267,9 +294,15 @@ public class HUDTinhToanChiSo {
                 }
             }
         }
+        // su phu
         duLieuNguoiChoi.setChiMangSuDung(cm);
         duLieuNguoiChoi.setSatThuongChiMangSuDung(stcm);
         duLieuNguoiChoi.setGiamSatThuongSuDung(giamSatThuong);
+        // de tu
+        duLieuNguoiChoi.deTu.setChiMangSuDung(cm_de);
+        duLieuNguoiChoi.deTu.setSatThuongChiMangSuDung(stcm_de);
+        duLieuNguoiChoi.deTu.setGiamSatThuongSuDung(giamSatThuong_de);
+
         if (veHUD.vuaHopThe) {
             duLieuNguoiChoi.setHpHienTai(duLieuNguoiChoi.getHpHopThe());
             duLieuNguoiChoi.setKiHienTai(duLieuNguoiChoi.getKiHopThe());
@@ -282,5 +315,8 @@ public class HUDTinhToanChiSo {
         // Giới hạn HP/KI hiện tại
         if (duLieuNguoiChoi.getHpHienTai() > hp) duLieuNguoiChoi.setHpHienTai(hp);
         if (duLieuNguoiChoi.getKiHienTai() > ki) duLieuNguoiChoi.setKiHienTai(ki);
+
+        if (duLieuNguoiChoi.deTu.getHpHienTai() > hp_de) duLieuNguoiChoi.deTu.setHpHienTai(hp_de);
+        if (duLieuNguoiChoi.deTu.getKiHienTai() > ki_de) duLieuNguoiChoi.deTu.setKiHienTai(ki_de);
     }
 }

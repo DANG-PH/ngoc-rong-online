@@ -46,8 +46,8 @@ public class NhanVat {
     private Texture[] chan_chay;
     private Texture chan_bay;
 
-    private Texture[] ttnl = new Texture[4];
-    private Texture[] bom = new Texture[2];
+    public Texture[] ttnl = new Texture[4];
+    public Texture[] bom = new Texture[2];
     private Texture[] saoDo = new Texture[3];
     private Texture[] saoXanh = new Texture[3];
     private Texture[] saoVang = new Texture[2];
@@ -1777,6 +1777,18 @@ public class NhanVat {
                     } else if (veHUD.tinNhanChat.equals("ve nha") || veHUD.tinNhanChat.equals("go home")) {
                         veHUD.trangthaide = "Về nhà";
                         duLieuNguoiChoi.deTu.capNhatTrangThaiDeTu();
+                    }
+                    if (veHUD.tinNhanChat.equals("bien hinh") || veHUD.tinNhanChat.equals("transformation")) {
+                        if (duLieuNguoiChoi.deTu.getTenSkill(3) != null && duLieuNguoiChoi.deTu.getTenSkill(3).equals("Biến hình") && duLieuNguoiChoi.deTu.timeCoolDownBienKhi == 0 && duLieuNguoiChoi.deTu.timeChoBienKhi == 0) {
+                            duLieuNguoiChoi.deTu.timeChoBienKhi = 2f;
+                            duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Dạ sư phụ",3f);
+                        }
+                    }
+                    if (veHUD.tinNhanChat.equals("huy bien hinh")) {
+                        if (duLieuNguoiChoi.deTu.getTenSkill(3) != null && duLieuNguoiChoi.deTu.getTenSkill(3).equals("Biến hình") && duLieuNguoiChoi.deTu.dangBienKhi) {
+                            duLieuNguoiChoi.deTu.huyBienKhi();
+                            duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Dạ sư phụ",3f);
+                        }
                     }
                     if (veHUD.tinNhanChat.contains("ten con la:") && !veHUD.daRanDomChatDeTu) {
                         String[] part = veHUD.tinNhanChat.split(":", -1);

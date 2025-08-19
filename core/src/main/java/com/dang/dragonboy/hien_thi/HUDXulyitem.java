@@ -303,15 +303,17 @@ public class HUDXulyitem {
                     } else {
                         duLieuNguoiChoi.deTu.setAvtDangMac(item.getId());
                     }
-
-                    DeTuCauHinh c2 = laCaiTrang ? veHUD.DoicaitrangDeTu(item.getId()) : veHUD.Doi_avt_ao_quan_DeTu(duLieuNguoiChoi.deTu.getHanhtinh(), item.getId(), veHUD.aodetudangmac, veHUD.quandetudangmac);
-                    duLieuNguoiChoi.deTu.fixCaiTrang(
-                        c2.dau_dung_de_tu, c2.dau_chay_de_tu,
-                        c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
-                        c2.chan_dung_de_tu, c2.chan_nhay_de_tu, c2.chan_roi_de_tu, c2.chan_chay_de_tu,
-                        c2.than_bay_de_tu, c2.chan_bay_de_tu,
-                        c2.lechMapDeTu
-                    );
+                    if (!duLieuNguoiChoi.deTu.dangBienKhi) {
+                        DeTuCauHinh c2 = laCaiTrang ? veHUD.DoicaitrangDeTu(item.getId()) : veHUD.Doi_avt_ao_quan_DeTu(duLieuNguoiChoi.deTu.getHanhtinh(), item.getId(), veHUD.aodetudangmac, veHUD.quandetudangmac);
+                        duLieuNguoiChoi.deTu.fixCaiTrang(
+                            c2.dau_dung_de_tu, c2.dau_chay_de_tu,
+                            c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
+                            c2.chan_dung_de_tu, c2.chan_nhay_de_tu, c2.chan_roi_de_tu, c2.chan_chay_de_tu,
+                            c2.than_bay_de_tu, c2.chan_bay_de_tu,
+                            c2.chan_gong_de_tu, c2.than_thu_de_tu,
+                            c2.lechMapDeTu
+                        );
+                    }
                     tangchisoDeTu(item.getChiso());
                     danhSach.remove(indexx);
                 } else {
@@ -333,15 +335,18 @@ public class HUDXulyitem {
                     duLieuNguoiChoi.deTu.setSoSaoCuongHoaAo(item.getSoSaoPhaLeCuongHoa());
                     duLieuNguoiChoi.deTu.setHanhTinhAo(item.getHanhtinh());
                     duLieuNguoiChoi.deTu.setSucManhYeuCauAo(item.getSucManhYeuCau());
-                    if (!DeTuXuLy.getDangMacCaiTrang()) {
-                        DeTuCauHinh c2 = veHUD.Doi_avt_ao_quan_DeTu(duLieuNguoiChoi.deTu.getHanhtinh(), duLieuNguoiChoi.deTu.getAvtDangMac(), item.getId(), veHUD.quandetudangmac);
-                        duLieuNguoiChoi.deTu.fixCaiTrang(
-                            c2.dau_dung_de_tu, c2.dau_chay_de_tu,
-                            c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
-                            c2.chan_dung_de_tu, c2.chan_nhay_de_tu, c2.chan_roi_de_tu, c2.chan_chay_de_tu,
-                            c2.than_bay_de_tu, c2.chan_bay_de_tu,
-                            c2.lechMapDeTu
-                        );
+                    if (!duLieuNguoiChoi.deTu.dangBienKhi) {
+                        if (!DeTuXuLy.getDangMacCaiTrang()) {
+                            DeTuCauHinh c2 = veHUD.Doi_avt_ao_quan_DeTu(duLieuNguoiChoi.deTu.getHanhtinh(), duLieuNguoiChoi.deTu.getAvtDangMac(), item.getId(), veHUD.quandetudangmac);
+                            duLieuNguoiChoi.deTu.fixCaiTrang(
+                                c2.dau_dung_de_tu, c2.dau_chay_de_tu,
+                                c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
+                                c2.chan_dung_de_tu, c2.chan_nhay_de_tu, c2.chan_roi_de_tu, c2.chan_chay_de_tu,
+                                c2.than_bay_de_tu, c2.chan_bay_de_tu,
+                                c2.chan_gong_de_tu, c2.than_thu_de_tu,
+                                c2.lechMapDeTu
+                            );
+                        }
                     }
                     tangchisoDeTu(item.getChiso());
                     duLieuNguoiChoi.deTu.dangMacAo(true);
@@ -366,15 +371,18 @@ public class HUDXulyitem {
                     duLieuNguoiChoi.deTu.setSoSaoCuongHoaQuan(item.getSoSaoPhaLeCuongHoa());
                     duLieuNguoiChoi.deTu.setHanhTinhQuan(item.getHanhtinh());
                     duLieuNguoiChoi.deTu.setSucManhYeuCauQuan(item.getSucManhYeuCau());
-                    if (!DeTuXuLy.getDangMacCaiTrang()) {
-                        DeTuCauHinh c2 = veHUD.Doi_avt_ao_quan_DeTu(duLieuNguoiChoi.deTu.getHanhtinh(), duLieuNguoiChoi.deTu.getAvtDangMac(), veHUD.aodetudangmac, item.getId());
-                        duLieuNguoiChoi.deTu.fixCaiTrang(
-                            c2.dau_dung_de_tu, c2.dau_chay_de_tu,
-                            c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
-                            c2.chan_dung_de_tu, c2.chan_nhay_de_tu, c2.chan_roi_de_tu, c2.chan_chay_de_tu,
-                            c2.than_bay_de_tu, c2.chan_bay_de_tu,
-                            c2.lechMapDeTu
-                        );
+                    if (!duLieuNguoiChoi.deTu.dangBienKhi) {
+                        if (!DeTuXuLy.getDangMacCaiTrang()) {
+                            DeTuCauHinh c2 = veHUD.Doi_avt_ao_quan_DeTu(duLieuNguoiChoi.deTu.getHanhtinh(), duLieuNguoiChoi.deTu.getAvtDangMac(), veHUD.aodetudangmac, item.getId());
+                            duLieuNguoiChoi.deTu.fixCaiTrang(
+                                c2.dau_dung_de_tu, c2.dau_chay_de_tu,
+                                c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
+                                c2.chan_dung_de_tu, c2.chan_nhay_de_tu, c2.chan_roi_de_tu, c2.chan_chay_de_tu,
+                                c2.than_bay_de_tu, c2.chan_bay_de_tu,
+                                c2.chan_gong_de_tu,c2.than_thu_de_tu,
+                                c2.lechMapDeTu
+                            );
+                        }
                     }
                     tangchisoDeTu(item.getChiso());
                     duLieuNguoiChoi.deTu.dangMacQuan(true);
@@ -619,15 +627,18 @@ public class HUDXulyitem {
         duLieuNguoiChoi.deTu.setSucManhYeuCauAo(item.getSucManhYeuCau());
 
         // 5. Load avatar nếu không cải trang
-        if (!DeTuXuLy.getDangMacCaiTrang()) {
-            DeTuCauHinh c2 = veHUD.Doi_avt_ao_quan_DeTu(duLieuNguoiChoi.deTu.getHanhtinh(), duLieuNguoiChoi.deTu.getAvtDangMac(), item.getId(), veHUD.quandetudangmac);
-            duLieuNguoiChoi.deTu.fixCaiTrang(
-                c2.dau_dung_de_tu, c2.dau_chay_de_tu,
-                c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
-                c2.chan_dung_de_tu, c2.chan_nhay_de_tu, c2.chan_roi_de_tu, c2.chan_chay_de_tu,
-                c2.than_bay_de_tu, c2.chan_bay_de_tu,
-                c2.lechMapDeTu
-            );
+        if (!duLieuNguoiChoi.deTu.dangBienKhi) {
+            if (!DeTuXuLy.getDangMacCaiTrang()) {
+                DeTuCauHinh c2 = veHUD.Doi_avt_ao_quan_DeTu(duLieuNguoiChoi.deTu.getHanhtinh(), duLieuNguoiChoi.deTu.getAvtDangMac(), item.getId(), veHUD.quandetudangmac);
+                duLieuNguoiChoi.deTu.fixCaiTrang(
+                    c2.dau_dung_de_tu, c2.dau_chay_de_tu,
+                    c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
+                    c2.chan_dung_de_tu, c2.chan_nhay_de_tu, c2.chan_roi_de_tu, c2.chan_chay_de_tu,
+                    c2.than_bay_de_tu, c2.chan_bay_de_tu,
+                    c2.chan_gong_de_tu, c2.than_thu_de_tu,
+                    c2.lechMapDeTu
+                );
+            }
         }
 
         // 6. Tăng chỉ số áo mới
@@ -669,15 +680,18 @@ public class HUDXulyitem {
         veHUD.aodetudangmac = "set_base";
 
         // 5. Cập nhật giao diện nếu không cải trang
-        if (!DeTuXuLy.getDangMacCaiTrang()){
-            DeTuCauHinh c2 = veHUD.Doi_avt_ao_quan_DeTu(duLieuNguoiChoi.deTu.getHanhtinh(), duLieuNguoiChoi.deTu.getAvtDangMac(), "set_base", veHUD.quandetudangmac);
-            duLieuNguoiChoi.deTu.fixCaiTrang(
-                c2.dau_dung_de_tu, c2.dau_chay_de_tu,
-                c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
-                c2.chan_dung_de_tu, c2.chan_nhay_de_tu, c2.chan_roi_de_tu, c2.chan_chay_de_tu,
-                c2.than_bay_de_tu, c2.chan_bay_de_tu,
-                c2.lechMapDeTu
-            );
+        if (!duLieuNguoiChoi.deTu.dangBienKhi) {
+            if (!DeTuXuLy.getDangMacCaiTrang()) {
+                DeTuCauHinh c2 = veHUD.Doi_avt_ao_quan_DeTu(duLieuNguoiChoi.deTu.getHanhtinh(), duLieuNguoiChoi.deTu.getAvtDangMac(), "set_base", veHUD.quandetudangmac);
+                duLieuNguoiChoi.deTu.fixCaiTrang(
+                    c2.dau_dung_de_tu, c2.dau_chay_de_tu,
+                    c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
+                    c2.chan_dung_de_tu, c2.chan_nhay_de_tu, c2.chan_roi_de_tu, c2.chan_chay_de_tu,
+                    c2.than_bay_de_tu, c2.chan_bay_de_tu,
+                    c2.chan_gong_de_tu, c2.than_thu_de_tu,
+                    c2.lechMapDeTu
+                );
+            }
         }
 
         // 6. Kích hoạt lại set nếu đủ 4 món còn lại
@@ -835,15 +849,18 @@ public class HUDXulyitem {
         duLieuNguoiChoi.deTu.setSucManhYeuCauQuan(item.getSucManhYeuCau());
 
         // 5. Load avatar nếu không cải trang
-        if (!DeTuXuLy.getDangMacCaiTrang()) {
-            DeTuCauHinh c2 = veHUD.Doi_avt_ao_quan_DeTu(duLieuNguoiChoi.deTu.getHanhtinh(), duLieuNguoiChoi.deTu.getAvtDangMac(),veHUD.aodetudangmac, item.getId());
-            duLieuNguoiChoi.deTu.fixCaiTrang(
-                c2.dau_dung_de_tu, c2.dau_chay_de_tu,
-                c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
-                c2.chan_dung_de_tu, c2.chan_nhay_de_tu, c2.chan_roi_de_tu, c2.chan_chay_de_tu,
-                c2.than_bay_de_tu, c2.chan_bay_de_tu,
-                c2.lechMapDeTu
-            );
+        if (!duLieuNguoiChoi.deTu.dangBienKhi) {
+            if (!DeTuXuLy.getDangMacCaiTrang()) {
+                DeTuCauHinh c2 = veHUD.Doi_avt_ao_quan_DeTu(duLieuNguoiChoi.deTu.getHanhtinh(), duLieuNguoiChoi.deTu.getAvtDangMac(), veHUD.aodetudangmac, item.getId());
+                duLieuNguoiChoi.deTu.fixCaiTrang(
+                    c2.dau_dung_de_tu, c2.dau_chay_de_tu,
+                    c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
+                    c2.chan_dung_de_tu, c2.chan_nhay_de_tu, c2.chan_roi_de_tu, c2.chan_chay_de_tu,
+                    c2.than_bay_de_tu, c2.chan_bay_de_tu,
+                    c2.chan_gong_de_tu, c2.than_thu_de_tu,
+                    c2.lechMapDeTu
+                );
+            }
         }
 
         // 6. Tăng chỉ số quần mới
@@ -887,15 +904,18 @@ public class HUDXulyitem {
         veHUD.quandetudangmac = "set_base";
 
         // 5. Cập nhật giao diện nếu không cải trang
-        if (!DeTuXuLy.getDangMacCaiTrang()) {
-            DeTuCauHinh c2 = veHUD.Doi_avt_ao_quan_DeTu(duLieuNguoiChoi.deTu.getHanhtinh(), duLieuNguoiChoi.deTu.getAvtDangMac(), veHUD.aodetudangmac, "set_base");
-            duLieuNguoiChoi.deTu.fixCaiTrang(
-                c2.dau_dung_de_tu, c2.dau_chay_de_tu,
-                c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
-                c2.chan_dung_de_tu, c2.chan_nhay_de_tu, c2.chan_roi_de_tu, c2.chan_chay_de_tu,
-                c2.than_bay_de_tu, c2.chan_bay_de_tu,
-                c2.lechMapDeTu
-            );
+        if (!duLieuNguoiChoi.deTu.dangBienKhi) {
+            if (!DeTuXuLy.getDangMacCaiTrang()) {
+                DeTuCauHinh c2 = veHUD.Doi_avt_ao_quan_DeTu(duLieuNguoiChoi.deTu.getHanhtinh(), duLieuNguoiChoi.deTu.getAvtDangMac(), veHUD.aodetudangmac, "set_base");
+                duLieuNguoiChoi.deTu.fixCaiTrang(
+                    c2.dau_dung_de_tu, c2.dau_chay_de_tu,
+                    c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
+                    c2.chan_dung_de_tu, c2.chan_nhay_de_tu, c2.chan_roi_de_tu, c2.chan_chay_de_tu,
+                    c2.than_bay_de_tu, c2.chan_bay_de_tu,
+                    c2.chan_gong_de_tu, c2.than_thu_de_tu,
+                    c2.lechMapDeTu
+                );
+            }
         }
 
         // 6. Kích hoạt lại set nếu đủ 4 món còn lại
@@ -1480,17 +1500,20 @@ public class HUDXulyitem {
         } else {
             duLieuNguoiChoi.deTu.setAvtDangMac(item.getId());
         }
-        // 3. Load config cải trang mới
-        DeTuCauHinh c2 = laCaiTrangMoi
-            ? veHUD.DoicaitrangDeTu(item.getId())
-            : veHUD.Doi_avt_ao_quan_DeTu(duLieuNguoiChoi.deTu.getHanhtinh(), item.getId(), veHUD.aodetudangmac, veHUD.quandetudangmac);
-        duLieuNguoiChoi.deTu.fixCaiTrang(
-            c2.dau_dung_de_tu, c2.dau_chay_de_tu,
-            c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
-            c2.chan_dung_de_tu, c2.chan_nhay_de_tu, c2.chan_roi_de_tu, c2.chan_chay_de_tu,
-            c2.than_bay_de_tu, c2.chan_bay_de_tu,
-            c2.lechMapDeTu
-        );
+        if (!duLieuNguoiChoi.deTu.dangBienKhi) {
+            // 3. Load config cải trang mới
+            DeTuCauHinh c2 = laCaiTrangMoi
+                ? veHUD.DoicaitrangDeTu(item.getId())
+                : veHUD.Doi_avt_ao_quan_DeTu(duLieuNguoiChoi.deTu.getHanhtinh(), item.getId(), veHUD.aodetudangmac, veHUD.quandetudangmac);
+            duLieuNguoiChoi.deTu.fixCaiTrang(
+                c2.dau_dung_de_tu, c2.dau_chay_de_tu,
+                c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
+                c2.chan_dung_de_tu, c2.chan_nhay_de_tu, c2.chan_roi_de_tu, c2.chan_chay_de_tu,
+                c2.than_bay_de_tu, c2.chan_bay_de_tu,
+                c2.chan_gong_de_tu, c2.than_thu_de_tu,
+                c2.lechMapDeTu
+            );
+        }
 
         tangchisoDeTu(item.getChiso());
 
@@ -1550,15 +1573,17 @@ public class HUDXulyitem {
         Item caiTrangCu = new Item(idCu, tenCu, loai, veHUD.iconctDeTu, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, null,0,0,0,hansudung);
         giamchisoDeTu(chisocu);
         duLieuNguoiChoi.themItemVaoHanhTrang(caiTrangCu);
-
-        DeTuCauHinh c2 = veHUD.Doi_avt_ao_quan_DeTu(duLieuNguoiChoi.deTu.getHanhtinh(), duLieuNguoiChoi.deTu.getHanhtinh()+"_base", veHUD.aodetudangmac, veHUD.quandetudangmac);
-        duLieuNguoiChoi.deTu.fixCaiTrang(
-            c2.dau_dung_de_tu, c2.dau_chay_de_tu,
-            c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
-            c2.chan_dung_de_tu, c2.chan_nhay_de_tu, c2.chan_roi_de_tu, c2.chan_chay_de_tu,
-            c2.than_bay_de_tu, c2.chan_bay_de_tu,
-            c2.lechMapDeTu
-        );
+        if (!duLieuNguoiChoi.deTu.dangBienKhi) {
+            DeTuCauHinh c2 = veHUD.Doi_avt_ao_quan_DeTu(duLieuNguoiChoi.deTu.getHanhtinh(), duLieuNguoiChoi.deTu.getHanhtinh() + "_base", veHUD.aodetudangmac, veHUD.quandetudangmac);
+            duLieuNguoiChoi.deTu.fixCaiTrang(
+                c2.dau_dung_de_tu, c2.dau_chay_de_tu,
+                c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
+                c2.chan_dung_de_tu, c2.chan_nhay_de_tu, c2.chan_roi_de_tu, c2.chan_chay_de_tu,
+                c2.than_bay_de_tu, c2.chan_bay_de_tu,
+                c2.chan_gong_de_tu, c2.than_thu_de_tu,
+                c2.lechMapDeTu
+            );
+        }
         veHUD.iconctDeTu = null;
     }
 

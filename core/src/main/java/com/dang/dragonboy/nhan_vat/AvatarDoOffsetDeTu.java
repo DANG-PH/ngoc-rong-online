@@ -19,13 +19,17 @@ public class AvatarDoOffsetDeTu {
             lechDau(3.3f, -9f,3.3f, -9f,3.3f, -9f,3.3f, -9f,3.3f, -9f),
             lechDau(3f, -23.5f),
             lechDau(0.2f, -31f),
-            lechDau(-0.3f, -15.5f)
+            lechDau(-0.3f, -15.5f),
+            lechDau(6f, -15.5f),
+            lechDau(6f, -22f)
         ));
         OFFSET_AVATAR.put("Krillin_base", taoLech(
             lechDau(-0.3f, -15.5f),
             lechDau(3.3f, -9f,3.3f, -9f,3.3f, -9f,3.3f, -9f,3.3f, -9f),
             lechDau(3f, -23.5f),
             lechDau(0.2f, -31f),
+            lechDau(-0.3f, -15.5f),
+            lechDau(-0.3f, -15.5f),
             lechDau(-0.3f, -15.5f)
         ));
         OFFSET_AVATAR.put("Yamcha_base", taoLech(
@@ -33,6 +37,8 @@ public class AvatarDoOffsetDeTu {
             lechDau(3.3f, -14.5f,3.3f, -14.5f,3.3f, -14.5f,3.3f, -14.5f,3.3f, -14.5f),
             lechDau(3f, -29f),
             lechDau(0.2f, -36.5f),
+            lechDau(-0.3f, -21f),
+            lechDau(-0.3f, -21f),
             lechDau(-0.3f, -21f)
         ));
 
@@ -41,7 +47,9 @@ public class AvatarDoOffsetDeTu {
             lechDau( 3.3f, -9f,3.3f, -9f,3.3f, -9f,3.3f, -9f,3.3f, -9f),
             lechDau( 1f, -23.5f),
             lechDau(-3.2f, -31f),
-            lechDau(-0.3f, -15.5f)
+            lechDau(-0.3f, -15.5f),
+            lechDau(-2f, -13.5f),
+            lechDau(-2f, -13.5f)
         ));
 
         OFFSET_AVATAR.put("traidat_base", taoLech(
@@ -49,7 +57,9 @@ public class AvatarDoOffsetDeTu {
             lechDau(3.3f, -10f,3.3f, -10f,3.3f, -10f,3.3f, -10f,3.3f, -10f),
             lechDau(-2f, -23.5f),
             lechDau(-3.8f, -31f),
-            lechDau(5f, -19f)
+            lechDau(5f, -19f),
+            lechDau(2f, -15f),
+            lechDau(2f, -21.5f)
         ));
 
         // --- ÁO ---
@@ -58,7 +68,9 @@ public class AvatarDoOffsetDeTu {
             lechThan(1.5f, 5.2f,1.5f, 5.2f,1.5f, 5.2f,1.5f, 5.2f,1.5f, 5.2f ),
             lechThan(-4f, 6f),
             lechThan(-6f, 7f ),
-            lechThan(5f, 8f)
+            lechThan(5f, 8f),
+            lechThan(8f, 8f),
+            lechThan(-1f, 8f)
         ));
 
         OFFSET_AO.put("set_cam", taoLech(
@@ -66,7 +78,9 @@ public class AvatarDoOffsetDeTu {
             lechThan(1.5f, 5.2f,1.5f, 5.2f,1.5f, 5.2f,1.5f, 5.2f,1.5f, 5.2f ),
             lechThan(-4f, 6f),
             lechThan(-5.5f, 6.5f ),
-            lechThan(0f, 0f)
+            lechThan(0f, 0f),
+            lechThan(8f, 8f),
+            lechThan(-1f, 8f)
         ));
 
         OFFSET_AO.put("set_huy_diet", taoLech(
@@ -74,7 +88,9 @@ public class AvatarDoOffsetDeTu {
             lechThan(1.5f, 7f,1.5f, 7f,1.5f, 7f,1.5f, 7f,1.5f, 7f),
             lechThan(0f, 2f),
             lechThan(-4f, 2f),
-            lechThan(-1f, 4f)
+            lechThan(-1f, 4f),
+            lechThan(-1f, 3.5f),
+            lechThan(-1f, 3.5f)
         ));
 
         // --- QUẦN ---
@@ -83,10 +99,14 @@ public class AvatarDoOffsetDeTu {
             lechChan(),
             lechChan(),
             lechChan(),
+            lechChan(),
+            lechChan(),
             lechChan()
         ));
 
         OFFSET_QUAN.put("set_huy_diet", taoLech(
+            lechChan(),
+            lechChan(),
             lechChan(),
             lechChan(),
             lechChan(),
@@ -128,7 +148,9 @@ public class AvatarDoOffsetDeTu {
         List<DoLechModular> diChuyen,
         List<DoLechModular> nhay,
         List<DoLechModular> roi,
-        List<DoLechModular> bayNgang
+        List<DoLechModular> bayNgang,
+        List<DoLechModular> thu,
+        List<DoLechModular> gong
     ) {
         Map<TrangThaiDeTu, List<DoLechModular>> map = new HashMap<>();
         map.put(TrangThaiDeTu.DUNG_YEN, dungYen);
@@ -136,6 +158,8 @@ public class AvatarDoOffsetDeTu {
         map.put(TrangThaiDeTu.NHAY, nhay);
         map.put(TrangThaiDeTu.ROI, roi);
         map.put(TrangThaiDeTu.BAY_NGANG, bayNgang);
+        map.put(TrangThaiDeTu.THU, thu);
+        map.put(TrangThaiDeTu.GONG, gong);
         return map;
     }
 

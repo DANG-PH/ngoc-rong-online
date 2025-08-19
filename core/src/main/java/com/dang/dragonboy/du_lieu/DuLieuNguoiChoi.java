@@ -753,6 +753,7 @@ public class DuLieuNguoiChoi {
                 config.than_dung_de_tu, config.than_nhay_de_tu, config.than_roi_de_tu, config.than_chay_de_tu,
                 config.chan_dung_de_tu, config.chan_nhay_de_tu, config.chan_roi_de_tu, config.chan_chay_de_tu,
                 config.than_bay_de_tu, config.chan_bay_de_tu,
+                config.chan_gong_de_tu,config.than_thu_de_tu,
                 config.lechMapDeTu,
                 null,null,null,null,null,null,nhanVat,this
             );

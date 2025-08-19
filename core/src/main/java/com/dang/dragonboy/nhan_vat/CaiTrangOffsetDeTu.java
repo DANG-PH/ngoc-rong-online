@@ -17,6 +17,14 @@ public class CaiTrangOffsetDeTu {
         OFFSET_CAI_TRANG.put("set_base_traidat", taoCtDeTuTraiDat());
         OFFSET_CAI_TRANG.put("xiao", taoXiao());
         OFFSET_CAI_TRANG.put("ayaka", taoAyaka());
+        OFFSET_CAI_TRANG.put("khi_7", taoKhi7(0,0));
+        OFFSET_CAI_TRANG.put("khi_6", taoKhi7(0,0));
+        OFFSET_CAI_TRANG.put("khi_5", taoKhi7(0,0));
+        OFFSET_CAI_TRANG.put("khi_4", taoKhi7(-7,3));
+        OFFSET_CAI_TRANG.put("khi_3", taoKhi7(14,10));
+        OFFSET_CAI_TRANG.put("khi_2", taoKhi7(12.9f,6));
+        OFFSET_CAI_TRANG.put("khi_1", taoKhi7(12.9f,6));
+        OFFSET_CAI_TRANG.put("khi_8", taoKhi7(-2,1));
     }
 
     public static Map<TrangThaiDeTu, List<DoLechModular>> getOffset(String ten) {
@@ -46,7 +54,9 @@ public class CaiTrangOffsetDeTu {
             }),
             lech(-4f, 6f, 0.5f, -21.5f,0,0),
             lech(-5.5f, 6.5f, -1.2f, -28f,0,0),
-            lech(0f, -1f, -0.3f, -15.5f,0,0)
+            lech(0f, -1f, -0.3f, -15.5f,0,0),
+            lech(8f, 8f, 6f, -15.5f,0,0),
+            lech(-1f, 8f, 6f, -22f,0,0)
         );
     }
 
@@ -62,7 +72,9 @@ public class CaiTrangOffsetDeTu {
             }),
             lech(-4f, 6f, 0.5f, -21.5f,0,0),
             lech(-5.5f, 6.5f, -1.2f, -28f,0,0),
-            lech(5f, 8f, 7f, -19f,0,0)
+            lech(5f, 8f, 7f, -19f,0,0),
+            lech(8f, 8f, 6f, -15.5f,0,0),
+            lech(-1f, 8f, 6f, -22f,0,0)
         );
     }
 
@@ -78,7 +90,9 @@ public class CaiTrangOffsetDeTu {
             }),
             lech(6f, 7.5f, 0.5f, -53.5f,0,0),
             lech(-5.5f, 6.5f, -4f, -56.5f,0,0),
-            lech(11.3f, -18.5f, 5f, -63.5f,0,0)
+            lech(11.3f, -18.5f, 5f, -63.5f,0,0),
+            lech(8f, 8f, 6f, -15.5f,0,0),
+            lech(-1f, 8f, 6f, -22f,0,0)
         );
     }
 
@@ -94,7 +108,9 @@ public class CaiTrangOffsetDeTu {
             }),
             lech(-1f, 7f, 0.5f, -20.8f,0,0),
             lech(-7f, 7.5f, 1f, -31.5f,0,0),
-            lech(0f, -1f, -0.3f, -15.5f,0,0)
+            lech(0f, -1f, -0.3f, -15.5f,0,0),
+            lech(8f, 8f, 6f, -15.5f,0,0),
+            lech(-1f, 8f, 6f, -22f,0,0)
         );
     }
 
@@ -110,7 +126,9 @@ public class CaiTrangOffsetDeTu {
             }),
             lech(6.5f, 7f, 9f, -25f,0,0),
             lech(-7f, 7.5f, 1f, -34.5f,0,0),
-            lech(0f, -1f, -0.3f, -15.5f,0,0)
+            lech(0f, -1f, -0.3f, -15.5f,0,0),
+            lech(8f, 8f, 6f, -15.5f,0,0),
+            lech(-1f, 8f, 6f, -22f,0,0)
         );
     }
 
@@ -126,7 +144,9 @@ public class CaiTrangOffsetDeTu {
             }),
             lech(3.5f, 7f, 6f, -18.5f,0,0),
             lech(-5f, 7.5f, -1f, -29f,0,0),
-            lech(3.5f, 7f, 6f, -18.5f,0,0)
+            lech(3.5f, 7f, 6f, -18.5f,0,0),
+            lech(8f, 8f, 6f, -15.5f,0,0),
+            lech(-1f, 8f, 6f, -22f,0,0)
         );
     }
 
@@ -142,7 +162,9 @@ public class CaiTrangOffsetDeTu {
             }),
             lech(-4f, -12f, 0.5f, -49f,0,0),
             lech(-5.5f, -12f, -1.2f, -54f,0,0),
-            lech(-17f, -1f, -13f, -35f,0,0)
+            lech(-17f, -1f, -13f, -35f,0,0),
+            lech(8f, 8f, 6f, -15.5f,0,0),
+            lech(-1f, 8f, 6f, -22f,0,0)
         );
     }
 
@@ -158,7 +180,27 @@ public class CaiTrangOffsetDeTu {
             }),
             lech(0, -3f, -5f, -60f,0,0),
             lech(-1.5f, -3f, -8f, -66f,0,0),
-            lech(0f, 10f, -4f, -47f,0,0)
+            lech(0f, 10f, -4f, -47f,0,0),
+            lech(8f, 8f, 6f, -15.5f,0,0),
+            lech(-1f, 8f, 6f, -22f,0,0)
+        );
+    }
+
+    private static Map<TrangThaiDeTu, List<DoLechModular>> taoKhi7(float offsetDauY, float offsetDauX) {
+        return taoLech(
+            lech(1f, -5f, -6f+offsetDauX, -54f+offsetDauY,0,0),
+            lechDiChuyen(new float[][] {
+                {3f  , -2f, 10f+offsetDauX, -49.5f+offsetDauY, 0  , 0},
+                {-18f-29f, -4f, -19f+offsetDauX, -53.5f+offsetDauY, -20-29f, 0},
+                {-1f-39f  , -18f, -29f+offsetDauX, -65.5f+offsetDauY, -20-39f, 0},
+                {-33f-33f, -15f, -23f+offsetDauX, -77.5f+offsetDauY, -20-33f, 0},
+                {3f-29f  , -5f, -19f+offsetDauX, -53.5f+offsetDauY, -20-29f  , 0},
+            }),
+            lech(3f, 1f, 1f+offsetDauX, -48.5f+offsetDauY,0,0),
+            lech(-3f, 2f, -12f+offsetDauX, -67f+offsetDauY,0,0),
+            lech(-26f, 20f, -28f+offsetDauX, -29.5f+offsetDauY,0,0),
+            lech(5f, -1f, 0f+offsetDauX, -53f+offsetDauY,0,0),
+            lech(0f, -1f, -2f+offsetDauX, -50.5f+offsetDauY,0,0)
         );
     }
 
@@ -169,7 +211,9 @@ public class CaiTrangOffsetDeTu {
         List<DoLechModular> diChuyen,
         List<DoLechModular> nhay,
         List<DoLechModular> roi,
-        List<DoLechModular> bayNgang
+        List<DoLechModular> bayNgang,
+        List<DoLechModular> thu,
+        List<DoLechModular> gong
     ) {
         Map<TrangThaiDeTu, List<DoLechModular>> map = new HashMap<>();
         map.put(TrangThaiDeTu.DUNG_YEN, dungYen);
@@ -177,6 +221,8 @@ public class CaiTrangOffsetDeTu {
         map.put(TrangThaiDeTu.NHAY, nhay);
         map.put(TrangThaiDeTu.ROI, roi);
         map.put(TrangThaiDeTu.BAY_NGANG, bayNgang);
+        map.put(TrangThaiDeTu.THU, thu);
+        map.put(TrangThaiDeTu.GONG, gong);
         return map;
     }
 

@@ -18,6 +18,7 @@ public class DeTuCauHinh {
     public Texture than_roi_de_tu;
     public Texture[] than_chay_de_tu;
     public Texture than_bay_de_tu;
+    public Texture than_thu_de_tu;
 
     // Chân
     public Texture chan_dung_de_tu;
@@ -25,6 +26,7 @@ public class DeTuCauHinh {
     public Texture chan_roi_de_tu;
     public Texture[] chan_chay_de_tu;
     public Texture chan_bay_de_tu;
+    public Texture chan_gong_de_tu;
 
     // Offset
     public Map<TrangThaiDeTu, List<DoLechModular>> lechMapDeTu;
@@ -37,6 +39,7 @@ public class DeTuCauHinh {
         Texture than_dung_de_tu, Texture than_nhay_de_tu, Texture than_roi_de_tu, Texture[] than_chay_de_tu,
         Texture chan_dung_de_tu, Texture chan_nhay_de_tu, Texture chan_roi_de_tu, Texture[] chan_chay_de_tu,
         Texture than_bay_de_tu, Texture chan_bay_de_tu,
+        Texture chan_gong_de_tu, Texture than_thu_de_tu,
         Map<TrangThaiDeTu, List<DoLechModular>> lechMapDeTu,
         Texture ao_de_tu, Texture quan_de_tu, Texture gang_de_tu, Texture giay_de_tu, Texture rada_de_tu, Texture iconct_de_tu
     ) {
@@ -47,11 +50,13 @@ public class DeTuCauHinh {
         this.than_roi_de_tu = than_roi_de_tu;
         this.than_chay_de_tu = than_chay_de_tu;
         this.than_bay_de_tu = than_bay_de_tu;
+        this.than_thu_de_tu = than_thu_de_tu;
         this.chan_dung_de_tu = chan_dung_de_tu;
         this.chan_nhay_de_tu = chan_nhay_de_tu;
         this.chan_roi_de_tu = chan_roi_de_tu;
         this.chan_chay_de_tu = chan_chay_de_tu;
         this.chan_bay_de_tu = chan_bay_de_tu;
+        this.chan_gong_de_tu = chan_gong_de_tu;
         this.lechMapDeTu = lechMapDeTu;
         this.ao_de_tu = ao_de_tu;
         this.quan_de_tu = quan_de_tu;
