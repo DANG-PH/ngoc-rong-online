@@ -1351,9 +1351,7 @@ public class DeTu {
 
         timeCooldownDash -= delta;
         if (timeChoBienKhi > 0) {
-            if (timeChoBienKhi>1.25f) {
-                trangThai = TrangThaiDeTu.GONG;
-            } else if (timeChoBienKhi>1f) {
+            if (timeChoBienKhi > 0.3f) {
                 trangThai = TrangThaiDeTu.THU;
             } else {
                 trangThai = TrangThaiDeTu.GONG;
@@ -1882,19 +1880,9 @@ public class DeTu {
             fontTenDeTu.setColor(16f / 255f, 237f / 255f, 227f / 255f, 1f);
             layout.setText(fontTenDeTu,getTen());
             fontTenDeTu.draw(batch,layout,x+(rong_de_tu- layout.width)/2f,y+cao_de_tu+30);
+
             if (timeChoBienKhi > 0) {
-                System.out.println(timeChoBienKhi);
-            }
-            if (timeSauBienKhi > 0) {
-                System.out.println(timeSauBienKhi);
-            }
-            if (timeChoBienKhi > 0) {
-                int tick = (int)(timeChoBienKhi * 10);
-                int tick1 = (int)(timeChoBienKhi * 15);
-                if (tick1 % 2 == 0) {
-                    veQckk(batch,x + rong_de_tu/2f+5f*flipScale, y + cao_de_tu / 2f);
-                }
-                if (tick % 2 == 0) {
+                if (timeChoBienKhi> 0.35f) {
                     veTaiTaoNangLuong(batch,x + rong_de_tu/2f+5f*flipScale,y);
                 }
             }

@@ -1780,7 +1780,7 @@ public class NhanVat {
                     }
                     if (veHUD.tinNhanChat.equals("bien hinh") || veHUD.tinNhanChat.equals("transformation")) {
                         if (duLieuNguoiChoi.deTu.getTenSkill(3) != null && duLieuNguoiChoi.deTu.getTenSkill(3).equals("Biến hình") && duLieuNguoiChoi.deTu.timeCoolDownBienKhi == 0 && duLieuNguoiChoi.deTu.timeChoBienKhi == 0) {
-                            duLieuNguoiChoi.deTu.timeChoBienKhi = 2f;
+                            duLieuNguoiChoi.deTu.timeChoBienKhi = 0.6f;
                             duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Dạ sư phụ",3f);
                         }
                     }
