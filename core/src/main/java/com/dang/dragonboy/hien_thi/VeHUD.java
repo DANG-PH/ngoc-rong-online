@@ -182,7 +182,7 @@ public class VeHUD {
     public boolean dangChonHanhTrangDeTu = false;
 
     public boolean dangChonNhacNen = false;
-    public Music[] nhacNen = new Music[10];
+    public Music[] nhacNen = new Music[11];
 
     public boolean dangHienChonMiniGame = false;
     public boolean dangHienMiniGame = false;
@@ -581,7 +581,8 @@ public class VeHUD {
             "dandan.mp3",
             "saominhchuanamtaynhau.mp3",
             "thoigiansetraloi.mp3",
-            "suthatdaboquen.mp3"
+            "suthatdaboquen.mp3",
+            "khonglayduocvo.mp3"
         };
 
         for (int i = 1; i < tenFile.length; i++) {
@@ -952,7 +953,7 @@ public class VeHUD {
                         setTinNhanPet("Cần chờ "+(int)(delayHopTheThuong/60f)+" phút nữa để hợp thể Fushion Dance",2);
                     }
                 } else if (dangChonNhacNen) {
-                    String[] chucNang = {"Tắt nhạc","Khẩu thị tâm phi","Đếm ngày xa em","Kẻ theo đuổi ánh sáng","Tháp rơi tự do","Điều anh biết","DanDan Kokoro Hikareteku","Sao mình chưa nắm tay nhau","Thời gian sẽ trả lời","Sự thật đã bỏ quên"};
+                    String[] chucNang = {"Tắt nhạc","Khẩu thị tâm phi","Đếm ngày xa em","Kẻ theo đuổi ánh sáng","Tháp rơi tự do","Điều anh biết","DanDan Kokoro Hikareteku","Sao mình chưa nắm tay nhau","Thời gian sẽ trả lời","Sự thật đã bỏ quên", "Không lấy được vợ"};
                     if (oChiSoDangChon == 0) {
                         for (int i = 1; i < nhacNen.length; i++) {
                             if (nhacNen[i].isPlaying()) nhacNen[i].stop();

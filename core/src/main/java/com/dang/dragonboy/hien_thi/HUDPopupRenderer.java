@@ -1611,7 +1611,7 @@ public class HUDPopupRenderer {
         }
         // nhac nen
         if (veHUD.chucNangDangChon == 4 && veHUD.dangChonNhacNen) {
-            String[] chucNang = {"Tắt nhạc","Khẩu thị tâm phi","Đếm ngày xa em","Kẻ theo đuổi ánh sáng","Tháp rơi tự do","Điều anh biết","DanDan Kokoro Hikareteku","Sao mình chưa nắm tay nhau","Thời gian sẽ trả lời","Sự thật đã bỏ quên"};
+            String[] chucNang = {"Tắt nhạc","Khẩu thị tâm phi","Đếm ngày xa em","Kẻ theo đuổi ánh sáng","Tháp rơi tự do","Điều anh biết","DanDan Kokoro Hikareteku","Sao mình chưa nắm tay nhau","Thời gian sẽ trả lời","Sự thật đã bỏ quên", "Không lấy được vợ"};
             float viewY = 35;
             float viewHeight = 444 - 35;
             int KhoangCachO = 49;
@@ -1627,10 +1627,10 @@ public class HUDPopupRenderer {
             batch.flush();
             Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
             Gdx.gl.glScissor(0, (int)viewY, 350, (int)viewHeight);
-            float totalHeight = 10 * KhoangCachO;
+            float totalHeight = veHUD.nhacNen.length * KhoangCachO;
             veHUD.maxScroll = Math.max(0, totalHeight - viewHeight);
             float startY = viewY + viewHeight - KhoangCachO + veHUD.scrollY;
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < veHUD.nhacNen.length; i++) {
                 float y = startY - i * KhoangCachO;
                 Texture tex = (veHUD.oChiSoDangChon == i) ? veHUD.o_chi_so_co_ban_click : veHUD.o_chi_so_co_ban;
                 batch.draw(tex, 3, y, 344, 50);

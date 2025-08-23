@@ -16,6 +16,8 @@ public class Npc {
     private NpcOffset offset;
     private GlyphLayout layout;
     private BitmapFont font;
+    private Texture muiTenNpc;
+    private boolean dangClickNpc = false;
 
     public Npc(String ten, float x, float y) {
         this.ten = ten;
@@ -30,6 +32,7 @@ public class Npc {
         param.size = 18;
         font = generator.generateFont(param);
         generator.dispose();
+        muiTenNpc = new Texture("hud/giaodientrong/clicknpc.png");
     }
     public String getTen() {
         return ten;
@@ -52,6 +55,7 @@ public class Npc {
     public void setNpcOffset(NpcOffset offsetNpc) {
         this.offset = offsetNpc;
     }
+
     public void ve(SpriteBatch batch, float thoiGianTichLuy) {
         if (taiAnh == null || offset == null) return;
 
@@ -86,14 +90,27 @@ public class Npc {
         float dauY = thanY + thanH + offset.getDauYOffset();
         batch.draw(dau, dauX, dauY, dauW, dauH);
 
+        //Vẽ mũi tên Npc nếu đang click
+        float tenY = baseY + chanH + dauH + 30;
+        if (dangClickNpc) {
+            batch.draw(muiTenNpc, baseX + (chanW - muiTenNpc.getWidth()*0.5f) / 2f ,tenY, muiTenNpc.getWidth()*0.5f, muiTenNpc.getHeight()*0.5f);
+        }
+
         // ve Ten Npc
         setTenTiengVietNpc();
         font.setColor(Color.YELLOW);
         layout.setText(font, tenTiengVietNpc);
         float tenX = baseX + (chanW - layout.width) / 2f;
-        float tenY = baseY + chanH + dauH + 30;
-        font.draw(batch, layout, tenX, tenY);
+        font.draw(batch, layout, tenX, dangClickNpc ? tenY + 40f : tenY);
         font.setColor(Color.WHITE);
+    }
+
+    public void checkClick(float x_check, float y_check) {
+        if (x_check >= x && x_check <= x + taiAnh.getChan().getWidth() * 0.5f && y_check >= y && y_check <= y + taiAnh.getChan().getHeight() * 0.5f + taiAnh.getThan().getHeight() * 0.5f + taiAnh.getDau().getHeight() * 0.5f) {
+            dangClickNpc = true;
+        } else {
+            dangClickNpc = false;
+        }
     }
 
     public void setTenTiengVietNpc() {

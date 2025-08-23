@@ -207,6 +207,7 @@ public class NhanVat {
 
     public boolean diChuyenDenMucTieu = false;
     private float x_muc_tieu,y_muc_tieu;
+    public float x_check_npc, y_check_npc;
     boolean daNhayDeLenY = false;
     private Texture[] clickdichuyen = new Texture[4];
     private float thoiGianHienDiemCanDen = 0; // đếm thời gian từ lúc click
@@ -220,6 +221,8 @@ public class NhanVat {
     public void setToaDoMucTieu(float x, float y) {
         this.x_muc_tieu = x;
         this.y_muc_tieu = y;
+        this.x_check_npc = x;
+        this.y_check_npc = y;
         dangHienDiemCanDen = true;
         thoiGianHienDiemCanDen = 0f;
     }

@@ -398,8 +398,9 @@ public class ManHinhNhaGohan implements Screen {
             batch.draw(khoi, -10+i*287, 0, 287, 200);
         }
 
-        for (Npc npc : danhSachNpc) {
-            npc.ve(batch,thoiGianTichLuy);
+        for (int i = 0; i < danhSachNpc.size(); i++) {
+            danhSachNpc.get(i).checkClick(nhanVat.x_check_npc, nhanVat.y_check_npc);
+            danhSachNpc.get(i).ve(batch,thoiGianTichLuy);
         }
 
         // cây đậu + đùi gà + lửa + củi

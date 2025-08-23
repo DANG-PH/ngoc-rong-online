@@ -725,7 +725,7 @@ public class HUDClickHandler {
             float viewY = 35;
             float viewHeight = 444 - 35;
             int KhoangCachItem = 49;
-            int tongSoO = 10;
+            int tongSoO = veHUD.nhacNen.length;
 
             // Kiểm tra có click vào vùng không
             if (x >= 3 && x <= 3 + 344 && y >= viewY && y <= viewY + viewHeight) {
