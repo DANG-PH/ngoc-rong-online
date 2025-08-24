@@ -17,7 +17,7 @@ public class Npc {
     private GlyphLayout layout;
     private BitmapFont font;
     private Texture muiTenNpc;
-    private boolean dangClickNpc = false;
+    public boolean dangClickNpc = false;
 
     public Npc(String ten, float x, float y) {
         this.ten = ten;

@@ -420,7 +420,15 @@ public class ManHinhNhaGohan implements Screen {
         batch.draw(luaa,1203,203,luaaW,luaaH);
         batch.draw(duiga,1178,205,33,24);
         nhanVat.ve(batch, thoiGianTichLuy);
-        nhanVat.veDiemCanDen(batch);
+        boolean duocVeDiemCanDen = true;
+        for (Npc npc : danhSachNpc) {
+            if (npc.dangClickNpc) {
+                duocVeDiemCanDen = false;
+            }
+        }
+        if (duocVeDiemCanDen) {
+            nhanVat.veDiemCanDen(batch);
+        }
         batch.end();
         if (targetX > 410 && targetX < 850) {
             shapeRenderer.setProjectionMatrix(camManager.camera.combined);
