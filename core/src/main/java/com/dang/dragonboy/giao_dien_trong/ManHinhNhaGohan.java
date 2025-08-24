@@ -263,6 +263,7 @@ public class ManHinhNhaGohan implements Screen {
             NpcOffset offsetNpc = map.getNpcOffset(npc.getTen());
             npc.setNpcTaiAnh(taiAnhNpc);
             npc.setNpcOffset(offsetNpc);
+            npc.setNhanVat(nhanVat);
         }
     }
     private NhanVatCauHinh Doicaitrang(String TenCaiTrang){
@@ -386,8 +387,6 @@ public class ManHinhNhaGohan implements Screen {
             }
         }
         batch.draw(light,150,340,600,500);
-        batch.draw(ruongdo,120,190,50,35);
-        tenNpc(font,"Rương đồ",120,230,50,35);
         batch.draw(caycoi2,500,-130,200,200);
         batch.draw(caycoi2,630,-80,200,200);
         batch.draw(dochanhtinh,670,0,400,165);
@@ -404,15 +403,6 @@ public class ManHinhNhaGohan implements Screen {
         }
 
         // cây đậu + đùi gà + lửa + củi
-        float caydauW = caccaydau[capcaydau].getWidth() * 0.5f;
-        float caydauH = caccaydau[capcaydau].getHeight() * 0.48f;
-        batch.draw(caccaydau[capcaydau],600,192,caydauW, caydauH);
-        String text = "Đậu thần cấp " + (capcaydau + 1);
-        layout.setText(fontDauThan, text);
-        fontDauThan.draw(batch, layout,
-            600 + (caccaydau[capcaydau].getWidth() * 0.5f - layout.width) / 2f,
-            192 + caccaydau[capcaydau].getHeight() * 0.5f + 15
-        );
         batch.draw(cui_dot_lua,1170,180,66,48);
         Texture luaa = lua[frameLua];
         float luaaW = luaa.getWidth() * 0.5f;
@@ -430,32 +420,6 @@ public class ManHinhNhaGohan implements Screen {
             nhanVat.veDiemCanDen(batch);
         }
         batch.end();
-        if (targetX > 410 && targetX < 850) {
-            shapeRenderer.setProjectionMatrix(camManager.camera.combined);
-            Gdx.gl.glEnable(GL20.GL_BLEND); // Câu lệnh để pha alpha tùy ý
-
-            shapeRenderer.setColor(0f, 0f, 0f, 0.5f);
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.rect(
-                600 + (caccaydau[capcaydau].getWidth() * 0.5f) / 2f -90,
-                192 + caccaydau[capcaydau].getHeight() * 0.5f + 35,
-                180,
-                80);
-            shapeRenderer.end();
-
-            batch.begin();
-            layout.setText(fontDauThan,"Có thể thu hoạch");
-            fontDauThan.draw(batch,layout,
-                600 + (caccaydau[capcaydau].getWidth() * 0.5f - layout.width) / 2f,
-                192 + caccaydau[capcaydau].getHeight() * 0.5f + 90
-            );
-            layout.setText(fontDauThan,(2*(capcaydau+1)+3)+"/"+(2*(capcaydau+1)+3));
-            fontDauThan.draw(batch,layout,
-                600 + (caccaydau[capcaydau].getWidth() * 0.5f - layout.width) / 2f,
-                192 + caccaydau[capcaydau].getHeight() * 0.5f + 65
-            );
-            batch.end();
-        }
         if (targetX > 610 && targetX < 1060) {
             shapeRenderer.setProjectionMatrix(camManager.camera.combined);
             Gdx.gl.glEnable(GL20.GL_BLEND); // Câu lệnh để pha alpha tùy ý
@@ -485,10 +449,6 @@ public class ManHinhNhaGohan implements Screen {
         batch.end();
     }
 
-    private void tenNpc(BitmapFont font,String ten,float toadoX,float toadoY, float width,float height){
-        layout.setText(font,ten);
-        drawText(font, ten, toadoX + (width - layout.width) / 2, toadoY + height, Color.YELLOW);
-    }
     private SkillNhanVat[] loadSkillIcons(String hanhTinh) {
         SkillNhanVat[] skillIcons = new SkillNhanVat[9];
         for (int i = 0; i < 9; i++) {

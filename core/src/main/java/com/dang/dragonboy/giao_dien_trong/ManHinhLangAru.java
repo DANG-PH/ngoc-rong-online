@@ -18,6 +18,13 @@ import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.xu_ly_map.MapLangAru;
 import com.dang.dragonboy.hien_thi.QuanLyCamera;
+import com.dang.dragonboy.xu_ly_map.MapNhaGohan;
+import com.dang.dragonboy.xu_ly_map.npc.Npc;
+import com.dang.dragonboy.xu_ly_map.npc.NpcOffset;
+import com.dang.dragonboy.xu_ly_map.npc.NpcTaiAnh;
+
+import java.util.List;
+import java.util.Map;
 
 
 public class ManHinhLangAru implements Screen {
@@ -50,6 +57,10 @@ public class ManHinhLangAru implements Screen {
     private int frameLua = 0;
     private float timeLua = 0f;
 
+    private MapLangAru map;
+    private List<Npc> danhSachNpc;
+    private Map<String, NpcTaiAnh> npcTaiAnhMap;
+
     public ManHinhLangAru(Main game, ThongTinChuyenMap thongtin) {
         this.game = game;
         this.thongtin =  thongtin;
@@ -65,10 +76,8 @@ public class ManHinhLangAru implements Screen {
         hud = thongtin.hud;
         camManager = thongtin.camManager;
         // Tạo map và load địa hình
-        MapLangAru map = new MapLangAru();
+        map = new MapLangAru();
         map.taiDuLieuMap();
-        nhanVat.setDanhSachDat(map.LayDanhSachDat());
-        nhanVat.setGioiHanToaDo(map.getChieuRongMap(), map.getChieuCaoMap(),5,0);
         this.rongMap = map.getChieuRongMap();
         this.caoMap = map.getChieuCaoMap();
         shapeRenderer = new ShapeRenderer();
@@ -121,6 +130,19 @@ public class ManHinhLangAru implements Screen {
 
         light = new Texture("hieuung/hieuungmap/light.png");
         khoi = new Texture("hieuung/hieuungmap/khoimay.png");
+
+        nhanVat.setDanhSachDat(map.LayDanhSachDat());
+        nhanVat.setGioiHanToaDo(map.getChieuRongMap(), map.getChieuCaoMap(),5,0);
+
+        this.danhSachNpc = map.LayDanhSachNpc();
+        this.npcTaiAnhMap = map.getNpcTaiAnhMap();
+        for (Npc npc : danhSachNpc) {
+            NpcTaiAnh taiAnhNpc = npcTaiAnhMap.get(npc.getTen());
+            NpcOffset offsetNpc = map.getNpcOffset(npc.getTen());
+            npc.setNpcTaiAnh(taiAnhNpc);
+            npc.setNpcOffset(offsetNpc);
+            npc.setNhanVat(nhanVat);
+        }
     }
 
     @Override
@@ -213,8 +235,23 @@ public class ManHinhLangAru implements Screen {
         float luaaW = luaa.getWidth() * 0.5f;
         float luaaH = luaa.getHeight() * 0.5f;
         batch.draw(luaa,273,190,luaaW,luaaH);
+
+        for (int i = 0; i < danhSachNpc.size(); i++) {
+            danhSachNpc.get(i).checkClick(nhanVat.x_check_npc, nhanVat.y_check_npc);
+            danhSachNpc.get(i).ve(batch,thoiGianTichLuy);
+        }
+
         nhanVat.ve(batch, thoiGianTichLuy);
-        nhanVat.veDiemCanDen(batch);
+        boolean duocVeDiemCanDen = true;
+        for (Npc npc : danhSachNpc) {
+            if (npc.dangClickNpc) {
+                duocVeDiemCanDen = false;
+            }
+        }
+        if (duocVeDiemCanDen) {
+            nhanVat.veDiemCanDen(batch);
+        }
+
         batch.draw(mapLangAruSau,-96f,-38,mapLangAruSau.getWidth()/2f,mapLangAruSau.getHeight()/2f);
         batch.end();
 

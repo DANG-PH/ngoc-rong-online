@@ -18,6 +18,13 @@ import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.xu_ly_map.MapDoiHoaCuc;
 import com.dang.dragonboy.hien_thi.QuanLyCamera;
+import com.dang.dragonboy.xu_ly_map.MapLangAru;
+import com.dang.dragonboy.xu_ly_map.npc.Npc;
+import com.dang.dragonboy.xu_ly_map.npc.NpcOffset;
+import com.dang.dragonboy.xu_ly_map.npc.NpcTaiAnh;
+
+import java.util.List;
+import java.util.Map;
 
 
 public class ManHinhDoiHoaCuc implements Screen {
@@ -42,6 +49,10 @@ public class ManHinhDoiHoaCuc implements Screen {
     private Texture khoi;
     private float scrollX_khoi = 0,scrollX_khoi1 = 0;
 
+    private MapDoiHoaCuc map;
+    private List<Npc> danhSachNpc;
+    private Map<String, NpcTaiAnh> npcTaiAnhMap;
+
     public ManHinhDoiHoaCuc(Main game, ThongTinChuyenMap thongtin) {
         this.game = game;
         this.thongtin =  thongtin;
@@ -53,10 +64,8 @@ public class ManHinhDoiHoaCuc implements Screen {
         hud = thongtin.hud;
         camManager = thongtin.camManager;
         // Tạo map và load địa hình
-        MapDoiHoaCuc map = new MapDoiHoaCuc();
+        map = new MapDoiHoaCuc();
         map.taiDuLieuMap();
-        nhanVat.setDanhSachDat(map.LayDanhSachDat());
-        nhanVat.setGioiHanToaDo(map.getChieuRongMap(), map.getChieuCaoMap(),5,0);
         this.rongMap = map.getChieuRongMap();
         this.caoMap = map.getChieuCaoMap();
         shapeRenderer = new ShapeRenderer();
@@ -91,6 +100,19 @@ public class ManHinhDoiHoaCuc implements Screen {
 
         light = new Texture("hieuung/hieuungmap/light.png");
         khoi = new Texture("hieuung/hieuungmap/khoimay.png");
+
+        nhanVat.setDanhSachDat(map.LayDanhSachDat());
+        nhanVat.setGioiHanToaDo(map.getChieuRongMap(), map.getChieuCaoMap(),5,0);
+
+        this.danhSachNpc = map.LayDanhSachNpc();
+        this.npcTaiAnhMap = map.getNpcTaiAnhMap();
+        for (Npc npc : danhSachNpc) {
+            NpcTaiAnh taiAnhNpc = npcTaiAnhMap.get(npc.getTen());
+            NpcOffset offsetNpc = map.getNpcOffset(npc.getTen());
+            npc.setNpcTaiAnh(taiAnhNpc);
+            npc.setNpcOffset(offsetNpc);
+            npc.setNhanVat(nhanVat);
+        }
     }
 
     @Override
@@ -179,8 +201,22 @@ public class ManHinhDoiHoaCuc implements Screen {
         for (int i = 0; i < 3; i++) {
             batch.draw(light,150+i*(600*1.1f+180),515,600*1.1f,500*1.1f);
         }
+
+        for (int i = 0; i < danhSachNpc.size(); i++) {
+            danhSachNpc.get(i).checkClick(nhanVat.x_check_npc, nhanVat.y_check_npc);
+            danhSachNpc.get(i).ve(batch,thoiGianTichLuy);
+        }
+
         nhanVat.ve(batch, thoiGianTichLuy);
-        nhanVat.veDiemCanDen(batch);
+        boolean duocVeDiemCanDen = true;
+        for (Npc npc : danhSachNpc) {
+            if (npc.dangClickNpc) {
+                duocVeDiemCanDen = false;
+            }
+        }
+        if (duocVeDiemCanDen) {
+            nhanVat.veDiemCanDen(batch);
+        }
 
         batch.draw(mapDoiHoaCucSau,0,-38-96,mapDoiHoaCucSau.getWidth()/2f,mapDoiHoaCucSau.getHeight()/2f);
         batch.draw(mapDoiHoaCucSau1,0-camOffsetX*0.5f-100f,-38-96-50f,mapDoiHoaCucSau1.getWidth()/2f,mapDoiHoaCucSau1.getHeight()/2f);

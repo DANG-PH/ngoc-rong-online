@@ -5,7 +5,7 @@ public class NpcOffset {
     public float thanX, thanY;
     public float chanX, chanY;
 
-    public NpcOffset(float dauX, float dauY, float thanX, float thanY, float chanX, float chanY) {
+    public NpcOffset(float thanX, float thanY, float dauX, float dauY, float chanX, float chanY) {
         this.dauX = dauX;
         this.dauY = dauY;
         this.thanX = thanX;

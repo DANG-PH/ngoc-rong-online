@@ -344,6 +344,14 @@ public class ThemItemTest {
 //        ));
 
 //        duLieu.themItemVaoHanhTrang(new Item(
+//            "broly_lssj", "Cải trang Broly", LoaiItem.CAITRANG,
+//            new Texture("nhanvat/caitrang/broly_lssj/daudung.png"),
+//            "Cải trang thành Broly", 1,
+//            new int[]{0,0,0,50,0,100,100,0,100,0,0,0,0},
+//            nhanVat.getHanhtinh(), 9_999_999_999L, null, 0, 0, 0, -1
+//        ));
+//
+//        duLieu.themItemVaoHanhTrang(new Item(
 //            "xiao", "Cải trang Hộ Pháp Dạ Xoa", LoaiItem.CAITRANG,
 //            new Texture("nhanvat/caitrang/xiao/icon.png"),
 //            "Cải trang thành Xiao - Genshin impact", 1,

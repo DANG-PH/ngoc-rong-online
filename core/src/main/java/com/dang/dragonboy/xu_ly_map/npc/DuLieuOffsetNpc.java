@@ -8,8 +8,10 @@ public class DuLieuOffsetNpc {
 
     static {
         // Đặt offset cho từng NPC
-        OFFSET_DATA.put("ong_gohan", new NpcOffset(0, -20, 0f, 8.5f-10.2f, 0f, 0));
-        OFFSET_DATA.put("admin_haidang", new NpcOffset(0f, -4f, -0.3f, -15.5f+3f, 0, 0));
+        OFFSET_DATA.put("ong_gohan", new NpcOffset(0, 8.5f, 0f, -20f, 0f, 0));
+        OFFSET_DATA.put("admin_haidang", new NpcOffset(0f, -24f, 1.5f, -55f,0,0));
+        OFFSET_DATA.put("admin_dungle", new NpcOffset(0f, -5f, 3.5f, -28f,0,0));
+        OFFSET_DATA.put("admin_thanhle", new NpcOffset(0f, -1.5f, -0.3f, -16f,0,0));
         OFFSET_DATA.put("vua_vegeta", new NpcOffset(2, 22, 0, 6, 0, -4));
     }
 
