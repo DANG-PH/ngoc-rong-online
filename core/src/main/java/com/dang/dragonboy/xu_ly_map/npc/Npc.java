@@ -21,6 +21,11 @@ public class Npc {
     private GlyphLayout layout;
     private BitmapFont font, fontDauThan;
     private Texture muiTenNpc;
+    private Texture[] clickNpc = new Texture[4];
+    private float timeDoiFrame = 0f;
+    private int frame = 0;
+    private int soLanChay = 0;
+    private boolean dangClickNpc2 = false;
     public boolean dangClickNpc = false;
     ShapeRenderer shapeRenderer = new ShapeRenderer();
 
@@ -53,6 +58,9 @@ public class Npc {
         generator2.dispose();
 
         muiTenNpc = new Texture("hud/giaodientrong/clicknpc.png");
+        for (int i = 0; i < 4; i++) {
+            clickNpc[i] = new Texture("hieuung/hieuunggame/click_npc/"+(i+1)+".png");
+        }
     }
     public String getTen() {
         return ten;
@@ -83,6 +91,7 @@ public class Npc {
     }
 
     public void ve(SpriteBatch batch, float thoiGianTichLuy) {
+        capNhat();
         if (loainpc == LoaiNPC.NGUOI) {
             if (taiAnh == null || offset == null) return;
             float doDaoDong = (float) Math.sin(thoiGianTichLuy) * 1.08f;
@@ -129,6 +138,11 @@ public class Npc {
             float tenX = baseX + (chanW - layout.width) / 2f;
             font.draw(batch, layout, tenX, dangClickNpc ? tenY + 40f : tenY);
             font.setColor(Color.WHITE);
+
+            // Nếu click nhiều lần
+            if (dangClickNpc2) {
+                batch.draw(clickNpc[frame], baseX + (chanW - clickNpc[frame].getWidth() * 0.5f) / 2f, tenY, clickNpc[frame].getWidth() * 0.5f, clickNpc[frame].getHeight() * 0.5f);
+            }
         } else {
             if (taiAnh == null) return;
 
@@ -190,6 +204,10 @@ public class Npc {
                 font.draw(batch, layout, tenX, dangClickNpc ? tenY + 40f : tenY);
                 font.setColor(Color.WHITE);
             }
+            // Nếu click nhiều lần
+            if (dangClickNpc2) {
+                batch.draw(clickNpc[frame], x + (anhW - clickNpc[frame].getWidth() * 0.5f) / 2f, tenY, clickNpc[frame].getWidth() * 0.5f, clickNpc[frame].getHeight() * 0.5f);
+            }
         }
     }
 
@@ -198,17 +216,35 @@ public class Npc {
             if (x_check >= x && x_check <= x + taiAnh.getChan().getWidth() * 0.5f &&
                 y_check >= y && y_check <= y + taiAnh.getChan().getHeight() * 0.5f
                 + taiAnh.getThan().getHeight() * 0.5f + taiAnh.getDau().getHeight() * 0.5f) {
-                dangClickNpc = true;
+                if (!dangClickNpc) {
+                    dangClickNpc = true;
+                    nhanVat.vuaClick = false;
+                } else {
+                    if (nhanVat.vuaClick) {
+                        dangClickNpc2 = true;
+                        nhanVat.vuaClick = false;
+                    }
+                }
             } else {
                 dangClickNpc = false;
+                dangClickNpc2 = false;
             }
         } else {
             // npc chỉ có 1 ảnh
             if (x_check >= x && x_check <= x + taiAnh.getAnhNpc().getWidth() * 0.5f &&
                 y_check >= y && y_check <= y + taiAnh.getAnhNpc().getHeight() * 0.5f) {
-                dangClickNpc = true;
+                if (!dangClickNpc) {
+                    dangClickNpc = true;
+                    nhanVat.vuaClick = false;
+                } else {
+                    if (nhanVat.vuaClick) {
+                        dangClickNpc2 = true;
+                        nhanVat.vuaClick = false;
+                    }
+                }
             } else {
                 dangClickNpc = false;
+                dangClickNpc2 = false;
             }
         }
     }
@@ -231,6 +267,22 @@ public class Npc {
             case "dau_traidat_10" -> tenTiengVietNpc = "Đậu thần cấp 10";
             case "ruong_do" -> tenTiengVietNpc = "Rương đồ";
             default -> tenTiengVietNpc = "";
+        }
+    }
+
+    public void capNhat() {
+        if (dangClickNpc2) {
+            timeDoiFrame += Gdx.graphics.getDeltaTime();
+            if (timeDoiFrame > 0.06f) {
+                frame=(frame+1)%clickNpc.length;
+                soLanChay++;
+                timeDoiFrame = 0f;
+            }
+            if (soLanChay >= clickNpc.length*2) {
+                dangClickNpc2 = false;
+                soLanChay = 0;
+                frame = 0;
+            }
         }
     }
 }
