@@ -21,6 +21,12 @@ public abstract class MapCoBan {
         return danhSachNpc;
     }
 
+    public void capNhatNpc() {
+        // Xóa NPC đã hủy
+//        danhSachNpc.removeIf(Npc::isDaHuy);
+        danhSachNpc.removeIf(npc -> npc.isDaHuy());
+    }
+
     public NpcTaiAnh getNpcTaiAnh(String ten) {
         return npcTaiAnhMap.get(ten);
     }

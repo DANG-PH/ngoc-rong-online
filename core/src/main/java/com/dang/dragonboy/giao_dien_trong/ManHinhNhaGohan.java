@@ -397,19 +397,20 @@ public class ManHinhNhaGohan implements Screen {
             batch.draw(khoi, -10+i*287, 0, 287, 200);
         }
 
-        for (int i = 0; i < danhSachNpc.size(); i++) {
-            danhSachNpc.get(i).checkClick(nhanVat.x_check_npc, nhanVat.y_check_npc);
-            danhSachNpc.get(i).ve(batch,thoiGianTichLuy);
-        }
-
-        // cây đậu + đùi gà + lửa + củi
         batch.draw(cui_dot_lua,1170,180,66,48);
         Texture luaa = lua[frameLua];
         float luaaW = luaa.getWidth() * 0.5f;
         float luaaH = luaa.getHeight() * 0.5f;
         batch.draw(luaa,1203,203,luaaW,luaaH);
-        batch.draw(duiga,1178,205,33,24);
+
+        map.capNhatNpc();
+        for (int i = 0; i < danhSachNpc.size(); i++) {
+            danhSachNpc.get(i).checkClick(nhanVat.x_check_npc, nhanVat.y_check_npc);
+            danhSachNpc.get(i).ve(batch,thoiGianTichLuy);
+        }
+
         nhanVat.ve(batch, thoiGianTichLuy);
+
         boolean duocVeDiemCanDen = true;
         for (Npc npc : danhSachNpc) {
             if (npc.dangClickNpc) {

@@ -2189,6 +2189,14 @@ public class NhanVat {
         }
     }
 
+    public DuLieuNguoiChoi getDuLieuNguoiChoi() {
+        return duLieuNguoiChoi;
+    }
+
+    public VeHUD getVeHUD() {
+        return veHUD;
+    }
+
     public void dispose() {
         if (veHUD != null) veHUD.dispose();
         if (avtTexture != null) {

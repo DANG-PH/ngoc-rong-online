@@ -206,6 +206,7 @@ public class ManHinhDoiHoaCuc implements Screen {
             danhSachNpc.get(i).checkClick(nhanVat.x_check_npc, nhanVat.y_check_npc);
             danhSachNpc.get(i).ve(batch,thoiGianTichLuy);
         }
+        map.capNhatNpc();
 
         nhanVat.ve(batch, thoiGianTichLuy);
         boolean duocVeDiemCanDen = true;

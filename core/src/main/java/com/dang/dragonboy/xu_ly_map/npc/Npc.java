@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
+import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 
 public class Npc {
@@ -30,6 +32,7 @@ public class Npc {
     ShapeRenderer shapeRenderer = new ShapeRenderer();
 
     LoaiNPC loainpc;
+    private boolean daHuy = false;
 
     public Npc(String ten, LoaiNPC loainpc, float x, float y) {
         this.ten = ten;
@@ -143,7 +146,7 @@ public class Npc {
             if (dangClickNpc2) {
                 batch.draw(clickNpc[frame], baseX + (chanW - clickNpc[frame].getWidth() * 0.5f) / 2f, tenY, clickNpc[frame].getWidth() * 0.5f, clickNpc[frame].getHeight() * 0.5f);
             }
-        } else {
+        } else if (loainpc == LoaiNPC.CAYDAU || loainpc == LoaiNPC.RUONGDO) {
             if (taiAnh == null) return;
 
             float scale = 0.5f;
@@ -153,7 +156,7 @@ public class Npc {
             float anhW = anh.getWidth() * scale;
             float anhH = anh.getHeight() * scale;
 
-            // Vẽ chân
+            // Vẽ ảnh
             batch.draw(anh, x, y, anhW, anhH);
 
             //Vẽ mũi tên Npc nếu đang click
@@ -208,6 +211,28 @@ public class Npc {
             if (dangClickNpc2) {
                 batch.draw(clickNpc[frame], x + (anhW - clickNpc[frame].getWidth() * 0.5f) / 2f, tenY, clickNpc[frame].getWidth() * 0.5f, clickNpc[frame].getHeight() * 0.5f);
             }
+        } else if (loainpc == LoaiNPC.DUIGA) {
+            if (taiAnh == null) return;
+
+            float scale = 1f;
+
+            Texture anh = taiAnh.getAnhNpc();
+
+            float anhW = anh.getWidth() * scale;
+            float anhH = anh.getHeight() * scale;
+
+            batch.draw(anh, x, y, anhW, anhH);
+
+            //Vẽ mũi tên Npc nếu đang click
+            float tenY = y + anhH + 30;
+            if (dangClickNpc) {
+                batch.draw(muiTenNpc, x + (anhW - muiTenNpc.getWidth() * 0.5f) / 2f, tenY, muiTenNpc.getWidth() * 0.5f, muiTenNpc.getHeight() * 0.5f);
+            }
+
+            // Nếu click nhiều lần
+            if (dangClickNpc2) {
+                batch.draw(clickNpc[frame], x + (anhW - clickNpc[frame].getWidth() * 0.5f) / 2f, tenY, clickNpc[frame].getWidth() * 0.5f, clickNpc[frame].getHeight() * 0.5f);
+            }
         }
     }
 
@@ -223,6 +248,7 @@ public class Npc {
                     if (nhanVat.vuaClick) {
                         dangClickNpc2 = true;
                         nhanVat.vuaClick = false;
+                        thucHienHanhDongNpc();
                     }
                 }
             } else {
@@ -231,8 +257,8 @@ public class Npc {
             }
         } else {
             // npc chỉ có 1 ảnh
-            if (x_check >= x && x_check <= x + taiAnh.getAnhNpc().getWidth() * 0.5f &&
-                y_check >= y && y_check <= y + taiAnh.getAnhNpc().getHeight() * 0.5f) {
+            if (x_check >= x-10 && x_check <= x + taiAnh.getAnhNpc().getWidth() * 0.5f + 10 &&
+                y_check >= y-20 && y_check <= y + taiAnh.getAnhNpc().getHeight() * 0.5f+20) {
                 if (!dangClickNpc) {
                     dangClickNpc = true;
                     nhanVat.vuaClick = false;
@@ -240,12 +266,28 @@ public class Npc {
                     if (nhanVat.vuaClick) {
                         dangClickNpc2 = true;
                         nhanVat.vuaClick = false;
+                        thucHienHanhDongNpc();
                     }
                 }
             } else {
                 dangClickNpc = false;
                 dangClickNpc2 = false;
             }
+        }
+    }
+
+    public void thucHienHanhDongNpc() {
+        float dx = Math.abs(nhanVat.getX() - x);
+        float dy = Math.abs(nhanVat.getY() - y);
+        float khoangCach = (int)Math.sqrt(dx*dx+dy*dy);
+        if (khoangCach >= 60) return;
+        DuLieuNguoiChoi duLieuNguoiChoi = nhanVat.getDuLieuNguoiChoi();
+        VeHUD veHUD = nhanVat.getVeHUD();
+        if (loainpc == LoaiNPC.DUIGA) {
+            duLieuNguoiChoi.setHpHienTai(duLieuNguoiChoi.getHpHopThe());
+            duLieuNguoiChoi.setKiHienTai(duLieuNguoiChoi.getKiHopThe());
+            veHUD.setTinNhanPet("Bạn vừa ăn đùi gà",2f);
+            huyNpc();
         }
     }
 
@@ -284,5 +326,13 @@ public class Npc {
                 frame = 0;
             }
         }
+    }
+
+    public boolean isDaHuy() {
+        return daHuy;
+    }
+
+    public void huyNpc() {
+        daHuy = true;
     }
 }
