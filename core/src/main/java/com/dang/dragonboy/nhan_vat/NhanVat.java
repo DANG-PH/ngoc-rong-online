@@ -1119,7 +1119,7 @@ public class NhanVat {
                 diChuyenDenMucTieu = false;
             }
         }
-        if (veHUD.dangHienPopup || veHUD.timeChoBienKhi > 0) {
+        if (veHUD.dangHienPopup || veHUD.timeChoBienKhi > 0 || veHUD.dangHienDauThan) {
             dungTrai();
             dungPhai();
             thaNhay();

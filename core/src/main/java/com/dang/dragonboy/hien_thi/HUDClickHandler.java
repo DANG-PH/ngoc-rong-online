@@ -38,7 +38,7 @@ public class HUDClickHandler {
         for (int i = 0; i < 5; i++) {
             float x_ve = skillBaseX + i * (65f);
             if (x >= x_ve && x <= x_ve+oskillW && y >= skillY && y <= skillY+oskillH) {
-                if (!veHUD.dangHienPopup) {
+                if (!veHUD.dangHienPopup && !veHUD.dangHienDauThan) {
                     if (veHUD.skillDangChon == i) {
                         veHUD.dungSkill(i);
                     } else {
@@ -59,7 +59,7 @@ public class HUDClickHandler {
         float ochatX = screenWidth - ochatW - 15;
         float ochatY = screenHeight-10-ochatH;
         if (x >= ochatX && x <= ochatX + 60 && y >= ochatY && y <= ochatY + 60) {
-            if (!veHUD.dangHienPopup && !veHUD.dangHienKhungChat && !(veHUD.timeHienRongThan<=300-2.1f && veHUD.timeHienRongThan>0)) {
+            if (!veHUD.dangHienPopup && !veHUD.dangHienDauThan && !veHUD.dangHienKhungChat && !(veHUD.timeHienRongThan<=300-2.1f && veHUD.timeHienRongThan>0)) {
                 veHUD.clickOChat();
             }
         }
@@ -70,7 +70,7 @@ public class HUDClickHandler {
         float odauthanX = screenWidth - odauthanW - 10;
         float odauthanY = 10;
         if (x >= odauthanX && x <= odauthanX + 75 && y >= odauthanY && y <= odauthanY + 75) {
-            if (!veHUD.dangHienPopup && !veHUD.dangHienKhungChat && !(veHUD.timeHienRongThan<=300-2.1f && veHUD.timeHienRongThan>0)) {
+            if (!veHUD.dangHienPopup && !veHUD.dangHienDauThan && !veHUD.dangHienKhungChat && !(veHUD.timeHienRongThan<=300-2.1f && veHUD.timeHienRongThan>0)) {
                 veHUD.clickODauThan();
             }
         }
@@ -78,7 +78,7 @@ public class HUDClickHandler {
         float nutPopupX = 0f;
         float nutPopupY = screenHeight / 4f * 3;
         if (x >= nutPopupX && x <= nutPopupX + 25 && y >= nutPopupY && y <= nutPopupY + 35) {
-            if (!veHUD.dangHienKhungChat && !(veHUD.timeHienRongThan<=300-2.1f && veHUD.timeHienRongThan>0)) {
+            if (!veHUD.dangHienKhungChat && !veHUD.dangHienDauThan && !(veHUD.timeHienRongThan<=300-2.1f && veHUD.timeHienRongThan>0)) {
                 veHUD.vuaClickMoPopup = true;
                 veHUD.clickY =  nutPopupY + 19f;
                 veHUD.clickX =  nutPopupX + 20;
@@ -93,6 +93,19 @@ public class HUDClickHandler {
                     veHUD.nutClickTimer2 = 0.3f;
                     veHUD.nutduocchon = i;
                 }
+            }
+        }
+
+        // Vùng lựa chọn khi bật npc cây đậu
+        if (veHUD.dangHienDauThan){
+            for (int i = 0; i < 2; i++){
+                if (x>=393 + i * 120 && x <= 393 + i * 120+114 && y>=5 && y<=5+114){
+                    veHUD.nutClickTimer2 = 0.3f;
+                    veHUD.nutduocchon = i;
+                }
+            }
+            if (x<393 || x> 393 + 120+114 || y > 119) {
+                veHUD.dangHienDauThan = false;
             }
         }
 

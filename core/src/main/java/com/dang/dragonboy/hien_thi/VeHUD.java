@@ -311,6 +311,8 @@ public class VeHUD {
     public boolean dangDungGiapXen = false;
     public float timeDungGiapXen = 0f;
 
+    public boolean dangHienDauThan = false, vuaClickNangCapDau = false, vuaClickThuHoachDau = false;
+
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data;
         duLieuNguoiChoi.setNhanVat(nhanVat);
@@ -644,7 +646,7 @@ public class VeHUD {
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
 
-        if (!dangHienKhungChat && !(timeHienRongThan<=300-2.1f && timeHienRongThan>0)) {
+        if (!dangHienKhungChat && !dangHienDauThan && !(timeHienRongThan<=300-2.1f && timeHienRongThan>0)) {
             // RENDER SAU ẢNH ĐẬU THẦN ( trắng )
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(1f, 1f, 1f, 1f);
@@ -667,7 +669,7 @@ public class VeHUD {
         batch.draw(thanhhpnv1,165, screenHeight - 80 - 5 + 55);
         batch.draw(thanhkinv1,165, screenHeight - 80 - 5 + 55-20);
 
-        if (!dangHienKhungChat && !(timeHienRongThan<=300-2.1f && timeHienRongThan>0)) {
+        if (!dangHienKhungChat && !dangHienDauThan && !(timeHienRongThan<=300-2.1f && timeHienRongThan>0)) {
             // ô chat (góc phải trên)
             int ochatW = 60;
             int ochatH = 60;
@@ -860,6 +862,7 @@ public class VeHUD {
             veGlow.veGlow(shapeRenderer,clickX,clickY,timeGlow);
         }
         batch.begin();
+        renderLuaChonCayDau(batch);
         renderPopup(batch);
         renderPetChat(batch);
     }
@@ -1095,10 +1098,16 @@ public class VeHUD {
                     // Gán vào ô được chọn
                     oSkills[nutduocchon] = oChiSoDangChon - 6;
                     HienPopUpGanSkill = false;
-                } else {
+                } else if (dangHienDieuUocRongThan) {
                     if (!daUocRongThan) {
                         themItemTest.themQuaTuDieuUocRongThan();
                         daUocRongThan = true;
+                    }
+                } else if (dangHienDauThan) {
+                    if (nutduocchon == 0) {
+                        vuaClickThuHoachDau = true;
+                    } else {
+                        vuaClickNangCapDau = true;
                     }
                 }
             }
@@ -1464,7 +1473,7 @@ public class VeHUD {
                 } else if (dangHienGioiThieuGame) {
                     if (chuaNhanQuaLanDau) {
                         duLieuNguoiChoi.tangNgoc(1_000_000);
-                        duLieuNguoiChoi.tangVang(1_000_000_000);
+                        duLieuNguoiChoi.tangVang(10_000_000_000L);
                         duLieuNguoiChoi.tangSucManh(10_000_000_000L);
                         if (duLieuNguoiChoi.coDeTu()) {
                             duLieuNguoiChoi.deTu.tangSucManh(50_000_000_000L);
@@ -2089,6 +2098,31 @@ public class VeHUD {
             }
         }
     }
+
+    public void renderLuaChonCayDau(SpriteBatch batch) {
+        if (!dangHienDauThan) return;
+        String[] listLuaChon = new String[] {"Thu hoạch","Nâng cấp "+ formatVangNgoc(duLieuNguoiChoi.getCapCayDau()*duLieuNguoiChoi.getCapCayDau()*5_000_000L) + " vàng"};
+        for (int i = 0; i < 2; i++) {
+            if (nutduocchon==i) {
+                Texture nutVe = nutClickTimer2 > 0 ? nutvuongclick : nutvuong;
+                batch.draw(nutVe , 393 + i * 120, 5, 114, 114);
+            }
+            else {
+                batch.draw(nutvuong , 393 + i * 120, 5, 114, 114);
+            }
+            font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+            layout.setText(
+                font,
+                listLuaChon[i],
+                font.getColor(),
+                100,
+                Align.center,
+                true
+            );
+            font.draw(batch,layout,393 + i * 120+7f,5+(114+layout.height)/2f);
+        }
+    }
+
     public void dispose() {
         Texture[] textures = {
             saoden, saoxanh, ochat, ochatclick, thanhhp,

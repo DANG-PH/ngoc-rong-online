@@ -13,7 +13,7 @@ public class MapNhaGohan extends MapCoBan {
         danhSachDat.add(new HitboxDat(0, 0, 1420, 175));
         // them npc
         themNpc("ong_gohan", LoaiNPC.NGUOI,400,188);
-        themNpc("dau_traidat_7", LoaiNPC.CAYDAU, 600, 192);
+        themNpc("dau_traidat_1", LoaiNPC.CAYDAU, 600, 192);
         themNpc("ruong_do", LoaiNPC.RUONGDO, 120, 190);
         themNpc("dui_ga", LoaiNPC.DUIGA, 1178, 205);
     }

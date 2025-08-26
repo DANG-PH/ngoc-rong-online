@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.nhan_vat.NhanVat;
+import com.dang.dragonboy.xu_ly_map.MapCoBan;
 
 public class Npc {
     static NhanVat nhanVat;
@@ -191,9 +192,8 @@ public class Npc {
                         600 + (anhW - layout.width) / 2f,
                         192 + anhH + 90
                     );
-                    String[] parts = ten.split("_");
-                    int capCayDau = Integer.parseInt(parts[2]);
-                    layout.setText(fontDauThan, (2 * capCayDau + 3) + "/" + (2 * capCayDau + 3));
+                    DuLieuNguoiChoi duLieuNguoiChoi = nhanVat.getDuLieuNguoiChoi();
+                    layout.setText(fontDauThan, (2 * duLieuNguoiChoi.getCapCayDau() + 3) + "/" + (2 * duLieuNguoiChoi.getCapCayDau() + 3));
                     fontDauThan.draw(batch, layout,
                         600 + (anhW - layout.width) / 2f,
                         192 + anhH + 65
@@ -289,6 +289,9 @@ public class Npc {
             veHUD.setTinNhanPet("Bạn vừa ăn đùi gà",2f);
             huyNpc();
         }
+        if (loainpc == LoaiNPC.CAYDAU) {
+            veHUD.dangHienDauThan = true;
+        }
     }
 
     public void setTenTiengVietNpc() {
@@ -324,6 +327,26 @@ public class Npc {
                 dangClickNpc2 = false;
                 soLanChay = 0;
                 frame = 0;
+            }
+        }
+        if (loainpc == LoaiNPC.CAYDAU) {
+            VeHUD veHUD = nhanVat.getVeHUD();
+            DuLieuNguoiChoi duLieuNguoiChoi = nhanVat.getDuLieuNguoiChoi();
+            if (veHUD.vuaClickNangCapDau) {
+                if (duLieuNguoiChoi.getVang() >= duLieuNguoiChoi.getCapCayDau()*duLieuNguoiChoi.getCapCayDau()*5_000_000 && duLieuNguoiChoi.getCapCayDau()<10) {
+                    duLieuNguoiChoi.giamVang(duLieuNguoiChoi.getCapCayDau() * duLieuNguoiChoi.getCapCayDau() * 5_000_000);
+                    duLieuNguoiChoi.tangCapCayDau();
+                    veHUD.dangHienDauThan = false;
+                    this.ten = "dau_"+nhanVat.getHanhtinh()+"_"+duLieuNguoiChoi.getCapCayDau();
+                    this.taiAnh = new NpcTaiAnh(ten,loainpc);
+                } else {
+                    if (duLieuNguoiChoi.getCapCayDau()>=10) {
+                        veHUD.setTinNhanPet("Cây đậu đã đạt cấp tối đa",2f);
+                    } else {
+                        veHUD.setTinNhanPet("Bạn không đủ vàng",2f);
+                    }
+                }
+                veHUD.vuaClickNangCapDau = false;
             }
         }
     }

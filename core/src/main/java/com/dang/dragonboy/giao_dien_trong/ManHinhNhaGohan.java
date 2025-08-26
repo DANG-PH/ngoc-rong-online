@@ -114,7 +114,7 @@ public class ManHinhNhaGohan implements Screen {
                 config.lechMap,
                 config.avt,
                 null, null, null, null, null, null, null, null,
-                6,
+                1,
                 hanhtinh, nhanvat
             );
             nhanVat = haidang;
