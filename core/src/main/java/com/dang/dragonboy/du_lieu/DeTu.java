@@ -408,15 +408,21 @@ public class DeTu {
         }
         if (sucManh >= 150_000_000 && tenSkill[1]==null) {
             tenSkill[1] = danhSachSkill2[MathUtils.random(danhSachSkill2.length - 1)];
-            setTinNhanDeTuChat("Sư phụ ơi con lên cấp rồi",3f);
+            if (!this.getTrangthai().equals("Về nhà")) {
+                setTinNhanDeTuChat("Sư phụ ơi con lên cấp rồi", 3f);
+            }
         }
         if (sucManh >= 1_500_000_000 && tenSkill[2]==null) {
             tenSkill[2] = danhSachSkill3[MathUtils.random(danhSachSkill3.length - 1)];
-            setTinNhanDeTuChat("Sư phụ ơi con lên cấp rồi",3f);
+            if (!this.getTrangthai().equals("Về nhà")) {
+                setTinNhanDeTuChat("Sư phụ ơi con lên cấp rồi", 3f);
+            }
         }
         if (sucManh >= 20_000_000_000L && tenSkill[3]==null) {
             tenSkill[3] = danhSachSkill4[MathUtils.random(danhSachSkill4.length - 1)];
-            setTinNhanDeTuChat("Sư phụ ơi con lên cấp rồi",3f);
+            if (!this.getTrangthai().equals("Về nhà")) {
+                setTinNhanDeTuChat("Sư phụ ơi con lên cấp rồi", 3f);
+            }
         }
         if (sucManh >= 1_500_000 && chuaFixAvtAoQuan) {
             DeTuCauHinh c2 = Doi_avt_ao_quan_DeTu(hanhtinh,hanhtinh+"_base","set_base","set_base");
@@ -429,7 +435,9 @@ public class DeTu {
                 c2.lechMapDeTu
             );
             texAvtDeTu = new Texture("nhanvat/detu/" + hanhtinh + "/avt" + "lon" + ".png");
-            setTinNhanDeTuChat("Sư phụ ơi con lên cấp rồi",3f);
+            if (!this.getTrangthai().equals("Về nhà")) {
+                setTinNhanDeTuChat("Sư phụ ơi con lên cấp rồi", 3f);
+            }
             chuaFixAvtAoQuan = false;
         }
     }
