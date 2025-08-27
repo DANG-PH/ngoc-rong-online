@@ -1106,6 +1106,7 @@ public class NhanVat {
     }
 
     public void capNhat() {
+        duLieuNguoiChoi.capNhat();
 //        if (1==1) {
 //            trangThai = TrangThai.GONG;
 //            flipX = false;

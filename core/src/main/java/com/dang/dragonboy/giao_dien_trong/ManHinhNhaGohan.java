@@ -28,10 +28,12 @@ import com.dang.dragonboy.nhan_vat.NhanVatXuLy;
 import com.dang.dragonboy.hien_thi.QuanLyCamera;
 import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.hien_thi.SkillNhanVat;
+import com.dang.dragonboy.xu_ly_map.MapCoBan;
 import com.dang.dragonboy.xu_ly_map.MapNhaGohan;
 // dữ liệu
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 //xu ly map
+import com.dang.dragonboy.xu_ly_map.npc.LoaiNPC;
 import com.dang.dragonboy.xu_ly_map.npc.Npc;
 import com.dang.dragonboy.xu_ly_map.npc.NpcTaiAnh;
 import com.dang.dragonboy.xu_ly_map.npc.NpcOffset;
@@ -80,7 +82,7 @@ public class ManHinhNhaGohan implements Screen {
     private int HanhTinhDuocChon;
     private float thoiGianTichLuy = 0;
 
-    private MapNhaGohan map;
+    private MapCoBan map, mapLangAru;
     private List<Npc> danhSachNpc;
     private Map<String, NpcTaiAnh> npcTaiAnhMap;
 
@@ -172,18 +174,23 @@ public class ManHinhNhaGohan implements Screen {
                 nhanVat.getGiamSatThuongNhanVat()
             );
             hudRenderer.setDuLieuNguoiChoi(duLieu);
+            // Tạo map và load địa hình
+            map = new MapNhaGohan();
+            map.taiDuLieuMap();
         } else {
             this.hudRenderer = info.hud;
             this.nhanVat = info.nhanVat;
             if ("langaru".equals(info.mapTruoc)){
                 info.nhanVat.datToaDo(875,175);
                 info.hud.getDuLieuNguoiChoi().deTu.datToaDo(875+(nhanVat.getFlipX()? 50f : -50f),175);
+                this.mapLangAru = info.mapTr;
+            }
+            this.map = info.mapSau;
+            if (daAnDuiGa()) {
+                map.themNpc("dui_ga", LoaiNPC.DUIGA, 1178, 205);
             }
         }
         capcaydau = nhanVat.getCapcaydau();
-        // Tạo map và load địa hình
-        map = new MapNhaGohan();
-        map.taiDuLieuMap();
     }
 
     @Override
@@ -438,7 +445,7 @@ public class ManHinhNhaGohan implements Screen {
         // Kiểm tra nếu đứng trong vùng "Làng Aru" và bấm Enter thì chuyển màn
         if (targetX > 760 && targetX < 990 && targetY >= 0 && targetY <= 400) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-                ThongTinChuyenMap info = new ThongTinChuyenMap(nhanVat, "nhagohan",hudRenderer,camManager);
+                ThongTinChuyenMap info = new ThongTinChuyenMap(nhanVat, "nhagohan",hudRenderer,camManager, map, mapLangAru);
                 game.setScreen(new ManHinhSplash(game, new ManHinhLangAru(game, info)));
             }
         }
@@ -448,6 +455,16 @@ public class ManHinhNhaGohan implements Screen {
         hudRenderer.render(batch);
         hudRenderer.update(delta);
         batch.end();
+    }
+
+    public boolean daAnDuiGa() {
+        List<Npc> npcs = map.LayDanhSachNpc();
+        for (Npc npc : npcs) {
+            if (npc.getTen().equals("dui_ga")) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private SkillNhanVat[] loadSkillIcons(String hanhTinh) {

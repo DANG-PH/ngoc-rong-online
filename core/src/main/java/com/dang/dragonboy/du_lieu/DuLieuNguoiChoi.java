@@ -1,5 +1,7 @@
 package com.dang.dragonboy.du_lieu;
 import java.util.ArrayList;
+
+import com.badlogic.gdx.Gdx;
 import com.dang.dragonboy.item.Item;
 import com.dang.dragonboy.item.LoaiItem;
 import com.dang.dragonboy.hien_thi.VeHUD;
@@ -60,6 +62,10 @@ public class DuLieuNguoiChoi {
     private String[] danhSachHanhTinh = {"traidat","xayda","namek"};
 
     private float HpHopThe,KiHopThe,SdHopThe,ChiMangSuDung,SatThuongChiMangSuDung,GiamSatThuongSuDung;
+
+    // Logic chỉ cho đậu thần
+    public int soDauThanHienTai ;
+    public float timeTangMotDauThan = 1/2f * 60f;
 
     // Constructor
     public DuLieuNguoiChoi(String ten, long sucManh, int theLuc,
@@ -180,7 +186,7 @@ public class DuLieuNguoiChoi {
     public int getCapCayDau() { return capcaydau ;}
     public int getSoDauThan() { return soDauThan; }
     public int getDauHoiHPKI() {
-        switch (capcaydau){
+        switch (capcaydau-1){
             case 0: return 500;
             case 1: return 1000;
             case 2: return 3000;
@@ -759,6 +765,17 @@ public class DuLieuNguoiChoi {
             );
             deTu.setDanhSachDat(nhanVat.danhSachDat);
             deTu.setGioiHanToaDo(nhanVat.getGioiHanXMax(), nhanVat.getGioiHanYMax());
+        }
+    }
+
+    public void capNhat() {
+        // đậu thần
+        if (soDauThanHienTai < 2 * this.getCapCayDau() + 3) {
+            timeTangMotDauThan -= Gdx.graphics.getDeltaTime();
+            if (timeTangMotDauThan <= 0) {
+                soDauThanHienTai += 1;
+                timeTangMotDauThan = this.getCapCayDau()/2f * 60f;
+            }
         }
     }
 

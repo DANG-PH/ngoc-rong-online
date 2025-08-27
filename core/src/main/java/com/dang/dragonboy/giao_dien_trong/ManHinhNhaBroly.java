@@ -418,12 +418,12 @@ public class ManHinhNhaBroly implements Screen {
             batch.end();
         }
         // Kiểm tra nếu đứng trong vùng "Làng Aru" và bấm Enter thì chuyển màn
-        if (targetX > 760 && targetX < 990 && targetY >= 0 && targetY <= 400) {
-            if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-                ThongTinChuyenMap info = new ThongTinChuyenMap(nhanVat, "nhabroly",hudRenderer,camManager);
-                game.setScreen(new ManHinhSplash(game, new ManHinhLangAru(game, info)));
-            }
-        }
+//        if (targetX > 760 && targetX < 990 && targetY >= 0 && targetY <= 400) {
+//            if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+//                ThongTinChuyenMap info = new ThongTinChuyenMap(nhanVat, "nhabroly",hudRenderer,camManager);
+//                game.setScreen(new ManHinhSplash(game, new ManHinhLangAru(game, info)));
+//            }
+//        }
         // 2. Vẽ UI cố định
         batch.setProjectionMatrix(camManager.uiCamera.combined);
         batch.begin();

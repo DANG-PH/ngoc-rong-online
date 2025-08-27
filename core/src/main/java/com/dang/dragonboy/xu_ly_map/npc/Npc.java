@@ -35,10 +35,6 @@ public class Npc {
     LoaiNPC loainpc;
     private boolean daHuy = false;
 
-    // Logic chỉ cho npc đậu thần
-    private int soDauThanHienTai ;
-    private float timeTangMotDauThan = 1/2f * 60f;
-
     public Npc(String ten, LoaiNPC loainpc, float x, float y) {
         this.ten = ten;
         this.loainpc = loainpc;
@@ -193,7 +189,7 @@ public class Npc {
                     batch.begin();
                     DuLieuNguoiChoi duLieuNguoiChoi = nhanVat.getDuLieuNguoiChoi();
                     boolean fullDauThan = false;
-                    if (soDauThanHienTai == 2 * duLieuNguoiChoi.getCapCayDau() + 3) {
+                    if (duLieuNguoiChoi.soDauThanHienTai == 2 * duLieuNguoiChoi.getCapCayDau() + 3) {
                         fullDauThan = true;
                     }
                     if (fullDauThan) {
@@ -202,19 +198,19 @@ public class Npc {
                             600 + (anhW - layout.width) / 2f,
                             192 + anhH + 90
                         );
-                        layout.setText(fontDauThan, soDauThanHienTai + "/" + (2 * duLieuNguoiChoi.getCapCayDau() + 3));
+                        layout.setText(fontDauThan, duLieuNguoiChoi.soDauThanHienTai + "/" + (2 * duLieuNguoiChoi.getCapCayDau() + 3));
                         fontDauThan.draw(batch, layout,
                             600 + (anhW - layout.width) / 2f,
                             192 + anhH + 65
                         );
                     } else {
-                        layout.setText(fontDauThan, soDauThanHienTai + "/" + (2 * duLieuNguoiChoi.getCapCayDau() + 3));
+                        layout.setText(fontDauThan, duLieuNguoiChoi.soDauThanHienTai + "/" + (2 * duLieuNguoiChoi.getCapCayDau() + 3));
                         fontDauThan.draw(batch, layout,
                             600 + (anhW - layout.width) / 2f,
                             192 + anhH + 90
                         );
-                        int phut = (int)timeTangMotDauThan / 60;
-                        int giay = (int)timeTangMotDauThan % 60;
+                        int phut = (int)duLieuNguoiChoi.timeTangMotDauThan / 60;
+                        int giay = (int)duLieuNguoiChoi.timeTangMotDauThan % 60;
                         String phutText = (phut < 10 ? "0" : "") + phut;
                         String giayText = (giay < 10 ? "0" : "") + giay;
                         layout.setText(fontDauThan,phutText+":"+giayText);
@@ -357,14 +353,7 @@ public class Npc {
                 frame = 0;
             }
         }
-        // npc đậu thần
-        if (soDauThanHienTai < 2 * duLieuNguoiChoi.getCapCayDau() + 3) {
-            timeTangMotDauThan -= Gdx.graphics.getDeltaTime();
-            if (timeTangMotDauThan <= 0) {
-                soDauThanHienTai += 1;
-                timeTangMotDauThan = duLieuNguoiChoi.getCapCayDau()/2f * 60f;
-            }
-        }
+
         if (loainpc == LoaiNPC.CAYDAU) {
             if (veHUD.vuaClickNangCapDau) {
                 if (duLieuNguoiChoi.getVang() >= duLieuNguoiChoi.getCapCayDau()*duLieuNguoiChoi.getCapCayDau()*5_000_000 && duLieuNguoiChoi.getCapCayDau()<10) {
@@ -373,7 +362,7 @@ public class Npc {
                     veHUD.dangHienDauThan = false;
                     this.ten = "dau_"+nhanVat.getHanhtinh()+"_"+duLieuNguoiChoi.getCapCayDau();
                     this.taiAnh = new NpcTaiAnh(ten,loainpc);
-                    timeTangMotDauThan = duLieuNguoiChoi.getCapCayDau()/2f * 60f;
+                    duLieuNguoiChoi.timeTangMotDauThan = duLieuNguoiChoi.getCapCayDau()/2f * 60f;
                 } else {
                     if (duLieuNguoiChoi.getCapCayDau()>=10) {
                         veHUD.setTinNhanPet("Cây đậu đã đạt cấp tối đa",2f);
@@ -384,10 +373,10 @@ public class Npc {
                 veHUD.vuaClickNangCapDau = false;
             }
             if (veHUD.vuaClickThuHoachDau) {
-                if (soDauThanHienTai>0) {
-                    duLieuNguoiChoi.tangDau(soDauThanHienTai);
-                    timeTangMotDauThan = duLieuNguoiChoi.getCapCayDau()/2f * 60f;
-                    soDauThanHienTai = 0;
+                if (duLieuNguoiChoi.soDauThanHienTai>0) {
+                    duLieuNguoiChoi.tangDau(duLieuNguoiChoi.soDauThanHienTai);
+                    duLieuNguoiChoi.timeTangMotDauThan = duLieuNguoiChoi.getCapCayDau()/2f * 60f;
+                    duLieuNguoiChoi.soDauThanHienTai = 0;
                     veHUD.dangHienDauThan = false;
                 } else {
                     veHUD.setTinNhanPet("Vui lòng kiên nhẫn",2f);

@@ -16,6 +16,7 @@ import com.dang.dragonboy.he_thong.Main;
 import com.dang.dragonboy.he_thong.ThongTinChuyenMap;
 import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.nhan_vat.NhanVat;
+import com.dang.dragonboy.xu_ly_map.MapCoBan;
 import com.dang.dragonboy.xu_ly_map.MapDoiHoaCuc;
 import com.dang.dragonboy.hien_thi.QuanLyCamera;
 import com.dang.dragonboy.xu_ly_map.MapLangAru;
@@ -49,7 +50,7 @@ public class ManHinhDoiHoaCuc implements Screen {
     private Texture khoi;
     private float scrollX_khoi = 0,scrollX_khoi1 = 0;
 
-    private MapDoiHoaCuc map;
+    private MapCoBan map, mapLangAru;
     private List<Npc> danhSachNpc;
     private Map<String, NpcTaiAnh> npcTaiAnhMap;
 
@@ -59,13 +60,18 @@ public class ManHinhDoiHoaCuc implements Screen {
         if ("langaru".equals(thongtin.mapTruoc)){
             thongtin.nhanVat.datToaDo(5,175);
             thongtin.hud.getDuLieuNguoiChoi().deTu.datToaDo(5+(thongtin.nhanVat.getFlipX()? 50f : -50f),175);
+            mapLangAru = thongtin.mapTr;
         }
         nhanVat = thongtin.nhanVat;
         hud = thongtin.hud;
         camManager = thongtin.camManager;
         // Tạo map và load địa hình
-        map = new MapDoiHoaCuc();
-        map.taiDuLieuMap();
+        if (thongtin.mapSau == null) {
+            map = new MapDoiHoaCuc();
+            map.taiDuLieuMap();
+        } else {
+            map = thongtin.mapSau;
+        }
         this.rongMap = map.getChieuRongMap();
         this.caoMap = map.getChieuCaoMap();
         shapeRenderer = new ShapeRenderer();
@@ -274,7 +280,7 @@ public class ManHinhDoiHoaCuc implements Screen {
 
     public void checkQuaMap() {
         if (nhanVat.getX()<-5-nhanVat.getRong() && nhanVat.getY()<300) {
-            ThongTinChuyenMap info = new ThongTinChuyenMap(nhanVat, "doihoacuc",hud,camManager);
+            ThongTinChuyenMap info = new ThongTinChuyenMap(nhanVat, "doihoacuc",hud,camManager, map, mapLangAru);
             game.setScreen(new ManHinhSplash(game, new ManHinhLangAru(game, info)));
         }
     }

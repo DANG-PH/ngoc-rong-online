@@ -16,6 +16,7 @@ import com.dang.dragonboy.he_thong.Main;
 import com.dang.dragonboy.he_thong.ThongTinChuyenMap;
 import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.nhan_vat.NhanVat;
+import com.dang.dragonboy.xu_ly_map.MapCoBan;
 import com.dang.dragonboy.xu_ly_map.MapLangAru;
 import com.dang.dragonboy.hien_thi.QuanLyCamera;
 import com.dang.dragonboy.xu_ly_map.MapNhaGohan;
@@ -57,7 +58,7 @@ public class ManHinhLangAru implements Screen {
     private int frameLua = 0;
     private float timeLua = 0f;
 
-    private MapLangAru map;
+    private MapCoBan map, mapNhaGohan, mapDoiHoaCuc;
     private List<Npc> danhSachNpc;
     private Map<String, NpcTaiAnh> npcTaiAnhMap;
 
@@ -67,17 +68,23 @@ public class ManHinhLangAru implements Screen {
         if ("nhagohan".equals(thongtin.mapTruoc)){
             thongtin.nhanVat.datToaDo(675,175);
             thongtin.hud.getDuLieuNguoiChoi().deTu.datToaDo(675+(thongtin.nhanVat.getFlipX()? 50f : -50f),175);
+            mapNhaGohan = thongtin.mapTr;
         }
         if ("doihoacuc".equals(thongtin.mapTruoc)){
             thongtin.nhanVat.datToaDo(2390,175);
             thongtin.hud.getDuLieuNguoiChoi().deTu.datToaDo(2390+(thongtin.nhanVat.getFlipX()? 50f : -50f),175);
+            mapDoiHoaCuc = thongtin.mapTr;
         }
         nhanVat = thongtin.nhanVat;
         hud = thongtin.hud;
         camManager = thongtin.camManager;
         // Tạo map và load địa hình
-        map = new MapLangAru();
-        map.taiDuLieuMap();
+        if (thongtin.mapSau==null) {
+            map = new MapLangAru();
+            map.taiDuLieuMap();
+        } else {
+            map = thongtin.mapSau;
+        }
         this.rongMap = map.getChieuRongMap();
         this.caoMap = map.getChieuCaoMap();
         shapeRenderer = new ShapeRenderer();
@@ -332,7 +339,7 @@ public class ManHinhLangAru implements Screen {
         // Kiểm tra nếu đứng trong vùng "Làng Aru" và bấm Enter thì chuyển màn
         if (nhanVat.getX() > 560 && nhanVat.getX() < 790 && nhanVat.getY() >= 0 && nhanVat.getY() <= 400) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-                ThongTinChuyenMap info = new ThongTinChuyenMap(nhanVat, "langaru",hud,camManager);
+                ThongTinChuyenMap info = new ThongTinChuyenMap(nhanVat, "langaru",hud,camManager, map, mapNhaGohan);
                 game.setScreen(new ManHinhSplash(game, new ManHinhNhaGohan(game,nhanVat.getTen(),nhanVat.getHanhtinh(),nhanVat.getNhanvat(),info)));
             }
         }
@@ -349,7 +356,7 @@ public class ManHinhLangAru implements Screen {
     }
     public void checkQuaMap() {
         if (nhanVat.getX()>2405 && nhanVat.getY()<300) {
-            ThongTinChuyenMap info = new ThongTinChuyenMap(nhanVat, "langaru",hud,camManager);
+            ThongTinChuyenMap info = new ThongTinChuyenMap(nhanVat, "langaru",hud,camManager, map, mapDoiHoaCuc);
             game.setScreen(new ManHinhSplash(game, new ManHinhDoiHoaCuc(game, info)));
         }
     }
