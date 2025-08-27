@@ -277,8 +277,10 @@ public class HUDTinhToanChiSo {
                 duLieuNguoiChoi.tangHpHienTai(duLieuNguoiChoi.getHpHopThe()*veHUD.hpHoiTtnl/100f);
                 duLieuNguoiChoi.tangKiHienTai(duLieuNguoiChoi.getKiHopThe()*veHUD.KiHoiTtnl/100f);
             }
-            if (duLieuNguoiChoi.getKiHienTai() == duLieuNguoiChoi.getKiHopThe() && duLieuNguoiChoi.getHpHienTai() == duLieuNguoiChoi.getHpHopThe()) {
+            if (duLieuNguoiChoi.getKiHienTai() == duLieuNguoiChoi.getKiHopThe() && duLieuNguoiChoi.getHpHienTai() == duLieuNguoiChoi.getHpHopThe() && veHUD.timeTtnl <= veHUD.timeTtnlMax-2f) {
                 veHUD.huyTtnl();
+                veHUD.dangHienTinNhanChat = true;
+                veHUD.tinNhanChat = "Phục hồi năng lượng\n" + "100%";
             }
             if (veHUD.timeThongBaoHoiPhucTtnl >= 4.5f) {
                 veHUD.timeThongBaoHoiPhucTtnl = 0f;

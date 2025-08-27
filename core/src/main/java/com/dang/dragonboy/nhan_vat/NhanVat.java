@@ -1157,7 +1157,7 @@ public class NhanVat {
             }
             return;
         }
-        if (!dangDungDat) {
+        if (!dangDungDat && veHUD.timeTtnl <= veHUD.timeTtnlMax-0.4f) {
             veHUD.huyTtnl();
         }
         if (veHUD.timeTtnl < 8f) {
