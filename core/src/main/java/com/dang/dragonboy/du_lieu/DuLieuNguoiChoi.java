@@ -43,6 +43,9 @@ public class DuLieuNguoiChoi {
 
     private ArrayList<Item> hanhTrang = new ArrayList<>();
     private ArrayList<Item> hanhTrangDangMac = new ArrayList<>(8);
+    private ArrayList<Item> hanhTrangRuongDo = new ArrayList<>();
+    public final int MAXRUONGDO = 20;
+
     {
         for (int i = 0; i < 8; i++) {
             hanhTrangDangMac.add(null);
@@ -161,6 +164,31 @@ public class DuLieuNguoiChoi {
             return hanhTrang.get(index);
         }
         return null;
+    }
+
+    public ArrayList<Item> getHanhTrangRuongDo() {
+        return hanhTrangRuongDo;
+    }
+
+    public void themItemVaoHanhTrangRuongDo(Item item) {
+        if (hanhTrangRuongDo.size() < MAXRUONGDO) {
+            if (item.getLoai() != LoaiItem.NGOCRONG && item.getLoai() != LoaiItem.PHUTRO && item.getLoai() != LoaiItem.NANGSKILL) {
+                hanhTrangRuongDo.add(item);
+            } else {
+                boolean daSoHuuItem = false;
+                for (Item itemm : hanhTrangRuongDo) {
+                    if ((itemm.getLoai() == LoaiItem.NGOCRONG || item.getLoai() == LoaiItem.PHUTRO || item.getLoai() == LoaiItem.NANGSKILL) && itemm.getId() == item.getId()) {
+                        itemm.tangSoLuong(item.getSoLuong());
+                        daSoHuuItem = true;
+                    }
+                }
+                if (!daSoHuuItem) {
+                    hanhTrangRuongDo.add(item);
+                }
+            }
+        } else {
+            veHUD.setTinNhanPet("Rương đồ đã đầy",2f);
+        }
     }
 
     // Getter

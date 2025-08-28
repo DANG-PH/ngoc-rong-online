@@ -313,6 +313,9 @@ public class Npc {
         if (loainpc == LoaiNPC.CAYDAU) {
             veHUD.dangHienDauThan = true;
         }
+        if (loainpc == LoaiNPC.RUONGDO) {
+            veHUD.dangHienRuongDo = true;
+        }
     }
 
     public void setTenTiengVietNpc() {

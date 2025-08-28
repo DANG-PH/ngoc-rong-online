@@ -35,6 +35,7 @@ public class VeHUD {
     public HUDXulyitem xulyitem;
     private HUDPopupThongTin popupThongTin;
     private HUDPopupHanhTrang popupHanhTrang;
+    private HUDRuongDo ruongDo;
 
     private DuLieuNguoiChoi duLieuNguoiChoi;
     public QuanLyCamera camManager;
@@ -77,11 +78,14 @@ public class VeHUD {
 
     public float scrollY = 0f;
     public float scrollYDeTu = 0f;
+    public float scrollYRuongDo = 0f;
     public float maxScroll = 0f;
     public float maxScrollDeTu = 0f;
+    public float maxScrollRuongDo = 0f;
     private final float scrollSpeed = 30f; // số pixel cuộn mỗi lần
     public int hangTrangDangChon = -1;
     public int hangTrangDeTuDangChon = -1;
+    public int hanhTrangRuongDoDangChon = -1;
 
     public Texture o_noi_tai, o_noi_tai_click, o_chi_so_co_ban, o_chi_so_co_ban_click;
     public int oChiSoDangChon = -1;
@@ -92,6 +96,7 @@ public class VeHUD {
     public boolean DangHienPopupThongTin = false;
     public boolean DangHienPopupThongTin1 = false;
     public boolean DangHienPopupThongTin2 = false;
+    public boolean DangHienPopupThongTin3 = false;
     public float TimeChoHienPopup = 0;
     public float TimeChoHienPopup1 = 0;
     public boolean vuaMoPopupThongTin = false;
@@ -103,12 +108,16 @@ public class VeHUD {
     public float PopupHanhTrangY = 0;
     public float PopupHanhTrangXdetu = 0;
     public float PopupHanhTrangYdetu = 0;
+    public float PopupHanhTrangXRuongDo = 0;
+    public float PopupHanhTrangYRuongDo = 0;
     String itemDangChon;
     Item itemm = null;
     public float PopupHanhTrangW = 0;
     public float PopupHanhTrangH = 0;
     public float PopupHanhTrangWdetu = 0;
     public float PopupHanhTrangHdetu = 0;
+    public float PopupHanhTrangWRuongDo = 0;
+    public float PopupHanhTrangHRuongDo = 0;
     float nutClickTimer = 0;
     float nutClickTimer1 = 0;
     int oChiSoDangChonTamThoi = -1;
@@ -180,6 +189,7 @@ public class VeHUD {
     public boolean dangHienPopupDeTu = false;
     public boolean dangChonHanhTrangSuPhu = false;
     public boolean dangChonHanhTrangDeTu = false;
+    public boolean dangChonHanhTrangRuongDo = false;
 
     public boolean dangChonNhacNen = false;
     public Music[] nhacNen = new Music[11];
@@ -263,6 +273,8 @@ public class VeHUD {
     public boolean vuaKeoHanhTrang = false;
     public boolean keoHanhTrangDeTu = false;
     public boolean vuaKeoHanhTrangDeTu = false;
+    public boolean keoHanhTrangRuongDo = false;
+    public boolean vuaKeoHanhTrangRuongDo = false;
 
     public String trangthaide;
     public boolean renderDeTu = false;
@@ -312,6 +324,8 @@ public class VeHUD {
     public float timeDungGiapXen = 0f;
 
     public boolean dangHienDauThan = false, vuaClickNangCapDau = false, vuaClickThuHoachDau = false;
+    public boolean dangHienRuongDo = false;
+    public boolean vuaTatRuongDo = false;
 
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data;
@@ -331,6 +345,7 @@ public class VeHUD {
         xulyitem = new HUDXulyitem(this, layout, duLieuNguoiChoi, nhanVat);
         popupThongTin = new HUDPopupThongTin(this, layout, duLieuNguoiChoi, nhanVat);
         popupHanhTrang = new HUDPopupHanhTrang(this, layout, duLieuNguoiChoi, nhanVat);
+        ruongDo = new HUDRuongDo(this,duLieuNguoiChoi,nhanVat);
         duLieuNguoiChoi.taoDeTu("Đệ tử");
         duLieuNguoiChoi.deTu.setVeHUD(this);
     }
@@ -365,6 +380,14 @@ public class VeHUD {
 
         // Giới hạn scroll
         scrollYDeTu = Math.max(0, Math.min(scrollYDeTu, maxScrollDeTu));
+    }
+
+    public void scrollRuongDo(int amount) {
+        // amount âm là cuộn lên, dương là cuộn xuống
+        scrollYRuongDo += amount * scrollSpeed;
+
+        // Giới hạn scroll
+        scrollYRuongDo = Math.max(0, Math.min(scrollYRuongDo, maxScrollRuongDo));
     }
 
     public VeHUD(GlyphLayout layout) {
@@ -862,6 +885,7 @@ public class VeHUD {
             veGlow.veGlow(shapeRenderer,clickX,clickY,timeGlow);
         }
         batch.begin();
+        ruongDo.renderRuongDo(batch);
         renderLuaChonCayDau(batch);
         renderPopup(batch);
         renderPetChat(batch);
@@ -1125,52 +1149,84 @@ public class VeHUD {
                         DangHienPopupThongTin1 = false;
                         TimeChoHienPopup = 0;
                     } else if (nuthanhtrangchon == 3) {
-                        if (duLieuNguoiChoi.deTu.getSucManh() >= 1_500_000) {
-                            if (duLieuNguoiChoi.deTu.getSucManh() >= itemm.getSucManhYeuCau()) {
-                                boolean duDieuKien = false;
-                                if (duLieuNguoiChoi.deTu.getHanhtinh().equals(itemm.getHanhtinh()) || itemm.getHanhtinh().equals("all")) {
-                                    duDieuKien = true;
-                                }
-                                if (duDieuKien) {
-                                    xulyitem.macDoChoDe(hangTrangDangChon);
-                                    if (!dangHienPopupDeTu) {
-                                        chucNangDangChon = 4;
-                                        dangHienPopupDeTu = true;
-                                        scrollY = 0;
-                                        scrollYDeTu = 0;
+                        if (!dangHienRuongDo) {
+                            if (duLieuNguoiChoi.deTu.getSucManh() >= 1_500_000) {
+                                if (duLieuNguoiChoi.deTu.getSucManh() >= itemm.getSucManhYeuCau()) {
+                                    boolean duDieuKien = false;
+                                    if (duLieuNguoiChoi.deTu.getHanhtinh().equals(itemm.getHanhtinh()) || itemm.getHanhtinh().equals("all")) {
+                                        duDieuKien = true;
                                     }
-                                    if (!duLieuNguoiChoi.deTu.getTrangthai().equals("Về nhà")) {
-                                        duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Cám ơn sư phụ", 3f);
+                                    if (duDieuKien) {
+                                        xulyitem.macDoChoDe(hangTrangDangChon);
+                                        if (!dangHienPopupDeTu) {
+                                            chucNangDangChon = 4;
+                                            dangHienPopupDeTu = true;
+                                            scrollY = 0;
+                                            scrollYDeTu = 0;
+                                        }
+                                        if (!duLieuNguoiChoi.deTu.getTrangthai().equals("Về nhà")) {
+                                            duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Cám ơn sư phụ", 3f);
+                                        }
+                                    } else {
+                                        if (!duLieuNguoiChoi.deTu.getHanhtinh().equals(itemm.getHanhtinh())) {
+                                            String ht;
+                                            switch (itemm.getHanhtinh()) {
+                                                case "traidat":
+                                                    ht = "Trái Đất";
+                                                    break;
+                                                case "xayda":
+                                                    ht = "Sayda";
+                                                    break;
+                                                case "namek":
+                                                    ht = "Namếc";
+                                                    break;
+                                                default:
+                                                    ht = "";
+                                            }
+                                            setTinNhanPet("Đệ tử không thể mặc đồ " + ht, 2f);
+                                        }
                                     }
                                 } else {
-                                    if (!duLieuNguoiChoi.deTu.getHanhtinh().equals(itemm.getHanhtinh())) {
-                                        String ht;
-                                        switch (itemm.getHanhtinh()) {
-                                            case "traidat": ht = "Trái Đất"; break;
-                                            case "xayda" : ht = "Sayda"; break;
-                                            case "namek" : ht = "Namếc"; break;
-                                            default: ht = "";
-                                        }
-                                        setTinNhanPet("Đệ tử không thể mặc đồ "+ht,2f);
-                                    }
+                                    setTinNhanPet("Đệ tử cần thêm " + formatVangNgoc(itemm.getSucManhYeuCau() - duLieuNguoiChoi.deTu.getSucManh()) + " sức mạnh nữa", 2f);
                                 }
                             } else {
-                                setTinNhanPet("Đệ tử cần thêm "+formatVangNgoc(itemm.getSucManhYeuCau()-duLieuNguoiChoi.deTu.getSucManh())+" sức mạnh nữa",2f);
+                                setTinNhanPet("Đệ tử cần lên 1tr5 sức mạnh", 2f);
                             }
-                        } else {
-                            setTinNhanPet("Đệ tử cần lên 1tr5 sức mạnh",2f);
+                            hangTrangDangChon = -1;
+                            hangTrangDeTuDangChon = -1;
+                            DangHienPopupThongTin1 = false;
+                            TimeChoHienPopup = 0;
+                        } else if (dangHienRuongDo) {
+                            if (duLieuNguoiChoi.getHanhTrangRuongDo().size() < duLieuNguoiChoi.MAXRUONGDO) {
+                                duLieuNguoiChoi.getHanhTrang().remove(itemm);
+                            }
+                            duLieuNguoiChoi.themItemVaoHanhTrangRuongDo(itemm);
+                            hangTrangDangChon = -1;
+                            hanhTrangRuongDoDangChon = -1;
+                            DangHienPopupThongTin1 = false;
+                            TimeChoHienPopup = 0;
                         }
-                        hangTrangDangChon = -1;
-                        hangTrangDeTuDangChon = -1;
-                        DangHienPopupThongTin1 = false;
-                        TimeChoHienPopup = 0;
                     } else if (nuthanhtrangchon == 4) {
-                        xulyitem.goDoChoDe(hangTrangDeTuDangChon);
-                        DangHienPopupThongTin2 = false;
-                        TimeChoHienPopup = 0;
+                        if (dangHienPopupDeTu) {
+                            xulyitem.goDoChoDe(hangTrangDeTuDangChon);
+                            DangHienPopupThongTin2 = false;
+                            TimeChoHienPopup = 0;
+                        } else if (dangHienRuongDo) {
+                            if (duLieuNguoiChoi.getHanhTrang().size() < 50) {
+                                duLieuNguoiChoi.getHanhTrangRuongDo().remove(itemm);
+                            }
+                            duLieuNguoiChoi.themItemVaoHanhTrang(itemm);
+                            DangHienPopupThongTin3 = false;
+                            TimeChoHienPopup = 0;
+                        }
                     } else if (nuthanhtrangchon == 5) {
-                        DangHienPopupThongTin2 = false;
-                        TimeChoHienPopup = 0;
+                        if (dangHienPopupDeTu) {
+                            DangHienPopupThongTin2 = false;
+                            TimeChoHienPopup = 0;
+                        } else if (dangHienRuongDo) {
+                            DangHienPopupThongTin3 = false;
+                            TimeChoHienPopup = 0;
+                        }
                     }
                 } else if (dangHienMiniGame) {
                     if (dangHienMiniGame && !dangHienMiniGameHuongDanThem && !dangHienMiniGameThamGia) {
@@ -1423,6 +1479,20 @@ public class VeHUD {
                     if (nutduocchon == 1) {
                         if (hangTrangDangChon >= 8) {
                             ArrayList<Item> danhSach = duLieuNguoiChoi.getHanhTrang();
+                            //xét trước khi xóa
+                            if (dangDungAura && auraDangDung == danhSach.get(hangTrangDangChon-8)) {
+                                dangDungAura = false;
+                                timeChoBuffAuraTieuDoiTruong = 0f;
+                                chuaSetUpAnhAura = true;
+                            }
+                            if (dangDungHuyHieu && huyHieuDangDung == danhSach.get(hangTrangDangChon-8)) {
+                                dangDungHuyHieu = false;
+                                chuaSetUpAnhHuyHieu = true;
+                            }
+                            if (dangDungDeoLung && deoLungDangDung == danhSach.get(hangTrangDangChon-8)) {
+                                dangDungDeoLung = false;
+                                chuaSetUpAnhDeoLung = true;
+                            }
                             danhSach.remove(hangTrangDangChon - 8);
                         } else {
                             switch (hangTrangDangChon) {
@@ -1672,6 +1742,9 @@ public class VeHUD {
     }
     void PopupHanhTrangDeTu(ShapeRenderer shapeRenderer,SpriteBatch batch, float x, float y , float width , int oHanhTrangDangChon) {
         popupHanhTrang.PopupHanhTrangDeTu(shapeRenderer,batch,x,y,width,oHanhTrangDangChon);
+    }
+    void PopupHanhTrangRuongDo(ShapeRenderer shapeRenderer,SpriteBatch batch, float x, float y , float width , int oHanhTrangDangChon) {
+        popupHanhTrang.PopupHanhTrangRuongDo(shapeRenderer,batch,x,y,width,oHanhTrangDangChon);
     }
 
     long tinhChiPhiTiemNang(int oChiSo, int chiSoGoc, int soLanTang, int buocTang) {

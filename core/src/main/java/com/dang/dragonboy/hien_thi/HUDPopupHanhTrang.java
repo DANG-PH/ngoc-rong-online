@@ -33,7 +33,7 @@ public class HUDPopupHanhTrang {
         setkichhoat.put("Dũng Sĩ Trong Băng Giá", "(5 món +40% Chí Mạng)");
         veHUD.PopupHanhTrangH = 0;
         float xCongThem = 0;
-        if (veHUD.dangHienPopupDeTu) {
+        if (veHUD.dangHienPopupDeTu || veHUD.dangHienRuongDo) {
             xCongThem = 1020 - width - 10;
         } else {
             xCongThem = 0;
@@ -1102,27 +1102,42 @@ public class HUDPopupHanhTrang {
                     veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 52);
                 }
             }
-            if  (oHanhTrangDangChon >= 8 &&
-                (veHUD.itemm.getLoai() == LoaiItem.AO ||
-                    veHUD.itemm.getLoai() == LoaiItem.QUAN ||
-                    veHUD.itemm.getLoai() == LoaiItem.GIAY ||
-                    veHUD.itemm.getLoai() == LoaiItem.GANG ||
-                    veHUD.itemm.getLoai() == LoaiItem.CAITRANG ||
-                    veHUD.itemm.getLoai() == LoaiItem.AVATAR ||
-                    veHUD.itemm.getLoai() == LoaiItem.RADA) && duLieuNguoiChoi.coDeTu()) {
-                float nutX = 1 + 2 * 120 + xCongThem;
-                float nutY = y - 115;
-                if (veHUD.nuthanhtrangchon == 3) {
-                    Texture nutVe = veHUD.nutClickTimer3 > 0 ? veHUD.nutvuongclick : veHUD.nutvuong;
-                    batch.draw(nutVe, nutX, nutY, 114, 114);
-                } else {
-                    batch.draw(veHUD.nutvuong, nutX, nutY, 114, 114);
+            if (!veHUD.dangHienRuongDo) {
+                if (oHanhTrangDangChon >= 8 &&
+                    (veHUD.itemm.getLoai() == LoaiItem.AO ||
+                        veHUD.itemm.getLoai() == LoaiItem.QUAN ||
+                        veHUD.itemm.getLoai() == LoaiItem.GIAY ||
+                        veHUD.itemm.getLoai() == LoaiItem.GANG ||
+                        veHUD.itemm.getLoai() == LoaiItem.CAITRANG ||
+                        veHUD.itemm.getLoai() == LoaiItem.AVATAR ||
+                        veHUD.itemm.getLoai() == LoaiItem.RADA) && duLieuNguoiChoi.coDeTu()) {
+                    float nutX = 1 + 2 * 120 + xCongThem;
+                    float nutY = y - 115;
+                    if (veHUD.nuthanhtrangchon == 3) {
+                        Texture nutVe = veHUD.nutClickTimer3 > 0 ? veHUD.nutvuongclick : veHUD.nutvuong;
+                        batch.draw(nutVe, nutX, nutY, 114, 114);
+                    } else {
+                        batch.draw(veHUD.nutvuong, nutX, nutY, 114, 114);
+                    }
+                    layout.setText(veHUD.font, "Cho đệ tử");
+                    veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 52);
                 }
-                layout.setText(veHUD.font, "Cho đệ tử");
-                veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 52);
+            } else {
+                if (oHanhTrangDangChon >= 8) {
+                    float nutX = 1 + 2 * 120 + xCongThem;
+                    float nutY = y - 115;
+                    if (veHUD.nuthanhtrangchon == 3) {
+                        Texture nutVe = veHUD.nutClickTimer3 > 0 ? veHUD.nutvuongclick : veHUD.nutvuong;
+                        batch.draw(nutVe, nutX, nutY, 114, 114);
+                    } else {
+                        batch.draw(veHUD.nutvuong, nutX, nutY, 114, 114);
+                    }
+                    layout.setText(veHUD.font, "Cất vào \n rương");
+                    veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114/2f + layout.height/2f);
+                }
             }
+            batch.end();
         }
-        batch.end();
     }
 
     public void PopupHanhTrangDeTu(ShapeRenderer shapeRenderer, SpriteBatch batch, float x, float y , float width , int oHanhTrangDangChon) {
@@ -1673,6 +1688,1077 @@ public class HUDPopupHanhTrang {
                     true
                 );
                 veHUD.fontMotaHanhTrang.draw(batch, layout, veHUD.PopupHanhTrangXdetu + (veHUD.PopupHanhTrangWdetu - layout.width) / 2f + xCongThem, veHUD.PopupHanhTrangYdetu + veHUD.PopupHanhTrangHdetu - offsetY);
+                offsetY += layout.height + 30;
+            }
+        }
+        if (veHUD.itemm!=null) {
+            for (int i = 0; i < 2; i++) {
+                float nutX = 1 + i * 120 + xCongThem;
+                float nutY = y - 115;
+                if (veHUD.nuthanhtrangchon == i+4) {
+                    Texture nutVe = veHUD.nutClickTimer3 > 0 ? veHUD.nutvuongclick : veHUD.nutvuong;
+                    batch.draw(nutVe, nutX, nutY, 114, 114);
+                } else {
+                    batch.draw(veHUD.nutvuong, nutX, nutY, 114, 114);
+                }
+
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                if (i == 0) {
+                    layout.setText(veHUD.font, "Lấy ra");
+                    veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 52);
+                } else {
+                    layout.setText(veHUD.font, "Đóng");
+                    veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 52);
+                }
+            }
+        }
+        batch.end();
+    }
+
+    public void PopupHanhTrangRuongDo(ShapeRenderer shapeRenderer, SpriteBatch batch, float x, float y , float width , int oHanhTrangDangChon) {
+        String[] chisoduoccong = {"HP", "KI", "SD", "Chí mạng","Giáp", "ST Crit", "HP", "KI", "Sức đánh", "HP", "KI", "Sức đánh", "Giảm sát thương"};
+        Map<String, String> setkichhoat = new HashMap<>();
+        setkichhoat.put("Nappa", "(5 món +80% HP)");
+        setkichhoat.put("Sôngôku", "(5 món +100% sát thương Kamejoko)");
+        setkichhoat.put("Dũng Sĩ Trong Băng Giá", "(5 món +40% Chí Mạng)");
+        veHUD.PopupHanhTrangHRuongDo = 0;
+        float xCongThem = 0;
+        if (veHUD.itemm!=null) {
+            if ("giapluyentap".equals(veHUD.itemDangChon)) {
+                layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 15;
+                layout.setText(veHUD.fontSkillchuaco, "Hiệu lực trong " + (veHUD.itemm.getHanSuDung() > 60f ? (int) (veHUD.itemm.getHanSuDung() / 60f) + " phút" : (int)(veHUD.itemm.getHanSuDung())+" giây"));
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 15;
+                for (int i = 6; i <= 12; i++) {
+                    if (veHUD.itemm.getChiso()[i] > 0) {
+                        layout.setText(veHUD.fontSkillchuaco, chisoduoccong[i] + "+" + veHUD.itemm.getChiso()[i] + "%");
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 15;
+                    }
+                }
+                if (veHUD.itemm.getSucManhYeuCau()>0) {
+                    if (duLieuNguoiChoi.getSucManh() >= veHUD.itemm.getSucManhYeuCau()) {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 10;
+                    } else {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 10;
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh của bạn: " + duLieuNguoiChoi.getSucManh());
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 10;
+                    }
+                }
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.font, "____________________________________");
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 15;
+                layout.setText(
+                    veHUD.fontMotaHanhTrang,
+                    veHUD.itemm.getMoTa(),
+                    veHUD.fontMotaHanhTrang.getColor(),
+                    330,
+                    Align.left,
+                    true
+                );
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 42;
+                if (veHUD.itemm.getSoSaoPhaLe() > 0) {
+                    veHUD.PopupHanhTrangHRuongDo += 20;
+                }
+            }
+            if ("ao".equals(veHUD.itemDangChon) || "quan".equals(veHUD.itemDangChon) || "giay".equals(veHUD.itemDangChon) || "gang".equals(veHUD.itemDangChon) || "rada".equals(veHUD.itemDangChon)) {
+                if (!nhanVat.getHanhtinh().equals(veHUD.itemm.getHanhtinh())){
+                    String ht = veHUD.itemm.getHanhtinh();
+                    if (ht.equals("traidat")){ht = "Trái đất";}
+                    if (ht.equals("xayda")){ht = "Sayda";}
+                    if (ht.equals("namek")){ht = "Namếc";}
+                    layout.setText(veHUD.fontTenSkill,"Dành cho "+ht);
+                    veHUD.PopupHanhTrangHRuongDo += layout.height + 15;
+                }
+                layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 15;
+                for (int i = 9; i < 12; i++ ){
+                    if (veHUD.itemm.getChiso()[i] > 0) {
+                        layout.setText(veHUD.fontSkillchuaco,chisoduoccong[i] + "+"+veHUD.itemm.getChiso()[i]);
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 15;
+                    }
+                    if (veHUD.itemm.getChiso()[i-6] > 0){
+                        layout.setText(veHUD.fontSkillchuaco,chisoduoccong[i-6] + "+"+veHUD.itemm.getChiso()[i-6]);
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 15;
+                    }
+                }
+
+                for (int i = 6; i < 9; i++) {
+                    if (veHUD.itemm.getChiso()[i] > 0) {
+                        layout.setText(veHUD.fontSkillchuaco, chisoduoccong[i] + "+" + veHUD.itemm.getChiso()[i] + "%");
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 15;
+                    }
+                }
+                if (veHUD.itemm.getSetkichhoat() != null){
+                    boolean fullSetNappa = "Nappa".equals(veHUD.skha)
+                        && "Nappa".equals(veHUD.skhq)
+                        && "Nappa".equals(veHUD.skhg)
+                        && "Nappa".equals(veHUD.skhj)
+                        && "Nappa".equals(veHUD.skhrada);
+                    boolean fullSetSongoku = "Sôngôku".equals(veHUD.skha)
+                        && "Sôngôku".equals(veHUD.skhq)
+                        && "Sôngôku".equals(veHUD.skhg)
+                        && "Sôngôku".equals(veHUD.skhj)
+                        && "Sôngôku".equals(veHUD.skhrada);
+                    boolean fullSetAyaka = "Dũng Sĩ Trong Băng Giá".equals(veHUD.skha)
+                        && "Dũng Sĩ Trong Băng Giá".equals(veHUD.skhq)
+                        && "Dũng Sĩ Trong Băng Giá".equals(veHUD.skhg)
+                        && "Dũng Sĩ Trong Băng Giá".equals(veHUD.skhj)
+                        && "Dũng Sĩ Trong Băng Giá".equals(veHUD.skhrada);
+                    if (fullSetNappa || fullSetSongoku || fullSetAyaka) {
+                        layout.setText(veHUD.fontSkillchuaco, "Set " + veHUD.itemm.getSetkichhoat());
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 12;
+                        layout.setText(veHUD.fontSkillchuaco, setkichhoat.get(veHUD.itemm.getSetkichhoat()));
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 12;
+                        layout.setText(veHUD.fontSkillchuaco, "Không thể giao dịch");
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 12;
+                    } else {
+                        layout.setText(veHUD.fontTenSkill, "Set " + veHUD.itemm.getSetkichhoat());
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 12;
+                        layout.setText(veHUD.fontTenSkill, setkichhoat.get(veHUD.itemm.getSetkichhoat()));
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 12;
+                        layout.setText(veHUD.fontTenSkill, "Không thể giao dịch");
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 12;
+                    }
+                }
+                if (veHUD.itemm.getSucManhYeuCau()>0) {
+                    if (duLieuNguoiChoi.getSucManh() >= veHUD.itemm.getSucManhYeuCau()) {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 10;
+                    } else {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 10;
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh của bạn: " + duLieuNguoiChoi.getSucManh());
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 10;
+                    }
+                }
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.font, "____________________________________");
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 15;
+                layout.setText(
+                    veHUD.fontMotaHanhTrang,
+                    veHUD.itemm.getMoTa(),
+                    veHUD.fontMotaHanhTrang.getColor(),
+                    330,
+                    Align.left,
+                    true
+                );
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 42;
+                if (veHUD.itemm.getSoSaoPhaLe() > 0) {
+                    veHUD.PopupHanhTrangHRuongDo += 20;
+                }
+            }
+            if ("caitrang".equals(veHUD.itemDangChon) || "avatar".equals(veHUD.itemDangChon)) {
+                layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 15;
+                for (int i = 0; i <= 12; i++) {
+                    if (veHUD.itemm.getChiso()[i] > 0) {
+                        layout.setText(veHUD.fontSkillchuaco, chisoduoccong[i] + "+" + veHUD.itemm.getChiso()[i] + "%");
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 15;
+                    }
+                }
+                layout.setText(veHUD.fontTenSkill, "Không thể giao dịch");
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 12;
+                if (veHUD.itemm.getSucManhYeuCau()>0) {
+                    if (duLieuNguoiChoi.getSucManh() >= veHUD.itemm.getSucManhYeuCau()) {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 10;
+                    } else {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 10;
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh của bạn: " + duLieuNguoiChoi.getSucManh());
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 10;
+                    }
+                }
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.font, "____________________________________");
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 15;
+                layout.setText(
+                    veHUD.fontMotaHanhTrang,
+                    veHUD.itemm.getMoTa(),
+                    veHUD.fontMotaHanhTrang.getColor(),
+                    330,
+                    Align.left,
+                    true
+                );
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 28;
+            }
+            if ("vanbay".equals(veHUD.itemDangChon)) {
+                layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 15;
+                layout.setText(veHUD.fontTenSkill, veHUD.itemm.getMoTa());
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 15;
+                layout.setText(veHUD.fontTenSkill, "Không thể giao dịch");
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 12;
+                if (veHUD.itemm.getSucManhYeuCau()>0) {
+                    if (duLieuNguoiChoi.getSucManh() >= veHUD.itemm.getSucManhYeuCau()) {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 10;
+                    } else {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 10;
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh của bạn: " + duLieuNguoiChoi.getSucManh());
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 10;
+                    }
+                }
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.font, "____________________________________");
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 15;
+                layout.setText(
+                    veHUD.fontMotaHanhTrang,
+                    veHUD.itemm.getMoTa(),
+                    veHUD.fontMotaHanhTrang.getColor(),
+                    330,
+                    Align.left,
+                    true
+                );
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 40;
+            }
+            if ("bongtai".equals(veHUD.itemDangChon)) {
+                layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 15;
+                if (veHUD.itemm.getMoTa().contains("Rồng Thần")) {
+                    layout.setText(veHUD.fontTenSkill, "Tăng 5% chỉ số");
+                    veHUD.PopupHanhTrangHRuongDo += layout.height + 12;
+                }
+                if (veHUD.itemm.getSucManhYeuCau()>0) {
+                    if (duLieuNguoiChoi.getSucManh() >= veHUD.itemm.getSucManhYeuCau()) {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 10;
+                    } else {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 10;
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh của bạn: " + duLieuNguoiChoi.getSucManh());
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 10;
+                    }
+                }
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.font, "____________________________________");
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 15;
+                layout.setText(
+                    veHUD.fontMotaHanhTrang,
+                    veHUD.itemm.getMoTa(),
+                    veHUD.fontMotaHanhTrang.getColor(),
+                    330,
+                    Align.left,
+                    true
+                );
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 40;
+            }
+            if ("ngocrong".equals(veHUD.itemDangChon)) {
+                layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 15;
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.font, "____________________________________");
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 15;
+                layout.setText(
+                    veHUD.fontMotaHanhTrang,
+                    veHUD.itemm.getMoTa(),
+                    veHUD.fontMotaHanhTrang.getColor(),
+                    330,
+                    Align.left,
+                    true
+                );
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 50;
+            }
+            if ("huyhieu".equals(veHUD.itemDangChon)) {
+                layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 15;
+                for (int i = 0; i <= 12; i++) {
+                    if (veHUD.itemm.getChiso()[i] > 0) {
+                        layout.setText(veHUD.fontSkillchuaco, chisoduoccong[i] + "+" + veHUD.itemm.getChiso()[i] + "%");
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 15;
+                    }
+                }
+                layout.setText(veHUD.fontTenSkill, "Không thể giao dịch");
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 12;
+                if (veHUD.itemm.getSucManhYeuCau()>0) {
+                    if (duLieuNguoiChoi.getSucManh() >= veHUD.itemm.getSucManhYeuCau()) {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 10;
+                    } else {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 10;
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh của bạn: " + duLieuNguoiChoi.getSucManh());
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 10;
+                    }
+                }
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.font, "____________________________________");
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 15;
+                layout.setText(
+                    veHUD.fontMotaHanhTrang,
+                    veHUD.itemm.getMoTa(),
+                    veHUD.fontMotaHanhTrang.getColor(),
+                    330,
+                    Align.left,
+                    true
+                );
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 28;
+            }
+            if ("hopqua".equals(veHUD.itemDangChon)) {
+                layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 15;
+                if (veHUD.itemm.getSucManhYeuCau()>0) {
+                    if (duLieuNguoiChoi.getSucManh() >= veHUD.itemm.getSucManhYeuCau()) {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 10;
+                    } else {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 10;
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh của bạn: " + duLieuNguoiChoi.getSucManh());
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 10;
+                    }
+                }
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.font, "____________________________________");
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 15;
+                layout.setText(
+                    veHUD.fontMotaHanhTrang,
+                    veHUD.itemm.getMoTa(),
+                    veHUD.fontMotaHanhTrang.getColor(),
+                    330,
+                    Align.left,
+                    true
+                );
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 50;
+            }
+            if ("phutro".equals(veHUD.itemDangChon)) {
+                layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 15;
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.font, "____________________________________");
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 15;
+                layout.setText(
+                    veHUD.fontMotaHanhTrang,
+                    veHUD.itemm.getMoTa(),
+                    veHUD.fontMotaHanhTrang.getColor(),
+                    330,
+                    Align.left,
+                    true
+                );
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 50;
+            }
+            if ("deolung".equals(veHUD.itemDangChon) || "aura".equals(veHUD.itemDangChon)) {
+                layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 15;
+                for (int i = 0; i <= 12; i++) {
+                    if (veHUD.itemm.getChiso()[i] > 0) {
+                        layout.setText(veHUD.fontSkillchuaco, chisoduoccong[i] + "+" + veHUD.itemm.getChiso()[i] + "%");
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 15;
+                    }
+                }
+                layout.setText(veHUD.fontTenSkill, "Không thể giao dịch");
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 12;
+                if (veHUD.itemm.getSucManhYeuCau()>0) {
+                    if (duLieuNguoiChoi.getSucManh() >= veHUD.itemm.getSucManhYeuCau()) {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 10;
+                    } else {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 10;
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh của bạn: " + duLieuNguoiChoi.getSucManh());
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 10;
+                    }
+                }
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.font, "____________________________________");
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 15;
+                layout.setText(
+                    veHUD.fontMotaHanhTrang,
+                    veHUD.itemm.getMoTa(),
+                    veHUD.fontMotaHanhTrang.getColor(),
+                    330,
+                    Align.left,
+                    true
+                );
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 28;
+            }
+            if ("nangskill".equals(veHUD.itemDangChon)) {
+                layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 15;
+                layout.setText(veHUD.fontTenSkill, "Không thể giao dịch");
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 12;
+                if (veHUD.itemm.getSucManhYeuCau()>0) {
+                    if (duLieuNguoiChoi.getSucManh() >= veHUD.itemm.getSucManhYeuCau()) {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 10;
+                    } else {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + veHUD.itemm.getSucManhYeuCau());
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 10;
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh của bạn: " + duLieuNguoiChoi.getSucManh());
+                        veHUD.PopupHanhTrangHRuongDo += layout.height + 10;
+                    }
+                }
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.font, "____________________________________");
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 15;
+                layout.setText(
+                    veHUD.fontMotaHanhTrang,
+                    veHUD.itemm.getMoTa(),
+                    veHUD.fontMotaHanhTrang.getColor(),
+                    330,
+                    Align.left,
+                    true
+                );
+                veHUD.PopupHanhTrangHRuongDo += layout.height + 40;
+            }
+            // --- VẼ BACKGROUND BẰNG SHAPERENDERER ---
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(1, 1, 1, 1);
+            shapeRenderer.rect(x + xCongThem, y, width, veHUD.PopupHanhTrangHRuongDo);
+            shapeRenderer.end();
+
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            shapeRenderer.setColor(Color.BLACK);
+            for (int i = 0; i < 2; i++) {
+                shapeRenderer.rect(x - i + xCongThem, y - i, width + i * 2, veHUD.PopupHanhTrangHRuongDo + i * 2);
+            }
+            shapeRenderer.end();
+
+            // --- GIỚI HẠN VỊ TRÍ POPUP ---
+            if ((veHUD.PopupHanhTrangYRuongDo - 120) < 0) {
+                veHUD.PopupHanhTrangYRuongDo = 125;
+            }
+            if ((veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo) > 590) {
+                veHUD.PopupHanhTrangYRuongDo = 590 - veHUD.PopupHanhTrangHRuongDo;
+            }
+
+            batch.begin();
+            // --- VẼ THÔNG TIN ITEM ---
+            DecimalFormat dinhDang = new DecimalFormat("#,###");
+            if ("giapluyentap".equals(veHUD.itemDangChon)) {
+                float offsetY = 10;
+                if (veHUD.itemm.getTexture() != null) {
+                    batch.draw(veHUD.itemm.getTexture(), veHUD.PopupHanhTrangXRuongDo + 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - veHUD.itemm.getTexture().getHeight() * 0.5f - offsetY, veHUD.itemm.getTexture().getWidth() * 0.5f, veHUD.itemm.getTexture().getHeight() * 0.5f);
+                    offsetY += 10;
+                }
+                veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
+                veHUD.fontTenSkill.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                offsetY += layout.height + 12;
+
+                layout.setText(veHUD.fontSkillchuaco, "Hiệu lực trong " + (veHUD.itemm.getHanSuDung() > 60f ? (int) (veHUD.itemm.getHanSuDung() / 60f) + " phút" : (int)(veHUD.itemm.getHanSuDung())+" giây"));
+                veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                offsetY += layout.height + 12;
+
+                for (int i = 6; i <= 12; i++) {
+                    if (veHUD.itemm.getChiso()[i] > 0) {
+                        layout.setText(veHUD.fontSkillchuaco, chisoduoccong[i] + "+" + veHUD.itemm.getChiso()[i] + "%");
+                        veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height + 12;
+                    }
+                }
+                if (veHUD.itemm.getSucManhYeuCau()>0) {
+                    if (duLieuNguoiChoi.getSucManh() >= veHUD.itemm.getSucManhYeuCau()) {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));
+                        veHUD.fontMotaHanhTrang.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height;
+                    } else {
+                        layout.setText(veHUD.fontMotaHanhTrang1, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));
+                        veHUD.fontMotaHanhTrang1.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height+5;
+                        layout.setText(veHUD.fontMotaHanhTrang1, "Sức mạnh của bạn: " +  dinhDang.format(duLieuNguoiChoi.getSucManh()));
+                        veHUD.fontMotaHanhTrang1.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height;
+                    }
+                }
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.font, "____________________________________");
+                for (int i = 0; i < 2; i++) {
+                    veHUD.font.draw(batch, layout, veHUD.PopupHanhTrangXRuongDo + (veHUD.PopupHanhTrangWRuongDo - layout.width) / 2f + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY - i * 1);
+                }
+                offsetY += layout.height + 25;
+
+                layout.setText(
+                    veHUD.fontMotaHanhTrang,
+                    veHUD.itemm.getMoTa(),
+                    veHUD.fontMotaHanhTrang.getColor(),
+                    330,
+                    Align.left,
+                    true
+                );
+                veHUD.fontMotaHanhTrang.draw(batch, layout, veHUD.PopupHanhTrangXRuongDo + (veHUD.PopupHanhTrangWRuongDo - layout.width) / 2f + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                offsetY += layout.height + 30;
+
+                if (veHUD.itemm.getSoSaoPhaLe() > 0) {
+                    float saoxanhW = veHUD.saoxanh.getWidth() * 0.5f;
+                    float saoxanhH = veHUD.saoxanh.getHeight() * 0.5f;
+                    float spacing = 40f;
+                    int soSao = veHUD.itemm.getSoSaoPhaLe();
+
+                    float totalW = (soSao - 1) * spacing + saoxanhW;
+
+                    float startX = veHUD.PopupHanhTrangXRuongDo + (veHUD.PopupHanhTrangWRuongDo - totalW) / 2f;
+
+                    for (int i = 0; i < soSao; i++) {
+                        float drawX = startX + i * spacing;
+                        if (i < veHUD.itemm.getSoSaoPhaLeCuongHoa()) {
+                            batch.draw(veHUD.saoxanh, drawX + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY, saoxanhW, saoxanhH);
+                        } else {
+                            batch.draw(veHUD.saoden, drawX + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY, saoxanhW, saoxanhH);
+                        }
+                    }
+                }
+            } else if ("ao".equals(veHUD.itemDangChon) || "quan".equals(veHUD.itemDangChon) || "giay".equals(veHUD.itemDangChon) || "gang".equals(veHUD.itemDangChon) || "rada".equals(veHUD.itemDangChon)) {
+                float offsetY = 10;
+                if (veHUD.itemm.getTexture() != null) {
+                    batch.draw(veHUD.itemm.getTexture(), veHUD.PopupHanhTrangXRuongDo + 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - veHUD.itemm.getTexture().getHeight() * 0.5f - offsetY, veHUD.itemm.getTexture().getWidth() * 0.5f, veHUD.itemm.getTexture().getHeight() * 0.5f);
+                    offsetY += 10;
+                }
+                if (!nhanVat.getHanhtinh().equals(veHUD.itemm.getHanhtinh())){
+                    String ht = veHUD.itemm.getHanhtinh();
+                    if (ht.equals("traidat")){ht = "Trái đất";}
+                    if (ht.equals("xayda")){ht = "Sayda";}
+                    if (ht.equals("namek")){ht = "Namếc";}
+                    veHUD.fontTenSkill.setColor(203 / 255f, 0 / 255f, 26 / 255f, 1f);
+                    layout.setText(veHUD.fontTenSkill,"Dành cho "+ht);
+                    veHUD.fontTenSkill.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                    offsetY += layout.height + 12;
+                }
+                if (veHUD.itemm.getSoCap() > 0){
+                    veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                    layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
+                    veHUD.fontTenSkill.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 50 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                    layout.setText(veHUD.fontTenSkill, "[+"+veHUD.itemm.getSoCap()+"]");
+                    veHUD.fontTenSkill.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                    offsetY += layout.height + 12;
+                } else {
+                    veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                    layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
+                    veHUD.fontTenSkill.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                    offsetY += layout.height + 12;
+                }
+                for (int i = 9; i < 12; i++ ){
+                    if (veHUD.itemm.getChiso()[i] > 0) {
+                        layout.setText(veHUD.fontSkillchuaco,chisoduoccong[i] + "+"+veHUD.itemm.getChiso()[i]);
+                        veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height + 12;
+                    }
+                    if (veHUD.itemm.getChiso()[i-6] > 0){
+                        if (i-6==4) {
+                            layout.setText(veHUD.fontSkillchuaco, chisoduoccong[i - 6] + "+" + veHUD.itemm.getChiso()[i - 6]);
+                        } else {
+                            layout.setText(veHUD.fontSkillchuaco, chisoduoccong[i - 6] + "+" + veHUD.itemm.getChiso()[i - 6]+"%");
+                        }
+                        veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height + 12;
+                    }
+                }
+                if (veHUD.itemm.getSetkichhoat() != null) {
+                    String set = veHUD.itemm.getSetkichhoat();
+                    boolean isFullSet = false;
+
+                    if ("Nappa".equals(set)) {
+                        isFullSet = "Nappa".equals(veHUD.skha)
+                            && "Nappa".equals(veHUD.skhq)
+                            && "Nappa".equals(veHUD.skhg)
+                            && "Nappa".equals(veHUD.skhj)
+                            && "Nappa".equals(veHUD.skhrada);
+                    } else if ("Sôngôku".equals(set)) {
+                        isFullSet = "Sôngôku".equals(veHUD.skha)
+                            && "Sôngôku".equals(veHUD.skhq)
+                            && "Sôngôku".equals(veHUD.skhg)
+                            && "Sôngôku".equals(veHUD.skhj)
+                            && "Sôngôku".equals(veHUD.skhrada);
+                    } else if ("Dũng Sĩ Trong Băng Giá".equals(set)) {
+                        isFullSet = "Dũng Sĩ Trong Băng Giá".equals(veHUD.skha)
+                            && "Dũng Sĩ Trong Băng Giá".equals(veHUD.skhq)
+                            && "Dũng Sĩ Trong Băng Giá".equals(veHUD.skhg)
+                            && "Dũng Sĩ Trong Băng Giá".equals(veHUD.skhj)
+                            && "Dũng Sĩ Trong Băng Giá".equals(veHUD.skhrada);
+                    }
+                    // Hiển thị
+                    layout.setText(veHUD.fontSkillchuaco, "Set " + set);
+                    veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                    offsetY += layout.height + 12;
+
+                    layout.setText(isFullSet ? veHUD.fontSkillchuaco : veHUD.fontTenSkill, setkichhoat.get(set));
+                    (isFullSet ? veHUD.fontSkillchuaco : veHUD.fontTenSkill).draw(batch, layout,
+                        veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem,
+                        veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                    offsetY += layout.height + 12;
+
+                    layout.setText(veHUD.fontSkillchuaco, "Không thể giao dịch");
+                    veHUD.fontSkillchuaco.draw(batch, layout,
+                        veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem,
+                        veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                    offsetY += layout.height + 12;
+                }
+                for (int i = 6; i < 9; i++) {
+                    if (veHUD.itemm.getChiso()[i] > 0) {
+                        layout.setText(veHUD.fontSkillchuaco, chisoduoccong[i] + "+" + veHUD.itemm.getChiso()[i]+"%");
+                        veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height + 12;
+                    }
+                }
+                if (veHUD.itemm.getSucManhYeuCau()>0) {
+                    if (duLieuNguoiChoi.getSucManh() >= veHUD.itemm.getSucManhYeuCau()) {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));
+                        veHUD.fontMotaHanhTrang.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height;
+                    } else {
+                        layout.setText(veHUD.fontMotaHanhTrang1, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));
+                        veHUD.fontMotaHanhTrang1.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height+5;
+                        layout.setText(veHUD.fontMotaHanhTrang1, "Sức mạnh của bạn: " +  dinhDang.format(duLieuNguoiChoi.getSucManh()));
+                        veHUD.fontMotaHanhTrang1.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height;
+                    }
+                }
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.font, "____________________________________");
+                for (int i = 0; i < 2; i++) {
+                    veHUD.font.draw(batch, layout, veHUD.PopupHanhTrangXRuongDo + (veHUD.PopupHanhTrangWRuongDo - layout.width) / 2f + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY - i * 1);
+                }
+                offsetY += layout.height + 25;
+
+                layout.setText(
+                    veHUD.fontMotaHanhTrang,
+                    veHUD.itemm.getMoTa(),
+                    veHUD.fontMotaHanhTrang.getColor(),
+                    330,
+                    Align.left,
+                    true
+                );
+                veHUD.fontMotaHanhTrang.draw(batch, layout, veHUD.PopupHanhTrangXRuongDo + (veHUD.PopupHanhTrangWRuongDo - layout.width) / 2f + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                offsetY += layout.height + 32;
+
+                if (veHUD.itemm.getSoSaoPhaLe() > 0) {
+                    float saoxanhW = veHUD.saoxanh.getWidth() * 0.5f;
+                    float saoxanhH = veHUD.saoxanh.getHeight() * 0.5f;
+                    float spacing = 40f;
+                    int soSao = veHUD.itemm.getSoSaoPhaLe();
+
+                    float totalW = (soSao - 1) * spacing + saoxanhW;
+
+                    float startX = veHUD.PopupHanhTrangXRuongDo + (veHUD.PopupHanhTrangWRuongDo - totalW) / 2f;
+
+                    for (int i = 0; i < soSao; i++) {
+                        float drawX = startX + i * spacing;
+                        if (i < veHUD.itemm.getSoSaoPhaLeCuongHoa()) {
+                            batch.draw(veHUD.saoxanh, drawX + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY, saoxanhW, saoxanhH);
+                        } else {
+                            batch.draw(veHUD.saoden, drawX + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY, saoxanhW, saoxanhH);
+                        }
+                    }
+                }
+            } else if ("caitrang".equals(veHUD.itemDangChon) || "avatar".equals(veHUD.itemDangChon)) {
+                float offsetY = 10;
+                if (veHUD.itemm.getTexture() != null) {
+                    if (veHUD.itemm.getTexture().getHeight()*0.5f < 60) {
+                        batch.draw(veHUD.itemm.getTexture(), veHUD.PopupHanhTrangXRuongDo + 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - veHUD.itemm.getTexture().getHeight() * 0.5f - offsetY, veHUD.itemm.getTexture().getWidth() * 0.5f, veHUD.itemm.getTexture().getHeight() * 0.5f);
+                    } else {
+                        batch.draw(veHUD.itemm.getTexture(), veHUD.PopupHanhTrangXRuongDo + 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - veHUD.itemm.getTexture().getHeight() * 0.38f - offsetY, veHUD.itemm.getTexture().getWidth() * 0.38f, veHUD.itemm.getTexture().getHeight() * 0.38f);
+                    }
+                    offsetY += 10;
+                }
+                veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
+                veHUD.fontTenSkill.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                offsetY += layout.height + 12;
+
+                for (int i = 0; i <= 12; i++) {
+                    if (veHUD.itemm.getChiso()[i] > 0) {
+                        if (!chisoduoccong[i].equals("Giáp")) {
+                            layout.setText(veHUD.fontSkillchuaco, chisoduoccong[i] + "+" + veHUD.itemm.getChiso()[i] + "%");
+                        } else {
+                            layout.setText(veHUD.fontSkillchuaco, chisoduoccong[i] + "+" + veHUD.itemm.getChiso()[i]);
+                        }
+                        veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height + 12;
+                    }
+                }
+                layout.setText(veHUD.fontSkillchuaco, "Không thể giao dịch");
+                veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                offsetY += layout.height + 12;
+                if (veHUD.itemm.getSucManhYeuCau()>0) {
+                    if (duLieuNguoiChoi.getSucManh() >= veHUD.itemm.getSucManhYeuCau()) {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));
+                        veHUD.fontMotaHanhTrang.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height;
+                    } else {
+                        layout.setText(veHUD.fontMotaHanhTrang1, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));
+                        veHUD.fontMotaHanhTrang1.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo+ veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height+5;
+                        layout.setText(veHUD.fontMotaHanhTrang1, "Sức mạnh của bạn: " +  dinhDang.format(duLieuNguoiChoi.getSucManh()));
+                        veHUD.fontMotaHanhTrang1.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height;
+                    }
+                }
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.font, "____________________________________");
+                for (int i = 0; i < 2; i++) {
+                    veHUD.font.draw(batch, layout, veHUD.PopupHanhTrangXRuongDo + (veHUD.PopupHanhTrangWRuongDo - layout.width) / 2f + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY - i * 1);
+                }
+                offsetY += layout.height + 25;
+
+                layout.setText(
+                    veHUD.fontMotaHanhTrang,
+                    veHUD.itemm.getMoTa(),
+                    veHUD.fontMotaHanhTrang.getColor(),
+                    330,
+                    Align.left,
+                    true
+                );
+                veHUD.fontMotaHanhTrang.draw(batch, layout, veHUD.PopupHanhTrangXRuongDo + (veHUD.PopupHanhTrangWRuongDo - layout.width) / 2f + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                offsetY += layout.height + 30;
+            } else if ("vanbay".equals(veHUD.itemDangChon)) {
+                float offsetY = 10;
+                if (veHUD.itemm.getTexture() != null) {
+                    batch.draw(veHUD.itemm.getTexture(), veHUD.PopupHanhTrangXRuongDo + 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - veHUD.itemm.getTexture().getHeight() * 0.5f - offsetY, veHUD.itemm.getTexture().getWidth() * 0.5f, veHUD.itemm.getTexture().getHeight() * 0.5f);
+                    offsetY += 10;
+                }
+                veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
+                veHUD.fontTenSkill.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                offsetY += layout.height + 12;
+
+                layout.setText(veHUD.fontSkillchuaco, veHUD.itemm.getMoTa());
+                veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                offsetY += layout.height + 12;
+                layout.setText(veHUD.fontSkillchuaco, "Không thể giao dịch");
+                veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                offsetY += layout.height + 12;
+                if (veHUD.itemm.getSucManhYeuCau()>0) {
+                    if (duLieuNguoiChoi.getSucManh() >= veHUD.itemm.getSucManhYeuCau()) {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));
+                        veHUD.fontMotaHanhTrang.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height;
+                    } else {
+                        layout.setText(veHUD.fontMotaHanhTrang1, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));
+                        veHUD.fontMotaHanhTrang1.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height+5;
+                        layout.setText(veHUD.fontMotaHanhTrang1, "Sức mạnh của bạn: " +  dinhDang.format(duLieuNguoiChoi.getSucManh()));
+                        veHUD.fontMotaHanhTrang1.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height;
+                    }
+                }
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.font, "____________________________________");
+                for (int i = 0; i < 2; i++) {
+                    veHUD.font.draw(batch, layout, veHUD.PopupHanhTrangXRuongDo + (veHUD.PopupHanhTrangWRuongDo - layout.width) / 2f + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY - i * 1);
+                }
+                offsetY += layout.height + 25;
+
+                layout.setText(
+                    veHUD.fontMotaHanhTrang,
+                    veHUD.itemm.getMoTa(),
+                    veHUD.fontMotaHanhTrang.getColor(),
+                    330,
+                    Align.left,
+                    true
+                );
+                veHUD.fontMotaHanhTrang.draw(batch, layout, veHUD.PopupHanhTrangXRuongDo + (veHUD.PopupHanhTrangWRuongDo - layout.width) / 2f + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                offsetY += layout.height + 30;
+            } else if ("bongtai".equals(veHUD.itemDangChon)) {
+                float offsetY = 10;
+                if (veHUD.itemm.getTexture() != null) {
+                    batch.draw(veHUD.itemm.getTexture(), veHUD.PopupHanhTrangXRuongDo + 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - veHUD.itemm.getTexture().getHeight() * 0.5f - offsetY, veHUD.itemm.getTexture().getWidth() * 0.5f, veHUD.itemm.getTexture().getHeight() * 0.5f);
+                    offsetY += 10;
+                }
+                veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
+                veHUD.fontTenSkill.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                offsetY += layout.height + 12;
+                if (veHUD.itemm.getMoTa().contains("Rồng Thần")) {
+                    layout.setText(veHUD.fontSkillchuaco, "Tăng 5% chỉ số");
+                    veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                    offsetY += layout.height + 12;
+                }
+                if (veHUD.itemm.getSucManhYeuCau()>0) {
+                    if (duLieuNguoiChoi.getSucManh() >= veHUD.itemm.getSucManhYeuCau()) {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));
+                        veHUD.fontMotaHanhTrang.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height;
+                    } else {
+                        layout.setText(veHUD.fontMotaHanhTrang1, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));
+                        veHUD.fontMotaHanhTrang1.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height+5;
+                        layout.setText(veHUD.fontMotaHanhTrang1, "Sức mạnh của bạn: " +  dinhDang.format(duLieuNguoiChoi.getSucManh()));
+                        veHUD.fontMotaHanhTrang1.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height;
+                    }
+                }
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.font, "____________________________________");
+                for (int i = 0; i < 2; i++) {
+                    veHUD.font.draw(batch, layout, veHUD.PopupHanhTrangXRuongDo + (veHUD.PopupHanhTrangWRuongDo - layout.width) / 2f + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY - i * 1);
+                }
+                offsetY += layout.height + 25;
+
+                layout.setText(
+                    veHUD.fontMotaHanhTrang,
+                    veHUD.itemm.getMoTa(),
+                    veHUD.fontMotaHanhTrang.getColor(),
+                    330,
+                    Align.left,
+                    true
+                );
+                veHUD.fontMotaHanhTrang.draw(batch, layout, veHUD.PopupHanhTrangXRuongDo + (veHUD.PopupHanhTrangWRuongDo - layout.width) / 2f + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                offsetY += layout.height + 30;
+            } else if ("ngocrong".equals(veHUD.itemDangChon)) {
+                float offsetY = 10;
+                if (veHUD.itemm.getTexture() != null) {
+                    batch.draw(veHUD.itemm.getTexture(), veHUD.PopupHanhTrangXRuongDo + 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - veHUD.itemm.getTexture().getHeight() * 0.5f - offsetY, veHUD.itemm.getTexture().getWidth() * 0.5f, veHUD.itemm.getTexture().getHeight() * 0.5f);
+                    offsetY += 10;
+                }
+                veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
+                veHUD.fontTenSkill.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                offsetY += layout.height + 12;
+
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.font, "____________________________________");
+                for (int i = 0; i < 2; i++) {
+                    veHUD.font.draw(batch, layout, veHUD.PopupHanhTrangXRuongDo + (veHUD.PopupHanhTrangWRuongDo - layout.width) / 2f + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY - i * 1);
+                }
+                offsetY += layout.height + 25;
+
+                layout.setText(
+                    veHUD.fontMotaHanhTrang,
+                    veHUD.itemm.getMoTa(),
+                    veHUD.fontMotaHanhTrang.getColor(),
+                    330,
+                    Align.left,
+                    true
+                );
+                veHUD.fontMotaHanhTrang.draw(batch, layout, veHUD.PopupHanhTrangXRuongDo + (veHUD.PopupHanhTrangWRuongDo - layout.width) / 2f + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                offsetY += layout.height + 30;
+            } else if ("huyhieu".equals(veHUD.itemDangChon)) {
+                float offsetY = 10;
+                if (veHUD.itemm.getTexture() != null) {
+                    batch.draw(veHUD.itemm.getTexture(), veHUD.PopupHanhTrangXRuongDo + 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - veHUD.itemm.getTexture().getHeight() * 0.5f - offsetY, veHUD.itemm.getTexture().getWidth() * 0.5f, veHUD.itemm.getTexture().getHeight() * 0.5f);
+                    offsetY += 10;
+                }
+                veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
+                veHUD.fontTenSkill.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                offsetY += layout.height + 12;
+
+                for (int i = 0; i <= 12; i++) {
+                    if (veHUD.itemm.getChiso()[i] > 0) {
+                        if (!chisoduoccong[i].equals("Giáp")) {
+                            layout.setText(veHUD.fontSkillchuaco, chisoduoccong[i] + "+" + veHUD.itemm.getChiso()[i] + "%");
+                        } else {
+                            layout.setText(veHUD.fontSkillchuaco, chisoduoccong[i] + "+" + veHUD.itemm.getChiso()[i]);
+                        }
+                        veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height + 12;
+                    }
+                }
+                layout.setText(veHUD.fontSkillchuaco, "Không thể giao dịch");
+                veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                offsetY += layout.height + 12;
+
+                if (veHUD.itemm.getSucManhYeuCau()>0) {
+                    if (duLieuNguoiChoi.getSucManh() >= veHUD.itemm.getSucManhYeuCau()) {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));
+                        veHUD.fontMotaHanhTrang.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height;
+                    } else {
+                        layout.setText(veHUD.fontMotaHanhTrang1, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));
+                        veHUD.fontMotaHanhTrang1.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height+5;
+                        layout.setText(veHUD.fontMotaHanhTrang1, "Sức mạnh của bạn: " +  dinhDang.format(duLieuNguoiChoi.getSucManh()));
+                        veHUD.fontMotaHanhTrang1.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height;
+                    }
+                }
+
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.font, "____________________________________");
+                for (int i = 0; i < 2; i++) {
+                    veHUD.font.draw(batch, layout, veHUD.PopupHanhTrangXRuongDo + (veHUD.PopupHanhTrangWRuongDo - layout.width) / 2f + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY - i * 1);
+                }
+                offsetY += layout.height + 25;
+
+                layout.setText(
+                    veHUD.fontMotaHanhTrang,
+                    veHUD.itemm.getMoTa(),
+                    veHUD.fontMotaHanhTrang.getColor(),
+                    330,
+                    Align.left,
+                    true
+                );
+                veHUD.fontMotaHanhTrang.draw(batch, layout, veHUD.PopupHanhTrangXRuongDo + (veHUD.PopupHanhTrangWRuongDo - layout.width) / 2f + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                offsetY += layout.height + 30;
+            } else if ("hopqua".equals(veHUD.itemDangChon)) {
+                float offsetY = 10;
+                if (veHUD.itemm.getTexture() != null) {
+                    batch.draw(veHUD.itemm.getTexture(), veHUD.PopupHanhTrangXRuongDo + 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - veHUD.itemm.getTexture().getHeight() * 0.5f - offsetY, veHUD.itemm.getTexture().getWidth() * 0.5f, veHUD.itemm.getTexture().getHeight() * 0.5f);
+                    offsetY += 10;
+                }
+                veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
+                veHUD.fontTenSkill.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                offsetY += layout.height + 12;
+
+                if (veHUD.itemm.getSucManhYeuCau()>0) {
+                    if (duLieuNguoiChoi.getSucManh() >= veHUD.itemm.getSucManhYeuCau()) {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));
+                        veHUD.fontMotaHanhTrang.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height;
+                    } else {
+                        layout.setText(veHUD.fontMotaHanhTrang1, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));
+                        veHUD.fontMotaHanhTrang1.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height+5;
+                        layout.setText(veHUD.fontMotaHanhTrang1, "Sức mạnh của bạn: " +  dinhDang.format(duLieuNguoiChoi.getSucManh()));
+                        veHUD.fontMotaHanhTrang1.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height;
+                    }
+                }
+
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.font, "____________________________________");
+                for (int i = 0; i < 2; i++) {
+                    veHUD.font.draw(batch, layout, veHUD.PopupHanhTrangXRuongDo + (veHUD.PopupHanhTrangWRuongDo - layout.width) / 2f + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY - i * 1);
+                }
+                offsetY += layout.height + 25;
+
+                layout.setText(
+                    veHUD.fontMotaHanhTrang,
+                    veHUD.itemm.getMoTa(),
+                    veHUD.fontMotaHanhTrang.getColor(),
+                    330,
+                    Align.left,
+                    true
+                );
+                veHUD.fontMotaHanhTrang.draw(batch, layout, veHUD.PopupHanhTrangXRuongDo + (veHUD.PopupHanhTrangWRuongDo - layout.width) / 2f + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                offsetY += layout.height + 30;
+            } else if ("phutro".equals(veHUD.itemDangChon)) {
+                float offsetY = 10;
+                if (veHUD.itemm.getTexture() != null) {
+                    batch.draw(veHUD.itemm.getTexture(), veHUD.PopupHanhTrangXRuongDo + 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - veHUD.itemm.getTexture().getHeight() * 0.5f - offsetY, veHUD.itemm.getTexture().getWidth() * 0.5f, veHUD.itemm.getTexture().getHeight() * 0.5f);
+                    offsetY += 10;
+                }
+                veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
+                veHUD.fontTenSkill.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                offsetY += layout.height + 12;
+
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.font, "____________________________________");
+                for (int i = 0; i < 2; i++) {
+                    veHUD.font.draw(batch, layout, veHUD.PopupHanhTrangXRuongDo + (veHUD.PopupHanhTrangWRuongDo - layout.width) / 2f + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY - i * 1);
+                }
+                offsetY += layout.height + 25;
+
+                layout.setText(
+                    veHUD.fontMotaHanhTrang,
+                    veHUD.itemm.getMoTa(),
+                    veHUD.fontMotaHanhTrang.getColor(),
+                    330,
+                    Align.left,
+                    true
+                );
+                veHUD.fontMotaHanhTrang.draw(batch, layout, veHUD.PopupHanhTrangXRuongDo + (veHUD.PopupHanhTrangWRuongDo - layout.width) / 2f + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                offsetY += layout.height + 30;
+            } else if ("deolung".equals(veHUD.itemDangChon) || "aura".equals(veHUD.itemDangChon)) {
+                float offsetY = 10;
+                if (veHUD.itemm.getTexture() != null) {
+                    batch.draw(veHUD.itemm.getTexture(), veHUD.PopupHanhTrangXRuongDo + 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - veHUD.itemm.getTexture().getHeight() * 0.5f - offsetY, veHUD.itemm.getTexture().getWidth() * 0.5f, veHUD.itemm.getTexture().getHeight() * 0.5f);
+                    offsetY += 10;
+                }
+                veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
+                veHUD.fontTenSkill.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                offsetY += layout.height + 12;
+
+                for (int i = 0; i <= 12; i++) {
+                    if (veHUD.itemm.getChiso()[i] > 0) {
+                        if (!chisoduoccong[i].equals("Giáp")) {
+                            layout.setText(veHUD.fontSkillchuaco, chisoduoccong[i] + "+" + veHUD.itemm.getChiso()[i] + "%");
+                        } else {
+                            layout.setText(veHUD.fontSkillchuaco, chisoduoccong[i] + "+" + veHUD.itemm.getChiso()[i]);
+                        }
+                        veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height + 12;
+                    }
+                }
+                layout.setText(veHUD.fontSkillchuaco, "Không thể giao dịch");
+                veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                offsetY += layout.height + 12;
+
+                if (veHUD.itemm.getSucManhYeuCau()>0) {
+                    if (duLieuNguoiChoi.getSucManh() >= veHUD.itemm.getSucManhYeuCau()) {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));
+                        veHUD.fontMotaHanhTrang.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height;
+                    } else {
+                        layout.setText(veHUD.fontMotaHanhTrang1, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));
+                        veHUD.fontMotaHanhTrang1.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height+5;
+                        layout.setText(veHUD.fontMotaHanhTrang1, "Sức mạnh của bạn: " +  dinhDang.format(duLieuNguoiChoi.getSucManh()));
+                        veHUD.fontMotaHanhTrang1.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height;
+                    }
+                }
+
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.font, "____________________________________");
+                for (int i = 0; i < 2; i++) {
+                    veHUD.font.draw(batch, layout, veHUD.PopupHanhTrangXRuongDo + (veHUD.PopupHanhTrangWRuongDo - layout.width) / 2f + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY - i * 1);
+                }
+                offsetY += layout.height + 25;
+
+                layout.setText(
+                    veHUD.fontMotaHanhTrang,
+                    veHUD.itemm.getMoTa(),
+                    veHUD.fontMotaHanhTrang.getColor(),
+                    330,
+                    Align.left,
+                    true
+                );
+                veHUD.fontMotaHanhTrang.draw(batch, layout, veHUD.PopupHanhTrangXRuongDo + (veHUD.PopupHanhTrangWRuongDo - layout.width) / 2f + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                offsetY += layout.height + 30;
+            } else if ("nangskill".equals(veHUD.itemDangChon)) {
+                float offsetY = 10;
+                if (veHUD.itemm.getTexture() != null) {
+                    batch.draw(veHUD.itemm.getTexture(), veHUD.PopupHanhTrangXRuongDo + 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - veHUD.itemm.getTexture().getHeight() * 0.5f - offsetY, veHUD.itemm.getTexture().getWidth() * 0.5f, veHUD.itemm.getTexture().getHeight() * 0.5f);
+                    offsetY += 10;
+                }
+                veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
+                veHUD.fontTenSkill.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                offsetY += layout.height + 12;
+
+                layout.setText(veHUD.fontSkillchuaco, "Không thể giao dịch");
+                veHUD.fontSkillchuaco.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                offsetY += layout.height + 12;
+
+                if (veHUD.itemm.getSucManhYeuCau()>0) {
+                    if (duLieuNguoiChoi.getSucManh() >= veHUD.itemm.getSucManhYeuCau()) {
+                        layout.setText(veHUD.fontMotaHanhTrang, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));
+                        veHUD.fontMotaHanhTrang.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo+ veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height;
+                    } else {
+                        layout.setText(veHUD.fontMotaHanhTrang1, "Sức mạnh yêu cầu: " + dinhDang.format(veHUD.itemm.getSucManhYeuCau()));
+                        veHUD.fontMotaHanhTrang1.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height+5;
+                        layout.setText(veHUD.fontMotaHanhTrang1, "Sức mạnh của bạn: " +  dinhDang.format(duLieuNguoiChoi.getSucManh()));
+                        veHUD.fontMotaHanhTrang1.draw(batch, layout, veHUD.PopupHanhTrangWRuongDo + veHUD.PopupHanhTrangXRuongDo - layout.width - 15 + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
+                        offsetY += layout.height;
+                    }
+                }
+
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.font, "____________________________________");
+                for (int i = 0; i < 2; i++) {
+                    veHUD.font.draw(batch, layout, veHUD.PopupHanhTrangXRuongDo + (veHUD.PopupHanhTrangWRuongDo - layout.width) / 2f + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY - i * 1);
+                }
+                offsetY += layout.height + 25;
+
+                layout.setText(
+                    veHUD.fontMotaHanhTrang,
+                    veHUD.itemm.getMoTa(),
+                    veHUD.fontMotaHanhTrang.getColor(),
+                    330,
+                    Align.left,
+                    true
+                );
+                veHUD.fontMotaHanhTrang.draw(batch, layout, veHUD.PopupHanhTrangXRuongDo + (veHUD.PopupHanhTrangWRuongDo - layout.width) / 2f + xCongThem, veHUD.PopupHanhTrangYRuongDo + veHUD.PopupHanhTrangHRuongDo - offsetY);
                 offsetY += layout.height + 30;
             }
         }
