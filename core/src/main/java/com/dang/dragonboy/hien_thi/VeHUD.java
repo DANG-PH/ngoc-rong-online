@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.audio.Music;
 import java.util.LinkedList;
 import com.dang.dragonboy.he_thong.TrangThaiChu;
+import com.dang.dragonboy.xu_ly_map.npc.Npc;
 
 public class VeHUD {
     public ThemItemTest themItemTest;
@@ -326,6 +327,9 @@ public class VeHUD {
     public boolean dangHienDauThan = false, vuaClickNangCapDau = false, vuaClickThuHoachDau = false;
     public boolean dangHienRuongDo = false;
     public boolean vuaTatRuongDo = false;
+
+    public boolean daClickVaoNpc = false;
+    public Npc npcHienTai;
 
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data;
@@ -669,7 +673,7 @@ public class VeHUD {
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
 
-        if (!dangHienKhungChat && !dangHienDauThan && !(timeHienRongThan<=300-2.1f && timeHienRongThan>0)) {
+        if (!dangHienKhungChat && !daClickVaoNpc && !dangHienDauThan && !(timeHienRongThan<=300-2.1f && timeHienRongThan>0)) {
             // RENDER SAU ẢNH ĐẬU THẦN ( trắng )
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(1f, 1f, 1f, 1f);
@@ -692,7 +696,7 @@ public class VeHUD {
         batch.draw(thanhhpnv1,165, screenHeight - 80 - 5 + 55);
         batch.draw(thanhkinv1,165, screenHeight - 80 - 5 + 55-20);
 
-        if (!dangHienKhungChat && !dangHienDauThan && !(timeHienRongThan<=300-2.1f && timeHienRongThan>0)) {
+        if (!dangHienKhungChat && !daClickVaoNpc && !dangHienDauThan && !(timeHienRongThan<=300-2.1f && timeHienRongThan>0)) {
             // ô chat (góc phải trên)
             int ochatW = 60;
             int ochatH = 60;
@@ -887,6 +891,9 @@ public class VeHUD {
         batch.begin();
         ruongDo.renderRuongDo(batch);
         renderLuaChonCayDau(batch);
+        if (daClickVaoNpc) {
+            npcHienTai.renderHUDnpc(batch);
+        }
         renderPopup(batch);
         renderPetChat(batch);
     }

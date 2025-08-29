@@ -6,6 +6,8 @@ public class NpcTaiAnh {
     public Texture chan;
     public Texture than;
     public Texture dau;
+    public Texture avtNpc;
+
     public Texture anhNpc;
 
     public NpcTaiAnh(String npcName, LoaiNPC loaiNPC) {
@@ -25,6 +27,7 @@ public class NpcTaiAnh {
     public Texture getDau() { return dau; }
     public Texture getThan() { return than; }
     public Texture getChan() { return chan; }
+    public Texture getAvtNpc() { return avtNpc; }
     public Texture getAnhNpc() { return anhNpc; }
 
     public void dispose() {

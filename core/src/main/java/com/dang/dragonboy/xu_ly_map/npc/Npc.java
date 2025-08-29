@@ -316,6 +316,10 @@ public class Npc {
         if (loainpc == LoaiNPC.RUONGDO) {
             veHUD.dangHienRuongDo = true;
         }
+        if (loainpc == LoaiNPC.NGUOI) {
+            veHUD.daClickVaoNpc = true;
+            veHUD.npcHienTai = this;
+        }
     }
 
     public void setTenTiengVietNpc() {
@@ -388,6 +392,15 @@ public class Npc {
             }
         }
     }
+
+    public void xuLyClick(int x, int y) {
+        NpcHUDClickHandler.xuLyClick(this,nhanVat.getVeHUD(),nhanVat.getDuLieuNguoiChoi(),nhanVat,x, y);
+    }
+
+    public void renderHUDnpc(SpriteBatch batch) {
+        NpcHUDrender.renderHUDnpc(this,nhanVat.getVeHUD(),nhanVat.getDuLieuNguoiChoi(),nhanVat,batch);
+    }
+
 
     public boolean isDaHuy() {
         return daHuy;

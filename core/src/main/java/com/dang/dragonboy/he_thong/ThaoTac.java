@@ -25,7 +25,7 @@ public class ThaoTac extends InputAdapter {
 
     @Override
     public boolean keyDown(int keycode) {
-        if (hud.timeChoHopThe == 0 && !hud.dangHienDauThan && !hud.dangHienPopup && !hud.dangHienRuongDo && !hud.dangHienDieuUocRongThan && hud.timeChoBienKhi == 0) {
+        if (hud.timeChoHopThe == 0 && !hud.dangHienDauThan && !hud.daClickVaoNpc && !hud.dangHienPopup && !hud.dangHienRuongDo && !hud.dangHienDieuUocRongThan && hud.timeChoBienKhi == 0) {
             switch (keycode) {
                 case Input.Keys.LEFT:
                     if (nhanVat.diChuyenDenMucTieu) {
@@ -235,6 +235,9 @@ public class ThaoTac extends InputAdapter {
         if (!hud.vuaKeoHanhTrang && !hud.vuaKeoHanhTrangDeTu && !hud.vuaKeoHanhTrangRuongDo) {
             hud.xuLyClick(screenX, y);
         }
+        if (hud.daClickVaoNpc) {
+            hud.npcHienTai.xuLyClick(screenX, y);
+        }
         if (button == Input.Buttons.LEFT) {
             camera.ketThucKeoCamera();
             hud.keoHanhTrang = false;
@@ -242,7 +245,7 @@ public class ThaoTac extends InputAdapter {
             hud.vuaKeoHanhTrangDeTu = false;
             hud.vuaKeoHanhTrangRuongDo = false;
         }
-        if (!hud.dangHienPopup && !hud.dangHienRuongDo && !hud.dangHienDauThan && hud.timeChoBienKhi == 0 && !laClickTrenHUD(screenX, y) && !camera.vuaKeoCamera && !hud.vuaTatPopup && !hud.vuaTatRuongDo && !hud.dangHienKhungChat && hud.timeChoHopThe == 0 && !hud.dangHienDieuUocRongThan ) {
+        if (!hud.dangHienPopup && !hud.dangHienRuongDo && !hud.daClickVaoNpc && !hud.dangHienDauThan && hud.timeChoBienKhi == 0 && !laClickTrenHUD(screenX, y) && !camera.vuaKeoCamera && !hud.vuaTatPopup && !hud.vuaTatRuongDo && !hud.dangHienKhungChat && hud.timeChoHopThe == 0 && !hud.dangHienDieuUocRongThan ) {
             float viewportWidth = camera.camera.viewportWidth;
             float viewportHeight = camera.camera.viewportHeight;
 
