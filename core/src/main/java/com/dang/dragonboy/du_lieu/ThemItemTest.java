@@ -545,6 +545,22 @@ public class ThemItemTest {
 //        ));
 
         duLieu.themItemVaoHanhTrang(new Item(
+            "ve_quay_npc_haidang", "Vé quay Rồng Thần", LoaiItem.VE_QUAY_NPC_HAIDANG,
+            new Texture("vatpham/vatphamgame/ve_quay_npc_haidang/1.png"),
+            "Vé quay ẩn chứa tiềm năng vô hạn. Cần gặp NPC Admin Hải Đăng để sử dụng và có cơ hội nhận những phần thưởng hiếm và nhiều phần quà giá trị khác", 98,
+            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+            "all", 0, null, 0, 0, 0, -1
+        ));
+
+        duLieu.themItemVaoHanhTrangRuongDo(new Item(
+            "ve_quay_npc_haidang", "Vé quay Rồng Thần", LoaiItem.VE_QUAY_NPC_HAIDANG,
+            new Texture("vatpham/vatphamgame/ve_quay_npc_haidang/1.png"),
+            "Vé quay ẩn chứa tiềm năng vô hạn. Cần gặp NPC Admin Hải Đăng để sử dụng và có cơ hội nhận những phần thưởng hiếm và nhiều phần quà giá trị khác", 1,
+            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+            "all", 0, null, 0, 0, 0, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
             "nr1sd", "Ngọc rồng đen 1 sao", LoaiItem.NGOCRONG,
             new Texture("vatpham/vatphamgame/ngocrongden/nr1sd.png"),
             "Thu thập đủ 7 viên để triệu hồi Rồng Thần Hắc Ám.", 99,
@@ -841,20 +857,20 @@ public class ThemItemTest {
         return itemDuocChon;
     }
     public void themQuaAdHaiDang() {
-        duLieu.themItemVaoHanhTrang(new Item(
-            "thien_tu", "Huy hiệu Thiên Tử", LoaiItem.HUYHIEU,
-            new Texture("vatpham/vatphamgame/huy_hieu/thien_tu/icon.png"),
-            "Thiên mệnh tại thân - Thống ngự càn khôn", 1,
-            new int[]{0, 0, 0, 0, 0, 0, 10, 10, 10, 0, 0, 0, 0},
-            "all", 10_000_000L, null, 0, 0, 0, -1
-        ));
-        duLieu.themItemVaoHanhTrang(new Item(
-            nhanVat.getHanhtinh()+"_toi_thuong", "Huy hiệu Tối Thượng", LoaiItem.HUYHIEU,
-            new Texture("vatpham/vatphamgame/huy_hieu/"+nhanVat.getHanhtinh()+"_toi_thuong/icon.png"),
-            "Biểu tượng của người thống trị - Sức mạnh tối thượng không ai sánh kịp", 1,
-            new int[]{0,0,0,10,0,10,0,0,0,0,0,0,0},
-            "all", 10_000_000L, null, 0, 0, 0, -1
-        ));
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            "thien_tu", "Huy hiệu Thiên Tử", LoaiItem.HUYHIEU,
+//            new Texture("vatpham/vatphamgame/huy_hieu/thien_tu/icon.png"),
+//            "Thiên mệnh tại thân - Thống ngự càn khôn", 1,
+//            new int[]{0, 0, 0, 0, 0, 0, 10, 10, 10, 0, 0, 0, 0},
+//            "all", 10_000_000L, null, 0, 0, 0, -1
+//        ));
+//        duLieu.themItemVaoHanhTrang(new Item(
+//            nhanVat.getHanhtinh()+"_toi_thuong", "Huy hiệu Tối Thượng", LoaiItem.HUYHIEU,
+//            new Texture("vatpham/vatphamgame/huy_hieu/"+nhanVat.getHanhtinh()+"_toi_thuong/icon.png"),
+//            "Biểu tượng của người thống trị - Sức mạnh tối thượng không ai sánh kịp", 1,
+//            new int[]{0,0,0,10,0,10,0,0,0,0,0,0,0},
+//            "all", 10_000_000L, null, 0, 0, 0, -1
+//        ));
         duLieu.themItemVaoHanhTrang(new Item(
             "set_cam", "Áo võ kame", LoaiItem.AO,
             new Texture("vatpham/do/traidat/set_cam/ao.png"),

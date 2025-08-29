@@ -1964,7 +1964,7 @@ public class VeHUD {
             if (itemDangChon.equals("hopqua")) {
                 if (itemm.getId().equals("adminHD")) {
                     themItemTest.themQuaAdHaiDang();
-                    setTinNhanPet("Bạn vừa nhận 01 set Sôngôku + Huy hiệu Thiên Tử + Huy hiệu Trái Đất Tối Thượng",2f);
+                    setTinNhanPet("Bạn vừa nhận 01 set kích hoạt",2f);
                     duLieuNguoiChoi.getHanhTrang().remove(itemm);
                 }
                 if (itemm.getId().equals("adminTL")) {
@@ -2101,6 +2101,9 @@ public class VeHUD {
                         }
                         break;
                 }
+            }
+            if (itemDangChon.equals("vequaynpchaidang")) {
+                setTinNhanPet("Cần gặp NPC Hải Đăng để sử dụng", 2f);
             }
         } else if (duLieuNguoiChoi.getSucManh() < itemm.getSucManhYeuCau()) {
             setTinNhanPet("Bạn cần thêm "+formatVangNgoc(itemm.getSucManhYeuCau()-duLieuNguoiChoi.getSucManh())+" sức mạnh nữa",2f);

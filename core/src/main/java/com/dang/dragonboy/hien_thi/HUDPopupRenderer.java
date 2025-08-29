@@ -372,7 +372,8 @@ public class HUDPopupRenderer {
                             item.getLoai() == LoaiItem.AURA ||
                             item.getLoai() == LoaiItem.HUYHIEU ||
                             item.getLoai() == LoaiItem.BONGTAI ||
-                            item.getLoai() == LoaiItem.NANGSKILL
+                            item.getLoai() == LoaiItem.NANGSKILL ||
+                            item.getLoai() == LoaiItem.VE_QUAY_NPC_HAIDANG
                         ) {
                             layout.setText(veHUD.fontCapSKill,item.getMoTa());
                             veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
@@ -1376,7 +1377,8 @@ public class HUDPopupRenderer {
                             item.getLoai() == LoaiItem.AURA ||
                             item.getLoai() == LoaiItem.HUYHIEU ||
                             item.getLoai() == LoaiItem.BONGTAI ||
-                            item.getLoai() == LoaiItem.NANGSKILL
+                            item.getLoai() == LoaiItem.NANGSKILL ||
+                            item.getLoai() == LoaiItem.VE_QUAY_NPC_HAIDANG
                         ) {
                             layout.setText(veHUD.fontCapSKill,item.getMoTa());
                             veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12 + 1020 - 350, y + 49 - 30);

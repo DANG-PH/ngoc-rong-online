@@ -123,12 +123,20 @@ public class DuLieuNguoiChoi {
 
     public void themItemVaoHanhTrang(Item item) {
         if (hanhTrang.size() < 50) {
-            if (item.getLoai() != LoaiItem.NGOCRONG && item.getLoai() != LoaiItem.PHUTRO && item.getLoai() != LoaiItem.NANGSKILL) {
+            if (item.getLoai() != LoaiItem.NGOCRONG &&
+                item.getLoai() != LoaiItem.PHUTRO &&
+                item.getLoai() != LoaiItem.NANGSKILL &&
+                item.getLoai() != LoaiItem.VE_QUAY_NPC_HAIDANG) {
                 hanhTrang.add(item);
             } else {
                 boolean daSoHuuItem = false;
                 for (Item itemm : hanhTrang) {
-                    if ((itemm.getLoai() == LoaiItem.NGOCRONG || item.getLoai() == LoaiItem.PHUTRO || item.getLoai() == LoaiItem.NANGSKILL) && itemm.getId() == item.getId()) {
+                    if ((itemm.getLoai() == LoaiItem.NGOCRONG ||
+                        item.getLoai() == LoaiItem.PHUTRO ||
+                        item.getLoai() == LoaiItem.NANGSKILL ||
+                        item.getLoai() == LoaiItem.VE_QUAY_NPC_HAIDANG
+                        )
+                        && itemm.getId() == item.getId()) {
                         itemm.tangSoLuong(item.getSoLuong());
                         daSoHuuItem = true;
                     }
@@ -172,12 +180,20 @@ public class DuLieuNguoiChoi {
 
     public void themItemVaoHanhTrangRuongDo(Item item) {
         if (hanhTrangRuongDo.size() < MAXRUONGDO) {
-            if (item.getLoai() != LoaiItem.NGOCRONG && item.getLoai() != LoaiItem.PHUTRO && item.getLoai() != LoaiItem.NANGSKILL) {
+            if (item.getLoai() != LoaiItem.NGOCRONG &&
+                item.getLoai() != LoaiItem.PHUTRO &&
+                item.getLoai() != LoaiItem.NANGSKILL &&
+                item.getLoai() != LoaiItem.VE_QUAY_NPC_HAIDANG) {
                 hanhTrangRuongDo.add(item);
             } else {
                 boolean daSoHuuItem = false;
                 for (Item itemm : hanhTrangRuongDo) {
-                    if ((itemm.getLoai() == LoaiItem.NGOCRONG || item.getLoai() == LoaiItem.PHUTRO || item.getLoai() == LoaiItem.NANGSKILL) && itemm.getId() == item.getId()) {
+                    if ((itemm.getLoai() == LoaiItem.NGOCRONG ||
+                        item.getLoai() == LoaiItem.PHUTRO ||
+                        item.getLoai() == LoaiItem.NANGSKILL ||
+                        item.getLoai() == LoaiItem.VE_QUAY_NPC_HAIDANG
+                        )
+                        && itemm.getId() == item.getId()) {
                         itemm.tangSoLuong(item.getSoLuong());
                         daSoHuuItem = true;
                     }

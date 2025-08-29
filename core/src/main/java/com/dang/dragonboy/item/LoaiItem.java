@@ -19,5 +19,6 @@ public enum LoaiItem {
     PHUTRO,
     DEOLUNG,
     AURA,
-    NANGSKILL
+    NANGSKILL,
+    VE_QUAY_NPC_HAIDANG
 }

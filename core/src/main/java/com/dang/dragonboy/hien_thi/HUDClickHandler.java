@@ -345,6 +345,8 @@ public class HUDClickHandler {
                             veHUD.itemDangChon = "aura";
                         } else if (item.getLoai() == LoaiItem.NANGSKILL) {
                             veHUD.itemDangChon = "nangskill";
+                        } else if (item.getLoai() == LoaiItem.VE_QUAY_NPC_HAIDANG) {
+                            veHUD.itemDangChon = "vequaynpchaidang";
                         }
                     } else {
                         veHUD.itemm = null;
@@ -779,6 +781,8 @@ public class HUDClickHandler {
                                 veHUD.itemDangChon = "aura";
                             } else if (item.getLoai() == LoaiItem.NANGSKILL) {
                                 veHUD.itemDangChon = "nangskill";
+                            } else if (item.getLoai() == LoaiItem.VE_QUAY_NPC_HAIDANG) {
+                                veHUD.itemDangChon = "vequaynpchaidang";
                             }
                         } else {
                             veHUD.itemm = null;
