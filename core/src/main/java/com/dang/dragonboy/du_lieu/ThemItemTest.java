@@ -546,7 +546,7 @@ public class ThemItemTest {
 
         duLieu.themItemVaoHanhTrang(new Item(
             "ve_quay_npc_haidang", "Vé quay Rồng Thần", LoaiItem.VE_QUAY_NPC_HAIDANG,
-            new Texture("vatpham/vatphamgame/ve_quay_npc_haidang/1.png"),
+            new Texture("vatpham/vatphamgame/ve_quay_npc_haidang/vequay.png"),
             "Vé quay ẩn chứa tiềm năng vô hạn. Cần gặp NPC Admin Hải Đăng để sử dụng và có cơ hội nhận những phần thưởng hiếm và nhiều phần quà giá trị khác", 98,
             new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
             "all", 0, null, 0, 0, 0, -1
@@ -554,7 +554,7 @@ public class ThemItemTest {
 
         duLieu.themItemVaoHanhTrangRuongDo(new Item(
             "ve_quay_npc_haidang", "Vé quay Rồng Thần", LoaiItem.VE_QUAY_NPC_HAIDANG,
-            new Texture("vatpham/vatphamgame/ve_quay_npc_haidang/1.png"),
+            new Texture("vatpham/vatphamgame/ve_quay_npc_haidang/vequay.png"),
             "Vé quay ẩn chứa tiềm năng vô hạn. Cần gặp NPC Admin Hải Đăng để sử dụng và có cơ hội nhận những phần thưởng hiếm và nhiều phần quà giá trị khác", 1,
             new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
             "all", 0, null, 0, 0, 0, -1

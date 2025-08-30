@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.Align;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.nhan_vat.NhanVat;
@@ -34,6 +36,13 @@ public class Npc {
     private boolean daHuy = false;
 
     public NpcHUDrender npcHUDrender;
+
+    public String tinNhanChat = "";
+    public boolean dangHienTinNhanChat = false;
+    public float timeHienTinNhan = 0;
+    public float timeLauLauChat = 0f;
+
+    public boolean flipX = false;
 
     public Npc(String ten, LoaiNPC loainpc, float x, float y) {
         this.ten = ten;
@@ -112,41 +121,72 @@ public class Npc {
             float thanH = than.getHeight() * scale;
             float dauW = dau.getWidth() * scale;
             float dauH = dau.getHeight() * scale;
+            float rong = chanW;
+            float cao = chanH + thanH + dau.getHeight() * 0.15f;
+            float flipScale = flipX ? -1f : 1f;
 
             // Tính vị trí vẽ theo tọa độ NPC cộng với offset và dao động
-            float baseX = x + offset.getOffsetX();
+            float baseX =flipX ? x + rong - offset.getOffsetX() : x + offset.getOffsetX();
             float baseY = y + offset.getOffsetY();
 
             // Vẽ chân
-            batch.draw(chan, baseX, baseY, chanW, chanH);
+            batch.draw(chan, baseX, baseY, chanW * flipScale, chanH);
 
             // Vẽ thân
-            float thanX = baseX + chanW / 2f - thanW / 2f + offset.getThanXOffset();
+            float thanX = baseX + (chanW / 2f - thanW / 2f + offset.getThanXOffset())* flipScale;
             float thanY = baseY + chanH + doDaoDong;
-            batch.draw(than, thanX, thanY - 10.2f + offset.getThanYOffset(), thanW, thanH);
+            batch.draw(than, thanX, thanY - 10.2f + offset.getThanYOffset(), thanW * flipScale, thanH);
 
             // Vẽ đầu
-            float dauX = baseX + chanW / 2f - dauW / 2f + offset.getDauXOffset();
+            float dauX = baseX + (chanW / 2f - dauW / 2f + offset.getDauXOffset())* flipScale;
             float dauY = thanY + thanH;
-            batch.draw(dau, dauX, dauY + offset.getDauYOffset(), dauW, dauH);
+            batch.draw(dau, dauX, dauY + offset.getDauYOffset(), dauW * flipScale, dauH);
 
             //Vẽ mũi tên Npc nếu đang click
             float tenY = baseY + chanH + dauH + 30;
             if (dangClickNpc) {
-                batch.draw(muiTenNpc, baseX + (chanW - muiTenNpc.getWidth() * 0.5f) / 2f, tenY, muiTenNpc.getWidth() * 0.5f, muiTenNpc.getHeight() * 0.5f);
+                batch.draw(muiTenNpc, x + (rong - muiTenNpc.getWidth() * 0.5f) / 2f, tenY, muiTenNpc.getWidth() * 0.5f, muiTenNpc.getHeight() * 0.5f);
             }
 
             // ve Ten Npc
             setTenTiengVietNpc();
             font.setColor(Color.YELLOW);
             layout.setText(font, tenTiengVietNpc);
-            float tenX = baseX + (chanW - layout.width) / 2f;
+            float tenX = x + (rong - layout.width) / 2f;
             font.draw(batch, layout, tenX, dangClickNpc ? tenY + 40f : tenY);
             font.setColor(Color.WHITE);
 
             // Nếu click nhiều lần
             if (dangClickNpc2) {
-                batch.draw(clickNpc[frame], baseX + (chanW - clickNpc[frame].getWidth() * 0.5f) / 2f, tenY, clickNpc[frame].getWidth() * 0.5f, clickNpc[frame].getHeight() * 0.5f);
+                batch.draw(clickNpc[frame], x + (rong - clickNpc[frame].getWidth() * 0.5f) / 2f, tenY, clickNpc[frame].getWidth() * 0.5f, clickNpc[frame].getHeight() * 0.5f);
+            }
+
+            VeHUD veHUD = nhanVat.getVeHUD();
+            if (dangHienTinNhanChat) {
+                layout.setText(
+                    veHUD.fontchat,
+                    tinNhanChat,
+                    new Color(0, 0, 0, 1),
+                    180,
+                    Align.center,
+                    true
+                );
+                batch.end();
+                shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                shapeRenderer.setColor(1, 1, 1, 1);
+                shapeRenderer.rect(x + (rong - 200) / 2f, y + cao + 30, 200, 36 + layout.height);
+                shapeRenderer.end();
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+                shapeRenderer.setColor(Color.BLACK);
+                for (int i = 0; i < 2; i++) {
+                    shapeRenderer.rect(x + (rong - 200) / 2f - i, y + cao + 30 - i, 200 + i * 2, 36 + layout.height + i * 2);
+                }
+                shapeRenderer.end();
+                batch.begin();
+                float duoiX = flipX ? x + rong + 20 : x - 20;
+                batch.draw(veHUD.duoichat, duoiX, y + cao + 15, 16 * flipScale, 16);
+                veHUD.fontchat.draw(batch, layout, x + (rong - 200) / 2f + 10f, y + cao + 30 + 18f + layout.height);
             }
         } else if (loainpc == LoaiNPC.CAYDAU || loainpc == LoaiNPC.RUONGDO) {
             if (taiAnh == null) return;
@@ -271,6 +311,13 @@ public class Npc {
                         dangClickNpc2 = true;
                         nhanVat.vuaClick = false;
                         thucHienHanhDongNpc();
+                        if (nhanVat.getX()+nhanVat.getRong()/2f <= x + taiAnh.getThan().getWidth() * 0.5f / 2f) {
+                            nhanVat.setflip("phai");
+                            flipX = true;
+                        } else {
+                            nhanVat.setflip("trai");
+                            flipX = false;
+                        }
                     }
                 }
             } else {
@@ -392,6 +439,30 @@ public class Npc {
                 veHUD.vuaClickThuHoachDau = false;
             }
         }
+
+        if (loainpc == LoaiNPC.NGUOI) {
+            if (!LoiThoai_ChucNang_Npc.getLoiThoaiNgoai(ten)[0].equals("null")) {
+                timeLauLauChat += Gdx.graphics.getDeltaTime();
+                if (timeLauLauChat > 10f) {
+                    boolean duocChat = Math.random() < 0.9;
+                    if (duocChat) {
+                        dangHienTinNhanChat = true;
+                        timeHienTinNhan = 2f;
+                        tinNhanChat = LoiThoai_ChucNang_Npc.getLoiThoaiNgoai(ten)[MathUtils.random(LoiThoai_ChucNang_Npc.getLoiThoaiNgoai(ten).length - 1)];
+                    }
+                    timeLauLauChat = 0f;
+                }
+                if (timeHienTinNhan > 0) {
+                    timeHienTinNhan -= Gdx.graphics.getDeltaTime();
+                    if (timeHienTinNhan <= 0) {
+                        timeHienTinNhan = 0;
+                        dangHienTinNhanChat = false;
+                        tinNhanChat = "";
+                    }
+                }
+            }
+        }
+
     }
 
     public void xuLyClick(int x, int y) {

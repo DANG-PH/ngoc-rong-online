@@ -2253,6 +2253,8 @@ public class VeHUD {
                 for (int i = 0; i < 16; i++) {
                     if (ui.anhGacha[i] != null) ui.anhGacha[i].dispose();
                 }
+                if (ui.veQuayKhoa != null) ui.veQuayKhoa.dispose();
+                if (ui.veQuay != null) ui.veQuay.dispose();
         }
         BitmapFont[] fonts = {
             font, fontText, fontTenSkill, fontSkilldaco, fontSkillchuaco, fontSkillchuaco1,

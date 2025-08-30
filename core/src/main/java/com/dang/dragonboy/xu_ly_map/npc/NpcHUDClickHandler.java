@@ -22,8 +22,15 @@ public class NpcHUDClickHandler {
                 }
             }
             if (ui.dangBatManHinhGacha) {
-                if (x>510 && !ui.dangGacha) {
-                    ui.gacha(1);
+                for (int i = 0; i < 2; i++) {
+                    float nutWidth = 140;
+                    float nutHeight = 50;
+                    float nutX = (Gdx.graphics.getWidth() - ui.anhGachaBase.getWidth()) / 2f + 8 + (ui.anhGachaBase.getWidth() - nutWidth) / 2f - 3f;
+                    float nutY = 55 + 280 - i * 100;
+                    if (x >= nutX && x <= nutX + 140 && y >= nutY && y <= nutY + nutHeight) {
+                        ui.nutGachaDangChon = i;
+                        ui.timeChoTruocGacha = 0.3f;
+                    }
                 }
             }
         }

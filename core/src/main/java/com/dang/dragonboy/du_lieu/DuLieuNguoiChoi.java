@@ -70,6 +70,9 @@ public class DuLieuNguoiChoi {
     public int soDauThanHienTai ;
     public float timeTangMotDauThan = 1/2f * 60f;
 
+    // dữ liệu vé quay khóa ở npc hải đăng
+    private int soVeQuayKhoa = 0;
+
     // Constructor
     public DuLieuNguoiChoi(String ten, long sucManh, int theLuc,
                            float HpHienTai, float HpNhanVat, int HpGoc,
@@ -839,5 +842,17 @@ public class DuLieuNguoiChoi {
     }
     public void setVeHUD(VeHUD veHUD) {
         this.veHUD = veHUD;
+    }
+
+    public void tangVeQuayKhoa(int soluong) {
+        this.soVeQuayKhoa += soluong;
+    }
+
+    public void giamVeQuayKhoa(int soluong) {
+        this.soVeQuayKhoa -= soluong;
+    }
+
+    public int getSoVeQuayKhoa() {
+        return soVeQuayKhoa;
     }
 }
