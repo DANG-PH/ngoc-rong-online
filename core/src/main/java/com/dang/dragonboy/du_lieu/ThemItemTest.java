@@ -7,6 +7,7 @@ import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.item.Item;
 import com.dang.dragonboy.item.LoaiItem;
 import com.dang.dragonboy.nhan_vat.NhanVatXuLy;
+import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_haidang;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -196,6 +197,30 @@ public class ThemItemTest {
             "bo_huyet", "Bổ huyết", LoaiItem.PHUTRO,
             new Texture("vatpham/vatphamgame/phu_tro/bo_huyet.png"),
             "Trong vòng tối đa 10 phút +100% HP", 99,
+            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+            "all", 0, null, 0, 0, 0, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "hp", "Sinh lực", LoaiItem.PHUTRO,
+            new Texture("vatpham/vatphamgame/phu_tro/hp.png"),
+            "Trong vòng tối đa 2 phút +10% HP", 99,
+            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+            "all", 0, null, 0, 0, 0, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "dame", "Cường công", LoaiItem.PHUTRO,
+            new Texture("vatpham/vatphamgame/phu_tro/dame.png"),
+            "Trong vòng tối đa 2 phút +10% Sức đánh gốc", 99,
+            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+            "all", 0, null, 0, 0, 0, -1
+        ));
+
+        duLieu.themItemVaoHanhTrang(new Item(
+            "ki", "Linh khí", LoaiItem.PHUTRO,
+            new Texture("vatpham/vatphamgame/phu_tro/ki.png"),
+            "Trong vòng tối đa 2 phút +10% KI", 99,
             new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
             "all", 0, null, 0, 0, 0, -1
         ));
@@ -856,6 +881,84 @@ public class ThemItemTest {
         // Trả về item mới với chỉ số random
         return itemDuocChon;
     }
+    public Item randomBongTai() {
+        // Danh sách item các vật phẩm đeo lưng
+        Item[] danhSachItem = new Item[]{
+            new Item(
+                "bongtaic2", "Bông tai Porata Cấp 2", LoaiItem.BONGTAI,
+                new Texture("vatpham/vatphamgame/bongtai/bongtaic2.png"),
+                "Sử dụng để hợp thể với đệ tử và tăng tổng 10% chỉ số", 1,
+                new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+                "all", 150000000L, null, 0, 0, 0, -1
+            ),
+            new Item(
+                "bongtaic3", "Bông tai Porata Cấp 3", LoaiItem.BONGTAI,
+                new Texture("vatpham/vatphamgame/bongtai/bongtaic3.png"),
+                "Sử dụng để hợp thể với đệ tử và tăng tổng 20% chỉ số", 1,
+                new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+                "all", 1500000000L, null, 0, 0, 0, -1
+            )
+        };
+
+        // Random chọn item
+        Item itemDuocChon = danhSachItem[MathUtils.random(danhSachItem.length - 1)];
+        switch (itemDuocChon.getId()) {
+            case "bongtaic2": veHUD.setTinNhanPet("Bạn đã nhận thành công Bông Tai Porata Cấp 2.",2f);break;
+            case "bongtaic3": veHUD.setTinNhanPet("Bạn đã nhận thành công Bông Tai Porata Cấp 3.",2f);break;
+            default: veHUD.setTinNhanPet("Bạn đã nhận thành công Bông Tai Porata.",2f);
+        }
+
+        return itemDuocChon;
+    }
+    public Item randomGenshin() {
+        // Danh sách item các vật phẩm đeo lưng
+        Item[] danhSachItem = new Item[]{
+            new Item(
+                "xiao", "Cải trang Hộ Pháp Dạ Xoa", LoaiItem.CAITRANG,
+                new Texture("nhanvat/caitrang/xiao/icon.png"),
+                "Cải trang thành Xiao - Genshin impact", 1,
+                new int[]{0,0,0,50,0,100,100,0,100,0,0,0,0},
+                nhanVat.getHanhtinh(), 9_999_999_999L, null, 0, 0, 0, -1
+            ),
+            new Item(
+                "ayaka", "Cải trang tiểu thư Kamisato", LoaiItem.CAITRANG,
+                new Texture("nhanvat/caitrang/ayaka/icon.png"),
+                "Cải trang thành Ayaka - Genshin impact", 1,
+                new int[]{0,0,0,0,0,0,40,50,60,0,0,0,0},
+                nhanVat.getHanhtinh(), 9_999_999_999L, null, 0, 0, 0, -1
+            )
+        };
+
+        // Random chọn item
+        Item itemDuocChon = danhSachItem[MathUtils.random(danhSachItem.length - 1)];
+        switch (itemDuocChon.getId()) {
+            case "xiao": veHUD.setTinNhanPet("Bạn đã nhận thành công Cải Trang Chiến Thần Xiao.",2f);break;
+            case "ayaka": veHUD.setTinNhanPet("Bạn đã nhận thành công Cải Trang Tiểu Thư Ayaka.",2f);break;
+            default: veHUD.setTinNhanPet("Bạn đã nhận thành công item.",2f);
+        }
+
+        return itemDuocChon;
+    }
+    public Item randomNgocRong() {
+        int soSao = MathUtils.random(1,7);
+        return new Item(
+            "nr"+soSao+"s", "Ngọc rồng " +soSao+" sao", LoaiItem.NGOCRONG,
+            new Texture("vatpham/vatphamgame/ngocrong/"+"nr"+soSao+"s"+".png"),
+            "Thu thập để ước rồng thần", 1,
+            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+            "all", 0, null, 0, 0, 0, -1
+        );
+    }
+    public Item randomNgocRongDen() {
+        int soSao = MathUtils.random(1,7);
+        return new Item(
+            "nr"+soSao+"sd", "Ngọc rồng đen "+soSao+" sao", LoaiItem.NGOCRONG,
+            new Texture("vatpham/vatphamgame/ngocrongden/"+"nr"+soSao+"sd"+".png"),
+            "Thu thập đủ 7 viên để triệu hồi Rồng Thần Hắc Ám.", 1,
+            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+            "all", 0, null, 0, 0, 0, -1
+        );
+    }
     public void themQuaAdHaiDang() {
 //        duLieu.themItemVaoHanhTrang(new Item(
 //            "thien_tu", "Huy hiệu Thiên Tử", LoaiItem.HUYHIEU,
@@ -1247,5 +1350,133 @@ public class ThemItemTest {
             }
         }
         veHUD.timeHienRongThan = 1f;
+    }
+    public void themQuaGacha(int index, int chiso, Texture[] mangAnh) {
+        admin_haidang ui = (admin_haidang) veHUD.npcHienTai.npcHUDrender.ui_npc;
+        switch (index) {
+            case 0:
+                Item item = this.randomBongTai();
+                mangAnh[chiso] = item.getId().contains("c2") ? ui.randomBongTai[0] : ui.randomBongTai[1];
+                duLieu.themItemVaoHanhTrang(item);
+                break;
+            case 1:
+                duLieu.themItemVaoHanhTrang(new Item(
+                    "hp", "Sinh lực", LoaiItem.PHUTRO,
+                    new Texture("vatpham/vatphamgame/phu_tro/hp.png"),
+                    "Trong vòng tối đa 2 phút +10% HP", 1,
+                    new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+                    "all", 0, null, 0, 0, 0, -1
+                ));
+                mangAnh[chiso] = ui.vatPhamGachaKrandom[1];
+                break;
+            case 2:
+                duLieu.themItemVaoHanhTrang(new Item(
+                    "gohan_beast", "Cải trang Gohan Beast", LoaiItem.CAITRANG,
+                    new Texture("nhanvat/caitrang/gohan_beast/daudung.png"),
+                    "Cải trang thành Gohan Beast", 1,
+                    new int[]{0,0,0,50,0,100,100,0,100,0,0,0,0},
+                    nhanVat.getHanhtinh(), 10_000_000L, null, 0, 0, 0, -1
+                ));
+                mangAnh[chiso] = ui.vatPhamGachaKrandom[2];
+                break;
+            case 3:
+                int soNgocCong = MathUtils.random(100,500);
+                duLieu.tangNgoc(soNgocCong);
+                mangAnh[chiso] = ui.vatPhamGachaKrandom[3];
+                break;
+            case 4:
+                Item itemDeoLung = this.randomDeoLung();
+                switch (itemDeoLung.getId()) {
+                    case "canh_ac_quy" : mangAnh[chiso] = ui.randomDeoLung[0];break;
+                    case "canh_doi" : mangAnh[chiso] = ui.randomDeoLung[1];break;
+                    case "canh_thien_su" : mangAnh[chiso] = ui.randomDeoLung[2];break;
+                    case "canh_thien_than" : mangAnh[chiso] = ui.randomDeoLung[3];break;
+                    case "hoa" : mangAnh[chiso] = ui.randomDeoLung[4];break;
+                    case "kiem" : mangAnh[chiso] = ui.randomDeoLung[5];break;
+                    case "luoi_hai" : mangAnh[chiso] = ui.randomDeoLung[6];break;
+                }
+                duLieu.themItemVaoHanhTrang(itemDeoLung);
+                break;
+            case 5:
+                duLieu.themItemVaoHanhTrang(new Item(
+                    "goku_black_rose", "Cải trang Super Black Goku", LoaiItem.CAITRANG,
+                    new Texture("nhanvat/caitrang/goku_black_rose/daudung.png"),
+                    "Cải trang thành Super Black Goku", 1,
+                    new int[]{0,0,0,0,0,0,45,45,45,0,0,0,0},
+                    "all", 40_000_000_000L, null, 0, 0, 0, -1
+                ));
+                mangAnh[chiso] = ui.vatPhamGachaKrandom[5];
+                break;
+            case 6:
+                Item itemNr = randomNgocRong();
+                int indexNr = Integer.parseInt(itemNr.getId().substring(2,3));
+                mangAnh[chiso] = ui.randomNgocRong[indexNr-1];
+                duLieu.themItemVaoHanhTrang(randomNgocRong());
+                break;
+            case 7:
+                long soVangCong = MathUtils.random(100_000_000L,1_000_000_000L);
+                duLieu.tangVang(soVangCong);
+                mangAnh[chiso] = ui.vatPhamGachaKrandom[7];
+                break;
+            case 8:
+                Item itemGenshin = this.randomGenshin();
+                mangAnh[chiso] = itemGenshin.getId().equals("xiao") ? ui.randomGenShin[0] : ui.randomGenShin[1];
+                duLieu.themItemVaoHanhTrang(itemGenshin);
+                break;
+            case 9:
+                duLieu.themItemVaoHanhTrang(new Item(
+                    "dame", "Cường công", LoaiItem.PHUTRO,
+                    new Texture("vatpham/vatphamgame/phu_tro/dame.png"),
+                    "Trong vòng tối đa 2 phút +10% Sức đánh gốc", 1,
+                    new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+                    "all", 0, null, 0, 0, 0, -1
+                ));
+                mangAnh[chiso] = ui.vatPhamGachaKrandom[9];
+                break;
+            case 10:
+                mangAnh[chiso] = ui.vatPhamGachaKrandom[10];
+                break;
+            case 11:
+                Item itemNrDen = randomNgocRongDen();
+                int indexNrDen = Integer.parseInt(itemNrDen.getId().substring(2,3));
+                mangAnh[chiso] = ui.randomNgocRongDen[indexNrDen-1];
+                duLieu.themItemVaoHanhTrang(itemNrDen);
+                break;
+            case 12:
+                Item itemHuyHieu = this.randomHuyHieu();
+                switch (itemHuyHieu.getId()) {
+                    case "trum_cuoi" : mangAnh[chiso] = ui.randomHuyHieu[0];break;
+                    case "thien_tu" : mangAnh[chiso] = ui.randomHuyHieu[1];break;
+                    case "traidat_toi_thuong" : mangAnh[chiso] = ui.randomHuyHieu[2];break;
+                    case "xayda_toi_thuong" : mangAnh[chiso] = ui.randomHuyHieu[3];break;
+                }
+                duLieu.themItemVaoHanhTrang(itemHuyHieu);
+                break;
+            case 13:
+                int soVangCongg = MathUtils.random(10_000_000,100_000_000);
+                duLieu.tangVang(soVangCongg);
+                mangAnh[chiso] = ui.vatPhamGachaKrandom[13];
+                break;
+            case 14:
+                duLieu.themItemVaoHanhTrang(new Item(
+                    "ki", "Linh khí", LoaiItem.PHUTRO,
+                    new Texture("vatpham/vatphamgame/phu_tro/ki.png"),
+                    "Trong vòng tối đa 2 phút +10% KI", 99,
+                    new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+                    "all", 0, null, 0, 0, 0, -1
+                ));
+                mangAnh[chiso] = ui.vatPhamGachaKrandom[14];
+                break;
+            case 15:
+                duLieu.themItemVaoHanhTrang(new Item(
+                    "trung_de_tu", "Trứng đệ tử", LoaiItem.PHUTRO,
+                    new Texture("vatpham/vatphamgame/phu_tro/trung_de_tu.png"),
+                    "Sử dụng vật phẩm có thể giúp người chơi sở hữu đệ tử.", 1,
+                    new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+                    "all", 0, null, 0, 0, 0, -1
+                ));
+                mangAnh[chiso] = ui.vatPhamGachaKrandom[15];
+                break;
+        }
     }
 }

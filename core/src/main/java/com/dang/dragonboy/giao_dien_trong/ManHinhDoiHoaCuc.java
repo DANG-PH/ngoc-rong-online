@@ -59,7 +59,9 @@ public class ManHinhDoiHoaCuc implements Screen {
         this.thongtin =  thongtin;
         if ("langaru".equals(thongtin.mapTruoc)){
             thongtin.nhanVat.datToaDo(5,175);
-            thongtin.hud.getDuLieuNguoiChoi().deTu.datToaDo(5+(thongtin.nhanVat.getFlipX()? 50f : -50f),175);
+            if (thongtin.hud.getDuLieuNguoiChoi().coDeTu()) {
+                thongtin.hud.getDuLieuNguoiChoi().deTu.datToaDo(5 + (thongtin.nhanVat.getFlipX() ? 50f : -50f), 175);
+            }
             mapLangAru = thongtin.mapTr;
         }
         nhanVat = thongtin.nhanVat;

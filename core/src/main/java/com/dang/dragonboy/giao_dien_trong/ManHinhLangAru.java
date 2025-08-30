@@ -67,12 +67,16 @@ public class ManHinhLangAru implements Screen {
         this.thongtin =  thongtin;
         if ("nhagohan".equals(thongtin.mapTruoc)){
             thongtin.nhanVat.datToaDo(675,175);
-            thongtin.hud.getDuLieuNguoiChoi().deTu.datToaDo(675+(thongtin.nhanVat.getFlipX()? 50f : -50f),175);
+            if (thongtin.hud.getDuLieuNguoiChoi().coDeTu()) {
+                thongtin.hud.getDuLieuNguoiChoi().deTu.datToaDo(675 + (thongtin.nhanVat.getFlipX() ? 50f : -50f), 175);
+            }
             mapNhaGohan = thongtin.mapTr;
         }
         if ("doihoacuc".equals(thongtin.mapTruoc)){
             thongtin.nhanVat.datToaDo(2390,175);
-            thongtin.hud.getDuLieuNguoiChoi().deTu.datToaDo(2390+(thongtin.nhanVat.getFlipX()? 50f : -50f),175);
+            if (thongtin.hud.getDuLieuNguoiChoi().coDeTu()) {
+                thongtin.hud.getDuLieuNguoiChoi().deTu.datToaDo(2390 + (thongtin.nhanVat.getFlipX() ? 50f : -50f), 175);
+            }
             mapDoiHoaCuc = thongtin.mapTr;
         }
         nhanVat = thongtin.nhanVat;

@@ -1322,11 +1322,11 @@ public class DeTu {
                 dangBienKhi = true;
                 vuaBienKhi = true;
                 timeBienKhi = timeBienKhiMAX;
-                timeCoolDownBienKhi = (500-20*duLieuNguoiChoi.deTu.getCapSkill(3));
-                sucDanhTangBienKhi = 30+10*duLieuNguoiChoi.deTu.getCapSkill(3);
-                hpTangBienKhi = 30+10*duLieuNguoiChoi.deTu.getCapSkill(3);
-                DeTuCauHinh c2 = veHUD.DoicaitrangDeTu("khi_"+duLieuNguoiChoi.deTu.getCapSkill(3));
-                duLieuNguoiChoi.deTu.fixCaiTrang(
+                timeCoolDownBienKhi = (500-20*this.getCapSkill(3));
+                sucDanhTangBienKhi = 30+10*this.getCapSkill(3);
+                hpTangBienKhi = 30+10*this.getCapSkill(3);
+                DeTuCauHinh c2 = veHUD.DoicaitrangDeTu("khi_"+this.getCapSkill(3));
+                this.fixCaiTrang(
                     c2.dau_dung_de_tu, c2.dau_chay_de_tu,
                     c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
                     c2.chan_dung_de_tu, c2.chan_nhay_de_tu, c2.chan_roi_de_tu, c2.chan_chay_de_tu,
@@ -2081,10 +2081,10 @@ public class DeTu {
     public void huyBienKhi() {
         dangBienKhi = false;
         timeSauBienKhi = 0.6f;
-        ArrayList<Item> danhSach = duLieuNguoiChoi.deTu.getHanhTrangDangMac();
+        ArrayList<Item> danhSach = this.getHanhTrangDangMac();
         if (DeTuXuLy.getDangMacCaiTrang() && !DeTuXuLy.getDangMacAvatar() && danhSach.get(5) != null) {
             DeTuCauHinh c2 = veHUD.DoicaitrangDeTu(danhSach.get(5).getId());
-            duLieuNguoiChoi.deTu.fixCaiTrang(
+            this.fixCaiTrang(
                 c2.dau_dung_de_tu, c2.dau_chay_de_tu,
                 c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
                 c2.chan_dung_de_tu, c2.chan_nhay_de_tu, c2.chan_roi_de_tu, c2.chan_chay_de_tu,
@@ -2093,8 +2093,8 @@ public class DeTu {
                 c2.lechMapDeTu
             );
         } else {
-            DeTuCauHinh c2 = veHUD.Doi_avt_ao_quan_DeTu(duLieuNguoiChoi.deTu.getHanhtinh(), avtdangmac,veHUD.aodetudangmac , veHUD.quandetudangmac);
-            duLieuNguoiChoi.deTu.fixCaiTrang(
+            DeTuCauHinh c2 = veHUD.Doi_avt_ao_quan_DeTu(this.getHanhtinh(), avtdangmac,veHUD.aodetudangmac , veHUD.quandetudangmac);
+            this.fixCaiTrang(
                 c2.dau_dung_de_tu, c2.dau_chay_de_tu,
                 c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
                 c2.chan_dung_de_tu, c2.chan_nhay_de_tu, c2.chan_roi_de_tu, c2.chan_chay_de_tu,

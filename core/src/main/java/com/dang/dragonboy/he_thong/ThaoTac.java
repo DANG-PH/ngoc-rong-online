@@ -245,7 +245,7 @@ public class ThaoTac extends InputAdapter {
             hud.vuaKeoHanhTrangDeTu = false;
             hud.vuaKeoHanhTrangRuongDo = false;
         }
-        if (!hud.dangHienPopup && !hud.dangHienRuongDo && !hud.daClickVaoNpc && !hud.dangHienDauThan && hud.timeChoBienKhi == 0 && !laClickTrenHUD(screenX, y) && !camera.vuaKeoCamera && !hud.vuaTatPopup && !hud.vuaTatRuongDo && !hud.dangHienKhungChat && hud.timeChoHopThe == 0 && !hud.dangHienDieuUocRongThan ) {
+        if (!hud.dangHienPopup && !hud.dangHienRuongDo && !hud.daClickVaoNpc && !hud.dangHienDauThan && hud.timeChoBienKhi == 0 && !laClickTrenHUD(screenX, y) && !camera.vuaKeoCamera &&!hud.vuaThoatNpc && !hud.vuaTatPopup && !hud.vuaTatRuongDo && !hud.dangHienKhungChat && hud.timeChoHopThe == 0 && !hud.dangHienDieuUocRongThan ) {
             float viewportWidth = camera.camera.viewportWidth;
             float viewportHeight = camera.camera.viewportHeight;
 
@@ -260,6 +260,7 @@ public class ThaoTac extends InputAdapter {
         }
         hud.vuaTatPopup = false;
         hud.vuaTatRuongDo = false;
+        hud.vuaThoatNpc = false;
         return true;
     }
     @Override

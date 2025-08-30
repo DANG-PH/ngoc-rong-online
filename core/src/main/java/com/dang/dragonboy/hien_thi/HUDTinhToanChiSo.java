@@ -26,6 +26,7 @@ public class HUDTinhToanChiSo {
         } else {
             sd = duLieuNguoiChoi.getSucDanhNhanVat()*2;
         }
+        if (veHUD.dangDungCuongCong) sd*=1.1f;
         int cm = duLieuNguoiChoi.getChiMangNhanVat();
         int stcm = duLieuNguoiChoi.getSatThuongChiMang();
         int giamSatThuong = duLieuNguoiChoi.getGiamSatThuongNhanVat();
@@ -77,14 +78,20 @@ public class HUDTinhToanChiSo {
             sd_de *= 1+duLieuNguoiChoi.deTu.sucDanhTangBienKhi/100f;
         }
 
-        // ===== Bổ Huyết =====
+        // ===== Bổ Huyết, Sinh Lực =====
         if (veHUD.dangDungBoHuyet) {
             hp *= 2;
         }
+        if (veHUD.dangDungSinhLuc) {
+            hp *= 1.1f;
+        }
 
-        // ===== Bổ Khí =====
+        // ===== Bổ Khí, Linh Khí =====
         if (veHUD.dangDungBoKhi) {
             ki *= 2;
+        }
+        if (veHUD.dangDungLinhKhi) {
+            ki *= 1.1f;
         }
 
         // ===== HUY HIỆU =====
@@ -257,9 +264,11 @@ public class HUDTinhToanChiSo {
         duLieuNguoiChoi.setKiHopThe(ki);
         duLieuNguoiChoi.setSdHopThe(sd);
         //detu
-        duLieuNguoiChoi.deTu.setHpHopThe(hp_de);
-        duLieuNguoiChoi.deTu.setKiHopThe(ki_de);
-        duLieuNguoiChoi.deTu.setSdHopThe(sd_de);
+        if (duLieuNguoiChoi.coDeTu()) {
+            duLieuNguoiChoi.deTu.setHpHopThe(hp_de);
+            duLieuNguoiChoi.deTu.setKiHopThe(ki_de);
+            duLieuNguoiChoi.deTu.setSdHopThe(sd_de);
+        }
         // skill
         if (veHUD.dangBienKhi) {
             cm = 110;
@@ -301,10 +310,11 @@ public class HUDTinhToanChiSo {
         duLieuNguoiChoi.setSatThuongChiMangSuDung(stcm);
         duLieuNguoiChoi.setGiamSatThuongSuDung(giamSatThuong);
         // de tu
-        duLieuNguoiChoi.deTu.setChiMangSuDung(cm_de);
-        duLieuNguoiChoi.deTu.setSatThuongChiMangSuDung(stcm_de);
-        duLieuNguoiChoi.deTu.setGiamSatThuongSuDung(giamSatThuong_de);
-
+        if (duLieuNguoiChoi.coDeTu()) {
+            duLieuNguoiChoi.deTu.setChiMangSuDung(cm_de);
+            duLieuNguoiChoi.deTu.setSatThuongChiMangSuDung(stcm_de);
+            duLieuNguoiChoi.deTu.setGiamSatThuongSuDung(giamSatThuong_de);
+        }
         if (veHUD.vuaHopThe) {
             duLieuNguoiChoi.setHpHienTai(duLieuNguoiChoi.getHpHopThe());
             duLieuNguoiChoi.setKiHienTai(duLieuNguoiChoi.getKiHopThe());
@@ -317,8 +327,9 @@ public class HUDTinhToanChiSo {
         // Giới hạn HP/KI hiện tại
         if (duLieuNguoiChoi.getHpHienTai() > hp) duLieuNguoiChoi.setHpHienTai(hp);
         if (duLieuNguoiChoi.getKiHienTai() > ki) duLieuNguoiChoi.setKiHienTai(ki);
-
-        if (duLieuNguoiChoi.deTu.getHpHienTai() > hp_de) duLieuNguoiChoi.deTu.setHpHienTai(hp_de);
-        if (duLieuNguoiChoi.deTu.getKiHienTai() > ki_de) duLieuNguoiChoi.deTu.setKiHienTai(ki_de);
+        if (duLieuNguoiChoi.coDeTu()) {
+            if (duLieuNguoiChoi.deTu.getHpHienTai() > hp_de) duLieuNguoiChoi.deTu.setHpHienTai(hp_de);
+            if (duLieuNguoiChoi.deTu.getKiHienTai() > ki_de) duLieuNguoiChoi.deTu.setKiHienTai(ki_de);
+        }
     }
 }

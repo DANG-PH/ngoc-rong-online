@@ -182,7 +182,9 @@ public class ManHinhNhaGohan implements Screen {
             this.nhanVat = info.nhanVat;
             if ("langaru".equals(info.mapTruoc)){
                 info.nhanVat.datToaDo(875,175);
-                info.hud.getDuLieuNguoiChoi().deTu.datToaDo(875+(nhanVat.getFlipX()? 50f : -50f),175);
+                if (info.hud.getDuLieuNguoiChoi().coDeTu()) {
+                    info.hud.getDuLieuNguoiChoi().deTu.datToaDo(875 + (nhanVat.getFlipX() ? 50f : -50f), 175);
+                }
                 this.mapLangAru = info.mapTr;
             }
             this.map = info.mapSau;

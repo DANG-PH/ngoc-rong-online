@@ -648,7 +648,7 @@ public class HUDClickHandler {
             } else {
                 veHUD.dangChonHanhTrangDeTu = false;
             }
-            if (!veHUD.DangHienPopupThongTin1 && !veHUD.DangHienPopupThongTin2 && !veHUD.dangHienThongBao) {
+            if (!veHUD.DangHienPopupThongTin1 && !veHUD.DangHienPopupThongTin2 && !veHUD.dangHienThongBao && duLieuNguoiChoi.coDeTu()) {
                 float viewY = 35;
                 float viewHeight = 444 - 35;
                 int KhoangCachItem = 61;

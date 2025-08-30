@@ -311,14 +311,12 @@ public class Npc {
                         dangClickNpc2 = true;
                         nhanVat.vuaClick = false;
                         thucHienHanhDongNpc();
-                        if (nhanVat.getX()+nhanVat.getRong()/2f <= x + taiAnh.getThan().getWidth() * 0.5f / 2f) {
-                            nhanVat.setflip("phai");
-                            flipX = true;
-                        } else {
-                            nhanVat.setflip("trai");
-                            flipX = false;
-                        }
                     }
+                }
+                if (nhanVat.getX()+nhanVat.getRong()/2f <= x + taiAnh.getThan().getWidth() * 0.5f / 2f) {
+                    flipX = true;
+                } else {
+                    flipX = false;
                 }
             } else {
                 dangClickNpc = false;

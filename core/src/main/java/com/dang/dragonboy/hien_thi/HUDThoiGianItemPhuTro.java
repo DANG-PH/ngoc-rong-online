@@ -36,5 +36,26 @@ public class HUDThoiGianItemPhuTro {
                 veHUD.dangDungGiapXen = false;
             }
         }
+        if (veHUD.timeDungSinhLuc>0) {
+            veHUD.timeDungSinhLuc-=delta;
+            if(veHUD.timeDungSinhLuc<=0) {
+                veHUD.timeDungSinhLuc = 0;
+                veHUD.dangDungSinhLuc = false;
+            }
+        }
+        if (veHUD.timeDungCuongCong>0) {
+            veHUD.timeDungCuongCong-=delta;
+            if(veHUD.timeDungCuongCong<=0) {
+                veHUD.timeDungCuongCong = 0;
+                veHUD.dangDungCuongCong = false;
+            }
+        }
+        if (veHUD.timeDungLinhKhi>0) {
+            veHUD.timeDungLinhKhi-=delta;
+            if(veHUD.timeDungLinhKhi<=0) {
+                veHUD.timeDungLinhKhi = 0;
+                veHUD.dangDungLinhKhi = false;
+            }
+        }
     }
 }

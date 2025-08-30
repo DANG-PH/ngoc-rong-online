@@ -325,6 +325,12 @@ public class VeHUD {
     public float timeDungCuongNo = 0f;
     public boolean dangDungGiapXen = false;
     public float timeDungGiapXen = 0f;
+    public boolean dangDungSinhLuc = false;
+    public float timeDungSinhLuc = 0f;
+    public boolean dangDungCuongCong = false;
+    public float timeDungCuongCong = 0f;
+    public boolean dangDungLinhKhi = false;
+    public float timeDungLinhKhi = 0f;
 
     public boolean dangHienDauThan = false, vuaClickNangCapDau = false, vuaClickThuHoachDau = false;
     public boolean dangHienRuongDo = false;
@@ -332,6 +338,7 @@ public class VeHUD {
 
     public boolean daClickVaoNpc = false;
     public Npc npcHienTai;
+    public boolean vuaThoatNpc = false;
 
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data;
@@ -352,8 +359,8 @@ public class VeHUD {
         popupThongTin = new HUDPopupThongTin(this, layout, duLieuNguoiChoi, nhanVat);
         popupHanhTrang = new HUDPopupHanhTrang(this, layout, duLieuNguoiChoi, nhanVat);
         ruongDo = new HUDRuongDo(this,duLieuNguoiChoi,nhanVat);
-        duLieuNguoiChoi.taoDeTu("Đệ tử");
-        duLieuNguoiChoi.deTu.setVeHUD(this);
+//        duLieuNguoiChoi.taoDeTu("Đệ tử");
+//        duLieuNguoiChoi.deTu.setVeHUD(this);
     }
 
     public void setCamera(QuanLyCamera camManager) {
@@ -2009,6 +2016,29 @@ public class VeHUD {
                     timeDungGiapXen = 600f;
                     itemm.giamSoLuong(1);
                 }
+                if (itemm.getId().equals("dame")) {
+                    dangDungCuongCong = true;
+                    timeDungCuongCong = 120f;
+                    itemm.giamSoLuong(1);
+                }
+                if (itemm.getId().equals("hp")) {
+                    dangDungSinhLuc = true;
+                    timeDungSinhLuc = 120f;
+                    itemm.giamSoLuong(1);
+                }
+                if (itemm.getId().equals("ki")) {
+                    dangDungLinhKhi = true;
+                    timeDungLinhKhi = 120f;
+                    itemm.giamSoLuong(1);
+                }
+                // item khác ngoài tăng chỉ số
+                if (itemm.getId().equals("trung_de_tu")) {
+                    if (!duLieuNguoiChoi.coDeTu()) {
+                        duLieuNguoiChoi.taoDeTu("Đệ tử");
+                        duLieuNguoiChoi.deTu.setVeHUD(this);
+                        itemm.giamSoLuong(1);
+                    }
+                }
                 if (itemm.getSoLuong() == 0) {
                     duLieuNguoiChoi.getHanhTrang().remove(itemm);
                 }
@@ -2248,13 +2278,16 @@ public class VeHUD {
         }
 
         if (npcHienTai.npcHUDrender.ui_npc instanceof admin_haidang) {
-                admin_haidang ui = (admin_haidang) npcHienTai.npcHUDrender.ui_npc;
-                if (ui.anhGachaBase != null) ui.anhGachaBase.dispose();
-                for (int i = 0; i < 16; i++) {
-                    if (ui.anhGacha[i] != null) ui.anhGacha[i].dispose();
-                }
-                if (ui.veQuayKhoa != null) ui.veQuayKhoa.dispose();
-                if (ui.veQuay != null) ui.veQuay.dispose();
+            admin_haidang ui = (admin_haidang) npcHienTai.npcHUDrender.ui_npc;
+            if (ui.anhGachaBase != null) ui.anhGachaBase.dispose();
+            for (int i = 0; i < 16; i++) {
+                if (ui.anhGacha[i] != null) ui.anhGacha[i].dispose();
+            }
+            if (ui.veQuayKhoa != null) ui.veQuayKhoa.dispose();
+            if (ui.veQuay != null) ui.veQuay.dispose();
+            for (Texture tex : ui.randomGenShin) if (tex != null) tex.dispose();
+            for (Texture tex : ui.randomBongTai) if (tex != null) tex.dispose();
+            for (Texture tex : ui.randomHuyHieu) if (tex != null) tex.dispose();
         }
         BitmapFont[] fonts = {
             font, fontText, fontTenSkill, fontSkilldaco, fontSkillchuaco, fontSkillchuaco1,

@@ -16,21 +16,35 @@ public class NpcHUDClickHandler {
             admin_haidang ui = (admin_haidang) npc.npcHUDrender.ui_npc;
             for (int i = 0; i < soNut; i++){
                 float nutX = (Gdx.graphics.getWidth()-(soNut-1)*120-114)/2f + i * 120;
-                if (x>=nutX && x <= nutX+114 && y>=5 && y<=5+114 && !ui.dangBatManHinhGacha){
+                if (x>=nutX && x <= nutX+114 && y>=5 && y<=5+114 && !ui.dangBatManHinhGacha  && !ui.dangThongBaoSauGacha){
                     ui.timeClickNut = 0.3f;
                     ui.nutDangChon = i;
                 }
             }
-            if (ui.dangBatManHinhGacha) {
-                for (int i = 0; i < 2; i++) {
+            if (ui.dangBatManHinhGacha && !ui.dangThongBaoSauGacha) {
+                for (int i = 0; i < 3; i++) {
                     float nutWidth = 140;
                     float nutHeight = 50;
                     float nutX = (Gdx.graphics.getWidth() - ui.anhGachaBase.getWidth()) / 2f + 8 + (ui.anhGachaBase.getWidth() - nutWidth) / 2f - 3f;
-                    float nutY = 55 + 280 - i * 100;
+                    float nutY = 55 + 300 - i * 60;
                     if (x >= nutX && x <= nutX + 140 && y >= nutY && y <= nutY + nutHeight) {
                         ui.nutGachaDangChon = i;
                         ui.timeChoTruocGacha = 0.3f;
                     }
+                }
+            }
+            if (!ui.dangBatManHinhGacha && !ui.dangThongBaoSauGacha) {
+                float nutX = (Gdx.graphics.getWidth()-(soNut-1)*120-114)/2f;
+                if (x<nutX || x>nutX+360 || y>120) {
+                    veHUD.daClickVaoNpc = false;
+                    veHUD.vuaThoatNpc = true;
+                }
+            }
+            if (ui.dangThongBaoSauGacha) {
+                float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
+                float nutY = 50;
+                if (x >= nutX && x <= nutX + 140 && y >= nutY && y <= nutY + 50) {
+                    ui.timeBamNutOk = 0.3f;
                 }
             }
         }
