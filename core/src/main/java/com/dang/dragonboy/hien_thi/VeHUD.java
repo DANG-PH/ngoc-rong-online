@@ -23,6 +23,8 @@ import com.badlogic.gdx.audio.Music;
 import java.util.LinkedList;
 import com.dang.dragonboy.he_thong.TrangThaiChu;
 import com.dang.dragonboy.xu_ly_map.npc.Npc;
+import com.dang.dragonboy.xu_ly_map.npc.NpcHUDrender.*;
+import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.*;
 
 public class VeHUD {
     public ThemItemTest themItemTest;
@@ -51,7 +53,7 @@ public class VeHUD {
     public Texture nutpopup;
 
     public BitmapFont font, fontChucnang, fontDauThan, fontNhiemVu, fontNhiemVu1, fontNhiemVuChuaLam, fontMotaNhiemVu, fontvangngoc, fontsm, fontSkilldaco, fontSkillchuaco, fontMotaSkill, fontCapSKill, fontMotaNoiTai, fontTiemNang, fontTenSkill, fontchat, fontMotaNganSkill, fontMotaNganSkill1, fontSkillchuaco1, fontMotaHanhTrang, fontMotaHanhTrang1, fontText;
-    private GlyphLayout layout;
+    public GlyphLayout layout;
 
     public SkillNhanVat[] skillIcons;
 
@@ -2243,6 +2245,14 @@ public class VeHUD {
         }
         if (framesPet != null) {
             for (Texture tex : framesPet) if (tex != null) tex.dispose();
+        }
+
+        if (npcHienTai.npcHUDrender.ui_npc instanceof admin_haidang) {
+                admin_haidang ui = (admin_haidang) npcHienTai.npcHUDrender.ui_npc;
+                if (ui.anhGachaBase != null) ui.anhGachaBase.dispose();
+                for (int i = 0; i < 16; i++) {
+                    if (ui.anhGacha[i] != null) ui.anhGacha[i].dispose();
+                }
         }
         BitmapFont[] fonts = {
             font, fontText, fontTenSkill, fontSkilldaco, fontSkillchuaco, fontSkillchuaco1,

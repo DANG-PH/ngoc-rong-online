@@ -7,19 +7,17 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.nhan_vat.NhanVat;
-import com.dang.dragonboy.xu_ly_map.MapCoBan;
 
 public class Npc {
     static NhanVat nhanVat;
     String ten;
     String tenTiengVietNpc;
     float x, y;
-    private NpcTaiAnh taiAnh;
+    public NpcTaiAnh taiAnh;
     private NpcOffset offset;
     private GlyphLayout layout;
     private BitmapFont font, fontDauThan;
@@ -34,6 +32,8 @@ public class Npc {
 
     LoaiNPC loainpc;
     private boolean daHuy = false;
+
+    public NpcHUDrender npcHUDrender;
 
     public Npc(String ten, LoaiNPC loainpc, float x, float y) {
         this.ten = ten;
@@ -92,6 +92,7 @@ public class Npc {
     }
     public void setNhanVat(NhanVat nv) {
         nhanVat = nv;
+        this.npcHUDrender = new NpcHUDrender(this,nhanVat.getVeHUD(),nhanVat.getDuLieuNguoiChoi(),nhanVat);
     }
 
     public void ve(SpriteBatch batch, float thoiGianTichLuy) {
@@ -398,7 +399,15 @@ public class Npc {
     }
 
     public void renderHUDnpc(SpriteBatch batch) {
-        NpcHUDrender.renderHUDnpc(this,nhanVat.getVeHUD(),nhanVat.getDuLieuNguoiChoi(),nhanVat,batch);
+        npcHUDrender.renderHUDnpc(batch);
+    }
+
+    public String[] getLoiThoaiTrong() {
+        return LoiThoai_ChucNang_Npc.getLoiThoaiTrong(ten);
+    }
+
+    public String[] getChucNang() {
+        return LoiThoai_ChucNang_Npc.getChucNang(ten);
     }
 
 

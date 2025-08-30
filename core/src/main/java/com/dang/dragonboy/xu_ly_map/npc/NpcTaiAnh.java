@@ -15,6 +15,7 @@ public class NpcTaiAnh {
             chan = new Texture("nhanvat/npc/" + npcName + "/chan.png");
             than = new Texture("nhanvat/npc/" + npcName + "/than.png");
             dau = new Texture("nhanvat/npc/" + npcName + "/dau.png");
+            avtNpc = new Texture("nhanvat/npc/" + npcName + "/avt.png");
         } else if (loaiNPC == LoaiNPC.CAYDAU) {
             String[] parts = npcName.split("_");
             int capCayDau = Integer.parseInt(parts[2]);
