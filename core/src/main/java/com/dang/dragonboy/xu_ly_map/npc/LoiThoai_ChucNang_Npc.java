@@ -20,7 +20,7 @@ public class LoiThoai_ChucNang_Npc {
         // Đặt thoại cho từng NPC
         LOITHOAI_NGOAI_DATA.put("ong_gohan", new String[] {"null"});
         LOITHOAI_NGOAI_DATA.put("admin_haidang", new String[] {"Thiên mệnh tại thân...","Đạo hữu xin dừng bước..."});
-        LOITHOAI_NGOAI_DATA.put("admin_dungle",new String[] {"null"});
+        LOITHOAI_NGOAI_DATA.put("admin_dungle",new String[] {"ộ i i...","Upin Ipin","Sẽ có những cơn gió...","Săn bắt cao bằng..."});
         LOITHOAI_NGOAI_DATA.put("admin_thanhle",new String[] {"null"} );
         LOITHOAI_NGOAI_DATA.put("vua_vegeta", new String[] {"null"});
     }

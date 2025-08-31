@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.hien_thi.QuanLyCamera;
+import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_haidang;
 
 public class ThaoTac extends InputAdapter {
     private int yCuKeo = 0;
@@ -325,6 +326,22 @@ public class ThaoTac extends InputAdapter {
             } else if (Character.toString(character).matches("[a-zA-Z0-9 /]")) {
                 if (hud.soVangNguoiChoiNhapChanLe.length() < 100) {
                     hud.soVangNguoiChoiNhapChanLe += character;
+                }
+            }
+        }
+        if (hud.npcHienTai != null) {
+            if (hud.npcHienTai.npcHUDrender.ui_npc instanceof admin_haidang) {
+                admin_haidang ui = (admin_haidang) hud.npcHienTai.npcHUDrender.ui_npc;
+                if (ui.dangHienChatDoiVeQuay) {
+                    if (character == '\b') {
+                        if (!ui.tinNhanChat.isEmpty()) {
+                            ui.tinNhanChat = ui.tinNhanChat.substring(0, ui.tinNhanChat.length() - 1);
+                        }
+                    } else if (Character.toString(character).matches("[a-zA-Z0-9]")) {
+                        if (ui.tinNhanChat.length() < 100) {
+                            ui.tinNhanChat += character;
+                        }
+                    }
                 }
             }
         }

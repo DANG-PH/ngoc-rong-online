@@ -16,6 +16,7 @@ public class MapNhaGohan extends MapCoBan {
         themNpc("dau_traidat_1", LoaiNPC.CAYDAU, 600, 192);
         themNpc("ruong_do", LoaiNPC.RUONGDO, 120, 190);
         themNpc("dui_ga", LoaiNPC.DUIGA, 1178, 205);
+        themNpc("admin_haidang", LoaiNPC.NGUOI,250,188);
     }
 
     @Override

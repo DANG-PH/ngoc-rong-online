@@ -23,6 +23,8 @@ public class Main extends Game {
         assetManager.load("hieuung/hieuunggame/gacha/gacha1.png", Texture.class);
         assetManager.load("vatpham/vatphamgame/ve_quay_npc_haidang/vequay.png", Texture.class);
         assetManager.load("vatpham/vatphamgame/ve_quay_npc_haidang/vequaykhoa.png", Texture.class);
+        assetManager.load("hieuung/hieuunggame/gacha/shopthuong.png", Texture.class);
+        assetManager.load("hieuung/hieuunggame/gacha/shopvip.png", Texture.class);
 
         // có thể load thêm các texture khác ở đây...
 

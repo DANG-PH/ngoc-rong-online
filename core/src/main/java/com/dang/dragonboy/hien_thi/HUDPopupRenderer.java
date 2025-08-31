@@ -1613,7 +1613,7 @@ public class HUDPopupRenderer {
         }
         // nhac nen
         if (veHUD.chucNangDangChon == 4 && veHUD.dangChonNhacNen) {
-            String[] chucNang = {"Tắt nhạc","Khẩu thị tâm phi","Đếm ngày xa em","Kẻ theo đuổi ánh sáng","Tháp rơi tự do","Điều anh biết","DanDan Kokoro Hikareteku","Sao mình chưa nắm tay nhau","Thời gian sẽ trả lời","Sự thật đã bỏ quên", "Không lấy được vợ"};
+            String[] chucNang = {"Tắt nhạc","Khẩu thị tâm phi","Đếm ngày xa em","Kẻ theo đuổi ánh sáng","Tháp rơi tự do","Điều anh biết","DanDan Kokoro Hikareteku","Sao mình chưa nắm tay nhau","Thời gian sẽ trả lời","Sự thật đã bỏ quên", "Không lấy được vợ","Seasons"};
             float viewY = 35;
             float viewHeight = 444 - 35;
             int KhoangCachO = 49;

@@ -71,7 +71,7 @@ public class DuLieuNguoiChoi {
     public float timeTangMotDauThan = 1/2f * 60f;
 
     // dữ liệu vé quay khóa ở npc hải đăng
-    private int soVeQuayKhoa = 1000;
+    private int soVeQuayKhoa = 0;
 
     // Constructor
     public DuLieuNguoiChoi(String ten, long sucManh, int theLuc,
@@ -854,5 +854,23 @@ public class DuLieuNguoiChoi {
 
     public int getSoVeQuayKhoa() {
         return soVeQuayKhoa;
+    }
+
+    public boolean checkCoItemTrongHanhTrang(String id) {
+        for (Item item : this.getHanhTrang()) {
+            if (item.getId().equals(id)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Item layItemTrongHanhTrang(String id) {
+        for (Item item : this.getHanhTrang()) {
+            if (item.getId().equals(id)) {
+                return item;
+            }
+        }
+        return null;
     }
 }

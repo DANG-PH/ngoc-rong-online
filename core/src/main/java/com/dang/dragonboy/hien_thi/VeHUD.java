@@ -52,7 +52,7 @@ public class VeHUD {
     public Texture oskill, oskillclick;
     public Texture nutpopup;
 
-    public BitmapFont font, fontChucnang, fontDauThan, fontNhiemVu, fontNhiemVu1, fontNhiemVuChuaLam, fontMotaNhiemVu, fontvangngoc, fontsm, fontSkilldaco, fontSkillchuaco, fontMotaSkill, fontCapSKill, fontMotaNoiTai, fontTiemNang, fontTenSkill, fontchat, fontMotaNganSkill, fontMotaNganSkill1, fontSkillchuaco1, fontMotaHanhTrang, fontMotaHanhTrang1, fontText;
+    public BitmapFont font, fontChucnang,fontChucnang1, fontDauThan, fontNhiemVu, fontNhiemVu1, fontNhiemVuChuaLam, fontMotaNhiemVu, fontvangngoc, fontsm, fontSkilldaco, fontSkillchuaco, fontMotaSkill, fontCapSKill, fontMotaNoiTai, fontTiemNang, fontTenSkill, fontchat, fontMotaNganSkill, fontMotaNganSkill1, fontSkillchuaco1, fontMotaHanhTrang, fontMotaHanhTrang1, fontText, fontMoTaQuyDoiVe;
     public GlyphLayout layout;
 
     public SkillNhanVat[] skillIcons;
@@ -195,7 +195,7 @@ public class VeHUD {
     public boolean dangChonHanhTrangRuongDo = false;
 
     public boolean dangChonNhacNen = false;
-    public Music[] nhacNen = new Music[11];
+    public Music[] nhacNen = new Music[12];
 
     public boolean dangHienChonMiniGame = false;
     public boolean dangHienMiniGame = false;
@@ -571,9 +571,13 @@ public class VeHUD {
         param3.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
             "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ ễ ằ ừ — ẳ ữ ỗ ằ ễ ỗ ừ ẵ ê : ĩ ≤";
         param3.size = 14;
+        fontMoTaQuyDoiVe = generator3.generateFont(param3);
+        param3.size = 14;
         fontchat = generator3.generateFont(param3);
         param3.color = new Color(94 / 255f, 86 / 255f, 74 / 255f, 1f);
         fontChucnang = generator3.generateFont(param3);
+        param3.size = 11;
+        fontChucnang1 = generator3.generateFont(param3);
         param3.size = 16;
         fontNhiemVu = generator3.generateFont(param3);
         param3.size = 15;
@@ -620,7 +624,8 @@ public class VeHUD {
             "saominhchuanamtaynhau.mp3",
             "thoigiansetraloi.mp3",
             "suthatdaboquen.mp3",
-            "khonglayduocvo.mp3"
+            "khonglayduocvo.mp3",
+            "seasons.mp3"
         };
 
         for (int i = 1; i < tenFile.length; i++) {
@@ -996,7 +1001,7 @@ public class VeHUD {
                         setTinNhanPet("Cần chờ "+(int)(delayHopTheThuong/60f)+" phút nữa để hợp thể Fushion Dance",2);
                     }
                 } else if (dangChonNhacNen) {
-                    String[] chucNang = {"Tắt nhạc","Khẩu thị tâm phi","Đếm ngày xa em","Kẻ theo đuổi ánh sáng","Tháp rơi tự do","Điều anh biết","DanDan Kokoro Hikareteku","Sao mình chưa nắm tay nhau","Thời gian sẽ trả lời","Sự thật đã bỏ quên", "Không lấy được vợ"};
+                    String[] chucNang = {"Tắt nhạc","Khẩu thị tâm phi","Đếm ngày xa em","Kẻ theo đuổi ánh sáng","Tháp rơi tự do","Điều anh biết","DanDan Kokoro Hikareteku","Sao mình chưa nắm tay nhau","Thời gian sẽ trả lời","Sự thật đã bỏ quên", "Không lấy được vợ","Seasons"};
                     if (oChiSoDangChon == 0) {
                         for (int i = 1; i < nhacNen.length; i++) {
                             if (nhacNen[i].isPlaying()) nhacNen[i].stop();
@@ -2275,6 +2280,13 @@ public class VeHUD {
         }
     }
 
+    public boolean isDangPhatNhac() {
+        for (int i = 1; i < nhacNen.length; i++) {
+            if (nhacNen[i].isPlaying()) return true;
+        }
+        return false;
+    }
+
     public void dispose() {
         Texture[] textures = {
             saoden, saoxanh, ochat, ochatclick, thanhhp,
@@ -2322,16 +2334,23 @@ public class VeHUD {
             }
             if (ui.veQuayKhoa != null) ui.veQuayKhoa.dispose();
             if (ui.veQuay != null) ui.veQuay.dispose();
+            if (ui.nutsv != null) ui.nutsv.dispose();
+            if (ui.nutclicksv != null) ui.nutclicksv.dispose();
+            if (ui.formQuyDoiVe != null) ui.formQuyDoiVe.dispose();
             for (Texture tex : ui.randomGenShin) if (tex != null) tex.dispose();
             for (Texture tex : ui.randomBongTai) if (tex != null) tex.dispose();
             for (Texture tex : ui.randomHuyHieu) if (tex != null) tex.dispose();
+            for (Texture tex : ui.randomDeoLung) if (tex != null) tex.dispose();
+            for (Texture tex : ui.randomNgocRong) if (tex != null) tex.dispose();
+            for (Texture tex : ui.randomNgocRongDen) if (tex != null) tex.dispose();
+            for (Texture tex : ui.vatPhamGachaKrandom) if (tex != null) tex.dispose();
         }
         BitmapFont[] fonts = {
             font, fontText, fontTenSkill, fontSkilldaco, fontSkillchuaco, fontSkillchuaco1,
             fontDauThan, fontchat, fontChucnang, fontNhiemVu, fontNhiemVu1, fontCapSKill,
             fontMotaNganSkill1, fontNhiemVuChuaLam, fontMotaNhiemVu, fontMotaNoiTai,
             fontMotaSkill, fontvangngoc, fontMotaHanhTrang, fontMotaHanhTrang1,
-            fontTiemNang, fontsm, fontMotaNganSkill
+            fontTiemNang, fontsm, fontMotaNganSkill, fontMoTaQuyDoiVe
         };
 
         for (BitmapFont f : fonts) {
