@@ -180,7 +180,8 @@ public class admin_haidang extends renderUInpc {
         if (dangThongBaoSauGacha) {
             batch.draw(veHUD.anhThongBao, (Gdx.graphics.getWidth() - 720) / 2f, 65, 720, 175);
 
-            veHUD.layout.setText(veHUD.fontTenSkill, "Chúc mừng bạn đã nhận được những phần quà sau");
+            String text = dangGachaX1hayX10 == 1 ? "Chúc mừng bạn đã nhận được phần quà sau" : "Chúc mừng bạn đã nhận được những phần quà sau";
+            veHUD.layout.setText(veHUD.fontTenSkill, text);
             veHUD.fontTenSkill.draw(batch, veHUD.layout, (Gdx.graphics.getWidth() - veHUD.layout.width) / 2, 210);
 
             if (dangGachaX1hayX10 == 1) {

@@ -2139,6 +2139,43 @@ public class VeHUD {
                             setTinNhanPet("Bạn chưa có đệ tử", 2f);
                         }
                         break;
+                    case "skill4_de_khi":
+                        if (!duLieuNguoiChoi.coDeTu()) {
+                            setTinNhanPet("Bạn chưa có đệ tử", 2f);
+                            return;
+                        }
+
+                        long sucManhYeuCau = 20_000_000_000L;
+                        if (duLieuNguoiChoi.deTu.getSucManh() < sucManhYeuCau) {
+                            setTinNhanPet("Đệ tử chưa đủ sức mạnh", 2f);
+                            return;
+                        }
+
+                        String skill = duLieuNguoiChoi.deTu.getTenSkill(3);
+                        int capSkill = duLieuNguoiChoi.deTu.getCapSkill(3);
+
+                        if (!"Biến hình".equals(skill)) {
+                            duLieuNguoiChoi.deTu.setSkillDeTu(4, "Biến hình");
+                            return;
+                        }
+
+                        if (capSkill < 7) {
+                            setTinNhanPet("Kỹ năng biến hình đệ tử cần đạt cấp 7", 2f);
+                            return;
+                        }
+
+                        if (capSkill == 7) {
+                            duLieuNguoiChoi.deTu.tangCapSkill(3);
+                            itemm.giamSoLuong(1);
+                            if (itemm.getSoLuong() == 0) {
+                                duLieuNguoiChoi.getHanhTrang().remove(itemm);
+                            }
+                            setTinNhanPet("Kỹ năng đệ tử đã đạt cấp tối đa", 2f);
+                            return;
+                        }
+// Nếu > 7
+                        setTinNhanPet("Kỹ năng biến hình đệ đạt cấp tối đa", 2f);
+                    break;
                 }
             }
             if (itemDangChon.equals("vequaynpchaidang")) {

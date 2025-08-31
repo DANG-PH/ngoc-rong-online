@@ -722,7 +722,7 @@ public class DeTu {
     }
 
     public void tangCapSkill(int i) {
-        if (i >= 0 && i < 4 && capSkill[i] < 7) {
+        if (i >= 0 && i < 4 && (capSkill[i] < 7 || capSkill[i] < 8 && tenSkill[i].equals("Biến hình"))) {
             capSkill[i]++;
         }
     }
@@ -1980,6 +1980,14 @@ public class DeTu {
                     danhSachSKill = new String[0];
             }
             tenSkill[Skill - 1] = danhSachSKill[MathUtils.random(danhSachSKill.length - 1)];
+            veHUD.setTinNhanPet("Kỹ năng đệ tử đã được thay đổi thành công",2f);
+        } else {
+            veHUD.setTinNhanPet("Sức mạnh đệ tử không đủ",2f);
+        }
+    }
+    public void setSkillDeTu(int Skill,String tenSkillCanSet) {
+        if (tenSkill[Skill-1] != null) {
+            tenSkill[Skill - 1] = tenSkillCanSet;
             veHUD.setTinNhanPet("Kỹ năng đệ tử đã được thay đổi thành công",2f);
         } else {
             veHUD.setTinNhanPet("Sức mạnh đệ tử không đủ",2f);

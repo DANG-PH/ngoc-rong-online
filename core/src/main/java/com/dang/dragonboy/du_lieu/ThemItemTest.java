@@ -89,13 +89,13 @@ public class ThemItemTest {
 //            "all", 1_500_000L, null, 0, 0, 0, -1
 //        ));
 
-//        duLieu.themItemVaoHanhTrang(new Item(
-//            "skill4_de", "Nâng Cấp Kỹ Năng 4 Đệ Tử", LoaiItem.NANGSKILL,
-//            new Texture("vatpham/vatphamgame/nang_skill_de_tu/skill4.png"),
-//            "Sử dụng để nâng cấp kỹ năng 4 đệ tử.", 8,
-//            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
-//            "all", 1500000L, null, 0, 0, 0, -1
-//        ));
+        duLieu.themItemVaoHanhTrang(new Item(
+            "skill4_de", "Nâng Cấp Kỹ Năng 4 Đệ Tử", LoaiItem.NANGSKILL,
+            new Texture("vatpham/vatphamgame/nang_skill_de_tu/skill4.png"),
+            "Sử dụng để nâng cấp kỹ năng 4 đệ tử.", 8,
+            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+            "all", 1500000L, null, 0, 0, 0, -1
+        ));
 //
 //        duLieu.themItemVaoHanhTrang(new Item(
 //            "skill3_de", "Nâng Cấp Kỹ Năng 3 Đệ Tử", LoaiItem.NANGSKILL,
@@ -1434,6 +1434,13 @@ public class ThemItemTest {
                 mangAnh[chiso] = ui.vatPhamGachaKrandom[9];
                 break;
             case 10:
+                duLieu.themItemVaoHanhTrang(new Item(
+                    "skill4_de_khi", "Nâng cấp Biến Hình Đệ Tử", LoaiItem.NANGSKILL,
+                    new Texture("kynang/iconkynang/xayda/skill4_xayda.png"),
+                    "Sử dụng để nâng cấp kỹ năng Biến Hình Đệ Tử lên cấp 8. Hoặc đổi skill 4 Đệ Tử thành Biến Hình ", 1,
+                    new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+                    "all", 1500000L, null, 0, 0, 0, -1
+                ));
                 mangAnh[chiso] = ui.vatPhamGachaKrandom[10];
                 break;
             case 11:
@@ -1461,7 +1468,7 @@ public class ThemItemTest {
                 duLieu.themItemVaoHanhTrang(new Item(
                     "ki", "Linh khí", LoaiItem.PHUTRO,
                     new Texture("vatpham/vatphamgame/phu_tro/ki.png"),
-                    "Trong vòng tối đa 2 phút +10% KI", 99,
+                    "Trong vòng tối đa 2 phút +10% KI", 1,
                     new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
                     "all", 0, null, 0, 0, 0, -1
                 ));
