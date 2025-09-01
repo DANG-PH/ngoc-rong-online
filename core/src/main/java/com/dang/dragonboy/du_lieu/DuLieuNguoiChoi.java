@@ -668,7 +668,7 @@ public class DuLieuNguoiChoi {
         this.GiamSatThuongNhanVat -= PtGiamSatThuong;
         this.GiamSatThuongNhanVat = Math.min(this.GiamSatThuongNhanVat,85);
     }
-    public void giamVang(int soLuong) {
+    public void giamVang(long soLuong) {
         this.vang -= soLuong;
     }
 

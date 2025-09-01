@@ -29,8 +29,8 @@ public class HUDThoiGianMiniGame {
         if (veHUD.timeMiniGameChanLe<=0) {
             int conSoMayMan = MathUtils.random(1, 99);
             if ((veHUD.NguoiChoiChonChanLe.equals("chan") && conSoMayMan%2==0) || (veHUD.NguoiChoiChonChanLe.equals("le") && conSoMayMan%2!=0)) {
-                duLieuNguoiChoi.tangVang((int)(veHUD.soVangCuocChanLe*1.9f));
-                veHUD.soVangDuocNhanGanNhatChanLe = (int)(veHUD.soVangCuocChanLe*1.9f);
+                duLieuNguoiChoi.tangVang((long)(veHUD.soVangCuocChanLe*1.9f));
+                veHUD.soVangDuocNhanGanNhatChanLe = (long)(veHUD.soVangCuocChanLe*1.9f);
                 veHUD.dangHienTinNhanPet = true;
                 veHUD.timeHienTinNhanPet = 2f;
                 veHUD.setTinNhanPet("Chúc mừng người chơi "+duLieuNguoiChoi.getTen()+" đã may mắn nhận được "+veHUD.formatVangNgoc((int)(veHUD.soVangCuocChanLe*1.9f))+" vàng từ tính năng Mini Game",2f);

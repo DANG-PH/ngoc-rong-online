@@ -213,8 +213,8 @@ public class VeHUD {
     public float timeMiniGameChanLe = 30f;
     public int ketQuaGiaiTruocChanLe;
     public String NguoiChoiChonChanLe = "";
-    public int soVangCuocChanLe;
-    public int soVangDuocNhanGanNhatChanLe;
+    public long soVangCuocChanLe;
+    public long soVangDuocNhanGanNhatChanLe;
     public String soVangNguoiChoiNhapChanLe = "";
 
     public boolean dangHopThe = false;
@@ -1617,7 +1617,7 @@ public class VeHUD {
                             if (soVangNguoiChoiNhapChanLe.contains("/") && soVangNguoiChoiNhapChanLe.split("/").length == 2) {
                                 try {
                                     String[] parts = soVangNguoiChoiNhapChanLe.split("/");
-                                    int soVang = Integer.parseInt(parts[0].trim());
+                                    long soVang = Long.parseLong(parts[0].trim());
                                     String duDoan = parts[1].trim();
                                     if (soVang >= 1 && (duDoan.equals("chan") || duDoan.equals("le")) && soVangCuocChanLe == 0 && "".equals(NguoiChoiChonChanLe) && duLieuNguoiChoi.getVang()>=soVang) {
                                         soVangCuocChanLe = soVang;

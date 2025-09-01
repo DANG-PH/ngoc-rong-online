@@ -68,6 +68,13 @@ public class NpcHUDClickHandler {
                     float nutY = 416 - i * 46;
                     if (x >= nutX && x <= nutX + 200 && y >= nutY && y <= nutY + 36) {
                         ui.chucNangQuyDoiVeDangChon = i;
+                        if (i == 1) {
+                            ui.tongVang = 0;
+                            ui.tongVeKhoa = 0;
+                        } else {
+                            ui.tongNgoc = 0;
+                            ui.tongVeVip = 0;
+                        }
                     }
                 }
                 if (x >= (Gdx.graphics.getWidth() - 680) / 2f + 12.5f && x <= (Gdx.graphics.getWidth() - 680) / 2f + 12.5f + 200 && y >= 65 + 30 && y <= 65 + 30 + 36) {
@@ -77,6 +84,21 @@ public class NpcHUDClickHandler {
                 if (x >= (Gdx.graphics.getWidth() - 680) / 2f + 12.5f && x <= (Gdx.graphics.getWidth() - 680) / 2f + 12.5f + 200 && y >= 65 + 30 + 38 && y <= 65 + 30 + 36 + 38) {
                     ui.timeChoHienChatDoiVeQuay = 0.3f;
                 }
+               for (int i = 0; i < 3; i++) {
+                   float nutW = 68 * 0.7f,nutH = 52 * 0.7f;
+                   float nutX = 396f - 0.4f + (140 - nutW)/2f + 151*i, nutY = 260 + 3f;
+                   if (x >= nutX && x <= nutX + nutW && y >= nutY && y <= nutY + nutH && ui.timeChoThemItemVeQuay <= 0) {
+                       ui.nutThemDangChon = i;
+                       ui.timeChoThemItemVeQuay = 0.2f;
+                   }
+               }
+               if (x >= 396+(435-140*0.7f) && x <= 396+(435-140*0.7f)+140*0.7f && y >= 100 && y <= 100 + 48 * 0.7f) {
+                   if (ui.chucNangQuyDoiVeDangChon == 0) {
+                       ui.timeChoMuaItemThuong = 0.3f;
+                   } else {
+                       ui.timeChoMuaItemVip = 0.3f;
+                   }
+               }
             }
             if (ui.dangHienChatDoiVeQuay) {
                 float nX = (Gdx.graphics.getWidth() - 140) / 2f;

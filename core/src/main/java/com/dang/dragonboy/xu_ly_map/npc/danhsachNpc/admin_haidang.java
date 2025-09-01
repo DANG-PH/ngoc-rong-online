@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Align;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.hien_thi.VeHUD;
+import com.dang.dragonboy.item.LoaiItem;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.xu_ly_map.npc.Npc;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.renderUInpc;
@@ -65,6 +66,14 @@ public class admin_haidang extends renderUInpc {
     public float timeChoHienChatDoiVeQuay = 0f;
     public int nutDuocChonKhiChat = -1;
     public String tinNhanChat = "";
+
+    public long tongVang;
+    public int tongNgoc,tongVeKhoa,tongVeVip;
+
+    public float timeChoThemItemVeQuay = 0f;
+    public int nutThemDangChon = -1;
+
+    public float timeChoMuaItemThuong = 0f, timeChoMuaItemVip = 0f;
 
     public admin_haidang(Npc npc, VeHUD veHUD, DuLieuNguoiChoi duLieuNguoiChoi, NhanVat nhanVat) {
         super(npc, veHUD, duLieuNguoiChoi, nhanVat);
@@ -239,11 +248,16 @@ public class admin_haidang extends renderUInpc {
                             loi = "Không có item trong hành trang";
                         } else if (duLieuNguoiChoi.layItemTrongHanhTrang("ve_quay_npc_haidang").getSoLuong() < Integer.parseInt(tinNhanChat)) {
                             loi = "Số lượng quy đổi không hợp lệ";
+                        } else if (duLieuNguoiChoi.getSoVeQuayKhoa() + Integer.parseInt(tinNhanChat) >= 1000) {
+                            loi = "Số vé quay khóa đã đạt tối đa";
                         }
                         if (loi != null) {
                             veHUD.setTinNhanPet(loi,2f);
                         } else {
                             duLieuNguoiChoi.layItemTrongHanhTrang("ve_quay_npc_haidang").giamSoLuong(Integer.parseInt(tinNhanChat));
+                            if (duLieuNguoiChoi.layItemTrongHanhTrang("ve_quay_npc_haidang").getSoLuong() == 0) {
+                                duLieuNguoiChoi.getHanhTrang().remove(duLieuNguoiChoi.layItemTrongHanhTrang("ve_quay_npc_haidang"));
+                            }
                             duLieuNguoiChoi.tangVeQuayKhoa(Integer.parseInt(tinNhanChat));
                             veHUD.setTinNhanPet("Quy đổi thành công",2f);
                         }
@@ -255,6 +269,101 @@ public class admin_haidang extends renderUInpc {
                         tinNhanChat = "";
                         nutDuocChonKhiChat = -1;
                     }
+                }
+            }
+        }
+        if (timeChoThemItemVeQuay > 0) {
+            timeChoThemItemVeQuay -= Gdx.graphics.getDeltaTime();
+            if (timeChoThemItemVeQuay <= 0) {
+                timeChoThemItemVeQuay = 0;
+                if (chucNangQuyDoiVeDangChon == 0) {
+                    long tongVangCong = 0;
+                    int tongVeNhan = 0;
+                    switch (nutThemDangChon) {
+                        case 0:
+                            tongVangCong = 100_000_000L;
+                            tongVeNhan = 1;
+                            break;
+                        case 1:
+                            tongVangCong = 1_000_000_000L;
+                            tongVeNhan = 10;
+                            break;
+                        case 2:
+                            tongVangCong = 10_000_000_000L;
+                            tongVeNhan = 100;
+                            break;
+                    }
+                    String loi = null;
+                    if (duLieuNguoiChoi.getSoVeQuayKhoa() + tongVeKhoa + tongVeNhan >= 1000) {
+                        loi = "Vé quay khóa đã đầy";
+                    } else if (duLieuNguoiChoi.getVang() < tongVang + tongVangCong) {
+                        loi = "Không đủ vàng";
+                    }
+                    if (loi != null) {
+                        veHUD.setTinNhanPet(loi,2f);
+                    } else {
+                        tongVang += tongVangCong;
+                        tongVeKhoa += tongVeNhan;
+                    }
+                } else if (chucNangQuyDoiVeDangChon == 1) {
+                    int tongNgocCong = 0;
+                    int tongVeNhan = 0;
+                    switch (nutThemDangChon) {
+                        case 0:
+                            tongNgocCong = 100;
+                            tongVeNhan = 1;
+                            break;
+                        case 1:
+                            tongNgocCong = 1000;
+                            tongVeNhan = 10;
+                            break;
+                        case 2:
+                            tongNgocCong = 10000;
+                            tongVeNhan = 100;
+                            break;
+                    }
+                    String loi = null;
+                    if (duLieuNguoiChoi.checkCoItemTrongHanhTrang("ve_quay_npc_haidang") && duLieuNguoiChoi.layItemTrongHanhTrang("ve_quay_npc_haidang").getSoLuong() + tongVeVip + tongVeNhan >= 1000) {
+                        loi = "Vé quay VIP đã đầy";
+                    } else if (duLieuNguoiChoi.getNgoc() < tongNgoc + tongNgocCong) {
+                        loi = "Không đủ ngọc";
+                    }
+                    if (loi != null) {
+                        veHUD.setTinNhanPet(loi,2f);
+                    } else {
+                        tongNgoc += tongNgocCong;
+                        tongVeVip += tongVeNhan;
+                    }
+                }
+            }
+        }
+        if (timeChoMuaItemThuong > 0) {
+            timeChoMuaItemThuong -= Gdx.graphics.getDeltaTime();
+            if (timeChoMuaItemThuong <= 0) {
+                if (tongVeKhoa > 0) {
+                    duLieuNguoiChoi.tangVeQuayKhoa(tongVeKhoa);
+                    duLieuNguoiChoi.giamVang(tongVang);
+                    veHUD.setTinNhanPet("Nhận thành công " + tongVeKhoa + " vé quay khóa", 2f);
+                    tongVang = 0;
+                    tongVeKhoa = 0;
+                }
+            }
+        }
+        if (timeChoMuaItemVip > 0) {
+            timeChoMuaItemVip -= Gdx.graphics.getDeltaTime();
+            if (timeChoMuaItemVip <= 0) {
+                if (tongVeVip > 0) {
+                    duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
+                        "ve_quay_npc_haidang", "Vé quay Rồng Thần", LoaiItem.VE_QUAY_NPC_HAIDANG,
+                        new Texture("vatpham/vatphamgame/ve_quay_npc_haidang/vequay.png"),
+                        "Vé quay ẩn chứa tiềm năng vô hạn. Cần gặp NPC Admin Hải Đăng để sử dụng và có cơ hội nhận những phần thưởng hiếm và nhiều phần quà giá trị khác", tongVeVip,
+                        new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                        "all", 0, null, 0, 0, 0, -1
+                    ));
+                    veHUD.setTinNhanPet("Nhận thành công " + tongVeVip + " vé quay VIP", 2f);
+                    duLieuNguoiChoi.giamNgoc(tongNgoc);
+                    tongNgoc = 0;
+                    tongVeVip = 0;
                 }
             }
         }
@@ -416,8 +525,9 @@ public class admin_haidang extends renderUInpc {
                 }
             }
 
-            veHUD.layout.setText(veHUD.fontsm, "Vé quay: "+duLieuNguoiChoi.getSoVeQuayKhoa() +" | " + "Pity: "+pity+"/90");
-            veHUD.fontsm.draw(batch, veHUD.layout, 510-veHUD.layout.width/2f+3f, 220);
+            veHUD.layout.setText(veHUD.fontsm, "Pity: "+pity+"/90 "+" | " + " Vé quay: "+duLieuNguoiChoi.getSoVeQuayKhoa());
+            veHUD.fontsm.draw(batch, veHUD.layout, 510-veHUD.layout.width/2f+3f - 6f, 220);
+            batch.draw(veQuayKhoa,510-veHUD.layout.width/2f+3f+3f - 6f + veHUD.layout.width,220-veHUD.layout.height/2f-(veQuayKhoa.getHeight()/5f)/2f,veQuayKhoa.getWidth()/5f,veQuayKhoa.getHeight()/5f);
         }
     }
 
@@ -477,23 +587,63 @@ public class admin_haidang extends renderUInpc {
             for (int i = 0; i < 3; i++) {
                 float nutW = 68 * 0.7f,nutH = 52 * 0.7f;
                 float nutX = 396f - 0.4f + (140 - nutW)/2f + 151*i, nutY = 260 + 3f;
-                batch.draw(veHUD.nutchucnang, nutX, nutY, nutW, nutH);
+                batch.draw(timeChoThemItemVeQuay > 0 && nutThemDangChon == i ? veHUD.nutchucnangclick : veHUD.nutchucnang, nutX, nutY, nutW, nutH);
             }
+            batch.draw(timeChoMuaItemThuong > 0 ? veHUD.nutclick : veHUD.nutdn,396+(435-140*0.7f),60+40,140*0.7f,48*0.7f);
+
+            veHUD.fontMoTaQuyDoiVe.setColor(1.0f, 0.956f, 0.863f, 1f);
+            veHUD.layout.setText(veHUD.fontMoTaQuyDoiVe, "Số vé khóa: "+ duLieuNguoiChoi.getSoVeQuayKhoa());
+            veHUD.fontMoTaQuyDoiVe.draw(batch, veHUD.layout, 401,60+55);
+            batch.draw(veQuayKhoa,401+veHUD.layout.width+3f,60+55 - veHUD.layout.height/2f - (veQuayKhoa.getHeight()/5f)/2f,veQuayKhoa.getWidth()/5f,veQuayKhoa.getHeight()/5f);
+
+            veHUD.fontMoTaQuyDoiVe.setColor(1.0f, 0.956f, 0.863f, 1f);
+            veHUD.layout.setText(veHUD.fontMoTaQuyDoiVe, "Tổng vé khóa nhận: "+tongVeKhoa);
+            veHUD.fontMoTaQuyDoiVe.draw(batch, veHUD.layout, 401,60+75);
+            batch.draw(veQuayKhoa,401+veHUD.layout.width+3f,60+75 - veHUD.layout.height/2f - (veQuayKhoa.getHeight()/5f)/2f,veQuayKhoa.getWidth()/5f,veQuayKhoa.getHeight()/5f);
+
+            veHUD.fontMoTaQuyDoiVe.setColor(1.0f, 0.956f, 0.863f, 1f);
+            veHUD.layout.setText(veHUD.fontMoTaQuyDoiVe, "Tổng vàng cần: "+veHUD.formatVangNgoc(tongVang));
+            veHUD.fontMoTaQuyDoiVe.draw(batch, veHUD.layout, 401,60+95);
+            batch.draw(vatPhamGachaKrandom[13],401+veHUD.layout.width+3f,60+95 - veHUD.layout.height/2f - (vatPhamGachaKrandom[13].getHeight()/2f)/2f,vatPhamGachaKrandom[13].getWidth()/2f,vatPhamGachaKrandom[13].getHeight()/2f);
         }
+
         if (chucNangQuyDoiVeDangChon == 1) {
             batch.draw(shopVip,396f-0.4f,259,shopVip.getWidth(),shopVip.getHeight());
             for (int i = 0; i < 3; i++) {
                 float nutW = 68 * 0.7f,nutH = 52 * 0.7f;
                 float nutX = 396f - 0.4f + (140 - nutW)/2f + 151*i, nutY = 260 + 3f;
-                batch.draw(veHUD.nutchucnang, nutX, nutY, nutW, nutH);
+                batch.draw(timeChoThemItemVeQuay > 0 && nutThemDangChon == i ? veHUD.nutchucnangclick : veHUD.nutchucnang, nutX, nutY, nutW, nutH);
             }
+            batch.draw(timeChoMuaItemVip > 0 ? veHUD.nutclick : veHUD.nutdn,396+(435-140*0.7f),60+40,140*0.7f,48*0.7f);
+
+            veHUD.fontMoTaQuyDoiVe.setColor(1.0f, 0.956f, 0.863f, 1f);
+            veHUD.layout.setText(veHUD.fontMoTaQuyDoiVe, "Số vé VIP: "+ (duLieuNguoiChoi.checkCoItemTrongHanhTrang("ve_quay_npc_haidang") ? duLieuNguoiChoi.layItemTrongHanhTrang("ve_quay_npc_haidang").getSoLuong() : "0"));
+            veHUD.fontMoTaQuyDoiVe.draw(batch, veHUD.layout, 401,60+55);
+            batch.draw(veQuay,401+veHUD.layout.width+3f,60+55 - veHUD.layout.height/2f - (veQuay.getHeight()/5f)/2f,veQuay.getWidth()/5f,veQuay.getHeight()/5f);
+
+            veHUD.fontMoTaQuyDoiVe.setColor(1.0f, 0.956f, 0.863f, 1f);
+            veHUD.layout.setText(veHUD.fontMoTaQuyDoiVe, "Tổng vé VIP nhận: "+tongVeVip);
+            veHUD.fontMoTaQuyDoiVe.draw(batch, veHUD.layout, 401,60+75);
+            batch.draw(veQuay,401+veHUD.layout.width+3f,60+75 - veHUD.layout.height/2f - (veQuay.getHeight()/5f)/2f,veQuay.getWidth()/5f,veQuay.getHeight()/5f);
+
+
+            veHUD.fontMoTaQuyDoiVe.setColor(1.0f, 0.956f, 0.863f, 1f);
+            veHUD.layout.setText(veHUD.fontMoTaQuyDoiVe, "Tổng ngọc cần: "+tongNgoc);
+            veHUD.fontMoTaQuyDoiVe.draw(batch, veHUD.layout, 401,60+95);
+            batch.draw(vatPhamGachaKrandom[3],401+veHUD.layout.width+3f,60+95 - veHUD.layout.height/2f - (vatPhamGachaKrandom[3].getHeight()/2f)/2f,vatPhamGachaKrandom[3].getWidth()/2f,vatPhamGachaKrandom[3].getHeight()/2f);
         }
+
         for (int i = 0; i < 3; i++) {
             float nutW = 68 * 0.7f,nutH = 52 * 0.7f;
             float nutX = 396f - 0.4f + (140 - nutW)/2f + 151*i, nutY = 260 + 3f;
             veHUD.layout.setText(veHUD.fontChucnang1,"Thêm");
             veHUD.fontChucnang1.draw(batch,veHUD.layout,nutX+(nutW-veHUD.layout.width)/2f,nutY+(nutH+veHUD.layout.height)/2f);
         }
+
+        veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+        veHUD.layout.setText(veHUD.font, "Mua");
+        veHUD.font.draw(batch, veHUD.layout, 396+(435-140*0.7f) + (140*0.7f - veHUD.layout.width) / 2f, 60+40 + (48*0.7f+veHUD.layout.height)/2f);
+
     }
     public void renderKhungChatQuyDoiVe(SpriteBatch batch) {
         if (dangHienChatDoiVeQuay) {
