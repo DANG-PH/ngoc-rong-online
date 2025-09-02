@@ -1349,13 +1349,13 @@ public class ThemItemTest {
                     "gohan_beast", "Cải trang Gohan Beast", LoaiItem.CAITRANG,
                     new Texture("nhanvat/caitrang/gohan_beast/daudung.png"),
                     "Cải trang thành Gohan Beast", 1,
-                    new int[]{0,0,0,50,0,100,100,0,100,0,0,0,0},
+                    new int[]{0,0,0,10,0,0,30,0,40,0,0,0,0},
                     nhanVat.getHanhtinh(), 10_000_000L, null, 0, 0, 0, -1
                 ));
                 mangAnh[chiso] = ui.vatPhamGachaKrandom[2];
                 break;
             case 3:
-                int soNgocCong = MathUtils.random(100,500);
+                int soNgocCong = MathUtils.random(10,70);
                 duLieu.tangNgoc(soNgocCong);
                 mangAnh[chiso] = ui.vatPhamGachaKrandom[3];
                 break;
@@ -1389,7 +1389,7 @@ public class ThemItemTest {
                 duLieu.themItemVaoHanhTrang(randomNgocRong());
                 break;
             case 7:
-                long soVangCong = MathUtils.random(100_000_000L,1_000_000_000L);
+                long soVangCong = MathUtils.random(50_000_000L,250_000_000L);
                 duLieu.tangVang(soVangCong);
                 mangAnh[chiso] = ui.vatPhamGachaKrandom[7];
                 break;
@@ -1435,7 +1435,7 @@ public class ThemItemTest {
                 duLieu.themItemVaoHanhTrang(itemHuyHieu);
                 break;
             case 13:
-                int soVangCongg = MathUtils.random(10_000_000,100_000_000);
+                int soVangCongg = MathUtils.random(5_000_000,50_000_000);
                 duLieu.tangVang(soVangCongg);
                 mangAnh[chiso] = ui.vatPhamGachaKrandom[13];
                 break;

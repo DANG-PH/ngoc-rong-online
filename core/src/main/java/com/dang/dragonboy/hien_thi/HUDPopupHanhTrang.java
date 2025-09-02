@@ -33,7 +33,7 @@ public class HUDPopupHanhTrang {
         setkichhoat.put("Dũng Sĩ Trong Băng Giá", "(5 món +40% Chí Mạng)");
         veHUD.PopupHanhTrangH = 0;
         float xCongThem = 0;
-        if (veHUD.dangHienPopupDeTu || veHUD.dangHienRuongDo) {
+        if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU || veHUD.dangHienRuongDo) {
             xCongThem = 1020 - width - 10;
         } else {
             xCongThem = 0;

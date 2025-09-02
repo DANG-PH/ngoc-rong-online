@@ -55,7 +55,10 @@ public class Npc {
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
             "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ";
-        param.size = 18;
+        param.size = 16;
+        param.borderWidth = 2f;
+        float xx = 0.4f;
+        param.borderColor = new Color(xx, xx, xx, 1f);
         font = generator.generateFont(param);
         generator.dispose();
         // Font có viền đen dành riêng cho dòng chữ "Đậu thần cấp ..."

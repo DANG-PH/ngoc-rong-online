@@ -120,125 +120,44 @@ public class HUDClickHandler {
             float nutXX = 350 - nutXW - 6;
             float nutXY = 610 - nutXH - 2;
             if (x >= nutXX && x <= nutXX + nutXW && y >= nutXY && y <= nutXY + nutXH) {
-                if (veHUD.dangHienGioiThieuGame) {
-                    veHUD.dangHienGioiThieuGame = false;
+                if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.THONG_BAO || veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.GIOI_THIEU_GAME) {
+                    veHUD.trangThaiChucNangHUDChucNang = TrangThaiChucNangHUD_ChucNang.NONE;
                     veHUD.scrollY = 0;
                     veHUD.oChiSoDangChon = -1;
                     veHUD.clickY = y;
                     veHUD.clickX = x;
                     veHUD.timeGlow = 0.3f;
-                } else if (veHUD.dangHienThongBaoGame) {
-                    veHUD.dangHienThongBaoGame = false;
+                } else if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU) {
+                    veHUD.trangThaiChucNangHUDChucNang = TrangThaiChucNangHUD_ChucNang.NONE;
                     veHUD.scrollY = 0;
                     veHUD.oChiSoDangChon = -1;
+                    veHUD.chucNangDeTuDangChon = 0;
                     veHUD.clickY = y;
                     veHUD.clickX = x;
                     veHUD.timeGlow = 0.3f;
-                } if (veHUD.dangHienChonMiniGame) {
-                    if (veHUD.dangHienMiniGameHuongDanThemChanLe) {
-                        veHUD.dangHienMiniGameHuongDanThemChanLe = false;
-                        veHUD.clickY = y;
-                        veHUD.clickX = x;
-                        veHUD.timeGlow = 0.2f;
-                        return;
-                    }
-                    else if (veHUD.dangHienMiniGameThamGiaChanLe) {
-                        veHUD.dangHienMiniGameThamGiaChanLe = false;
-                        veHUD.clickY = y;
-                        veHUD.clickX = x;
-                        veHUD.timeGlow = 0.2f;
-                        return;
-                    }
-                    else if (veHUD.dangHienMiniGameChanLe) {
-                        veHUD.dangHienMiniGameChanLe = false;
-                        veHUD.clickY = y;
-                        veHUD.clickX = x;
-                        veHUD.timeGlow = 0.2f;
-                        return;
-                    }
-                    else if (veHUD.dangHienMiniGameHuongDanThem) {
-                        veHUD.dangHienMiniGameHuongDanThem = false;
-                        veHUD.clickY = y;
-                        veHUD.clickX = x;
-                        veHUD.timeGlow = 0.2f;
-                        return;
-                    }
-                    else if (veHUD.dangHienMiniGameThamGia) {
-                        veHUD.dangHienMiniGameThamGia = false;
-                        veHUD.clickY = y;
-                        veHUD.clickX = x;
-                        veHUD.timeGlow = 0.2f;
-                        return;
-                    }
-                    else if (veHUD.dangHienMiniGame) {
-                        veHUD.dangHienMiniGame = false;
-                        veHUD.clickY = y;
-                        veHUD.clickX = x;
-                        veHUD.timeGlow = 0.2f;
-                        return;
+                }
+            } else if (x > 350 && x <= 1020 && !veHUD.DangHienPopupThongTin && !veHUD.HienPopUpGanSkill && !veHUD.DangHienPopupThongTin1 && !(veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.MINIGAME)) {
+                if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.GIOI_THIEU_GAME) {
+                    veHUD.trangThaiChucNangHUDChucNang = TrangThaiChucNangHUD_ChucNang.NONE;
+                    veHUD.scrollY = 0;
+                    veHUD.oChiSoDangChon = -1;
+                } else if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.THONG_BAO) {
+                    if (veHUD.trangThaiChucNangHUDChucNangThongBao == TrangThaiChucNangHUD_ChucNang_ThongBao.NONE) {
+                        veHUD.trangThaiChucNangHUDChucNang = TrangThaiChucNangHUD_ChucNang.NONE;
+                        veHUD.scrollY = 0;
+                        veHUD.oChiSoDangChon = -1;
                     }
                     else {
-                        veHUD.dangHienChonMiniGame = false;
-                        veHUD.clickY = y;
-                        veHUD.clickX = x;
-                        veHUD.timeGlow = 0.2f;
-                        return;
-                    }
-                } else {
-                    if (!veHUD.dangHienPopupDeTu) {
-                        veHUD.vuaClickTatPopup = true;
-                        veHUD.clickY = y;
-                        veHUD.clickX = x;
-                        veHUD.timeGlow = 0.2f;
-                    } else {
-                        if (veHUD.chucNangDeTuDangChon == 1) {
-                            veHUD.dangHienPopupDeTu = false;
-                            veHUD.scrollY = 0;
-                            veHUD.oChiSoDangChon = -1;
-                            veHUD.chucNangDeTuDangChon = 0;
-                            veHUD.clickY = y;
-                            veHUD.clickX = x;
-                            veHUD.timeGlow = 0.3f;
-                        }
-                    }
-                }
-            } else if (x > 350 && x <= 1020 && !veHUD.DangHienPopupThongTin && !veHUD.HienPopUpGanSkill && !veHUD.DangHienPopupThongTin1 && !veHUD.dangHienChonMiniGame) {
-                if (veHUD.dangHienGioiThieuGame) {
-                    veHUD.dangHienGioiThieuGame = false;
-                    veHUD.scrollY = 0;
-                    veHUD.oChiSoDangChon = -1;
-                } else if (veHUD.dangHienThongBaoGame) {
-                    if (veHUD.dangHienThongBaoLienHeAdmin) {
-                        veHUD.dangHienThongBaoLienHeAdmin = false;
-                        veHUD.scrollY = 0;
-                        veHUD.oChiSoDangChon = -1;
-                    } else if (veHUD.dangHienThongBaoCapNhat) {
-                        veHUD.dangHienThongBaoCapNhat = false;
-                        veHUD.scrollY = 0;
-                        veHUD.oChiSoDangChon = -1;
-                    } else if (veHUD.dangHienThongBaox2x3) {
-                        veHUD.dangHienThongBaox2x3 = false;
-                        veHUD.scrollY = 0;
-                        veHUD.oChiSoDangChon = -1;
-                    } else if (veHUD.dangHienThongBaoGiftCode) {
-                        veHUD.dangHienThongBaoGiftCode = false;
-                        veHUD.scrollY = 0;
-                        veHUD.oChiSoDangChon = -1;
-                    } else if (veHUD.dangHienThongBaoEvent) {
-                        veHUD.dangHienThongBaoEvent = false;
-                        veHUD.scrollY = 0;
-                        veHUD.oChiSoDangChon = -1;
-                    } else {
-                        veHUD.dangHienThongBaoGame = false;
+                        veHUD.trangThaiChucNangHUDChucNangThongBao = TrangThaiChucNangHUD_ChucNang_ThongBao.NONE;
                         veHUD.scrollY = 0;
                         veHUD.oChiSoDangChon = -1;
                     }
-                } else if (veHUD.dangChonNhacNen) {
-                    veHUD.dangChonNhacNen = false;
+                } else if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.NHAC_NEN) {
+                    veHUD.trangThaiChucNangHUDChucNang = TrangThaiChucNangHUD_ChucNang.NONE;
                     veHUD.scrollY = 0;
                     veHUD.oChiSoDangChon = -1;
                 } else {
-                    if (!veHUD.dangHienPopupDeTu) {
+                    if (!(veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU)) {
                         veHUD.tatPopupNhanVat();
                         veHUD.hangTrangDangChon = -1;
                         veHUD.oChiSoDangChon = -1;
@@ -250,19 +169,20 @@ public class HUDClickHandler {
             // cac nut chuc nang
             for (int i = 0; i < 5; i++) {
                 if (x >= 2+i*68+3 && x <= 2+i*68+3 + 68 && y >= 450 && y <= 450 + 52){
-                    if (!veHUD.dangHienPopupDeTu && !veHUD.dangHienChonMiniGame) {
-                        veHUD.chucNangDangChon = i;
+                    if (!(veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU) && !(veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.MINIGAME)) {
+                        switch (i) {
+                            case 0 -> veHUD.trangThaiChucNangHUD = TrangThaiChucNangHUD.NHIEM_VU;
+                            case 1 -> veHUD.trangThaiChucNangHUD = TrangThaiChucNangHUD.HANH_TRANG;
+                            case 2 -> veHUD.trangThaiChucNangHUD = TrangThaiChucNangHUD.KY_NANG;
+                            case 3 -> veHUD.trangThaiChucNangHUD = TrangThaiChucNangHUD.BANG_HOI;
+                            case 4 -> veHUD.trangThaiChucNangHUD = TrangThaiChucNangHUD.CHUC_NANG;
+                        }
                         veHUD.scrollY = 0;
                         veHUD.oChiSoDangChon = -1;
                         veHUD.DangHienPopupThongTin1 = false;
                         veHUD.hangTrangDangChon = -1;
-                        veHUD.dangHienGioiThieuGame = false;
-                        veHUD.dangHienThongBaoGame = false;
-                        veHUD.dangHienThongBaoLienHeAdmin = false;
-                        veHUD.dangHienThongBaox2x3 = false;
-                        veHUD.dangHienThongBaoCapNhat = false;
-                        veHUD.dangHienThongBaoGiftCode = false;
-                        veHUD.dangHienThongBaoEvent = false;
+                        veHUD.trangThaiChucNangHUDChucNangThongBao = TrangThaiChucNangHUD_ChucNang_ThongBao.NONE;
+                        veHUD.trangThaiChucNangHUDChucNang = TrangThaiChucNangHUD_ChucNang.NONE;
                         veHUD.clickX = x;
                         veHUD.clickY = y;
                         veHUD.timeGlow = 0.3f;
@@ -271,7 +191,7 @@ public class HUDClickHandler {
             }
         }
         boolean duDieuKienn = false;
-        if (veHUD.dangHienPopup && (veHUD.chucNangDangChon == 1 || veHUD.dangHienPopupDeTu) && !veHUD.DangHienPopupThongTin1 && !veHUD.DangHienPopupThongTin2 && !veHUD.dangHienThongBao) {
+        if (veHUD.dangHienPopup && (veHUD.trangThaiChucNangHUD == TrangThaiChucNangHUD.HANH_TRANG || veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU) && !veHUD.DangHienPopupThongTin1 && !veHUD.DangHienPopupThongTin2 && !veHUD.dangHienThongBao) {
             duDieuKienn = true;
         }
         if (veHUD.dangHienRuongDo && !veHUD.DangHienPopupThongTin1 && !veHUD.DangHienPopupThongTin3 && !veHUD.dangHienThongBao) {
@@ -294,10 +214,10 @@ public class HUDClickHandler {
             int KhoangCachItem = 49;
             int tongSoO = 8 + 12;
             boolean duDieuKien = false;
-            if (veHUD.dangHienPopupDeTu || veHUD.dangHienRuongDo) {
+            if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU || veHUD.dangHienRuongDo) {
                 duDieuKien = x >= 3 + 1020-350 && x <= 3 + 344 + 1020-350 && y >= viewY && y <= viewY + viewHeight;
             }
-            if (veHUD.chucNangDangChon == 1 && veHUD.dangHienPopup) {
+            if (veHUD.trangThaiChucNangHUD == TrangThaiChucNangHUD.HANH_TRANG && veHUD.dangHienPopup) {
                 duDieuKien = x >= 3 && x <= 3 + 344 && y >= viewY && y <= viewY + viewHeight;
             }
             if (duDieuKien) {
@@ -399,7 +319,7 @@ public class HUDClickHandler {
                 }
             }
         }
-        if (veHUD.dangHienPopup && veHUD.chucNangDangChon == 2 && !veHUD.DangHienPopupThongTin && !veHUD.HienPopUpGanSkill) {
+        if (veHUD.dangHienPopup && veHUD.trangThaiChucNangHUD == TrangThaiChucNangHUD.KY_NANG && !veHUD.DangHienPopupThongTin && !veHUD.HienPopUpGanSkill) {
             float viewY = 35;
             float viewHeight = 444 - 35;
             int KhoangCachItem = 61;
@@ -456,7 +376,7 @@ public class HUDClickHandler {
                 }
             }
         }
-        if (veHUD.dangHienPopup && veHUD.chucNangDangChon == 4 && !veHUD.dangHienThongBaoGame && !veHUD.dangHienGioiThieuGame && !veHUD.dangHienPopupDeTu && !veHUD.dangChonNhacNen && !veHUD.dangHienChonMiniGame) {
+        if (veHUD.dangHienPopup && veHUD.trangThaiChucNangHUD == TrangThaiChucNangHUD.CHUC_NANG && veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.NONE) {
             float viewY = 35;
             float viewHeight = 444 - 35;
             int KhoangCachItem = 49;
@@ -484,7 +404,7 @@ public class HUDClickHandler {
             }
         }
         // chức năng giới thiệu game
-        if (veHUD.dangHienGioiThieuGame) {
+        if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.GIOI_THIEU_GAME) {
             float viewY = 35;
             float viewHeight = 444 - 35;
             if (x >= (350-140)/2f && x <= (350-140)/2f + 140 && y >= viewY && y <= viewY + viewHeight) {
@@ -517,7 +437,7 @@ public class HUDClickHandler {
             }
         }
         // chuc nang mini game
-        if (veHUD.dangHienChonMiniGame && !veHUD.dangHienMiniGame && !veHUD.dangHienMiniGameChanLe) {
+        if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.MINIGAME && veHUD.trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.NONE) {
             for (int i = 0; i < 2; i++) {
                 if (x >= (Gdx.graphics.getWidth()-240)/2f + i * 120 && x <= (Gdx.graphics.getWidth()-240)/2f + i * 120 + 115 && y >= 120 - 115 && y <= 120) {
                     veHUD.nutClickTimer3 = 0.3f;
@@ -525,14 +445,14 @@ public class HUDClickHandler {
                 }
             }
             if (x < (Gdx.graphics.getWidth()-240)/2f || x > (Gdx.graphics.getWidth()-240)/2f + 240) {
-                veHUD.dangHienChonMiniGame = false;
+                veHUD.trangThaiChucNangHUDChucNang = TrangThaiChucNangHUD_ChucNang.NONE;
             } else {
                 if (y > 120) {
-                    veHUD.dangHienChonMiniGame = false;
+                    veHUD.trangThaiChucNangHUDChucNang = TrangThaiChucNangHUD_ChucNang.NONE;
                 }
             }
         }
-        if (veHUD.dangHienMiniGame && !veHUD.dangHienMiniGameHuongDanThem && !veHUD.dangHienMiniGameThamGia) {
+        if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.MINIGAME && veHUD.trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.NONE_CSMM) {
             for (int i = 0; i < 3; i++) {
                 if (x >= (Gdx.graphics.getWidth()-360)/2f + i * 120 && x <= (Gdx.graphics.getWidth()-360)/2f + i * 120 + 115 && y >= 120 - 115 && y <= 120) {
                     veHUD.nutClickTimer3 = 0.3f;
@@ -540,28 +460,28 @@ public class HUDClickHandler {
                 }
             }
             if (x < (Gdx.graphics.getWidth()-360)/2f || x > (Gdx.graphics.getWidth()-360)/2f + 360) {
-                veHUD.dangHienMiniGame = false;
+                veHUD.trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE;
             } else {
                 if (y > 120) {
-                    veHUD.dangHienMiniGame = false;
+                    veHUD.trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE;
                 }
             }
         }
-        if (veHUD.dangHienMiniGame && veHUD.dangHienMiniGameHuongDanThem) {
+        if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.MINIGAME && veHUD.trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.HUONG_DAN_THEM_CSMM) {
             float i = 1;
             if (x >= (Gdx.graphics.getWidth()-360)/2f + i * 120 && x <= (Gdx.graphics.getWidth()-360)/2f + i * 120 + 115 && y >= 120 - 115 && y <= 120) {
                 veHUD.nutClickTimer3 = 0.3f;
                 veHUD.nuthanhtrangchon = i;
             }
             if (x < (Gdx.graphics.getWidth()-360)/2f || x > (Gdx.graphics.getWidth()-360)/2f + 360) {
-                veHUD.dangHienMiniGameHuongDanThem = false;
+                veHUD.trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE_CSMM;
             } else {
                 if (y > 120) {
-                    veHUD.dangHienMiniGameHuongDanThem = false;
+                    veHUD.trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE_CSMM;
                 }
             }
         }
-        if (veHUD.dangHienMiniGame && veHUD.dangHienMiniGameThamGia) {
+        if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.MINIGAME && veHUD.trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.THAM_GIA_CSMM) {
             float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
             float nutY = 12;
             if (x >= nutX-81 && x <= nutX-81 + 140 && y >= nutY && y <= nutY + 50 ) {
@@ -573,7 +493,7 @@ public class HUDClickHandler {
                 veHUD.nutduocchon = 2;
             }
         }
-        if (veHUD.dangHienMiniGameChanLe && !veHUD.dangHienMiniGameHuongDanThemChanLe && !veHUD.dangHienMiniGameThamGiaChanLe) {
+        if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.MINIGAME && veHUD.trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.NONE_CHAN_LE) {
             for (int i = 0; i < 3; i++) {
                 if (x >= (Gdx.graphics.getWidth()-360)/2f + i * 120 && x <= (Gdx.graphics.getWidth()-360)/2f + i * 120 + 115 && y >= 120 - 115 && y <= 120) {
                     veHUD.nutClickTimer3 = 0.3f;
@@ -581,28 +501,28 @@ public class HUDClickHandler {
                 }
             }
             if (x < (Gdx.graphics.getWidth()-360)/2f || x > (Gdx.graphics.getWidth()-360)/2f + 360) {
-                veHUD.dangHienMiniGameChanLe = false;
+                veHUD.trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE;
             } else {
                 if (y > 120) {
-                    veHUD.dangHienMiniGameChanLe = false;
+                    veHUD.trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE;
                 }
             }
         }
-        if (veHUD.dangHienMiniGameChanLe && veHUD.dangHienMiniGameHuongDanThemChanLe) {
+        if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.MINIGAME && veHUD.trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.HUONG_DAN_THEM_CHAN_LE) {
             float i = 1;
             if (x >= (Gdx.graphics.getWidth()-360)/2f + i * 120 && x <= (Gdx.graphics.getWidth()-360)/2f + i * 120 + 115 && y >= 120 - 115 && y <= 120) {
                 veHUD.nutClickTimer3 = 0.3f;
                 veHUD.nuthanhtrangchon = i;
             }
             if (x < (Gdx.graphics.getWidth()-360)/2f || x > (Gdx.graphics.getWidth()-360)/2f + 360) {
-                veHUD.dangHienMiniGameHuongDanThemChanLe = false;
+                veHUD.trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE_CHAN_LE;
             } else {
                 if (y > 120) {
-                    veHUD.dangHienMiniGameHuongDanThemChanLe = false;
+                    veHUD.trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE_CHAN_LE;
                 }
             }
         }
-        if (veHUD.dangHienMiniGameChanLe && veHUD.dangHienMiniGameThamGiaChanLe) {
+        if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.MINIGAME && veHUD.trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.THAM_GIA_CHAN_LE) {
             float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
             float nutY = 12;
             if (x >= nutX-81 && x <= nutX-81 + 140 && y >= nutY && y <= nutY + 50 ) {
@@ -615,7 +535,7 @@ public class HUDClickHandler {
             }
         }
         // chức năng thông báo game
-        if (veHUD.dangHienThongBaoGame && !veHUD.dangHienThongBaoCapNhat && !veHUD.dangHienThongBaoEvent && !veHUD.dangHienThongBaoLienHeAdmin && !veHUD.dangHienThongBaox2x3 && !veHUD.dangHienThongBaoGiftCode) {
+        if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.THONG_BAO && veHUD.trangThaiChucNangHUDChucNangThongBao == TrangThaiChucNangHUD_ChucNang_ThongBao.NONE) {
             float viewY = 35;
             float viewHeight = 444 - 35;
             int KhoangCachItem = 49;
@@ -637,7 +557,7 @@ public class HUDClickHandler {
                 }
             }
         }
-        if (veHUD.dangHienPopupDeTu) {
+        if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU) {
             if (x > 1020-350 && x <= 1020) {
                 veHUD.dangChonHanhTrangSuPhu = true;
             } else {
@@ -701,9 +621,9 @@ public class HUDClickHandler {
                 }
             }
         }
-        if (veHUD.dangHienPopupDeTu && !veHUD.DangHienPopupThongTin1 && !veHUD.DangHienPopupThongTin2 && !veHUD.dangHienThongBao) {
+        if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU && !veHUD.DangHienPopupThongTin1 && !veHUD.DangHienPopupThongTin2 && !veHUD.dangHienThongBao) {
             if (x > 350 && x <= 1020-350) {
-                veHUD.dangHienPopupDeTu = false;
+                veHUD.trangThaiChucNangHUDChucNang = TrangThaiChucNangHUD_ChucNang.NONE;
                 veHUD.scrollY = 0;
                 veHUD.oChiSoDangChon = -1;
                 veHUD.chucNangDeTuDangChon = 0;
@@ -811,7 +731,7 @@ public class HUDClickHandler {
         }
 
         // chức năng đệ tử game
-        if (veHUD.dangHienPopupDeTu && veHUD.chucNangDeTuDangChon == 1) {
+        if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU && veHUD.chucNangDeTuDangChon == 1) {
             float viewY = 35;
             float viewHeight = 444 - 35;
             int KhoangCachItem = 49;
@@ -834,7 +754,7 @@ public class HUDClickHandler {
             }
         }
         // chức năng chọn nhạc nền
-        if (veHUD.dangChonNhacNen) {
+        if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.NHAC_NEN) {
             float viewY = 35;
             float viewHeight = 444 - 35;
             int KhoangCachItem = 49;
@@ -877,22 +797,22 @@ public class HUDClickHandler {
                 return;
             }
             if (x > 0 && x <= 360 && (y > veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH || y < veHUD.PopupHanhTrangY - 130)) {
-                if (!veHUD.dangHienPopupDeTu && !veHUD.dangHienRuongDo) {
+                if (!(veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU) && !veHUD.dangHienRuongDo) {
                     veHUD.DangHienPopupThongTin1 = false;
                     veHUD.TimeChoHienPopup = 0;
                 }
             } if (x > 360 && x <= 1020) {
-                if (!veHUD.dangHienPopupDeTu && !veHUD.dangHienRuongDo) {
+                if (!(veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU) && !veHUD.dangHienRuongDo) {
                     veHUD.DangHienPopupThongTin1 = false;
                     veHUD.TimeChoHienPopup = 0;
                 }
             } if (x > 1020 - 360 && x <= 1020 && (y > veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH || y < veHUD.PopupHanhTrangY - 130)) {
-                if (veHUD.dangHienPopupDeTu || veHUD.dangHienRuongDo) {
+                if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU || veHUD.dangHienRuongDo) {
                     veHUD.DangHienPopupThongTin1 = false;
                     veHUD.TimeChoHienPopup = 0;
                 }
             } if (x > 0 && x <= 1020-360) {
-                if (veHUD.dangHienPopupDeTu) {
+                if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU) {
                     veHUD.DangHienPopupThongTin1 = false;
                     veHUD.TimeChoHienPopup = 0;
                     veHUD.dangChonHanhTrangSuPhu = true;
@@ -908,7 +828,7 @@ public class HUDClickHandler {
         }
         if (veHUD.DangHienPopupThongTin1) {
             float xCongThem = 0;
-            if (veHUD.dangHienPopupDeTu || veHUD.dangHienRuongDo) {
+            if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU || veHUD.dangHienRuongDo) {
                 xCongThem = 1020 - 360 - 10;
             } else {
                 xCongThem = 0;

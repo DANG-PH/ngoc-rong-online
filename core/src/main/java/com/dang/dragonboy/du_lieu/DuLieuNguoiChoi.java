@@ -883,7 +883,7 @@ public class DuLieuNguoiChoi {
     }
 
     public boolean duChoTrongHanhTrang(int choTrong) {
-        if (hanhTrang.size()+choTrong > MAXRUONGDO) return false;
+        if (hanhTrang.size()+choTrong > MAXHANHTRANG) return false;
         return true;
     }
 

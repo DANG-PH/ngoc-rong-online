@@ -4,9 +4,8 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Gdx;
 
-import com.dang.dragonboy.hien_thi.VeHUD;
+import com.dang.dragonboy.hien_thi.*;
 import com.dang.dragonboy.nhan_vat.NhanVat;
-import com.dang.dragonboy.hien_thi.QuanLyCamera;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_dungle.TrangThaiChucNang_admin_dungle;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_haidang.admin_haidang;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_dungle.admin_dungle;
@@ -123,7 +122,7 @@ public class ThaoTac extends InputAdapter {
         if (button == Input.Buttons.LEFT && !hud.dangHienPopup && !hud.dangHienRuongDo) {
             camera.batDauKeoCamera(screenX, screenY);
         }
-        if (hud.dangHienPopupDeTu) {
+        if (hud.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU) {
             if ( screenX >= 1020 - 360 && screenX <= 1020 && y > 0 && y <= 444) {
                 hud.dangChonHanhTrangDeTu = false;
                 hud.dangChonHanhTrangSuPhu = true;
@@ -145,10 +144,10 @@ public class ThaoTac extends InputAdapter {
         }
         // Kéo hành trang sư phụ bên trái (chỉ khi không mở đệ tử)
         if (button == Input.Buttons.LEFT &&
-            (hud.chucNangDangChon == 1 || hud.chucNangDangChon == 2 || hud.chucNangDangChon == 4 ) &&
-            !hud.dangHienPopupDeTu &&
+            (hud.trangThaiChucNangHUD == TrangThaiChucNangHUD.HANH_TRANG || hud.trangThaiChucNangHUD == TrangThaiChucNangHUD.KY_NANG || hud.trangThaiChucNangHUD == TrangThaiChucNangHUD.CHUC_NANG) &&
+            !(hud.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU) &&
             !hud.DangHienPopupThongTin1 &&
-            !hud.dangHienChonMiniGame &&
+            !(hud.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.MINIGAME) &&
             !hud.dangHienRuongDo &&
             screenX > 0 && screenX <= 350 &&
             y > 0 && y <= 444) {
@@ -161,7 +160,7 @@ public class ThaoTac extends InputAdapter {
 
         // Kéo hành trang đệ tử bên trái
         if (button == Input.Buttons.LEFT &&
-            hud.dangHienPopupDeTu &&
+            hud.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU &&
             hud.dangChonHanhTrangDeTu &&
             !hud.DangHienPopupThongTin1 &&
             screenX > 0 && screenX <= 350 &&
@@ -185,7 +184,7 @@ public class ThaoTac extends InputAdapter {
 
         // Kéo hành trang sư phụ bên phải (chỉ khi mở popup đệ tử hoac ruong do, và đang chọn sư phụ)
         if (button == Input.Buttons.LEFT &&
-            (hud.dangHienPopupDeTu || hud.dangHienRuongDo) &&
+            (hud.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU || hud.dangHienRuongDo) &&
             hud.dangChonHanhTrangSuPhu &&
             !hud.DangHienPopupThongTin1 &&
             screenX >= 1020 - 360 && screenX <= 1020 &&
@@ -269,8 +268,8 @@ public class ThaoTac extends InputAdapter {
     @Override
     public boolean scrolled(float amountX, float amountY) {
         // chỉ xử lý khi đang mở popup và chọn mục hành trang
-        if (hud.dangHienPopup && (hud.chucNangDangChon == 1 || hud.chucNangDangChon == 2 || hud.chucNangDangChon == 4 || hud.chucNangDangChon == 3) && !hud.dangHienThongBao && !hud.DangHienPopupThongTin1 && !hud.DangHienPopupThongTin && !hud.DangHienPopupThongTin2 && !hud.dangHienChonMiniGame) {
-            if (!hud.dangHienPopupDeTu) {
+        if (hud.dangHienPopup && (hud.trangThaiChucNangHUD == TrangThaiChucNangHUD.HANH_TRANG || hud.trangThaiChucNangHUD == TrangThaiChucNangHUD.KY_NANG || hud.trangThaiChucNangHUD == TrangThaiChucNangHUD.CHUC_NANG) && !hud.dangHienThongBao && !hud.DangHienPopupThongTin1 && !hud.DangHienPopupThongTin && !hud.DangHienPopupThongTin2 && !(hud.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.MINIGAME)) {
+            if (!(hud.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU)) {
                 hud.scroll((int) amountY); // amountY là số lần lăn bánh (thường là ±1)
                 return true;
             } else {
@@ -284,7 +283,7 @@ public class ThaoTac extends InputAdapter {
                 }
             }
         }
-        if (hud.dangHienRuongDo && !hud.dangHienThongBao && !hud.DangHienPopupThongTin1 && !hud.DangHienPopupThongTin && !hud.DangHienPopupThongTin3 && !hud.dangHienChonMiniGame) {
+        if (hud.dangHienRuongDo && !hud.dangHienThongBao && !hud.DangHienPopupThongTin1 && !hud.DangHienPopupThongTin && !hud.DangHienPopupThongTin3 && !(hud.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.MINIGAME)) {
             if (hud.dangChonHanhTrangSuPhu) {
                 hud.scroll((int) amountY); // amountY là số lần lăn bánh (thường là ±1)
                 return true;
@@ -309,7 +308,7 @@ public class ThaoTac extends InputAdapter {
                 }
             }
         }
-        if (hud.dangHienMiniGameThamGia) {
+        if (hud.trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.THAM_GIA_CSMM) {
             if (character == '\b') {
                 if (!hud.soNgocNguoiChoiNhap.isEmpty()) {
                     hud.soNgocNguoiChoiNhap = hud.soNgocNguoiChoiNhap.substring(0, hud.soNgocNguoiChoiNhap.length() - 1);
@@ -320,7 +319,7 @@ public class ThaoTac extends InputAdapter {
                 }
             }
         }
-        if (hud.dangHienMiniGameThamGiaChanLe) {
+        if (hud.trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.THAM_GIA_CHAN_LE) {
             if (character == '\b') {
                 if (!hud.soVangNguoiChoiNhapChanLe.isEmpty()) {
                     hud.soVangNguoiChoiNhapChanLe = hud.soVangNguoiChoiNhapChanLe.substring(0, hud.soVangNguoiChoiNhapChanLe.length() - 1);

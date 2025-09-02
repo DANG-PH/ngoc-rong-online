@@ -30,32 +30,48 @@ public class ham_tien_ich {
 
     public static int randomSo(admin_haidang npc) {
         float tileHienTai = npc.tileCoBanVIP;
-        // Nếu vượt mốc pity mềm -> tăng tỉ lệ mỗi lần
         if (npc.demKhongVIP >= npc.mocPityMem) {
-            // mỗi lần sau mốc 75 tăng 0.5% (0.005f)
             float congThem = 0.005f * (npc.demKhongVIP - npc.mocPityMem + 1);
-            tileHienTai = Math.min(0.10f, npc.tileCoBanVIP + congThem); // trần 10%
+            tileHienTai = Math.min(0.10f, npc.tileCoBanVIP + congThem);
         }
-        // pity cứng: đảm bảo lần thứ 90 ra VIP
         boolean batBuocRaVIP = (npc.demKhongVIP + 1 >= npc.mocPityCung);
 
-        boolean laVIP = batBuocRaVIP || Math.random() < tileHienTai;
+        float P = batBuocRaVIP ? 1f : tileHienTai;  // VIP chính
+        float rand = (float)Math.random();
 
         int ketQua;
-        if (laVIP) {
+        if (rand < P) {
+            // VIP chính
             int[] oVIP = {0, 4, 8, 12};
             ketQua = oVIP[MathUtils.random(oVIP.length - 1)];
             npc.demKhongVIP = 0;
         } else {
-            int[] oThuong = {1,3,6,7,9,10,13,14,15};
-            int[] oVipLoai2 = {2,5,11};
-            boolean chonVipLoai2 = Math.random() < 0.01;
-            if (chonVipLoai2) {
-                ketQua = oVipLoai2[MathUtils.random(oVipLoai2.length - 1)];
-            } else {
-                ketQua = oThuong[MathUtils.random(oThuong.length - 1)];
+            // Phần còn lại (1 - P)
+            float trongSo = rand - P;
+            float phanConLai = 1 - P;
+            System.out.println(trongSo+", "+phanConLai);
+            // nhóm 2,5 (1%)
+            if (trongSo < 0.01f * phanConLai) {
+                int[] nhom015 = {2, 5};
+                ketQua = nhom015[MathUtils.random(nhom015.length - 1)];
+            }
+            // nhóm 15,11,10 (9%)
+            else if (trongSo < (0.01f + 0.09f) * phanConLai) {
+                int[] nhom15 = {15, 11, 10};
+                ketQua = nhom15[MathUtils.random(nhom15.length - 1)];
+            }
+            // nhóm 6,7 (20%)
+            else if (trongSo < (0.01f + 0.09f + 0.20f) * phanConLai) {
+                int[] nhom30 = {6, 7};
+                ketQua = nhom30[MathUtils.random(nhom30.length - 1)];
+            }
+            // còn lại (70%)
+            else {
+                int[] nhomConLai = {1, 9, 13, 14, 3};
+                ketQua = nhomConLai[MathUtils.random(nhomConLai.length - 1)];
             }
             npc.demKhongVIP++;
+            System.out.println(ketQua);
         }
         return ketQua;
     }
