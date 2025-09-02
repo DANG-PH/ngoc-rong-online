@@ -242,7 +242,7 @@ public class NhanVat {
         if (dangDungDat && y_muc_tieu <= y+cao ) {
             y_muc_tieu = y;
         }
-        batch.draw(clickdichuyen[frameIndex], x_muc_tieu, y_muc_tieu,clickdichuyen[frameIndex].getWidth()*0.5f*flipscale,clickdichuyen[frameIndex].getHeight()*0.5f);
+        batch.draw(clickdichuyen[frameIndex], x_muc_tieu-clickdichuyen[frameIndex].getWidth()*0.5f*flipscale/2f, y_muc_tieu,clickdichuyen[frameIndex].getWidth()*0.5f*flipscale,clickdichuyen[frameIndex].getHeight()*0.5f);
     }
 
     // cai trang
@@ -1179,9 +1179,9 @@ public class NhanVat {
         if (dangDungDat && diChuyenDenMucTieu) {
             float x_real;
             if (flipX) {
-                x_real = x+rong;
+                x_real = x+rong/2f;
             } else {
-                x_real = x;
+                x_real = x+rong/2f;
             }
             boolean ganX = Math.abs(x_real - x_muc_tieu) < 10f;
             boolean chenhLechY = Math.abs(y+cao - y_muc_tieu) > 5f;
@@ -1208,11 +1208,11 @@ public class NhanVat {
         if (!dangDungDat && diChuyenDenMucTieu) {
             float x_real;
             if (flipX) {
-                x_real = x+rong;
+                x_real = x+rong/2f;
             } else {
-                x_real = x;
+                x_real = x+rong/2f;
             }
-            boolean daDenX = Math.abs(x_real - x_muc_tieu) < 5f;
+            boolean daDenX = Math.abs(x_real - x_muc_tieu) < 10f;
             boolean daDenY = Math.abs(y - y_muc_tieu) < 5f;
 
             // Nếu Y mục tiêu nằm thấp hơn hiện tại → chỉ rơi xuống, không đi ngang

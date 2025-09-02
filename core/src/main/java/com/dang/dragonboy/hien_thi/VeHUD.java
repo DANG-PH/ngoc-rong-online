@@ -26,6 +26,10 @@ import com.dang.dragonboy.xu_ly_map.npc.Npc;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_haidang.admin_haidang;
 
 public class VeHUD {
+    //fps
+    private float timeCapNhatFPS = 0f;
+    private int fps = 0;
+
     public ThemItemTest themItemTest;
     private HUDThoiGianItemPhuTro thoiGianItemPhuTro;
     private HUDRongThan HUDRongThan;
@@ -709,6 +713,11 @@ public class VeHUD {
         batch.draw(thanhhpnv1,165, screenHeight - 80 - 5 + 55);
         batch.draw(thanhkinv1,165, screenHeight - 80 - 5 + 55-20);
 
+//        //FPS
+//        fontTenSkill.setColor(0.761f, 0.114f, 0.067f, 1f);
+//        layout.setText(fontTenSkill,"FPS: "+fps);
+//        fontTenSkill.draw(batch,layout,166,screenHeight - 80 - 5 + 55-20-15);
+
         if (!dangHienKhungChat && !daClickVaoNpc && !dangHienDauThan && !(timeHienRongThan<=300-2.1f && timeHienRongThan>0)) {
             // ô chat (góc phải trên)
             int ochatW = 60;
@@ -959,6 +968,13 @@ public class VeHUD {
         }
     }
     public void update(float delta) {
+//        //fps
+//        timeCapNhatFPS += delta;
+//        if (timeCapNhatFPS >= 1) {
+//            timeCapNhatFPS = 0;
+//            fps = Gdx.graphics.getFramesPerSecond();
+//        }
+
         thoiGianItemPhuTro.capNhatThoiGianItem(delta);
 
         HUDRongThan.capNhatThoiGian(delta);

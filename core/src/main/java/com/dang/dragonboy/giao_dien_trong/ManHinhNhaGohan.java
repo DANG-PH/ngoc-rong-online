@@ -82,7 +82,7 @@ public class ManHinhNhaGohan implements Screen {
     private int HanhTinhDuocChon;
     private float thoiGianTichLuy = 0;
 
-    private MapCoBan map, mapLangAru;
+    static MapCoBan map, mapLangAru;
     private List<Npc> danhSachNpc;
     private Map<String, NpcTaiAnh> npcTaiAnhMap;
 

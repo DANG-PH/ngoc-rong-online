@@ -50,7 +50,7 @@ public class ManHinhDoiHoaCuc implements Screen {
     private Texture khoi;
     private float scrollX_khoi = 0,scrollX_khoi1 = 0;
 
-    private MapCoBan map, mapLangAru;
+    static MapCoBan map, mapLangAru;
     private List<Npc> danhSachNpc;
     private Map<String, NpcTaiAnh> npcTaiAnhMap;
 

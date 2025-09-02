@@ -58,7 +58,7 @@ public class ManHinhLangAru implements Screen {
     private int frameLua = 0;
     private float timeLua = 0f;
 
-    private MapCoBan map, mapNhaGohan, mapDoiHoaCuc;
+    static MapCoBan map, mapNhaGohan, mapDoiHoaCuc;
     private List<Npc> danhSachNpc;
     private Map<String, NpcTaiAnh> npcTaiAnhMap;
 

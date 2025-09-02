@@ -611,6 +611,7 @@ public class HUDPopupRenderer {
             veHUD.font.draw(batch,layout,15,444-115-20-20 + veHUD.scrollY);
             veHUD.maxScroll = Math.max(0, layout.height + 115 + 50 + 70 - viewHeight);
             batch.draw(veHUD.isThongBaoOKPressed>0? veHUD.nutclick : veHUD.nutdn, (350-140)/2f, 444-115-20-20-70 - h + veHUD.scrollY, 140, 50);
+            veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
             layout.setText(veHUD.fontTenSkill, "Nhận quà");
             veHUD.fontTenSkill.draw(batch, layout, (350-140)/2f + (140 - layout.width) / 2f, 444-115-20-20-70 -h + 30 +  veHUD.scrollY);
             batch.flush();
