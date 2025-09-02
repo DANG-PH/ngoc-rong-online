@@ -35,7 +35,7 @@ public class Npc {
     LoaiNPC loainpc;
     private boolean daHuy = false;
 
-    public NpcHUDrender npcHUDrender;
+    public NpcHUDrender npcHUDrender = null;
 
     public String tinNhanChat = "";
     public boolean dangHienTinNhanChat = false;
@@ -101,7 +101,10 @@ public class Npc {
     }
     public void setNhanVat(NhanVat nv) {
         nhanVat = nv;
-        this.npcHUDrender = new NpcHUDrender(this,nhanVat.getVeHUD(),nhanVat.getDuLieuNguoiChoi(),nhanVat);
+        if (npcHUDrender == null) {
+            this.npcHUDrender = new NpcHUDrender(this, nhanVat.getVeHUD(), nhanVat.getDuLieuNguoiChoi(), nhanVat);
+        }
+
     }
 
     public void ve(SpriteBatch batch, float thoiGianTichLuy) {
@@ -128,19 +131,19 @@ public class Npc {
             // Tính vị trí vẽ theo tọa độ NPC cộng với offset và dao động
             float baseX =flipX ? x + rong - offset.getOffsetX() : x + offset.getOffsetX();
             float baseY = y + offset.getOffsetY();
+            float thanX = baseX + (chanW / 2f - thanW / 2f + offset.getThanXOffset())* flipScale;
+            float thanY = baseY + chanH + doDaoDong;
+            float dauX = baseX + (chanW / 2f - dauW / 2f + offset.getDauXOffset())* flipScale;
+            float dauY = thanY + thanH;
 
             // Vẽ chân
             batch.draw(chan, baseX, baseY, chanW * flipScale, chanH);
 
-            // Vẽ thân
-            float thanX = baseX + (chanW / 2f - thanW / 2f + offset.getThanXOffset())* flipScale;
-            float thanY = baseY + chanH + doDaoDong;
-            batch.draw(than, thanX, thanY - 10.2f + offset.getThanYOffset(), thanW * flipScale, thanH);
-
             // Vẽ đầu
-            float dauX = baseX + (chanW / 2f - dauW / 2f + offset.getDauXOffset())* flipScale;
-            float dauY = thanY + thanH;
             batch.draw(dau, dauX, dauY + offset.getDauYOffset(), dauW * flipScale, dauH);
+
+            // Vẽ thân
+            batch.draw(than, thanX, thanY - 10.2f + offset.getThanYOffset(), thanW * flipScale, thanH);
 
             //Vẽ mũi tên Npc nếu đang click
             float tenY = baseY + chanH + dauH + 30;
@@ -442,7 +445,7 @@ public class Npc {
             if (!LoiThoai_ChucNang_Npc.getLoiThoaiNgoai(ten)[0].equals("null")) {
                 timeLauLauChat += Gdx.graphics.getDeltaTime();
                 if (timeLauLauChat > 10f) {
-                    boolean duocChat = Math.random() < 0.9;
+                    boolean duocChat = Math.random() < 0.5;
                     if (duocChat) {
                         dangHienTinNhanChat = true;
                         timeHienTinNhan = 2f;

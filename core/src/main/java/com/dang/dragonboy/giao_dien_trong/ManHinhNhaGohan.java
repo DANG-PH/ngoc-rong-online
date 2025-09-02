@@ -120,21 +120,6 @@ public class ManHinhNhaGohan implements Screen {
                 hanhtinh, nhanvat
             );
             nhanVat = haidang;
-//        NhanVatCauHinh c2 = Doi_avt_ao_quan(hanhtinh,nhanvat+"_base","set_huy_diet","set_cam");
-//        if (!NhanVatXuLy.getDangMacCaiTrang()){
-//            nhanVat.fixDau(c2.dau_dung, c2.dau_chay,c2.avt,c2.lechMap,c2.iconct);
-//            nhanVat.fixThan(c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,c2.than_bay,c2.lechMap,c2.ao);
-//            nhanVat.fixChan(c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,c2.chan_bay,c2.lechMap,c2.quan);
-//        } else {
-//            nhanVat.fixCaiTrang(
-//                c2.dau_dung, c2.dau_chay,
-//                c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
-//                c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
-//                c2.than_bay, c2.chan_bay,
-//                c2.lechMap,
-//                c2.avt
-//            );
-//        }
             nhanVat.setTen(tenNhanVat); // set tên nhân vật trong nhanvat.java
             hudRenderer.setNhanVat(nhanVat);// load cái này để đổi avt theo ct
             hudRenderer.setCamera(camManager);

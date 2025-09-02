@@ -4,11 +4,13 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Gdx;
 
-import com.badlogic.gdx.math.Vector3;
 import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.hien_thi.QuanLyCamera;
-import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_haidang;
+import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_dungle.TrangThaiChucNang_admin_dungle;
+import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_haidang.admin_haidang;
+import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_dungle.admin_dungle;
+import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle.TrangThaiChucNang_admin_thanhle;
 
 public class ThaoTac extends InputAdapter {
     private int yCuKeo = 0;
@@ -333,6 +335,20 @@ public class ThaoTac extends InputAdapter {
             if (hud.npcHienTai.npcHUDrender.ui_npc instanceof admin_haidang) {
                 admin_haidang ui = (admin_haidang) hud.npcHienTai.npcHUDrender.ui_npc;
                 if (ui.dangHienChatDoiVeQuay) {
+                    if (character == '\b') {
+                        if (!ui.tinNhanChat.isEmpty()) {
+                            ui.tinNhanChat = ui.tinNhanChat.substring(0, ui.tinNhanChat.length() - 1);
+                        }
+                    } else if (Character.toString(character).matches("[a-zA-Z0-9]")) {
+                        if (ui.tinNhanChat.length() < 100) {
+                            ui.tinNhanChat += character;
+                        }
+                    }
+                }
+            }
+            if (hud.npcHienTai.npcHUDrender.ui_npc instanceof admin_dungle) {
+                admin_dungle ui = (admin_dungle) hud.npcHienTai.npcHUDrender.ui_npc;
+                if (ui.trangThai == TrangThaiChucNang_admin_dungle.DOI_GIFT_CODE) {
                     if (character == '\b') {
                         if (!ui.tinNhanChat.isEmpty()) {
                             ui.tinNhanChat = ui.tinNhanChat.substring(0, ui.tinNhanChat.length() - 1);

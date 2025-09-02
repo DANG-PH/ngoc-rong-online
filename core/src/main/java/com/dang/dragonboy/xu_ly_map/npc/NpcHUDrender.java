@@ -5,6 +5,9 @@ import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.*;
+import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_dungle.admin_dungle;
+import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle.admin_thanhle;
+import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_haidang.admin_haidang;
 
 public class NpcHUDrender {
     public renderUInpc ui_npc;
@@ -21,13 +24,24 @@ public class NpcHUDrender {
     }
 
     public void renderHUDnpc(SpriteBatch batch) {
-        if (npc.getTen().equals("admin_haidang")) {
-            if (ui_npc == null) {
-                ui_npc = new admin_haidang(npc, veHUD, duLieuNguoiChoi, nhanVat);
+        if (ui_npc == null) {
+            switch (npc.getTen()) {
+                case "admin_haidang":
+                    ui_npc = new admin_haidang(npc, veHUD, duLieuNguoiChoi, nhanVat);
+                    break;
+
+                case "admin_thanhle":
+                    ui_npc = new admin_thanhle(npc, veHUD, duLieuNguoiChoi, nhanVat);
+                    break;
+                case "admin_dungle":
+                    ui_npc = new admin_dungle(npc, veHUD, duLieuNguoiChoi, nhanVat);
+                    break;
+                default:
+                    return;
             }
-            ui_npc.render(batch);
-            ui_npc.capNhat();
         }
+        ui_npc.render(batch);
+        ui_npc.capNhat();
     }
 }
 

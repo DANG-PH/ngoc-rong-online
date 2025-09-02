@@ -11,6 +11,9 @@ public class ThongTinChuyenMap {
     public final VeHUD hud;
     public final QuanLyCamera camManager;
     public final MapCoBan mapTr, mapSau;
+//    public final MapCoBan mapNhaGohan;
+//    public final MapCoBan mapLangAru;
+//    public final MapCoBan mapDoiHoaCuc;
 
     public ThongTinChuyenMap(NhanVat nhanVat, String mapTruoc , VeHUD hud,QuanLyCamera camManager, MapCoBan mapTr, MapCoBan mapSau) {
         this.nhanVat = nhanVat;

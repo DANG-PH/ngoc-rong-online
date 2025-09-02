@@ -234,7 +234,6 @@ public class HUDTinhToanChiSo {
             // Giảm thời gian còn lại
             if (veHUD.itemGiapLuyenTapVuaCoi.getHanSuDung() > 0f) {
                 veHUD.itemGiapLuyenTapVuaCoi.giamHanSuDung();
-                nhanVat.setHanSuDungGiapLuyenTap(veHUD.itemGiapLuyenTapVuaCoi.getHanSuDung());
 
                 float sdCongThem;
                 switch (veHUD.itemGiapLuyenTapVuaCoi.getId()) {

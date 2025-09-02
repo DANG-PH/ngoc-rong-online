@@ -4,12 +4,23 @@ import com.badlogic.gdx.Gdx;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.nhan_vat.NhanVat;
-import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.*;
+import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_haidang.*;
+import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle.*;
+import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_dungle.*;
 
 public class NpcHUDClickHandler {
     public static void xuLyClick(Npc npc, VeHUD veHUD, DuLieuNguoiChoi duLieuNguoiChoi, NhanVat nhanVat,float x, float y) {
-        if (npc.getTen().equals("admin_haidang")) {
-            click_admin_haidang(npc,veHUD,duLieuNguoiChoi,nhanVat,x,y);
+        switch (npc.getTen()) {
+            case "admin_haidang":
+                click_admin_haidang(npc, veHUD, duLieuNguoiChoi, nhanVat, x, y);
+                break;
+
+            case "admin_thanhle":
+                click_admin_thanhle(npc, veHUD, duLieuNguoiChoi, nhanVat, x, y);
+                break;
+            case "admin_dungle":
+                click_admin_dungle(npc, veHUD, duLieuNguoiChoi, nhanVat, x, y);
+                break;
         }
     }
 
@@ -20,7 +31,7 @@ public class NpcHUDClickHandler {
 //            }
         admin_haidang ui = (admin_haidang) npc.npcHUDrender.ui_npc;
         // Thoát + chức năng chính NPC
-        boolean duDieuKienThoat_Npc = !ui.dangBatManHinhGacha && !ui.dangThongBaoSauGacha && !ui.dangQuyDoiVe;
+        boolean duDieuKienThoat_Npc = ui.trangThai == TrangThaiChucNang_admin_haidang.NONE;
         if (duDieuKienThoat_Npc) {
             float nutX = (Gdx.graphics.getWidth()-(soNut-1)*120-114)/2f;
             if (x<nutX || x>nutX+360 || y>120) {
@@ -32,11 +43,11 @@ public class NpcHUDClickHandler {
             float nutX = (Gdx.graphics.getWidth()-(soNut-1)*120-114)/2f + i * 120;
             if (x>=nutX && x <= nutX+114 && y>=5 && y<=5+114 && duDieuKienThoat_Npc){
                 ui.timeClickNut = 0.3f;
-                ui.nutDangChon = i;
+                ui.nutChucNangDangChon = i;
             }
         }
         //gacha
-        if (ui.dangBatManHinhGacha && !ui.dangThongBaoSauGacha) {
+        if (ui.trangThai == TrangThaiChucNang_admin_haidang.GACHA) {
             for (int i = 0; i < 3; i++) {
                 float nutWidth = 140;
                 float nutHeight = 50;
@@ -48,12 +59,11 @@ public class NpcHUDClickHandler {
                         ui.timeChoTruocGacha = 0.3f;
                     } else {
                         ui.timeChoTatChucNang = 0.3f;
-                        ui.chucNangCanTat = 0;
                     }
                 }
             }
         }
-        if (ui.dangThongBaoSauGacha) {
+        if (ui.trangThai == TrangThaiChucNang_admin_haidang.GACHA_THONG_BAO) {
             float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
             float nutY = 50;
             if (x >= nutX && x <= nutX + 140 && y >= nutY && y <= nutY + 50) {
@@ -61,7 +71,7 @@ public class NpcHUDClickHandler {
             }
         }
         // quy đổi vé
-        if (ui.dangQuyDoiVe) {
+        if (ui.trangThai == TrangThaiChucNang_admin_haidang.QUY_DOI) {
             if (!ui.dangHienChatDoiVeQuay) {
                 for (int i = 0; i < 2; i++) {
                     float nutX = (Gdx.graphics.getWidth() - 680) / 2f + 12.5f;
@@ -79,7 +89,6 @@ public class NpcHUDClickHandler {
                 }
                 if (x >= (Gdx.graphics.getWidth() - 680) / 2f + 12.5f && x <= (Gdx.graphics.getWidth() - 680) / 2f + 12.5f + 200 && y >= 65 + 30 && y <= 65 + 30 + 36) {
                     ui.timeChoTatChucNang = 0.3f;
-                    ui.chucNangCanTat = 1;
                 }
                 if (x >= (Gdx.graphics.getWidth() - 680) / 2f + 12.5f && x <= (Gdx.graphics.getWidth() - 680) / 2f + 12.5f + 200 && y >= 65 + 30 + 38 && y <= 65 + 30 + 36 + 38) {
                     ui.timeChoHienChatDoiVeQuay = 0.3f;
@@ -113,6 +122,64 @@ public class NpcHUDClickHandler {
                 }
             }
         }
+        if (ui.trangThai == TrangThaiChucNang_admin_haidang.HUONG_DAN) {
+            float nutX = (Gdx.graphics.getWidth()-114)/2f;
+            float nutY = 120 - 115;
+            if (checkChuotTrongNut(x,y,nutX,nutY,114,114)) {
+                ui.timeBamNutOkHuongDan = 0.3f;
+            }
+        }
     }
 
+    public static void click_admin_thanhle(Npc npc, VeHUD veHUD, DuLieuNguoiChoi duLieuNguoiChoi, NhanVat nhanVat,float x, float y) {
+        admin_thanhle ui = (admin_thanhle) npc.npcHUDrender.ui_npc;
+        int soNut = npc.getChucNang().length;
+        if (ui.trangThai == TrangThaiChucNang_admin_thanhle.NONE) {
+            if (!checkChuotTrongNut(x,y,(Gdx.graphics.getWidth()-soNut*120)/2f,5,120*soNut,114)) {
+                veHUD.daClickVaoNpc = false;
+                veHUD.vuaThoatNpc = true;
+            }
+            if (checkChuotTrongNut(x,y,(Gdx.graphics.getWidth()-soNut*120)/2f+120,5,114,114)) {
+                ui.nutChucNangDangChon = 1;
+                ui.timeClickNut = 0.3f;
+            }
+        }
+    }
+
+    public static void click_admin_dungle(Npc npc, VeHUD veHUD, DuLieuNguoiChoi duLieuNguoiChoi, NhanVat nhanVat,float x, float y) {
+        admin_dungle ui = (admin_dungle) npc.npcHUDrender.ui_npc;
+        int soNut = npc.getChucNang().length;
+        if (ui.trangThai == TrangThaiChucNang_admin_dungle.NONE) {
+            if (!checkChuotTrongNut(x,y,(Gdx.graphics.getWidth()-soNut*120)/2f,5,120*soNut,114)) {
+                veHUD.daClickVaoNpc = false;
+                veHUD.vuaThoatNpc = true;
+            }
+            for (int i = 0; i <= 2; i++) {
+                if (checkChuotTrongNut(x, y, (Gdx.graphics.getWidth() - soNut * 120) / 2f + 120*i, 5, 114, 114)) {
+                    ui.nutChucNangDangChon = i;
+                    ui.timeClickNut = 0.3f;
+                }
+            }
+        }
+        if (ui.trangThai == TrangThaiChucNang_admin_dungle.DOI_GIFT_CODE) {
+            float nX = (Gdx.graphics.getWidth() - 140) / 2f;
+            float nutY = 12;
+            if (x >= nX - 81 && x <= nX - 81 + 140 && y >= nutY && y <= nutY + 48) {
+                ui.timeChoDoiGiftCode = 0.3f;
+                ui.nutDuocChonKhiChat = 0;
+            }
+            if (x >= nX + 81 && x <= nX + 81 + 140 && y >= nutY && y <= nutY + 48) {
+                ui.timeChoDoiGiftCode = 0.3f;
+                ui.nutDuocChonKhiChat = 1;
+            }
+        }
+    }
+
+
+    public static boolean checkChuotTrongNut(float chuotX, float chuotY,float nutX, float nutY, float nutW ,float nutH) {
+        if (chuotX >= nutX && chuotX <= nutX + nutW && chuotY >= nutY && chuotY <= nutY + nutH) {
+            return true;
+        }
+        return false;
+    }
 }

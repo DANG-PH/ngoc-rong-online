@@ -2,6 +2,7 @@ package com.dang.dragonboy.du_lieu;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.dang.dragonboy.item.Item;
 import com.dang.dragonboy.item.LoaiItem;
 import com.dang.dragonboy.hien_thi.VeHUD;
@@ -11,6 +12,7 @@ import com.dang.dragonboy.nhan_vat.NhanVatXuLy;
 import com.dang.dragonboy.nhan_vat.DeTuXuLy;
 import com.dang.dragonboy.nhan_vat.DeTuCauHinh;
 import com.badlogic.gdx.math.MathUtils;
+import java.util.*;
 public class DuLieuNguoiChoi {
     public DeTu deTu;
     private NhanVat nhanVat;
@@ -45,6 +47,7 @@ public class DuLieuNguoiChoi {
     private ArrayList<Item> hanhTrangDangMac = new ArrayList<>(8);
     private ArrayList<Item> hanhTrangRuongDo = new ArrayList<>();
     public final int MAXRUONGDO = 20;
+    public final int MAXHANHTRANG = 50;
 
     {
         for (int i = 0; i < 8; i++) {
@@ -72,6 +75,11 @@ public class DuLieuNguoiChoi {
 
     // dữ liệu vé quay khóa ở npc hải đăng
     private int soVeQuayKhoa = 0;
+
+    private List<String> giftCodeTanThu = new ArrayList<>(List.of("HDG01", "HDG02", "HDG03"));
+    private List<String> giftCodeTanThuDaDung = new ArrayList<>();
+
+    private boolean daNhanQuaTanThu = false;
 
     // Constructor
     public DuLieuNguoiChoi(String ten, long sucManh, int theLuc,
@@ -125,7 +133,7 @@ public class DuLieuNguoiChoi {
     }
 
     public void themItemVaoHanhTrang(Item item) {
-        if (hanhTrang.size() < 50) {
+        if (hanhTrang.size() < MAXHANHTRANG) {
             if (item.getLoai() != LoaiItem.NGOCRONG &&
                 item.getLoai() != LoaiItem.PHUTRO &&
                 item.getLoai() != LoaiItem.NANGSKILL &&
@@ -872,5 +880,77 @@ public class DuLieuNguoiChoi {
             }
         }
         return null;
+    }
+
+    public boolean duChoTrongHanhTrang(int choTrong) {
+        if (hanhTrang.size()+choTrong > MAXRUONGDO) return false;
+        return true;
+    }
+
+    public boolean isDaNhanQuaTanThu() {
+        return daNhanQuaTanThu;
+    }
+
+    public void daNhanQuaTanThu() {
+        this.daNhanQuaTanThu = true;
+    }
+
+    public void suDungGiftCode(String giftcode) {
+        String loi = null;
+        if (!checkCoCode(giftcode)) {
+            loi = "Mã code không tồn tại";
+        } else if (checkSuDungCode(giftcode)) {
+            loi = "Mã code đã được sử dụng";
+        } else {
+            loi = duDieuKienDungCode(giftcode);
+        }
+
+        if (loi == null) {
+            giftCodeTanThuDaDung.add(giftcode);
+            veHUD.themItemTest.suDungGiftCode(giftcode);
+        } else {
+            veHUD.setTinNhanPet(loi,2f);
+        }
+    }
+
+    public boolean checkCoCode(String giftcode) {
+        return giftCodeTanThu.contains(giftcode);
+    }
+
+    public boolean checkSuDungCode(String giftcode) {
+        return giftCodeTanThuDaDung.contains(giftcode);
+    }
+
+    public String duDieuKienDungCode(String giftcode) {
+        String loi = null;
+        switch (giftcode) {
+            case "HDG01":
+                if (checkCoItemTrongHanhTrang("ve_quay_npc_haidang")) {
+                    if (layItemTrongHanhTrang("ve_quay_npc_haidang").getSoLuong() >= 999) {
+                        loi = "Đã đạt giới hạn vé quay, vui lòng thử lại sau";
+                    }
+                } else {
+                    if (!duChoTrongHanhTrang(1)) {
+                        loi = "Cần ít nhất 1 ô trống hành trang";
+                    }
+                }
+                break;
+            case "HDG02":
+                boolean coBoHuyet = checkCoItemTrongHanhTrang("bo_huyet");
+                boolean coCuongNo = checkCoItemTrongHanhTrang("cuong_no");
+                int soLuongOtrong = 0;
+                if (!coCuongNo) soLuongOtrong++;
+                if (!coBoHuyet) soLuongOtrong++;
+                if (!duChoTrongHanhTrang(soLuongOtrong)) {
+                    loi = "Cần ít nhất "+soLuongOtrong+" ô trống hành trang";
+                }
+                break;
+            case "HDG03":
+                if (!duChoTrongHanhTrang(1)) {
+                    loi = "Cần ít nhất "+1+" ô trống hành trang";
+                }
+                break;
+        }
+        return loi;
     }
 }

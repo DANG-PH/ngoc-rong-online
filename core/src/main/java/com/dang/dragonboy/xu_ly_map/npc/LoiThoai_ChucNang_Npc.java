@@ -11,8 +11,8 @@ public class LoiThoai_ChucNang_Npc {
         // Đặt thoại cho từng NPC
         LOITHOAI_TRONG_DATA.put("ong_gohan", new String[] {"1"});
         LOITHOAI_TRONG_DATA.put("admin_haidang", new String[] {"Ta ở đây để ban cho ngươi cơ duyên lớn"});
-        LOITHOAI_TRONG_DATA.put("admin_dungle",new String[] {"1"});
-        LOITHOAI_TRONG_DATA.put("admin_thanhle",new String[] {"1"} );
+        LOITHOAI_TRONG_DATA.put("admin_dungle",new String[] {"Nhận quà để tiếp tục hành trình phía trước"});
+        LOITHOAI_TRONG_DATA.put("admin_thanhle",new String[] {"Cậu cần trang bị gì cứ đến chỗ tôi nhé"} );
         LOITHOAI_TRONG_DATA.put("vua_vegeta", new String[] {"1"});
     }
 
@@ -20,8 +20,8 @@ public class LoiThoai_ChucNang_Npc {
         // Đặt thoại cho từng NPC
         LOITHOAI_NGOAI_DATA.put("ong_gohan", new String[] {"null"});
         LOITHOAI_NGOAI_DATA.put("admin_haidang", new String[] {"Thiên mệnh tại thân...","Đạo hữu xin dừng bước..."});
-        LOITHOAI_NGOAI_DATA.put("admin_dungle",new String[] {"ộ i i...","Upin Ipin","Sẽ có những cơn gió...","Săn bắt cao bằng..."});
-        LOITHOAI_NGOAI_DATA.put("admin_thanhle",new String[] {"null"} );
+        LOITHOAI_NGOAI_DATA.put("admin_dungle",new String[] {"Bạn muốn nhận quà?","Có điều gì đó chờ đợi bạn ở đây...","Chúc một ngày tốt lành..."});
+        LOITHOAI_NGOAI_DATA.put("admin_thanhle",new String[] {"Thứ ngươi thiếu, chính là sức mạnh nơi đây...", "Trang bị tốt, hành trình bền...", "Vật trong tay, mệnh trong người...",} );
         LOITHOAI_NGOAI_DATA.put("vua_vegeta", new String[] {"null"});
     }
 
@@ -29,8 +29,8 @@ public class LoiThoai_ChucNang_Npc {
         // Đặt chuc nang cho từng NPC
         CHUCNANG_DATA.put("ong_gohan", new String[] {"1"});
         CHUCNANG_DATA.put("admin_haidang", new String[] {"Vòng quay\nmay mắn","Quy đổi vé","Hướng dẫn chơi"});
-        CHUCNANG_DATA.put("admin_dungle",new String[] {"1"});
-        CHUCNANG_DATA.put("admin_thanhle",new String[] {"1"} );
+        CHUCNANG_DATA.put("admin_dungle",new String[] {"Nhập Giftcode","Nhận quà","Đóng"});
+        CHUCNANG_DATA.put("admin_thanhle",new String[] {"Cửa hàng","Đóng"} );
         CHUCNANG_DATA.put("vua_vegeta", new String[] {"1"});
     }
 

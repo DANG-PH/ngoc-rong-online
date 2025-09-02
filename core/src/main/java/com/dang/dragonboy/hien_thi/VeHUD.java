@@ -23,8 +23,7 @@ import com.badlogic.gdx.audio.Music;
 import java.util.LinkedList;
 import com.dang.dragonboy.he_thong.TrangThaiChu;
 import com.dang.dragonboy.xu_ly_map.npc.Npc;
-import com.dang.dragonboy.xu_ly_map.npc.NpcHUDrender.*;
-import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.*;
+import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_haidang.admin_haidang;
 
 public class VeHUD {
     public ThemItemTest themItemTest;
