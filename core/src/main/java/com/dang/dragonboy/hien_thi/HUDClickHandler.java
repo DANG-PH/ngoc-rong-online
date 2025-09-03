@@ -137,11 +137,7 @@ public class HUDClickHandler {
                     veHUD.timeGlow = 0.3f;
                 }
             } else if (x > 350 && x <= 1020 && !veHUD.DangHienPopupThongTin && !veHUD.HienPopUpGanSkill && !veHUD.DangHienPopupThongTin1 && !(veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.MINIGAME)) {
-                if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.GIOI_THIEU_GAME) {
-                    veHUD.trangThaiChucNangHUDChucNang = TrangThaiChucNangHUD_ChucNang.NONE;
-                    veHUD.scrollY = 0;
-                    veHUD.oChiSoDangChon = -1;
-                } else if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.THONG_BAO) {
+                if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.THONG_BAO) {
                     if (veHUD.trangThaiChucNangHUDChucNangThongBao == TrangThaiChucNangHUD_ChucNang_ThongBao.NONE) {
                         veHUD.trangThaiChucNangHUDChucNang = TrangThaiChucNangHUD_ChucNang.NONE;
                         veHUD.scrollY = 0;
@@ -152,17 +148,18 @@ public class HUDClickHandler {
                         veHUD.scrollY = 0;
                         veHUD.oChiSoDangChon = -1;
                     }
-                } else if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.NHAC_NEN) {
-                    veHUD.trangThaiChucNangHUDChucNang = TrangThaiChucNangHUD_ChucNang.NONE;
-                    veHUD.scrollY = 0;
-                    veHUD.oChiSoDangChon = -1;
                 } else {
-                    if (!(veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU)) {
+                    if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.NONE) {
                         veHUD.tatPopupNhanVat();
                         veHUD.hangTrangDangChon = -1;
                         veHUD.oChiSoDangChon = -1;
                         veHUD.scrollY = 0;
                         veHUD.scrollYDeTu = 0;
+                    }
+                    else {
+                        veHUD.trangThaiChucNangHUDChucNang = TrangThaiChucNangHUD_ChucNang.NONE;
+                        veHUD.scrollY = 0;
+                        veHUD.oChiSoDangChon = -1;
                     }
                 }
             }
@@ -776,6 +773,30 @@ public class HUDClickHandler {
                 }
             }
         }
+        // Chuc nang tai khoan
+        if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.TAI_KHOAN) {
+            float viewY = 35;
+            float viewHeight = 444 - 35;
+            int KhoangCachItem = 49;
+            int tongSoO = 1;
+
+            // Kiểm tra có click vào vùng không
+            if (x >= 3 && x <= 3 + 344 && y >= viewY && y <= viewY + viewHeight) {
+                // Tính tọa độ tương đối trong khung scroll
+                float relativeY = y - viewY;
+
+                // Tính vị trí click từ đỉnh danh sách cuộn
+                float realY = veHUD.scrollY + (viewHeight - relativeY);
+
+                int index = (int)(realY / KhoangCachItem);
+
+                if (index >= 0 && index < tongSoO) {
+                    veHUD.oChiSoDangChon = index;
+                    veHUD.timeDoTre = 0.3f;
+                }
+            }
+        }
+
         // Popup bỏ vật phẩm
         if (veHUD.dangHienThongBao) {
             float nutX = (Gdx.graphics.getWidth() - 140) / 2f;

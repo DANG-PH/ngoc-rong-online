@@ -32,6 +32,7 @@ public class VeHUD {
     public TrangThaiChucNangHUD_ChucNang_ThongBao trangThaiChucNangHUDChucNangThongBao = TrangThaiChucNangHUD_ChucNang_ThongBao.NONE;
     public TrangThaiChucNangHUD_ChucNang_MiniGame trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE;
     //fps
+    public boolean dangBatFPS = false;
     private float timeCapNhatFPS = 0f;
     private int fps = 0;
 
@@ -701,10 +702,12 @@ public class VeHUD {
         batch.draw(thanhhpnv1,165, screenHeight - 80 - 5 + 55);
         batch.draw(thanhkinv1,165, screenHeight - 80 - 5 + 55-20);
 
-//        //FPS
-//        fontTenSkill.setColor(0.761f, 0.114f, 0.067f, 1f);
-//        layout.setText(fontTenSkill,"FPS: "+fps);
-//        fontTenSkill.draw(batch,layout,166,screenHeight - 80 - 5 + 55-20-15);
+        //FPS
+        if (dangBatFPS) {
+            fontTenSkill.setColor(0.761f, 0.114f, 0.067f, 1f);
+            layout.setText(fontTenSkill, "FPS: " + fps);
+            fontTenSkill.draw(batch, layout, 166, screenHeight - 80 - 5 + 55 - 20 - 15);
+        }
 
         if (!dangHienKhungChat && !daClickVaoNpc && !dangHienDauThan && !(timeHienRongThan<=300-2.1f && timeHienRongThan>0)) {
             // ô chat (góc phải trên)
@@ -956,12 +959,14 @@ public class VeHUD {
         }
     }
     public void update(float delta) {
-//        //fps
-//        timeCapNhatFPS += delta;
-//        if (timeCapNhatFPS >= 1) {
-//            timeCapNhatFPS = 0;
-//            fps = Gdx.graphics.getFramesPerSecond();
-//        }
+        //fps
+        if (dangBatFPS) {
+            timeCapNhatFPS += delta;
+            if (timeCapNhatFPS >= 1) {
+                timeCapNhatFPS = 0;
+                fps = Gdx.graphics.getFramesPerSecond();
+            }
+        }
 
         thoiGianItemPhuTro.capNhatThoiGianItem(delta);
 
@@ -1020,6 +1025,14 @@ public class VeHUD {
                         setTinNhanPet("Đang phát bài "+chucNang[oChiSoDangChon],2f);
                     }
                     trangThaiChucNangHUDChucNang = TrangThaiChucNangHUD_ChucNang.NONE;
+                } else if (trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.TAI_KHOAN) {
+                    if (oChiSoDangChon == 0) {
+                        dangBatFPS = !dangBatFPS;
+                        String thongBao = "";
+                        if (dangBatFPS) thongBao = "Bạn vừa bật FPS";
+                        else thongBao = "Bạn vừa tắt FPS";
+                        setTinNhanPet(thongBao,2f);
+                    }
                 } else {
                     if (duLieuNguoiChoi.coDeTu()) {
                         if (oChiSoDangChon == 0) {
@@ -1035,6 +1048,8 @@ public class VeHUD {
                             hangTrangDeTuDangChon = -1;
                         } else if (oChiSoDangChon == 7) {
                             trangThaiChucNangHUDChucNang = TrangThaiChucNangHUD_ChucNang.NHAC_NEN;
+                        } else if (oChiSoDangChon == 8) {
+                            trangThaiChucNangHUDChucNang = TrangThaiChucNangHUD_ChucNang.TAI_KHOAN;
                         }
                     } else {
                         if (oChiSoDangChon == 0) {
@@ -1045,6 +1060,8 @@ public class VeHUD {
                             trangThaiChucNangHUDChucNang = TrangThaiChucNangHUD_ChucNang.THONG_BAO;
                         } else if (oChiSoDangChon == 6) {
                             trangThaiChucNangHUDChucNang = TrangThaiChucNangHUD_ChucNang.NHAC_NEN;
+                        } else if (oChiSoDangChon == 7) {
+                            trangThaiChucNangHUDChucNang = TrangThaiChucNangHUD_ChucNang.TAI_KHOAN;
                         }
                     }
                 }

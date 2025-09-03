@@ -1614,11 +1614,7 @@ public class HUDPopupRenderer {
                 }
             }
             // nhac nen
-            if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.NHAC_NEN) {
-                String[] chucNang = {"Tắt nhạc", "Khẩu thị tâm phi", "Đếm ngày xa em", "Kẻ theo đuổi ánh sáng", "Tháp rơi tự do", "Điều anh biết", "DanDan Kokoro Hikareteku", "Sao mình chưa nắm tay nhau", "Thời gian sẽ trả lời", "Sự thật đã bỏ quên", "Không lấy được vợ", "Seasons"};
-                float viewY = 35;
-                float viewHeight = 444 - 35;
-                int KhoangCachO = 49;
+            if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.NHAC_NEN || veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.TAI_KHOAN) {
                 veHUD.font.setColor(1, 1, 1, 1);
                 layout.setText(veHUD.font, "Ngọc rồng 0.0.1");
                 veHUD.font.draw(batch, layout, 125, 590);
@@ -1628,22 +1624,14 @@ public class HUDPopupRenderer {
 
                 layout.setText(veHUD.fontsm, "Máy chủ vũ trụ 1: " + "admin"); // sau fix vũ trụ + tài khoản user
                 veHUD.fontsm.draw(batch, layout, 125, 535);
-                batch.flush();
-                Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
-                Gdx.gl.glScissor(0, (int) viewY, 350, (int) viewHeight);
-                float totalHeight = veHUD.nhacNen.length * KhoangCachO;
-                veHUD.maxScroll = Math.max(0, totalHeight - viewHeight);
-                float startY = viewY + viewHeight - KhoangCachO + veHUD.scrollY;
-                for (int i = 0; i < veHUD.nhacNen.length; i++) {
-                    float y = startY - i * KhoangCachO;
-                    Texture tex = (veHUD.oChiSoDangChon == i) ? veHUD.o_chi_so_co_ban_click : veHUD.o_chi_so_co_ban;
-                    batch.draw(tex, 3, y, 344, 50);
-                    veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
-                    layout.setText(veHUD.fontTenSkill, chucNang[i]);
-                    veHUD.fontTenSkill.draw(batch, layout, 3 + (344 - layout.width) / 2f, y + (48 - layout.height) / 2f + layout.height);
-                }
-                batch.flush();
-                Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
+            }
+            if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.NHAC_NEN) {
+                String[] chucNang = {"Tắt nhạc", "Khẩu thị tâm phi", "Đếm ngày xa em", "Kẻ theo đuổi ánh sáng", "Tháp rơi tự do", "Điều anh biết", "DanDan Kokoro Hikareteku", "Sao mình chưa nắm tay nhau", "Thời gian sẽ trả lời", "Sự thật đã bỏ quên", "Không lấy được vợ", "Seasons"};
+                veFormNut(batch,chucNang);
+            }
+            if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.TAI_KHOAN) {
+                String text = veHUD.dangBatFPS ? "Tắt FPS" : "Bật FPS";
+                veFormNut(batch,new String[]{text});
             }
         }
         if (veHUD.timeGlow > 0) {
@@ -1651,5 +1639,26 @@ public class HUDPopupRenderer {
             veHUD.veGlow.veGlow(shapeRenderer, veHUD.clickX, veHUD.clickY, veHUD.timeGlow);
             batch.begin();
         }
+    }
+    public void veFormNut(SpriteBatch batch, String[] chucNang) {
+        float viewY = 35;
+        float viewHeight = 444 - 35;
+        int KhoangCachO = 49;
+        batch.flush();
+        Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
+        Gdx.gl.glScissor(0, (int) viewY, 350, (int) viewHeight);
+        float totalHeight = chucNang.length * KhoangCachO;
+        veHUD.maxScroll = Math.max(0, totalHeight - viewHeight);
+        float startY = viewY + viewHeight - KhoangCachO + veHUD.scrollY;
+        for (int i = 0; i < chucNang.length; i++) {
+            float y = startY - i * KhoangCachO;
+            Texture tex = (veHUD.oChiSoDangChon == i) ? veHUD.o_chi_so_co_ban_click : veHUD.o_chi_so_co_ban;
+            batch.draw(tex, 3, y, 344, 50);
+            veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+            layout.setText(veHUD.fontTenSkill, chucNang[i]);
+            veHUD.fontTenSkill.draw(batch, layout, 3 + (344 - layout.width) / 2f, y + (48 - layout.height) / 2f + layout.height);
+        }
+        batch.flush();
+        Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
     }
 }
