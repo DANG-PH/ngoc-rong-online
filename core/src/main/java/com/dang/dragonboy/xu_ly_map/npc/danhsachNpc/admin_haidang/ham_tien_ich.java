@@ -49,7 +49,6 @@ public class ham_tien_ich {
             // Phần còn lại (1 - P)
             float trongSo = rand - P;
             float phanConLai = 1 - P;
-            System.out.println(trongSo+", "+phanConLai);
             // nhóm 2,5 (1%)
             if (trongSo < 0.01f * phanConLai) {
                 int[] nhom015 = {2, 5};
@@ -71,7 +70,6 @@ public class ham_tien_ich {
                 ketQua = nhomConLai[MathUtils.random(nhomConLai.length - 1)];
             }
             npc.demKhongVIP++;
-            System.out.println(ketQua);
         }
         return ketQua;
     }

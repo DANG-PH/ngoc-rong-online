@@ -29,7 +29,7 @@ public class LoiThoai_ChucNang_Npc {
         // Đặt chuc nang cho từng NPC
         CHUCNANG_DATA.put("ong_gohan", new String[] {"1"});
         CHUCNANG_DATA.put("admin_haidang", new String[] {"Vòng quay\nmay mắn","Quy đổi vé","Hướng dẫn chơi"});
-        CHUCNANG_DATA.put("admin_dungle",new String[] {"Nhập Giftcode","Nhận quà","Đóng"});
+        CHUCNANG_DATA.put("admin_dungle",new String[] {"Nhập Giftcode","Nhận quà","Nhận quà\nNạp từ web","Đóng"});
         CHUCNANG_DATA.put("admin_thanhle",new String[] {"Cửa hàng","Đóng"} );
         CHUCNANG_DATA.put("vua_vegeta", new String[] {"1"});
     }

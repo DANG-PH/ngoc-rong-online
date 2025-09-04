@@ -1,5 +1,8 @@
 package com.dang.dragonboy.hien_thi;
 
+import java.time.ZonedDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -36,6 +39,15 @@ public class VeHUD {
     private float timeCapNhatFPS = 0f;
     private int fps = 0;
 
+    //cooldown
+    public boolean dangHienCoolDownSkill = false;
+    //mapHienTai
+    public boolean dangHienMapHienTai = false;
+    //ngayGioHienTai
+    public boolean dangHienNgayGioHienTai = false;
+    //ChiSoHPKI
+    public boolean dangHienChiSo = false;
+
     public ThemItemTest themItemTest;
     private HUDThoiGianItemPhuTro thoiGianItemPhuTro;
     private HUDRongThan HUDRongThan;
@@ -61,7 +73,7 @@ public class VeHUD {
     public Texture oskill, oskillclick;
     public Texture nutpopup;
 
-    public BitmapFont font, fontChucnang,fontChucnang1, fontDauThan, fontNhiemVu, fontNhiemVu1, fontNhiemVuChuaLam, fontMotaNhiemVu, fontvangngoc, fontsm, fontSkilldaco, fontSkillchuaco, fontMotaSkill, fontCapSKill, fontMotaNoiTai, fontTiemNang, fontTenSkill, fontchat, fontMotaNganSkill, fontMotaNganSkill1, fontSkillchuaco1, fontMotaHanhTrang, fontMotaHanhTrang1, fontText, fontMoTaQuyDoiVe;
+    public BitmapFont font,fontNgayGioHienTai, fontChucnang,fontChucnang1, fontDauThan, fontNhiemVu, fontNhiemVu1, fontNhiemVuChuaLam, fontMotaNhiemVu, fontvangngoc, fontsm, fontSkilldaco, fontSkillchuaco, fontMotaSkill, fontCapSKill, fontMotaNoiTai, fontTiemNang, fontTenSkill, fontchat, fontMotaNganSkill, fontMotaNganSkill1, fontSkillchuaco1, fontMotaHanhTrang, fontMotaHanhTrang1, fontText, fontMoTaQuyDoiVe;
     public GlyphLayout layout;
 
     public SkillNhanVat[] skillIcons;
@@ -545,6 +557,11 @@ public class VeHUD {
         fontSkillchuaco = generator.generateFont(param);
         param.color = new Color(0x00 / 255f, 0xcb / 255f, 0x00 / 255f, 1f);
         fontSkillchuaco1 = generator.generateFont(param);
+        param.color = new Color(Color.WHITE);
+        param.size = 19;
+        param.borderWidth = 2f;
+        param.borderColor = new Color(0.4f, 0.4f, 0.4f, 1f);
+        fontNgayGioHienTai = generator.generateFont(param);
         generator.dispose();
         // Font có viền đen dành riêng cho dòng chữ "Đậu thần cấp ..."
         FreeTypeFontGenerator generator2 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchinh.ttf"));
@@ -701,12 +718,25 @@ public class VeHUD {
         batch.draw(thanhhp, hpX, hpY, thanhhpW, thanhhpH);
         batch.draw(thanhhpnv1,165, screenHeight - 80 - 5 + 55);
         batch.draw(thanhkinv1,165, screenHeight - 80 - 5 + 55-20);
+        if (dangHienChiSo) {
+            layout.setText(fontsm,(int)duLieuNguoiChoi.getHpHienTai()+"");
+            fontsm.draw(batch,layout,165+(thanhhpnv.getWidth()-layout.width)/2f,screenHeight - 80 - 5 + 55+(thanhhpnv.getHeight()+layout.height)/2f);
+            layout.setText(fontsm,(int)duLieuNguoiChoi.getKiHienTai()+"");
+            fontsm.draw(batch,layout,165+(thanhkinv.getWidth()-layout.width)/2f,screenHeight - 80 - 5 + 55-20+(thanhkinv.getHeight()+layout.height)/2f);
+        }
 
         //FPS
         if (dangBatFPS) {
             fontTenSkill.setColor(0.761f, 0.114f, 0.067f, 1f);
             layout.setText(fontTenSkill, "FPS: " + fps);
             fontTenSkill.draw(batch, layout, 166, screenHeight - 80 - 5 + 55 - 20 - 15);
+        }
+        //Ngày giờ hiện tại
+        if (dangHienNgayGioHienTai) {
+            ZonedDateTime vnTime = ZonedDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
+            DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+            layout.setText(fontNgayGioHienTai, vnTime.format(fmt)+"");
+            fontNgayGioHienTai.draw(batch,layout,685,40);
         }
 
         if (!dangHienKhungChat && !daClickVaoNpc && !dangHienDauThan && !(timeHienRongThan<=300-2.1f && timeHienRongThan>0)) {
@@ -741,6 +771,10 @@ public class VeHUD {
                         shapeRenderer.rect(x + 6.9f,skillY + 6.9f,oskillW - 13.8f,(oskillH - 13.8f)*timeCoolDownBienKhi/(500-20*duLieuNguoiChoi.getCapSkill(3)));
                         shapeRenderer.end();
                         batch.begin();
+                        if (dangHienCoolDownSkill) {
+                            layout.setText(fontsm,(int)(timeCoolDownBienKhi)+"");
+                            fontsm.draw(batch,layout,x + 6.9f+(oskillW - 13.8f-layout.width)/2f,skillY + 6.9f+(oskillH - 13.8f + layout.height)/2f);
+                        }
                     }
                     if (oSkills[i] == 2 && timeCoolDownTtnl>0) {
                         batch.end();
@@ -750,6 +784,10 @@ public class VeHUD {
                         shapeRenderer.rect(x + 6.9f,skillY + 6.9f,oskillW - 13.8f,(oskillH - 13.8f)*timeCoolDownTtnl/20);
                         shapeRenderer.end();
                         batch.begin();
+                        if (dangHienCoolDownSkill) {
+                            layout.setText(fontsm,(int)(timeCoolDownTtnl)+"");
+                            fontsm.draw(batch,layout,x + 6.9f+(oskillW - 13.8f-layout.width)/2f,skillY + 6.9f+(oskillH - 13.8f + layout.height)/2f);
+                        }
                     }
                     if (oSkills[i] == 5 && timeCoolDownHuytSao>0) {
                         batch.end();
@@ -759,6 +797,10 @@ public class VeHUD {
                         shapeRenderer.rect(x + 6.9f,skillY + 6.9f,oskillW - 13.8f,(oskillH - 13.8f)*timeCoolDownHuytSao/180f);
                         shapeRenderer.end();
                         batch.begin();
+                        if (dangHienCoolDownSkill) {
+                            layout.setText(fontsm,(int)(timeCoolDownHuytSao)+"");
+                            fontsm.draw(batch,layout,x + 6.9f+(oskillW - 13.8f-layout.width)/2f,skillY + 6.9f+(oskillH - 13.8f + layout.height)/2f);
+                        }
                     }
                     if (oSkills[i] == 3 && timeChoBienKhi > 0 ) {
                         batch.end();
@@ -1026,12 +1068,38 @@ public class VeHUD {
                     }
                     trangThaiChucNangHUDChucNang = TrangThaiChucNangHUD_ChucNang.NONE;
                 } else if (trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.TAI_KHOAN) {
-                    if (oChiSoDangChon == 0) {
-                        dangBatFPS = !dangBatFPS;
-                        String thongBao = "";
-                        if (dangBatFPS) thongBao = "Bạn vừa bật FPS";
-                        else thongBao = "Bạn vừa tắt FPS";
-                        setTinNhanPet(thongBao,2f);
+                    String thongBao = "";
+                    switch (oChiSoDangChon) {
+                        case 0:
+                            dangBatFPS = !dangBatFPS;
+                            if (dangBatFPS) thongBao = "Bạn vừa bật FPS";
+                            else thongBao = "Bạn vừa tắt FPS";
+                            setTinNhanPet(thongBao,2f);
+                            break;
+                        case 1:
+                            dangHienCoolDownSkill = !dangHienCoolDownSkill;
+                            if (dangHienCoolDownSkill) thongBao = "Bạn vừa bật Cooldown Skill";
+                            else thongBao = "Bạn vừa tắt Cooldown Skill";
+                            setTinNhanPet(thongBao,2f);
+                            break;
+                        case 2:
+                            dangHienMapHienTai = !dangHienMapHienTai;
+                            if (dangHienMapHienTai) thongBao = "Đang hiện Map";
+                            else thongBao = "Đã ẩn Map";
+                            setTinNhanPet(thongBao,2f);
+                            break;
+                        case 3:
+                            dangHienNgayGioHienTai = !dangHienNgayGioHienTai;
+                            if (dangHienNgayGioHienTai) thongBao = "Đã hiện ngày giờ";
+                            else thongBao = "Đã ẩn ngày giờ";
+                            setTinNhanPet(thongBao,2f);
+                            break;
+                        case 4:
+                            dangHienChiSo = !dangHienChiSo;
+                            if (dangHienChiSo) thongBao = "Đang hiện chỉ số HP/KI";
+                            else thongBao = "Đã ẩn chỉ số";
+                            setTinNhanPet(thongBao,2f);
+                            break;
                     }
                 } else {
                     if (duLieuNguoiChoi.coDeTu()) {

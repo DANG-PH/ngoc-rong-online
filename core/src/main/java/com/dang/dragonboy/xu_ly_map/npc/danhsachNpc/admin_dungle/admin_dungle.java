@@ -158,6 +158,8 @@ public class admin_dungle extends renderUInpc {
                             veHUD.setTinNhanPet(loi,2f);
                         }
                     } else if (nutChucNangDangChon == 2) {
+                        veHUD.setTinNhanPet("Chức năng đang cập nhật",2f);
+                    } else if (nutChucNangDangChon == 3) {
                         veHUD.daClickVaoNpc = false;
                     }
                 }

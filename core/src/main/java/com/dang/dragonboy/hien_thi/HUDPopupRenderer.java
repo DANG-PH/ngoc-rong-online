@@ -1630,8 +1630,12 @@ public class HUDPopupRenderer {
                 veFormNut(batch,chucNang);
             }
             if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.TAI_KHOAN) {
-                String text = veHUD.dangBatFPS ? "Tắt FPS" : "Bật FPS";
-                veFormNut(batch,new String[]{text});
+                String textFPS = veHUD.dangBatFPS ? "Tắt FPS" : "Bật FPS";
+                String textCoolDown = veHUD.dangHienCoolDownSkill ? "Tắt CoolDown Skill" : "Bật CoolDown Skill";
+                String textMap = veHUD.dangHienMapHienTai ? "Tắt Hiện Map" : "Bật Hiện Map";
+                String textNgayGio = veHUD.dangHienNgayGioHienTai ? "Tắt hiện ngày giờ" : "Bật ngày giờ";
+                String textHPKI = veHUD.dangHienChiSo ? "Tắt hiện chỉ số" : "Bật hiện chỉ số";
+                veFormNut(batch,new String[]{textFPS,textCoolDown,textMap,textNgayGio,textHPKI});
             }
         }
         if (veHUD.timeGlow > 0) {

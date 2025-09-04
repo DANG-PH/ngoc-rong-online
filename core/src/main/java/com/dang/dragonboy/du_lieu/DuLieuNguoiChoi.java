@@ -67,7 +67,7 @@ public class DuLieuNguoiChoi {
 
     private String[] danhSachHanhTinh = {"traidat","xayda","namek"};
 
-    private float HpHopThe,KiHopThe,SdHopThe,ChiMangSuDung,SatThuongChiMangSuDung,GiamSatThuongSuDung;
+    private float HpHopThe = HpNhanVat,KiHopThe = KiNhanVat,SdHopThe,ChiMangSuDung,SatThuongChiMangSuDung,GiamSatThuongSuDung;
 
     // Logic chỉ cho đậu thần
     public int soDauThanHienTai ;
@@ -689,9 +689,12 @@ public class DuLieuNguoiChoi {
 
     //setter hop the
 
+//    public synchronized void setHpHopThe(float Hp) {
+//        this.HpHopThe = Hp;
+//    }
     public void setHpHopThe(float Hp) {
-        this.HpHopThe = Hp;
-    }
+    this.HpHopThe = Hp;
+}
 
     public float getHpHopThe() {
         return HpHopThe;
