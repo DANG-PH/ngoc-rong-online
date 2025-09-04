@@ -25,10 +25,16 @@ import java.util.ArrayList;
 import com.badlogic.gdx.audio.Music;
 import java.util.LinkedList;
 import com.dang.dragonboy.he_thong.TrangThaiChu;
+import com.dang.dragonboy.xu_ly_map.MapDoiHoaCuc;
+import com.dang.dragonboy.xu_ly_map.MapLangAru;
+import com.dang.dragonboy.xu_ly_map.MapNhaGohan;
 import com.dang.dragonboy.xu_ly_map.npc.Npc;
+import com.dang.dragonboy.xu_ly_map.MapCoBan;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_haidang.admin_haidang;
 
 public class VeHUD {
+    //Map hien tai
+    public MapCoBan mapHienTai;
     // trang thai man hinh
     public TrangThaiChucNangHUD trangThaiChucNangHUD = TrangThaiChucNangHUD.NHIEM_VU;
     public TrangThaiChucNangHUD_ChucNang trangThaiChucNangHUDChucNang = TrangThaiChucNangHUD_ChucNang.NONE;
@@ -737,6 +743,11 @@ public class VeHUD {
             DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
             layout.setText(fontNgayGioHienTai, vnTime.format(fmt)+"");
             fontNgayGioHienTai.draw(batch,layout,685,40);
+        }
+        //Map hien tai
+        if (dangHienMapHienTai) {
+            layout.setText(fontNgayGioHienTai,"Map: "+layTenMap());
+            fontNgayGioHienTai.draw(batch,layout,40,420);
         }
 
         if (!dangHienKhungChat && !daClickVaoNpc && !dangHienDauThan && !(timeHienRongThan<=300-2.1f && timeHienRongThan>0)) {
@@ -2369,6 +2380,17 @@ public class VeHUD {
             if (nhacNen[i].isPlaying()) return true;
         }
         return false;
+    }
+
+    public String layTenMap() {
+        if (mapHienTai instanceof MapNhaGohan) {
+            return "Nhà Gôhan";
+        } else if (mapHienTai instanceof MapLangAru) {
+            return "Làng Aru";
+        } else if (mapHienTai instanceof MapDoiHoaCuc) {
+            return "Đồi Hoa Cúc";
+        }
+        return null;
     }
 
     public void dispose() {

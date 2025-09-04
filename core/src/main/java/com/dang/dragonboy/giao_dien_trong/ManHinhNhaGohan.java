@@ -177,6 +177,7 @@ public class ManHinhNhaGohan implements Screen {
                 map.themNpc("dui_ga", LoaiNPC.DUIGA, 1178, 205);
             }
         }
+        this.hudRenderer.mapHienTai = map;
         capcaydau = nhanVat.getCapcaydau();
     }
 

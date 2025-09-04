@@ -76,6 +76,7 @@ public class ManHinhDoiHoaCuc implements Screen {
         }
         this.rongMap = map.getChieuRongMap();
         this.caoMap = map.getChieuCaoMap();
+        this.hud.mapHienTai = map;
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
         layout = new GlyphLayout();
