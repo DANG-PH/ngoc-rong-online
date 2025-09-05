@@ -24,16 +24,20 @@ public class admin_thanhle extends renderUInpc {
     @Override
     public void render(SpriteBatch batch) {
         renderCacChucNang(batch);
+        renderChucNangCuaHang(batch);
     }
 
     @Override
     public void capNhat() {
         float delta = Gdx.graphics.getDeltaTime();
+        if (!veHUD.dangHienPopupNhanVatPhai && trangThai == TrangThaiChucNang_admin_thanhle.CUA_HANG) {
+            trangThai = TrangThaiChucNang_admin_thanhle.NONE;
+        }
         capNhatClickNut(delta);
     }
 
     public void renderCacChucNang(SpriteBatch batch) {
-        if (trangThai == TrangThaiChucNang_admin_thanhle.CUA_HANG) return;
+        if (trangThai != TrangThaiChucNang_admin_thanhle.NONE) return;
 
         float daoDong = (float) Math.sin(nhanVat.thoiGianTichLuy) * 1.3f;
         float doDaiShaperender = 120 * npc.getChucNang().length;
@@ -79,6 +83,11 @@ public class admin_thanhle extends renderUInpc {
         }
     }
 
+    public void renderChucNangCuaHang(SpriteBatch batch) {
+        if (trangThai != TrangThaiChucNang_admin_thanhle.CUA_HANG) return;
+        veHUD.renderHUDPopupNhanVatPhai(batch,npc.taiAnh.avtNpc);
+    }
+
     public void capNhatClickNut(float delta) {
         if (timeClickNut > 0) {
             timeClickNut -= delta;
@@ -87,6 +96,10 @@ public class admin_thanhle extends renderUInpc {
                 if (trangThai == TrangThaiChucNang_admin_thanhle.NONE) {
                     if (nutChucNangDangChon == 1) {
                         veHUD.daClickVaoNpc = false;
+                    }
+                    if (nutChucNangDangChon == 0) {
+                        trangThai = TrangThaiChucNang_admin_thanhle.CUA_HANG;
+                        veHUD.dangHienPopupNhanVatPhai = true;
                     }
                 }
             }

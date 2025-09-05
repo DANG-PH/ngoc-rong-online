@@ -142,9 +142,11 @@ public class NpcHUDClickHandler {
                 veHUD.daClickVaoNpc = false;
                 veHUD.vuaThoatNpc = true;
             }
-            if (checkChuotTrongNut(x,y,(Gdx.graphics.getWidth()-soNut*120)/2f+120,5,114,114)) {
-                ui.nutChucNangDangChon = 1;
-                ui.timeClickNut = 0.3f;
+            for (int i = 0; i <= 2; i++) {
+                if (checkChuotTrongNut(x, y, (Gdx.graphics.getWidth() - soNut * 120) / 2f + 120*i, 5, 114, 114)) {
+                    ui.nutChucNangDangChon = i;
+                    ui.timeClickNut = 0.3f;
+                }
             }
         }
     }

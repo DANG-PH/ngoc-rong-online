@@ -210,6 +210,7 @@ public class VeHUD {
     public boolean dangChonHanhTrangSuPhu = false;
     public boolean dangChonHanhTrangDeTu = false;
     public boolean dangChonHanhTrangRuongDo = false;
+    public boolean dangChonHanhTrangNPC = false;
 
     public Music[] nhacNen = new Music[12];
 
@@ -349,6 +350,8 @@ public class VeHUD {
     public boolean daClickVaoNpc = false;
     public Npc npcHienTai;
     public boolean vuaThoatNpc = false;
+
+    public boolean dangHienPopupNhanVatPhai = false;
 
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data;
@@ -1259,7 +1262,7 @@ public class VeHUD {
         if (nutClickTimer3 > 0){
             nutClickTimer3 -= Gdx.graphics.getDeltaTime();
             if (nutClickTimer3 <= 0) {
-                if (trangThaiChucNangHUD == TrangThaiChucNangHUD.HANH_TRANG || trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU || dangHienRuongDo) {
+                if (trangThaiChucNangHUD == TrangThaiChucNangHUD.HANH_TRANG || trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU || dangHienRuongDo || dangHienPopupNhanVatPhai) {
                     // mac do
                     if (nuthanhtrangchon == 1) {
                         // MẶC ITEM
@@ -2391,6 +2394,10 @@ public class VeHUD {
             return "Đồi Hoa Cúc";
         }
         return null;
+    }
+
+    public void renderHUDPopupNhanVatPhai(SpriteBatch batch, Texture avtNPC){
+        HUDFormPopupNhanVatPhai.render(batch,this,duLieuNguoiChoi,nhanVat,avtNPC);
     }
 
     public void dispose() {

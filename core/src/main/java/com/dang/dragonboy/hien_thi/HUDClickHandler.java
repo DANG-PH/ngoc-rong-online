@@ -191,7 +191,7 @@ public class HUDClickHandler {
         if (veHUD.dangHienPopup && (veHUD.trangThaiChucNangHUD == TrangThaiChucNangHUD.HANH_TRANG || veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU) && !veHUD.DangHienPopupThongTin1 && !veHUD.DangHienPopupThongTin2 && !veHUD.dangHienThongBao) {
             duDieuKienn = true;
         }
-        if (veHUD.dangHienRuongDo && !veHUD.DangHienPopupThongTin1 && !veHUD.DangHienPopupThongTin3 && !veHUD.dangHienThongBao) {
+        if ((veHUD.dangHienRuongDo || veHUD.dangHienPopupNhanVatPhai) && !veHUD.DangHienPopupThongTin1 && !veHUD.DangHienPopupThongTin3 && !veHUD.dangHienThongBao) {
             duDieuKienn = true;
         }
         if (duDieuKienn) {
@@ -211,7 +211,7 @@ public class HUDClickHandler {
             int KhoangCachItem = 49;
             int tongSoO = 8 + 12;
             boolean duDieuKien = false;
-            if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU || veHUD.dangHienRuongDo) {
+            if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU || veHUD.dangHienRuongDo || veHUD.dangHienPopupNhanVatPhai) {
                 duDieuKien = x >= 3 + 1020-350 && x <= 3 + 344 + 1020-350 && y >= viewY && y <= viewY + viewHeight;
             }
             if (veHUD.trangThaiChucNangHUD == TrangThaiChucNangHUD.HANH_TRANG && veHUD.dangHienPopup) {
@@ -727,6 +727,26 @@ public class HUDClickHandler {
             }
         }
 
+        if (veHUD.dangHienPopupNhanVatPhai) {
+            if (x > 1020-350 && x <= 1020) {
+                veHUD.dangChonHanhTrangSuPhu = true;
+            } else {
+                veHUD.dangChonHanhTrangSuPhu = false;
+            }
+            if (x > 0 && x <= 350) {
+                veHUD.dangChonHanhTrangNPC = true;
+            } else {
+                veHUD.dangChonHanhTrangNPC = false;
+            }
+        }
+
+        if (veHUD.dangHienPopupNhanVatPhai && !veHUD.DangHienPopupThongTin1 && !veHUD.DangHienPopupThongTin3 && !veHUD.dangHienThongBao) {
+            if (x > 350 && x <= 1020-350) {
+                veHUD.dangHienPopupNhanVatPhai = false;
+                veHUD.scrollY = 0;
+            }
+        }
+
         // chức năng đệ tử game
         if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU && veHUD.chucNangDeTuDangChon == 1) {
             float viewY = 35;
@@ -818,17 +838,17 @@ public class HUDClickHandler {
                 return;
             }
             if (x > 0 && x <= 360 && (y > veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH || y < veHUD.PopupHanhTrangY - 130)) {
-                if (!(veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU) && !veHUD.dangHienRuongDo) {
+                if (!(veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU) && !veHUD.dangHienRuongDo && !veHUD.dangHienPopupNhanVatPhai) {
                     veHUD.DangHienPopupThongTin1 = false;
                     veHUD.TimeChoHienPopup = 0;
                 }
             } if (x > 360 && x <= 1020) {
-                if (!(veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU) && !veHUD.dangHienRuongDo) {
+                if (!(veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU) && !veHUD.dangHienRuongDo && !veHUD.dangHienPopupNhanVatPhai) {
                     veHUD.DangHienPopupThongTin1 = false;
                     veHUD.TimeChoHienPopup = 0;
                 }
             } if (x > 1020 - 360 && x <= 1020 && (y > veHUD.PopupHanhTrangY + veHUD.PopupHanhTrangH || y < veHUD.PopupHanhTrangY - 130)) {
-                if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU || veHUD.dangHienRuongDo) {
+                if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU || veHUD.dangHienRuongDo && veHUD.dangHienPopupNhanVatPhai) {
                     veHUD.DangHienPopupThongTin1 = false;
                     veHUD.TimeChoHienPopup = 0;
                 }
@@ -845,11 +865,16 @@ public class HUDClickHandler {
                     veHUD.dangChonHanhTrangSuPhu = true;
                     veHUD.dangChonHanhTrangRuongDo = false;
                 }
+                if (veHUD.dangHienPopupNhanVatPhai) {
+                    veHUD.DangHienPopupThongTin1 = false;
+                    veHUD.TimeChoHienPopup = 0;
+                    veHUD.dangChonHanhTrangSuPhu = true;
+                }
             }
         }
         if (veHUD.DangHienPopupThongTin1) {
             float xCongThem = 0;
-            if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU || veHUD.dangHienRuongDo) {
+            if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU || veHUD.dangHienRuongDo || veHUD.dangHienPopupNhanVatPhai) {
                 xCongThem = 1020 - 360 - 10;
             } else {
                 xCongThem = 0;

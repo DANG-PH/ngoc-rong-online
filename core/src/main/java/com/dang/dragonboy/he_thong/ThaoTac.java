@@ -119,7 +119,7 @@ public class ThaoTac extends InputAdapter {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         int y = Gdx.graphics.getHeight() - screenY;
-        if (button == Input.Buttons.LEFT && !hud.dangHienPopup && !hud.dangHienRuongDo) {
+        if (button == Input.Buttons.LEFT && !hud.dangHienPopup && !hud.dangHienRuongDo && !hud.daClickVaoNpc) {
             camera.batDauKeoCamera(screenX, screenY);
         }
         if (hud.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU) {
@@ -142,6 +142,16 @@ public class ThaoTac extends InputAdapter {
                 hud.dangChonHanhTrangSuPhu = false;
             }
         }
+        if (hud.dangHienPopupNhanVatPhai) {
+            if ( screenX >= 1020 - 360 && screenX <= 1020 && y > 0 && y <= 444) {
+                hud.dangChonHanhTrangNPC = false;
+                hud.dangChonHanhTrangSuPhu = true;
+            }
+            if ( screenX > 0 && screenX <= 350 && y > 0 && y <= 444) {
+                hud.dangChonHanhTrangNPC = true;
+                hud.dangChonHanhTrangSuPhu = false;
+            }
+        }
         // Kéo hành trang sư phụ bên trái (chỉ khi không mở đệ tử)
         if (button == Input.Buttons.LEFT &&
             (hud.trangThaiChucNangHUD == TrangThaiChucNangHUD.HANH_TRANG || hud.trangThaiChucNangHUD == TrangThaiChucNangHUD.KY_NANG || hud.trangThaiChucNangHUD == TrangThaiChucNangHUD.CHUC_NANG) &&
@@ -149,6 +159,7 @@ public class ThaoTac extends InputAdapter {
             !hud.DangHienPopupThongTin1 &&
             !(hud.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.MINIGAME) &&
             !hud.dangHienRuongDo &&
+            !hud.daClickVaoNpc &&
             screenX > 0 && screenX <= 350 &&
             y > 0 && y <= 444) {
 
@@ -184,7 +195,7 @@ public class ThaoTac extends InputAdapter {
 
         // Kéo hành trang sư phụ bên phải (chỉ khi mở popup đệ tử hoac ruong do, và đang chọn sư phụ)
         if (button == Input.Buttons.LEFT &&
-            (hud.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU || hud.dangHienRuongDo) &&
+            (hud.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU || hud.dangHienRuongDo || hud.dangHienPopupNhanVatPhai) &&
             hud.dangChonHanhTrangSuPhu &&
             !hud.DangHienPopupThongTin1 &&
             screenX >= 1020 - 360 && screenX <= 1020 &&
@@ -290,6 +301,12 @@ public class ThaoTac extends InputAdapter {
             }
             if (hud.dangChonHanhTrangRuongDo) {
                 hud.scrollRuongDo((int) amountY); // amountY là số lần lăn bánh (thường là ±1)
+                return true;
+            }
+        }
+        if (hud.dangHienPopupNhanVatPhai && !hud.dangHienThongBao && !hud.DangHienPopupThongTin1 && !hud.DangHienPopupThongTin && !hud.DangHienPopupThongTin3 && !(hud.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.MINIGAME)) {
+            if (hud.dangChonHanhTrangSuPhu) {
+                hud.scroll((int) amountY); // amountY là số lần lăn bánh (thường là ±1)
                 return true;
             }
         }
