@@ -54,7 +54,7 @@ public class Npc {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
         param.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
-            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ";
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ế Ế";
         param.size = 16;
         param.borderWidth = 2f;
         float xx = 0.4f;
@@ -380,6 +380,7 @@ public class Npc {
             case "admin_haidang" -> tenTiengVietNpc = "Admin Hải Đăng";
             case "admin_thanhle" -> tenTiengVietNpc = "Admin Thành Lê";
             case "admin_dungle" -> tenTiengVietNpc = "Admin Dũng Lê";
+            case "thay_hieu" -> tenTiengVietNpc = "Thầy Hiếu";
             case "dau_traidat_1" -> tenTiengVietNpc = "Đậu thần cấp 1";
             case "dau_traidat_2" -> tenTiengVietNpc = "Đậu thần cấp 2";
             case "dau_traidat_3" -> tenTiengVietNpc = "Đậu thần cấp 3";

@@ -7,6 +7,7 @@ import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_haidang.*;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle.*;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_dungle.*;
+import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.thay_hieu.*;
 
 public class NpcHUDClickHandler {
     public static void xuLyClick(Npc npc, VeHUD veHUD, DuLieuNguoiChoi duLieuNguoiChoi, NhanVat nhanVat,float x, float y) {
@@ -14,12 +15,14 @@ public class NpcHUDClickHandler {
             case "admin_haidang":
                 click_admin_haidang(npc, veHUD, duLieuNguoiChoi, nhanVat, x, y);
                 break;
-
             case "admin_thanhle":
                 click_admin_thanhle(npc, veHUD, duLieuNguoiChoi, nhanVat, x, y);
                 break;
             case "admin_dungle":
                 click_admin_dungle(npc, veHUD, duLieuNguoiChoi, nhanVat, x, y);
+                break;
+            case "thay_hieu":
+                click_thay_hieu(npc, veHUD, duLieuNguoiChoi, nhanVat, x, y);
                 break;
         }
     }
@@ -177,6 +180,36 @@ public class NpcHUDClickHandler {
             if (checkChuotTrongNut(x,y,(Gdx.graphics.getWidth()-114)/2f,5,114,114)) {
                 ui.timeClickNut = 0.3f;
                 ui.nutChucNangDangChon = 0;
+            }
+        }
+    }
+
+    public static void click_thay_hieu(Npc npc, VeHUD veHUD, DuLieuNguoiChoi duLieuNguoiChoi, NhanVat nhanVat,float x, float y) {
+        thay_hieu ui = (thay_hieu) npc.npcHUDrender.ui_npc;
+        int soNut = 0;
+        switch (ui.trangThai){
+            case NONE -> soNut = npc.getChucNang().length;
+            case CHUC_NANG_CHUYEN_HOA ->  soNut = 3;
+            case CHUC_NANG_PHA_LE -> soNut = 3;
+        }
+        for (int i = 0; i <= soNut; i++) {
+            if (checkChuotTrongNut(x, y, (Gdx.graphics.getWidth() - soNut * 120) / 2f + 120*i, 5, 114, 114)) {
+                ui.nutChucNangDangChon = i;
+                ui.timeClickNut = 0.3f;
+            }
+        }
+        if (!checkChuotTrongNut(x,y,(Gdx.graphics.getWidth()-soNut*120)/2f,5,120*soNut,114)) {
+            switch (ui.trangThai) {
+                case NONE:
+                    veHUD.daClickVaoNpc = false;
+                    veHUD.vuaThoatNpc = true;
+                    break;
+                case CHUC_NANG_PHA_LE:
+                    ui.trangThai = TrangThaiChucNang_thay_hieu.NONE;
+                    break;
+                case CHUC_NANG_CHUYEN_HOA:
+                    ui.trangThai = TrangThaiChucNang_thay_hieu.NONE;
+                    break;
             }
         }
     }

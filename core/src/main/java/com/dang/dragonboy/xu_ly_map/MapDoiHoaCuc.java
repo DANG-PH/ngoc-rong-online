@@ -12,6 +12,7 @@ public class MapDoiHoaCuc extends MapCoBan {
         danhSachDat.add(new HitboxDat(864*2, -38-96, 1248, 175+48+38+96));
         //npc
         themNpc("admin_dungle", LoaiNPC.NGUOI,250,188);
+        themNpc("thay_hieu", LoaiNPC.NGUOI,864*2+300,188+48);
     }
     @Override
     public float getChieuRongMap() {

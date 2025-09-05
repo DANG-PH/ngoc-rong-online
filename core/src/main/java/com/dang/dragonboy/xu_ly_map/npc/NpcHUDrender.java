@@ -8,6 +8,7 @@ import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.*;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_dungle.admin_dungle;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle.admin_thanhle;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_haidang.admin_haidang;
+import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.thay_hieu.thay_hieu;
 
 public class NpcHUDrender {
     public renderUInpc ui_npc;
@@ -29,12 +30,14 @@ public class NpcHUDrender {
                 case "admin_haidang":
                     ui_npc = new admin_haidang(npc, veHUD, duLieuNguoiChoi, nhanVat);
                     break;
-
                 case "admin_thanhle":
                     ui_npc = new admin_thanhle(npc, veHUD, duLieuNguoiChoi, nhanVat);
                     break;
                 case "admin_dungle":
                     ui_npc = new admin_dungle(npc, veHUD, duLieuNguoiChoi, nhanVat);
+                    break;
+                case "thay_hieu":
+                    ui_npc = new thay_hieu(npc, veHUD, duLieuNguoiChoi, nhanVat);
                     break;
                 default:
                     return;
