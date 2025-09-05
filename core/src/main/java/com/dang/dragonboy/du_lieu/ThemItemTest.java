@@ -10,6 +10,7 @@ import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_haidang.admin_haidang;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ThemItemTest {
@@ -1487,7 +1488,7 @@ public class ThemItemTest {
         ));
     }
 
-    public void suDungGiftCode(String giftcode) {
+    public void suDungGiftCode(String giftcode, List<String> danhSachPhanThuong) {
         switch (giftcode) {
             case "HDG01":
                 duLieu.themItemVaoHanhTrang(new Item(
@@ -1498,6 +1499,7 @@ public class ThemItemTest {
                     "all", 0, null, 0, 0, 0, -1
                 ));
                 veHUD.setTinNhanPet("Bạn vừa nhận x99 Vé quay VIP",2f);
+                danhSachPhanThuong.add("x99 Vé quay VIP");
                 break;
             case "HDG02":
                 duLieu.themItemVaoHanhTrang(new Item(
@@ -1517,6 +1519,8 @@ public class ThemItemTest {
                 ));
 
                 veHUD.setTinNhanPet("Bạn vừa nhận x99 Bổ Huyết, Cuồng Nộ",2f);
+                danhSachPhanThuong.add("x99 Bổ Huyết");
+                danhSachPhanThuong.add("x99 Cuồng Nộ");
                 break;
             case "HDG03":
                 duLieu.themItemVaoHanhTrang(new Item(
@@ -1527,6 +1531,7 @@ public class ThemItemTest {
                     "all", 1_000_000_000L, null, 3, 0, 0, 0
                 ));
                 veHUD.setTinNhanPet("Bạn vừa nhận x1 Giáp Luyện Tập 3 sao",2f);
+                danhSachPhanThuong.add("x1 Giáp Luyện Tập 3 sao");
                 break;
         }
     }

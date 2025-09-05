@@ -898,7 +898,7 @@ public class DuLieuNguoiChoi {
         this.daNhanQuaTanThu = true;
     }
 
-    public void suDungGiftCode(String giftcode) {
+    public void suDungGiftCode(String giftcode, List<String> danhSachPhanThuong) {
         String loi = null;
         if (!checkCoCode(giftcode)) {
             loi = "Mã code không tồn tại";
@@ -910,7 +910,7 @@ public class DuLieuNguoiChoi {
 
         if (loi == null) {
             giftCodeTanThuDaDung.add(giftcode);
-            veHUD.themItemTest.suDungGiftCode(giftcode);
+            veHUD.themItemTest.suDungGiftCode(giftcode, danhSachPhanThuong);
         } else {
             veHUD.setTinNhanPet(loi,2f);
         }

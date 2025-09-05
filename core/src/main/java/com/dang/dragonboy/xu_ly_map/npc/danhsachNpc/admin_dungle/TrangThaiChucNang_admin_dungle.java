@@ -3,5 +3,6 @@ package com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_dungle;
 public enum TrangThaiChucNang_admin_dungle {
     NONE,
     DOI_GIFT_CODE,
-    NHAN_VAT_PHAM_NAP_WEB
+    NHAN_VAT_PHAM_NAP_WEB,
+    NHAN_QUA_THANH_CONG
 }

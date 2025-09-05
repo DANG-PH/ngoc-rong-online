@@ -154,7 +154,7 @@ public class NpcHUDClickHandler {
                 veHUD.daClickVaoNpc = false;
                 veHUD.vuaThoatNpc = true;
             }
-            for (int i = 0; i <= 2; i++) {
+            for (int i = 0; i <= 3; i++) {
                 if (checkChuotTrongNut(x, y, (Gdx.graphics.getWidth() - soNut * 120) / 2f + 120*i, 5, 114, 114)) {
                     ui.nutChucNangDangChon = i;
                     ui.timeClickNut = 0.3f;
@@ -171,6 +171,12 @@ public class NpcHUDClickHandler {
             if (x >= nX + 81 && x <= nX + 81 + 140 && y >= nutY && y <= nutY + 48) {
                 ui.timeChoDoiGiftCode = 0.3f;
                 ui.nutDuocChonKhiChat = 1;
+            }
+        }
+        if (ui.trangThai == TrangThaiChucNang_admin_dungle.NHAN_QUA_THANH_CONG) {
+            if (checkChuotTrongNut(x,y,(Gdx.graphics.getWidth()-114)/2f,5,114,114)) {
+                ui.timeClickNut = 0.3f;
+                ui.nutChucNangDangChon = 0;
             }
         }
     }

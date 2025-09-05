@@ -13,6 +13,8 @@ import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.xu_ly_map.npc.Npc;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.renderUInpc;
 
+import java.util.*;
+
 public class admin_dungle extends renderUInpc {
     public TrangThaiChucNang_admin_dungle trangThai = TrangThaiChucNang_admin_dungle.NONE;
     public int nutChucNangDangChon = -1;
@@ -20,6 +22,8 @@ public class admin_dungle extends renderUInpc {
     public String tinNhanChat = "";
     public int nutDuocChonKhiChat = -1;
     public float timeChoDoiGiftCode = 0f;
+    public List<String> danhSachPhanThuong = new ArrayList<>();
+    public String footerQuaTanThu = "";
 
     public admin_dungle(Npc npc, VeHUD veHUD, DuLieuNguoiChoi duLieuNguoiChoi, NhanVat nhanVat) {
         super(npc, veHUD, duLieuNguoiChoi, nhanVat);
@@ -29,6 +33,7 @@ public class admin_dungle extends renderUInpc {
     public void render(SpriteBatch batch) {
         renderCacChucNang(batch);
         renderChucNangDoiGiftCode(batch);
+        renderChucNangNhanQuaThanhCong(batch);
     }
 
     @Override
@@ -135,6 +140,48 @@ public class admin_dungle extends renderUInpc {
         Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
     }
 
+    public void renderChucNangNhanQuaThanhCong(SpriteBatch batch) {
+        if (!(trangThai == TrangThaiChucNang_admin_dungle.NHAN_QUA_THANH_CONG)) return;
+        veHUD.fontTenSkill.getData().markupEnabled = true;
+        String text = danhSachPhanThuong.size() == 1 ?"[#C21D11]Chúc mừng bạn đã nhận được phần quà[]\n\n" : "[#C21D11]Chúc mừng bạn đã nhận được những phần quà[]\n\n";
+        for (String qua : danhSachPhanThuong) {
+            text += "[#6975E9]" + qua + "[]\n";
+        }
+        text += footerQuaTanThu.isEmpty() ? "[#17BF01]\nHẹn gặp lại![]" : "[#17BF01]\n"+footerQuaTanThu+"[]";
+        veHUD.layout.setText(
+            veHUD.fontTenSkill,
+            text,
+            veHUD.fontTenSkill.getColor(),
+            550,
+            Align.center,
+            true
+        );
+
+        float daoDong = (float) Math.sin(nhanVat.thoiGianTichLuy) * 1.3f;
+        batch.draw(npc.taiAnh.avtNpc,(Gdx.graphics.getWidth() - 600) / 2f+30,120+veHUD.layout.height+35*2+daoDong,npc.taiAnh.avtNpc.getWidth()*0.5f,npc.taiAnh.avtNpc.getHeight()*0.5f);
+        batch.end();
+        veHUD.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        veHUD.shapeRenderer.setColor(1, 1, 1, 1);
+        veHUD.shapeRenderer.rect((Gdx.graphics.getWidth() - 600) / 2f, 120, 600, veHUD.layout.height+35*2);
+        veHUD.shapeRenderer.end();
+        veHUD.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        veHUD.shapeRenderer.setColor(Color.BLACK);
+        for (int i = 0; i < 2; i++) {
+            veHUD.shapeRenderer.rect((Gdx.graphics.getWidth() - 600) / 2f - i, 120 - i, 600 + i * 2, veHUD.layout.height+35*2 + i * 2);
+        }
+        veHUD.shapeRenderer.end();
+        batch.begin();
+        veHUD.fontTenSkill.draw(batch,veHUD.layout,(Gdx.graphics.getWidth() - 600) / 2f+25,120+ veHUD.layout.height+35);
+
+        float nutX = (Gdx.graphics.getWidth()-114)/2f;
+        float nutY = 120 - 115;
+        batch.draw(timeClickNut > 0 ? veHUD.nutvuongclick : veHUD.nutvuong, nutX, nutY, 114, 114);
+
+        veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+        veHUD.layout.setText(veHUD.font, "OK");
+        veHUD.font.draw(batch, veHUD.layout, nutX + (114 - veHUD.layout.width) / 2f, nutY + 114 - 52);
+    }
+
     public void capNhatClickNut(float delta) {
         if (timeClickNut > 0) {
             timeClickNut -= delta;
@@ -153,7 +200,12 @@ public class admin_dungle extends renderUInpc {
                         if (loi == null) {
                             veHUD.themItemTest.nhanQuaTanThu();
                             duLieuNguoiChoi.daNhanQuaTanThu();
-                            veHUD.setTinNhanPet("Bạn vừa nhận x3 quà tân thử từ admin",2f);
+                            trangThai = TrangThaiChucNang_admin_dungle.NHAN_QUA_THANH_CONG;
+                            danhSachPhanThuong.add("x1 Hộp quà Admin Hải Đăng");
+                            danhSachPhanThuong.add("x1 Hộp quà Admin Thành Lê");
+                            danhSachPhanThuong.add("x1 Hộp quà Admin Dũng Lê");
+                            footerQuaTanThu = "Khởi đầu mới - Hành trình phiêu lưu đang chờ bạn!";
+                            veHUD.setTinNhanPet("Bạn vừa nhận x3 quà tân thủ từ admin",2f);
                         } else {
                             veHUD.setTinNhanPet(loi,2f);
                         }
@@ -161,6 +213,13 @@ public class admin_dungle extends renderUInpc {
                         veHUD.setTinNhanPet("Chức năng đang cập nhật",2f);
                     } else if (nutChucNangDangChon == 3) {
                         veHUD.daClickVaoNpc = false;
+                    }
+                }
+                if (trangThai == TrangThaiChucNang_admin_dungle.NHAN_QUA_THANH_CONG) {
+                    if (nutChucNangDangChon == 0) {
+                        trangThai = TrangThaiChucNang_admin_dungle.NONE;
+                        footerQuaTanThu = "";
+                        danhSachPhanThuong.clear();
                     }
                 }
             }
@@ -173,12 +232,17 @@ public class admin_dungle extends renderUInpc {
                 timeChoDoiGiftCode = 0;
                 switch (nutDuocChonKhiChat) {
                     case 0:
-                        duLieuNguoiChoi.suDungGiftCode(tinNhanChat);
+                        duLieuNguoiChoi.suDungGiftCode(tinNhanChat,danhSachPhanThuong);
+                        if (!danhSachPhanThuong.isEmpty()) {
+                            trangThai = TrangThaiChucNang_admin_dungle.NHAN_QUA_THANH_CONG;
+                        } else {
+                            trangThai = TrangThaiChucNang_admin_dungle.NONE;
+                        }
                         break;
                     case 1:
+                        trangThai = TrangThaiChucNang_admin_dungle.NONE;
                         break;
                 }
-                trangThai = TrangThaiChucNang_admin_dungle.NONE;
                 tinNhanChat = "";
                 nutDuocChonKhiChat = -1;
             }
