@@ -51,9 +51,6 @@ public class HUDXulyitem {
                 Item item = danhSach.get(indexx);
                 veHUD.itemm = item;
                 if (item.getLoai() == LoaiItem.CAITRANG || item.getLoai() == LoaiItem.AVATAR) {
-                    if (item.getLoai() == LoaiItem.CAITRANG ){
-                        veHUD.itemDangChon = "caitrang";
-                    } else { veHUD.itemDangChon = "avatar"; }
 
                     boolean loaiCaiTrangDangMac = NhanVatXuLy.getDangMacCaiTrang(); // cái đang mặc
                     boolean laCaiTrang = item.getLoai() == LoaiItem.CAITRANG;       // cái sắp mặc
@@ -95,7 +92,6 @@ public class HUDXulyitem {
                         macCaiTrangMoi(item, indexx, danhSach, loaiCaiTrangDangMac, laCaiTrang);
                     }
                 } else if (item.getLoai() == LoaiItem.AO) {
-                    veHUD.itemDangChon = "ao";
                     if (veHUD.ao == null){
                         duLieuNguoiChoi.setItemVaoHanhTrangDangMac(item,0);
                         veHUD.ao = item.getTexture();
@@ -130,7 +126,6 @@ public class HUDXulyitem {
                         macAoMoi(item, indexx, danhSach);
                     }
                 } else if (item.getLoai() == LoaiItem.QUAN) {
-                    veHUD.itemDangChon = "quan";
                     if (veHUD.quan == null){
                         duLieuNguoiChoi.setItemVaoHanhTrangDangMac(item,1);
                         veHUD.quan = item.getTexture();
@@ -165,7 +160,6 @@ public class HUDXulyitem {
                         macQuanMoi(item, indexx, danhSach);
                     }
                 } else if (item.getLoai() == LoaiItem.GANG) {
-                    veHUD.itemDangChon = "gang";
                     if (veHUD.gang == null){
                         duLieuNguoiChoi.setItemVaoHanhTrangDangMac(item,2);
                         veHUD.gang = item.getTexture();
@@ -187,7 +181,6 @@ public class HUDXulyitem {
                         macGangMoi(item, indexx, danhSach);
                     }
                 } else if (item.getLoai() == LoaiItem.GIAY) {
-                    veHUD.itemDangChon = "giay";
                     if (veHUD.giay == null){
                         duLieuNguoiChoi.setItemVaoHanhTrangDangMac(item,3);
                         veHUD.giay = item.getTexture();
@@ -209,7 +202,6 @@ public class HUDXulyitem {
                         macGiayMoi(item, indexx, danhSach);
                     }
                 } else if (item.getLoai() == LoaiItem.RADA) {
-                    veHUD.itemDangChon = "rada";
                     if (veHUD.rada == null){
                         duLieuNguoiChoi.setItemVaoHanhTrangDangMac(item,4);
                         veHUD.rada = item.getTexture();
@@ -231,7 +223,6 @@ public class HUDXulyitem {
                         macRadaMoi(item, indexx, danhSach);
                     }
                 } else if (item.getLoai() == LoaiItem.GIAPLUYENTAP) {
-                    veHUD.itemDangChon = "giapluyentap";
                     if (veHUD.giaplt == null){
                         duLieuNguoiChoi.setItemVaoHanhTrangDangMac(item,6);
                         veHUD.giaplt = item.getTexture();
@@ -252,7 +243,6 @@ public class HUDXulyitem {
                         macGiapLuyenTapMoi(item, indexx, danhSach);
                     }
                 } else if (item.getLoai() == LoaiItem.VANBAY) {
-                    veHUD.itemDangChon = "vanbay";
                     if (veHUD.vanbay == null){
                         duLieuNguoiChoi.setItemVaoHanhTrangDangMac(item,7);
                         veHUD.vanbay = item.getTexture();
@@ -281,9 +271,6 @@ public class HUDXulyitem {
             Item item = danhSach.get(indexx);
             veHUD.itemm = item;
             if (item.getLoai() == LoaiItem.CAITRANG || item.getLoai() == LoaiItem.AVATAR) {
-                if (item.getLoai() == LoaiItem.CAITRANG ){
-                    veHUD.itemDangChon = "caitrang";
-                } else { veHUD.itemDangChon = "avatar"; }
 
                 boolean loaiCaiTrangDangMac = DeTuXuLy.getDangMacCaiTrang(); // cái đang mặc
                 boolean laCaiTrang = item.getLoai() == LoaiItem.CAITRANG;       // cái sắp mặc
@@ -320,7 +307,6 @@ public class HUDXulyitem {
                     macCaiTrangMoiDeTu(item, indexx, danhSach, loaiCaiTrangDangMac, laCaiTrang);
                 }
             } else if (item.getLoai() == LoaiItem.AO) {
-                veHUD.itemDangChon = "ao";
                 if (veHUD.aoDeTu == null){
                     duLieuNguoiChoi.deTu.setItemVaoHanhTrangDangMac(item,0);
                     veHUD.aoDeTu = item.getTexture();
@@ -356,7 +342,6 @@ public class HUDXulyitem {
                     macAoMoiDeTu(item, indexx, danhSach);
                 }
             } else if (item.getLoai() == LoaiItem.QUAN) {
-                veHUD.itemDangChon = "quan";
                 if (veHUD.quanDeTu == null){
                     duLieuNguoiChoi.deTu.setItemVaoHanhTrangDangMac(item,1);
                     veHUD.quanDeTu = item.getTexture();
@@ -392,7 +377,6 @@ public class HUDXulyitem {
                     macQuanMoiDeTu(item, indexx, danhSach);
                 }
             } else if (item.getLoai() == LoaiItem.GANG) {
-                veHUD.itemDangChon = "gang";
                 if (veHUD.gangDeTu == null){
                     duLieuNguoiChoi.deTu.setItemVaoHanhTrangDangMac(item,2);
                     veHUD.gangDeTu = item.getTexture();
@@ -414,7 +398,6 @@ public class HUDXulyitem {
                     macGangMoiDeTu(item, indexx, danhSach);
                 }
             } else if (item.getLoai() == LoaiItem.GIAY) {
-                veHUD.itemDangChon = "giay";
                 if (veHUD.giayDeTu == null){
                     duLieuNguoiChoi.deTu.setItemVaoHanhTrangDangMac(item,3);
                     veHUD.giayDeTu = item.getTexture();
@@ -436,7 +419,6 @@ public class HUDXulyitem {
                     macGiayMoiDeTu(item, indexx, danhSach);
                 }
             } else if (item.getLoai() == LoaiItem.RADA) {
-                veHUD.itemDangChon = "rada";
                 if (veHUD.radaDeTu == null){
                     duLieuNguoiChoi.deTu.setItemVaoHanhTrangDangMac(item,4);
                     veHUD.radaDeTu = item.getTexture();

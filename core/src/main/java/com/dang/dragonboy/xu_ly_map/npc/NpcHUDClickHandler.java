@@ -2,12 +2,17 @@ package com.dang.dragonboy.xu_ly_map.npc;
 
 import com.badlogic.gdx.Gdx;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
+import com.dang.dragonboy.hien_thi.TrangThaiChucNangHUD;
 import com.dang.dragonboy.hien_thi.VeHUD;
+import com.dang.dragonboy.item.Item;
+import com.dang.dragonboy.item.LoaiItem;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_haidang.*;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle.*;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_dungle.*;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.thay_hieu.*;
+
+import java.util.ArrayList;
 
 public class NpcHUDClickHandler {
     public static void xuLyClick(Npc npc, VeHUD veHUD, DuLieuNguoiChoi duLieuNguoiChoi, NhanVat nhanVat,float x, float y) {
@@ -146,6 +151,57 @@ public class NpcHUDClickHandler {
                 if (checkChuotTrongNut(x, y, (Gdx.graphics.getWidth() - soNut * 120) / 2f + 120*i, 5, 114, 114)) {
                     ui.nutChucNangDangChon = i;
                     ui.timeClickNut = 0.3f;
+                }
+            }
+        }
+        if (ui.trangThai == TrangThaiChucNang_admin_thanhle.CUA_HANG) {
+            for (int i = 0; i <= 3; i++) {
+                if (checkChuotTrongNut(x, y, (350-3*80)/2f + i * 82, 450, 80, 52)) {
+                    switch (i) {
+                        case 0 -> ui.trangThaiCuaHang = TrangThaiChucNang_CUA_HANG_admin_thanhle.AO_QUAN;
+                        case 1 -> ui.trangThaiCuaHang = TrangThaiChucNang_CUA_HANG_admin_thanhle.PHU_KIEN;
+                        case 2 -> ui.trangThaiCuaHang = TrangThaiChucNang_CUA_HANG_admin_thanhle.DAC_BIET;
+                    }
+                }
+            }
+        }
+        if (ui.trangThai == TrangThaiChucNang_admin_thanhle.CUA_HANG && ui.trangThaiCuaHang == TrangThaiChucNang_CUA_HANG_admin_thanhle.AO_QUAN) {
+            float viewY = 35;
+            float viewHeight = 444 - 35;
+            int KhoangCachItem = 49;
+            boolean duDieuKien = checkChuotTrongNut(x,y,3,35,344,444-35) && !veHUD.DangHienPopupThongTin1 && !veHUD.DangHienPopupThongTin3 && !veHUD.dangHienThongBao;
+            if (duDieuKien) {
+                float relativeY = y - viewY;
+                float realY = veHUD.scrollYTrai + (viewHeight - relativeY);
+                int index = (int) (realY / KhoangCachItem);
+                ui.indexItemDuocChon = index;
+                ArrayList<Item> danhSach = ui.danhSachItemAoQuan;
+                if (index < danhSach.toArray().length) {
+                    Item item = danhSach.get(index);
+                    veHUD.itemm = item;
+                    if (veHUD.itemm != null) {
+                        veHUD.DangHienPopupThongTin3 = true;
+                        veHUD.PopupHanhTrangX_Trai = 5;
+                        veHUD.PopupHanhTrangW_Trai = 360;
+                        veHUD.PopupHanhTrangY_Trai = viewY + viewHeight - (index + 1) * KhoangCachItem + veHUD.scrollYTrai;
+                        veHUD.PopupHanhTrangH_Trai = 0;
+                        veHUD.TimeChoHienPopup = 0.3f;
+                        veHUD.vuaMoPopupThongTin = true;
+                    }
+                }
+            }
+            if (veHUD.dangHienPopupNhanVatPhai && !veHUD.DangHienPopupThongTin1 && !veHUD.DangHienPopupThongTin3 && !veHUD.dangHienThongBao) {
+                if (x > 350 && x <= 1020-350) {
+                    ui.indexItemDuocChon = -1;
+                }
+            }
+            if (veHUD.DangHienPopupThongTin3 && veHUD.TimeChoHienPopup <= 0 && !veHUD.vuaMoPopupThongTin) {
+                float yNut = veHUD.PopupHanhTrangY_Trai - 115;
+                for (int i = 0; i < 2; i++) {
+                    if (checkChuotTrongNut(x, y, 1+120*i, yNut, 114, 114)) {
+                        ui.timeChoMuaDo = 0.3f;
+                        ui.nutDuocChonClickMuaDo = i;
+                    }
                 }
             }
         }

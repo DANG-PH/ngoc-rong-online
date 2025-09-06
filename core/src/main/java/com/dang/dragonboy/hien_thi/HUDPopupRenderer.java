@@ -158,13 +158,13 @@ public class HUDPopupRenderer {
             int tongSoTrangBi = soTrangBi + soKhac;
 
             float totalHeight = tongSoTrangBi * KhoangCachItem;
-            veHUD.maxScroll = Math.max(0, totalHeight - viewHeight);
+            veHUD.maxScrollPhai = Math.max(0, totalHeight - viewHeight);
 
             batch.flush();
             Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
             Gdx.gl.glScissor(0, (int)viewY, 350, (int)viewHeight);
             // Vị trí bắt đầu vẽ từ trên xuống
-            float startY = viewY + viewHeight - KhoangCachItem + veHUD.scrollY;
+            float startY = viewY + viewHeight - KhoangCachItem + veHUD.scrollYPhai;
             Texture[] itemNhanVat = {
                 veHUD.ao,veHUD.quan,veHUD.gang,veHUD.giay,veHUD.rada,veHUD.iconct,veHUD.giaplt,veHUD.vanbay
             };
@@ -385,7 +385,7 @@ public class HUDPopupRenderer {
             Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
             batch.end();
             if (veHUD.DangHienPopupThongTin1 && veHUD.TimeChoHienPopup <= 0) {
-                veHUD.PopupHanhTrang(shapeRenderer,batch, veHUD.PopupHanhTrangX, veHUD.PopupHanhTrangY ,veHUD.PopupHanhTrangW ,veHUD.hangTrangDangChon);
+                veHUD.PopupHanhTrang(shapeRenderer,batch,veHUD.hangTrangDangChon,false);
             }
             batch.begin();
             if (veHUD.dangHienThongBao){
@@ -440,14 +440,14 @@ public class HUDPopupRenderer {
             int tongO = oChiSoCoBan + oNoiTai + oSKill;
 
             float totalHeight = tongO * KhoangCachO;
-            veHUD.maxScroll = Math.max(0, totalHeight - viewHeight);
+            veHUD.maxScrollPhai = Math.max(0, totalHeight - viewHeight);
 
             batch.flush();
             Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
             Gdx.gl.glScissor(0, (int)viewY, 350, (int)viewHeight);
 
             // Vị trí bắt đầu vẽ từ trên xuống
-            float startY = viewY + viewHeight - KhoangCachO + veHUD.scrollY;
+            float startY = viewY + viewHeight - KhoangCachO + veHUD.scrollYPhai;
 
             for (int i = 0; i < oChiSoCoBan; i++) {
                 float y = startY - i * KhoangCachO;
@@ -553,8 +553,8 @@ public class HUDPopupRenderer {
                 Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
                 Gdx.gl.glScissor(0, (int) viewY, 350, (int) viewHeight);
                 float totalHeight = chucNang.length * KhoangCachO;
-                veHUD.maxScroll = Math.max(0, totalHeight - viewHeight);
-                float startY = viewY + viewHeight - KhoangCachO + veHUD.scrollY;
+                veHUD.maxScrollPhai = Math.max(0, totalHeight - viewHeight);
+                float startY = viewY + viewHeight - KhoangCachO + veHUD.scrollYPhai;
                 for (int i = 0; i < chucNang.length; i++) {
                     float y = startY - i * KhoangCachO;
                     Texture tex = (veHUD.oChiSoDangChon == i) ? veHUD.o_chi_so_co_ban_click : veHUD.o_chi_so_co_ban;
@@ -587,7 +587,7 @@ public class HUDPopupRenderer {
                 batch.flush();
                 Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
                 Gdx.gl.glScissor(0, (int) viewY, 350, (int) viewHeight);
-                batch.draw(new Texture("hud/giaodienngoai/chung/icon128_1.png"), (350 - 115) / 2f, 444 - 115 - 20 + veHUD.scrollY, 115, 115);
+                batch.draw(new Texture("hud/giaodienngoai/chung/icon128_1.png"), (350 - 115) / 2f, 444 - 115 - 20 + veHUD.scrollYPhai, 115, 115);
                 layout.setText(
                     veHUD.font,
                     "Xin chào mọi người!\n" +
@@ -609,12 +609,12 @@ public class HUDPopupRenderer {
                     true
                 );
                 float h = layout.height;
-                veHUD.font.draw(batch, layout, 15, 444 - 115 - 20 - 20 + veHUD.scrollY);
-                veHUD.maxScroll = Math.max(0, layout.height + 115 + 50 + 70 - viewHeight);
-                batch.draw(veHUD.isThongBaoOKPressed > 0 ? veHUD.nutclick : veHUD.nutdn, (350 - 140) / 2f, 444 - 115 - 20 - 20 - 70 - h + veHUD.scrollY, 140, 50);
+                veHUD.font.draw(batch, layout, 15, 444 - 115 - 20 - 20 + veHUD.scrollYPhai);
+                veHUD.maxScrollPhai = Math.max(0, layout.height + 115 + 50 + 70 - viewHeight);
+                batch.draw(veHUD.isThongBaoOKPressed > 0 ? veHUD.nutclick : veHUD.nutdn, (350 - 140) / 2f, 444 - 115 - 20 - 20 - 70 - h + veHUD.scrollYPhai, 140, 50);
                 veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
                 layout.setText(veHUD.fontTenSkill, "Nhận quà");
-                veHUD.fontTenSkill.draw(batch, layout, (350 - 140) / 2f + (140 - layout.width) / 2f, 444 - 115 - 20 - 20 - 70 - h + 30 + veHUD.scrollY);
+                veHUD.fontTenSkill.draw(batch, layout, (350 - 140) / 2f + (140 - layout.width) / 2f, 444 - 115 - 20 - 20 - 70 - h + 30 + veHUD.scrollYPhai);
                 batch.flush();
                 Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
             }
@@ -1001,7 +1001,7 @@ public class HUDPopupRenderer {
                 batch.flush();
                 Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
                 Gdx.gl.glScissor(0, (int) viewY, 350, (int) viewHeight);
-                batch.draw(new Texture("hud/giaodienngoai/chung/logogame4.png"), (350 - 112) / 2f, 444 - 53 - 20 + veHUD.scrollY, 112, 53);
+                batch.draw(new Texture("hud/giaodienngoai/chung/logogame4.png"), (350 - 112) / 2f, 444 - 53 - 20 + veHUD.scrollYPhai, 112, 53);
                 layout.setText(
                     veHUD.font,
                     "Liên hệ Admin:\n" +
@@ -1030,8 +1030,8 @@ public class HUDPopupRenderer {
                     true
                 );
                 float h = layout.height;
-                veHUD.font.draw(batch, layout, 15, 444 - 53 - 20 - 20 + veHUD.scrollY);
-                veHUD.maxScroll = Math.max(0, h + 53 + 30 - viewHeight);
+                veHUD.font.draw(batch, layout, 15, 444 - 53 - 20 - 20 + veHUD.scrollYPhai);
+                veHUD.maxScrollPhai = Math.max(0, h + 53 + 30 - viewHeight);
                 batch.flush();
                 Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
             }
@@ -1050,8 +1050,8 @@ public class HUDPopupRenderer {
                     true
                 );
                 float h = layout.height;
-                veHUD.font.draw(batch, layout, 15, 444 - 20 + veHUD.scrollY);
-                veHUD.maxScroll = Math.max(0, h + 30 - viewHeight);
+                veHUD.font.draw(batch, layout, 15, 444 - 20 + veHUD.scrollYPhai);
+                veHUD.maxScrollPhai = Math.max(0, h + 30 - viewHeight);
                 batch.flush();
                 Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
             }
@@ -1070,8 +1070,8 @@ public class HUDPopupRenderer {
                     true
                 );
                 float h = layout.height;
-                veHUD.font.draw(batch, layout, 15, 444 - 20 + veHUD.scrollY);
-                veHUD.maxScroll = Math.max(0, h + 30 - viewHeight);
+                veHUD.font.draw(batch, layout, 15, 444 - 20 + veHUD.scrollYPhai);
+                veHUD.maxScrollPhai = Math.max(0, h + 30 - viewHeight);
                 batch.flush();
                 Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
             }
@@ -1094,8 +1094,8 @@ public class HUDPopupRenderer {
                     true
                 );
                 float h = layout.height;
-                veHUD.font.draw(batch, layout, 15, 444 - 20 + veHUD.scrollY);
-                veHUD.maxScroll = Math.max(0, h + 30 - viewHeight);
+                veHUD.font.draw(batch, layout, 15, 444 - 20 + veHUD.scrollYPhai);
+                veHUD.maxScrollPhai = Math.max(0, h + 30 - viewHeight);
                 batch.flush();
                 Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
             }
@@ -1114,8 +1114,8 @@ public class HUDPopupRenderer {
                     true
                 );
                 float h = layout.height;
-                veHUD.font.draw(batch, layout, 15, 444 - 20 + veHUD.scrollY);
-                veHUD.maxScroll = Math.max(0, h + 30 - viewHeight);
+                veHUD.font.draw(batch, layout, 15, 444 - 20 + veHUD.scrollYPhai);
+                veHUD.maxScrollPhai = Math.max(0, h + 30 - viewHeight);
                 batch.flush();
                 Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
             }
@@ -1165,13 +1165,13 @@ public class HUDPopupRenderer {
                 int tongSoTrangBi = soTrangBi + soKhac;
 
                 float totalHeight = tongSoTrangBi * KhoangCachItem;
-                veHUD.maxScroll = Math.max(0, totalHeight - viewHeight);
+                veHUD.maxScrollPhai = Math.max(0, totalHeight - viewHeight);
 
                 batch.flush();
                 Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
                 Gdx.gl.glScissor(1020 - 350, (int) viewY, 350, (int) viewHeight);
                 // Vị trí bắt đầu vẽ từ trên xuống
-                float startY = viewY + viewHeight - KhoangCachItem + veHUD.scrollY;
+                float startY = viewY + viewHeight - KhoangCachItem + veHUD.scrollYPhai;
                 Texture[] itemNhanVat = {
                     veHUD.ao, veHUD.quan, veHUD.gang, veHUD.giay, veHUD.rada, veHUD.iconct, veHUD.giaplt, veHUD.vanbay
                 };
@@ -1392,7 +1392,7 @@ public class HUDPopupRenderer {
                 Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
                 batch.end();
                 if (veHUD.DangHienPopupThongTin1 && veHUD.TimeChoHienPopup <= 0) {
-                    veHUD.PopupHanhTrang(shapeRenderer, batch, veHUD.PopupHanhTrangX, veHUD.PopupHanhTrangY, veHUD.PopupHanhTrangW, veHUD.hangTrangDangChon);
+                    veHUD.PopupHanhTrang(shapeRenderer, batch, veHUD.hangTrangDangChon,true);
                 }
                 batch.begin();
 
@@ -1444,13 +1444,13 @@ public class HUDPopupRenderer {
                     int tongSoTrangBiDeTu = soTrangBiDeTu + soSkillDeTu;
 
                     float totalHeightDeTu = tongSoTrangBiDeTu * KhoangCachItemDeTu;
-                    veHUD.maxScrollDeTu = Math.max(0, totalHeightDeTu - viewHeight);
+                    veHUD.maxScrollTrai = Math.max(0, totalHeightDeTu - viewHeight);
 
                     batch.flush();
                     Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
                     Gdx.gl.glScissor(0, (int) viewY, 350, (int) viewHeight);
                     // Vị trí bắt đầu vẽ từ trên xuống
-                    float startYDeTu = viewY + viewHeight - KhoangCachItemDeTu + veHUD.scrollYDeTu;
+                    float startYDeTu = viewY + viewHeight - KhoangCachItemDeTu + veHUD.scrollYTrai;
                     Texture[] itemDeTu = {
                         veHUD.aoDeTu, veHUD.quanDeTu, veHUD.gangDeTu, veHUD.giayDeTu, veHUD.radaDeTu, veHUD.iconctDeTu
                     };
@@ -1566,7 +1566,7 @@ public class HUDPopupRenderer {
                     Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
                     batch.end();
                     if (veHUD.DangHienPopupThongTin2 && veHUD.TimeChoHienPopup1 <= 0) {
-                        veHUD.PopupHanhTrangDeTu(shapeRenderer, batch, veHUD.PopupHanhTrangXdetu, veHUD.PopupHanhTrangYdetu, veHUD.PopupHanhTrangWdetu, veHUD.hangTrangDeTuDangChon);
+                        veHUD.PopupHanhTrang(shapeRenderer, batch, veHUD.hangTrangDeTuDangChon,true);
                     }
                     batch.begin();
                 }
@@ -1652,8 +1652,8 @@ public class HUDPopupRenderer {
         Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
         Gdx.gl.glScissor(0, (int) viewY, 350, (int) viewHeight);
         float totalHeight = chucNang.length * KhoangCachO;
-        veHUD.maxScroll = Math.max(0, totalHeight - viewHeight);
-        float startY = viewY + viewHeight - KhoangCachO + veHUD.scrollY;
+        veHUD.maxScrollPhai = Math.max(0, totalHeight - viewHeight);
+        float startY = viewY + viewHeight - KhoangCachO + veHUD.scrollYPhai;
         for (int i = 0; i < chucNang.length; i++) {
             float y = startY - i * KhoangCachO;
             Texture tex = (veHUD.oChiSoDangChon == i) ? veHUD.o_chi_so_co_ban_click : veHUD.o_chi_so_co_ban;

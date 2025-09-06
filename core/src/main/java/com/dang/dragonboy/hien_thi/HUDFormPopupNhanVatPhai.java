@@ -67,13 +67,13 @@ public class HUDFormPopupNhanVatPhai {
         int tongSoTrangBi = soTrangBi + soKhac;
 
         float totalHeight = tongSoTrangBi * KhoangCachItem;
-        veHUD.maxScroll = Math.max(0, totalHeight - viewHeight);
+        veHUD.maxScrollPhai = Math.max(0, totalHeight - viewHeight);
 
         batch.flush();
         Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
         Gdx.gl.glScissor(1020 - 350, (int) viewY, 350, (int) viewHeight);
         // Vị trí bắt đầu vẽ từ trên xuống
-        float startY = viewY + viewHeight - KhoangCachItem + veHUD.scrollY;
+        float startY = viewY + viewHeight - KhoangCachItem + veHUD.scrollYPhai;
         Texture[] itemNhanVat = {
             veHUD.ao, veHUD.quan, veHUD.gang, veHUD.giay, veHUD.rada, veHUD.iconct, veHUD.giaplt, veHUD.vanbay
         };
@@ -288,7 +288,7 @@ public class HUDFormPopupNhanVatPhai {
         Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
         batch.end();
         if (veHUD.DangHienPopupThongTin1 && veHUD.TimeChoHienPopup <= 0) {
-            veHUD.PopupHanhTrang(veHUD.shapeRenderer, batch, veHUD.PopupHanhTrangX, veHUD.PopupHanhTrangY, veHUD.PopupHanhTrangW, veHUD.hangTrangDangChon);
+            veHUD.PopupHanhTrang(veHUD.shapeRenderer, batch, veHUD.hangTrangDangChon,true);
         }
         batch.begin();
 

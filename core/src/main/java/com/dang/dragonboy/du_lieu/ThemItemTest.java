@@ -1066,7 +1066,7 @@ public class ThemItemTest {
                             veHUD.bongTaiRongThan = true;
                         }
                         veHUD.hangTrangDangChon = -1;
-                        veHUD.scrollY = 0;
+                        veHUD.scrollYPhai = 0;
                     }
                     veHUD.setTinNhanPet("Chúc mừng bạn đã ước thành công Bông Tai Porata Đặc Biệt",2f);
                     break;
@@ -1131,7 +1131,7 @@ public class ThemItemTest {
                         veHUD.hangTrangDangChon = viTriMoi + 8;
                         veHUD.xulyitem.macDo(veHUD.hangTrangDangChon);
                         veHUD.hangTrangDangChon = -1;
-                        veHUD.scrollY = 0;
+                        veHUD.scrollYPhai = 0;
                     }
                     veHUD.setTinNhanPet("Bạn đã trở thành người đẹp trai nhất vũ trụ!",2f);
                     break;
@@ -1234,7 +1234,7 @@ public class ThemItemTest {
                         veHUD.hangTrangDangChon = viTriMoi + 8;
                         veHUD.xulyitem.macDo(veHUD.hangTrangDangChon);
                         veHUD.hangTrangDangChon = -1;
-                        veHUD.scrollY = 0;
+                        veHUD.scrollYPhai = 0;
                     }
                     break;
                 case 1:
@@ -1250,7 +1250,7 @@ public class ThemItemTest {
                         veHUD.hangTrangDangChon = viTriMoi + 8;
                         veHUD.xulyitem.macDo(veHUD.hangTrangDangChon);
                         veHUD.hangTrangDangChon = -1;
-                        veHUD.scrollY = 0;
+                        veHUD.scrollYPhai = 0;
                     }
                     veHUD.setTinNhanPet("Bạn đã nhận được Thú cưỡi cực VIP - Phượng Hoàng Lửa",2f);
                     break;

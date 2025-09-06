@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Align;
+import com.dang.dragonboy.item.LoaiItem;
 import com.dang.dragonboy.nhan_vat.*;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.du_lieu.ThemItemTest;
@@ -105,13 +106,12 @@ public class VeHUD {
 
     public Texture hanh_trang, hanh_trang_click, hanh_trang_dang_mac, hanh_trang_dang_mac_click;
 
-    public float scrollY = 0f;
-    public float scrollYDeTu = 0f;
-    public float scrollYRuongDo = 0f;
-    public float maxScroll = 0f;
-    public float maxScrollDeTu = 0f;
-    public float maxScrollRuongDo = 0f;
+    public float scrollYPhai = 0f;
+    public float scrollYTrai = 0f;
+    public float maxScrollPhai = 0f;
+    public float maxScrollTrai = 0f;
     private final float scrollSpeed = 30f; // số pixel cuộn mỗi lần
+
     public int hangTrangDangChon = -1;
     public int hangTrangDeTuDangChon = -1;
     public int hanhTrangRuongDoDangChon = -1;
@@ -133,20 +133,17 @@ public class VeHUD {
     public float PopupThongTinY = 0;
     public float PopupThongTinW = 0;
     public float PopupThongTinH = 0;
-    public float PopupHanhTrangX = 0;
-    public float PopupHanhTrangY = 0;
-    public float PopupHanhTrangXdetu = 0;
-    public float PopupHanhTrangYdetu = 0;
-    public float PopupHanhTrangXRuongDo = 0;
-    public float PopupHanhTrangYRuongDo = 0;
-    String itemDangChon;
-    Item itemm = null;
-    public float PopupHanhTrangW = 0;
-    public float PopupHanhTrangH = 0;
-    public float PopupHanhTrangWdetu = 0;
-    public float PopupHanhTrangHdetu = 0;
-    public float PopupHanhTrangWRuongDo = 0;
-    public float PopupHanhTrangHRuongDo = 0;
+    public float PopupHanhTrangX_Trai = 0;
+    public float PopupHanhTrangY_Trai = 0;
+    public float PopupHanhTrangX_Phai = 0;
+    public float PopupHanhTrangY_Phai = 0;
+    public Item itemm = null;
+
+    public float PopupHanhTrangW_Phai = 0;
+    public float PopupHanhTrangH_Phai = 0;
+    public float PopupHanhTrangW_Trai = 0;
+    public float PopupHanhTrangH_Trai = 0;
+
     float nutClickTimer = 0;
     float nutClickTimer1 = 0;
     int oChiSoDangChonTamThoi = -1;
@@ -207,10 +204,8 @@ public class VeHUD {
     public float timeDoTre = 0;
     private boolean chuaNhanQuaLanDau = true;
 
-    public boolean dangChonHanhTrangSuPhu = false;
-    public boolean dangChonHanhTrangDeTu = false;
-    public boolean dangChonHanhTrangRuongDo = false;
-    public boolean dangChonHanhTrangNPC = false;
+    public boolean dangChonHanhTrangPhai = false;
+    public boolean dangChonHanhTrangTrai = false;
 
     public Music[] nhacNen = new Music[12];
 
@@ -283,12 +278,10 @@ public class VeHUD {
     public boolean vuaClickTatPopup = false;
     public boolean vuaClickMoPopup = false;
 
-    public boolean keoHanhTrang = false;
-    public boolean vuaKeoHanhTrang = false;
-    public boolean keoHanhTrangDeTu = false;
-    public boolean vuaKeoHanhTrangDeTu = false;
-    public boolean keoHanhTrangRuongDo = false;
-    public boolean vuaKeoHanhTrangRuongDo = false;
+    public boolean keoHanhTrangPhai = false;
+    public boolean vuaKeoHanhTrangPhai = false;
+    public boolean keoHanhTrangTrai = false;
+    public boolean vuaKeoHanhTrangTrai = false;
 
     public String trangthaide;
     public boolean renderDeTu = false;
@@ -372,8 +365,8 @@ public class VeHUD {
         popupThongTin = new HUDPopupThongTin(this, layout, duLieuNguoiChoi, nhanVat);
         popupHanhTrang = new HUDPopupHanhTrang(this, layout, duLieuNguoiChoi, nhanVat);
         ruongDo = new HUDRuongDo(this,duLieuNguoiChoi,nhanVat);
-//        duLieuNguoiChoi.taoDeTu("Đệ tử");
-//        duLieuNguoiChoi.deTu.setVeHUD(this);
+        duLieuNguoiChoi.taoDeTu("Đệ tử");
+        duLieuNguoiChoi.deTu.setVeHUD(this);
     }
 
     public void setCamera(QuanLyCamera camManager) {
@@ -392,28 +385,20 @@ public class VeHUD {
         }
     }
 
-    public void scroll(int amount) {
+    public void scrollPhai(int amount) {
         // amount âm là cuộn lên, dương là cuộn xuống
-        scrollY += amount * scrollSpeed;
+        scrollYPhai += amount * scrollSpeed;
 
         // Giới hạn scroll
-        scrollY = Math.max(0, Math.min(scrollY, maxScroll));
+        scrollYPhai = Math.max(0, Math.min(scrollYPhai, maxScrollPhai));
     }
 
-    public void scrollDeTu(int amount) {
+    public void scrollTrai(int amount) {
         // amount âm là cuộn lên, dương là cuộn xuống
-        scrollYDeTu += amount * scrollSpeed;
+        scrollYTrai += amount * scrollSpeed;
 
         // Giới hạn scroll
-        scrollYDeTu = Math.max(0, Math.min(scrollYDeTu, maxScrollDeTu));
-    }
-
-    public void scrollRuongDo(int amount) {
-        // amount âm là cuộn lên, dương là cuộn xuống
-        scrollYRuongDo += amount * scrollSpeed;
-
-        // Giới hạn scroll
-        scrollYRuongDo = Math.max(0, Math.min(scrollYRuongDo, maxScrollRuongDo));
+        scrollYTrai = Math.max(0, Math.min(scrollYTrai, maxScrollTrai));
     }
 
     public VeHUD(GlyphLayout layout) {
@@ -1056,7 +1041,7 @@ public class VeHUD {
                     if (oChiSoDangChon == 4 && !dangHopTheThuong && delayHopTheThuong == 0 && !dangHopThe) {
                         timeChoHopThe = 2f;
                         dangHienPopup = false;
-                        scrollY = 0;
+                        scrollYPhai = 0;
                         hangTrangDangChon = -1;
                         dangHopTheThuong = true;
                     } else if (dangHopThe) {
@@ -1125,7 +1110,7 @@ public class VeHUD {
                             trangThaiChucNangHUDChucNang = TrangThaiChucNangHUD_ChucNang.THONG_BAO;
                         } else if (oChiSoDangChon == 3) {
                             trangThaiChucNangHUDChucNang = TrangThaiChucNangHUD_ChucNang.DE_TU;
-                            scrollYDeTu = 0;
+                            scrollYTrai = 0;
                             hangTrangDangChon = -1;
                             hangTrangDeTuDangChon = -1;
                         } else if (oChiSoDangChon == 7) {
@@ -1148,7 +1133,7 @@ public class VeHUD {
                     }
                 }
                 oChiSoDangChon = -1;
-                scrollY = 0;
+                scrollYPhai = 0;
             }
         }
         if (dangHienTinNhanChat) {
@@ -1284,8 +1269,8 @@ public class VeHUD {
                                         if (!(trangThaiChucNangHUDChucNang==TrangThaiChucNangHUD_ChucNang.DE_TU)) {
                                             trangThaiChucNangHUD = TrangThaiChucNangHUD.CHUC_NANG;
                                             trangThaiChucNangHUDChucNang=TrangThaiChucNangHUD_ChucNang.DE_TU;
-                                            scrollY = 0;
-                                            scrollYDeTu = 0;
+                                            scrollYPhai = 0;
+                                            scrollYTrai = 0;
                                         }
                                         if (!duLieuNguoiChoi.deTu.getTrangthai().equals("Về nhà")) {
                                             duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Cám ơn sư phụ", 3f);
@@ -1746,7 +1731,7 @@ public class VeHUD {
                 HienPopUpGanSkill = true;
             }
         }
-        if (DangHienPopupThongTin || DangHienPopupThongTin1){
+        if (DangHienPopupThongTin || DangHienPopupThongTin1 || DangHienPopupThongTin3){
             TimeChoHienPopup-=Gdx.graphics.getDeltaTime();
         }
         if (DangHienPopupThongTin2){
@@ -1856,14 +1841,8 @@ public class VeHUD {
     void PopupThongTin(ShapeRenderer shapeRenderer, SpriteBatch batch, float x, float y , float width, float height , int oChiSoDangChon) {
         popupThongTin.PopupThongTin(shapeRenderer,batch,x,y,width,height,oChiSoDangChon);
     }
-    void PopupHanhTrang(ShapeRenderer shapeRenderer,SpriteBatch batch, float x, float y , float width , int oHanhTrangDangChon) {
-        popupHanhTrang.PopupHanhTrang(shapeRenderer,batch,x,y,width,oHanhTrangDangChon);
-    }
-    void PopupHanhTrangDeTu(ShapeRenderer shapeRenderer,SpriteBatch batch, float x, float y , float width , int oHanhTrangDangChon) {
-        popupHanhTrang.PopupHanhTrangDeTu(shapeRenderer,batch,x,y,width,oHanhTrangDangChon);
-    }
-    void PopupHanhTrangRuongDo(ShapeRenderer shapeRenderer,SpriteBatch batch, float x, float y , float width , int oHanhTrangDangChon) {
-        popupHanhTrang.PopupHanhTrangRuongDo(shapeRenderer,batch,x,y,width,oHanhTrangDangChon);
+    public void PopupHanhTrang(ShapeRenderer shapeRenderer,SpriteBatch batch, int oHanhTrangDangChon,boolean benPhai) {
+        popupHanhTrang.PopupHanhTrang(shapeRenderer,batch,oHanhTrangDangChon,benPhai);
     }
 
     long tinhChiPhiTiemNang(int oChiSo, int chiSoGoc, int soLanTang, int buocTang) {
@@ -1938,14 +1917,19 @@ public class VeHUD {
 
     public void xuLyDungItem() {
         if ((nhanVat.getHanhtinh().equals(itemm.getHanhtinh()) || itemm.getHanhtinh().equals("all")) && duLieuNguoiChoi.getSucManh() >= itemm.getSucManhYeuCau()) {
-            if (!itemDangChon.equals("bongtai") && !itemDangChon.equals("ngocrong") && !itemDangChon.equals("huyhieu") && !itemDangChon.equals("hopqua") && !itemDangChon.equals("phutro") && !itemDangChon.equals("deolung")) {
+            if (itemm.getLoai() != LoaiItem.BONGTAI &&
+                itemm.getLoai() != LoaiItem.NGOCRONG &&
+                itemm.getLoai() != LoaiItem.HUYHIEU &&
+                itemm.getLoai() != LoaiItem.HOPQUA &&
+                itemm.getLoai() != LoaiItem.PHUTRO &&
+                itemm.getLoai() != LoaiItem.DEOLUNG) {
                 xulyitem.macDo(hangTrangDangChon);
             }
-            if (itemDangChon.equals("bongtai")) {
+            if (itemm.getLoai() == LoaiItem.BONGTAI) {
                 if (timeHopTheTHuong == 0 && delayHopTheBongTai == 0 && duLieuNguoiChoi.coDeTu()) {
                     timeChoHopThe = 1.5f;
                     dangHienPopup = false;
-                    scrollY = 0;
+                    scrollYPhai = 0;
                     hangTrangDangChon = -1;
                     dangHopTheThuong = false;
                     if (!dangHopThe) {
@@ -1968,7 +1952,7 @@ public class VeHUD {
                     }
                 }
             }
-            if (itemDangChon.equals("ngocrong")) {
+            if (itemm.getLoai() == LoaiItem.NGOCRONG) {
                 if (timeDelayUocRong == 0 || duLieuNguoiChoi.getTen().equals("admin")) {
                     if (!itemm.getTenItem().contains("Ngọc rồng đen")) {
                         if (itemm.getId().equals("nr3s") || itemm.getId().equals("nr2s") || itemm.getId().equals("nr1s")) {
@@ -2071,7 +2055,7 @@ public class VeHUD {
                     setTinNhanPet("Ngọc rồng cần khôi phục trong "+(int)(timeDelayUocRong/60f)+" phút nữa",2f);
                 }
             }
-            if (itemDangChon.equals("huyhieu")) {
+            if (itemm.getLoai() == LoaiItem.HUYHIEU) {
                 if (dangDungHuyHieu) {
                     dangDungHuyHieu = false;
                     chuaSetUpAnhHuyHieu = true;
@@ -2080,7 +2064,7 @@ public class VeHUD {
                     huyHieuDangDung = itemm;
                 }
             }
-            if (itemDangChon.equals("hopqua")) {
+            if (itemm.getLoai() == LoaiItem.HOPQUA) {
                 if (itemm.getId().equals("adminHD")) {
                     themItemTest.themQuaAdHaiDang();
                     setTinNhanPet("Bạn vừa nhận 01 set kích hoạt",2f);
@@ -2098,7 +2082,7 @@ public class VeHUD {
                     duLieuNguoiChoi.getHanhTrang().remove(itemm);
                 }
             }
-            if (itemDangChon.equals("phutro")) {
+            if (itemm.getLoai() == LoaiItem.PHUTRO) {
                 if (itemm.getId().equals("bo_huyet")) {
                     dangDungBoHuyet = true;
                     timeDungBoHuyet = 600f;
@@ -2146,7 +2130,7 @@ public class VeHUD {
                     duLieuNguoiChoi.getHanhTrang().remove(itemm);
                 }
             }
-            if (itemDangChon.equals("deolung")) {
+            if (itemm.getLoai() == LoaiItem.DEOLUNG) {
                 if (dangDungDeoLung) {
                     dangDungDeoLung = false;
                     framesDeoLung = 0;
@@ -2156,7 +2140,7 @@ public class VeHUD {
                     deoLungDangDung = itemm;
                 }
             }
-            if (itemDangChon.equals("aura")) {
+            if (itemm.getLoai() == LoaiItem.AURA) {
                 if (dangDungAura) {
                     dangDungAura = false;
                     timeChoBuffAuraTieuDoiTruong = 0f;
@@ -2166,7 +2150,7 @@ public class VeHUD {
                     auraDangDung = itemm;
                 }
             }
-            if (itemDangChon.equals("nangskill")) {
+            if (itemm.getLoai() == LoaiItem.NANGSKILL) {
                 switch (itemm.getId()) {
                     case "khi":
                         if (duLieuNguoiChoi.getCapSkill(3) < 7) {
@@ -2281,7 +2265,7 @@ public class VeHUD {
                     break;
                 }
             }
-            if (itemDangChon.equals("vequaynpchaidang")) {
+            if (itemm.getLoai() == LoaiItem.VE_QUAY_NPC_HAIDANG) {
                 setTinNhanPet("Cần gặp NPC Hải Đăng để sử dụng", 2f);
             }
         } else if (duLieuNguoiChoi.getSucManh() < itemm.getSucManhYeuCau()) {

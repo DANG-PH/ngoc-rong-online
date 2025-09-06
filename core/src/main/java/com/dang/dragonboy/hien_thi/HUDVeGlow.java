@@ -20,8 +20,8 @@ public class HUDVeGlow {
                     veHUD.hangTrangDangChon = -1;
                     veHUD.oChiSoDangChon = -1;
                     veHUD.vuaClickTatPopup = false;
-                    veHUD.scrollY = 0;
-                    veHUD.scrollYDeTu = 0;
+                    veHUD.scrollYPhai = 0;
+                    veHUD.scrollYTrai = 0;
                 }
                 if (veHUD.vuaClickMoPopup) {
                     veHUD.hienPopupNhanVat();
