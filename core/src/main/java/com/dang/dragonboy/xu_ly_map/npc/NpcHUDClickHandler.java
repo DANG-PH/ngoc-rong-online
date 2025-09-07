@@ -162,6 +162,9 @@ public class NpcHUDClickHandler {
                         case 1 -> ui.trangThaiCuaHang = TrangThaiChucNang_CUA_HANG_admin_thanhle.PHU_KIEN;
                         case 2 -> ui.trangThaiCuaHang = TrangThaiChucNang_CUA_HANG_admin_thanhle.DAC_BIET;
                     }
+                    veHUD.clickY = y;
+                    veHUD.clickX = x;
+                    veHUD.timeGlow = 0.3f;
                 }
             }
         }
@@ -203,6 +206,17 @@ public class NpcHUDClickHandler {
                         ui.nutDuocChonClickMuaDo = i;
                     }
                 }
+            }
+            // nutX để tắt popup
+            float nutXW = veHUD.nutX.getWidth() * 0.5f;
+            float nutXH = veHUD.nutX.getHeight() * 0.55f;
+            float nutXX = 350 - nutXW - 6;
+            float nutXY = 610 - nutXH - 2;
+            if (checkChuotTrongNut(x,y,nutXX,nutXY,nutXW,nutXH)) {
+                ui.timeChoTatPopupNpc = 0.3f;
+                veHUD.clickY = y;
+                veHUD.clickX = x;
+                veHUD.timeGlow = 0.3f;
             }
         }
     }

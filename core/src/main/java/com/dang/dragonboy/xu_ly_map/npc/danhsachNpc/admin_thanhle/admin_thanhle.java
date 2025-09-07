@@ -31,6 +31,7 @@ public class admin_thanhle extends renderUInpc {
     public Item itemDangChon;
     public int nutDuocChonClickMuaDo = -1;
     public float timeChoMuaDo = 0f;
+    public float timeChoTatPopupNpc = 0f;
 
     public admin_thanhle(Npc npc, VeHUD veHUD, DuLieuNguoiChoi duLieuNguoiChoi, NhanVat nhanVat) {
         super(npc, veHUD, duLieuNguoiChoi, nhanVat);
@@ -55,6 +56,7 @@ public class admin_thanhle extends renderUInpc {
         TimeChoHienPopup-=Gdx.graphics.getDeltaTime();
         capNhatClickNut(delta);
         capNhatTimeChoMuaDo(delta);
+        capNhatTimeChoTatPopupNpc(delta);
     }
 
     public void renderCacChucNang(SpriteBatch batch) {
@@ -107,6 +109,14 @@ public class admin_thanhle extends renderUInpc {
     public void renderChucNangCuaHang(SpriteBatch batch) {
         if (trangThai != TrangThaiChucNang_admin_thanhle.CUA_HANG) return;
         veHUD.renderHUDPopupNhanVatPhai(batch,npc.taiAnh.avtNpc);
+
+        veHUD.fontMotaChucNangNpc.setColor(1.0f, 0.956f, 0.863f, 1f);
+        veHUD.layout.setText(veHUD.fontMotaChucNangNpc,"Xin chào!\nCậu muốn mua gì?");
+        veHUD.fontMotaChucNangNpc.draw(batch, veHUD.layout, 150,565);
+
+        float nutXW = veHUD.nutX.getWidth() * 0.5f;
+        float nutXH = veHUD.nutX.getHeight() * 0.55f;
+        batch.draw(veHUD.nutX, 350 - nutXW - 6, 610 - nutXH - 2, nutXW, nutXH - 5);
 
         // chuc nang
         String[] TextChucnang = {
@@ -262,6 +272,13 @@ public class admin_thanhle extends renderUInpc {
                         veHUD.fontCapSKill.draw(batch,layout,3 + 56 + 12, y + 49 - 30);
                     }
                 }
+                //vẽ số tiền
+                veHUD.fontTenSkill.setColor(Color.valueOf("FEA900"));
+                String textGia = ItemGia.layGiaItem(item) >= 1_000_000L ? veHUD.formatVangNgoc(ItemGia.layGiaItem(item)) : ItemGia.layGiaItem(item)+"";
+                veHUD.layout.setText(veHUD.fontTenSkill,textGia);
+                veHUD.fontTenSkill.draw(batch,layout,350- layout.width-35,y+50-8);
+                Texture loaiTien = ItemGia.layLoaiTien(item) == LoaiTien.VANG ? veHUD.vang : veHUD.ngoc;
+                batch.draw(loaiTien,350- 20-10f,y+50-8- layout.height,20,20);
             }
         }
         batch.flush();
@@ -298,12 +315,56 @@ public class admin_thanhle extends renderUInpc {
                 timeChoMuaDo = 0;
                 switch (nutDuocChonClickMuaDo) {
                     case 1 :
-                        veHUD.DangHienPopupThongTin3 = false;
-                        veHUD.TimeChoHienPopup = 0;
-                        veHUD.dangChonHanhTrangPhai = false;
-                        veHUD.dangChonHanhTrangTrai = true;
+                        break;
+                    case 0 :
+                        String loi = null;
+                        Long giaItem = ItemGia.layGiaItem(veHUD.itemm);
+                        LoaiTien loaiTien = ItemGia.layLoaiTien(veHUD.itemm);
+                        Long loaiTienCanSoSanh = loaiTien == LoaiTien.VANG ? duLieuNguoiChoi.getVang() : duLieuNguoiChoi.getNgoc();
+                        if (!duLieuNguoiChoi.duChoTrongHanhTrang(1)) {
+                            loi = "Cần ít nhất 1 ô trống trong hành trang";
+                        } else if (loaiTienCanSoSanh < giaItem) {
+                            loi = "Không đủ "+(loaiTien == LoaiTien.VANG ? "vàng" : "ngọc");
+                        }
+                        if (loi == null) {
+                            if (loaiTien == LoaiTien.VANG) {
+                                duLieuNguoiChoi.giamVang(giaItem);
+                            } else {
+                                duLieuNguoiChoi.giamNgoc(giaItem);
+                            }
+                            // Thêm item, rollback nếu thất bại
+                            boolean thanhCong = duLieuNguoiChoi.themItemVaoHanhTrang(veHUD.itemm);
+                            if (!thanhCong) {
+                                if (loaiTien == LoaiTien.VANG) {
+                                    duLieuNguoiChoi.tangVang(giaItem); // hoàn tiền
+                                } else {
+                                    duLieuNguoiChoi.tangNgoc(giaItem);
+                                }
+                                veHUD.setTinNhanPet("Có lỗi khi thêm vật phẩm, giao dịch bị hủy", 2f);
+                            } else {
+                                veHUD.setTinNhanPet("Mua thành công "+veHUD.itemm.getTenItem(),2f);
+                            }
+                        } else {
+                            veHUD.setTinNhanPet(loi,2f);
+                        }
                         break;
                 }
+                veHUD.DangHienPopupThongTin3 = false;
+                veHUD.TimeChoHienPopup = 0;
+                veHUD.dangChonHanhTrangPhai = false;
+                veHUD.dangChonHanhTrangTrai = true;
+            }
+        }
+    }
+
+    public void capNhatTimeChoTatPopupNpc(float delta) {
+        if (timeChoTatPopupNpc > 0) {
+            timeChoTatPopupNpc -= delta;
+            if (timeChoTatPopupNpc <= 0) {
+                timeChoTatPopupNpc = 0;
+                veHUD.dangHienPopupNhanVatPhai = false;
+                veHUD.scrollYPhai = 0;
+                veHUD.scrollYTrai = 0;
             }
         }
     }

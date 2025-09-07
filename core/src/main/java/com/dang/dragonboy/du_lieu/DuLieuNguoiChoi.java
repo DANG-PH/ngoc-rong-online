@@ -132,7 +132,7 @@ public class DuLieuNguoiChoi {
         return hanhTrang;
     }
 
-    public void themItemVaoHanhTrang(Item item) {
+    public boolean themItemVaoHanhTrang(Item item) {
         if (hanhTrang.size() < MAXHANHTRANG) {
             if (item.getLoai() != LoaiItem.NGOCRONG &&
                 item.getLoai() != LoaiItem.PHUTRO &&
@@ -158,7 +158,9 @@ public class DuLieuNguoiChoi {
             }
         } else {
             veHUD.setTinNhanPet("Cần ít nhất 1 ô trống",2f);
+            return false;
         }
+        return true;
     }
 
     public ArrayList<Item> getHanhTrangDangMac() {
@@ -622,7 +624,7 @@ public class DuLieuNguoiChoi {
     public void tangVang(long soLuong) {
         this.vang += soLuong;
     }
-    public void tangNgoc(int soLuong) {
+    public void tangNgoc(long soLuong) {
         this.ngoc += soLuong;
     }
 
@@ -680,7 +682,7 @@ public class DuLieuNguoiChoi {
         this.vang -= soLuong;
     }
 
-    public void giamNgoc(int soLuong) {
+    public void giamNgoc(long soLuong) {
         this.ngoc -= soLuong;
     }
     public void giamDau(){

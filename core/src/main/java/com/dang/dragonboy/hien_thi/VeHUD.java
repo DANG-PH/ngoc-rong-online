@@ -80,7 +80,7 @@ public class VeHUD {
     public Texture oskill, oskillclick;
     public Texture nutpopup;
 
-    public BitmapFont font,fontNgayGioHienTai, fontChucnang,fontChucnang1, fontDauThan, fontNhiemVu, fontNhiemVu1, fontNhiemVuChuaLam, fontMotaNhiemVu, fontvangngoc, fontsm, fontSkilldaco, fontSkillchuaco, fontMotaSkill, fontCapSKill, fontMotaNoiTai, fontTiemNang, fontTenSkill, fontchat, fontMotaNganSkill, fontMotaNganSkill1, fontSkillchuaco1, fontMotaHanhTrang, fontMotaHanhTrang1, fontText, fontMoTaQuyDoiVe;
+    public BitmapFont font,fontNgayGioHienTai, fontChucnang,fontChucnang1, fontDauThan, fontNhiemVu, fontNhiemVu1, fontNhiemVuChuaLam, fontMotaNhiemVu, fontvangngoc, fontsm, fontSkilldaco, fontSkillchuaco, fontMotaSkill, fontCapSKill, fontMotaNoiTai, fontTiemNang, fontTenSkill, fontchat, fontMotaNganSkill, fontMotaNganSkill1, fontSkillchuaco1, fontMotaHanhTrang, fontMotaHanhTrang1, fontText, fontMoTaQuyDoiVe, fontMotaChucNangNpc;
     public GlyphLayout layout;
 
     public SkillNhanVat[] skillIcons;
@@ -575,6 +575,8 @@ public class VeHUD {
             "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ ễ ằ ừ — ẳ ữ ỗ ằ ễ ỗ ừ ẵ ê : ĩ ≤";
         param3.size = 14;
         fontMoTaQuyDoiVe = generator3.generateFont(param3);
+        param3.size = 15;
+        fontMotaChucNangNpc = generator3.generateFont(param3);
         param3.size = 14;
         fontchat = generator3.generateFont(param3);
         param3.color = new Color(94 / 255f, 86 / 255f, 74 / 255f, 1f);
@@ -938,11 +940,6 @@ public class VeHUD {
             batch.draw(nenflash,0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
             batch.setColor(1, 1, 1, 1);
         }
-        batch.end();
-        if (timeGlow>0) {
-            veGlow.veGlow(shapeRenderer,clickX,clickY,timeGlow);
-        }
-        batch.begin();
         ruongDo.renderRuongDo(batch);
         renderLuaChonCayDau(batch);
         if (daClickVaoNpc) {
@@ -950,6 +947,12 @@ public class VeHUD {
         }
         renderPopup(batch);
         renderPetChat(batch);
+
+        batch.end();
+        if (timeGlow>0) {
+            veGlow.veGlow(shapeRenderer,clickX,clickY,timeGlow);
+        }
+        batch.begin();
     }
 
     public void clickOChat() {
