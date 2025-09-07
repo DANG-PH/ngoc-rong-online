@@ -139,6 +139,8 @@ public class admin_thanhle extends renderUInpc {
         }
 
         renderAoQuan(batch);
+
+        veHUD.renderHUDThongBaoPopupNhanVatPhai(batch);
     }
 
     public void renderAoQuan(SpriteBatch batch) {

@@ -308,7 +308,11 @@ public class HUDFormPopupNhanVatPhai {
         veHUD.layout.setText(veHUD.fontvangngoc, veHUD.formatVangNgoc(duLieuNguoiChoi.getNgoc()));
         veHUD.fontvangngoc.draw(batch, veHUD.layout, 275 + 20 + 10, 22);
 
+    }
+
+    public static void renderThongBao(SpriteBatch batch,VeHUD veHUD) {
         if (veHUD.dangHienThongBao){
+            veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
             batch.draw(veHUD.anhThongBao, (Gdx.graphics.getWidth() - 720) / 2f, 65, 720, 175);
             veHUD.layout.setText(veHUD.fontTenSkill, "Bạn có chắc muốn hủy bỏ (mất luôn)");
             veHUD.fontTenSkill.draw(batch, veHUD.layout, (Gdx.graphics.getWidth() - veHUD.layout.width) / 2, 175);

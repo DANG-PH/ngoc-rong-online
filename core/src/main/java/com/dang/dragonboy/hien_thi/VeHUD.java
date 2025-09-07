@@ -2387,6 +2387,10 @@ public class VeHUD {
         HUDFormPopupNhanVatPhai.render(batch,this,duLieuNguoiChoi,nhanVat,avtNPC);
     }
 
+    public void renderHUDThongBaoPopupNhanVatPhai(SpriteBatch batch){
+        HUDFormPopupNhanVatPhai.renderThongBao(batch,this);
+    }
+
     public void dispose() {
         Texture[] textures = {
             saoden, saoxanh, ochat, ochatclick, thanhhp,
