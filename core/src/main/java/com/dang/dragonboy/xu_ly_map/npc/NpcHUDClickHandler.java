@@ -198,12 +198,23 @@ public class NpcHUDClickHandler {
                     ui.indexItemDuocChon = -1;
                 }
             }
-            if (veHUD.DangHienPopupThongTin3 && veHUD.TimeChoHienPopup <= 0 && !veHUD.vuaMoPopupThongTin) {
-                float yNut = veHUD.PopupHanhTrangY_Trai - 115;
-                for (int i = 0; i < 2; i++) {
-                    if (checkChuotTrongNut(x, y, 1+120*i, yNut, 114, 114)) {
-                        ui.timeChoMuaDo = 0.3f;
-                        ui.nutDuocChonClickMuaDo = i;
+            if (veHUD.TimeChoHienPopup <= 0 && !veHUD.vuaMoPopupThongTin) {
+                float yNutTrai = veHUD.PopupHanhTrangY_Trai - 115;
+                float yNutPhai = veHUD.PopupHanhTrangY_Phai - 115;
+                if (veHUD.DangHienPopupThongTin3) {
+                    for (int i = 0; i < 2; i++) {
+                        if (checkChuotTrongNut(x, y, 1 + 120 * i, yNutTrai, 114, 114)) {
+                            ui.timeChoHanhTrangTrai = 0.3f;
+                            ui.nutDuocChonHanhTrangTrai = i;
+                        }
+                    }
+                }
+                if (veHUD.DangHienPopupThongTin1) {
+                    for (int i = 0; i < 2; i++) {
+                        if (checkChuotTrongNut(x, y, 1 + 120 * i + 1020 - 350, yNutPhai, 114, 114)) {
+                            ui.timeChoHanhTrangPhai = 0.3f;
+                            ui.nutDuocChonHanhTrangPhai = i;
+                        }
                     }
                 }
             }

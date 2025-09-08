@@ -1091,154 +1091,80 @@ public class HUDPopupHanhTrang {
             }
         }
         nutTheoChucNang(batch, oHanhTrangDangChon, PopupX, PopupY, PopupW, PopupH, xCongThem);
+        batch.end();
+    }
+
+    private void veNut(SpriteBatch batch, float nutX, float nutY, boolean dangChon, String text, float timeCanXet) {
+        Texture nutVe = dangChon && timeCanXet > 0 ? veHUD.nutvuongclick : veHUD.nutvuong;
+        batch.draw(nutVe, nutX, nutY, 114, 114);
+
+        veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+        layout.setText(veHUD.font, text);
+
+        // căn giữa text
+        float textX = nutX + (114 - layout.width) / 2f;
+        float textY = nutY + (114 - layout.height) / 2f + layout.height;
+        veHUD.font.draw(batch, layout, textX, textY);
+    }
+
+    private void veDanhSachNut(SpriteBatch batch, String[] labels, int nutBatDau, float PopupX, float PopupY, float xCongThem, int nutDangChon, float timeCanXet) {
+        for (int i = 0; i < labels.length; i++) {
+            float nutX = 1 + i * 120 + xCongThem;
+            float nutY = PopupY - 115;
+            veNut(batch, nutX, nutY, (nutDangChon == nutBatDau + i), labels[i], timeCanXet);
+        }
     }
 
     public void nutTheoChucNang(SpriteBatch batch, int oHanhTrangDangChon, float PopupX, float PopupY, float PopupW, float PopupH, float xCongThem) {
 
-        if (veHUD.trangThaiChucNangHUD == TrangThaiChucNangHUD.HANH_TRANG && veHUD.dangHienPopup ||
-            veHUD.trangThaiChucNangHUD == TrangThaiChucNangHUD.CHUC_NANG && veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU && veHUD.dangChonHanhTrangPhai ||
-            veHUD.daClickVaoNpc && veHUD.dangChonHanhTrangPhai && veHUD.dangHienPopupNhanVatPhai
-        ) {
-            if (veHUD.itemm!=null) {
-                for (int i = 0; i < 2; i++) {
-                    float nutX = 1 + i * 120 + xCongThem;
-                    float nutY = PopupY - 115;
-                    if (veHUD.nuthanhtrangchon == i + 1) {
-                        Texture nutVe = veHUD.nutClickTimer3 > 0 ? veHUD.nutvuongclick : veHUD.nutvuong;
-                        batch.draw(nutVe, nutX, nutY, 114, 114);
-                    } else {
-                        batch.draw(veHUD.nutvuong, nutX, nutY, 114, 114);
-                    }
+        // Các trường hợp popup item chung
+        if ((veHUD.trangThaiChucNangHUD == TrangThaiChucNangHUD.HANH_TRANG && veHUD.dangHienPopup) ||
+            (veHUD.trangThaiChucNangHUD == TrangThaiChucNangHUD.CHUC_NANG && veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU && veHUD.dangChonHanhTrangPhai) ||
+            (veHUD.daClickVaoNpc && veHUD.dangChonHanhTrangPhai && veHUD.dangHienPopupNhanVatPhai && !(veHUD.npcHienTai.npcHUDrender.ui_npc instanceof admin_thanhle))) {
 
-                    veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
-                    if (i == 0) {
-                        if (oHanhTrangDangChon < 8) {
-                            layout.setText(veHUD.font, "Lấy ra");
-                            veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 52);
-                        } else {
-                            layout.setText(veHUD.font, "Sử dụng");
-                            veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 52);
-                        }
-                    } else {
-                        layout.setText(veHUD.font, "Bỏ ra");
-                        veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 52);
-                    }
-                }
+            if (veHUD.itemm != null) {
+                String[] labels = { (oHanhTrangDangChon < 8 ? "Lấy ra" : "Sử dụng"), "Bỏ ra" };
+                veDanhSachNut(batch, labels, 1, PopupX, PopupY, xCongThem, (int)veHUD.nuthanhtrangchon, veHUD.nutClickTimer3);
+
                 if (oHanhTrangDangChon >= 8 &&
-                    (veHUD.itemm.getLoai() == LoaiItem.AO ||
-                        veHUD.itemm.getLoai() == LoaiItem.QUAN ||
-                        veHUD.itemm.getLoai() == LoaiItem.GIAY ||
-                        veHUD.itemm.getLoai() == LoaiItem.GANG ||
-                        veHUD.itemm.getLoai() == LoaiItem.CAITRANG ||
-                        veHUD.itemm.getLoai() == LoaiItem.AVATAR ||
+                    (veHUD.itemm.getLoai() == LoaiItem.AO || veHUD.itemm.getLoai() == LoaiItem.QUAN ||
+                        veHUD.itemm.getLoai() == LoaiItem.GIAY || veHUD.itemm.getLoai() == LoaiItem.GANG ||
+                        veHUD.itemm.getLoai() == LoaiItem.CAITRANG || veHUD.itemm.getLoai() == LoaiItem.AVATAR ||
                         veHUD.itemm.getLoai() == LoaiItem.RADA) && duLieuNguoiChoi.coDeTu()) {
-                    float nutX = 1 + 2 * 120 + xCongThem;
-                    float nutY = PopupY - 115;
-                    if (veHUD.nuthanhtrangchon == 3) {
-                        Texture nutVe = veHUD.nutClickTimer3 > 0 ? veHUD.nutvuongclick : veHUD.nutvuong;
-                        batch.draw(nutVe, nutX, nutY, 114, 114);
-                    } else {
-                        batch.draw(veHUD.nutvuong, nutX, nutY, 114, 114);
-                    }
-                    layout.setText(veHUD.font, "Cho đệ tử");
-                    veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 52);
-                }
-                batch.end();
-            }
-        }
-        if (veHUD.dangHienRuongDo && veHUD.dangChonHanhTrangPhai) {
-            if (veHUD.itemm!=null) {
-                for (int i = 0; i < 2; i++) {
-                    float nutX = 1 + i * 120 + xCongThem;
-                    float nutY = PopupY - 115;
-                    if (veHUD.nuthanhtrangchon == i + 1) {
-                        Texture nutVe = veHUD.nutClickTimer3 > 0 ? veHUD.nutvuongclick : veHUD.nutvuong;
-                        batch.draw(nutVe, nutX, nutY, 114, 114);
-                    } else {
-                        batch.draw(veHUD.nutvuong, nutX, nutY, 114, 114);
-                    }
-
-                    veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
-                    if (i == 0) {
-                        if (oHanhTrangDangChon < 8) {
-                            layout.setText(veHUD.font, "Lấy ra");
-                            veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 52);
-                        } else {
-                            layout.setText(veHUD.font, "Sử dụng");
-                            veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 52);
-                        }
-                    } else {
-                        layout.setText(veHUD.font, "Bỏ ra");
-                        veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 52);
-                    }
-                }
-                if (oHanhTrangDangChon >= 8) {
-                    float nutX = 1 + 2 * 120 + xCongThem;
-                    float nutY = PopupY - 115;
-                    if (veHUD.nuthanhtrangchon == 3) {
-                        Texture nutVe = veHUD.nutClickTimer3 > 0 ? veHUD.nutvuongclick : veHUD.nutvuong;
-                        batch.draw(nutVe, nutX, nutY, 114, 114);
-                    } else {
-                        batch.draw(veHUD.nutvuong, nutX, nutY, 114, 114);
-                    }
-                    layout.setText(veHUD.font, "Cất vào \n rương");
-                    veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114/2f + layout.height/2f);
-                }
-                batch.end();
-            }
-        }
-        if (veHUD.dangChonHanhTrangTrai && veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU ||
-            veHUD.dangChonHanhTrangTrai && veHUD.dangHienRuongDo
-        ) {
-            if (veHUD.itemm!=null) {
-                for (int i = 0; i < 2; i++) {
-                    float nutX = 1 + i * 120 + xCongThem;
-                    float nutY = PopupY - 115;
-                    if (veHUD.nuthanhtrangchon == i+4) {
-                        Texture nutVe = veHUD.nutClickTimer3 > 0 ? veHUD.nutvuongclick : veHUD.nutvuong;
-                        batch.draw(nutVe, nutX, nutY, 114, 114);
-                    } else {
-                        batch.draw(veHUD.nutvuong, nutX, nutY, 114, 114);
-                    }
-
-                    veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
-                    if (i == 0) {
-                        layout.setText(veHUD.font, "Lấy ra");
-                        veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 52);
-                    } else {
-                        layout.setText(veHUD.font, "Đóng");
-                        veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 52);
-                    }
+                    veDanhSachNut(batch, new String[]{"Cho đệ tử"}, 3, PopupX, PopupY, xCongThem, (int)veHUD.nuthanhtrangchon,veHUD.nutClickTimer3);
                 }
             }
-            batch.end();
         }
-        if (veHUD.dangChonHanhTrangTrai && veHUD.daClickVaoNpc) {
-            if (veHUD.npcHienTai.npcHUDrender.ui_npc instanceof admin_thanhle) {
-                admin_thanhle ui = (admin_thanhle) veHUD.npcHienTai.npcHUDrender.ui_npc;
-                if (ui.trangThai == TrangThaiChucNang_admin_thanhle.CUA_HANG) {
-                    if (veHUD.itemm != null) {
-                        for (int i = 0; i < 2; i++) {
-                            float nutX = 1 + i * 120 + xCongThem;
-                            float nutY = PopupY - 115;
-                            if (ui.nutDuocChonClickMuaDo == i) {
-                                Texture nutVe = ui.timeChoMuaDo > 0 ? veHUD.nutvuongclick : veHUD.nutvuong;
-                                batch.draw(nutVe, nutX, nutY, 114, 114);
-                            } else {
-                                batch.draw(veHUD.nutvuong, nutX, nutY, 114, 114);
-                            }
 
-                            veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
-                            if (i == 0) {
-                                layout.setText(veHUD.font, "Mua");
-                                veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 52);
-                            } else {
-                                layout.setText(veHUD.font, "Đóng");
-                                veHUD.font.draw(batch, layout, nutX + (114 - layout.width) / 2f, nutY + 114 - 52);
-                            }
-                        }
-                    }
-                    batch.end();
+        // Popup rương đồ
+        if (veHUD.dangHienRuongDo && veHUD.dangChonHanhTrangPhai && veHUD.itemm != null) {
+            String[] labels = { (oHanhTrangDangChon < 8 ? "Lấy ra" : "Sử dụng"), "Bỏ ra" };
+            veDanhSachNut(batch, labels, 1, PopupX, PopupY, xCongThem, (int)veHUD.nuthanhtrangchon,veHUD.nutClickTimer3);
+
+            if (oHanhTrangDangChon >= 8) {
+                veDanhSachNut(batch, new String[]{"Cất vào \n rương"}, 3, PopupX, PopupY, xCongThem, (int)veHUD.nuthanhtrangchon,veHUD.nutClickTimer3);
+            }
+        }
+
+        // Popup hành trang trái (đệ tử / rương)
+        if ((veHUD.dangChonHanhTrangTrai && veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU) ||
+            (veHUD.dangChonHanhTrangTrai && veHUD.dangHienRuongDo)) {
+            if (veHUD.itemm != null) {
+                String[] labels = {"Lấy ra", "Đóng"};
+                veDanhSachNut(batch, labels, 4, PopupX, PopupY, xCongThem, (int)veHUD.nuthanhtrangchon,veHUD.nutClickTimer3);
+            }
+        }
+
+        // admin_thanhle
+        if (veHUD.daClickVaoNpc && veHUD.npcHienTai.npcHUDrender.ui_npc instanceof admin_thanhle ui) {
+            if (ui.trangThai == TrangThaiChucNang_admin_thanhle.CUA_HANG && veHUD.itemm != null) {
+                if (veHUD.dangChonHanhTrangTrai) {
+                    String[] labels = {"Mua", "Đóng"};
+                    veDanhSachNut(batch, labels, 0, PopupX, PopupY, xCongThem, ui.nutDuocChonHanhTrangTrai,ui.timeChoHanhTrangTrai);
+                }
+                if (veHUD.dangChonHanhTrangPhai) {
+                    String[] labels = {"Sử dụng", "Bán"};
+                    veDanhSachNut(batch, labels, 0, PopupX, PopupY, xCongThem, ui.nutDuocChonHanhTrangPhai,ui.timeChoHanhTrangPhai);
                 }
             }
         }

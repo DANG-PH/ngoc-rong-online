@@ -32,6 +32,8 @@ import com.dang.dragonboy.xu_ly_map.MapNhaGohan;
 import com.dang.dragonboy.xu_ly_map.npc.Npc;
 import com.dang.dragonboy.xu_ly_map.MapCoBan;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_haidang.admin_haidang;
+import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle.LoaiTien;
+import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle.admin_thanhle;
 
 public class VeHUD {
     //Map hien tai
@@ -1628,6 +1630,10 @@ public class VeHUD {
                                     xulyitem.goCaiTrang(NhanVatXuLy.getDangMacCaiTrang(), true);
                                     break;
                             }
+                        }
+                        if (daClickVaoNpc && npcHienTai.npcHUDrender.ui_npc instanceof admin_thanhle) {
+                            admin_thanhle ui = (admin_thanhle) npcHienTai.npcHUDrender.ui_npc;
+                            ui.banItemHanhTrang();
                         }
                         dangHienThongBao = false;
                         nutduocchon = -1;

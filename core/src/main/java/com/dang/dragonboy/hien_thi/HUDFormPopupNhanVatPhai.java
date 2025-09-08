@@ -13,6 +13,8 @@ import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.item.Item;
 import com.dang.dragonboy.item.LoaiItem;
 import com.dang.dragonboy.nhan_vat.NhanVat;
+import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle.ItemGia;
+import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle.admin_thanhle;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -310,22 +312,53 @@ public class HUDFormPopupNhanVatPhai {
 
     }
 
-    public static void renderThongBao(SpriteBatch batch,VeHUD veHUD) {
-        if (veHUD.dangHienThongBao){
-            veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
-            batch.draw(veHUD.anhThongBao, (Gdx.graphics.getWidth() - 720) / 2f, 65, 720, 175);
+    public static void renderThongBao(SpriteBatch batch, VeHUD veHUD) {
+        if (!veHUD.dangHienThongBao) return;
+
+        // vẽ nền thông báo
+        float thongBaoX = (Gdx.graphics.getWidth() - 720) / 2f;
+        float thongBaoY = 65;
+        batch.draw(veHUD.anhThongBao, thongBaoX, thongBaoY, 720, 175);
+
+        veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+
+        // render nội dung khác nhau
+        if (veHUD.daClickVaoNpc && veHUD.npcHienTai.npcHUDrender.ui_npc instanceof admin_thanhle) {
+            // trường hợp bán item
+            veHUD.layout.setText(veHUD.fontTenSkill, "Bạn có chắc muốn bán");
+            veHUD.fontTenSkill.draw(batch, veHUD.layout, (Gdx.graphics.getWidth() - veHUD.layout.width) / 2f, 190);
+
+            veHUD.layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
+            veHUD.fontTenSkill.draw(batch, veHUD.layout, (Gdx.graphics.getWidth() - veHUD.layout.width) / 2f, 165);
+
+            String giaBan = "với giá là " + veHUD.formatVangNgoc(ItemGia.layGiaItem(veHUD.itemm) / 4) + " ?";
+            veHUD.layout.setText(veHUD.fontTenSkill, giaBan);
+            veHUD.fontTenSkill.draw(batch, veHUD.layout, (Gdx.graphics.getWidth() - veHUD.layout.width) / 2f, 140);
+        } else {
+            // trường hợp hủy bỏ
             veHUD.layout.setText(veHUD.fontTenSkill, "Bạn có chắc muốn hủy bỏ (mất luôn)");
-            veHUD.fontTenSkill.draw(batch, veHUD.layout, (Gdx.graphics.getWidth() - veHUD.layout.width) / 2, 175);
-            veHUD.layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem()+" ?");
-            veHUD.fontTenSkill.draw(batch, veHUD.layout, (Gdx.graphics.getWidth() - veHUD.layout.width) / 2, 150);
-            float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
-            float nutY = 50;
-            batch.draw(veHUD.isThongBaoOKPressed>0 && veHUD.nutduocchon==1? veHUD.nutclick : veHUD.nutdn, nutX-81, nutY, 140, 50);
-            veHUD.layout.setText(veHUD.fontTenSkill, "Có");
-            veHUD.fontTenSkill.draw(batch, veHUD.layout, nutX-81 + (140 - veHUD.layout.width) / 2f, nutY + 30);
-            batch.draw(veHUD.isThongBaoOKPressed>0 && veHUD.nutduocchon==2? veHUD.nutclick : veHUD.nutdn, nutX+81, nutY, 140, 50);
-            veHUD.layout.setText(veHUD.fontTenSkill, "Không");
-            veHUD.fontTenSkill.draw(batch, veHUD.layout, nutX+81 + (140 - veHUD.layout.width) / 2f, nutY + 30);
+            veHUD.fontTenSkill.draw(batch, veHUD.layout, (Gdx.graphics.getWidth() - veHUD.layout.width) / 2f, 175);
+
+            veHUD.layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem() + " ?");
+            veHUD.fontTenSkill.draw(batch, veHUD.layout, (Gdx.graphics.getWidth() - veHUD.layout.width) / 2f, 150);
         }
+
+        // vẽ 2 nút Có / Không
+        float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
+        float nutY = 50;
+
+        veNutThongBao(batch, veHUD, nutX - 81, nutY, "Có", veHUD.nutduocchon == 1, veHUD.isThongBaoOKPressed > 0);
+        veNutThongBao(batch, veHUD, nutX + 81, nutY, "Không", veHUD.nutduocchon == 2, veHUD.isThongBaoOKPressed > 0);
+    }
+
+    // helper vẽ nút trong thông báo
+    private static void veNutThongBao(SpriteBatch batch, VeHUD veHUD, float x, float y, String text, boolean duocChon, boolean pressed) {
+        Texture tex = (pressed && duocChon) ? veHUD.nutclick : veHUD.nutdn;
+        batch.draw(tex, x, y, 140, 50);
+
+        veHUD.layout.setText(veHUD.fontTenSkill, text);
+        float textX = x + (140 - veHUD.layout.width) / 2f;
+        float textY = y + 30;
+        veHUD.fontTenSkill.draw(batch, veHUD.layout, textX, textY);
     }
 }

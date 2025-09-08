@@ -788,7 +788,8 @@ public class HUDClickHandler {
         }
         if (veHUD.DangHienPopupThongTin1) {
             float xCongThem = 0,yNut;
-            if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU || veHUD.dangHienRuongDo || veHUD.dangHienPopupNhanVatPhai) {
+            // npc rương đồ và đệ ( popup nhân vật phải ở npc thì có logic nút 2 bên riêng ở trong ui của npc )
+            if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU || veHUD.dangHienRuongDo) {
                 xCongThem = 1020 - 360 - 10;
                 yNut = veHUD.PopupHanhTrangY_Phai - 115;
             } else {

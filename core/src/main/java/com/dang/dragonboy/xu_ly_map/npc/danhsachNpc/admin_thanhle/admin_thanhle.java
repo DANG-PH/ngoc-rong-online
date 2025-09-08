@@ -29,8 +29,14 @@ public class admin_thanhle extends renderUInpc {
     public int indexItemDuocChon = -1;
     private Texture nenTrangNga, nenTrangNgaClick ;
     public Item itemDangChon;
-    public int nutDuocChonClickMuaDo = -1;
-    public float timeChoMuaDo = 0f;
+
+    public int nutDuocChonHanhTrangTrai = -1;
+    public float timeChoHanhTrangTrai = 0f;
+
+    public int nutDuocChonHanhTrangPhai = -1;
+    public float timeChoHanhTrangPhai = 0f;
+
+
     public float timeChoTatPopupNpc = 0f;
 
     public admin_thanhle(Npc npc, VeHUD veHUD, DuLieuNguoiChoi duLieuNguoiChoi, NhanVat nhanVat) {
@@ -55,7 +61,8 @@ public class admin_thanhle extends renderUInpc {
         }
         TimeChoHienPopup-=Gdx.graphics.getDeltaTime();
         capNhatClickNut(delta);
-        capNhatTimeChoMuaDo(delta);
+        capNhatTimeHanhTrangTrai(delta);
+        capNhatTimeHanhTrangPhai(delta);
         capNhatTimeChoTatPopupNpc(delta);
     }
 
@@ -310,12 +317,12 @@ public class admin_thanhle extends renderUInpc {
         }
     }
 
-    public void capNhatTimeChoMuaDo(float delta) {
-        if (timeChoMuaDo > 0) {
-            timeChoMuaDo -= delta;
-            if (timeChoMuaDo <= 0) {
-                timeChoMuaDo = 0;
-                switch (nutDuocChonClickMuaDo) {
+    public void capNhatTimeHanhTrangTrai(float delta) {
+        if (timeChoHanhTrangTrai > 0) {
+            timeChoHanhTrangTrai -= delta;
+            if (timeChoHanhTrangTrai <= 0) {
+                timeChoHanhTrangTrai = 0;
+                switch (nutDuocChonHanhTrangTrai) {
                     case 1 :
                         break;
                     case 0 :
@@ -359,6 +366,27 @@ public class admin_thanhle extends renderUInpc {
         }
     }
 
+    public void capNhatTimeHanhTrangPhai(float delta) {
+        if (timeChoHanhTrangPhai > 0) {
+            timeChoHanhTrangPhai -= delta;
+            if (timeChoHanhTrangPhai <= 0) {
+                timeChoHanhTrangPhai = 0;
+                switch (nutDuocChonHanhTrangPhai) {
+                    case 1 :
+                        if (ItemGia.layGiaItem(veHUD.itemm) > 0) veHUD.dangHienThongBao = true;
+                        else veHUD.setTinNhanPet("Bạn không thể bán vật phẩm này",2f);
+                        break;
+                    case 0 :
+                        veHUD.xuLyDungItem();
+                }
+                veHUD.DangHienPopupThongTin1 = false;
+                veHUD.TimeChoHienPopup = 0;
+                veHUD.dangChonHanhTrangPhai = false;
+                veHUD.dangChonHanhTrangTrai = true;
+            }
+        }
+    }
+
     public void capNhatTimeChoTatPopupNpc(float delta) {
         if (timeChoTatPopupNpc > 0) {
             timeChoTatPopupNpc -= delta;
@@ -369,6 +397,18 @@ public class admin_thanhle extends renderUInpc {
                 veHUD.scrollYTrai = 0;
             }
         }
+    }
+
+    public void banItemHanhTrang() {
+        Item item = veHUD.itemm;
+        Long giaItem = ItemGia.layGiaItem(item);
+        LoaiTien loaiTien = ItemGia.layLoaiTien(item);
+        if (loaiTien == LoaiTien.VANG) {
+            duLieuNguoiChoi.tangVang(giaItem/4);
+        } else {
+            duLieuNguoiChoi.tangNgoc(giaItem/4);
+        }
+        veHUD.setTinNhanPet("Bán thành công "+item.getTenItem()+" với giá\n"+ veHUD.formatVangNgoc(giaItem),2f);
     }
 
     public void themItemVaoDanhSach() {
