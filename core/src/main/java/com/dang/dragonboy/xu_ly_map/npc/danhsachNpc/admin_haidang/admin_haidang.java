@@ -1,6 +1,6 @@
 package com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_haidang;
 import com.badlogic.gdx.graphics.GL20;
-import com.dang.dragonboy.du_lieu.ThemItemTest;
+import com.dang.dragonboy.item.ThemItemTest;
 import com.dang.dragonboy.he_thong.Main;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;

@@ -11,9 +11,11 @@ import com.badlogic.gdx.utils.Align;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.item.Item;
+import com.dang.dragonboy.item.ItemThuongXuLi;
 import com.dang.dragonboy.item.LoaiItem;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.xu_ly_map.npc.Npc;
+import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.a_PHAN_LOAI_NPC.NPC_CUA_HANG;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.renderUInpc;
 
 import java.util.*;
@@ -24,10 +26,16 @@ public class admin_thanhle extends renderUInpc {
     public float timeClickNut = 0f;
     public TrangThaiChucNang_CUA_HANG_admin_thanhle trangThaiCuaHang = TrangThaiChucNang_CUA_HANG_admin_thanhle.AO_QUAN;
     public ArrayList<Item> danhSachItemAoQuan = new ArrayList<>();
+    public ArrayList<Item> danhSachItemPhuKien = new ArrayList<>();
+    public ArrayList<Item> danhSachItemDacBiet = new ArrayList<>();
     public float TimeChoHienPopup = 0;
     public boolean dangHienPopupThongTin = false;
-    public int indexItemDuocChon = -1;
-    private Texture nenTrangNga, nenTrangNgaClick ;
+    public int[] indexItemDuocChon = new int[3];
+    {
+        for (int i = 0; i < indexItemDuocChon.length; i++) {
+            indexItemDuocChon[i] = -1;
+        }
+    }
     public Item itemDangChon;
 
     public int nutDuocChonHanhTrangTrai = -1;
@@ -36,14 +44,15 @@ public class admin_thanhle extends renderUInpc {
     public int nutDuocChonHanhTrangPhai = -1;
     public float timeChoHanhTrangPhai = 0f;
 
-
     public float timeChoTatPopupNpc = 0f;
+
+    public float[] scrollYTrai = new float[3];
 
     public admin_thanhle(Npc npc, VeHUD veHUD, DuLieuNguoiChoi duLieuNguoiChoi, NhanVat nhanVat) {
         super(npc, veHUD, duLieuNguoiChoi, nhanVat);
-        themItemVaoDanhSach();
-        nenTrangNga = new Texture("hud/giaodientrong/ochiso.png");
-        nenTrangNgaClick = new Texture("hud/giaodientrong/ochisoclick.png");
+        themItemVaoDanhSachAoQuan();
+        themItemVaoDanhSachPhuKien();
+        themItemVaoDanhSachDacBiet();
     }
 
     @Override
@@ -144,159 +153,16 @@ public class admin_thanhle extends renderUInpc {
             );
             veHUD.fontChucnang.draw(batch, veHUD.layout, (350-TextChucnang.length*80)/2f + i * 82 , 450 + 52/2f + veHUD.layout.height/2f);
         }
+        ArrayList<Item> ds = null;
+        switch (trangThaiCuaHang) {
+            case AO_QUAN -> ds = danhSachItemAoQuan;
+            case PHU_KIEN -> ds = danhSachItemPhuKien;
+            case DAC_BIET -> ds = danhSachItemDacBiet;
+        }
 
-        renderAoQuan(batch);
+        NPC_CUA_HANG.render_item(batch,veHUD, ds, indexItemDuocChon[trangThaiCuaHang.ordinal()]);
 
         veHUD.renderHUDThongBaoPopupNhanVatPhai(batch);
-    }
-
-    public void renderAoQuan(SpriteBatch batch) {
-        if (trangThaiCuaHang != TrangThaiChucNang_CUA_HANG_admin_thanhle.AO_QUAN || trangThai != TrangThaiChucNang_admin_thanhle.CUA_HANG) return;
-        // ô hành trang
-        float viewY = 35;
-        float viewHeight = 444 - 35;
-        int KhoangCachItem = 49;
-        GlyphLayout layout = veHUD.layout;
-
-        ArrayList<Item> danhSachItemRuongDo = danhSachItemAoQuan;
-        int tongSoRuongDo = danhSachItemAoQuan.size();
-
-        float totalHeightRuongDo = tongSoRuongDo * KhoangCachItem;
-        veHUD.maxScrollTrai = Math.max(0, totalHeightRuongDo - viewHeight);
-
-        batch.flush();
-        Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
-        Gdx.gl.glScissor(0, (int) viewY, 350, (int) viewHeight);
-        // Vị trí bắt đầu vẽ từ trên xuống
-        float startYRuongDo = viewY + viewHeight - KhoangCachItem + veHUD.scrollYTrai;
-
-        for (int i = 0; i < tongSoRuongDo; i++) {
-            float y = startYRuongDo - i * KhoangCachItem;
-            // Vẽ ô nền
-            Texture tex = (indexItemDuocChon == i) ? veHUD.hanh_trang_dang_mac_click : veHUD.hanh_trang_dang_mac;
-            Texture texNen = (indexItemDuocChon == i) ? nenTrangNgaClick : nenTrangNga;
-            batch.draw(tex, 3, y, 274, 50);
-            batch.draw(texNen, 60, y, 287, 50);
-            // Nếu có item trong danh sách thì vẽ icon
-            if (i < danhSachItemRuongDo.size()) {
-                Item item = danhSachItemRuongDo.get(i);
-                if (item != null) {
-                    if (item.getTexture().getHeight() * 0.5f < 60 && item.getTexture().getWidth()*0.5f < 100f) {
-                        batch.draw(item.getTexture(), 3 + (56 - item.getTexture().getWidth() * 0.5f) / 2f, y + (49 - item.getTexture().getHeight() * 0.5f) / 2f, item.getTexture().getWidth() * 0.5f, item.getTexture().getHeight() * 0.5f);
-                    } else {
-                        batch.draw(item.getTexture(), 3 + (56 - item.getTexture().getWidth() * 0.38f) / 2f, y + (49 - item.getTexture().getHeight() * 0.38f) / 2f, item.getTexture().getWidth() * 0.38f, item.getTexture().getHeight() * 0.38f);
-                    }
-                    String[] chisoduoccong = {"HP", "KI", "SD", "Chí mạng", "Giáp", "ST Crit", "HP", "KI", "Sức đánh", "HP", "KI", "Sức đánh", "Giảm sát thương"};
-                    int kc1 = 0;
-                    layout.setText(veHUD.fontMotaSkill, item.getTenItem());
-                    veHUD.fontMotaSkill.draw(batch, layout, 3 + 56 + 12, y + 49 - 10);
-                    kc1 += layout.width + 5;
-                    if (item.getSoCap() > 0) {
-                        layout.setText(veHUD.fontMotaSkill, "[+" + item.getSoCap() + "]");
-                        veHUD.fontMotaSkill.draw(batch, layout, 3 + 56 + 12 + kc1, y + 49 - 10);
-                    }
-                    if (item.getSoLuong() > 1) {
-                        layout.setText(veHUD.fontsm, item.getSoLuong()+"");
-                        veHUD.fontsm.draw(batch, layout, 3 + (70- layout.width)-5f, y + 15f);
-                    }
-                    if (item.getLoai() == LoaiItem.VANBAY) {
-                        layout.setText(veHUD.fontCapSKill, item.getMoTa());
-                        veHUD.fontCapSKill.draw(batch, layout, 3 + 56 + 12, y + 49 - 30);
-                    }
-                    if (item.getLoai() == LoaiItem.GIAPLUYENTAP) {
-                        layout.setText(veHUD.fontCapSKill, "Hiệu lực trong " + (item.getHanSuDung() > 60f ? (int) (item.getHanSuDung() / 60f) + " phút" : (int)(item.getHanSuDung())+" giây"));
-                        veHUD.fontCapSKill.draw(batch, layout, 3 + 56 + 12, y + 49 - 30);
-                    }
-                    if (item.getLoai() == LoaiItem.CAITRANG || item.getLoai() == LoaiItem.AVATAR) {
-                        int kc = 0;
-                        int soChiso = 0;
-                        for (int j = 6; j <= 12; j++) {
-                            if (item.getChiso()[j] > 0) {
-                                String prefix = (soChiso == 0) ? "" : ",";
-                                layout.setText(veHUD.fontCapSKill, prefix + chisoduoccong[j] + "+" + item.getChiso()[j] + "%");
-                                veHUD.fontCapSKill.draw(batch, layout, 3 + 56 + 12 + kc, y + 49 - 30);
-                                kc += layout.width + 1;
-                                soChiso++;
-                            }
-                        }
-                    }
-                    if (item.getLoai() == LoaiItem.AO) {
-                        int kc = 0;
-                        layout.setText(veHUD.fontCapSKill, "Giáp+" + item.getChiso()[4]);
-                        veHUD.fontCapSKill.draw(batch, layout, 3 + 56 + 12, y + 49 - 30);
-                        kc += layout.width + 1;
-                        if (item.getSetkichhoat() != null) {
-                            layout.setText(veHUD.fontCapSKill, ",Set " + item.getSetkichhoat());
-                            veHUD.fontCapSKill.draw(batch, layout, 3 + 56 + 12 + kc, y + 49 - 30);
-                        }
-                    }
-                    if (item.getLoai() == LoaiItem.QUAN) {
-                        int kc = 0;
-                        layout.setText(veHUD.fontCapSKill, "HP+" + item.getChiso()[9]);
-                        veHUD.fontCapSKill.draw(batch, layout, 3 + 56 + 12, y + 49 - 30);
-                        kc += layout.width + 1;
-                        if (item.getSetkichhoat() != null) {
-                            layout.setText(veHUD.fontCapSKill, ",Set " + item.getSetkichhoat());
-                            veHUD.fontCapSKill.draw(batch, layout, 3 + 56 + 12 + kc, y + 49 - 30);
-                        }
-                    }
-                    if (item.getLoai() == LoaiItem.GANG) {
-                        int kc = 0;
-                        layout.setText(veHUD.fontCapSKill, "Tấn công+" + item.getChiso()[11]);
-                        veHUD.fontCapSKill.draw(batch, layout, 3 + 56 + 12, y + 49 - 30);
-                        kc += layout.width + 1;
-                        if (item.getSetkichhoat() != null) {
-                            layout.setText(veHUD.fontCapSKill, ",Set " + item.getSetkichhoat());
-                            veHUD.fontCapSKill.draw(batch, layout, 3 + 56 + 12 + kc, y + 49 - 30);
-                        }
-                    }
-                    if (item.getLoai() == LoaiItem.GIAY) {
-                        int kc = 0;
-                        layout.setText(veHUD.fontCapSKill, "KI+" + item.getChiso()[10]);
-                        veHUD.fontCapSKill.draw(batch, layout, 3 + 56 + 12, y + 49 - 30);
-                        kc += layout.width + 1;
-                        if (item.getSetkichhoat() != null) {
-                            layout.setText(veHUD.fontCapSKill, ",Set " + item.getSetkichhoat());
-                            veHUD.fontCapSKill.draw(batch, layout, 3 + 56 + 12 + kc, y + 49 - 30);
-                        }
-                    }
-                    if (item.getLoai() == LoaiItem.RADA) {
-                        int kc = 0;
-                        layout.setText(veHUD.fontCapSKill, "Chí mạng+" + item.getChiso()[3] + "%");
-                        veHUD.fontCapSKill.draw(batch, layout, 3 + 56 + 12, y + 49 - 30);
-                        kc += layout.width + 1;
-                        if (item.getSetkichhoat() != null) {
-                            layout.setText(veHUD.fontCapSKill, ",Set " + item.getSetkichhoat());
-                            veHUD.fontCapSKill.draw(batch, layout, 3 + 56 + 12 + kc, y + 49 - 30);
-                        }
-                    }
-                    if (item.getLoai() == LoaiItem.DEOLUNG ||
-                        item.getLoai() == LoaiItem.AURA ||
-                        item.getLoai() == LoaiItem.HUYHIEU ||
-                        item.getLoai() == LoaiItem.BONGTAI ||
-                        item.getLoai() == LoaiItem.NANGSKILL ||
-                        item.getLoai() == LoaiItem.VE_QUAY_NPC_HAIDANG
-                    ) {
-                        layout.setText(veHUD.fontCapSKill,item.getMoTa());
-                        veHUD.fontCapSKill.draw(batch,layout,3 + 56 + 12, y + 49 - 30);
-                    }
-                }
-                //vẽ số tiền
-                veHUD.fontTenSkill.setColor(Color.valueOf("FEA900"));
-                String textGia = ItemGia.layGiaItem(item) >= 1_000_000L ? veHUD.formatVangNgoc(ItemGia.layGiaItem(item)) : ItemGia.layGiaItem(item)+"";
-                veHUD.layout.setText(veHUD.fontTenSkill,textGia);
-                veHUD.fontTenSkill.draw(batch,layout,350- layout.width-35,y+50-8);
-                Texture loaiTien = ItemGia.layLoaiTien(item) == LoaiTien.VANG ? veHUD.vang : veHUD.ngoc;
-                batch.draw(loaiTien,350- 20-10f,y+50-8- layout.height,20,20);
-            }
-        }
-        batch.flush();
-        Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
-        batch.end();
-        if (veHUD.DangHienPopupThongTin3 && veHUD.TimeChoHienPopup <= 0) {
-            veHUD.PopupHanhTrang(veHUD.shapeRenderer, batch, indexItemDuocChon,false);
-        }
-        batch.begin();
     }
 
     public void capNhatClickNut(float delta) {
@@ -408,87 +274,34 @@ public class admin_thanhle extends renderUInpc {
         } else {
             duLieuNguoiChoi.tangNgoc(giaItem/4);
         }
-        veHUD.setTinNhanPet("Bán thành công "+item.getTenItem()+" với giá\n"+ veHUD.formatVangNgoc(giaItem),2f);
+        veHUD.setTinNhanPet("Bán thành công "+item.getTenItem()+" với giá\n"+ veHUD.formatVangNgoc(giaItem/4),2f);
     }
 
-    public void themItemVaoDanhSach() {
-        danhSachItemAoQuan.add(new Item(
-            "set_cam", "Áo võ kame", LoaiItem.AO,
-            new Texture("vatpham/do/traidat/set_cam/ao.png"),
-            "Giúp giảm sát thương", 1,
-            new int[]{0,0,0,0,10,0,0,0,0,0,0,0,0},
-            "traidat", 150000L, null, 0,0, 0, -1
-        ));
+    public void themItemVaoDanhSachAoQuan() {
+        danhSachItemAoQuan.add(ItemThuongXuLi.taoItemThuong("set_cam",LoaiItem.AO,"traidat"));
+        danhSachItemAoQuan.add(ItemThuongXuLi.taoItemThuong("set_cam",LoaiItem.QUAN,"traidat"));
+    }
 
-        danhSachItemAoQuan.add(new Item(
-            "set_cam", "Quần võ kame", LoaiItem.QUAN,
-            new Texture("vatpham/do/traidat/set_cam/quan.png"),
-            "Giúp tăng HP", 1,
-            new int[]{0,0,0,0,0,0,0,0,0,5000,0,0,0},
-            "traidat", 150000L, null, 0,0, 0, -1
-        ));
+    public void themItemVaoDanhSachPhuKien() {
+        danhSachItemPhuKien.add(ItemThuongXuLi.taoItemThuong("set_cam",LoaiItem.GANG,"traidat"));
+        danhSachItemPhuKien.add(ItemThuongXuLi.taoItemThuong("set_cam",LoaiItem.GIAY,"traidat"));
+        danhSachItemPhuKien.add(ItemThuongXuLi.taoItemThuong("rada1",LoaiItem.RADA,"all"));
+    }
 
-        danhSachItemAoQuan.add(new Item(
-            "set_than_linh", "Găng thần linh", LoaiItem.GANG,
-            new Texture("vatpham/do/traidat/set_than_linh/gang.png"),
-            "Giúp tăng sức đánh", 1,
-            new int[]{0,0,0,0,0,0,0,0,0,0,0,9289,0},
-            "traidat", 20_000_000_000L, null, 0,0, 0, -1
+    public void themItemVaoDanhSachDacBiet() {
+        danhSachItemDacBiet.add(new Item(
+            "bongtaic1", "Bông tai Porata", LoaiItem.BONGTAI,
+            new Texture("vatpham/vatphamgame/bongtai/bongtaic1.png"),
+            "Sử dụng để hợp thể với đệ tử", 1,
+            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+            "all", 1500000L, null, 0, 0, 0, -1
         ));
-
-        danhSachItemAoQuan.add(new Item(
-            "set_cam", "Giày võ kame", LoaiItem.GIAY,
-            new Texture("vatpham/do/traidat/set_cam/giay.png"),
-            "Giúp tăng MP", 1,
-            new int[]{0,0,0,0,0,0,0,0,0,0,200,0,0},
-            "traidat", 150000L, null, 0,0, 0, -1
-        ));
-
-        danhSachItemAoQuan.add(new Item(
-            "rada1", "Rada cấp 1", LoaiItem.RADA,
-            new Texture("vatpham/do/rada/rada1.png"),
-            "Giúp tăng Chí Mạng", 1,
-            new int[]{0,0,0,1,0,0,0,0,0,0,0,0,0},
-            "traidat", 15000L, null, 0,0, 0, -1
-        ));
-        danhSachItemAoQuan.add(new Item(
-            "set_cam", "Áo võ kame", LoaiItem.AO,
-            new Texture("vatpham/do/traidat/set_cam/ao.png"),
-            "Giúp giảm sát thương", 1,
-            new int[]{0,0,0,0,10,0,0,0,0,0,0,0,0},
-            "traidat", 150000L, null, 0,0, 0, -1
-        ));
-
-        danhSachItemAoQuan.add(new Item(
-            "set_cam", "Quần võ kame", LoaiItem.QUAN,
-            new Texture("vatpham/do/traidat/set_cam/quan.png"),
-            "Giúp tăng HP", 1,
-            new int[]{0,0,0,0,0,0,0,0,0,5000,0,0,0},
-            "traidat", 150000L, null, 0,0, 0, -1
-        ));
-
-        danhSachItemAoQuan.add(new Item(
-            "set_than_linh", "Găng thần linh", LoaiItem.GANG,
-            new Texture("vatpham/do/traidat/set_than_linh/gang.png"),
-            "Giúp tăng sức đánh", 1,
-            new int[]{0,0,0,0,0,0,0,0,0,0,0,9289,0},
-            "traidat", 20_000_000_000L, null, 0,0, 0, -1
-        ));
-
-        danhSachItemAoQuan.add(new Item(
-            "set_cam", "Giày võ kame", LoaiItem.GIAY,
-            new Texture("vatpham/do/traidat/set_cam/giay.png"),
-            "Giúp tăng MP", 1,
-            new int[]{0,0,0,0,0,0,0,0,0,0,200,0,0},
-            "traidat", 150000L, null, 0,0, 0, -1
-        ));
-
-        danhSachItemAoQuan.add(new Item(
-            "rada1", "Rada cấp 1", LoaiItem.RADA,
-            new Texture("vatpham/do/rada/rada1.png"),
-            "Giúp tăng Chí Mạng", 1,
-            new int[]{0,0,0,1,0,0,0,0,0,0,0,0,0},
-            "traidat", 15000L, null, 0,0, 0, -1
+        danhSachItemDacBiet.add(new Item(
+            "glt_c1", "Giáp luyện tập cấp 1", LoaiItem.GIAPLUYENTAP,
+            new Texture("vatpham/vatphamgame/giapluyentap/gltc1.png"),
+            "Khi mặc vào sẽ tích lũy thời gian luyện tập, khi cởi ra nếu sẽ tăng sức đánh 10% và Crit 15%, ST Crit 30%", 1,
+            new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+            "all", 10_000_000L, null, 0, 0, 0, 0
         ));
     }
 }

@@ -1,6 +1,9 @@
 package com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.dang.dragonboy.item.Item;
+import com.dang.dragonboy.item.LoaiItem;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,9 +13,12 @@ public class ItemGia {
     static {
         themGia("Áo võ kame",LoaiTien.VANG, 500_000L);
         themGia("Quần võ kame",LoaiTien.VANG, 450_000L);
+        themGia("Găng võ kame",LoaiTien.VANG, 800_000L);
         themGia("Giày võ kame", LoaiTien.VANG,350_000L);
         themGia("Rada cấp 1", LoaiTien.VANG,10_000L);
         themGia("Găng thần linh",LoaiTien.VANG, 1_000_000_000L);
+        themGia("Bông tai Porata",LoaiTien.NGOC, 1000);
+        themGia("Giáp luyện tập cấp 1",LoaiTien.VANG, 10_000_000L);
     }
 
     // Hàm tiện ích để thêm giá

@@ -12,7 +12,7 @@ import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle.*;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_dungle.*;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.thay_hieu.*;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class NpcHUDClickHandler {
     public static void xuLyClick(Npc npc, VeHUD veHUD, DuLieuNguoiChoi duLieuNguoiChoi, NhanVat nhanVat,float x, float y) {
@@ -157,18 +157,22 @@ public class NpcHUDClickHandler {
         if (ui.trangThai == TrangThaiChucNang_admin_thanhle.CUA_HANG) {
             for (int i = 0; i <= 3; i++) {
                 if (checkChuotTrongNut(x, y, (350-3*80)/2f + i * 82, 450, 80, 52)) {
-                    switch (i) {
-                        case 0 -> ui.trangThaiCuaHang = TrangThaiChucNang_CUA_HANG_admin_thanhle.AO_QUAN;
-                        case 1 -> ui.trangThaiCuaHang = TrangThaiChucNang_CUA_HANG_admin_thanhle.PHU_KIEN;
-                        case 2 -> ui.trangThaiCuaHang = TrangThaiChucNang_CUA_HANG_admin_thanhle.DAC_BIET;
-                    }
+                    // Lưu scroll cũ trước khi đổi tab
+                    ui.scrollYTrai[ui.trangThaiCuaHang.ordinal()] = veHUD.scrollYTrai;
+
+                    // Đổi tab
+                    ui.trangThaiCuaHang = TrangThaiChucNang_CUA_HANG_admin_thanhle.values()[i];
+
+                    // Lấy scroll của tab mới
+                    veHUD.scrollYTrai = ui.scrollYTrai[i];
+
                     veHUD.clickY = y;
                     veHUD.clickX = x;
                     veHUD.timeGlow = 0.3f;
                 }
             }
         }
-        if (ui.trangThai == TrangThaiChucNang_admin_thanhle.CUA_HANG && ui.trangThaiCuaHang == TrangThaiChucNang_CUA_HANG_admin_thanhle.AO_QUAN) {
+        if (ui.trangThai == TrangThaiChucNang_admin_thanhle.CUA_HANG) {
             float viewY = 35;
             float viewHeight = 444 - 35;
             int KhoangCachItem = 49;
@@ -177,8 +181,13 @@ public class NpcHUDClickHandler {
                 float relativeY = y - viewY;
                 float realY = veHUD.scrollYTrai + (viewHeight - relativeY);
                 int index = (int) (realY / KhoangCachItem);
-                ui.indexItemDuocChon = index;
-                ArrayList<Item> danhSach = ui.danhSachItemAoQuan;
+                ui.indexItemDuocChon[ui.trangThaiCuaHang.ordinal()] = index;
+                ArrayList<Item> danhSach = null;
+                switch (ui.trangThaiCuaHang) {
+                    case AO_QUAN -> danhSach = ui.danhSachItemAoQuan;
+                    case PHU_KIEN -> danhSach = ui.danhSachItemPhuKien;
+                    case DAC_BIET -> danhSach = ui.danhSachItemDacBiet;
+                }
                 if (index < danhSach.toArray().length) {
                     Item item = danhSach.get(index);
                     veHUD.itemm = item;
@@ -195,7 +204,7 @@ public class NpcHUDClickHandler {
             }
             if (veHUD.dangHienPopupNhanVatPhai && !veHUD.DangHienPopupThongTin1 && !veHUD.DangHienPopupThongTin3 && !veHUD.dangHienThongBao) {
                 if (x > 350 && x <= 1020-350) {
-                    ui.indexItemDuocChon = -1;
+                    Arrays.fill(ui.indexItemDuocChon, -1);
                 }
             }
             if (veHUD.TimeChoHienPopup <= 0 && !veHUD.vuaMoPopupThongTin) {

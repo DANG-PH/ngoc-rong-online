@@ -1,10 +1,9 @@
-package com.dang.dragonboy.du_lieu;
+package com.dang.dragonboy.item;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.graphics.Texture;
+import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.nhan_vat.NhanVat;
-import com.dang.dragonboy.item.Item;
-import com.dang.dragonboy.item.LoaiItem;
 import com.dang.dragonboy.nhan_vat.NhanVatXuLy;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_haidang.admin_haidang;
 

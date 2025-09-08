@@ -90,7 +90,7 @@ public class HUDPopupHanhTrang {
                 }
             }
             if (loaiItem == LoaiItem.AO || loaiItem == LoaiItem.QUAN || loaiItem == LoaiItem.GANG || loaiItem == LoaiItem.GIAY || loaiItem == LoaiItem.RADA) {
-                if (!nhanVat.getHanhtinh().equals(veHUD.itemm.getHanhtinh())){
+                if (!nhanVat.getHanhtinh().equals(veHUD.itemm.getHanhtinh()) && !veHUD.itemm.getHanhtinh().equals("all")){
                     String ht = veHUD.itemm.getHanhtinh();
                     if (ht.equals("traidat")){ht = "Trái đất";}
                     if (ht.equals("xayda")){ht = "Sayda";}
@@ -535,7 +535,7 @@ public class HUDPopupHanhTrang {
                     batch.draw(veHUD.itemm.getTexture(), PopupX + 15 + xCongThem, PopupY + PopupH - veHUD.itemm.getTexture().getHeight() * 0.5f - offsetY, veHUD.itemm.getTexture().getWidth() * 0.5f, veHUD.itemm.getTexture().getHeight() * 0.5f);
                     offsetY += 10;
                 }
-                if (!nhanVat.getHanhtinh().equals(veHUD.itemm.getHanhtinh())){
+                if (!nhanVat.getHanhtinh().equals(veHUD.itemm.getHanhtinh()) && !veHUD.itemm.getHanhtinh().equals("all")){
                     String ht = veHUD.itemm.getHanhtinh();
                     if (ht.equals("traidat")){ht = "Trái đất";}
                     if (ht.equals("xayda")){ht = "Sayda";}

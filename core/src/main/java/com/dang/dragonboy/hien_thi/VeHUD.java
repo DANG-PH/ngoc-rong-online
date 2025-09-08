@@ -16,7 +16,7 @@ import com.badlogic.gdx.utils.Align;
 import com.dang.dragonboy.item.LoaiItem;
 import com.dang.dragonboy.nhan_vat.*;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
-import com.dang.dragonboy.du_lieu.ThemItemTest;
+import com.dang.dragonboy.item.ThemItemTest;
 import java.text.DecimalFormat;
 import com.badlogic.gdx.graphics.GL20;
 import com.dang.dragonboy.item.Item;
@@ -32,7 +32,6 @@ import com.dang.dragonboy.xu_ly_map.MapNhaGohan;
 import com.dang.dragonboy.xu_ly_map.npc.Npc;
 import com.dang.dragonboy.xu_ly_map.MapCoBan;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_haidang.admin_haidang;
-import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle.LoaiTien;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle.admin_thanhle;
 
 public class VeHUD {
@@ -106,7 +105,7 @@ public class VeHUD {
     public Texture thanhtheluc, thanhtheluc2;
     public TextureRegion thanhtheluc1, thanhtheluc3;
 
-    public Texture hanh_trang, hanh_trang_click, hanh_trang_dang_mac, hanh_trang_dang_mac_click;
+    public Texture hanh_trang, hanh_trang_click, hanh_trang_dang_mac, hanh_trang_dang_mac_click, nenTrangNga, nenTrangNgaClick ;
 
     public float scrollYPhai = 0f;
     public float scrollYTrai = 0f;
@@ -537,6 +536,8 @@ public class VeHUD {
         boKhi = new Texture("vatpham/vatphamgame/phu_tro/bo_khi.png");
         cuongNo = new Texture("vatpham/vatphamgame/phu_tro/cuong_no.png");
         giapXen = new Texture("vatpham/vatphamgame/phu_tro/giap_xen.png");
+        nenTrangNga = new Texture("hud/giaodientrong/ochiso.png");
+        nenTrangNgaClick = new Texture("hud/giaodientrong/ochisoclick.png");
         // Load font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -2428,6 +2429,9 @@ public class VeHUD {
         }
 
         if (texAvt != null) texAvt.dispose();
+
+        if (nenTrangNga!= null) nenTrangNga.dispose();
+        if (nenTrangNgaClick!= null) nenTrangNgaClick.dispose();
 
         for (int i = 1; i < nhacNen.length; i++) {
             if (nhacNen[i] != null) nhacNen[i].dispose();
