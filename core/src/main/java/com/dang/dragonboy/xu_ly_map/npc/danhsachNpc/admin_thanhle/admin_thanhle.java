@@ -44,8 +44,6 @@ public class admin_thanhle extends renderUInpc {
     public int nutDuocChonHanhTrangPhai = -1;
     public float timeChoHanhTrangPhai = 0f;
 
-    public float timeChoTatPopupNpc = 0f;
-
     public float[] scrollYTrai = new float[3];
 
     public admin_thanhle(Npc npc, VeHUD veHUD, DuLieuNguoiChoi duLieuNguoiChoi, NhanVat nhanVat) {
@@ -72,7 +70,6 @@ public class admin_thanhle extends renderUInpc {
         capNhatClickNut(delta);
         capNhatTimeHanhTrangTrai(delta);
         capNhatTimeHanhTrangPhai(delta);
-        capNhatTimeChoTatPopupNpc(delta);
     }
 
     public void renderCacChucNang(SpriteBatch batch) {
@@ -123,16 +120,12 @@ public class admin_thanhle extends renderUInpc {
     }
 
     public void renderChucNangCuaHang(SpriteBatch batch) {
-        if (trangThai != TrangThaiChucNang_admin_thanhle.CUA_HANG) return;
+        if (trangThai != TrangThaiChucNang_admin_thanhle.CUA_HANG || !veHUD.dangHienPopupNhanVatPhai) return;
         veHUD.renderHUDPopupNhanVatPhai(batch,npc.taiAnh.avtNpc);
 
         veHUD.fontMotaChucNangNpc.setColor(1.0f, 0.956f, 0.863f, 1f);
         veHUD.layout.setText(veHUD.fontMotaChucNangNpc,"Xin chào!\nCậu muốn mua gì?");
         veHUD.fontMotaChucNangNpc.draw(batch, veHUD.layout, 150,565);
-
-        float nutXW = veHUD.nutX.getWidth() * 0.5f;
-        float nutXH = veHUD.nutX.getHeight() * 0.55f;
-        batch.draw(veHUD.nutX, 350 - nutXW - 6, 610 - nutXH - 2, nutXW, nutXH - 5);
 
         // chuc nang
         String[] TextChucnang = {
@@ -160,7 +153,7 @@ public class admin_thanhle extends renderUInpc {
             case DAC_BIET -> ds = danhSachItemDacBiet;
         }
 
-        NPC_CUA_HANG.render_item(batch,veHUD, ds, indexItemDuocChon[trangThaiCuaHang.ordinal()]);
+        NPC_CUA_HANG.render_item(batch,274,veHUD, ds, indexItemDuocChon[trangThaiCuaHang.ordinal()]);
 
         veHUD.renderHUDThongBaoPopupNhanVatPhai(batch);
     }
@@ -249,18 +242,6 @@ public class admin_thanhle extends renderUInpc {
                 veHUD.TimeChoHienPopup = 0;
                 veHUD.dangChonHanhTrangPhai = false;
                 veHUD.dangChonHanhTrangTrai = true;
-            }
-        }
-    }
-
-    public void capNhatTimeChoTatPopupNpc(float delta) {
-        if (timeChoTatPopupNpc > 0) {
-            timeChoTatPopupNpc -= delta;
-            if (timeChoTatPopupNpc <= 0) {
-                timeChoTatPopupNpc = 0;
-                veHUD.dangHienPopupNhanVatPhai = false;
-                veHUD.scrollYPhai = 0;
-                veHUD.scrollYTrai = 0;
             }
         }
     }

@@ -227,17 +227,6 @@ public class NpcHUDClickHandler {
                     }
                 }
             }
-            // nutX để tắt popup
-            float nutXW = veHUD.nutX.getWidth() * 0.5f;
-            float nutXH = veHUD.nutX.getHeight() * 0.55f;
-            float nutXX = 350 - nutXW - 6;
-            float nutXY = 610 - nutXH - 2;
-            if (checkChuotTrongNut(x,y,nutXX,nutXY,nutXW,nutXH)) {
-                ui.timeChoTatPopupNpc = 0.3f;
-                veHUD.clickY = y;
-                veHUD.clickX = x;
-                veHUD.timeGlow = 0.3f;
-            }
         }
     }
 
@@ -284,24 +273,92 @@ public class NpcHUDClickHandler {
             case CHUC_NANG_CHUYEN_HOA ->  soNut = 3;
             case CHUC_NANG_PHA_LE -> soNut = 3;
         }
-        for (int i = 0; i <= soNut; i++) {
-            if (checkChuotTrongNut(x, y, (Gdx.graphics.getWidth() - soNut * 120) / 2f + 120*i, 5, 114, 114)) {
-                ui.nutChucNangDangChon = i;
-                ui.timeClickNut = 0.3f;
+        if (!veHUD.dangHienPopupNhanVatPhai) {
+            for (int i = 0; i <= soNut; i++) {
+                if (checkChuotTrongNut(x, y, (Gdx.graphics.getWidth() - soNut * 120) / 2f + 120 * i, 5, 114, 114)) {
+                    ui.nutChucNangDangChon = i;
+                    ui.timeClickNut = 0.3f;
+                }
             }
-        }
-        if (!checkChuotTrongNut(x,y,(Gdx.graphics.getWidth()-soNut*120)/2f,5,120*soNut,114)) {
-            switch (ui.trangThai) {
-                case NONE:
-                    veHUD.daClickVaoNpc = false;
-                    veHUD.vuaThoatNpc = true;
-                    break;
-                case CHUC_NANG_PHA_LE:
-                    ui.trangThai = TrangThaiChucNang_thay_hieu.NONE;
-                    break;
-                case CHUC_NANG_CHUYEN_HOA:
-                    ui.trangThai = TrangThaiChucNang_thay_hieu.NONE;
-                    break;
+            if (!checkChuotTrongNut(x, y, (Gdx.graphics.getWidth() - soNut * 120) / 2f, 5, 120 * soNut, 114)) {
+                switch (ui.trangThai) {
+                    case NONE:
+                        veHUD.daClickVaoNpc = false;
+                        veHUD.vuaThoatNpc = true;
+                        break;
+                    case CHUC_NANG_PHA_LE:
+                        ui.trangThai = TrangThaiChucNang_thay_hieu.NONE;
+                        break;
+                    case CHUC_NANG_CHUYEN_HOA:
+                        ui.trangThai = TrangThaiChucNang_thay_hieu.NONE;
+                        break;
+                }
+            }
+        } else {
+            if (ui.trangThai == TrangThaiChucNang_thay_hieu.CHUC_NANG_PHA_LE &&
+                ui.trangThaiPhaLe == TrangThaiChucNang_PHA_LE_thay_hieu.PHA_LE_HOA_TRANG_BI) {
+
+                if (!ui.danhSachItemCuongHoa.isEmpty()) {
+                    float viewY = 35;
+                    float viewHeight = 444 - 35;
+                    int KhoangCachItem = 49;
+                    boolean duDieuKien = checkChuotTrongNut(x, y, 3, 35, 344, 444 - 35) && !veHUD.DangHienPopupThongTin1 && !veHUD.DangHienPopupThongTin3 && !veHUD.dangHienThongBao;
+                    if (duDieuKien) {
+                        float relativeY = y - viewY;
+                        float realY = veHUD.scrollYTrai + (viewHeight - relativeY);
+                        int index = (int) (realY / KhoangCachItem);
+                        ui.indexItemDuocChon = index;
+                        ArrayList<Item> danhSach = ui.danhSachItemCuongHoa;
+                        if (index < danhSach.toArray().length) {
+                            Item item = danhSach.get(index);
+                            veHUD.itemm = item;
+                            if (veHUD.itemm != null) {
+                                veHUD.DangHienPopupThongTin3 = true;
+                                veHUD.PopupHanhTrangX_Trai = 5;
+                                veHUD.PopupHanhTrangW_Trai = 360;
+                                veHUD.PopupHanhTrangY_Trai = viewY + viewHeight - (index + 1) * KhoangCachItem + veHUD.scrollYTrai;
+                                veHUD.PopupHanhTrangH_Trai = 0;
+                                veHUD.TimeChoHienPopup = 0.3f;
+                                veHUD.vuaMoPopupThongTin = true;
+                            }
+                        }
+                    }
+
+                    // nut nang cap
+                    if (checkChuotTrongNut(x,y,(350 - 140) / 2f,444-ui.danhSachItemCuongHoa.size()*50-50-2f,140,50)) {
+                        ui.timeClickNutPhaLeHoaTrangBi = 0.3f;
+                    }
+                }
+
+                if (!veHUD.DangHienPopupThongTin1 && !veHUD.DangHienPopupThongTin3 && !veHUD.dangHienThongBao) {
+                    if (x > 350 && x <= 1020-350) {
+                       if (!ui.danhSachItemCuongHoa.isEmpty()) {
+                           duLieuNguoiChoi.themItemVaoHanhTrang(ui.danhSachItemCuongHoa.get(0));
+                           ui.danhSachItemCuongHoa.remove(ui.danhSachItemCuongHoa.get(0));
+                       }
+                    }
+                }
+
+                if (veHUD.TimeChoHienPopup <= 0 && !veHUD.vuaMoPopupThongTin) {
+                    float yNutTrai = veHUD.PopupHanhTrangY_Trai - 115;
+                    float yNutPhai = veHUD.PopupHanhTrangY_Phai - 115;
+                    if (veHUD.DangHienPopupThongTin3) {
+                        for (int i = 0; i < 1; i++) {
+                            if (checkChuotTrongNut(x, y, 1 + 120 * i, yNutTrai, 114, 114)) {
+                                ui.timeChoHanhTrangTrai = 0.3f;
+                                ui.nutDuocChonHanhTrangTrai = i;
+                            }
+                        }
+                    }
+                    if (veHUD.DangHienPopupThongTin1) {
+                        for (int i = 0; i < 2; i++) {
+                            if (checkChuotTrongNut(x, y, 1 + 120 * i + 1020 - 350, yNutPhai, 114, 114)) {
+                                ui.timeChoHanhTrangPhai = 0.3f;
+                                ui.nutDuocChonHanhTrangPhai = i;
+                            }
+                        }
+                    }
+                }
             }
         }
     }

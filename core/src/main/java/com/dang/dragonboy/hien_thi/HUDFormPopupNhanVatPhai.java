@@ -298,6 +298,11 @@ public class HUDFormPopupNhanVatPhai {
         batch.draw(veHUD.popupNhanVat, 0, 0, 350, 610);
         batch.draw(avtNPC,0,505,avtNPC.getWidth()*0.52f,avtNPC.getHeight()*0.52f);
 
+        // nutX
+        float nutXW = veHUD.nutX.getWidth() * 0.5f;
+        float nutXH = veHUD.nutX.getHeight() * 0.55f;
+        batch.draw(veHUD.nutX, 350 - nutXW - 6, 610 - nutXH - 2, nutXW, nutXH - 5);
+
         // ===== Vẽ vàng, ngọc =====
         batch.draw(veHUD.vang, 10, 8, 20, 20);
         batch.draw(veHUD.ngoc, 275, 7, 20, 20);

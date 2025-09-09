@@ -74,6 +74,22 @@ public class Item {
         this.soLuong -= soLuong;
     }
 
+    public boolean tangSoSaoPhaLe() {
+        if (this.soSaoPhaLe<7) {
+            this.soSaoPhaLe++;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean tangSoSaoPhaLeCuongHoa() {
+        if (this.soSaoPhaLeCuongHoa<7) {
+            this.soSaoPhaLeCuongHoa++;
+            return true;
+        }
+        return false;
+    }
+
     public int[] getChiso(){
         return chiso;
     }
@@ -106,16 +122,4 @@ public class Item {
         this.HanSuDung = Math.max(0,Math.min(this.HanSuDung,1800f));
     }
 
-    public void suDung() {
-        switch (loai) {
-            case HOI_MAU:
-                System.out.println("Hồi máu cho nhân vật...");
-                break;
-            case HOI_KI:
-                System.out.println("Hồi KI cho nhân vật...");
-                break;
-            case CAITRANG:
-
-        }
-    }
 }

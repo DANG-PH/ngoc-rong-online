@@ -307,8 +307,8 @@ public class ThemItemTest {
             "glt_c3", "Giáp luyện tập cấp 3", LoaiItem.GIAPLUYENTAP,
             new Texture("vatpham/vatphamgame/giapluyentap/gltc3.png"),
             "Khi mặc vào sẽ tích lũy thời gian luyện tập, khi cởi ra sẽ tăng sức đánh 30% và Crit 15%, ST Crit 30%", 1,
-            new int[]{0,0,0,0,0,0,35,0,0,0,0,0,0},
-            "all", 1_000_000_000L, null, 7, 7, 0, 0
+            new int[]{0,0,0,0,0,0,15,0,0,0,0,0,0},
+            "all", 1_000_000_000L, null, 3, 3, 0, 0
         ));
 
 //        duLieu.themItemVaoHanhTrang(new Item(

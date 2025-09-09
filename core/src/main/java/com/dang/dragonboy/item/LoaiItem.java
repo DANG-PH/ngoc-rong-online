@@ -1,8 +1,6 @@
 package com.dang.dragonboy.item;
 
 public enum LoaiItem {
-    HOI_MAU,
-    HOI_KI,
     AO,
     QUAN,
     GANG,

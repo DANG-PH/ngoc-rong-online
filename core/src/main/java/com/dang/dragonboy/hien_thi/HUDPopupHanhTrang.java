@@ -10,6 +10,7 @@ import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.item.LoaiItem;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle.*;
+import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.thay_hieu.*;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -1119,8 +1120,8 @@ public class HUDPopupHanhTrang {
 
         // Các trường hợp popup item chung
         if ((veHUD.trangThaiChucNangHUD == TrangThaiChucNangHUD.HANH_TRANG && veHUD.dangHienPopup) ||
-            (veHUD.trangThaiChucNangHUD == TrangThaiChucNangHUD.CHUC_NANG && veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU && veHUD.dangChonHanhTrangPhai) ||
-            (veHUD.daClickVaoNpc && veHUD.dangChonHanhTrangPhai && veHUD.dangHienPopupNhanVatPhai && !(veHUD.npcHienTai.npcHUDrender.ui_npc instanceof admin_thanhle))) {
+            (veHUD.trangThaiChucNangHUD == TrangThaiChucNangHUD.CHUC_NANG && veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU && veHUD.dangChonHanhTrangPhai)){
+//            (veHUD.daClickVaoNpc && veHUD.dangChonHanhTrangPhai && veHUD.dangHienPopupNhanVatPhai && !(veHUD.npcHienTai.npcHUDrender.ui_npc instanceof admin_thanhle))) {
 
             if (veHUD.itemm != null) {
                 String[] labels = { (oHanhTrangDangChon < 8 ? "Lấy ra" : "Sử dụng"), "Bỏ ra" };
@@ -1164,6 +1165,20 @@ public class HUDPopupHanhTrang {
                 }
                 if (veHUD.dangChonHanhTrangPhai) {
                     String[] labels = {"Sử dụng", "Bán"};
+                    veDanhSachNut(batch, labels, 0, PopupX, PopupY, xCongThem, ui.nutDuocChonHanhTrangPhai,ui.timeChoHanhTrangPhai);
+                }
+            }
+        }
+
+        // npc thay_hieu
+        if (veHUD.daClickVaoNpc && veHUD.npcHienTai.npcHUDrender.ui_npc instanceof thay_hieu ui) {
+            if (ui.trangThai == TrangThaiChucNang_thay_hieu.CHUC_NANG_PHA_LE && ui.trangThaiPhaLe == TrangThaiChucNang_PHA_LE_thay_hieu.PHA_LE_HOA_TRANG_BI && veHUD.itemm != null) {
+                if (veHUD.dangChonHanhTrangTrai) {
+                    String[] labels = {"Lấy ra"};
+                    veDanhSachNut(batch, labels, 0, PopupX, PopupY, xCongThem, ui.nutDuocChonHanhTrangTrai,ui.timeChoHanhTrangTrai);
+                }
+                if (veHUD.dangChonHanhTrangPhai) {
+                    String[] labels = {"Sử dụng", "Nâng cấp"};
                     veDanhSachNut(batch, labels, 0, PopupX, PopupY, xCongThem, ui.nutDuocChonHanhTrangPhai,ui.timeChoHanhTrangPhai);
                 }
             }

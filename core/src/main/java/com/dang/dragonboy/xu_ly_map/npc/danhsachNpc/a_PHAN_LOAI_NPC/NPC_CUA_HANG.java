@@ -8,14 +8,13 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.item.Item;
-import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle.ItemGia;
-import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle.LoaiTien;
-import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle.TrangThaiChucNang_admin_thanhle;
+import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle.*;
+import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.thay_hieu.thay_hieu;
 
 import java.util.ArrayList;
 
 public class NPC_CUA_HANG {
-    public static void render_item(SpriteBatch batch, VeHUD veHUD, ArrayList<Item> danhSachItem, int oChiSoCanXet) {
+    public static void render_item(SpriteBatch batch,float width, VeHUD veHUD, ArrayList<Item> danhSachItem, int oChiSoCanXet) {
         float viewY = 35, viewHeight = 444 - 35;
         int khoangCachItem = 49;
         int tongSoRuongDo = danhSachItem.size();
@@ -33,17 +32,19 @@ public class NPC_CUA_HANG {
             // Vẽ ô nền
             Texture tex = (oChiSoCanXet == i) ? veHUD.hanh_trang_dang_mac_click : veHUD.hanh_trang_dang_mac;
             Texture texNen = (oChiSoCanXet == i) ? veHUD.nenTrangNgaClick : veHUD.nenTrangNga;
-            batch.draw(tex, 3, y, 274, 50);
-            batch.draw(texNen, 60, y, 287, 50);
+            batch.draw(tex, 3, y, width, 50);
+            batch.draw(texNen, (width/4.91f)+10f, y, 347-(width/4.91f)-12f, 50);
 
             // Vẽ item
             if (i < danhSachItem.size()) {
                 Item item = danhSachItem.get(i);
                 if (item != null) {
-                    veIconItem(batch,veHUD, item, y);
-                    veTenSoLuong(batch,veHUD, item, y);
-                    veChiTietItem(batch,veHUD, item, y);
-                    veGiaItem(batch,veHUD, item, y);
+                    veIconItem(batch,width,veHUD, item, y);
+                    veTenSoLuong(batch,width,veHUD, item, y);
+                    veChiTietItem(batch,width,veHUD, item, y);
+                    if (veHUD.npcHienTai.npcHUDrender.ui_npc instanceof admin_thanhle) {
+                        veGiaItem(batch,veHUD, item, y);
+                    }
                 }
             }
         }
@@ -59,41 +60,41 @@ public class NPC_CUA_HANG {
     }
 
     // Vẽ icon item với scale tự động
-    private static void veIconItem(SpriteBatch batch,VeHUD veHUD, Item item, float y) {
+    private static void veIconItem(SpriteBatch batch,float width,VeHUD veHUD, Item item, float y) {
         Texture tex = item.getTexture();
         float scale = (tex.getHeight() * 0.5f < 60 && tex.getWidth() * 0.5f < 100f) ? 0.5f : 0.38f;
-        float x = 3 + (56 - tex.getWidth() * scale) / 2f;
+        float x = 3 + ((width/4.91f) - tex.getWidth() * scale) / 2f;
         float yy = y + (49 - tex.getHeight() * scale) / 2f;
         batch.draw(tex, x, yy, tex.getWidth() * scale, tex.getHeight() * scale);
     }
 
     // Vẽ tên + số cấp + số lượng
-    private static void veTenSoLuong(SpriteBatch batch,VeHUD veHUD, Item item, float y) {
+    private static void veTenSoLuong(SpriteBatch batch,float width,VeHUD veHUD, Item item, float y) {
         GlyphLayout layout = veHUD.layout;
-
+        float xBase = (width/4.91f)+15;
         // Tên item
         layout.setText(veHUD.fontMotaSkill, item.getTenItem());
-        veHUD.fontMotaSkill.draw(batch, layout, 71, y + 39);
+        veHUD.fontMotaSkill.draw(batch, layout, xBase, y + 39);
 
         float kc = layout.width + 5;
 
         // Cấp
         if (item.getSoCap() > 0) {
             layout.setText(veHUD.fontMotaSkill, "[+" + item.getSoCap() + "]");
-            veHUD.fontMotaSkill.draw(batch, layout, 71 + kc, y + 39);
+            veHUD.fontMotaSkill.draw(batch, layout, xBase + kc, y + 39);
         }
 
         // Số lượng
         if (item.getSoLuong() > 1) {
             layout.setText(veHUD.fontsm, String.valueOf(item.getSoLuong()));
-            veHUD.fontsm.draw(batch, layout, 65 - layout.width, y + 15);
+            veHUD.fontsm.draw(batch, layout, (width/4.91f)- 5 - layout.width, y + 15);
         }
     }
 
     // Vẽ mô tả/thuộc tính item
-    private static void veChiTietItem(SpriteBatch batch,VeHUD veHUD, Item item, float y) {
+    private static void veChiTietItem(SpriteBatch batch,float width,VeHUD veHUD, Item item, float y) {
         GlyphLayout layout = veHUD.layout;
-        float baseX = 71, baseY = y + 19;
+        float baseX = (width/4.91f)+15, baseY = y + 19;
 
         switch (item.getLoai()) {
             case VANBAY, DEOLUNG, AURA, HUYHIEU, BONGTAI, NANGSKILL, VE_QUAY_NPC_HAIDANG -> {

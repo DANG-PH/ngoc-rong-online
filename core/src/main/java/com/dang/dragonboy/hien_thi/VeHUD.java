@@ -346,6 +346,7 @@ public class VeHUD {
     public boolean vuaThoatNpc = false;
 
     public boolean dangHienPopupNhanVatPhai = false;
+    public float timeChoTatPopupNpc = 0f;
 
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data;
@@ -536,8 +537,8 @@ public class VeHUD {
         boKhi = new Texture("vatpham/vatphamgame/phu_tro/bo_khi.png");
         cuongNo = new Texture("vatpham/vatphamgame/phu_tro/cuong_no.png");
         giapXen = new Texture("vatpham/vatphamgame/phu_tro/giap_xen.png");
-        nenTrangNga = new Texture("hud/giaodientrong/ochiso.png");
-        nenTrangNgaClick = new Texture("hud/giaodientrong/ochisoclick.png");
+        nenTrangNga = new Texture("hud/giaodientrong/ochisosc.png");
+        nenTrangNgaClick = new Texture("hud/giaodientrong/ochisoscclick.png");
         // Load font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -1006,6 +1007,8 @@ public class VeHUD {
         }
     }
     public void update(float delta) {
+        //nut X tat popup NPC
+        capNhatTimeChoTatPopupNpc(delta);
         //fps
         if (dangBatFPS) {
             timeCapNhatFPS += delta;
@@ -2396,6 +2399,18 @@ public class VeHUD {
 
     public void renderHUDThongBaoPopupNhanVatPhai(SpriteBatch batch){
         HUDFormPopupNhanVatPhai.renderThongBao(batch,this);
+    }
+
+    public void capNhatTimeChoTatPopupNpc(float delta) {
+        if (timeChoTatPopupNpc > 0) {
+            timeChoTatPopupNpc -= delta;
+            if (timeChoTatPopupNpc <= 0) {
+                timeChoTatPopupNpc = 0;
+                dangHienPopupNhanVatPhai = false;
+                scrollYPhai = 0;
+                scrollYTrai = 0;
+            }
+        }
     }
 
     public void dispose() {
