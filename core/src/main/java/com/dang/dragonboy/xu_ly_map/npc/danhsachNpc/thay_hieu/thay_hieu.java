@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Align;
@@ -14,6 +15,7 @@ import com.dang.dragonboy.item.LoaiItem;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.xu_ly_map.npc.Npc;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.a_PHAN_LOAI_NPC.NPC_CUA_HANG;
+import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.a_PHAN_LOAI_NPC.NPC_KHUNG_CHUNG;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle.ItemGia;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle.LoaiTien;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle.TrangThaiChucNang_admin_thanhle;
@@ -24,6 +26,8 @@ import java.util.*;
 public class thay_hieu extends renderUInpc {
     public TrangThaiChucNang_PHA_LE_thay_hieu trangThaiPhaLe;
     public TrangThaiChucNang_thay_hieu trangThai = TrangThaiChucNang_thay_hieu.NONE;
+    public TrangThaiChucNang_PHA_LE_HOA_TRANG_BI_thay_hieu trangThaiNangCap = TrangThaiChucNang_PHA_LE_HOA_TRANG_BI_thay_hieu.NONE;
+
     public ArrayList<Item> danhSachItemCuongHoa = new ArrayList<>();
     public int nutChucNangDangChon = -1;
     public float timeClickNut = 0f;
@@ -37,6 +41,11 @@ public class thay_hieu extends renderUInpc {
     public int indexItemDuocChon = -1;
 
     public float timeClickNutPhaLeHoaTrangBi = 0f;
+    public int nutChucNangDangChon_pha_le_hoa = -1;
+    public float timeClickNut_pha_le_hoa = 0f;
+
+    public int[] tiLeNangCapTheoSao = new int[]{30,20,10,5,3,2,1};
+    public int[] vangNangCapTheoSao = new int[]{5_000_000,10_000_000,20_000_000,40_000_000,60_000_000,90_000_000,120_000_000};
 
     public thay_hieu(Npc npc, VeHUD veHUD, DuLieuNguoiChoi duLieuNguoiChoi, NhanVat nhanVat) {
         super(npc, veHUD, duLieuNguoiChoi, nhanVat);
@@ -64,37 +73,16 @@ public class thay_hieu extends renderUInpc {
         if (veHUD.dangHienPopupNhanVatPhai) return;
 
         String text = "";
+        BitmapFont fontVeKhung = veHUD.fontMotaHanhTrang;
+        fontVeKhung.getData().markupEnabled = true;
         switch (trangThai) {
-            case NONE -> text = npc.getLoiThoaiTrong()[0];
-            case CHUC_NANG_PHA_LE -> text = npc.getLoiThoaiTrong()[1];
-            case CHUC_NANG_CHUYEN_HOA -> text = npc.getLoiThoaiTrong()[2];
+            case NONE -> text = "[#000000]"+npc.getLoiThoaiTrong()[0];
+            case CHUC_NANG_PHA_LE -> text = "[#000000]"+npc.getLoiThoaiTrong()[1];
+            case CHUC_NANG_CHUYEN_HOA -> text = "[#000000]"+npc.getLoiThoaiTrong()[2];
             default -> text = null;
         }
 
-        veHUD.layout.setText(
-            veHUD.fontMotaHanhTrang,
-            text,
-            veHUD.fontMotaHanhTrang.getColor(),
-            550,
-            Align.center,
-            true
-        );
-
-        float daoDong = (float) Math.sin(nhanVat.thoiGianTichLuy) * 1.3f;
-        batch.draw(npc.taiAnh.avtNpc,(Gdx.graphics.getWidth() - 600) / 2f+30,120+veHUD.layout.height+35*2+daoDong,npc.taiAnh.avtNpc.getWidth()*0.5f,npc.taiAnh.avtNpc.getHeight()*0.5f);
-        batch.end();
-        veHUD.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        veHUD.shapeRenderer.setColor(1, 1, 1, 1);
-        veHUD.shapeRenderer.rect((Gdx.graphics.getWidth() - 600) / 2f, 120, 600, veHUD.layout.height+35*2);
-        veHUD.shapeRenderer.end();
-        veHUD.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        veHUD.shapeRenderer.setColor(Color.BLACK);
-        for (int i = 0; i < 2; i++) {
-            veHUD.shapeRenderer.rect((Gdx.graphics.getWidth() - 600) / 2f - i, 120 - i, 600 + i * 2, veHUD.layout.height+35*2 + i * 2);
-        }
-        veHUD.shapeRenderer.end();
-        batch.begin();
-        veHUD.fontMotaHanhTrang.draw(batch,veHUD.layout,(Gdx.graphics.getWidth() - 600) / 2f+25,120+ veHUD.layout.height+35);
+        NPC_KHUNG_CHUNG.renderKhungNpc(npc,veHUD,nhanVat,batch,text,fontVeKhung);
     }
 
     public void renderNut(SpriteBatch batch) {
@@ -113,29 +101,7 @@ public class thay_hieu extends renderUInpc {
             };
         }
 
-        int soNut = textDung.length;
-
-        for (int i = 0; i < soNut; i++) {
-            float nutX = (Gdx.graphics.getWidth()-(soNut-1)*120-114)/2f + i * 120;
-            float nutY = 120 - 115;
-            if (nutChucNangDangChon == i) {
-                Texture nutVe = timeClickNut > 0 ? veHUD.nutvuongclick : veHUD.nutvuong;
-                batch.draw(nutVe, nutX, nutY, 114, 114);
-            } else {
-                batch.draw(veHUD.nutvuong, nutX, nutY, 114, 114);
-            }
-
-            veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
-            veHUD.layout.setText(
-                veHUD.font,
-                textDung[i],
-                veHUD.font.getColor(),
-                100,
-                Align.center,
-                true
-            );
-            veHUD.font.draw(batch,veHUD.layout,nutX+7f,5+(114+veHUD.layout.height)/2f);
-        }
+        NPC_KHUNG_CHUNG.renderKhungNut(npc,veHUD,batch,textDung,nutChucNangDangChon,timeClickNut);
     }
 
     public void capNhatClickNut(float delta) {
@@ -242,8 +208,22 @@ public class thay_hieu extends renderUInpc {
                 if (danhSachItemCuongHoa.isEmpty()) loi = "Vui lòng chọn vật phẩm";
                 if (danhSachItemCuongHoa.get(0).getSoSaoPhaLe() >= 7) loi = "Số sao pha lê đã đạt cấp tối đa";
                 if (loi == null) {
+                    trangThaiNangCap = TrangThaiChucNang_PHA_LE_HOA_TRANG_BI_thay_hieu.POPUP_XAC_NHAN;
                 } else {
                     veHUD.setTinNhanPet(loi,2f);
+                }
+            }
+        }
+        if (timeClickNut_pha_le_hoa > 0) {
+            timeClickNut_pha_le_hoa -= delta;
+            if (timeClickNut_pha_le_hoa <= 0) {
+                switch (nutChucNangDangChon_pha_le_hoa) {
+                    case 0:
+                        veHUD.setTinNhanPet("Chức năng đang cập nhật",2f);
+                        break;
+                    case 1:
+                        trangThaiNangCap = TrangThaiChucNang_PHA_LE_HOA_TRANG_BI_thay_hieu.NONE;
+                        break;
                 }
             }
         }
@@ -287,5 +267,17 @@ public class thay_hieu extends renderUInpc {
 
         }
         veHUD.renderHUDThongBaoPopupNhanVatPhai(batch);
+
+        if (trangThaiNangCap == TrangThaiChucNang_PHA_LE_HOA_TRANG_BI_thay_hieu.POPUP_XAC_NHAN) {
+            Item item = danhSachItemCuongHoa.get(0);
+            BitmapFont fontVeKhung = veHUD.fontTenSkill;
+            fontVeKhung.getData().markupEnabled = true;
+            String textPhu = item.getMoTa();
+            if (item.getLoai() == LoaiItem.GIAPLUYENTAP) textPhu = "Hiệu lực trong " + (item.getHanSuDung() > 60f ? (int) (item.getHanSuDung() / 60f) + " phút" : (int) item.getHanSuDung() + " giây");
+            String text = "[#532905]"+item.getTenItem()+"[]\n[#17BF01]"+textPhu+"[]\n[#17BF01]"+(item.getSoSaoPhaLe()+1)+" Sao Pha Lê"+"[]\n[#6975E9]Tỉ lệ thành công: "+tiLeNangCapTheoSao[item.getSoSaoPhaLe()]+"%[]\n[#6975E9]Cần "+vangNangCapTheoSao[item.getSoSaoPhaLe()]/1000000+" Tr vàng[]";
+            NPC_KHUNG_CHUNG.renderKhungNpc(npc,veHUD,nhanVat,batch,text,fontVeKhung);
+            String[] textDung = new String[] {"Nâng cấp\n"+(item.getSoSaoPhaLe()+1)+" ngọc","Từ chối"};
+            NPC_KHUNG_CHUNG.renderKhungNut(npc,veHUD,batch,textDung,nutChucNangDangChon_pha_le_hoa,timeClickNut_pha_le_hoa);
+        }
     }
 }

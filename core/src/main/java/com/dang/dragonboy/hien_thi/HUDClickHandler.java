@@ -640,38 +640,6 @@ public class HUDClickHandler {
             }
         }
 
-        if (veHUD.dangHienPopupNhanVatPhai) {
-            if (x > 1020-350 && x <= 1020) {
-                veHUD.dangChonHanhTrangPhai = true;
-            } else {
-                veHUD.dangChonHanhTrangPhai = false;
-            }
-            if (x > 0 && x <= 350) {
-                veHUD.dangChonHanhTrangTrai = true;
-            } else {
-                veHUD.dangChonHanhTrangTrai = false;
-            }
-        }
-
-        if (veHUD.dangHienPopupNhanVatPhai && !veHUD.DangHienPopupThongTin1 && !veHUD.DangHienPopupThongTin3 && !veHUD.dangHienThongBao && !veHUD.dangChanThoatNpc) {
-            if (x > 350 && x <= 1020-350) {
-                veHUD.dangHienPopupNhanVatPhai = false;
-                veHUD.scrollYPhai = 0;
-                veHUD.scrollYTrai = 0;
-            }
-            // nutX để tắt popup
-            float nutXW = veHUD.nutX.getWidth() * 0.5f;
-            float nutXH = veHUD.nutX.getHeight() * 0.55f;
-            float nutXX = 350 - nutXW - 6;
-            float nutXY = 610 - nutXH - 2;
-            if (checkChuotTrongNut(x,y,nutXX,nutXY,nutXW,nutXH)) {
-                veHUD.timeChoTatPopupNpc = 0.3f;
-                veHUD.clickY = y;
-                veHUD.clickX = x;
-                veHUD.timeGlow = 0.3f;
-            }
-        }
-
         // chức năng đệ tử game
         if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU && veHUD.chucNangDeTuDangChon == 1) {
             float viewY = 35;
