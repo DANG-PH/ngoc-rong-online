@@ -337,14 +337,12 @@ public class NpcHUDClickHandler {
                     }
 
                     if (!veHUD.DangHienPopupThongTin1 && !veHUD.DangHienPopupThongTin3 && !veHUD.dangHienThongBao) {
-                        System.out.println(x > 350 && x <= 1020 - 350);
                         if (x > 350 && x <= 1020 - 350) {
                             if (!ui.danhSachItemCuongHoa.isEmpty()) {
                                 duLieuNguoiChoi.themItemVaoHanhTrang(ui.danhSachItemCuongHoa.get(0));
                                 ui.danhSachItemCuongHoa.remove(ui.danhSachItemCuongHoa.get(0));
                             }
                         }
-                        capNhatClickChung(npc, veHUD, x, y);
                     }
 
                     if (veHUD.TimeChoHienPopup <= 0 && !veHUD.vuaMoPopupThongTin) {
@@ -368,6 +366,7 @@ public class NpcHUDClickHandler {
                         }
                     }
                 }
+                capNhatClickChung(npc, veHUD, x, y);
             }
         } else {
             switch (ui.trangThaiNangCap) {
