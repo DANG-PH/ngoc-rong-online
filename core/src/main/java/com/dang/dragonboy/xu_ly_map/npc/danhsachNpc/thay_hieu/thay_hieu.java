@@ -49,6 +49,8 @@ public class thay_hieu extends renderUInpc {
     public int[] tiLeNangCapTheoSao = new int[]{30,20,10,5,3,2,1};
     public int[] vangNangCapTheoSao = new int[]{5_000_000,10_000_000,20_000_000,40_000_000,60_000_000,90_000_000,120_000_000};
     public float timeHienManHinhPhaLeHoa = 0f;
+    public float timeHienManHinhPhaLeHoaX10 = 0f;
+    public String tinNhanPhaLeX10 = "";
     public boolean daRanDom = false;
     public boolean thanhCongNangCap = false;
 
@@ -225,23 +227,56 @@ public class thay_hieu extends renderUInpc {
             timeClickNut_pha_le_hoa -= delta;
             if (timeClickNut_pha_le_hoa <= 0) {
                 switch (nutChucNangDangChon_pha_le_hoa) {
-                    case 0:
+                    case 0 -> {
                         Item item = danhSachItemCuongHoa.get(0);
                         String loi = null;
-                        if (duLieuNguoiChoi.getVang() < vangNangCapTheoSao[item.getSoSaoPhaLe()]) loi = "Bạn không đủ vàng";
-                        if (duLieuNguoiChoi.getNgoc() < item.getSoSaoPhaLe()+1) loi = "Bạn không đủ ngọc";
+                        if (duLieuNguoiChoi.getVang() < vangNangCapTheoSao[item.getSoSaoPhaLe()])
+                            loi = "Bạn không đủ vàng";
+                        if (duLieuNguoiChoi.getNgoc() < item.getSoSaoPhaLe() + 1) loi = "Bạn không đủ ngọc";
                         if (loi == null) {
                             timeHienManHinhPhaLeHoa = 3.5f;
                             trangThaiNangCap = TrangThaiChucNang_PHA_LE_HOA_TRANG_BI_thay_hieu.DANG_NANG_CAP;
                             duLieuNguoiChoi.giamVang(vangNangCapTheoSao[item.getSoSaoPhaLe()]);
-                            duLieuNguoiChoi.giamNgoc(item.getSoSaoPhaLe()+1);
+                            duLieuNguoiChoi.giamNgoc(item.getSoSaoPhaLe() + 1);
                         } else {
-                            veHUD.setTinNhanPet(loi,2f);
+                            veHUD.setTinNhanPet(loi, 2f);
                         }
-                        break;
-                    case 1:
+                    }
+                    case 1 -> {
+                        Item item = danhSachItemCuongHoa.get(0);
+                        String loi = null;
+                        if (duLieuNguoiChoi.getVang() < vangNangCapTheoSao[item.getSoSaoPhaLe()])
+                            loi = "Bạn không đủ vàng";
+                        if (duLieuNguoiChoi.getNgoc() < item.getSoSaoPhaLe() + 1) loi = "Bạn không đủ ngọc";
+                        if (loi == null) {
+                            boolean thoatNangCap = false;
+                            for (int i = 0; i < 10; i++) {
+                                if (duLieuNguoiChoi.getVang() < vangNangCapTheoSao[item.getSoSaoPhaLe()]) {
+                                    veHUD.setTinNhanPet("Bạn không đủ vàng", 2f);
+                                    break;
+                                }
+                                if (duLieuNguoiChoi.getNgoc() < item.getSoSaoPhaLe() + 1) {
+                                    veHUD.setTinNhanPet("Bạn không đủ ngọc", 2f);
+                                    break;
+                                }
+
+                                if (ranDomTangSaoPhaLeTrucTiep(item)) {
+                                    thoatNangCap = true;
+                                    item.tangSoSaoPhaLeCuongHoa();
+                                    item.tangChiSo(6,5);
+                                    break;
+                                }
+                            }
+                            timeHienManHinhPhaLeHoaX10 = 3.5f;
+                            tinNhanPhaLeX10 = thoatNangCap ? "Chúc mừng em nhé" : "Chúc em may mắn lần sau";
+                            trangThaiNangCap = TrangThaiChucNang_PHA_LE_HOA_TRANG_BI_thay_hieu.DANG_NANG_CAP;
+                        } else {
+                            veHUD.setTinNhanPet(loi, 2f);
+                        }
+                    }
+                    case 2 -> {
                         trangThaiNangCap = TrangThaiChucNang_PHA_LE_HOA_TRANG_BI_thay_hieu.NONE;
-                        break;
+                    }
                 }
             }
         }
@@ -269,6 +304,18 @@ public class thay_hieu extends renderUInpc {
                         danhSachItemCuongHoa.get(0).tangSoSaoPhaLe();
                     }
                     daRanDom = false;
+                }
+            }
+        }
+        if (timeHienManHinhPhaLeHoaX10 > 0) {
+            timeHienManHinhPhaLeHoaX10 -= delta;
+            if (timeHienManHinhPhaLeHoaX10 <= 2) {
+                npc.dangHienTinNhanChat = true;
+                npc.timeHienTinNhan = 2f;
+                npc.tinNhanChat = tinNhanPhaLeX10;
+                if (timeHienManHinhPhaLeHoaX10 <= 0) {
+                    timeHienManHinhPhaLeHoaX10 = 0;
+                    trangThaiNangCap = TrangThaiChucNang_PHA_LE_HOA_TRANG_BI_thay_hieu.NONE;
                 }
             }
         }
@@ -325,7 +372,7 @@ public class thay_hieu extends renderUInpc {
             String text = "[#532905]"+item.getTenItem()+"[]\n[#17BF01]"+textPhu+"[]\n[#17BF01]"+(item.getSoSaoPhaLe()+1)+" Sao Pha Lê"+"[]\n[#6975E9]Tỉ lệ thành công: "+tiLeNangCapTheoSao[item.getSoSaoPhaLe()]+"%[]\n"+maMau+"Cần "+vangNangCapTheoSao[item.getSoSaoPhaLe()]/1000000+" Tr vàng[]";
             NPC_KHUNG_CHUNG.renderKhungNpc(npc,veHUD,nhanVat,batch,text,fontVeKhung);
             String textNut = duLieuNguoiChoi.getVang() >= vangNangCapTheoSao[item.getSoSaoPhaLe()] ?"Nâng cấp\n"+(item.getSoSaoPhaLe()+1)+" ngọc":"Còn thiếu\n"+veHUD.formatVangNgoc(vangNangCapTheoSao[item.getSoSaoPhaLe()]-duLieuNguoiChoi.getVang())+" vàng";
-            String[] textDung = new String[] {textNut,"Từ chối"};
+            String[] textDung = new String[] {textNut,"Nâng cấp\nx10 lần","Từ chối"};
             NPC_KHUNG_CHUNG.renderKhungNut(npc,veHUD,batch,textDung,nutChucNangDangChon_pha_le_hoa,timeClickNut_pha_le_hoa);
         }
     }
@@ -354,11 +401,31 @@ public class thay_hieu extends renderUInpc {
                 veHUD.clickY = npc.getY()+danhSachItemCuongHoa.get(0).getTexture().getHeight()/4f;
             }
         }
+        if (timeHienManHinhPhaLeHoaX10 > 2) {
+            int tick = (int)(timeHienManHinhPhaLeHoaX10 * 3);
+            if (tick % 2 == 0) {
+                veHUD.timeGlow = 0.06f;
+                veHUD.clickX = npc.getX()+rong/2f;
+                veHUD.clickY = npc.getY()+danhSachItemCuongHoa.get(0).getTexture().getHeight()/4f;
+            }
+        }
         batch.end();
         if (veHUD.timeGlow>0) {
             veHUD.veGlow.veGlow(veHUD.shapeRenderer,veHUD.clickX,veHUD.clickY,veHUD.timeGlow);
         }
         batch.begin();
         batch.draw(danhSachItemCuongHoa.get(0).getTexture(),xVe,npc.getY(),danhSachItemCuongHoa.get(0).getTexture().getWidth()/2f * flipScale,danhSachItemCuongHoa.get(0).getTexture().getHeight()/2f);
+    }
+
+    public boolean ranDomTangSaoPhaLeTrucTiep(Item item) {
+        duLieuNguoiChoi.giamVang(vangNangCapTheoSao[item.getSoSaoPhaLe()]);
+        duLieuNguoiChoi.giamNgoc(item.getSoSaoPhaLe() + 1);
+        int so = MathUtils.random(1, 100);
+        System.out.println(so);
+        boolean nangCapThanhCong = so <= tiLeNangCapTheoSao[item.getSoSaoPhaLe()];
+        if (nangCapThanhCong) {
+            danhSachItemCuongHoa.get(0).tangSoSaoPhaLe();
+        }
+        return nangCapThanhCong;
     }
 }

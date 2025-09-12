@@ -371,7 +371,7 @@ public class NpcHUDClickHandler {
         } else {
             switch (ui.trangThaiNangCap) {
                 case POPUP_XAC_NHAN -> {
-                    int soNut = 2;
+                    int soNut = 3;
                     for (int i = 0; i < soNut; i++) {
                         if (checkChuotTrongNut(x, y, (Gdx.graphics.getWidth() - soNut * 120) / 2f + 120*i, 5, 114, 114)) {
                             ui.nutChucNangDangChon_pha_le_hoa = i;

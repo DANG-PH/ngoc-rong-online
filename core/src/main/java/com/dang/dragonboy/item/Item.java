@@ -93,6 +93,9 @@ public class Item {
     public int[] getChiso(){
         return chiso;
     }
+    public void tangChiSo(int indexChiSoCanTang, int chiSoTang) {
+        this.chiso[indexChiSoCanTang] += chiSoTang;
+    }
 
     public String getHanhtinh() { return hanhtinh;}
 
