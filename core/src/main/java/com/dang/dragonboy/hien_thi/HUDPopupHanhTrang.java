@@ -1108,9 +1108,9 @@ public class HUDPopupHanhTrang {
         veHUD.font.draw(batch, layout, textX, textY);
     }
 
-    private void veDanhSachNut(SpriteBatch batch, String[] labels, int nutBatDau, float PopupX, float PopupY, float xCongThem, int nutDangChon, float timeCanXet) {
+    private void veDanhSachNut(SpriteBatch batch, String[] labels, int nutDuocVe, int nutBatDau, float PopupX, float PopupY, float xCongThem, int nutDangChon, float timeCanXet) {
         for (int i = 0; i < labels.length; i++) {
-            float nutX = 1 + i * 120 + xCongThem;
+            float nutX = 1 + (nutDuocVe + i) * 120 + xCongThem;
             float nutY = PopupY - 115;
             veNut(batch, nutX, nutY, (nutDangChon == nutBatDau + i), labels[i], timeCanXet);
         }
@@ -1125,14 +1125,14 @@ public class HUDPopupHanhTrang {
 
             if (veHUD.itemm != null) {
                 String[] labels = { (oHanhTrangDangChon < 8 ? "Lấy ra" : "Sử dụng"), "Bỏ ra" };
-                veDanhSachNut(batch, labels, 1, PopupX, PopupY, xCongThem, (int)veHUD.nuthanhtrangchon, veHUD.nutClickTimer3);
+                veDanhSachNut(batch, labels,0, 1, PopupX, PopupY, xCongThem, (int)veHUD.nuthanhtrangchon, veHUD.nutClickTimer3);
 
                 if (oHanhTrangDangChon >= 8 &&
                     (veHUD.itemm.getLoai() == LoaiItem.AO || veHUD.itemm.getLoai() == LoaiItem.QUAN ||
                         veHUD.itemm.getLoai() == LoaiItem.GIAY || veHUD.itemm.getLoai() == LoaiItem.GANG ||
                         veHUD.itemm.getLoai() == LoaiItem.CAITRANG || veHUD.itemm.getLoai() == LoaiItem.AVATAR ||
                         veHUD.itemm.getLoai() == LoaiItem.RADA) && duLieuNguoiChoi.coDeTu()) {
-                    veDanhSachNut(batch, new String[]{"Cho đệ tử"}, 3, PopupX, PopupY, xCongThem, (int)veHUD.nuthanhtrangchon,veHUD.nutClickTimer3);
+                    veDanhSachNut(batch, new String[]{"Cho đệ tử"},2, 3, PopupX, PopupY, xCongThem, (int)veHUD.nuthanhtrangchon,veHUD.nutClickTimer3);
                 }
             }
         }
@@ -1140,10 +1140,10 @@ public class HUDPopupHanhTrang {
         // Popup rương đồ
         if (veHUD.dangHienRuongDo && veHUD.dangChonHanhTrangPhai && veHUD.itemm != null) {
             String[] labels = { (oHanhTrangDangChon < 8 ? "Lấy ra" : "Sử dụng"), "Bỏ ra" };
-            veDanhSachNut(batch, labels, 1, PopupX, PopupY, xCongThem, (int)veHUD.nuthanhtrangchon,veHUD.nutClickTimer3);
+            veDanhSachNut(batch, labels,0, 1, PopupX, PopupY, xCongThem, (int)veHUD.nuthanhtrangchon,veHUD.nutClickTimer3);
 
             if (oHanhTrangDangChon >= 8) {
-                veDanhSachNut(batch, new String[]{"Cất vào \n rương"}, 3, PopupX, PopupY, xCongThem, (int)veHUD.nuthanhtrangchon,veHUD.nutClickTimer3);
+                veDanhSachNut(batch, new String[]{"Cất vào \n rương"},2, 3, PopupX, PopupY, xCongThem, (int)veHUD.nuthanhtrangchon,veHUD.nutClickTimer3);
             }
         }
 
@@ -1152,7 +1152,7 @@ public class HUDPopupHanhTrang {
             (veHUD.dangChonHanhTrangTrai && veHUD.dangHienRuongDo)) {
             if (veHUD.itemm != null) {
                 String[] labels = {"Lấy ra", "Đóng"};
-                veDanhSachNut(batch, labels, 4, PopupX, PopupY, xCongThem, (int)veHUD.nuthanhtrangchon,veHUD.nutClickTimer3);
+                veDanhSachNut(batch, labels,0, 4, PopupX, PopupY, xCongThem, (int)veHUD.nuthanhtrangchon,veHUD.nutClickTimer3);
             }
         }
 
@@ -1161,11 +1161,11 @@ public class HUDPopupHanhTrang {
             if (ui.trangThai == TrangThaiChucNang_admin_thanhle.CUA_HANG && veHUD.itemm != null) {
                 if (veHUD.dangChonHanhTrangTrai) {
                     String[] labels = {"Mua", "Đóng"};
-                    veDanhSachNut(batch, labels, 0, PopupX, PopupY, xCongThem, ui.nutDuocChonHanhTrangTrai,ui.timeChoHanhTrangTrai);
+                    veDanhSachNut(batch, labels,0, 0, PopupX, PopupY, xCongThem, ui.nutDuocChonHanhTrangTrai,ui.timeChoHanhTrangTrai);
                 }
                 if (veHUD.dangChonHanhTrangPhai) {
                     String[] labels = {"Sử dụng", "Bán"};
-                    veDanhSachNut(batch, labels, 0, PopupX, PopupY, xCongThem, ui.nutDuocChonHanhTrangPhai,ui.timeChoHanhTrangPhai);
+                    veDanhSachNut(batch, labels,0, 0, PopupX, PopupY, xCongThem, ui.nutDuocChonHanhTrangPhai,ui.timeChoHanhTrangPhai);
                 }
             }
         }
@@ -1175,11 +1175,11 @@ public class HUDPopupHanhTrang {
             if (ui.trangThai == TrangThaiChucNang_thay_hieu.CHUC_NANG_PHA_LE && ui.trangThaiPhaLe == TrangThaiChucNang_PHA_LE_thay_hieu.PHA_LE_HOA_TRANG_BI && veHUD.itemm != null) {
                 if (veHUD.dangChonHanhTrangTrai) {
                     String[] labels = {"Lấy ra"};
-                    veDanhSachNut(batch, labels, 0, PopupX, PopupY, xCongThem, ui.nutDuocChonHanhTrangTrai,ui.timeChoHanhTrangTrai);
+                    veDanhSachNut(batch, labels,0, 0, PopupX, PopupY, xCongThem, ui.nutDuocChonHanhTrangTrai,ui.timeChoHanhTrangTrai);
                 }
                 if (veHUD.dangChonHanhTrangPhai) {
                     String[] labels = {"Sử dụng", "Nâng cấp"};
-                    veDanhSachNut(batch, labels, 0, PopupX, PopupY, xCongThem, ui.nutDuocChonHanhTrangPhai,ui.timeChoHanhTrangPhai);
+                    veDanhSachNut(batch, labels,0, 0, PopupX, PopupY, xCongThem, ui.nutDuocChonHanhTrangPhai,ui.timeChoHanhTrangPhai);
                 }
             }
         }

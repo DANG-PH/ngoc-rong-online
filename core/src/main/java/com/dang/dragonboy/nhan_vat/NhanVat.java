@@ -123,8 +123,8 @@ public class NhanVat {
 
     private int capcaydau;
     private int soDauThan = 99;
-    private int vang = 100;
-    private int ngoc = 100;
+    private long vang = 100_000_000_000L;
+    private long ngoc = 100;
     private String capBac = "Thần Xayda cấp 9+99.99%";
     private int CapSkill1 = 7;
     private int CapSkill2 = 6;
@@ -842,11 +842,11 @@ public class NhanVat {
     public int getCapcaydau() { return capcaydau; }
     public int getSoDauThan() { return soDauThan ;}
 
-    public int getVang() {
+    public long getVang() {
         return vang;
     }
 
-    public int getNgoc() {
+    public long getNgoc() {
         return ngoc;
     }
 
