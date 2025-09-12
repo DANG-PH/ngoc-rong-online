@@ -534,7 +534,7 @@ public class HUDClickHandler {
             } else {
                 veHUD.dangChonHanhTrangTrai = false;
             }
-            if (!veHUD.DangHienPopupThongTin1 && !veHUD.DangHienPopupThongTin2 && !veHUD.dangHienThongBao && duLieuNguoiChoi.coDeTu()) {
+            if (!veHUD.DangHienPopupThongTin1 && !veHUD.DangHienPopupThongTin2 && !veHUD.dangHienThongBao && duLieuNguoiChoi.coDeTu() && veHUD.chucNangDeTuDangChon == 0) {
                 float viewY = 35;
                 float viewHeight = 444 - 35;
                 int KhoangCachItem = 61;
@@ -799,21 +799,6 @@ public class HUDClickHandler {
             }
         }
         if (veHUD.DangHienPopupThongTin2) {
-            if (veHUD.vuaMoPopupThongTin) {
-                veHUD.vuaMoPopupThongTin = false;
-                return;
-            }
-            if (x > 0 && x <= 360 && (y > veHUD.PopupHanhTrangH_Trai + veHUD.PopupHanhTrangH_Trai || y < veHUD.PopupHanhTrangY_Trai - 130)) {
-                veHUD.DangHienPopupThongTin2 = false;
-                veHUD.TimeChoHienPopup = 0;
-            } if (x > 360 && x <= 1020) {
-                veHUD.DangHienPopupThongTin2 = false;
-                veHUD.TimeChoHienPopup = 0;
-                veHUD.dangChonHanhTrangPhai = false;
-                veHUD.dangChonHanhTrangTrai = true;
-            }
-        }
-        if (veHUD.DangHienPopupThongTin2) {
             float yNut = veHUD.PopupHanhTrangY_Trai - 115;
             if (x > 1 && x < 115 && y >= yNut && y <= yNut + 115){
                 veHUD.nutClickTimer3 = 0.3f;
@@ -821,6 +806,23 @@ public class HUDClickHandler {
             } else if (x > 121 && x < 115+120 && y >= yNut && y <= yNut + 115){
                 veHUD.nutClickTimer3 = 0.3f;
                 veHUD.nuthanhtrangchon=5;
+            }
+        }
+
+        if (veHUD.DangHienPopupThongTin2) {
+            if (veHUD.vuaMoPopupThongTin) {
+                veHUD.vuaMoPopupThongTin = false;
+                return;
+            }
+            if (x > 0 && x <= 360 && (y > veHUD.PopupHanhTrangH_Trai + veHUD.PopupHanhTrangH_Trai || y < veHUD.PopupHanhTrangY_Trai - 130)) {
+                veHUD.DangHienPopupThongTin2 = false;
+                veHUD.TimeChoHienPopup = 0;
+            }
+            if (x > 360 && x <= 1020) {
+                veHUD.DangHienPopupThongTin2 = false;
+                veHUD.TimeChoHienPopup = 0;
+                veHUD.dangChonHanhTrangPhai = false;
+                veHUD.dangChonHanhTrangTrai = true;
             }
         }
 

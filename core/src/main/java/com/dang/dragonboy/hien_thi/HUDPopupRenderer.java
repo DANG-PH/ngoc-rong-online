@@ -1566,7 +1566,7 @@ public class HUDPopupRenderer {
                     Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
                     batch.end();
                     if (veHUD.DangHienPopupThongTin2 && veHUD.TimeChoHienPopup1 <= 0) {
-                        veHUD.PopupHanhTrang(shapeRenderer, batch, veHUD.hangTrangDeTuDangChon,true);
+                        veHUD.PopupHanhTrang(shapeRenderer, batch, veHUD.hangTrangDeTuDangChon,false);
                     }
                     batch.begin();
                 }

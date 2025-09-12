@@ -290,7 +290,6 @@ public class thay_hieu extends renderUInpc {
                     Item item = danhSachItemCuongHoa.get(0);
                     int so = MathUtils.random(1, 100);
                     boolean nangCapThanhCong = so <= tiLeNangCapTheoSao[item.getSoSaoPhaLe()];
-                    System.out.println(so);
                     npc.dangHienTinNhanChat = true;
                     npc.timeHienTinNhan = 2f;
                     npc.tinNhanChat = nangCapThanhCong ? "Chúc mừng em nhé" : "Chúc em may mắn lần sau";
@@ -421,7 +420,6 @@ public class thay_hieu extends renderUInpc {
         duLieuNguoiChoi.giamVang(vangNangCapTheoSao[item.getSoSaoPhaLe()]);
         duLieuNguoiChoi.giamNgoc(item.getSoSaoPhaLe() + 1);
         int so = MathUtils.random(1, 100);
-        System.out.println(so);
         boolean nangCapThanhCong = so <= tiLeNangCapTheoSao[item.getSoSaoPhaLe()];
         if (nangCapThanhCong) {
             danhSachItemCuongHoa.get(0).tangSoSaoPhaLe();
