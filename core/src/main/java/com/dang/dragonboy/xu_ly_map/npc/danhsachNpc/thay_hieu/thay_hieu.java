@@ -376,6 +376,15 @@ public class thay_hieu extends renderUInpc {
         }
     }
 
+    public void renderChucNangEpSaoTrangBi(SpriteBatch batch) {
+        if (trangThaiPhaLe != TrangThaiChucNang_PHA_LE_thay_hieu.EP_SAO_TRANG_BI || !veHUD.dangHienPopupNhanVatPhai) return;
+        if (trangThaiNangCap == TrangThaiChucNang_PHA_LE_HOA_TRANG_BI_thay_hieu.DANG_NANG_CAP) return;
+
+        veHUD.renderHUDPopupNhanVatPhai(batch,npc.taiAnh.avtNpc);
+
+        veHUD.renderHUDThongBaoPopupNhanVatPhai(batch);
+    }
+
     public void renderDangNangCap(SpriteBatch batch) {
         if (trangThaiPhaLe != TrangThaiChucNang_PHA_LE_thay_hieu.PHA_LE_HOA_TRANG_BI || trangThaiNangCap != TrangThaiChucNang_PHA_LE_HOA_TRANG_BI_thay_hieu.DANG_NANG_CAP) return;
         batch.end();
