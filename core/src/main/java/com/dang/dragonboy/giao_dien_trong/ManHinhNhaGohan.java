@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 //He thong
+import com.dang.dragonboy.du_lieu.State_Management;
 import com.dang.dragonboy.he_thong.Main;
 import com.dang.dragonboy.he_thong.ThaoTac;
 import com.dang.dragonboy.he_thong.ThongTinChuyenMap;
@@ -162,6 +163,8 @@ public class ManHinhNhaGohan implements Screen {
             // Tạo map và load địa hình
             map = new MapNhaGohan();
             map.taiDuLieuMap();
+
+            State_Management.setDuLieuStateManagement(nhanVat, hudRenderer, duLieu);
         } else {
             this.hudRenderer = info.hud;
             this.nhanVat = info.nhanVat;
