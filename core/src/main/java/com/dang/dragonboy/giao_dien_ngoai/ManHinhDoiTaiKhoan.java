@@ -11,8 +11,16 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.InputAdapter;
 
 import com.dang.dragonboy.he_thong.Main;
+import com.dang.dragonboy.network.ApiService;
+
+enum TrangThaiManHinh {
+    NONE,
+    DANGKY,
+    THONGBAO,
+}
 
 public class ManHinhDoiTaiKhoan implements Screen {
+    private TrangThaiManHinh trangThaiManHinh = TrangThaiManHinh.NONE;
     private Main game;
     private ShapeRenderer shapeRenderer;
     private SpriteBatch batch;
@@ -28,18 +36,26 @@ public class ManHinhDoiTaiKhoan implements Screen {
     private boolean isOkPressed = false;
     private boolean isDongPressed = false;
     private boolean isQuenMKPressed = false;
+    private boolean isDangKyPressed = false;
+
     private float thoiGianHienNutClick = 0;
     private boolean chuyenManHinhOK = false;
     private boolean chuyenManHinhDong = false;
 
     private Texture anhThongBao;
-    private boolean dangHienThongBao = false;
     private boolean isThongBaoOKPressed = false;
+
+    private String tenTaiKhoanDky = "";
+    private String matKhauDky = "";
+    private boolean oNhapTaiKhoanDuocChonDky = false;
+    private boolean oNhapMatKhauDuocChonDky = false;
 
     private String tenTaiKhoan = "";
     private String matKhau = "";
     private boolean oNhapTaiKhoanDuocChon = false;
     private boolean oNhapMatKhauDuocChon = false;
+
+    private int nutManHinhDangKyChon = -1;
 
     public ManHinhDoiTaiKhoan(Main game) {
         this.game = game;
@@ -79,24 +95,48 @@ public class ManHinhDoiTaiKhoan implements Screen {
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean keyTyped(char character) {
-                if (oNhapTaiKhoanDuocChon) {
-                    if (character == '\b') {
-                        if (!tenTaiKhoan.isEmpty()) {
-                            tenTaiKhoan = tenTaiKhoan.substring(0, tenTaiKhoan.length() - 1);
+                if (trangThaiManHinh == TrangThaiManHinh.NONE) {
+                    if (oNhapTaiKhoanDuocChon) {
+                        if (character == '\b') {
+                            if (!tenTaiKhoan.isEmpty()) {
+                                tenTaiKhoan = tenTaiKhoan.substring(0, tenTaiKhoan.length() - 1);
+                            }
+                        } else if (Character.toString(character).matches("[a-zA-Z0-9]")) {
+                            if (tenTaiKhoan.length() < 20) {
+                                tenTaiKhoan += character;
+                            }
                         }
-                    } else if (Character.toString(character).matches("[a-zA-Z0-9]")) {
-                        if (tenTaiKhoan.length() < 20) {
-                            tenTaiKhoan += character;
+                    } else if (oNhapMatKhauDuocChon) {
+                        if (character == '\b') {
+                            if (!matKhau.isEmpty()) {
+                                matKhau = matKhau.substring(0, matKhau.length() - 1);
+                            }
+                        } else if (Character.toString(character).matches("[a-zA-Z0-9]")) {
+                            if (matKhau.length() < 20) {
+                                matKhau += character;
+                            }
                         }
                     }
-                } else if (oNhapMatKhauDuocChon) {
-                    if (character == '\b') {
-                        if (!matKhau.isEmpty()) {
-                            matKhau = matKhau.substring(0, matKhau.length() - 1);
+                } else if (trangThaiManHinh == TrangThaiManHinh.DANGKY) {
+                    if (oNhapTaiKhoanDuocChonDky) {
+                        if (character == '\b') {
+                            if (!tenTaiKhoanDky.isEmpty()) {
+                                tenTaiKhoanDky = tenTaiKhoanDky.substring(0, tenTaiKhoanDky.length() - 1);
+                            }
+                        } else if (Character.toString(character).matches("[a-zA-Z0-9]")) {
+                            if (tenTaiKhoanDky.length() < 20) {
+                                tenTaiKhoanDky += character;
+                            }
                         }
-                    } else if (Character.toString(character).matches("[a-zA-Z0-9]")) {
-                        if (matKhau.length() < 20) {
-                            matKhau += character;
+                    } else if (oNhapMatKhauDuocChonDky) {
+                        if (character == '\b') {
+                            if (!matKhauDky.isEmpty()) {
+                                matKhauDky = matKhauDky.substring(0, matKhauDky.length() - 1);
+                            }
+                        } else if (Character.toString(character).matches("[a-zA-Z0-9]")) {
+                            if (matKhauDky.length() < 20) {
+                                matKhauDky += character;
+                            }
                         }
                     }
                 }
@@ -109,20 +149,38 @@ public class ManHinhDoiTaiKhoan implements Screen {
     public void render(float delta) {
         thoiGianHienNutClick -= delta;
         if (thoiGianHienNutClick <= 0) {
-            if (chuyenManHinhOK) {
-                game.setScreen(new ManHinhMenu(game,null));
-                chuyenManHinhOK = false;
-            } else if (chuyenManHinhDong) {
-                game.setScreen(new ManHinhMenu(game,null));
-                chuyenManHinhDong = false;
-            } else if (isThongBaoOKPressed) {
-                dangHienThongBao = false;
-                isThongBaoOKPressed = false;
+            if (trangThaiManHinh == TrangThaiManHinh.NONE) {
+                if (chuyenManHinhOK) {
+                    game.setScreen(new ManHinhMenu(game, null));
+                    chuyenManHinhOK = false;
+                } else if (chuyenManHinhDong) {
+                    game.setScreen(new ManHinhMenu(game, null));
+                    chuyenManHinhDong = false;
+                } else if (isQuenMKPressed) {
+                    trangThaiManHinh = TrangThaiManHinh.THONGBAO;
+                } else if (isDangKyPressed) {
+                    trangThaiManHinh = TrangThaiManHinh.DANGKY;
+                }
+            }
+
+            if (trangThaiManHinh == TrangThaiManHinh.DANGKY) {
+                if (nutManHinhDangKyChon == 1) {
+                    trangThaiManHinh = TrangThaiManHinh.NONE;
+                    nutManHinhDangKyChon = -1;
+                }
+            }
+
+            if (trangThaiManHinh == TrangThaiManHinh.THONGBAO) {
+                if (isThongBaoOKPressed) {
+                    trangThaiManHinh = TrangThaiManHinh.NONE;
+                    isThongBaoOKPressed = false;
+                }
             }
 
             isOkPressed = false;
             isDongPressed = false;
             isQuenMKPressed = false;
+            isDangKyPressed = false;
         }
 
         if (Gdx.input.justTouched()) {
@@ -133,16 +191,31 @@ public class ManHinhDoiTaiKhoan implements Screen {
             float oY2 = 196;
 
             if (mouseX >= oX && mouseX <= oX + 340 && mouseY >= oY1 && mouseY <= oY1 + 40) {
-                oNhapTaiKhoanDuocChon = true;
-                oNhapMatKhauDuocChon = false;
+                if (trangThaiManHinh == TrangThaiManHinh.NONE) {
+                    oNhapTaiKhoanDuocChon = true;
+                    oNhapMatKhauDuocChon = false;
+                } else {
+                    oNhapTaiKhoanDuocChonDky = true;
+                    oNhapMatKhauDuocChonDky = false;
+                }
             } else if (mouseX >= oX && mouseX <= oX + 340 && mouseY >= oY2 && mouseY <= oY2 + 40) {
-                oNhapTaiKhoanDuocChon = false;
-                oNhapMatKhauDuocChon = true;
+                if (trangThaiManHinh == TrangThaiManHinh.NONE) {
+                    oNhapTaiKhoanDuocChon = false;
+                    oNhapMatKhauDuocChon = true;
+                } else {
+                    oNhapTaiKhoanDuocChonDky = false;
+                    oNhapMatKhauDuocChonDky = true;
+                }
             } else {
-                oNhapTaiKhoanDuocChon = false;
-                oNhapMatKhauDuocChon = false;
+                if (trangThaiManHinh == TrangThaiManHinh.NONE) {
+                    oNhapTaiKhoanDuocChon = false;
+                    oNhapMatKhauDuocChon = false;
+                } else {
+                    oNhapTaiKhoanDuocChonDky = false;
+                    oNhapMatKhauDuocChonDky = false;
+                }
             }
-            if (dangHienThongBao) {
+            if (trangThaiManHinh == TrangThaiManHinh.THONGBAO) {
                 float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
                 float nutY = 70;
                 if (mouseX >= nutX && mouseX <= nutX + 140 &&
@@ -167,15 +240,38 @@ public class ManHinhDoiTaiKhoan implements Screen {
             }
 
             if (mouseX >= okX && mouseX <= okX + 142 && mouseY >= okY && mouseY <= okY + 48) {
-                isOkPressed = true;
-                thoiGianHienNutClick = 0.1f;
-                chuyenManHinhOK = true;
+                if (trangThaiManHinh == TrangThaiManHinh.NONE) {
+                    isOkPressed = true;
+                    thoiGianHienNutClick = 0.1f;
+                    chuyenManHinhOK = true;
+                }
+                if (trangThaiManHinh == TrangThaiManHinh.DANGKY) {
+                    //call api
+                    boolean ok = ApiService.register(tenTaiKhoanDky, matKhauDky);
+                    if (ok) {
+                        System.out.println("Đăng ký thành công!");
+                    } else {
+                        System.out.println("Đăng ký thất bại!");
+                    }
+                    thoiGianHienNutClick = 0.1f;
+                    nutManHinhDangKyChon = 0;
+                }
             }
 
             if (mouseX >= quenX && mouseX <= quenX + 142 && mouseY >= quenY && mouseY <= quenY + 48) {
-                isQuenMKPressed = true;
+                if (trangThaiManHinh == TrangThaiManHinh.NONE) {
+                    isQuenMKPressed = true;
+                    thoiGianHienNutClick = 0.1f;
+                }
+                if (trangThaiManHinh == TrangThaiManHinh.DANGKY) {
+                    thoiGianHienNutClick = 0.1f;
+                    nutManHinhDangKyChon = 1;
+                }
+            }
+
+            if (mouseX >= 1020-20-135 && mouseX <= 1020-20 && mouseY >= 20 && mouseY <= 70) {
+                isDangKyPressed = true;
                 thoiGianHienNutClick = 0.1f;
-                dangHienThongBao = true;
             }
         }
 
@@ -205,7 +301,7 @@ public class ManHinhDoiTaiKhoan implements Screen {
         }
         batch.end();
 
-        if (dangHienThongBao) {
+        if (trangThaiManHinh == TrangThaiManHinh.THONGBAO) {
             batch.begin();
             batch.draw(anhThongBao, (Gdx.graphics.getWidth() - 740) / 2f, 85, 740, 168);
             layout.setText(font, "Để lấy lại mật khẩu xin vui lòng truy cập website https://chienbinhrongthieng.online");
@@ -216,70 +312,135 @@ public class ManHinhDoiTaiKhoan implements Screen {
             layout.setText(font, "OK");
             font.draw(batch, layout, nutX + (140 - layout.width) / 2f, nutY + 30);
             batch.end();
-            return;
         }
 
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(108f / 255f, 74f / 255f, 0f, 1f);
-        shapeRenderer.rect((Gdx.graphics.getWidth() - 369) / 2f, 214 - 49, 369, 214);
-        shapeRenderer.end();
+        if (trangThaiManHinh == TrangThaiManHinh.NONE) {
 
-        batch.begin();
-        float kdnW = 365;
-        float kdnH = 210;
-        batch.draw(khungdangnhap, (Gdx.graphics.getWidth() - kdnW) / 2f, kdnH - 43, kdnW, kdnH);
-        // Hiển thị ô tên tài khoản
-        float oX = (Gdx.graphics.getWidth() - 320) / 2f ;
-        float oY1 = 272;
-        float oY2 = 196;
-        if (tenTaiKhoan.isEmpty()) {
-            fontText.setColor(1.0f, 0.956f, 0.863f, 1f);
-            layout.setText(fontText, "Tên tài khoản");
-        } else {
-            fontText.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1); // nâu
-            layout.setText(fontText, tenTaiKhoan);
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(108f / 255f, 74f / 255f, 0f, 1f);
+            shapeRenderer.rect((Gdx.graphics.getWidth() - 369) / 2f, 214 - 49, 369, 214);
+            shapeRenderer.end();
+
+            batch.begin();
+            float kdnW = 365;
+            float kdnH = 210;
+            batch.draw(khungdangnhap, (Gdx.graphics.getWidth() - kdnW) / 2f, kdnH - 43, kdnW, kdnH);
+            // Hiển thị ô tên tài khoản
+            float oX = (Gdx.graphics.getWidth() - 320) / 2f;
+            float oY1 = 272;
+            float oY2 = 196;
+            if (tenTaiKhoan.isEmpty()) {
+                fontText.setColor(1.0f, 0.956f, 0.863f, 1f);
+                layout.setText(fontText, "Tên tài khoản");
+            } else {
+                fontText.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1); // nâu
+                layout.setText(fontText, tenTaiKhoan);
+            }
+            fontText.draw(batch, layout, oX + 10, oY1 + 25);
+
+            // Hiển thị ô mật khẩu (ẩn bằng ***)
+            if (matKhau.isEmpty()) {
+                fontText.setColor(1.0f, 0.956f, 0.863f, 1f); // xám
+                layout.setText(fontText, "Mật khẩu");
+            } else {
+                fontText.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1); // nâu
+                layout.setText(fontText, "*".repeat(matKhau.length()));
+            }
+            fontText.draw(batch, layout, oX + 10, oY2 + 25);
+
+            batch.draw(logo, 355, 325, 320, 210);
+
+            layout.setText(fontThuong, "chienbinhrongthieng.online");
+            fontThuong.setColor(1, 1, 1, 1);
+            fontThuong.draw(batch, layout, Gdx.graphics.getWidth() - layout.width - 10, 600);
+            layout.setText(fontThuong, "V0.0.0");
+            fontThuong.draw(batch, layout, Gdx.graphics.getWidth() - layout.width - 10, 580);
+
+            font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+            float nutOkX = (Gdx.graphics.getWidth() - kdnW) / 2f + 18;
+            float nutOkY = kdnH - 110;
+            float nutQuenX = (Gdx.graphics.getWidth() - kdnW) / 2f + 200;
+            float nutQuenY = kdnH - 110;
+            int nutDongX = 20;
+            int nutDongY = 20;
+
+            batch.draw(isOkPressed ? nutclick : nutdn, nutOkX, nutOkY, 142, 48);
+            layout.setText(font, "OK");
+            font.draw(batch, layout, nutOkX + (142 - layout.width) / 2, nutOkY + 30);
+
+            batch.draw(isDongPressed ? nutclick : nutdn, nutDongX, nutDongY, 135, 50);
+            layout.setText(font, "Đóng");
+            font.draw(batch, layout, nutDongX + (135 - layout.width) / 2, nutDongY + 30);
+
+            batch.draw(isDangKyPressed ? nutclick : nutdn, 1020 - nutDongX - 135, nutDongY, 135, 50);
+            layout.setText(font, "Đăng ký");
+            font.draw(batch, layout, 1020 - nutDongX - 135 + (135 - layout.width) / 2, nutDongY + 30);
+
+            batch.draw(isQuenMKPressed ? nutclick : nutdn, nutQuenX, nutQuenY, 142, 48);
+            layout.setText(font, "Quên M.Khẩu");
+            font.draw(batch, layout, nutQuenX + (142 - layout.width) / 2, nutQuenY + 30);
+
+            batch.end();
         }
-        fontText.draw(batch, layout, oX + 10, oY1 + 25);
 
-        // Hiển thị ô mật khẩu (ẩn bằng ***)
-        if (matKhau.isEmpty()) {
-            fontText.setColor(1.0f, 0.956f, 0.863f, 1f); // xám
-            layout.setText(fontText, "Mật khẩu");
-        } else {
-            fontText.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1); // nâu
-            layout.setText(fontText, "*".repeat(matKhau.length()));
+        if (trangThaiManHinh == TrangThaiManHinh.DANGKY) {
+
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(108f / 255f, 74f / 255f, 0f, 1f);
+            shapeRenderer.rect((Gdx.graphics.getWidth() - 369) / 2f, 214 - 49, 369, 214);
+            shapeRenderer.end();
+
+            batch.begin();
+            float kdnW = 365;
+            float kdnH = 210;
+            batch.draw(khungdangnhap, (Gdx.graphics.getWidth() - kdnW) / 2f, kdnH - 43, kdnW, kdnH);
+            // Hiển thị ô tên tài khoản
+            float oX = (Gdx.graphics.getWidth() - 320) / 2f;
+            float oY1 = 272;
+            float oY2 = 196;
+            if (tenTaiKhoanDky.isEmpty()) {
+                fontText.setColor(1.0f, 0.956f, 0.863f, 1f);
+                layout.setText(fontText, "Tên tài khoản đăng ký");
+            } else {
+                fontText.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1); // nâu
+                layout.setText(fontText, tenTaiKhoanDky);
+            }
+            fontText.draw(batch, layout, oX + 10, oY1 + 25);
+
+            // Hiển thị ô mật khẩu (ẩn bằng ***)
+            if (matKhauDky.isEmpty()) {
+                fontText.setColor(1.0f, 0.956f, 0.863f, 1f); // xám
+                layout.setText(fontText, "Mật khẩu đăng ký");
+            } else {
+                fontText.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1); // nâu
+                layout.setText(fontText, "*".repeat(matKhauDky.length()));
+            }
+            fontText.draw(batch, layout, oX + 10, oY2 + 25);
+
+            batch.draw(logo, 355, 325, 320, 210);
+
+            layout.setText(fontThuong, "chienbinhrongthieng.online");
+            fontThuong.setColor(1, 1, 1, 1);
+            fontThuong.draw(batch, layout, Gdx.graphics.getWidth() - layout.width - 10, 600);
+            layout.setText(fontThuong, "V0.0.0");
+            fontThuong.draw(batch, layout, Gdx.graphics.getWidth() - layout.width - 10, 580);
+
+            font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+            float nutOkX = (Gdx.graphics.getWidth() - kdnW) / 2f + 18;
+            float nutOkY = kdnH - 110;
+            float nutQuenX = (Gdx.graphics.getWidth() - kdnW) / 2f + 200;
+            float nutQuenY = kdnH - 110;
+
+            batch.draw(thoiGianHienNutClick > 0 && nutManHinhDangKyChon == 0 ? nutclick : nutdn, nutOkX, nutOkY, 142, 48);
+            layout.setText(font, "OK");
+            font.draw(batch, layout, nutOkX + (142 - layout.width) / 2, nutOkY + 30);
+
+            batch.draw(thoiGianHienNutClick > 0 && nutManHinhDangKyChon == 1 ? nutclick : nutdn, nutQuenX, nutQuenY, 142, 48);
+            layout.setText(font, "Đăng nhập");
+            font.draw(batch, layout, nutQuenX + (142 - layout.width) / 2, nutQuenY + 30);
+
+            batch.end();
         }
-        fontText.draw(batch, layout, oX + 10, oY2 + 25);
-
-        batch.draw(logo, 355, 325, 320, 210);
-
-        layout.setText(fontThuong, "chienbinhrongthieng.online");
-        fontThuong.setColor(1, 1, 1, 1);
-        fontThuong.draw(batch, layout, Gdx.graphics.getWidth() - layout.width - 10, 600);
-        layout.setText(fontThuong, "V0.0.0");
-        fontThuong.draw(batch, layout, Gdx.graphics.getWidth() - layout.width - 10, 580);
-
-        font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
-        float nutOkX = (Gdx.graphics.getWidth() - kdnW) / 2f + 18;
-        float nutOkY = kdnH - 110;
-        float nutQuenX = (Gdx.graphics.getWidth() - kdnW) / 2f + 200;
-        float nutQuenY = kdnH - 110;
-        int nutDongX = 20;
-        int nutDongY = 20;
-
-        batch.draw(isOkPressed ? nutclick : nutdn, nutOkX, nutOkY, 142, 48);
-        layout.setText(font, "OK");
-        font.draw(batch, layout, nutOkX + (142 - layout.width) / 2, nutOkY + 30);
-
-        batch.draw(isDongPressed ? nutclick : nutdn, nutDongX, nutDongY, 135, 50);
-        layout.setText(font, "Đóng");
-        font.draw(batch, layout, nutDongX + (135 - layout.width) / 2, nutDongY + 30);
-
-        batch.draw(isQuenMKPressed ? nutclick : nutdn, nutQuenX, nutQuenY, 142, 48);
-        layout.setText(font, "Quên M.Khẩu");
-        font.draw(batch, layout, nutQuenX + (142 - layout.width) / 2, nutQuenY + 30);
-
-        batch.end();
     }
 
     @Override public void resize(int width, int height) {}

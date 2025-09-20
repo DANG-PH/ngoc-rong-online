@@ -32,9 +32,9 @@ public class Main extends Game {
         assetManager.finishLoading();
 
         // sau đó mới chuyển màn hình
-        this.setScreen(new ManHinhNhaGohan(this,"admin","traidat","Goku",null));
+//        this.setScreen(new ManHinhNhaGohan(this,"admin","traidat","Goku",null));
         // hoặc dùng màn hình khởi động rồi mới vào game
-        // this.setScreen(new ManHinhKhoiDong(this));
+         this.setScreen(new ManHinhKhoiDong(this));
     }
 
     @Override
