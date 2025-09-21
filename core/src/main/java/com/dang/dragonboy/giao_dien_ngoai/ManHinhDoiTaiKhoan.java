@@ -10,8 +10,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.InputAdapter;
 
+import com.dang.dragonboy.nhan_vat.*;
+import com.dang.dragonboy.du_lieu.*;
+import com.dang.dragonboy.hien_thi.*;
+
+import com.dang.dragonboy.du_lieu.State_Management;
 import com.dang.dragonboy.he_thong.Main;
-import com.dang.dragonboy.network.ApiService;
+import com.dang.dragonboy.network.*;
+import com.google.gson.Gson;
 
 enum TrangThaiManHinh {
     NONE,
@@ -151,7 +157,18 @@ public class ManHinhDoiTaiKhoan implements Screen {
         if (thoiGianHienNutClick <= 0) {
             if (trangThaiManHinh == TrangThaiManHinh.NONE) {
                 if (chuyenManHinhOK) {
-                    game.setScreen(new ManHinhMenu(game, null));
+                    // check api đăng nhập
+                    // 2 biến cần check trong sql là tenTaiKhoan và matKhau
+                    UserResponse user = ApiService.login(tenTaiKhoan, matKhau);
+                    if (user != null) {
+                        System.out.println("Đăng nhập thành công!");
+                        // Truy cập dữ liệu backend trả về
+
+                        State_Management.setUserResponse(user);
+                        game.setScreen(new ManHinhMenu(game, null));
+                    } else {
+                        System.out.println("Đăng nhập thất bại!");
+                    }
                     chuyenManHinhOK = false;
                 } else if (chuyenManHinhDong) {
                     game.setScreen(new ManHinhMenu(game, null));

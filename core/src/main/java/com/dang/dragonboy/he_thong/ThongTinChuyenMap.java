@@ -1,5 +1,6 @@
 package com.dang.dragonboy.he_thong;
 
+import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.hien_thi.QuanLyCamera;
@@ -9,14 +10,16 @@ public class ThongTinChuyenMap {
     public final NhanVat nhanVat;
     public final String mapTruoc; // ID của map vừa thoát
     public final VeHUD hud;
+    private final DuLieuNguoiChoi duLieuNguoiChoi;
     public final QuanLyCamera camManager;
     public final MapCoBan mapTr, mapSau;
 //    public final MapCoBan mapNhaGohan;
 //    public final MapCoBan mapLangAru;
 //    public final MapCoBan mapDoiHoaCuc;
 
-    public ThongTinChuyenMap(NhanVat nhanVat, String mapTruoc , VeHUD hud,QuanLyCamera camManager, MapCoBan mapTr, MapCoBan mapSau) {
+    public ThongTinChuyenMap(DuLieuNguoiChoi duLieuNguoiChoi, NhanVat nhanVat, String mapTruoc , VeHUD hud,QuanLyCamera camManager, MapCoBan mapTr, MapCoBan mapSau) {
         this.nhanVat = nhanVat;
+        this.duLieuNguoiChoi = duLieuNguoiChoi;
         this.mapTruoc = mapTruoc;
         this.hud = hud;
         this.camManager = camManager;

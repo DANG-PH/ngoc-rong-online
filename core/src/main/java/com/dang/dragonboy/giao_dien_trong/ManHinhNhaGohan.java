@@ -163,8 +163,6 @@ public class ManHinhNhaGohan implements Screen {
             // Tạo map và load địa hình
             map = new MapNhaGohan();
             map.taiDuLieuMap();
-
-            State_Management.setDuLieuStateManagement(nhanVat, hudRenderer, duLieu);
         } else {
             this.hudRenderer = info.hud;
             this.nhanVat = info.nhanVat;
@@ -436,7 +434,7 @@ public class ManHinhNhaGohan implements Screen {
         // Kiểm tra nếu đứng trong vùng "Làng Aru" và bấm Enter thì chuyển màn
         if (targetX > 760 && targetX < 990 && targetY >= 0 && targetY <= 400) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-                ThongTinChuyenMap info = new ThongTinChuyenMap(nhanVat, "nhagohan",hudRenderer,camManager, map, mapLangAru);
+                ThongTinChuyenMap info = new ThongTinChuyenMap(hudRenderer.getDuLieuNguoiChoi(),nhanVat, "nhagohan",hudRenderer,camManager, map, mapLangAru);
                 game.setScreen(new ManHinhSplash(game, new ManHinhLangAru(game, info)));
             }
         }

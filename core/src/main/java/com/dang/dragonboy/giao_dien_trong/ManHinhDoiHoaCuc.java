@@ -283,7 +283,7 @@ public class ManHinhDoiHoaCuc implements Screen {
 
     public void checkQuaMap() {
         if (nhanVat.getX()<-5-nhanVat.getRong() && nhanVat.getY()<300) {
-            ThongTinChuyenMap info = new ThongTinChuyenMap(nhanVat, "doihoacuc",hud,camManager, map, mapLangAru);
+            ThongTinChuyenMap info = new ThongTinChuyenMap(hud.getDuLieuNguoiChoi(),nhanVat, "doihoacuc",hud,camManager, map, mapLangAru);
             game.setScreen(new ManHinhSplash(game, new ManHinhLangAru(game, info)));
         }
     }

@@ -344,7 +344,7 @@ public class ManHinhLangAru implements Screen {
         // Kiểm tra nếu đứng trong vùng "Làng Aru" và bấm Enter thì chuyển màn
         if (nhanVat.getX() > 560 && nhanVat.getX() < 790 && nhanVat.getY() >= 0 && nhanVat.getY() <= 400) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-                ThongTinChuyenMap info = new ThongTinChuyenMap(nhanVat, "langaru",hud,camManager, map, mapNhaGohan);
+                ThongTinChuyenMap info = new ThongTinChuyenMap(hud.getDuLieuNguoiChoi(),nhanVat, "langaru",hud,camManager, map, mapNhaGohan);
                 game.setScreen(new ManHinhSplash(game, new ManHinhNhaGohan(game,nhanVat.getTen(),nhanVat.getHanhtinh(),nhanVat.getNhanvat(),info)));
             }
         }
@@ -361,7 +361,7 @@ public class ManHinhLangAru implements Screen {
     }
     public void checkQuaMap() {
         if (nhanVat.getX()>2405 && nhanVat.getY()<300) {
-            ThongTinChuyenMap info = new ThongTinChuyenMap(nhanVat, "langaru",hud,camManager, map, mapDoiHoaCuc);
+            ThongTinChuyenMap info = new ThongTinChuyenMap(hud.getDuLieuNguoiChoi(),nhanVat, "langaru",hud,camManager, map, mapDoiHoaCuc);
             game.setScreen(new ManHinhSplash(game, new ManHinhDoiHoaCuc(game, info)));
         }
     }

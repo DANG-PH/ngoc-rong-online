@@ -10,6 +10,8 @@ dependencies {
   api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
   api "com.badlogicgames.gdx:gdx:$gdxVersion"
 
+  implementation "com.google.code.gson:gson:2.11.0"
+
   if(enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion";
     implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"

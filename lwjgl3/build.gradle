@@ -21,6 +21,13 @@ import io.github.fourlastor.construo.Target
 sourceSets.main.resources.srcDirs += [ rootProject.file('assets').path ]
 mainClassName = 'com.dang.dragonboy.lwjgl3.Lwjgl3Launcher'
 application.setMainClass(mainClassName)
+
+application {
+  applicationDefaultJvmArgs = [
+    "--add-opens=java.base/java.nio=ALL-UNNAMED"
+  ]
+}
+
 eclipse.project.name = appName + '-lwjgl3'
 java.sourceCompatibility = 17
 java.targetCompatibility = 17
@@ -36,6 +43,7 @@ dependencies {
   implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
   implementation project(':core')
   implementation("com.badlogicgames.gdx:gdx-tools:$gdxVersion"){exclude group: 'com.badlogicgames.gdx', module: 'gdx-backend-lwjgl'}
+  implementation "com.google.code.gson:gson:2.11.0"
 
   if(enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-backend-lwjgl3:$graalHelperVersion"

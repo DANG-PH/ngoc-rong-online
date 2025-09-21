@@ -10,9 +10,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
+import com.dang.dragonboy.du_lieu.State_Management;
+import com.dang.dragonboy.giao_dien_trong.ManHinhDoiHoaCuc;
+import com.dang.dragonboy.giao_dien_trong.ManHinhLangAru;
 import com.dang.dragonboy.giao_dien_trong.ManHinhNhaBroly;
 import com.dang.dragonboy.he_thong.Main;
 import com.dang.dragonboy.giao_dien_trong.ManHinhNhaGohan;
+import com.dang.dragonboy.he_thong.ThongTinChuyenMap;
+import com.dang.dragonboy.xu_ly_map.MapDoiHoaCuc;
+import com.dang.dragonboy.xu_ly_map.MapLangAru;
+import com.dang.dragonboy.xu_ly_map.MapNhaGohan;
 
 public class ManHinhMenu implements Screen {
     private Main game;
@@ -70,7 +77,18 @@ public class ManHinhMenu implements Screen {
 
             switch (nutDuocChon) {
                 case 0:
-                    nextScreen = new ManHinhSplash(game,new ManHinhNhaGohan(game,"admin","traidat","Goku",null));
+                    if (State_Management.getNhanVat() == null) {
+                        nextScreen = new ManHinhSplash(game, new ManHinhNhaGohan(game, "admin", "traidat", "Goku", null));
+                    } else {
+                        ThongTinChuyenMap info = new ThongTinChuyenMap(State_Management.getDuLieuNguoiChoi(),State_Management.getNhanVat(), null,State_Management.getVeHUD(),State_Management.getVeHUD().camManager,null, State_Management.getVeHUD().mapHienTai);
+                        if (State_Management.getVeHUD().mapHienTai instanceof MapNhaGohan) {
+                            game.setScreen(new ManHinhSplash(game, new ManHinhNhaGohan(game,State_Management.getNhanVat().getTen(),State_Management.getNhanVat().getHanhtinh(),State_Management.getNhanVat().getNhanvat(),info)));
+                        } else if (State_Management.getVeHUD().mapHienTai instanceof MapLangAru) {
+                            game.setScreen(new ManHinhSplash(game, new ManHinhLangAru(game, info)));
+                        } else if (State_Management.getVeHUD().mapHienTai instanceof MapDoiHoaCuc) {
+                            game.setScreen(new ManHinhSplash(game, new ManHinhDoiHoaCuc(game, info)));
+                        }
+                    }
                     break;
                 case 1:
                     nextScreen = new ManHinhChoiMoi(game);
@@ -119,6 +137,9 @@ public class ManHinhMenu implements Screen {
             "Đổi tài khoản",
             "Máy chủ: Vũ trụ " + mayChu
         };
+        if (State_Management.getUserResponse()!=null) {
+            labels[0] = "TK. "+State_Management.getUserResponse().username;
+        }
         if (mayChu=="HAIDANG1"){
             labels[3]="Máy chủ: HAIDANG1";
         }

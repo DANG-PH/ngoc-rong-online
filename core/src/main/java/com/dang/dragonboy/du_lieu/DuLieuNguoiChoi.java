@@ -13,6 +13,7 @@ import com.dang.dragonboy.nhan_vat.DeTuXuLy;
 import com.dang.dragonboy.nhan_vat.DeTuCauHinh;
 import com.badlogic.gdx.math.MathUtils;
 import java.util.*;
+import com.dang.dragonboy.network.*;
 public class DuLieuNguoiChoi {
     public DeTu deTu;
     private NhanVat nhanVat;
@@ -81,6 +82,8 @@ public class DuLieuNguoiChoi {
 
     private boolean daNhanQuaTanThu = false;
 
+    private float timeCapNhatAPI = 5f;
+
     // Constructor
     public DuLieuNguoiChoi(String ten, long sucManh, int theLuc,
                            float HpHienTai, float HpNhanVat, int HpGoc,
@@ -114,8 +117,10 @@ public class DuLieuNguoiChoi {
         this.GiamSatThuongNhanVat = GiamSatThuongNhanVat;
         this.capcaydau = capcaydau;
         this.soDauThan = soDauThan;
-        this.vang = vang;
-        this.ngoc = ngoc;
+//        this.vang = vang;
+//        this.ngoc = ngoc;
+        this.vang = State_Management.getUserResponse().vang;
+        this.ngoc = State_Management.getUserResponse().ngoc;
         this.capBac = capBac;
         if (capSkill != null && capSkill.length == 9) {
             System.arraycopy(capSkill, 0, this.capSkill, 0, 9);
@@ -835,6 +840,20 @@ public class DuLieuNguoiChoi {
             if (timeTangMotDauThan <= 0) {
                 soDauThanHienTai += 1;
                 timeTangMotDauThan = this.getCapCayDau()/2f * 60f;
+            }
+        }
+
+        //api du lieu
+        if (timeCapNhatAPI > 0) {
+            timeCapNhatAPI -= Gdx.graphics.getDeltaTime();
+            if (timeCapNhatAPI <= 0) {
+                timeCapNhatAPI = 5f;
+                UserResponse currentUser = State_Management.getUserResponse();
+                currentUser.vang = vang;
+                currentUser.ngoc = ngoc;
+                if (currentUser != null) {
+                    ApiService.saveGameAsync(currentUser);
+                }
             }
         }
     }
