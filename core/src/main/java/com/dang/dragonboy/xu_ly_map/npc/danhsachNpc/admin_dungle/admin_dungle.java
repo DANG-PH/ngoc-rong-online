@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Align;
@@ -11,8 +12,10 @@ import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.xu_ly_map.npc.Npc;
+import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.a_PHAN_LOAI_NPC.NPC_KHUNG_CHUNG;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.renderUInpc;
-
+import com.dang.dragonboy.du_lieu.*;
+import com.dang.dragonboy.network.*;
 import java.util.*;
 
 public class admin_dungle extends renderUInpc {
@@ -25,6 +28,9 @@ public class admin_dungle extends renderUInpc {
     public List<String> danhSachPhanThuong = new ArrayList<>();
     public String footerQuaTanThu = "";
 
+    public int nutChucNangDangChon_nhan_qua_web = -1;
+    public float timeClickNut_nhan_qua_web = 0f;
+
     public admin_dungle(Npc npc, VeHUD veHUD, DuLieuNguoiChoi duLieuNguoiChoi, NhanVat nhanVat) {
         super(npc, veHUD, duLieuNguoiChoi, nhanVat);
     }
@@ -33,6 +39,7 @@ public class admin_dungle extends renderUInpc {
     public void render(SpriteBatch batch) {
         renderCacChucNang(batch);
         renderChucNangDoiGiftCode(batch);
+        renderChucNanNhanQuaTuWeb(batch);
         renderChucNangNhanQuaThanhCong(batch);
     }
 
@@ -41,6 +48,7 @@ public class admin_dungle extends renderUInpc {
         float delta = Gdx.graphics.getDeltaTime();
         capNhatClickNut(delta);
         capNhatTimeChoDoiGiftCode(delta);
+        capNhatTimeNhanQuaWeb(delta);
     }
 
     public void renderCacChucNang(SpriteBatch batch) {
@@ -210,7 +218,7 @@ public class admin_dungle extends renderUInpc {
                             veHUD.setTinNhanPet(loi,2f);
                         }
                     } else if (nutChucNangDangChon == 2) {
-                        veHUD.setTinNhanPet("Chức năng đang cập nhật",2f);
+                        trangThai = TrangThaiChucNang_admin_dungle.NHAN_VAT_PHAM_NAP_WEB;
                     } else if (nutChucNangDangChon == 3) {
                         veHUD.daClickVaoNpc = false;
                     }
@@ -245,6 +253,67 @@ public class admin_dungle extends renderUInpc {
                 }
                 tinNhanChat = "";
                 nutDuocChonKhiChat = -1;
+            }
+        }
+    }
+
+    public void renderChucNanNhanQuaTuWeb(SpriteBatch batch) {
+        if (trangThai != TrangThaiChucNang_admin_dungle.NHAN_VAT_PHAM_NAP_WEB) return;
+
+        BitmapFont fontVeKhung = veHUD.fontMotaHanhTrang;
+        fontVeKhung.getData().markupEnabled = true;
+        String text = "Chào bạn, cảm ơn bạn đã ủng hộ chúng tôi";
+
+        NPC_KHUNG_CHUNG.renderKhungNpc(npc,veHUD,nhanVat,batch,text,fontVeKhung);
+
+        String[] textDung = new String[] {"Hiện có\n"+duLieuNguoiChoi.getVangNapTuWeb()+"\nvàng","Hiện có\n"+duLieuNguoiChoi.getNgocNapTuWeb()+"\nngọc","Quay lại"};
+        NPC_KHUNG_CHUNG.renderKhungNut(npc,veHUD,batch,textDung,nutChucNangDangChon_nhan_qua_web,timeClickNut_nhan_qua_web);
+    }
+
+    public void capNhatTimeNhanQuaWeb(float delta) {
+        if (timeClickNut_nhan_qua_web > 0) {
+            timeClickNut_nhan_qua_web -= delta;
+            if (timeClickNut_nhan_qua_web <= 0) {
+                timeClickNut_nhan_qua_web = 0;
+                switch (nutChucNangDangChon_nhan_qua_web) {
+                    case 0: { // vàng
+                        Integer used = ApiService.useVangNapTuWeb(State_Management.getUserResponse().username,
+                            duLieuNguoiChoi.getVangNapTuWeb());
+                        if (used != null && used > 0) {
+                            duLieuNguoiChoi.tangVang(used); // cộng trực tiếp vào vàng thường
+                            State_Management.getUserResponse().vangNapTuWeb -= used;
+                            State_Management.getUserResponse().vang += used;
+                            ApiService.saveGameAsync(State_Management.getUserResponse());
+
+                            veHUD.setTinNhanPet("Bạn vừa nhận " + veHUD.formatVangNgoc(used) + " vàng", 2f);
+                            duLieuNguoiChoi.setVangNapTuWeb(duLieuNguoiChoi.getVangNapTuWeb()-used);
+                        }
+                        if (used != null && used == 0) {
+                            veHUD.setTinNhanPet("Vui lòng nạp tiền", 2f);
+                        }
+                        break;
+                    }
+                    case 1: { // ngọc
+                        Integer used = ApiService.useNgocNapTuWeb(State_Management.getUserResponse().username,
+                            duLieuNguoiChoi.getNgocNapTuWeb());
+                        if (used != null && used > 0) {
+                            duLieuNguoiChoi.tangNgoc(used); // cộng trực tiếp vào ngọc thường
+                            State_Management.getUserResponse().ngocNapTuWeb -= used;
+                            State_Management.getUserResponse().ngoc += used;
+                            ApiService.saveGameAsync(State_Management.getUserResponse());
+
+                            veHUD.setTinNhanPet("Bạn vừa nhận " + veHUD.formatVangNgoc(used) + " ngọc", 2f);
+                            duLieuNguoiChoi.setNgocNapTuWeb(duLieuNguoiChoi.getNgocNapTuWeb()-used);
+                        }
+                        if (used != null && used == 0) {
+                            veHUD.setTinNhanPet("Vui lòng nạp tiền", 2f);
+                        }
+                        break;
+                    }
+                    case 2:
+                        break;
+                }
+                trangThai = TrangThaiChucNang_admin_dungle.NONE;
             }
         }
     }

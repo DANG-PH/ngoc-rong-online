@@ -13,22 +13,58 @@ public class ApiService {
 
     public static boolean register(String username, String password) {
         try {
+            // 1. Tạo URL tới API register
+
             URL url = new URL(BASE_URL + "/register");
+            // 👉 Lúc này chỉ mới tạo 1 đối tượng URL, nó chứa đường dẫn http://localhost:8080/api/auth/register.
+            // 👉 Chưa có kết nối gì tới server cả.
+
+            // 2. Mở kết nối HTTP tới server
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            // 👉 Bắt đầu mở kết nối đến server ở địa chỉ URL trên.
+            // 👉 Giờ đây `conn` là "đường ống" để mình gửi/nhận dữ liệu với server.
+
+            // 3. Gửi dữ liệu kiểu POST (tạo mới tài khoản)
             conn.setRequestMethod("POST");
+            // 👉 Mặc định HTTP request là GET.
+            // 👉 Ở đây đổi thành POST để báo server: "Tôi sẽ gửi dữ liệu mới lên".
+            // 👉 Nếu backend không có API POST /register → sẽ báo lỗi.
+
+            // 4. Báo server biết dữ liệu gửi là JSON
             conn.setRequestProperty("Content-Type", "application/json; utf-8");
+            // 👉 Thêm 1 cái header HTTP:
+            //    Content-Type: application/json; utf-8
+            // 👉 Nghĩa là dữ liệu trong request body sẽ là JSON.
+            // 👉 Nếu không có cái này, server có thể không hiểu dữ liệu gửi lên.
+
+            // 5. Cho phép gửi dữ liệu trong request body
             conn.setDoOutput(true);
+            // 👉 Mặc định request không gửi body (chỉ GET thôi).
+            // 👉 Với POST cần gửi dữ liệu → phải bật "output mode".
+            // 👉 Sau khi bật, mình có thể lấy được OutputStream để ghi dữ liệu.
 
+            // 6. Tạo dữ liệu JSON gửi lên
             String jsonInput = String.format("{\"username\":\"%s\",\"password\":\"%s\"}", username, password);
+            // 👉 Chuẩn bị 1 chuỗi JSON, ví dụ:
+            // {"username":"DangDepTrai","password":"123456"}
+            // 👉 Tạm thời chưa gửi, chỉ mới tạo string.
 
+            // 7. Gửi dữ liệu JSON vào request body
             try (OutputStream os = conn.getOutputStream()) {
-                byte[] input = jsonInput.getBytes("utf-8");
-                os.write(input, 0, input.length);
+                byte[] input = jsonInput.getBytes("utf-8"); // 👉 Chuyển chuỗi JSON thành mảng byte (UTF-8).
+                os.write(input, 0, input.length);           // 👉 Ghi toàn bộ mảng byte này vào OutputStream.
+                // 👉 Lúc này dữ liệu JSON đã thực sự "chảy" từ client → server.
             }
+            // 👉 Sau khi đóng try-with-resources, `os` tự đóng luôn.
 
+            // 8. Kiểm tra server trả về mã 200 (OK) thì coi như đăng ký thành công
             return conn.getResponseCode() == 200;
+            // 👉 Chờ server phản hồi.
+            // 👉 Nếu server trả về "HTTP/1.1 200 OK" → hàm này trả true.
+            // 👉 Nếu server trả về lỗi (400, 500, 404, …) → hàm này trả false.
+
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace();  // 9. Nếu có lỗi thì in ra màn hình (ví dụ: không kết nối được server, JSON sai, …)
             return false;
         }
     }
@@ -164,6 +200,71 @@ public class ApiService {
                     }
                     String jsonResponse = response.toString();
                     return gson.fromJson(jsonResponse, UserResponse.class);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    public static Integer useVangNapTuWeb(String username, long amount) {
+        try {
+            URL url = new URL(BASE_URL + "/useVangNapTuWeb");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json; utf-8");
+            conn.setDoOutput(true);
+
+            JsonObject json = new JsonObject();
+            json.addProperty("username", username);
+            json.addProperty("amount", amount);
+
+            try (OutputStream os = conn.getOutputStream()) {
+                byte[] input = json.toString().getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+
+            int status = conn.getResponseCode();
+            if (status == 200) {
+                try (BufferedReader br = new BufferedReader(
+                    new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
+                    String response = br.readLine();
+                    JsonObject jsonResponse = gson.fromJson(response, JsonObject.class);
+                    return jsonResponse.get("used").getAsInt();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Integer useNgocNapTuWeb(String username, long amount) {
+        try {
+            URL url = new URL(BASE_URL + "/useNgocNapTuWeb");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json; utf-8");
+            conn.setDoOutput(true);
+
+            JsonObject json = new JsonObject();
+            json.addProperty("username", username);
+            json.addProperty("amount", amount);
+
+            try (OutputStream os = conn.getOutputStream()) {
+                byte[] input = json.toString().getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+
+            int status = conn.getResponseCode();
+            if (status == 200) {
+                try (BufferedReader br = new BufferedReader(
+                    new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
+                    String response = br.readLine();
+                    JsonObject jsonResponse = gson.fromJson(response, JsonObject.class);
+                    return jsonResponse.get("used").getAsInt();
                 }
             }
         } catch (Exception e) {

@@ -268,6 +268,15 @@ public class NpcHUDClickHandler {
                 ui.nutChucNangDangChon = 0;
             }
         }
+        if (ui.trangThai == TrangThaiChucNang_admin_dungle.NHAN_VAT_PHAM_NAP_WEB) {
+            int soNutt = 3;
+            for (int i = 0; i < soNutt; i++) {
+                if (checkChuotTrongNut(x, y, (Gdx.graphics.getWidth() - soNutt * 120) / 2f + 120*i, 5, 114, 114)) {
+                    ui.nutChucNangDangChon_nhan_qua_web = i;
+                    ui.timeClickNut_nhan_qua_web = 0.3f;
+                }
+            }
+        }
     }
 
     public static void click_thay_hieu(Npc npc, VeHUD veHUD, DuLieuNguoiChoi duLieuNguoiChoi, NhanVat nhanVat,float x, float y) {

@@ -269,6 +269,10 @@ public class DuLieuNguoiChoi {
     }
     public long getVang() { return vang; }
     public long getNgoc() { return ngoc; }
+    public long getVangNapTuWeb() { return vangNapTuWeb; }
+    public long getNgocNapTuWeb() { return ngocNapTuWeb; }
+    public void setVangNapTuWeb(long sl) { this.vangNapTuWeb = sl; }
+    public void setNgocNapTuWeb(long sl) { this.ngocNapTuWeb = sl; }
     public String getCapBac() { return capBac; }
     public int getCapSkill(int index) {
         if (index >= 0 && index < capSkill.length) {
