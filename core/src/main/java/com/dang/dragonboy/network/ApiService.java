@@ -64,7 +64,7 @@ public class ApiService {
                         response.append(line.trim());
                     }
                     String jsonResponse = response.toString();
-                    System.out.println("Server response: " + jsonResponse);
+//                    System.out.println("Server response: " + jsonResponse);
                     return gson.fromJson(jsonResponse, UserResponse.class);
                 }
             } else {
@@ -75,7 +75,7 @@ public class ApiService {
                     while ((line = br.readLine()) != null) {
                         error.append(line.trim());
                     }
-                    System.err.println("Login failed, status: " + status + ", error: " + error.toString());
+//                    System.err.println("Login failed, status: " + status + ", error: " + error.toString());
                 }
                 return null;
             }
@@ -117,7 +117,7 @@ public class ApiService {
                     while ((line = br.readLine()) != null) {
                         response.append(line.trim());
                     }
-                    System.out.println("SaveGame response: " + response.toString());
+//                    System.out.println("SaveGame response: " + response.toString());
                 }
                 return true;
             } else {
@@ -125,7 +125,7 @@ public class ApiService {
                     StringBuilder error = new StringBuilder();
                     String line;
                     while ((line = br.readLine()) != null) error.append(line.trim());
-                    System.err.println("SaveGame error: " + error.toString());
+//                    System.err.println("SaveGame error: " + error.toString());
                 }
             }
         } catch (Exception e) {
@@ -138,10 +138,37 @@ public class ApiService {
         new Thread(() -> {
             boolean success = saveGame(user);
             if (success) {
-                System.out.println("Save game async: success");
+//                System.out.println("Save game async: success");
             } else {
-                System.out.println("Save game async: failed");
+//                System.out.println("Save game async: failed");
             }
         }).start();
+    }
+
+    public static UserResponse getBalance(String username) {
+        try {
+            URL url = new URL(BASE_URL + "/balance/" + username);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setConnectTimeout(5000);
+            conn.setReadTimeout(5000);
+
+            int status = conn.getResponseCode();
+            if (status == 200) {
+                try (BufferedReader br = new BufferedReader(
+                    new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        response.append(line.trim());
+                    }
+                    String jsonResponse = response.toString();
+                    return gson.fromJson(jsonResponse, UserResponse.class);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

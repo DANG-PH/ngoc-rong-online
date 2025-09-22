@@ -38,6 +38,8 @@ public class DuLieuNguoiChoi {
     private int soDauThan;
     private long vang;
     private long ngoc;
+    private long vangNapTuWeb;
+    private long ngocNapTuWeb;
     private String capBac;
     private int[] capSkill = new int[9];  // Mặc định toàn 0
     private String[] tenSkill = new String[9];
@@ -82,7 +84,8 @@ public class DuLieuNguoiChoi {
 
     private boolean daNhanQuaTanThu = false;
 
-    private float timeCapNhatAPI = 5f;
+    private float timeCapNhatAPISaveDuLieu = 5f;
+    private float timeCapNhatAPILayDuLieuThayDoi = 5f;
 
     // Constructor
     public DuLieuNguoiChoi(String ten, long sucManh, int theLuc,
@@ -97,7 +100,7 @@ public class DuLieuNguoiChoi {
                            String capBac,int[] capSkill,String[] tenSkill,String[][] motaSkill,int capcaydau,
                            int GiamSatThuongNhanVat) {
         this.ten = ten;
-        this.sucManh = sucManh;
+        this.sucManh = State_Management.getUserResponse().sucManh;
         this.theLuc = theLuc;
         this.HpHienTai = HpHienTai;
         this.HpNhanVat = HpNhanVat;
@@ -121,6 +124,8 @@ public class DuLieuNguoiChoi {
 //        this.ngoc = ngoc;
         this.vang = State_Management.getUserResponse().vang;
         this.ngoc = State_Management.getUserResponse().ngoc;
+        this.vangNapTuWeb = State_Management.getUserResponse().vangNapTuWeb;
+        this.ngocNapTuWeb = State_Management.getUserResponse().ngocNapTuWeb;
         this.capBac = capBac;
         if (capSkill != null && capSkill.length == 9) {
             System.arraycopy(capSkill, 0, this.capSkill, 0, 9);
@@ -844,15 +849,40 @@ public class DuLieuNguoiChoi {
         }
 
         //api du lieu
-        if (timeCapNhatAPI > 0) {
-            timeCapNhatAPI -= Gdx.graphics.getDeltaTime();
-            if (timeCapNhatAPI <= 0) {
-                timeCapNhatAPI = 5f;
+        if (timeCapNhatAPISaveDuLieu > 0) {
+            timeCapNhatAPISaveDuLieu -= Gdx.graphics.getDeltaTime();
+            if (timeCapNhatAPISaveDuLieu <= 0) {
+                timeCapNhatAPISaveDuLieu = 5f;
                 UserResponse currentUser = State_Management.getUserResponse();
                 currentUser.vang = vang;
                 currentUser.ngoc = ngoc;
+                currentUser.sucManh = sucManh;
                 if (currentUser != null) {
                     ApiService.saveGameAsync(currentUser);
+                }
+            }
+        }
+
+        if (timeCapNhatAPILayDuLieuThayDoi > 0) {
+            timeCapNhatAPILayDuLieuThayDoi -= Gdx.graphics.getDeltaTime();
+            if (timeCapNhatAPILayDuLieuThayDoi <= 0) {
+                timeCapNhatAPILayDuLieuThayDoi = 5f;
+                if (State_Management.getUserResponse() != null) {
+                    UserResponse balance = ApiService.getBalance(State_Management.getUserResponse().username);
+                    if (balance != null) {
+                        if (balance.vangNapTuWeb > vangNapTuWeb) {
+                            veHUD.setTinNhanPet("Bạn vừa nạp "+veHUD.formatVangNgoc(balance.vangNapTuWeb-vangNapTuWeb)+" vàng",2f);
+                        } else if (balance.vangNapTuWeb < vangNapTuWeb) {
+                            veHUD.setTinNhanPet("Bạn vừa nhận "+veHUD.formatVangNgoc(vangNapTuWeb-balance.vangNapTuWeb)+" vàng",2f);
+                        }
+                        if (balance.ngocNapTuWeb > ngocNapTuWeb) {
+                            veHUD.setTinNhanPet("Bạn vừa nạp "+veHUD.formatVangNgoc(balance.ngocNapTuWeb-ngocNapTuWeb)+" ngọc",2f);
+                        } else if (balance.ngocNapTuWeb < ngocNapTuWeb) {
+                            veHUD.setTinNhanPet("Bạn vừa nhận "+veHUD.formatVangNgoc(ngocNapTuWeb-balance.ngocNapTuWeb)+" ngọc",2f);
+                        }
+                        vangNapTuWeb = balance.vangNapTuWeb;
+                        ngocNapTuWeb = balance.ngocNapTuWeb;
+                    }
                 }
             }
         }

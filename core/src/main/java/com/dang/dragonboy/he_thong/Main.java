@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.Texture;
 
 import com.dang.dragonboy.giao_dien_ngoai.ManHinhKhoiDong;
 import com.dang.dragonboy.giao_dien_trong.ManHinhNhaGohan;
+import com.dang.dragonboy.network.*;
+import com.dang.dragonboy.du_lieu.*;
 
 public class Main extends Game {
 
@@ -44,6 +46,13 @@ public class Main extends Game {
 
     @Override
     public void dispose() {
+        UserResponse currentUser = State_Management.getUserResponse();
+        if (currentUser != null) {
+            // Dùng bản đồng bộ để chắc chắn gửi xong trước khi JVM thoát
+            ApiService.saveGame(currentUser);
+            System.out.println("Đã lưu dữ liệu lần cuối trước khi thoát game!");
+        }
+
         if (assetManager != null) {
             assetManager.dispose();
         }

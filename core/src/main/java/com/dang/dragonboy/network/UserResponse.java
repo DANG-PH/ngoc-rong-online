@@ -13,4 +13,7 @@ public class UserResponse {
     // dữ liệu luu từ server
     public long vang;
     public long ngoc;
+    public long sucManh;
+    public long vangNapTuWeb;
+    public long ngocNapTuWeb;
 }

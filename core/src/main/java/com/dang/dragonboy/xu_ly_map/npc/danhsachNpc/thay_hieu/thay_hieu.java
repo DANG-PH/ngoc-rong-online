@@ -230,21 +230,21 @@ public class thay_hieu extends renderUInpc {
                 if (nutChucNangDangChon_pha_le_hoa == 1) soLanCuongHoa = 10;
                 else if (nutChucNangDangChon_pha_le_hoa == 2) soLanCuongHoa = 100;
                 if (nutChucNangDangChon_pha_le_hoa == 0) {
-                        Item item = danhSachItemCuongHoa.get(0);
-                        String loi = null;
-                        if (duLieuNguoiChoi.getVang() < vangNangCapTheoSao[item.getSoSaoPhaLe()])
-                            loi = "Bạn không đủ vàng";
-                        if (duLieuNguoiChoi.getNgoc() < item.getSoSaoPhaLe() + 1) loi = "Bạn không đủ ngọc";
-                        if (loi == null) {
-                            timeHienManHinhPhaLeHoa = 3.5f;
-                            trangThaiNangCap = TrangThaiChucNang_PHA_LE_HOA_TRANG_BI_thay_hieu.DANG_NANG_CAP;
-                            duLieuNguoiChoi.giamVang(vangNangCapTheoSao[item.getSoSaoPhaLe()]);
-                            duLieuNguoiChoi.giamNgoc(item.getSoSaoPhaLe() + 1);
-                        } else {
-                            veHUD.setTinNhanPet(loi, 2f);
-                        }
+                    Item item = danhSachItemCuongHoa.get(0);
+                    String loi = null;
+                    if (duLieuNguoiChoi.getVang() < vangNangCapTheoSao[item.getSoSaoPhaLe()])
+                        loi = "Bạn không đủ vàng";
+                    if (duLieuNguoiChoi.getNgoc() < item.getSoSaoPhaLe() + 1) loi = "Bạn không đủ ngọc";
+                    if (loi == null) {
+                        timeHienManHinhPhaLeHoa = 3.5f;
+                        trangThaiNangCap = TrangThaiChucNang_PHA_LE_HOA_TRANG_BI_thay_hieu.DANG_NANG_CAP;
+                        duLieuNguoiChoi.giamVang(vangNangCapTheoSao[item.getSoSaoPhaLe()]);
+                        duLieuNguoiChoi.giamNgoc(item.getSoSaoPhaLe() + 1);
+                    } else {
+                        veHUD.setTinNhanPet(loi, 2f);
+                    }
                 }
-                if (nutChucNangDangChon == 1 || nutChucNangDangChon == 2) {
+                if (nutChucNangDangChon_pha_le_hoa == 1 || nutChucNangDangChon_pha_le_hoa == 2) {
                     Item item = danhSachItemCuongHoa.get(0);
                     String loi = null;
                     if (duLieuNguoiChoi.getVang() < vangNangCapTheoSao[item.getSoSaoPhaLe()])
@@ -275,7 +275,8 @@ public class thay_hieu extends renderUInpc {
                     } else {
                         veHUD.setTinNhanPet(loi, 2f);
                     }
-                } else {
+                }
+                if (nutChucNangDangChon_pha_le_hoa == 3) {
                     trangThaiNangCap = TrangThaiChucNang_PHA_LE_HOA_TRANG_BI_thay_hieu.NONE;
                 }
             }
@@ -309,12 +310,16 @@ public class thay_hieu extends renderUInpc {
         if (timeHienManHinhPhaLeHoaX10 > 0) {
             timeHienManHinhPhaLeHoaX10 -= delta;
             if (timeHienManHinhPhaLeHoaX10 <= 2) {
-                npc.dangHienTinNhanChat = true;
-                npc.timeHienTinNhan = 2f;
-                npc.tinNhanChat = tinNhanPhaLeX10;
+                if (!daRanDom) {
+                    npc.dangHienTinNhanChat = true;
+                    npc.timeHienTinNhan = 2f;
+                    npc.tinNhanChat = tinNhanPhaLeX10;
+                    daRanDom = true;
+                }
                 if (timeHienManHinhPhaLeHoaX10 <= 0) {
                     timeHienManHinhPhaLeHoaX10 = 0;
                     trangThaiNangCap = TrangThaiChucNang_PHA_LE_HOA_TRANG_BI_thay_hieu.NONE;
+                    daRanDom = false;
                 }
             }
         }
