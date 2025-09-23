@@ -393,13 +393,12 @@ public class thay_hieu extends renderUInpc {
     public void renderDangNangCap(SpriteBatch batch) {
         if (trangThaiPhaLe != TrangThaiChucNang_PHA_LE_thay_hieu.PHA_LE_HOA_TRANG_BI || trangThaiNangCap != TrangThaiChucNang_PHA_LE_HOA_TRANG_BI_thay_hieu.DANG_NANG_CAP) return;
         batch.end();
-        veHUD.shapeRenderer.setProjectionMatrix(veHUD.camManager.uiCamera.combined);
         Gdx.gl.glEnable(GL20.GL_BLEND);
         veHUD.shapeRenderer.setColor(0f, 0f, 0f, 0.6f);
         veHUD.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         veHUD.shapeRenderer.rect(0,0,1020,610);
         veHUD.shapeRenderer.end();
-        veHUD.shapeRenderer.setProjectionMatrix(veHUD.camManager.camera.combined);
+        batch.setProjectionMatrix(veHUD.camManager.camera.combined);
         batch.begin();
         npc.ve(batch,nhanVat.thoiGianTichLuy);
         npc.timeLauLauChat = 0;
@@ -424,10 +423,13 @@ public class thay_hieu extends renderUInpc {
         }
         batch.end();
         if (veHUD.timeGlow>0) {
+            veHUD.shapeRenderer.setProjectionMatrix(veHUD.camManager.camera.combined);
             veHUD.veGlow.veGlow(veHUD.shapeRenderer,veHUD.clickX,veHUD.clickY,veHUD.timeGlow);
+            veHUD.shapeRenderer.setProjectionMatrix(veHUD.camManager.uiCamera.combined);
         }
         batch.begin();
         batch.draw(danhSachItemCuongHoa.get(0).getTexture(),xVe,npc.getY(),danhSachItemCuongHoa.get(0).getTexture().getWidth()/2f * flipScale,danhSachItemCuongHoa.get(0).getTexture().getHeight()/2f);
+        batch.setProjectionMatrix(veHUD.camManager.uiCamera.combined);
     }
 
     public boolean ranDomTangSaoPhaLeTrucTiep(Item item) {

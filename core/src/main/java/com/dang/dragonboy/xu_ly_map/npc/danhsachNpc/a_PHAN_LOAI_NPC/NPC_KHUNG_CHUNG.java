@@ -26,6 +26,7 @@ public class NPC_KHUNG_CHUNG {
         float daoDong = (float) Math.sin(nhanVat.thoiGianTichLuy) * 1.3f;
         batch.draw(npc.taiAnh.avtNpc,(Gdx.graphics.getWidth() - 600) / 2f+30,120+veHUD.layout.height+35*2+daoDong,npc.taiAnh.avtNpc.getWidth()*0.5f,npc.taiAnh.avtNpc.getHeight()*0.5f);
         batch.end();
+        veHUD.shapeRenderer.setProjectionMatrix(veHUD.camManager.uiCamera.combined);
         veHUD.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         veHUD.shapeRenderer.setColor(1, 1, 1, 1);
         veHUD.shapeRenderer.rect((Gdx.graphics.getWidth() - 600) / 2f, 120, 600, veHUD.layout.height+35*2);
