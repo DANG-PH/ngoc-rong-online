@@ -11,11 +11,17 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
+import com.dang.dragonboy.du_lieu.State_Management;
 import com.dang.dragonboy.giao_dien_ngoai.ManHinhSplash;
 import com.dang.dragonboy.he_thong.Main;
+import com.dang.dragonboy.he_thong.ThaoTac;
 import com.dang.dragonboy.he_thong.ThongTinChuyenMap;
+import com.dang.dragonboy.hien_thi.SkillNhanVat;
 import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.nhan_vat.NhanVat;
+import com.dang.dragonboy.nhan_vat.NhanVatCauHinh;
+import com.dang.dragonboy.nhan_vat.NhanVatXuLy;
 import com.dang.dragonboy.xu_ly_map.MapCoBan;
 import com.dang.dragonboy.xu_ly_map.MapDoiHoaCuc;
 import com.dang.dragonboy.hien_thi.QuanLyCamera;
@@ -57,33 +63,100 @@ public class ManHinhDoiHoaCuc implements Screen {
     public ManHinhDoiHoaCuc(Main game, ThongTinChuyenMap thongtin) {
         this.game = game;
         this.thongtin =  thongtin;
-        if ("langaru".equals(thongtin.mapTruoc)){
-            thongtin.nhanVat.datToaDo(5,175);
-            if (thongtin.hud.getDuLieuNguoiChoi().coDeTu()) {
-                thongtin.hud.getDuLieuNguoiChoi().deTu.datToaDo(5 + (thongtin.nhanVat.getFlipX() ? 50f : -50f), 175);
-            }
-            mapLangAru = thongtin.mapTr;
-        }
-        nhanVat = thongtin.nhanVat;
-        hud = thongtin.hud;
-        camManager = thongtin.camManager;
-        // Tạo map và load địa hình
-        if (thongtin.mapSau == null) {
-            map = new MapDoiHoaCuc();
-            map.taiDuLieuMap();
-        } else {
-            map = thongtin.mapSau;
-        }
-        this.rongMap = map.getChieuRongMap();
-        this.caoMap = map.getChieuCaoMap();
-        this.hud.mapHienTai = map;
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
         layout = new GlyphLayout();
+        if (thongtin != null) {
+            if ("langaru".equals(thongtin.mapTruoc)) {
+                thongtin.nhanVat.datToaDo(5, 175);
+                if (thongtin.hud.getDuLieuNguoiChoi().coDeTu()) {
+                    thongtin.hud.getDuLieuNguoiChoi().deTu.datToaDo(5 + (thongtin.nhanVat.getFlipX() ? 50f : -50f), 175);
+                }
+                mapLangAru = thongtin.mapTr;
+            }
+            nhanVat = thongtin.nhanVat;
+            hud = thongtin.hud;
+            camManager = thongtin.camManager;
+            // Tạo map và load địa hình
+            if (thongtin.mapSau == null) {
+                map = new MapDoiHoaCuc();
+                map.taiDuLieuMap();
+            } else {
+                map = thongtin.mapSau;
+            }
+            this.rongMap = map.getChieuRongMap();
+            this.caoMap = map.getChieuCaoMap();
+            this.hud.mapHienTai = map;
+        } else {
+            hud = new VeHUD(layout);
+            camManager = new QuanLyCamera();
+            NhanVatCauHinh config = Doi_avt_ao_quan(State_Management.getUserResponse().hanhTinh, State_Management.getUserResponse().nhanVat + "_base", "set_base", "set_base");
+            NhanVat haidang = new NhanVat(
+                State_Management.getUserResponse().x, State_Management.getUserResponse().y,
+                config.dau_dung, config.dau_chay,
+                config.than_dung, config.than_nhay, config.than_roi, config.than_chay,
+                config.chan_dung, config.chan_nhay, config.chan_roi, config.chan_chay,
+                config.than_bay, config.chan_bay,
+                config.chan_gong,config.than_thu,
+                config.lechMap,
+                config.avt,
+                null, null, null, null, null, null, null, null,
+                1,
+                State_Management.getUserResponse().hanhTinh, State_Management.getUserResponse().nhanVat
+            );
+            nhanVat = haidang;
+            nhanVat.setTen(State_Management.getUserResponse().tenNhanVat); // set tên nhân vật trong nhanvat.java
+            hud.setNhanVat(nhanVat);// load cái này để đổi avt theo ct
+            hud.setCamera(camManager);
+            nhanVat.setHUD(hud);
+            SkillNhanVat[] traidatIcons = loadSkillIcons("xayda");
+            hud.setSkillIcons(traidatIcons);
+            // load du lieu nguoi dung
+            int[] capSkill = new int[9];
+            for (int i = 0; i < 9; i++) {
+                capSkill[i] = nhanVat.getCapSkill(i + 1); // nếu skill 1-9
+            }
+            String[] tenSkill = new String[9];
+            for (int i = 0; i < 9; i++) {
+                tenSkill[i] = nhanVat.getTenSkill(i + 1, "xayda"); // nếu skill 1-9
+            }
+            String[][] motaSkill = new String[9][];
+            for (int i = 0; i < 9; i++) {
+                motaSkill[i] = nhanVat.getMotaSkill(i + 1, "xayda");
+            }
+            DuLieuNguoiChoi duLieu = new DuLieuNguoiChoi(
+                nhanVat.getTen(),
+                nhanVat.getSucManh(),
+                nhanVat.getTheLuc(),
+                nhanVat.getHpHienTai(), nhanVat.getHpToiDa(), nhanVat.getHpGoc(),
+                nhanVat.getKiHienTai(), nhanVat.getKiToiDa(), nhanVat.getKiGoc(),
+                nhanVat.getSucDanhGoc(), nhanVat.getGiapGoc(),
+                nhanVat.getSucDanhNhanVat(), nhanVat.getGiapNhanVat(),
+                nhanVat.getChiMangGoc(), nhanVat.getChiMangNhanVat(),
+                nhanVat.getSatThuongChiMang(),
+                nhanVat.getTiemNangNhanVat(), nhanVat.getDiemSoiDongNhanVat(),
+                nhanVat.getSoDauThan(),
+                nhanVat.getVang(),
+                nhanVat.getNgoc(),
+                nhanVat.getCapBac(),
+                capSkill, tenSkill, motaSkill,
+                nhanVat.getCapcaydau(),
+                nhanVat.getGiamSatThuongNhanVat()
+            );
+            hud.setDuLieuNguoiChoi(duLieu);
+            // Tạo map và load địa hình
+            map = new MapDoiHoaCuc();
+            map.taiDuLieuMap();
+            this.rongMap = map.getChieuRongMap();
+            this.caoMap = map.getChieuCaoMap();
+            this.hud.mapHienTai = map;
+            System.out.print("hello");
+        }
     }
 
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(new ThaoTac(nhanVat, hud,camManager));
         // Font có viền đen dành riêng cho dòng chữ "Đậu thần cấp ..."
         FreeTypeFontGenerator generator2 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchinh.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -288,7 +361,25 @@ public class ManHinhDoiHoaCuc implements Screen {
         }
     }
 
-    @Override public void resize(int width, int height) {}
+    private NhanVatCauHinh Doicaitrang(String TenCaiTrang){
+        return NhanVatXuLy.xuly_id("caitrang_"+TenCaiTrang);
+    }
+    private NhanVatCauHinh Doi_avt_ao_quan(String HanhTinh, String TenAvatar , String ao, String quan){
+        return NhanVatXuLy.xuly_id("avatar_"+HanhTinh+"+"+TenAvatar+"+"+ao+"+"+quan);
+    }
+
+    private SkillNhanVat[] loadSkillIcons(String hanhTinh) {
+        SkillNhanVat[] skillIcons = new SkillNhanVat[9];
+        for (int i = 0; i < 9; i++) {
+            String path = "kynang/iconkynang/"+hanhTinh+"/skill" + (i + 1) + "_" + hanhTinh.toLowerCase() + ".png";
+            skillIcons[i] = new SkillNhanVat(path);
+        }
+        return skillIcons;
+    }
+
+    @Override public void resize(int width, int height) {
+        camManager.resize(width, height);
+    }
     @Override public void pause() {}
     @Override public void resume() {}
     @Override public void hide() {}

@@ -42,15 +42,14 @@ import com.dang.dragonboy.xu_ly_map.npc.NpcOffset;
 
 public class ManHinhNhaGohan implements Screen {
     //quan trong
-    private Main game;
-    private NhanVat nhanVat;
-    private ShapeRenderer shapeRenderer;
-    private SpriteBatch batch;
+    private final Main game;
+    private final NhanVat nhanVat;
+    private final ShapeRenderer shapeRenderer;
+    private final SpriteBatch batch;
     private BitmapFont font, fontText , fontDauThan;
-    private GlyphLayout layout;
+    private final GlyphLayout layout;
     //camera
-    private QuanLyCamera camManager;
-    private float camYBanDau = -1;  // vẫn giữ để tính parallax
+    private final QuanLyCamera camManager;
     //canh vat , nguoi
     private Texture sky, nuixa, nui, nuicay, nuithap;
     private Texture cayco, cayco1;
@@ -74,10 +73,6 @@ public class ManHinhNhaGohan implements Screen {
 
     private Texture muiTen;
 
-    private Texture npcdau, npcthan ,npcchan;
-    private float muiTenY = 0;
-    private float muiTenGoc = 0;
-    private int muiTenX = 0, muiTenYBase = -100;
     private Texture nutdn, nutclick;
     private float thoiGianHienNutClick = 0;
     private int HanhTinhDuocChon;
@@ -173,7 +168,12 @@ public class ManHinhNhaGohan implements Screen {
                 }
                 this.mapLangAru = thongtin.mapTr;
             }
-            this.map = thongtin.mapSau;
+            if (thongtin.mapSau != null) {
+                this.map = thongtin.mapSau;
+            } else {
+                this.map = new MapNhaGohan();
+                map.taiDuLieuMap();
+            }
             if (daAnDuiGa()) {
                 map.themNpc("dui_ga", LoaiNPC.DUIGA, 1178, 205);
             }

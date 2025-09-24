@@ -17,6 +17,8 @@ import com.dang.dragonboy.giao_dien_trong.ManHinhNhaBroly;
 import com.dang.dragonboy.he_thong.Main;
 import com.dang.dragonboy.giao_dien_trong.ManHinhNhaGohan;
 import com.dang.dragonboy.he_thong.ThongTinChuyenMap;
+import com.dang.dragonboy.network.ApiService;
+import com.dang.dragonboy.network.UserResponse;
 import com.dang.dragonboy.xu_ly_map.MapDoiHoaCuc;
 import com.dang.dragonboy.xu_ly_map.MapLangAru;
 import com.dang.dragonboy.xu_ly_map.MapNhaGohan;
@@ -77,15 +79,40 @@ public class ManHinhMenu implements Screen {
 
             switch (nutDuocChon) {
                 case 0:
-                    if (!State_Management.getUserResponse().daVaoTaiKhoanLanDau) {
-                        nextScreen = new ManHinhSplash(game, new ManHinhNhaGohan(game, "admin", "traidat", "Goku", null));
-                    } else {
-                        if (State_Management.getUserResponse().mapHienTai.equals("Nhà Gôhan")) {
+                    if (State_Management.getUserResponse() != null) {
+                        if (!State_Management.getUserResponse().daVaoTaiKhoanLanDau) {
                             nextScreen = new ManHinhSplash(game, new ManHinhNhaGohan(game, "admin", "traidat", "Goku", null));
-                        } else if (State_Management.getUserResponse().mapHienTai.equals("Làng Aru")) {
-                            nextScreen = (new ManHinhSplash(game, new ManHinhLangAru(game, null)));
-                        } else if (State_Management.getUserResponse().mapHienTai.equals("Đồi Hoa Cúc")) {
-                            nextScreen = (new ManHinhSplash(game, new ManHinhDoiHoaCuc(game, null)));
+                        } else {
+                            if (State_Management.getUserResponse().mapHienTai.equals("Nhà Gôhan")) {
+                                nextScreen = new ManHinhSplash(game, new ManHinhNhaGohan(game, "admin", "traidat", "Goku", null));
+                            } else if (State_Management.getUserResponse().mapHienTai.equals("Làng Aru")) {
+                                nextScreen = (new ManHinhSplash(game, new ManHinhLangAru(game, null)));
+                            } else if (State_Management.getUserResponse().mapHienTai.equals("Đồi Hoa Cúc")) {
+                                nextScreen = (new ManHinhSplash(game, new ManHinhDoiHoaCuc(game, null)));
+                            }
+                        }
+                    } else {
+                        UserResponse user = ApiService.login("ad", "1");
+                        if (user != null) {
+                            System.out.println("Đăng nhập thành công!");
+                            // Truy cập dữ liệu backend trả về
+
+                            State_Management.setUserResponse(user);
+                            System.out.println("x: "+State_Management.getUserResponse().x+", y: "+State_Management.getUserResponse().y);
+                            game.setScreen(new ManHinhMenu(game, null));
+                        } else {
+                            System.out.println("Đăng nhập thất bại!");
+                        }
+                        if (!State_Management.getUserResponse().daVaoTaiKhoanLanDau) {
+                            nextScreen = new ManHinhSplash(game, new ManHinhNhaGohan(game, "admin", "traidat", "Goku", null));
+                        } else {
+                            if (State_Management.getUserResponse().mapHienTai.equals("Nhà Gôhan")) {
+                                nextScreen = new ManHinhSplash(game, new ManHinhNhaGohan(game, "admin", "traidat", "Goku", null));
+                            } else if (State_Management.getUserResponse().mapHienTai.equals("Làng Aru")) {
+                                nextScreen = (new ManHinhSplash(game, new ManHinhLangAru(game, null)));
+                            } else if (State_Management.getUserResponse().mapHienTai.equals("Đồi Hoa Cúc")) {
+                                nextScreen = (new ManHinhSplash(game, new ManHinhDoiHoaCuc(game, null)));
+                            }
                         }
                     }
                     break;

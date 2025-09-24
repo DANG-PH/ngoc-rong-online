@@ -266,7 +266,7 @@ public class admin_dungle extends renderUInpc {
 
         NPC_KHUNG_CHUNG.renderKhungNpc(npc,veHUD,nhanVat,batch,text,fontVeKhung);
 
-        String[] textDung = new String[] {"Hiện có\n"+duLieuNguoiChoi.getVangNapTuWeb()+"\nvàng","Hiện có\n"+duLieuNguoiChoi.getNgocNapTuWeb()+"\nngọc","Quay lại"};
+        String[] textDung = new String[] {"Hiện có\n"+veHUD.formatVangNgoc(duLieuNguoiChoi.getVangNapTuWeb())+"\nvàng","Hiện có\n"+veHUD.formatVangNgoc(duLieuNguoiChoi.getNgocNapTuWeb())+"\nngọc","Quay lại"};
         NPC_KHUNG_CHUNG.renderKhungNut(npc,veHUD,batch,textDung,nutChucNangDangChon_nhan_qua_web,timeClickNut_nhan_qua_web);
     }
 
