@@ -381,6 +381,7 @@ public class Npc {
             case "admin_thanhle" -> tenTiengVietNpc = "Admin Thành Lê";
             case "admin_dungle" -> tenTiengVietNpc = "Admin Dũng Lê";
             case "thay_hieu" -> tenTiengVietNpc = "Thầy Hiếu";
+            case "admin_huykhoi" -> tenTiengVietNpc = "Admin Huy Khôi";
             case "dau_traidat_1" -> tenTiengVietNpc = "Đậu thần cấp 1";
             case "dau_traidat_2" -> tenTiengVietNpc = "Đậu thần cấp 2";
             case "dau_traidat_3" -> tenTiengVietNpc = "Đậu thần cấp 3";

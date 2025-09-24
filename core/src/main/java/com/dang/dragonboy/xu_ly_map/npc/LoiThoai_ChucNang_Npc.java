@@ -24,6 +24,7 @@ public class LoiThoai_ChucNang_Npc {
         LOITHOAI_NGOAI_DATA.put("admin_dungle",new String[] {"Bạn muốn nhận quà?","Có điều gì đó chờ đợi bạn ở đây...","Chúc một ngày tốt lành..."});
         LOITHOAI_NGOAI_DATA.put("admin_thanhle",new String[] {"Thứ ngươi thiếu, chính là sức mạnh nơi đây...", "Trang bị tốt, hành trình bền...", "Vật trong tay, mệnh trong người...",} );
         LOITHOAI_NGOAI_DATA.put("thay_hieu", new String[] {"Học OOP chưa? Hay lại chơi game tiếp?","Đừng để class thành God Class nhé","Học viện công nghệ bưu chính viễn thông","Kế thừa giúp tái sử dụng" ,"Đa hình giúp mở rộng","Trừu tượng giúp đơn giản hóa vấn đề","Đóng gói giúp bảo vệ dữ liệu"});
+        LOITHOAI_NGOAI_DATA.put("admin_huykhoi", new String[] {"Sách quý, kỹ năng hiếm, ngươi dám thử không?","Ngươi muốn biết chiêu hay tuyệt diệu nào?"});
         LOITHOAI_NGOAI_DATA.put("vua_vegeta", new String[] {"null"});
     }
 
