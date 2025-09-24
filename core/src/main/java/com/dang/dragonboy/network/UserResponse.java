@@ -16,4 +16,14 @@ public class UserResponse {
     public long sucManh;
     public long vangNapTuWeb;
     public long ngocNapTuWeb;
+
+    public float x;
+    public float y;
+    public String mapHienTai;
+
+    public boolean daVaoTaiKhoanLanDau;
+
+    public String hanhTinh = "traidat";
+    public String nhanVat = "Goku";
+    public String tenNhanVat = "admin";
 }

@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Align;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
+import com.dang.dragonboy.du_lieu.State_Management;
 import com.dang.dragonboy.du_lieu.TrangThaiDeTu;
 import com.dang.dragonboy.nhan_vat.van_bay.VanBayCauHinh;
 import com.dang.dragonboy.hien_thi.VeHUD;
@@ -962,8 +963,8 @@ public class NhanVat {
                    Texture than_bay,Texture chan_bay,Texture chan_gong, Texture than_thu, Map<TrangThai, List<DoLechModular>> lechTheoTrangThai,String avt,
                    Texture ao, Texture quan, Texture gang, Texture giay, Texture rada, Texture iconct, Texture giaplt, Texture vanbay,
                    int capcaydau, String hanhtinh, String nhanvat) {
-        this.x = x;
-        this.y = y;
+        this.x = State_Management.getUserResponse().x;
+        this.y = State_Management.getUserResponse().y;
 
         this.avt = avt;
         this.ao = ao;

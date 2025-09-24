@@ -861,6 +861,9 @@ public class DuLieuNguoiChoi {
                 currentUser.vang = vang;
                 currentUser.ngoc = ngoc;
                 currentUser.sucManh = sucManh;
+                currentUser.mapHienTai = veHUD.layTenMap();
+                currentUser.x = nhanVat.getX();
+                currentUser.y = nhanVat.getY();
                 if (currentUser != null) {
                     ApiService.saveGameAsync(currentUser);
                 }

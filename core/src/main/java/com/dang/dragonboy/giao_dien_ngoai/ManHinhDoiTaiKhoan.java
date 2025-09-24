@@ -165,6 +165,7 @@ public class ManHinhDoiTaiKhoan implements Screen {
                         // Truy cập dữ liệu backend trả về
 
                         State_Management.setUserResponse(user);
+                        System.out.println("x: "+State_Management.getUserResponse().x+", y: "+State_Management.getUserResponse().y);
                         game.setScreen(new ManHinhMenu(game, null));
                     } else {
                         System.out.println("Đăng nhập thất bại!");

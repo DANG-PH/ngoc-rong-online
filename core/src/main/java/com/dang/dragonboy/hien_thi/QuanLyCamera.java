@@ -23,6 +23,7 @@ public class QuanLyCamera {
     public QuanLyCamera() {
         // Camera chính
         camera = new OrthographicCamera();
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
         camera.update();
 

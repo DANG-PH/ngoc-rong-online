@@ -90,19 +90,19 @@ public class ManHinhNhaGohan implements Screen {
     //HUD
     private VeHUD hudRenderer;
 
-    public ManHinhNhaGohan(Main game , String tenNhanVat, String hanhtinh , String nhanvat, ThongTinChuyenMap info) {
+    public ManHinhNhaGohan(Main game , String tenNhanVat, String hanhtinh , String nhanvat, ThongTinChuyenMap thongtin) {
         this.game = game;
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
-        if (info==null) {
+        if (thongtin==null) {
             camManager = new QuanLyCamera();
         } else {
-            camManager = info.camManager;
+            camManager = thongtin.camManager;
         }
 
         layout = new GlyphLayout();
 
-        if (info == null) {
+        if (thongtin == null) {
             hudRenderer = new VeHUD(layout);
             // load skill + thuộc tính nhân vật
             //NhanVatCauHinh config = Doi_avt_ao_quan(hanhtinh,nhanvat+"_base","set_cam","set_cam") ;
@@ -164,16 +164,16 @@ public class ManHinhNhaGohan implements Screen {
             map = new MapNhaGohan();
             map.taiDuLieuMap();
         } else {
-            this.hudRenderer = info.hud;
-            this.nhanVat = info.nhanVat;
-            if ("langaru".equals(info.mapTruoc)){
-                info.nhanVat.datToaDo(875,175);
-                if (info.hud.getDuLieuNguoiChoi().coDeTu()) {
-                    info.hud.getDuLieuNguoiChoi().deTu.datToaDo(875 + (nhanVat.getFlipX() ? 50f : -50f), 175);
+            this.hudRenderer = thongtin.hud;
+            this.nhanVat = thongtin.nhanVat;
+            if ("langaru".equals(thongtin.mapTruoc)){
+                thongtin.nhanVat.datToaDo(875,175);
+                if (thongtin.hud.getDuLieuNguoiChoi().coDeTu()) {
+                    thongtin.hud.getDuLieuNguoiChoi().deTu.datToaDo(875 + (nhanVat.getFlipX() ? 50f : -50f), 175);
                 }
-                this.mapLangAru = info.mapTr;
+                this.mapLangAru = thongtin.mapTr;
             }
-            this.map = info.mapSau;
+            this.map = thongtin.mapSau;
             if (daAnDuiGa()) {
                 map.themNpc("dui_ga", LoaiNPC.DUIGA, 1178, 205);
             }

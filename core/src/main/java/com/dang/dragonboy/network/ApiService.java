@@ -131,6 +131,10 @@ public class ApiService {
             json.addProperty("username", user.username);
             json.addProperty("vang", user.vang);
             json.addProperty("ngoc", user.ngoc);
+            json.addProperty("sucManh", user.sucManh);
+            json.addProperty("mapHienTai", user.mapHienTai);
+            json.addProperty("x",user.x);
+            json.addProperty("y",user.y);
 
             String jsonInput = gson.toJson(json);
 

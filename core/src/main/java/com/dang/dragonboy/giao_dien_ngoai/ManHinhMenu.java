@@ -77,16 +77,15 @@ public class ManHinhMenu implements Screen {
 
             switch (nutDuocChon) {
                 case 0:
-                    if (State_Management.getNhanVat() == null) {
+                    if (!State_Management.getUserResponse().daVaoTaiKhoanLanDau) {
                         nextScreen = new ManHinhSplash(game, new ManHinhNhaGohan(game, "admin", "traidat", "Goku", null));
                     } else {
-                        ThongTinChuyenMap info = new ThongTinChuyenMap(State_Management.getDuLieuNguoiChoi(),State_Management.getNhanVat(), null,State_Management.getVeHUD(),State_Management.getVeHUD().camManager,null, State_Management.getVeHUD().mapHienTai);
-                        if (State_Management.getVeHUD().mapHienTai instanceof MapNhaGohan) {
-                            game.setScreen(new ManHinhSplash(game, new ManHinhNhaGohan(game,State_Management.getNhanVat().getTen(),State_Management.getNhanVat().getHanhtinh(),State_Management.getNhanVat().getNhanvat(),info)));
-                        } else if (State_Management.getVeHUD().mapHienTai instanceof MapLangAru) {
-                            game.setScreen(new ManHinhSplash(game, new ManHinhLangAru(game, info)));
-                        } else if (State_Management.getVeHUD().mapHienTai instanceof MapDoiHoaCuc) {
-                            game.setScreen(new ManHinhSplash(game, new ManHinhDoiHoaCuc(game, info)));
+                        if (State_Management.getUserResponse().mapHienTai.equals("Nhà Gôhan")) {
+                            nextScreen = new ManHinhSplash(game, new ManHinhNhaGohan(game, "admin", "traidat", "Goku", null));
+                        } else if (State_Management.getUserResponse().mapHienTai.equals("Làng Aru")) {
+                            nextScreen = (new ManHinhSplash(game, new ManHinhLangAru(game, null)));
+                        } else if (State_Management.getUserResponse().mapHienTai.equals("Đồi Hoa Cúc")) {
+                            nextScreen = (new ManHinhSplash(game, new ManHinhDoiHoaCuc(game, null)));
                         }
                     }
                     break;
