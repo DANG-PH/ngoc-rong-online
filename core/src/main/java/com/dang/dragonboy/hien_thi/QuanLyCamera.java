@@ -6,8 +6,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class QuanLyCamera {
-    private float camYBanDau = -1f;
-    private float camXBanDau = -1f;
+    private float camYBanDau = 305f;
+    private float camXBanDau = 510f;
     public OrthographicCamera camera;
     public Viewport viewport;
 
@@ -40,15 +40,9 @@ public class QuanLyCamera {
         uiCamera.setToOrtho(false, width, height); // Đảm bảo gốc tọa độ vẫn ở góc trái dưới khi resize
     }
     public float getOffsetY() {
-        if (camYBanDau < 0) {
-            camYBanDau = camera.position.y;
-        }
         return camera.position.y - camYBanDau;
     }
     public float getOffsetX() {
-        if (camXBanDau < 0) {
-            camXBanDau = camera.position.x;
-        }
         return camera.position.x - camXBanDau;
     }
 

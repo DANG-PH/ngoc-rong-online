@@ -2242,12 +2242,16 @@ public class VeHUD {
                     case "skill4_de_khi":
                         if (!duLieuNguoiChoi.coDeTu()) {
                             setTinNhanPet("Bạn chưa có đệ tử", 2f);
+                            DangHienPopupThongTin1 = false;
+                            TimeChoHienPopup = 0;
                             return;
                         }
 
                         long sucManhYeuCau = 20_000_000_000L;
                         if (duLieuNguoiChoi.deTu.getSucManh() < sucManhYeuCau) {
                             setTinNhanPet("Đệ tử chưa đủ sức mạnh", 2f);
+                            DangHienPopupThongTin1 = false;
+                            TimeChoHienPopup = 0;
                             return;
                         }
 
@@ -2256,11 +2260,19 @@ public class VeHUD {
 
                         if (!"Biến hình".equals(skill)) {
                             duLieuNguoiChoi.deTu.setSkillDeTu(4, "Biến hình");
+                            itemm.giamSoLuong(1);
+                            if (itemm.getSoLuong() == 0) {
+                                duLieuNguoiChoi.getHanhTrang().remove(itemm);
+                            }
+                            DangHienPopupThongTin1 = false;
+                            TimeChoHienPopup = 0;
                             return;
                         }
 
                         if (capSkill < 7) {
                             setTinNhanPet("Kỹ năng biến hình đệ tử cần đạt cấp 7", 2f);
+                            DangHienPopupThongTin1 = false;
+                            TimeChoHienPopup = 0;
                             return;
                         }
 
@@ -2271,6 +2283,8 @@ public class VeHUD {
                                 duLieuNguoiChoi.getHanhTrang().remove(itemm);
                             }
                             setTinNhanPet("Kỹ năng đệ tử đã đạt cấp tối đa", 2f);
+                            DangHienPopupThongTin1 = false;
+                            TimeChoHienPopup = 0;
                             return;
                         }
 // Nếu > 7
