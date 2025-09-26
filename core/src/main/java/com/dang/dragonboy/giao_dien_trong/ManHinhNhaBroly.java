@@ -167,7 +167,7 @@ public class ManHinhNhaBroly implements Screen {
             config.chan_gong,config.than_thu,
             config.lechMap,
             config.avt,
-            null,null,null,null,null,null,null,config.vanbay,
+            null,null,null,null,null,null,null,null,
             6,
             hanhtinh,nhanvat
         );

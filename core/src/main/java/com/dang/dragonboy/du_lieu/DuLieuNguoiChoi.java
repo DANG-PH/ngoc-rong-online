@@ -1,6 +1,6 @@
 package com.dang.dragonboy.du_lieu;
 import java.util.ArrayList;
-
+import com.google.gson.Gson;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.dang.dragonboy.item.Item;
@@ -1014,4 +1014,35 @@ public class DuLieuNguoiChoi {
         }
         return loi;
     }
+
+
+    // Helper: chuyển từ Item trong game -> ItemCanLuu để gửi lên backend
+    public ItemCanLuu convertItem(Item item, String viTri) {
+        if (item == null) return null;
+
+        ItemCanLuu itemDB = new ItemCanLuu();
+        itemDB.maItem = item.getId() == null ? "" : item.getId();
+        itemDB.ten = item.getTenItem() == null ? "" : item.getTenItem();
+        itemDB.moTa = item.getMoTa() == null ? "" : item.getMoTa();
+        itemDB.loai = item.getLoaiDB() == null ? "" : item.getLoaiDB();
+
+        itemDB.soLuong = item.getSoLuong();
+        itemDB.hanhTinh = item.getHanhtinh() == null ? "" : item.getHanhtinh();
+        itemDB.setKichHoat = item.getSetkichhoat() == null ? null : item.getSetkichhoat();
+
+        itemDB.soSaoPhaLe = item.getSoSaoPhaLe();
+        itemDB.soSaoPhaLeCuongHoa = item.getSoSaoPhaLeCuongHoa();
+        itemDB.soCap = item.getSoCap();
+
+        itemDB.hanSuDung = item.getHanSuDung();
+        itemDB.sucManhYeuCau = item.getSucManhYeuCau();
+
+        itemDB.linkTexture = item.getLinkTexture() == null ? "" : item.getLinkTexture();
+        Gson gson = new Gson();
+        itemDB.chiso = gson.toJson(item.getChiso());
+
+        itemDB.viTri = viTri;
+        return itemDB;
+    }
+
 }

@@ -12,13 +12,10 @@ public class State_Management {
     private static VeHUD veHUD = null;
     private static NhanVat nhanVat = null;
 
-    public static void setDuLieuStateManagement(UserResponse userResponsee,String tenTaiKhoann, NhanVat nhanvatt, VeHUD veHUDD,DuLieuNguoiChoi duLieuNguoiChoii, boolean dangDangNhapp) {
+    public static void setDuLieuStateManagement(NhanVat nhanvatt, VeHUD veHUDD,DuLieuNguoiChoi duLieuNguoiChoii) {
         duLieuNguoiChoi = duLieuNguoiChoii;
         veHUD = veHUDD;
         nhanVat = nhanvatt;
-        dangDangNhap = dangDangNhapp;
-        tenTaiKhoan = tenTaiKhoann;
-        userResponse = userResponsee;
     }
 
     public static void setUserResponse(UserResponse userResponsee) {

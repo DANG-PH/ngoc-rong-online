@@ -752,7 +752,7 @@ public class admin_haidang extends renderUInpc {
             if (timeChoMuaItemVip <= 0 && tongVeVip > 0) {
                 duLieuNguoiChoi.themItemVaoHanhTrang(new Item(
                     "ve_quay_npc_haidang", "Vé quay Rồng Thần", LoaiItem.VE_QUAY_NPC_HAIDANG,
-                    new Texture("vatpham/vatphamgame/ve_quay_npc_haidang/vequay.png"),
+                   "vatpham/vatphamgame/ve_quay_npc_haidang/vequay.png",
                     "Vé quay ẩn chứa tiềm năng vô hạn. Cần gặp NPC Admin Hải Đăng để sử dụng và có cơ hội nhận những phần thưởng hiếm và nhiều phần quà giá trị khác",
                     tongVeVip,
                     new int[13],

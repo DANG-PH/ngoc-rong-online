@@ -8,6 +8,8 @@ import com.dang.dragonboy.giao_dien_ngoai.ManHinhKhoiDong;
 import com.dang.dragonboy.giao_dien_trong.ManHinhNhaGohan;
 import com.dang.dragonboy.network.*;
 import com.dang.dragonboy.du_lieu.*;
+import java.util.*;
+import com.dang.dragonboy.item.*;
 
 public class Main extends Game {
 
@@ -48,7 +50,57 @@ public class Main extends Game {
     public void dispose() {
         UserResponse currentUser = State_Management.getUserResponse();
         if (currentUser != null) {
-            // Dùng bản đồng bộ để chắc chắn gửi xong trước khi JVM thoát
+            String username = currentUser.username;
+
+            // Gom danh sách tất cả item
+            List<ItemCanLuu> allItems = new ArrayList<>();
+
+            // Thêm tất cả item từ các danh sách vào allItems
+            if (State_Management.getDuLieuNguoiChoi() != null) {
+                DuLieuNguoiChoi duLieu = State_Management.getDuLieuNguoiChoi();
+
+                // Hành trang
+                if (duLieu.getHanhTrang() != null) {
+                    for (Item item : duLieu.getHanhTrang()) {
+                        ItemCanLuu converted = State_Management.getDuLieuNguoiChoi().convertItem(item, "hanhtrang");
+                        if (converted != null) allItems.add(converted);
+                    }
+                }
+
+                // Hành trang đang mặc
+                if (duLieu.getHanhTrangDangMac() != null) {
+                    for (Item item : duLieu.getHanhTrangDangMac()) {
+                        ItemCanLuu converted = State_Management.getDuLieuNguoiChoi().convertItem(item, "hanhtrangdangmac");
+                        if (converted != null) allItems.add(converted);
+                    }
+                }
+
+                // Rương đồ
+                if (duLieu.getHanhTrangRuongDo() != null) {
+                    for (Item item : duLieu.getHanhTrangRuongDo()) {
+                        ItemCanLuu converted = State_Management.getDuLieuNguoiChoi().convertItem(item, "ruongdo");
+                        if (converted != null) allItems.add(converted);
+                    }
+                }
+
+                // Hành trang đệ tử
+                if (duLieu.coDeTu() && duLieu.deTu != null && duLieu.deTu.getHanhTrangDangMac() != null) {
+                    for (Item item : duLieu.deTu.getHanhTrangDangMac()) {
+                        ItemCanLuu converted = State_Management.getDuLieuNguoiChoi().convertItem(item, "hanhtrangdetu");
+                        if (converted != null) allItems.add(converted);
+                    }
+                }
+            }
+
+            // Gửi lên backend
+            boolean success = ApiItemService.saveItems(State_Management.getUserResponse().username, allItems);
+            if (success) {
+                System.out.println("Đã lưu toàn bộ item của user " + State_Management.getUserResponse().username + " thành công!");
+            } else {
+                System.err.println("Lỗi khi lưu item cho user " + State_Management.getUserResponse().username);
+            }
+
+            // Lưu dữ liệu user cuối
             ApiService.saveGame(currentUser);
             System.out.println("Đã lưu dữ liệu lần cuối trước khi thoát game!");
         }

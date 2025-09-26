@@ -165,20 +165,18 @@ public class HUDPopupRenderer {
             Gdx.gl.glScissor(0, (int)viewY, 350, (int)viewHeight);
             // Vị trí bắt đầu vẽ từ trên xuống
             float startY = viewY + viewHeight - KhoangCachItem + veHUD.scrollYPhai;
-            Texture[] itemNhanVat = {
-                veHUD.ao,veHUD.quan,veHUD.gang,veHUD.giay,veHUD.rada,veHUD.iconct,veHUD.giaplt,veHUD.vanbay
-            };
+
             ArrayList<Item> danhSachDangMac = duLieuNguoiChoi.getHanhTrangDangMac();
             for (int i = 0; i < soTrangBi; i++) {
                 Item item = danhSachDangMac.get(i);
                 float y = startY - i * KhoangCachItem;
                 Texture tex = (veHUD.hangTrangDangChon == i) ? veHUD.hanh_trang_dang_mac_click : veHUD.hanh_trang_dang_mac;
                 batch.draw(tex, 3, y, 344, 50);
-                if (itemNhanVat[i]!=null){
-                    if (itemNhanVat[i].getHeight()*0.5f < 60 && itemNhanVat[i].getWidth()*0.5f < 100) {
-                        batch.draw(itemNhanVat[i], 3 + (70 - itemNhanVat[i].getWidth() * 0.5f) / 2f, y + (49 - itemNhanVat[i].getHeight() * 0.5f) / 2f, itemNhanVat[i].getWidth() * 0.5f, itemNhanVat[i].getHeight() * 0.5f);
+                if (item != null){
+                    if (item.getTexture().getHeight()*0.5f < 60 && item.getTexture().getWidth()*0.5f < 100) {
+                        batch.draw(item.getTexture(), 3 + (70 - item.getTexture().getWidth() * 0.5f) / 2f, y + (49 - item.getTexture().getHeight() * 0.5f) / 2f, item.getTexture().getWidth() * 0.5f, item.getTexture().getHeight() * 0.5f);
                     } else {
-                        batch.draw(itemNhanVat[i], 3 + (70 - itemNhanVat[i].getWidth() * 0.38f) / 2f, y + (49 - itemNhanVat[i].getHeight() * 0.38f) / 2f, itemNhanVat[i].getWidth() * 0.38f, itemNhanVat[i].getHeight() * 0.38f);
+                        batch.draw(item.getTexture(), 3 + (70 - item.getTexture().getWidth() * 0.38f) / 2f, y + (49 - item.getTexture().getHeight() * 0.38f) / 2f, item.getTexture().getWidth() * 0.38f, item.getTexture().getHeight() * 0.38f);
                     }
                 }
                 String[] chisoduoccong = {"HP", "KI", "SD", "Chí mạng","Giáp", "ST Crit", "HP", "KI", "Sức đánh", "HP", "KI", "Sức đánh", "Giảm sát thương"};
@@ -1172,20 +1170,18 @@ public class HUDPopupRenderer {
                 Gdx.gl.glScissor(1020 - 350, (int) viewY, 350, (int) viewHeight);
                 // Vị trí bắt đầu vẽ từ trên xuống
                 float startY = viewY + viewHeight - KhoangCachItem + veHUD.scrollYPhai;
-                Texture[] itemNhanVat = {
-                    veHUD.ao, veHUD.quan, veHUD.gang, veHUD.giay, veHUD.rada, veHUD.iconct, veHUD.giaplt, veHUD.vanbay
-                };
+
                 ArrayList<Item> danhSachDangMac = duLieuNguoiChoi.getHanhTrangDangMac();
                 for (int i = 0; i < soTrangBi; i++) {
                     Item item = danhSachDangMac.get(i);
                     float y = startY - i * KhoangCachItem;
                     Texture tex = (veHUD.hangTrangDangChon == i) ? veHUD.hanh_trang_dang_mac_click : veHUD.hanh_trang_dang_mac;
                     batch.draw(tex, 3 + 1020 - 350, y, 344, 50);
-                    if (itemNhanVat[i] != null) {
-                        if (itemNhanVat[i].getHeight() * 0.5f < 60 && itemNhanVat[i].getWidth() * 0.5f < 100) {
-                            batch.draw(itemNhanVat[i], 3 + (70 - itemNhanVat[i].getWidth() * 0.5f) / 2f + 1020 - 350, y + (49 - itemNhanVat[i].getHeight() * 0.5f) / 2f, itemNhanVat[i].getWidth() * 0.5f, itemNhanVat[i].getHeight() * 0.5f);
+                    if (item != null) {
+                        if (item.getTexture().getHeight() * 0.5f < 60 && item.getTexture().getWidth() * 0.5f < 100) {
+                            batch.draw(item.getTexture(), 3 + (70 - item.getTexture().getWidth() * 0.5f) / 2f + 1020 - 350, y + (49 - item.getTexture().getHeight() * 0.5f) / 2f, item.getTexture().getWidth() * 0.5f, item.getTexture().getHeight() * 0.5f);
                         } else {
-                            batch.draw(itemNhanVat[i], 3 + (70 - itemNhanVat[i].getWidth() * 0.38f) / 2f + 1020 - 350, y + (49 - itemNhanVat[i].getHeight() * 0.38f) / 2f, itemNhanVat[i].getWidth() * 0.38f, itemNhanVat[i].getHeight() * 0.38f);
+                            batch.draw(item.getTexture(), 3 + (70 - item.getTexture().getWidth() * 0.38f) / 2f + 1020 - 350, y + (49 - item.getTexture().getHeight() * 0.38f) / 2f, item.getTexture().getWidth() * 0.38f, item.getTexture().getHeight() * 0.38f);
                         }
                     }
                     String[] chisoduoccong = {"HP", "KI", "SD", "Chí mạng", "Giáp", "ST Crit", "HP", "KI", "Sức đánh", "HP", "KI", "Sức đánh", "Giảm sát thương"};
@@ -1451,20 +1447,18 @@ public class HUDPopupRenderer {
                     Gdx.gl.glScissor(0, (int) viewY, 350, (int) viewHeight);
                     // Vị trí bắt đầu vẽ từ trên xuống
                     float startYDeTu = viewY + viewHeight - KhoangCachItemDeTu + veHUD.scrollYTrai;
-                    Texture[] itemDeTu = {
-                        veHUD.aoDeTu, veHUD.quanDeTu, veHUD.gangDeTu, veHUD.giayDeTu, veHUD.radaDeTu, veHUD.iconctDeTu
-                    };
+
                     ArrayList<Item> danhSachDeTuDangMac = duLieuNguoiChoi.deTu.getHanhTrangDangMac();
                     for (int i = 0; i < soTrangBiDeTu; i++) {
                         Item item = danhSachDeTuDangMac.get(i);
                         float y = startYDeTu - i * KhoangCachItemDeTu;
                         Texture tex = (veHUD.hangTrangDeTuDangChon == i) ? veHUD.hanh_trang_dang_mac_click : veHUD.hanh_trang_dang_mac;
                         batch.draw(tex, 3, y, 344, 62);
-                        if (itemDeTu[i] != null) {
-                            if (itemDeTu[i].getHeight() * 0.5f < 60 && itemDeTu[i].getWidth() * 0.5f < 100f) {
-                                batch.draw(itemDeTu[i], 3 + (70 - itemDeTu[i].getWidth() * 0.5f) / 2f, y + (61 - itemDeTu[i].getHeight() * 0.5f) / 2f, itemDeTu[i].getWidth() * 0.5f, itemDeTu[i].getHeight() * 0.5f);
+                        if (item != null) {
+                            if (item.getTexture().getHeight() * 0.5f < 60 && item.getTexture().getWidth() * 0.5f < 100f) {
+                                batch.draw(item.getTexture(), 3 + (70 - item.getTexture().getWidth() * 0.5f) / 2f, y + (61 - item.getTexture().getHeight() * 0.5f) / 2f, item.getTexture().getWidth() * 0.5f, item.getTexture().getHeight() * 0.5f);
                             } else {
-                                batch.draw(itemDeTu[i], 3 + (70 - itemDeTu[i].getWidth() * 0.38f) / 2f, y + (61 - itemDeTu[i].getHeight() * 0.38f) / 2f, itemDeTu[i].getWidth() * 0.38f, itemDeTu[i].getHeight() * 0.38f);
+                                batch.draw(item.getTexture(), 3 + (70 - item.getTexture().getWidth() * 0.38f) / 2f, y + (61 - item.getTexture().getHeight() * 0.38f) / 2f, item.getTexture().getWidth() * 0.38f, item.getTexture().getHeight() * 0.38f);
                             }
                         }
                         String[] chisoduoccong = {"HP", "KI", "SD", "Chí mạng", "Giáp", "ST Crit", "HP", "KI", "Sức đánh", "HP", "KI", "Sức đánh", "Giảm sát thương"};

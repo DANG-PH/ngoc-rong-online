@@ -272,14 +272,14 @@ public class admin_thanhle extends renderUInpc {
     public void themItemVaoDanhSachDacBiet() {
         danhSachItemDacBiet.add(new Item(
             "bongtaic1", "Bông tai Porata", LoaiItem.BONGTAI,
-            new Texture("vatpham/vatphamgame/bongtai/bongtaic1.png"),
+            "vatpham/vatphamgame/bongtai/bongtaic1.png",
             "Sử dụng để hợp thể với đệ tử", 1,
             new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
             "all", 1500000L, null, 0, 0, 0, -1
         ));
         danhSachItemDacBiet.add(new Item(
             "glt_c1", "Giáp luyện tập cấp 1", LoaiItem.GIAPLUYENTAP,
-            new Texture("vatpham/vatphamgame/giapluyentap/gltc1.png"),
+            "vatpham/vatphamgame/giapluyentap/gltc1.png",
             "Khi mặc vào sẽ tích lũy thời gian luyện tập, khi cởi ra nếu sẽ tăng sức đánh 10% và Crit 15%, ST Crit 30%", 1,
             new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
             "all", 10_000_000L, null, 0, 0, 0, 0

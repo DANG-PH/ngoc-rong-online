@@ -37,7 +37,7 @@ public class NhanVat {
 
     // Ảnh các phần
     private String avt;
-    public Texture ao,quan,gang,giay,rada,iconct,giaplt,vanbay;
+    public String ao,quan,gang,giay,rada,iconct,giaplt,vanbay;
     private Texture avtTexture; // ảnh cache
     private Texture dau_dung, dau_chay;
     private Texture than_dung, than_nhay, than_roi;
@@ -961,7 +961,7 @@ public class NhanVat {
                    Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,
                    Texture chan_dung, Texture chan_nhay, Texture chan_roi, Texture[] chan_chay,
                    Texture than_bay,Texture chan_bay,Texture chan_gong, Texture than_thu, Map<TrangThai, List<DoLechModular>> lechTheoTrangThai,String avt,
-                   Texture ao, Texture quan, Texture gang, Texture giay, Texture rada, Texture iconct, Texture giaplt, Texture vanbay,
+                   String ao, String quan, String gang, String giay, String rada, String iconct, String giaplt, String vanbay,
                    int capcaydau, String hanhtinh, String nhanvat) {
         this.x = State_Management.getUserResponse().x;
         this.y = State_Management.getUserResponse().y;
@@ -2224,16 +2224,6 @@ public class NhanVat {
         for (Texture t : chan_chay) {
             t.dispose();
         }
-
-        // Các item/thiết bị
-        if (ao != null) ao.dispose();
-        if (quan != null) quan.dispose();
-        if (gang != null) gang.dispose();
-        if (giay != null) giay.dispose();
-        if (rada != null) rada.dispose();
-        if (iconct != null) iconct.dispose();
-        if (giaplt != null) giaplt.dispose();
-        if (vanbay != null) vanbay.dispose();
 
         // clickdichuyen
         for (Texture t : clickdichuyen) {

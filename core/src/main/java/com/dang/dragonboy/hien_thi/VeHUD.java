@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Align;
+import com.dang.dragonboy.du_lieu.State_Management;
 import com.dang.dragonboy.item.LoaiItem;
 import com.dang.dragonboy.nhan_vat.*;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
@@ -157,8 +158,8 @@ public class VeHUD {
     private int[] oSkills;
     float nutClickTimer2 = 0;
 
-    public Texture ao, quan, gang, giay, rada, iconct, giaplt, vanbay;
-    public Texture aoDeTu, quanDeTu, gangDeTu, giayDeTu, radaDeTu, iconctDeTu;
+    public String ao, quan, gang, giay, rada, iconct, giaplt, vanbay;
+    public String aoDeTu, quanDeTu, gangDeTu, giayDeTu, radaDeTu, iconctDeTu;
 
     private float dauThanRenderH = 53f;
     public String avatardangmac = "Goku_base";
@@ -354,6 +355,7 @@ public class VeHUD {
         duLieuNguoiChoi.setVeHUD(this);
         nhanVat.setDuLieuNguoiChoi(duLieuNguoiChoi);
         // Gọi thêm item từ file ngoài
+        xulyitem = new HUDXulyitem(this, layout, duLieuNguoiChoi, nhanVat);
         themItemTest = new ThemItemTest(duLieuNguoiChoi,nhanVat,this);
         themItemTest.themItemTest();
         thoiGianItemPhuTro = new HUDThoiGianItemPhuTro(this);
@@ -363,12 +365,13 @@ public class VeHUD {
         tinhToanChiSo = new HUDTinhToanChiSo(this,duLieuNguoiChoi,nhanVat);
         clickHandler = new HUDClickHandler(this, duLieuNguoiChoi, nhanVat);
         popupRenderer = new HUDPopupRenderer(this, layout, duLieuNguoiChoi,nhanVat);
-        xulyitem = new HUDXulyitem(this, layout, duLieuNguoiChoi, nhanVat);
         popupThongTin = new HUDPopupThongTin(this, layout, duLieuNguoiChoi, nhanVat);
         popupHanhTrang = new HUDPopupHanhTrang(this, layout, duLieuNguoiChoi, nhanVat);
         ruongDo = new HUDRuongDo(this,duLieuNguoiChoi,nhanVat);
         duLieuNguoiChoi.taoDeTu("Đệ tử");
         duLieuNguoiChoi.deTu.setVeHUD(this);
+
+        State_Management.setDuLieuStateManagement(nhanVat,this, duLieuNguoiChoi);
     }
 
     public void setCamera(QuanLyCamera camManager) {
@@ -2518,8 +2521,6 @@ public class VeHUD {
         }
 
         Texture[] itemTextures = {
-            ao, quan, gang, giay, rada, iconct, giaplt, vanbay,
-            aoDeTu, quanDeTu, gangDeTu, giayDeTu, radaDeTu, iconctDeTu,
             boHuyet, boKhi, cuongNo, giapXen,
             avtPetTheoHanhTinh
         };

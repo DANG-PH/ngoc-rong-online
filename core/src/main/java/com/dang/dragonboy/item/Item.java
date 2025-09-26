@@ -3,10 +3,12 @@ package com.dang.dragonboy.item;
 import com.badlogic.gdx.graphics.Texture;
 
 public class Item {
-    private String id;
+    private String maItem;
     private String ten;
-    private LoaiItem loai;
-    private Texture texture;
+    private transient LoaiItem loaiItem;
+    private String loai;
+    private transient Texture texture;
+    private String linkTexture;
     private String moTa;
     private int soLuong;
     private int[] chiso ;
@@ -16,12 +18,14 @@ public class Item {
     private int soSaoPhaLeCuongHoa;
     private float HanSuDung;
     private long sucManhYeuCau;
+    private String viTri;
 
-    public Item(String id, String ten, LoaiItem loai, Texture texture, String moTa, int soLuong, int[] chiso, String hanhtinh, long sucManhYeuCau, String setkichhoat, int soSaoPhaLe,int soSaoPhaLeCuongHoa, int soCap, float HanSuDung) {
-        this.id = id;
+    public Item(String maItem, String ten, LoaiItem loai, String linkTexture, String moTa, int soLuong, int[] chiso, String hanhtinh, long sucManhYeuCau, String setkichhoat, int soSaoPhaLe,int soSaoPhaLeCuongHoa, int soCap, float HanSuDung) {
+        this.maItem = maItem;
         this.ten = ten;
-        this.loai = loai;
-        this.texture = texture;
+        this.loaiItem = loai;
+        this.linkTexture = linkTexture;
+        this.texture = new Texture(linkTexture);
         this.moTa = moTa;
         this.soLuong = soLuong;
         this.chiso = chiso;
@@ -32,10 +36,12 @@ public class Item {
         this.HanSuDung = HanSuDung;
         this.sucManhYeuCau = sucManhYeuCau;
         this.soSaoPhaLeCuongHoa = soSaoPhaLeCuongHoa;
+
+        this.loai = loaiItem.name();
     }
 
     public String getId(){
-        return id;
+        return maItem;
     }
 
     public String getSetkichhoat(){
@@ -47,11 +53,19 @@ public class Item {
     }
 
     public LoaiItem getLoai() {
+        return loaiItem;
+    }
+
+    public String getLoaiDB() {
         return loai;
     }
 
     public Texture getTexture() {
         return texture;
+    }
+
+    public String getLinkTexture() {
+        return linkTexture;
     }
 
     public String getMoTa() {
@@ -125,4 +139,10 @@ public class Item {
         this.HanSuDung = Math.max(0,Math.min(this.HanSuDung,1800f));
     }
 
+    public void setViTri(String viTri) {
+        this.viTri = viTri;
+    }
+    public String getViTri() {
+        return viTri;
+    }
 }
