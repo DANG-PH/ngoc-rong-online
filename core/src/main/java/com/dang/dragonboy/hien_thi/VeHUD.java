@@ -355,6 +355,10 @@ public class VeHUD {
         duLieuNguoiChoi.setVeHUD(this);
         nhanVat.setDuLieuNguoiChoi(duLieuNguoiChoi);
         // Gọi thêm item từ file ngoài
+        if (State_Management.getUserResponse().coDeTu) {
+            duLieuNguoiChoi.taoDeTu("Đệ tử", false);
+            duLieuNguoiChoi.deTu.setVeHUD(this);
+        }
         xulyitem = new HUDXulyitem(this, layout, duLieuNguoiChoi, nhanVat);
         themItemTest = new ThemItemTest(duLieuNguoiChoi,nhanVat,this);
         themItemTest.themItemTest();
@@ -368,8 +372,6 @@ public class VeHUD {
         popupThongTin = new HUDPopupThongTin(this, layout, duLieuNguoiChoi, nhanVat);
         popupHanhTrang = new HUDPopupHanhTrang(this, layout, duLieuNguoiChoi, nhanVat);
         ruongDo = new HUDRuongDo(this,duLieuNguoiChoi,nhanVat);
-        duLieuNguoiChoi.taoDeTu("Đệ tử");
-        duLieuNguoiChoi.deTu.setVeHUD(this);
 
         State_Management.setDuLieuStateManagement(nhanVat,this, duLieuNguoiChoi);
     }
@@ -660,7 +662,7 @@ public class VeHUD {
             // Thêm vào danh sách
             lichSuTrangThaiChu.addFirst(trangThaiMoi);
 
-            // Giữ lại tối đa 100 phần tử (tùy bạn)
+            // Giữ lại tối đa 100 phần tử
             if (lichSuTrangThaiChu.size() > 100) {
                 lichSuTrangThaiChu.removeLast();
             }
@@ -2137,7 +2139,7 @@ public class VeHUD {
                 // item khác ngoài tăng chỉ số
                 if (itemm.getId().equals("trung_de_tu")) {
                     if (!duLieuNguoiChoi.coDeTu()) {
-                        duLieuNguoiChoi.taoDeTu("Đệ tử");
+                        duLieuNguoiChoi.taoDeTu("Đệ tử", true);
                         duLieuNguoiChoi.deTu.setVeHUD(this);
                         itemm.giamSoLuong(1);
                     }

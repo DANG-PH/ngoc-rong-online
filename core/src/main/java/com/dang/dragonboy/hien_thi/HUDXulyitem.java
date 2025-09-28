@@ -451,6 +451,161 @@ public class HUDXulyitem {
         }
     }
 
+    public void macDoVuaLoginDeTu(Item item) {
+        if (item.getLoai() == LoaiItem.CAITRANG || item.getLoai() == LoaiItem.AVATAR) {
+
+            boolean loaiCaiTrangDangMac = DeTuXuLy.getDangMacCaiTrang(); // cái đang mặc
+            boolean laCaiTrang = item.getLoai() == LoaiItem.CAITRANG;       // cái sắp mặc
+            if (veHUD.iconctDeTu == null) {
+                // Gán cải trang mới, không có cái cũ
+                duLieuNguoiChoi.deTu.setItemVaoHanhTrangDangMac(item,5);
+                veHUD.iconctDeTu = item.getLinkTexture();
+                duLieuNguoiChoi.deTu.setIdCaiTrang(item.getId());
+                duLieuNguoiChoi.deTu.setTenCaiTrang(item.getTenItem());
+                duLieuNguoiChoi.deTu.setMoTaCaiTrang(item.getMoTa());
+                duLieuNguoiChoi.deTu.setChisoCaiTrang(item.getChiso());
+                duLieuNguoiChoi.deTu.setHanSuDungCaiTrang(item.getHanSuDung());
+                duLieuNguoiChoi.deTu.setHanhTinhCaiTrang(item.getHanhtinh());
+                duLieuNguoiChoi.deTu.setSucManhYeuCauCaiTrang(item.getSucManhYeuCau());
+                if (laCaiTrang) {
+                    duLieuNguoiChoi.deTu.setAvtDangMac(duLieuNguoiChoi.deTu.getHanhtinh() + "_base");
+                } else {
+                    duLieuNguoiChoi.deTu.setAvtDangMac(item.getId());
+                }
+                if (!duLieuNguoiChoi.deTu.dangBienKhi) {
+                    DeTuCauHinh c2 = laCaiTrang ? veHUD.DoicaitrangDeTu(item.getId()) : veHUD.Doi_avt_ao_quan_DeTu(duLieuNguoiChoi.deTu.getHanhtinh(), item.getId(), veHUD.aodetudangmac, veHUD.quandetudangmac);
+                    duLieuNguoiChoi.deTu.fixCaiTrang(
+                        c2.dau_dung_de_tu, c2.dau_chay_de_tu,
+                        c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
+                        c2.chan_dung_de_tu, c2.chan_nhay_de_tu, c2.chan_roi_de_tu, c2.chan_chay_de_tu,
+                        c2.than_bay_de_tu, c2.chan_bay_de_tu,
+                        c2.chan_gong_de_tu, c2.than_thu_de_tu,
+                        c2.lechMapDeTu
+                    );
+                }
+                tangchisoDeTu(item.getChiso());
+            }
+        } else if (item.getLoai() == LoaiItem.AO) {
+            if (veHUD.aoDeTu == null){
+                duLieuNguoiChoi.deTu.setItemVaoHanhTrangDangMac(item,0);
+                veHUD.aoDeTu = item.getLinkTexture();
+                duLieuNguoiChoi.deTu.setIdAo(item.getId());
+                duLieuNguoiChoi.deTu.setTenAo(item.getTenItem());
+                duLieuNguoiChoi.deTu.setMoTaAo(item.getMoTa());
+                duLieuNguoiChoi.deTu.setChisoAo(item.getChiso());
+                veHUD.aodetudangmac = item.getId();
+                veHUD.skha_detu = item.getSetkichhoat();
+                duLieuNguoiChoi.deTu.setSoSaoAo(item.getSoSaoPhaLe());
+                duLieuNguoiChoi.deTu.setSoCapAo(item.getSoCap());
+                duLieuNguoiChoi.deTu.setSoSaoCuongHoaAo(item.getSoSaoPhaLeCuongHoa());
+                duLieuNguoiChoi.deTu.setHanhTinhAo(item.getHanhtinh());
+                duLieuNguoiChoi.deTu.setSucManhYeuCauAo(item.getSucManhYeuCau());
+                if (!duLieuNguoiChoi.deTu.dangBienKhi) {
+                    if (!DeTuXuLy.getDangMacCaiTrang()) {
+                        DeTuCauHinh c2 = veHUD.Doi_avt_ao_quan_DeTu(duLieuNguoiChoi.deTu.getHanhtinh(), duLieuNguoiChoi.deTu.getAvtDangMac(), item.getId(), veHUD.quandetudangmac);
+                        duLieuNguoiChoi.deTu.fixCaiTrang(
+                            c2.dau_dung_de_tu, c2.dau_chay_de_tu,
+                            c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
+                            c2.chan_dung_de_tu, c2.chan_nhay_de_tu, c2.chan_roi_de_tu, c2.chan_chay_de_tu,
+                            c2.than_bay_de_tu, c2.chan_bay_de_tu,
+                            c2.chan_gong_de_tu, c2.than_thu_de_tu,
+                            c2.lechMapDeTu
+                        );
+                    }
+                }
+                tangchisoDeTu(item.getChiso());
+                duLieuNguoiChoi.deTu.dangMacAo(true);
+                kichHoatSetHienTaiDeTu();
+            }
+        } else if (item.getLoai() == LoaiItem.QUAN) {
+            if (veHUD.quanDeTu == null){
+                duLieuNguoiChoi.deTu.setItemVaoHanhTrangDangMac(item,1);
+                veHUD.quanDeTu = item.getLinkTexture();
+                duLieuNguoiChoi.deTu.setIdQuan(item.getId());
+                duLieuNguoiChoi.deTu.setTenQuan(item.getTenItem());
+                duLieuNguoiChoi.deTu.setMoTaQuan(item.getMoTa());
+                duLieuNguoiChoi.deTu.setChisoQuan(item.getChiso());
+                veHUD.quandetudangmac = item.getId();
+                veHUD.skhq_detu = item.getSetkichhoat();
+                duLieuNguoiChoi.deTu.setSoSaoQuan(item.getSoSaoPhaLe());
+                duLieuNguoiChoi.deTu.setSoCapQuan(item.getSoCap());
+                duLieuNguoiChoi.deTu.setSoSaoCuongHoaQuan(item.getSoSaoPhaLeCuongHoa());
+                duLieuNguoiChoi.deTu.setHanhTinhQuan(item.getHanhtinh());
+                duLieuNguoiChoi.deTu.setSucManhYeuCauQuan(item.getSucManhYeuCau());
+                if (!duLieuNguoiChoi.deTu.dangBienKhi) {
+                    if (!DeTuXuLy.getDangMacCaiTrang()) {
+                        DeTuCauHinh c2 = veHUD.Doi_avt_ao_quan_DeTu(duLieuNguoiChoi.deTu.getHanhtinh(), duLieuNguoiChoi.deTu.getAvtDangMac(), veHUD.aodetudangmac, item.getId());
+                        duLieuNguoiChoi.deTu.fixCaiTrang(
+                            c2.dau_dung_de_tu, c2.dau_chay_de_tu,
+                            c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
+                            c2.chan_dung_de_tu, c2.chan_nhay_de_tu, c2.chan_roi_de_tu, c2.chan_chay_de_tu,
+                            c2.than_bay_de_tu, c2.chan_bay_de_tu,
+                            c2.chan_gong_de_tu,c2.than_thu_de_tu,
+                            c2.lechMapDeTu
+                        );
+                    }
+                }
+                tangchisoDeTu(item.getChiso());
+                duLieuNguoiChoi.deTu.dangMacQuan(true);
+                kichHoatSetHienTaiDeTu();
+            }
+        } else if (item.getLoai() == LoaiItem.GANG) {
+            if (veHUD.gangDeTu == null){
+                duLieuNguoiChoi.deTu.setItemVaoHanhTrangDangMac(item,2);
+                veHUD.gangDeTu = item.getLinkTexture();
+                duLieuNguoiChoi.deTu.setIdGang(item.getId());
+                duLieuNguoiChoi.deTu.setTenGang(item.getTenItem());
+                duLieuNguoiChoi.deTu.setMoTaGang(item.getMoTa());
+                duLieuNguoiChoi.deTu.setChisoGang(item.getChiso());
+                veHUD.skhg_detu = item.getSetkichhoat();
+                duLieuNguoiChoi.deTu.setSoSaoGang(item.getSoSaoPhaLe());
+                duLieuNguoiChoi.deTu.setSoCapGang(item.getSoCap());
+                duLieuNguoiChoi.deTu.setSoSaoCuongHoaGang(item.getSoSaoPhaLeCuongHoa());
+                duLieuNguoiChoi.deTu.setHanhTinhGang(item.getHanhtinh());
+                duLieuNguoiChoi.deTu.setSucManhYeuCauGang(item.getSucManhYeuCau());
+                tangchisoDeTu(item.getChiso());
+                duLieuNguoiChoi.deTu.dangMacGang(true);
+                kichHoatSetHienTaiDeTu();
+            }
+        } else if (item.getLoai() == LoaiItem.GIAY) {
+            if (veHUD.giayDeTu == null){
+                duLieuNguoiChoi.deTu.setItemVaoHanhTrangDangMac(item,3);
+                veHUD.giayDeTu = item.getLinkTexture();
+                duLieuNguoiChoi.deTu.setIdGiay(item.getId());
+                duLieuNguoiChoi.deTu.setTenGiay(item.getTenItem());
+                duLieuNguoiChoi.deTu.setMoTaGiay(item.getMoTa());
+                duLieuNguoiChoi.deTu.setChisoGiay(item.getChiso());
+                veHUD.skhj_detu = item.getSetkichhoat();
+                duLieuNguoiChoi.deTu.setSoSaoGiay(item.getSoSaoPhaLe());
+                duLieuNguoiChoi.deTu.setSoCapGiay(item.getSoCap());
+                duLieuNguoiChoi.deTu.setSoSaoCuongHoaGiay(item.getSoSaoPhaLeCuongHoa());
+                duLieuNguoiChoi.deTu.setHanhTinhGiay(item.getHanhtinh());
+                duLieuNguoiChoi.deTu.setSucManhYeuCauGiay(item.getSucManhYeuCau());
+                tangchisoDeTu(item.getChiso());
+                duLieuNguoiChoi.deTu.dangMacGiay(true);
+                kichHoatSetHienTaiDeTu();
+            }
+        } else if (item.getLoai() == LoaiItem.RADA) {
+            if (veHUD.radaDeTu == null){
+                duLieuNguoiChoi.deTu.setItemVaoHanhTrangDangMac(item,4);
+                veHUD.radaDeTu = item.getLinkTexture();
+                duLieuNguoiChoi.deTu.setIdRada(item.getId());
+                duLieuNguoiChoi.deTu.setTenRada(item.getTenItem());
+                duLieuNguoiChoi.deTu.setMoTaRada(item.getMoTa());
+                duLieuNguoiChoi.deTu.setChisoRada(item.getChiso());
+                veHUD.skhrada_detu = item.getSetkichhoat();
+                duLieuNguoiChoi.deTu.setSoSaoRada(item.getSoSaoPhaLe());
+                duLieuNguoiChoi.deTu.setSoCapRada(item.getSoCap());
+                duLieuNguoiChoi.deTu.setSoSaoCuongHoaRada(item.getSoSaoPhaLeCuongHoa());
+                duLieuNguoiChoi.deTu.setHanhTinhRada(item.getHanhtinh());
+                duLieuNguoiChoi.deTu.setSucManhYeuCauRada(item.getSucManhYeuCau());
+                tangchisoDeTu(item.getChiso());
+                duLieuNguoiChoi.deTu.dangMacRada(true);
+                kichHoatSetHienTaiDeTu();
+            }
+        }
+    }
+
     public void macDoChoDe(int index) {
         int indexx = veHUD.hangTrangDangChon - 8;
         ArrayList<Item> danhSach = duLieuNguoiChoi.getHanhTrang();

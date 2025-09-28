@@ -156,22 +156,43 @@ public class ManHinhDoiTaiKhoan implements Screen {
         thoiGianHienNutClick -= delta;
         if (thoiGianHienNutClick <= 0) {
             if (trangThaiManHinh == TrangThaiManHinh.NONE) {
+//                if (chuyenManHinhOK) {
+//                    // check api đăng nhập
+//                    // 2 biến cần check trong sql là tenTaiKhoan và matKhau
+//                    UserResponse user = ApiService.login(tenTaiKhoan, matKhau);
+//                    if (user != null) {
+//                        System.out.println("Đăng nhập thành công!");
+//                        // Truy cập dữ liệu backend trả về
+//
+//                        State_Management.setUserResponse(user);
+//                        System.out.println("x: "+State_Management.getUserResponse().x+", y: "+State_Management.getUserResponse().y);
+//                        game.setScreen(new ManHinhMenu(game, null));
+//                    } else {
+//                        System.out.println("Đăng nhập thất bại!");
+//                    }
+//                    chuyenManHinhOK = false;
+//                }
                 if (chuyenManHinhOK) {
-                    // check api đăng nhập
-                    // 2 biến cần check trong sql là tenTaiKhoan và matKhau
-                    UserResponse user = ApiService.login(tenTaiKhoan, matKhau);
-                    if (user != null) {
-                        System.out.println("Đăng nhập thành công!");
-                        // Truy cập dữ liệu backend trả về
-
-                        State_Management.setUserResponse(user);
-                        System.out.println("x: "+State_Management.getUserResponse().x+", y: "+State_Management.getUserResponse().y);
-                        game.setScreen(new ManHinhMenu(game, null));
-                    } else {
-                        System.out.println("Đăng nhập thất bại!");
-                    }
                     chuyenManHinhOK = false;
-                } else if (chuyenManHinhDong) {
+
+                    new Thread(() -> {
+                        // chạy ở thread phụ
+                        UserResponse user = ApiService.login(tenTaiKhoan, matKhau);
+
+                        // gửi nhiệm vụ về main thread
+                        Gdx.app.postRunnable(() -> {
+                            // chỗ này chạy ở main thread
+                            if (user != null) {
+                                System.out.println("Đăng nhập thành công!");
+                                State_Management.setUserResponse(user);
+                                game.setScreen(new ManHinhMenu(game, null));
+                            } else {
+                                System.out.println("Đăng nhập thất bại!");
+                            }
+                        });
+                    }).start();
+                }
+                else if (chuyenManHinhDong) {
                     game.setScreen(new ManHinhMenu(game, null));
                     chuyenManHinhDong = false;
                 } else if (isQuenMKPressed) {
@@ -185,6 +206,28 @@ public class ManHinhDoiTaiKhoan implements Screen {
                 if (nutManHinhDangKyChon == 1) {
                     trangThaiManHinh = TrangThaiManHinh.NONE;
                     nutManHinhDangKyChon = -1;
+                }
+                if (nutManHinhDangKyChon == 0) {
+//                    //call api
+//                    boolean ok = ApiService.register(tenTaiKhoanDky, matKhauDky);
+//                    if (ok) {
+//                        System.out.println("Đăng ký thành công!");
+//                    } else {
+//                        System.out.println("Đăng ký thất bại!");
+//                    }
+                    nutManHinhDangKyChon = -1;
+
+                    new Thread(() -> {
+                        boolean ok = ApiService.register(tenTaiKhoanDky, matKhauDky);
+
+                        Gdx.app.postRunnable(() -> {
+                            if (ok) {
+                                System.out.println("Đăng ký thành công!");
+                            } else {
+                                System.out.println("Đăng ký thất bại!");
+                            }
+                        });
+                    }).start();
                 }
             }
 
@@ -264,13 +307,6 @@ public class ManHinhDoiTaiKhoan implements Screen {
                     chuyenManHinhOK = true;
                 }
                 if (trangThaiManHinh == TrangThaiManHinh.DANGKY) {
-                    //call api
-                    boolean ok = ApiService.register(tenTaiKhoanDky, matKhauDky);
-                    if (ok) {
-                        System.out.println("Đăng ký thành công!");
-                    } else {
-                        System.out.println("Đăng ký thất bại!");
-                    }
                     thoiGianHienNutClick = 0.1f;
                     nutManHinhDangKyChon = 0;
                 }

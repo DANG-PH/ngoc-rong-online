@@ -167,8 +167,8 @@ public class DeTu {
 
     private VeHUD veHUD;
 
-    private String tinNhanDeTuChat;
-    private float timeHienChat;
+    private String tinNhanDeTuChat = "";
+    private float timeHienChat = 0f;
 
     private float timeChoHienBay;
     // Dùng cho hành vi di chuyển quanh sư phụ
@@ -216,14 +216,14 @@ public class DeTu {
                 Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,
                 Texture chan_dung, Texture chan_nhay, Texture chan_roi, Texture[] chan_chay,
                 Texture than_bay, Texture chan_bay,Texture chan_gong, Texture than_thu, Map<TrangThaiDeTu, List<DoLechModular>> lechTheoTrangThai,
-                Texture ao, Texture quan, Texture gang, Texture giay, Texture rada, Texture iconct,NhanVat nhanVat,DuLieuNguoiChoi duLieuNguoiChoi) {
+                Texture ao, Texture quan, Texture gang, Texture giay, Texture rada, Texture iconct,NhanVat nhanVat,DuLieuNguoiChoi duLieuNguoiChoi, boolean taoDeLanDau) {
         shapeRenderer = new ShapeRenderer();
         layout = new GlyphLayout();
         this.duLieuNguoiChoi = duLieuNguoiChoi;
         this.ten = ten;
         this.nhanVat = nhanVat;
         this.hanhtinh = hanhtinh;
-        this.sucManh = 1_499_999L;
+        this.sucManh = State_Management.getUserResponse().sucManhDeTu;
         this.theLuc = 50;
         this.HpGoc = 550000;
         this.KiGoc = 550000;
@@ -306,8 +306,10 @@ public class DeTu {
             new Texture("hieuung/hieuunggame/aura_bay/" + "3.png"),
             new Texture("hieuung/hieuunggame/aura_bay/" + "4.png")
         };
-        tinNhanDeTuChat = "Xin hãy thu nhận con làm đệ tử";
-        timeHienChat = 3f;
+
+        if (taoDeLanDau) {
+            setTinNhanDeTuChat("Xin hãy thu nhận con làm đệ tử", 3f);
+        }
 
         this.flipX = flipX;
         this.diQuaPhai = diQuaPhai;
@@ -319,6 +321,8 @@ public class DeTu {
         for (int i = 0; i < 3; i++) {
             bien_mat[i] = new Texture("hieuung/hieuunggame/bien_mat/"+(i+1)+".png");
         }
+
+        tangSucManh(0);
     }
 
     public Texture getAvtDeTu() {
@@ -408,19 +412,19 @@ public class DeTu {
         }
         if (sucManh >= 150_000_000 && tenSkill[1]==null) {
             tenSkill[1] = danhSachSkill2[MathUtils.random(danhSachSkill2.length - 1)];
-            if (!this.getTrangthai().equals("Về nhà")) {
+            if (!this.getTrangthai().equals("Về nhà") && SucManhCongThem!=0) {
                 setTinNhanDeTuChat("Sư phụ ơi con lên cấp rồi", 3f);
             }
         }
         if (sucManh >= 1_500_000_000 && tenSkill[2]==null) {
             tenSkill[2] = danhSachSkill3[MathUtils.random(danhSachSkill3.length - 1)];
-            if (!this.getTrangthai().equals("Về nhà")) {
+            if (!this.getTrangthai().equals("Về nhà") && SucManhCongThem!=0) {
                 setTinNhanDeTuChat("Sư phụ ơi con lên cấp rồi", 3f);
             }
         }
         if (sucManh >= 20_000_000_000L && tenSkill[3]==null) {
             tenSkill[3] = danhSachSkill4[MathUtils.random(danhSachSkill4.length - 1)];
-            if (!this.getTrangthai().equals("Về nhà")) {
+            if (!this.getTrangthai().equals("Về nhà") && SucManhCongThem!=0) {
                 setTinNhanDeTuChat("Sư phụ ơi con lên cấp rồi", 3f);
             }
         }
@@ -435,7 +439,7 @@ public class DeTu {
                 c2.lechMapDeTu
             );
             texAvtDeTu = new Texture("nhanvat/detu/" + hanhtinh + "/avt" + "lon" + ".png");
-            if (!this.getTrangthai().equals("Về nhà")) {
+            if (!this.getTrangthai().equals("Về nhà") && SucManhCongThem!=0) {
                 setTinNhanDeTuChat("Sư phụ ơi con lên cấp rồi", 3f);
             }
             chuaFixAvtAoQuan = false;

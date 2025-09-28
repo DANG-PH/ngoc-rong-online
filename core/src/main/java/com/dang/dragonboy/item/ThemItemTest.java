@@ -61,22 +61,15 @@ public class ThemItemTest {
                     );
                     break;
                 case "hanhtrangdetu":
-                    int indexde = -1;
-                    switch (LoaiItem.valueOf(item.loai)) {
-                        case AO -> indexde = 0;
-                        case QUAN -> indexde = 1;
-                        case GANG -> indexde = 2;
-                        case GIAY -> indexde = 3;
-                        case RADA -> indexde = 4;
-                        case CAITRANG -> indexde = 5;
-                    }
-                    duLieu.deTu.setItemVaoHanhTrangDangMac(new Item(
-                        item.maItem, item.ten, LoaiItem.valueOf(item.loai),
-                        item.linkTexture,
-                        item.moTa, item.soLuong,
-                        gson.fromJson(item.chiso, int[].class),
-                        item.hanhTinh, item.sucManhYeuCau, item.setKichHoat, item.soSaoPhaLe, item.soSaoPhaLeCuongHoa, item.soCap, item.hanSuDung
-                    ),indexde);
+                    veHUD.xulyitem.macDoVuaLoginDeTu(
+                        new Item(
+                            item.maItem, item.ten, LoaiItem.valueOf(item.loai),
+                            item.linkTexture,
+                            item.moTa, item.soLuong,
+                            gson.fromJson(item.chiso, int[].class),
+                            item.hanhTinh, item.sucManhYeuCau, item.setKichHoat, item.soSaoPhaLe, item.soSaoPhaLeCuongHoa, item.soCap, item.hanSuDung
+                        )
+                    );
                     break;
             }
         }
@@ -1363,7 +1356,7 @@ public class ThemItemTest {
                     break;
                 case 4:
                     if (!duLieu.coDeTu()) {
-                        duLieu.taoDeTu("Đệ tử");
+                        duLieu.taoDeTu("Đệ tử", true);
                         duLieu.deTu.setVeHUD(veHUD);
                         veHUD.setTinNhanPet("Bạn vừa tạo đệ tử",2f);
                     } else {

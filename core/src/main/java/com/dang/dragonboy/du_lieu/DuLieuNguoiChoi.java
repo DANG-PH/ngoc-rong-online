@@ -814,7 +814,7 @@ public class DuLieuNguoiChoi {
             setKichHoatNappa = false;
         }
     }
-    public void taoDeTu(String ten) {
+    public void taoDeTu(String ten, boolean taoDeLanDau) {
 //        String hanhtinh = danhSachHanhTinh[MathUtils.random(danhSachHanhTinh.length - 1)];
         String hanhtinh = nhanVat.getHanhtinh();
         DeTuCauHinh config = DoicaitrangDeTu("set_base_"+hanhtinh);
@@ -835,7 +835,7 @@ public class DuLieuNguoiChoi {
                 config.than_bay_de_tu, config.chan_bay_de_tu,
                 config.chan_gong_de_tu,config.than_thu_de_tu,
                 config.lechMapDeTu,
-                null,null,null,null,null,null,nhanVat,this
+                null,null,null,null,null,null,nhanVat,this, taoDeLanDau
             );
             deTu.setDanhSachDat(nhanVat.danhSachDat);
             deTu.setGioiHanToaDo(nhanVat.getGioiHanXMax(), nhanVat.getGioiHanYMax());
@@ -864,6 +864,10 @@ public class DuLieuNguoiChoi {
                 currentUser.mapHienTai = veHUD.layTenMap();
                 currentUser.x = nhanVat.getX();
                 currentUser.y = nhanVat.getY();
+                if (this.coDeTu()) {
+                    currentUser.coDeTu = this.coDeTu();
+                    currentUser.sucManhDeTu = this.deTu.getSucManh();
+                }
                 if (currentUser != null) {
                     ApiService.saveGameAsync(currentUser);
                 }

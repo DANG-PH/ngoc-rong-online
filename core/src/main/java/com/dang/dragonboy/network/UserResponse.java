@@ -26,4 +26,9 @@ public class UserResponse {
     public String hanhTinh = "traidat";
     public String nhanVat = "Goku";
     public String tenNhanVat = "admin";
+
+    public boolean coDeTu;
+
+    // de tu
+    public long sucManhDeTu;
 }
