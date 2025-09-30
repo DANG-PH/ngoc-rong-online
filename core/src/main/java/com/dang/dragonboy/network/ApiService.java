@@ -6,6 +6,7 @@ import java.net.URL;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import java.nio.charset.StandardCharsets;
+import com.google.gson.JsonElement;
 
 public class ApiService {
     private static final String BASE_URL = "http://localhost:8080/api/auth";
@@ -136,9 +137,13 @@ public class ApiService {
             json.addProperty("x",user.x);
             json.addProperty("y",user.y);
             json.addProperty("coDeTu",user.coDeTu);
-            json.addProperty("sucManhDeTu", user.sucManhDeTu);
+            // convert deTu object sang JsonElement rồi add
+            JsonElement deTuJson = gson.toJsonTree(user.deTu);
+            json.add("deTu", deTuJson);
 
             String jsonInput = gson.toJson(json);
+
+//            System.out.println("SaveGame JSON gửi đi: " + jsonInput);
 
             URL url = new URL(BASE_URL + "/saveGame");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();

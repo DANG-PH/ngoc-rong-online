@@ -29,6 +29,10 @@ public class UserResponse {
 
     public boolean coDeTu;
 
-    // de tu
-    public long sucManhDeTu;
+    public DeTuTheoUser deTu;
+
+    public boolean biBan;
+    public String role;
+//    // de tu
+//    public long sucManhDeTu;
 }

@@ -223,7 +223,7 @@ public class DeTu {
         this.ten = ten;
         this.nhanVat = nhanVat;
         this.hanhtinh = hanhtinh;
-        this.sucManh = State_Management.getUserResponse().sucManhDeTu;
+        this.sucManh = State_Management.getUserResponse().coDeTu ? State_Management.getUserResponse().deTu.sucManh : 2000;
         this.theLuc = 50;
         this.HpGoc = 550000;
         this.KiGoc = 550000;

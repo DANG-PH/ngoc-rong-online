@@ -865,8 +865,12 @@ public class DuLieuNguoiChoi {
                 currentUser.x = nhanVat.getX();
                 currentUser.y = nhanVat.getY();
                 if (this.coDeTu()) {
-                    currentUser.coDeTu = this.coDeTu();
-                    currentUser.sucManhDeTu = this.deTu.getSucManh();
+                    currentUser.coDeTu = true;
+
+                    DeTuTheoUser deTuTheoUser = new DeTuTheoUser();
+
+                    deTuTheoUser.sucManh = this.deTu.getSucManh();
+                    currentUser.deTu = deTuTheoUser;
                 }
                 if (currentUser != null) {
                     ApiService.saveGameAsync(currentUser);
