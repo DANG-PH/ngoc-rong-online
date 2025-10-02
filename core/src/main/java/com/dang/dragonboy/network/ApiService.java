@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import java.nio.charset.StandardCharsets;
 import com.google.gson.JsonElement;
+import java.util.*;
 
 public class ApiService {
     private static final String BASE_URL = "http://localhost:8080/api/auth";
@@ -282,5 +283,54 @@ public class ApiService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    // ====== Gọi API lấy danh sách item web ======
+    public static List<Integer> getItemsWeb(String username) {
+        try {
+            URL url = new URL(BASE_URL + "/getItemsWeb?username=" + username);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+
+            int status = conn.getResponseCode();
+            if (status == 200) {
+                try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = br.readLine()) != null) response.append(line.trim());
+
+                    // parse JSON array thành List<Integer>
+                    Integer[] arr = gson.fromJson(response.toString(), Integer[].class);
+                    return java.util.Arrays.asList(arr);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return java.util.Collections.emptyList(); // nếu lỗi thì trả list rỗng
+    }
+
+    // ====== Gọi API sử dụng item web ======
+    public static boolean useItemWeb(String username, int itemId) {
+        try {
+            URL url = new URL(BASE_URL + "/useItemWeb?username=" + username + "&itemId=" + itemId);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+
+            int status = conn.getResponseCode();
+            if (status == 200) {
+                return true; // dùng thành công
+            } else {
+                try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getErrorStream(), StandardCharsets.UTF_8))) {
+                    String line;
+                    StringBuilder error = new StringBuilder();
+                    while ((line = br.readLine()) != null) error.append(line.trim());
+                    System.err.println("UseItemWeb failed: " + error.toString());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
