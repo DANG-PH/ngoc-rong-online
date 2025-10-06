@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Align;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.hien_thi.VeHUD;
+import com.dang.dragonboy.item.Item;
+import com.dang.dragonboy.item.LoaiItem;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.xu_ly_map.npc.Npc;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.a_PHAN_LOAI_NPC.NPC_KHUNG_CHUNG;
@@ -266,7 +268,7 @@ public class admin_dungle extends renderUInpc {
 
         NPC_KHUNG_CHUNG.renderKhungNpc(npc,veHUD,nhanVat,batch,text,fontVeKhung);
 
-        String[] textDung = new String[] {"Hiện có\n"+veHUD.formatVangNgoc(duLieuNguoiChoi.getVangNapTuWeb())+"\nvàng","Hiện có\n"+veHUD.formatVangNgoc(duLieuNguoiChoi.getNgocNapTuWeb())+"\nngọc","Quay lại"};
+        String[] textDung = new String[] {"Hiện có\n"+veHUD.formatVangNgoc(duLieuNguoiChoi.getVangNapTuWeb())+"\nvàng","Hiện có\n"+veHUD.formatVangNgoc(duLieuNguoiChoi.getNgocNapTuWeb())+"\nngọc","Hiện có\n"+duLieuNguoiChoi.danhSachVatPhamWeb.size()+"\nvật phẩm","Quay lại"};
         NPC_KHUNG_CHUNG.renderKhungNut(npc,veHUD,batch,textDung,nutChucNangDangChon_nhan_qua_web,timeClickNut_nhan_qua_web);
     }
 
@@ -311,6 +313,32 @@ public class admin_dungle extends renderUInpc {
                         break;
                     }
                     case 2:
+                        List<Integer> ds = new ArrayList<>(duLieuNguoiChoi.danhSachVatPhamWeb);
+                        final int[] soItemNhan = {0};
+
+                        new Thread(() -> {
+                            List<Integer> itemsNhan = new ArrayList<>();
+                            for (int x : ds) {
+                                if (!duLieuNguoiChoi.duChoTrongHanhTrang(1)) break;
+
+                                boolean success = ApiService.useItemWeb(State_Management.getUserResponse().username, x);
+                                if (success) itemsNhan.add(x);
+                                else break;
+                            }
+
+                            if (!itemsNhan.isEmpty()) {
+                                Gdx.app.postRunnable(() -> {
+                                    for (int x : itemsNhan) {
+                                        duLieuNguoiChoi.themItemVaoHanhTrang(veHUD.themItemTest.themVatPhamWebTheoId(x));
+                                        duLieuNguoiChoi.danhSachVatPhamWeb.remove((Integer)x);
+                                        soItemNhan[0]++;
+                                    }
+                                    veHUD.setTinNhanPet("Bạn vừa nhận " + soItemNhan[0] + " quà từ web", 2f);
+                                });
+                            }
+                        }).start();
+                        break;
+                    case 3:
                         break;
                 }
                 trangThai = TrangThaiChucNang_admin_dungle.NONE;

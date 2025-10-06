@@ -365,24 +365,51 @@ public class ApiService {
 
     // ====== Gọi API sử dụng item web ======
     public static boolean useItemWeb(String username, int itemId) {
+        HttpURLConnection conn = null;
         try {
-            URL url = new URL(BASE_URL + "/useItemWeb?username=" + username + "&itemId=" + itemId);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            URL url = new URL(BASE_URL + "/useItemWeb");
+            conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json"); // chuẩn JSON
+            conn.setRequestProperty("Accept", "application/json");
+            conn.setDoOutput(true); // để gửi body
+
+            // JSON body thủ công
+            String jsonInputString = String.format("{\"username\":\"%s\",\"itemId\":%d}", username, itemId);
+            System.out.println("Sending JSON: " + jsonInputString);
+
+            try (OutputStream os = conn.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
 
             int status = conn.getResponseCode();
             if (status == 200 || status == 201) {
-                return true; // dùng thành công
+                try (BufferedReader br = new BufferedReader(
+                    new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        response.append(line.trim());
+                    }
+                    System.out.println("UseItemWeb success: " + response.toString());
+                }
+                return true;
             } else {
-                try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getErrorStream(), StandardCharsets.UTF_8))) {
+                try (BufferedReader br = new BufferedReader(
+                    new InputStreamReader(conn.getErrorStream(), StandardCharsets.UTF_8))) {
                     String line;
                     StringBuilder error = new StringBuilder();
                     while ((line = br.readLine()) != null) error.append(line.trim());
                     System.err.println("UseItemWeb failed: " + error.toString());
                 }
             }
+
         } catch (Exception e) {
+            System.err.println("Exception in useItemWeb: " + e.getMessage());
             e.printStackTrace();
+        } finally {
+            if (conn != null) conn.disconnect();
         }
         return false;
     }

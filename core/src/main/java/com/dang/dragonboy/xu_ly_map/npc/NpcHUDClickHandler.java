@@ -269,7 +269,7 @@ public class NpcHUDClickHandler {
             }
         }
         if (ui.trangThai == TrangThaiChucNang_admin_dungle.NHAN_VAT_PHAM_NAP_WEB) {
-            int soNutt = 3;
+            int soNutt = 4;
             for (int i = 0; i < soNutt; i++) {
                 if (checkChuotTrongNut(x, y, (Gdx.graphics.getWidth() - soNutt * 120) / 2f + 120*i, 5, 114, 114)) {
                     ui.nutChucNangDangChon_nhan_qua_web = i;

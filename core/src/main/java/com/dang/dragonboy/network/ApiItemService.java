@@ -83,6 +83,7 @@ public class ApiItemService {
                         response.append(line.trim());
                     }
                     String jsonResponse = response.toString();
+                    System.out.println("Response JSON: " + jsonResponse);
 
                     // parse JSON array -> List<Item>
                     ItemCanLuu[] itemsArray = gson.fromJson(jsonResponse, ItemCanLuu[].class);

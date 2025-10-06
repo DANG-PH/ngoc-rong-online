@@ -1585,4 +1585,64 @@ public class ThemItemTest {
                 break;
         }
     }
+
+    public Item themVatPhamWebTheoId(int id) {
+        switch (id) {
+            case 1: return new Item(
+                "goku_black_rose", "Cải trang Super Black Goku", LoaiItem.CAITRANG,
+                "nhanvat/caitrang/goku_black_rose/daudung.png",
+                "Cải trang thành Super Black Goku", 1,
+                new int[]{0,0,0,0,0,0,45,45,45,0,0,0,0},
+                "all", 40_000_000_000L, null, 0, 0, 0, -1
+                );
+            case 2: return new Item(
+                "trung_de_tu", "Trứng đệ tử", LoaiItem.PHUTRO,
+                "vatpham/vatphamgame/phu_tro/trung_de_tu.png",
+                "Sử dụng vật phẩm có thể giúp người chơi sở hữu đệ tử.", 1,
+                new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+                "all", 0, null, 0, 0, 0, -1
+                );
+            case 3:
+                return new Item(
+                        "set_vai_tho", "Áo vải thô", LoaiItem.AO,
+                        "vatpham/do/xayda/set_vai_tho/ao.png",
+                    "Giúp giảm sát thương", 1,
+                    new int[]{0,0,0,0,3,0,0,0,0,0,0,0,0},
+                    "xayda", 1000L, "Nappa", 0, 0, 0, -1
+                );
+            case 4:
+                return new Item(
+                        "set_than_linh", "Quần thần linh", LoaiItem.QUAN,
+                        "vatpham/do/xayda/set_than_linh/quan.png",
+                    "Giúp tăng HP", 1,
+                    new int[]{0,0,0,0,0,0,0,0,0,110000,0,0,0},
+                    "xayda", 20_000_000_000L, "Nappa", 0, 0, 0, -1
+                );
+            case 5:
+                return new Item(
+                        "set_vai_tho", "Găng vải thô", LoaiItem.GANG,
+                        "vatpham/do/xayda/set_vai_tho/gang.png",
+                    "Giúp tăng sức đánh", 1,
+                    new int[]{0,0,0,0,0,0,0,0,0,0,0,8,0},
+                    "xayda", 1000L, "Nappa", 0,0,0, -1
+                );
+            case 6:
+                return new Item(
+                        "set_vai_tho", "Giày vải thô", LoaiItem.GIAY,
+                        "vatpham/do/xayda/set_vai_tho/giay.png",
+                    "Giúp tăng MP", 1,
+                    new int[]{0,0,0,0,0,0,0,0,0,0,10,0,0},
+                    "xayda", 1000L, "Nappa", 0,0,0, -1
+                );
+            case 7:
+                return new Item(
+                        "set_than_linh", "Nhẫn thần linh", LoaiItem.RADA,
+                        "vatpham/do/xayda/set_than_linh/rada.png",
+                    "Giúp tăng Chí Mạng", 1,
+                    new int[]{0,0,0,18,0,0,0,0,0,0,0,0,0},
+                    "xayda", 40_000_000_000L, "Nappa", 0,0,0, -1
+                );
+        }
+        return null;
+    }
 }

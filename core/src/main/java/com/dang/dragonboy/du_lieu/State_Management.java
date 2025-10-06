@@ -54,4 +54,8 @@ public class State_Management {
     public static void setToken(String tokenn) {
         token = tokenn;
     }
+
+    public static void setDuLieuNguoiChoi(DuLieuNguoiChoi duLieuNguoiChoii) {
+        duLieuNguoiChoi = duLieuNguoiChoii;
+    }
 }

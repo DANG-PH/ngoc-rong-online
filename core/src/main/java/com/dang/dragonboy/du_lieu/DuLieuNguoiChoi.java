@@ -16,8 +16,8 @@ import java.util.*;
 import com.dang.dragonboy.network.*;
 public class DuLieuNguoiChoi {
     public DeTu deTu;
-    private NhanVat nhanVat;
-    private VeHUD veHUD;
+    public NhanVat nhanVat;
+    public VeHUD veHUD;
     private String ten;
     private long sucManh;
     private int theLuc;
@@ -40,6 +40,7 @@ public class DuLieuNguoiChoi {
     private long ngoc;
     private long vangNapTuWeb;
     private long ngocNapTuWeb;
+    public List<Integer> danhSachVatPhamWeb= new ArrayList<>();
     private String capBac;
     private int[] capSkill = new int[9];  // Mặc định toàn 0
     private String[] tenSkill = new String[9];
@@ -126,6 +127,7 @@ public class DuLieuNguoiChoi {
         this.ngoc = State_Management.getUserResponse().ngoc;
         this.vangNapTuWeb = State_Management.getUserResponse().vangNapTuWeb;
         this.ngocNapTuWeb = State_Management.getUserResponse().ngocNapTuWeb;
+        this.danhSachVatPhamWeb = State_Management.getUserResponse().danhSachVatPhamWeb;
         this.capBac = capBac;
         if (capSkill != null && capSkill.length == 9) {
             System.arraycopy(capSkill, 0, this.capSkill, 0, 9);
@@ -136,6 +138,8 @@ public class DuLieuNguoiChoi {
         if (motaSkill != null && motaSkill.length == 9) {
             System.arraycopy(motaSkill, 0, this.motaSkill, 0, 9);
         }
+
+        State_Management.setDuLieuNguoiChoi(this);
     }
 
     public ArrayList<Item> getHanhTrang() {
@@ -873,31 +877,65 @@ public class DuLieuNguoiChoi {
                     currentUser.deTu = deTuTheoUser;
                 }
                 if (currentUser != null) {
-                    ApiService.saveGameAsync(currentUser);
+                    new Thread(() -> {
+                        ApiService.saveGameAsync(currentUser);
+                    }).start();;
                 }
             }
         }
 
+        // Giữ thời gian cập nhật
         if (timeCapNhatAPILayDuLieuThayDoi > 0) {
             timeCapNhatAPILayDuLieuThayDoi -= Gdx.graphics.getDeltaTime();
             if (timeCapNhatAPILayDuLieuThayDoi <= 0) {
-                timeCapNhatAPILayDuLieuThayDoi = 5f;
-                if (State_Management.getUserResponse() != null) {
-                    UserResponse balance = ApiService.getBalance(State_Management.getUserResponse().username);
-                    if (balance != null) {
-                        if (balance.vangNapTuWeb > vangNapTuWeb) {
-                            veHUD.setTinNhanPet("Bạn vừa nạp "+veHUD.formatVangNgoc(balance.vangNapTuWeb-vangNapTuWeb)+" vàng",2f);
-                        } else if (balance.vangNapTuWeb < vangNapTuWeb) {
-                            veHUD.setTinNhanPet("Bạn vừa nhận "+veHUD.formatVangNgoc(vangNapTuWeb-balance.vangNapTuWeb)+" vàng",2f);
+                timeCapNhatAPILayDuLieuThayDoi = 5f; // reset 5s
+                UserResponse user = State_Management.getUserResponse();
+
+                if (user != null) {
+
+                    // --- THREAD 1: LẤY BALANCE (vàng, ngọc) ---
+                    new Thread(() -> {
+                        UserResponse balance = ApiService.getBalance(user.username);
+                        if (balance != null) {
+                            Gdx.app.postRunnable(() -> {
+                                // xử lý vàng
+                                if (balance.vangNapTuWeb > vangNapTuWeb) {
+                                    veHUD.setTinNhanPet("Bạn vừa nạp " +
+                                        veHUD.formatVangNgoc(balance.vangNapTuWeb - vangNapTuWeb) + " vàng", 2f);
+                                } else if (balance.vangNapTuWeb < vangNapTuWeb) {
+                                    veHUD.setTinNhanPet("Bạn vừa nhận " +
+                                        veHUD.formatVangNgoc(vangNapTuWeb - balance.vangNapTuWeb) + " vàng", 2f);
+                                }
+
+                                // xử lý ngọc
+                                if (balance.ngocNapTuWeb > ngocNapTuWeb) {
+                                    veHUD.setTinNhanPet("Bạn vừa nạp " +
+                                        veHUD.formatVangNgoc(balance.ngocNapTuWeb - ngocNapTuWeb) + " ngọc", 2f);
+                                } else if (balance.ngocNapTuWeb < ngocNapTuWeb) {
+                                    veHUD.setTinNhanPet("Bạn vừa nhận " +
+                                        veHUD.formatVangNgoc(ngocNapTuWeb - balance.ngocNapTuWeb) + " ngọc", 2f);
+                                }
+
+                                // cập nhật giá trị local
+                                vangNapTuWeb = balance.vangNapTuWeb;
+                                ngocNapTuWeb = balance.ngocNapTuWeb;
+                            });
                         }
-                        if (balance.ngocNapTuWeb > ngocNapTuWeb) {
-                            veHUD.setTinNhanPet("Bạn vừa nạp "+veHUD.formatVangNgoc(balance.ngocNapTuWeb-ngocNapTuWeb)+" ngọc",2f);
-                        } else if (balance.ngocNapTuWeb < ngocNapTuWeb) {
-                            veHUD.setTinNhanPet("Bạn vừa nhận "+veHUD.formatVangNgoc(ngocNapTuWeb-balance.ngocNapTuWeb)+" ngọc",2f);
+                    }).start();
+
+                    // --- THREAD 2: LẤY ITEMS ---
+                    new Thread(() -> {
+                        List<Integer> ds = ApiService.getItemsWeb(user.username);
+                        if (ds != null) {
+                            Gdx.app.postRunnable(() -> {
+                                if (ds.size() > danhSachVatPhamWeb.size()) {
+                                    veHUD.setTinNhanPet("Bạn vừa mua đồ từ web", 2f);
+                                }
+
+                                danhSachVatPhamWeb = new ArrayList<>(ds);
+                            });
                         }
-                        vangNapTuWeb = balance.vangNapTuWeb;
-                        ngocNapTuWeb = balance.ngocNapTuWeb;
-                    }
+                    }).start();
                 }
             }
         }

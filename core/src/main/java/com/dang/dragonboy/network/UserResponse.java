@@ -1,6 +1,6 @@
 package com.dang.dragonboy.network;
 
-
+import java.util.*;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.nhan_vat.NhanVat;
@@ -33,6 +33,6 @@ public class UserResponse {
 
     public boolean biBan;
     public String role;
-//    // de tu
-//    public long sucManhDeTu;
+
+    public List<Integer> danhSachVatPhamWeb;
 }

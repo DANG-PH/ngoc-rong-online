@@ -119,7 +119,27 @@ public class Main extends Game {
             }
 
             // Lưu dữ liệu user cuối
-            ApiService.saveGame(currentUser);
+            if (State_Management.getDuLieuNguoiChoi() != null) {
+                currentUser.vang = State_Management.getDuLieuNguoiChoi().getVang();
+                currentUser.ngoc = State_Management.getDuLieuNguoiChoi().getNgoc();
+                currentUser.sucManh = State_Management.getDuLieuNguoiChoi().getSucManh();
+                currentUser.mapHienTai = State_Management.getDuLieuNguoiChoi().veHUD.layTenMap();
+                currentUser.x = State_Management.getDuLieuNguoiChoi().nhanVat.getX();
+                currentUser.y = State_Management.getDuLieuNguoiChoi().nhanVat.getY();
+                if (State_Management.getDuLieuNguoiChoi().coDeTu()) {
+                    currentUser.coDeTu = true;
+
+                    DeTuTheoUser deTuTheoUser = new DeTuTheoUser();
+
+                    deTuTheoUser.sucManh = State_Management.getDuLieuNguoiChoi().deTu.getSucManh();
+                    currentUser.deTu = deTuTheoUser;
+                }
+                if (currentUser != null) {
+                    new Thread(() -> {
+                        ApiService.saveGameAsync(currentUser);
+                    }).start();
+                }
+            }
             System.out.println("Đã lưu dữ liệu lần cuối trước khi thoát game!");
         }
 
