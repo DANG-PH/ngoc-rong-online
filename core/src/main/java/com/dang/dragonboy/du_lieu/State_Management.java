@@ -11,6 +11,7 @@ public class State_Management {
     private static DuLieuNguoiChoi duLieuNguoiChoi = null;
     private static VeHUD veHUD = null;
     private static NhanVat nhanVat = null;
+    private static String token = "";
 
     public static void setDuLieuStateManagement(NhanVat nhanvatt, VeHUD veHUDD,DuLieuNguoiChoi duLieuNguoiChoii) {
         duLieuNguoiChoi = duLieuNguoiChoii;
@@ -44,5 +45,13 @@ public class State_Management {
 
     public static UserResponse getUserResponse() {
         return userResponse;
+    }
+
+    public static String getToken() {
+        return token;
+    }
+
+    public static void setToken(String tokenn) {
+        token = tokenn;
     }
 }

@@ -39,6 +39,24 @@ public class Main extends Game {
 //        this.setScreen(new ManHinhNhaGohan(this,"admin","traidat","Goku",null));
         // hoặc dùng màn hình khởi động rồi mới vào game
          this.setScreen(new ManHinhKhoiDong(this));
+
+
+        Map<String, String> savedUser = LocalStorage.loadLastUser();
+        if (savedUser != null) {
+            String token = savedUser.get("access_token");
+            String username = savedUser.get("lastUsername");
+
+            // ✅ Gọi API /profile để kiểm tra token còn hạn không
+            UserResponse profile = ApiService.getProfile(token);
+
+            if (profile != null) {
+                State_Management.setUserResponse(profile);
+            } else {
+                System.out.println("Token hết hạn hoặc không hợp lệ → yêu cầu đăng nhập lại");
+            }
+        } else {
+            System.out.println("Chưa có người dùng nào, yêu cầu đăng nhập");
+        }
     }
 
     @Override

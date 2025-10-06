@@ -7,9 +7,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.*;
 
 public class ApiItemService {
-    private static final String BASE_URL = "http://localhost:8080/api/items";
+    private static final String BASE_URL = "https://backendgamewebnestjs-production.up.railway.app/api/items";
     private static final Gson gson = new Gson();
 
     // Lưu danh sách item của user
@@ -19,11 +20,13 @@ public class ApiItemService {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
             conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json; utf-8");
+            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
             conn.setDoOutput(true);
 
             // Convert list item thành JSON
-            String jsonInput = gson.toJson(items);
+            Map<String, Object> payload = new HashMap<>();
+            payload.put("items", items); // items là List<ItemCanLuu>
+            String jsonInput = gson.toJson(payload);
 
             try (OutputStream os = conn.getOutputStream()) {
                 byte[] input = jsonInput.getBytes(StandardCharsets.UTF_8);
@@ -31,7 +34,7 @@ public class ApiItemService {
             }
 
             int status = conn.getResponseCode();
-            if (status == 200) {
+            if (status == 200 || status == 201) {
                 try (BufferedReader br = new BufferedReader(
                     new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
                     StringBuilder response = new StringBuilder();
@@ -71,7 +74,7 @@ public class ApiItemService {
             conn.setReadTimeout(5000);
 
             int status = conn.getResponseCode();
-            if (status == 200) {
+            if (status == 200 || status == 201) {
                 try (BufferedReader br = new BufferedReader(
                     new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
                     StringBuilder response = new StringBuilder();
@@ -98,7 +101,7 @@ public class ApiItemService {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
             conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json; utf-8");
+            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
             conn.setDoOutput(true);
 
             String jsonInput = gson.toJson(item);
@@ -108,7 +111,8 @@ public class ApiItemService {
             }
 
             int status = conn.getResponseCode();
-            return status == 200;
+            if (status == 200 || status == 201) return true;
+            return false;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -121,7 +125,7 @@ public class ApiItemService {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
             conn.setRequestMethod("PUT");
-            conn.setRequestProperty("Content-Type", "application/json; utf-8");
+            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
             conn.setDoOutput(true);
 
             String jsonInput = gson.toJson(item);
@@ -131,7 +135,8 @@ public class ApiItemService {
             }
 
             int status = conn.getResponseCode();
-            return status == 200;
+            if (status == 200 || status == 201) return true;
+            return false;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -145,7 +150,8 @@ public class ApiItemService {
             conn.setRequestMethod("DELETE");
 
             int status = conn.getResponseCode();
-            return status == 200;
+            if (status == 200 || status == 201) return true;
+            return false;
         } catch (Exception e) {
             e.printStackTrace();
         }
