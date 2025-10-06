@@ -40,7 +40,7 @@ public class DuLieuNguoiChoi {
     private long ngoc;
     private long vangNapTuWeb;
     private long ngocNapTuWeb;
-    public List<Integer> danhSachVatPhamWeb= new ArrayList<>();
+    public List<Integer> danhSachVatPhamWeb = new ArrayList<>();
     private String capBac;
     private int[] capSkill = new int[9];  // Mặc định toàn 0
     private String[] tenSkill = new String[9];
@@ -128,6 +128,7 @@ public class DuLieuNguoiChoi {
         this.vangNapTuWeb = State_Management.getUserResponse().vangNapTuWeb;
         this.ngocNapTuWeb = State_Management.getUserResponse().ngocNapTuWeb;
         this.danhSachVatPhamWeb = State_Management.getUserResponse().danhSachVatPhamWeb;
+        if (danhSachVatPhamWeb == null) this.danhSachVatPhamWeb = new ArrayList<>();
         this.capBac = capBac;
         if (capSkill != null && capSkill.length == 9) {
             System.arraycopy(capSkill, 0, this.capSkill, 0, 9);
@@ -931,7 +932,6 @@ public class DuLieuNguoiChoi {
                                 if (ds.size() > danhSachVatPhamWeb.size()) {
                                     veHUD.setTinNhanPet("Bạn vừa mua đồ từ web", 2f);
                                 }
-
                                 danhSachVatPhamWeb = new ArrayList<>(ds);
                             });
                         }
