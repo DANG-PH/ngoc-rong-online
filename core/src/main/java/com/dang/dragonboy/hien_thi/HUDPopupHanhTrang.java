@@ -118,7 +118,7 @@ public class HUDPopupHanhTrang {
                         PopupH += layout.height + 15;
                     }
                 }
-                if (veHUD.itemm.getSetkichhoat() != null){
+                if (veHUD.itemm.getSetkichhoat() != null && !veHUD.itemm.getSetkichhoat().equals("null")){
                     boolean fullSetNappa = "Nappa".equals(veHUD.skha)
                         && "Nappa".equals(veHUD.skhq)
                         && "Nappa".equals(veHUD.skhg)
@@ -575,7 +575,7 @@ public class HUDPopupHanhTrang {
                         offsetY += layout.height + 12;
                     }
                 }
-                if (veHUD.itemm.getSetkichhoat() != null) {
+                if (veHUD.itemm.getSetkichhoat() != null && !veHUD.itemm.getSetkichhoat().equals("null")) {
                     String set = veHUD.itemm.getSetkichhoat();
                     boolean isFullSet = false;
 

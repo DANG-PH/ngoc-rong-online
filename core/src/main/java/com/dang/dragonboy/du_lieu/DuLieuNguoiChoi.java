@@ -1,13 +1,15 @@
 package com.dang.dragonboy.du_lieu;
 import java.util.ArrayList;
+
+import com.dang.dragonboy.network.DTO.DeTuTheoUser;
+import com.dang.dragonboy.network.DTO.ItemCanLuu;
+import com.dang.dragonboy.network.DTO.UserResponse;
 import com.google.gson.Gson;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.dang.dragonboy.item.Item;
 import com.dang.dragonboy.item.LoaiItem;
 import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.nhan_vat.NhanVat;
-import com.dang.dragonboy.nhan_vat.NhanVatCauHinh;
 import com.dang.dragonboy.nhan_vat.NhanVatXuLy;
 import com.dang.dragonboy.nhan_vat.DeTuXuLy;
 import com.dang.dragonboy.nhan_vat.DeTuCauHinh;
@@ -896,30 +898,30 @@ public class DuLieuNguoiChoi {
 
                     // --- THREAD 1: LẤY BALANCE (vàng, ngọc) ---
                     new Thread(() -> {
-                        UserResponse balance = ApiService.getBalance(user.username);
+                        long[] balance = ApiService.getBalance();
                         if (balance != null) {
                             Gdx.app.postRunnable(() -> {
                                 // xử lý vàng
-                                if (balance.vangNapTuWeb > vangNapTuWeb) {
+                                if (balance[0] > vangNapTuWeb) {
                                     veHUD.setTinNhanPet("Bạn vừa nạp " +
-                                        veHUD.formatVangNgoc(balance.vangNapTuWeb - vangNapTuWeb) + " vàng", 2f);
-                                } else if (balance.vangNapTuWeb < vangNapTuWeb) {
+                                        veHUD.formatVangNgoc(balance[0] - vangNapTuWeb) + " vàng", 2f);
+                                } else if (balance[0] < vangNapTuWeb) {
                                     veHUD.setTinNhanPet("Bạn vừa nhận " +
-                                        veHUD.formatVangNgoc(vangNapTuWeb - balance.vangNapTuWeb) + " vàng", 2f);
+                                        veHUD.formatVangNgoc(vangNapTuWeb - balance[0]) + " vàng", 2f);
                                 }
 
                                 // xử lý ngọc
-                                if (balance.ngocNapTuWeb > ngocNapTuWeb) {
+                                if (balance[1] > ngocNapTuWeb) {
                                     veHUD.setTinNhanPet("Bạn vừa nạp " +
-                                        veHUD.formatVangNgoc(balance.ngocNapTuWeb - ngocNapTuWeb) + " ngọc", 2f);
-                                } else if (balance.ngocNapTuWeb < ngocNapTuWeb) {
+                                        veHUD.formatVangNgoc(balance[1] - ngocNapTuWeb) + " ngọc", 2f);
+                                } else if (balance[1] < ngocNapTuWeb) {
                                     veHUD.setTinNhanPet("Bạn vừa nhận " +
-                                        veHUD.formatVangNgoc(ngocNapTuWeb - balance.ngocNapTuWeb) + " ngọc", 2f);
+                                        veHUD.formatVangNgoc(ngocNapTuWeb - balance[1]) + " ngọc", 2f);
                                 }
 
                                 // cập nhật giá trị local
-                                vangNapTuWeb = balance.vangNapTuWeb;
-                                ngocNapTuWeb = balance.ngocNapTuWeb;
+                                vangNapTuWeb = balance[0];
+                                ngocNapTuWeb = balance[1];
                             });
                         }
                     }).start();
@@ -1080,8 +1082,8 @@ public class DuLieuNguoiChoi {
         itemDB.soSaoPhaLeCuongHoa = item.getSoSaoPhaLeCuongHoa();
         itemDB.soCap = item.getSoCap();
 
-        itemDB.hanSuDung = item.getHanSuDung();
-        itemDB.sucManhYeuCau = item.getSucManhYeuCau();
+        itemDB.hanSuDung = (int) item.getHanSuDung();
+        itemDB.sucManhYeuCau = String.valueOf(item.getSucManhYeuCau());
 
         itemDB.linkTexture = item.getLinkTexture() == null ? "" : item.getLinkTexture();
         Gson gson = new Gson();

@@ -279,37 +279,45 @@ public class admin_dungle extends renderUInpc {
                 timeClickNut_nhan_qua_web = 0;
                 switch (nutChucNangDangChon_nhan_qua_web) {
                     case 0: { // vàng
-                        Integer used = ApiService.useVangNapTuWeb(State_Management.getUserResponse().username,
-                            duLieuNguoiChoi.getVangNapTuWeb());
-                        if (used != null && used > 0) {
-                            duLieuNguoiChoi.tangVang(used); // cộng trực tiếp vào vàng thường
-                            State_Management.getUserResponse().vangNapTuWeb -= used;
-                            State_Management.getUserResponse().vang += used;
-                            ApiService.saveGameAsync(State_Management.getUserResponse());
+                        new Thread(() -> {
+                            boolean used = ApiService.useVangNapTuWeb(duLieuNguoiChoi.getVangNapTuWeb());
+                            long soVangDung = duLieuNguoiChoi.getVangNapTuWeb();
+                            Gdx.app.postRunnable(() -> {
+                                if (used) {
+                                    duLieuNguoiChoi.tangVang(soVangDung); // cộng trực tiếp vào vàng thường
+                                    State_Management.getUserResponse().vangNapTuWeb -= soVangDung;
+                                    State_Management.getUserResponse().vang += soVangDung;
+                                    ApiService.saveGameAsync(State_Management.getUserResponse());
 
-                            veHUD.setTinNhanPet("Bạn vừa nhận " + veHUD.formatVangNgoc(used) + " vàng", 2f);
-                            duLieuNguoiChoi.setVangNapTuWeb(duLieuNguoiChoi.getVangNapTuWeb()-used);
-                        }
-                        if (used != null && used == 0) {
-                            veHUD.setTinNhanPet("Vui lòng nạp tiền", 2f);
-                        }
+                                    veHUD.setTinNhanPet("Bạn vừa nhận " + veHUD.formatVangNgoc(soVangDung) + " vàng", 2f);
+                                    duLieuNguoiChoi.setVangNapTuWeb(duLieuNguoiChoi.getVangNapTuWeb()-soVangDung);
+                                }
+                                if (!used) {
+                                    veHUD.setTinNhanPet("Vui lòng nạp tiền", 2f);
+                                }
+                            });
+                        }).start();
                         break;
                     }
                     case 1: { // ngọc
-                        Integer used = ApiService.useNgocNapTuWeb(State_Management.getUserResponse().username,
-                            duLieuNguoiChoi.getNgocNapTuWeb());
-                        if (used != null && used > 0) {
-                            duLieuNguoiChoi.tangNgoc(used); // cộng trực tiếp vào ngọc thường
-                            State_Management.getUserResponse().ngocNapTuWeb -= used;
-                            State_Management.getUserResponse().ngoc += used;
-                            ApiService.saveGameAsync(State_Management.getUserResponse());
+                        new Thread(() -> {
+                            boolean used = ApiService.useNgocNapTuWeb(duLieuNguoiChoi.getNgocNapTuWeb());
+                            long soNgocDung = duLieuNguoiChoi.getNgocNapTuWeb();
+                            Gdx.app.postRunnable(() -> {
+                                if (used) {
+                                    duLieuNguoiChoi.tangNgoc(soNgocDung); // cộng trực tiếp vào ngọc thường
+                                    State_Management.getUserResponse().ngocNapTuWeb -= soNgocDung;
+                                    State_Management.getUserResponse().ngoc += soNgocDung;
+                                    ApiService.saveGameAsync(State_Management.getUserResponse());
 
-                            veHUD.setTinNhanPet("Bạn vừa nhận " + veHUD.formatVangNgoc(used) + " ngọc", 2f);
-                            duLieuNguoiChoi.setNgocNapTuWeb(duLieuNguoiChoi.getNgocNapTuWeb()-used);
-                        }
-                        if (used != null && used == 0) {
-                            veHUD.setTinNhanPet("Vui lòng nạp tiền", 2f);
-                        }
+                                    veHUD.setTinNhanPet("Bạn vừa nhận " + veHUD.formatVangNgoc(soNgocDung) + " ngọc", 2f);
+                                    duLieuNguoiChoi.setNgocNapTuWeb(duLieuNguoiChoi.getNgocNapTuWeb()-soNgocDung);
+                                }
+                                if (!used) {
+                                    veHUD.setTinNhanPet("Vui lòng nạp tiền", 2f);
+                                }
+                            });
+                        }).start();
                         break;
                     }
                     case 2:

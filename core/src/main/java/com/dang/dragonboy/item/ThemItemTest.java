@@ -2,10 +2,9 @@ package com.dang.dragonboy.item;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.graphics.Texture;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
-import com.dang.dragonboy.du_lieu.State_Management;
 import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.network.ApiItemService;
-import com.dang.dragonboy.network.ItemCanLuu;
+import com.dang.dragonboy.network.DTO.ItemCanLuu;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.nhan_vat.NhanVatXuLy;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_haidang.admin_haidang;
@@ -28,7 +27,7 @@ public class ThemItemTest {
     }
     public void themItemTest() {
         Gson gson = new Gson();
-        List<ItemCanLuu> itemTuDatabase = ApiItemService.getItems(State_Management.getUserResponse().username);
+        List<ItemCanLuu> itemTuDatabase = ApiItemService.getItems();
         for (ItemCanLuu item : itemTuDatabase) {
             switch (item.viTri) {
                 case "hanhtrang":
@@ -37,7 +36,7 @@ public class ThemItemTest {
                         item.linkTexture,
                         item.moTa, item.soLuong,
                         gson.fromJson(item.chiso, int[].class),
-                        item.hanhTinh, item.sucManhYeuCau, item.setKichHoat, item.soSaoPhaLe, item.soSaoPhaLeCuongHoa, item.soCap, item.hanSuDung
+                        item.hanhTinh, Long.parseLong(item.sucManhYeuCau), item.setKichHoat, item.soSaoPhaLe, item.soSaoPhaLeCuongHoa, item.soCap, item.hanSuDung
                     ));
                     break;
                 case "ruongdo":
@@ -46,7 +45,7 @@ public class ThemItemTest {
                         item.linkTexture,
                         item.moTa, item.soLuong,
                         gson.fromJson(item.chiso, int[].class),
-                        item.hanhTinh, item.sucManhYeuCau, item.setKichHoat, item.soSaoPhaLe, item.soSaoPhaLeCuongHoa, item.soCap, item.hanSuDung
+                        item.hanhTinh, Long.parseLong(item.sucManhYeuCau), item.setKichHoat, item.soSaoPhaLe, item.soSaoPhaLeCuongHoa, item.soCap, item.hanSuDung
                     ));
                     break;
                 case "hanhtrangdangmac":
@@ -56,7 +55,7 @@ public class ThemItemTest {
                             item.linkTexture,
                             item.moTa, item.soLuong,
                             gson.fromJson(item.chiso, int[].class),
-                            item.hanhTinh, item.sucManhYeuCau, item.setKichHoat, item.soSaoPhaLe, item.soSaoPhaLeCuongHoa, item.soCap, item.hanSuDung
+                            item.hanhTinh, Long.parseLong(item.sucManhYeuCau), item.setKichHoat, item.soSaoPhaLe, item.soSaoPhaLeCuongHoa, item.soCap, item.hanSuDung
                         )
                     );
                     break;
@@ -67,7 +66,7 @@ public class ThemItemTest {
                             item.linkTexture,
                             item.moTa, item.soLuong,
                             gson.fromJson(item.chiso, int[].class),
-                            item.hanhTinh, item.sucManhYeuCau, item.setKichHoat, item.soSaoPhaLe, item.soSaoPhaLeCuongHoa, item.soCap, item.hanSuDung
+                            item.hanhTinh, Long.parseLong(item.sucManhYeuCau), item.setKichHoat, item.soSaoPhaLe, item.soSaoPhaLeCuongHoa, item.soCap, item.hanSuDung
                         )
                     );
                     break;

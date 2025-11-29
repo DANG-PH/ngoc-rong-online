@@ -1,9 +1,6 @@
-package com.dang.dragonboy.network;
+package com.dang.dragonboy.network.DTO;
 
 import java.util.*;
-import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
-import com.dang.dragonboy.hien_thi.VeHUD;
-import com.dang.dragonboy.nhan_vat.NhanVat;
 
 public class UserResponse {
     public Long id;

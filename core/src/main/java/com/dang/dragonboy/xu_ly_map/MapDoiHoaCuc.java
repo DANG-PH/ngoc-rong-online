@@ -13,6 +13,7 @@ public class MapDoiHoaCuc extends MapCoBan {
         //npc
         themNpc("admin_dungle", LoaiNPC.NGUOI,250,188);
         themNpc("thay_hieu", LoaiNPC.NGUOI,864*2+300,188+48);
+        themNpc("admin_huykhoi", LoaiNPC.NGUOI,864*2-150,188-48);
     }
     @Override
     public float getChieuRongMap() {

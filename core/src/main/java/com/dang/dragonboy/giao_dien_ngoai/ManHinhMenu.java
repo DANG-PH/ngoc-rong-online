@@ -10,18 +10,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
-import com.dang.dragonboy.du_lieu.LocalStorage;
 import com.dang.dragonboy.du_lieu.State_Management;
 import com.dang.dragonboy.giao_dien_trong.ManHinhDoiHoaCuc;
 import com.dang.dragonboy.giao_dien_trong.ManHinhLangAru;
-import com.dang.dragonboy.giao_dien_trong.ManHinhNhaBroly;
 import com.dang.dragonboy.he_thong.Main;
 import com.dang.dragonboy.giao_dien_trong.ManHinhNhaGohan;
-import com.dang.dragonboy.he_thong.ThongTinChuyenMap;
-import com.dang.dragonboy.network.ApiService;
-import com.dang.dragonboy.network.UserResponse;
 
-import java.util.*;
+import java.util.Base64;
+import java.nio.charset.StandardCharsets;
 
 enum TrangThaiManHinhMenu {
     NONE,
@@ -124,28 +120,28 @@ public class ManHinhMenu implements Screen {
                                 trangThaiManHinh = TrangThaiManHinhMenu.BAN;
                             }
                         } else {
-                            UserResponse user = ApiService.login("ad", "1");
-                            if (user != null) {
-                                System.out.println("Đăng nhập thành công!");
-                                // Truy cập dữ liệu backend trả về
-
-                                State_Management.setUserResponse(user);
-                                System.out.println("x: " + State_Management.getUserResponse().x + ", y: " + State_Management.getUserResponse().y);
-                                game.setScreen(new ManHinhMenu(game, null));
-                            } else {
-                                System.out.println("Đăng nhập thất bại!");
-                            }
-                            if (!State_Management.getUserResponse().daVaoTaiKhoanLanDau) {
-                                nextScreen = new ManHinhSplash(game, new ManHinhNhaGohan(game, "admin", "traidat", "Goku", null));
-                            } else {
-                                if (State_Management.getUserResponse().mapHienTai.equals("Nhà Gôhan")) {
-                                    nextScreen = new ManHinhSplash(game, new ManHinhNhaGohan(game, "admin", "traidat", "Goku", null));
-                                } else if (State_Management.getUserResponse().mapHienTai.equals("Làng Aru")) {
-                                    nextScreen = (new ManHinhSplash(game, new ManHinhLangAru(game, null)));
-                                } else if (State_Management.getUserResponse().mapHienTai.equals("Đồi Hoa Cúc")) {
-                                    nextScreen = (new ManHinhSplash(game, new ManHinhDoiHoaCuc(game, null)));
-                                }
-                            }
+//                            UserResponse user = ApiService.login("ad", "1");
+//                            if (user != null) {
+//                                System.out.println("Đăng nhập thành công!");
+//                                // Truy cập dữ liệu backend trả về
+//
+//                                State_Management.setUserResponse(user);
+//                                System.out.println("x: " + State_Management.getUserResponse().x + ", y: " + State_Management.getUserResponse().y);
+//                                game.setScreen(new ManHinhMenu(game, null));
+//                            } else {
+//                                System.out.println("Đăng nhập thất bại!");
+//                            }
+//                            if (!State_Management.getUserResponse().daVaoTaiKhoanLanDau) {
+//                                nextScreen = new ManHinhSplash(game, new ManHinhNhaGohan(game, "admin", "traidat", "Goku", null));
+//                            } else {
+//                                if (State_Management.getUserResponse().mapHienTai.equals("Nhà Gôhan")) {
+//                                    nextScreen = new ManHinhSplash(game, new ManHinhNhaGohan(game, "admin", "traidat", "Goku", null));
+//                                } else if (State_Management.getUserResponse().mapHienTai.equals("Làng Aru")) {
+//                                    nextScreen = (new ManHinhSplash(game, new ManHinhLangAru(game, null)));
+//                                } else if (State_Management.getUserResponse().mapHienTai.equals("Đồi Hoa Cúc")) {
+//                                    nextScreen = (new ManHinhSplash(game, new ManHinhDoiHoaCuc(game, null)));
+//                                }
+//                            }
                         }
                         break;
                     case 1:
@@ -212,13 +208,17 @@ public class ManHinhMenu implements Screen {
             batch.draw(logo, 355, 360, 320, 200);
             String[] labels;
             if (State_Management.getUserResponse() != null) {
+                String username = new String(
+                    Base64.getDecoder().decode(State_Management.getSessionId()),
+                    StandardCharsets.UTF_8
+                );
+                State_Management.getUserResponse().username = username;
                 labels = new String[]{
-                    "TK. " + State_Management.getUserResponse().username,
+                    "TK. " + username,
                     "Chơi mới",
                     "Đổi tài khoản",
                     "Máy chủ: Vũ trụ " + mayChu
                 };
-
                 if ("HAIDANG1".equals(mayChu)) {
                     labels[3] = "Máy chủ: HAIDANG1";
                 }

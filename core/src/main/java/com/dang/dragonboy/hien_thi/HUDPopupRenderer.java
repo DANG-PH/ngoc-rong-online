@@ -222,7 +222,7 @@ public class HUDPopupRenderer {
                     layout.setText(veHUD.fontCapSKill,"Giáp+"+item.getChiso()[4]);
                     veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
                     kc += layout.width+1;
-                    if (item.getSetkichhoat()!=null){
+                    if (item.getSetkichhoat()!=null && !item.getSetkichhoat().equals("null") && !item.getSetkichhoat().equals("null")){
                         layout.setText(veHUD.fontCapSKill,",Set "+item.getSetkichhoat());
                         veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12 +kc, y + 49 - 30);
                     }
@@ -232,7 +232,7 @@ public class HUDPopupRenderer {
                     layout.setText(veHUD.fontCapSKill,"HP+"+item.getChiso()[9]);
                     veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
                     kc += layout.width+1;
-                    if (item.getSetkichhoat()!=null){
+                    if (item.getSetkichhoat()!=null && !item.getSetkichhoat().equals("null")){
                         layout.setText(veHUD.fontCapSKill,",Set "+item.getSetkichhoat());
                         veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12 +kc, y + 49 - 30);
                     }
@@ -242,7 +242,7 @@ public class HUDPopupRenderer {
                     layout.setText(veHUD.fontCapSKill,"Tấn công+"+item.getChiso()[11]);
                     veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
                     kc += layout.width+1;
-                    if (item.getSetkichhoat()!=null){
+                    if (item.getSetkichhoat()!=null && !item.getSetkichhoat().equals("null")){
                         layout.setText(veHUD.fontCapSKill,",Set "+item.getSetkichhoat());
                         veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12 +kc, y + 49 - 30);
                     }
@@ -252,7 +252,7 @@ public class HUDPopupRenderer {
                     layout.setText(veHUD.fontCapSKill,"KI+"+item.getChiso()[10]);
                     veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
                     kc += layout.width+1;
-                    if (item.getSetkichhoat()!=null){
+                    if (item.getSetkichhoat()!=null && !item.getSetkichhoat().equals("null")){
                         layout.setText(veHUD.fontCapSKill,",Set "+item.getSetkichhoat());
                         veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12 +kc, y + 49 - 30);
                     }
@@ -262,7 +262,7 @@ public class HUDPopupRenderer {
                     layout.setText(veHUD.fontCapSKill,"Chí mạng+"+item.getChiso()[3]+"%");
                     veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
                     kc += layout.width+1;
-                    if (item.getSetkichhoat()!=null){
+                    if (item.getSetkichhoat()!=null && !item.getSetkichhoat().equals("null")){
                         layout.setText(veHUD.fontCapSKill,",Set "+item.getSetkichhoat());
                         veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12 +kc, y + 49 - 30);
                     }
@@ -321,7 +321,7 @@ public class HUDPopupRenderer {
                             layout.setText(veHUD.fontCapSKill,"Giáp+"+item.getChiso()[4]);
                             veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
                             kc += layout.width+1;
-                            if (item.getSetkichhoat()!=null){
+                            if (item.getSetkichhoat()!=null && !item.getSetkichhoat().equals("null")){
                                 layout.setText(veHUD.fontCapSKill,",Set "+item.getSetkichhoat());
                                 veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12 +kc, y + 49 - 30);
                             }
@@ -331,7 +331,7 @@ public class HUDPopupRenderer {
                             layout.setText(veHUD.fontCapSKill,"HP+"+item.getChiso()[9]);
                             veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
                             kc += layout.width+1;
-                            if (item.getSetkichhoat()!=null){
+                            if (item.getSetkichhoat()!=null && !item.getSetkichhoat().equals("null")){
                                 layout.setText(veHUD.fontCapSKill,",Set "+item.getSetkichhoat());
                                 veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12 +kc, y + 49 - 30);
                             }
@@ -341,7 +341,7 @@ public class HUDPopupRenderer {
                             layout.setText(veHUD.fontCapSKill,"Tấn công+"+item.getChiso()[11]);
                             veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
                             kc += layout.width+1;
-                            if (item.getSetkichhoat()!=null){
+                            if (item.getSetkichhoat()!=null && !item.getSetkichhoat().equals("null")){
                                 layout.setText(veHUD.fontCapSKill,",Set "+item.getSetkichhoat());
                                 veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12 +kc, y + 49 - 30);
                             }
@@ -351,7 +351,7 @@ public class HUDPopupRenderer {
                             layout.setText(veHUD.fontCapSKill,"KI+"+item.getChiso()[10]);
                             veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
                             kc += layout.width+1;
-                            if (item.getSetkichhoat()!=null){
+                            if (item.getSetkichhoat()!=null && !item.getSetkichhoat().equals("null")){
                                 layout.setText(veHUD.fontCapSKill,",Set "+item.getSetkichhoat());
                                 veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12 +kc, y + 49 - 30);
                             }
@@ -361,7 +361,7 @@ public class HUDPopupRenderer {
                             layout.setText(veHUD.fontCapSKill,"Chí mạng+"+item.getChiso()[3]+"%");
                             veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12, y + 49 - 30);
                             kc += layout.width+1;
-                            if (item.getSetkichhoat()!=null){
+                            if (item.getSetkichhoat()!=null && !item.getSetkichhoat().equals("null")){
                                 layout.setText(veHUD.fontCapSKill,",Set "+item.getSetkichhoat());
                                 veHUD.fontCapSKill.draw(batch,layout,3 + 70 + 12 +kc, y + 49 - 30);
                             }
@@ -1227,7 +1227,7 @@ public class HUDPopupRenderer {
                         layout.setText(veHUD.fontCapSKill, "Giáp+" + item.getChiso()[4]);
                         veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + 1020 - 350, y + 49 - 30);
                         kc += layout.width + 1;
-                        if (item.getSetkichhoat() != null) {
+                        if (item.getSetkichhoat() != null && !item.getSetkichhoat().equals("null")) {
                             layout.setText(veHUD.fontCapSKill, ",Set " + item.getSetkichhoat());
                             veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + kc + 1020 - 350, y + 49 - 30);
                         }
@@ -1237,7 +1237,7 @@ public class HUDPopupRenderer {
                         layout.setText(veHUD.fontCapSKill, "HP+" + item.getChiso()[9]);
                         veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + 1020 - 350, y + 49 - 30);
                         kc += layout.width + 1;
-                        if (item.getSetkichhoat() != null) {
+                        if (item.getSetkichhoat() != null && !item.getSetkichhoat().equals("null")) {
                             layout.setText(veHUD.fontCapSKill, ",Set " + item.getSetkichhoat());
                             veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + kc + 1020 - 350, y + 49 - 30);
                         }
@@ -1247,7 +1247,7 @@ public class HUDPopupRenderer {
                         layout.setText(veHUD.fontCapSKill, "Tấn công+" + item.getChiso()[11]);
                         veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + 1020 - 350, y + 49 - 30);
                         kc += layout.width + 1;
-                        if (item.getSetkichhoat() != null) {
+                        if (item.getSetkichhoat() != null && !item.getSetkichhoat().equals("null")) {
                             layout.setText(veHUD.fontCapSKill, ",Set " + item.getSetkichhoat());
                             veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + kc + 1020 - 350, y + 49 - 30);
                         }
@@ -1257,7 +1257,7 @@ public class HUDPopupRenderer {
                         layout.setText(veHUD.fontCapSKill, "KI+" + item.getChiso()[10]);
                         veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + 1020 - 350, y + 49 - 30);
                         kc += layout.width + 1;
-                        if (item.getSetkichhoat() != null) {
+                        if (item.getSetkichhoat() != null && !item.getSetkichhoat().equals("null")) {
                             layout.setText(veHUD.fontCapSKill, ",Set " + item.getSetkichhoat());
                             veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + kc + 1020 - 350, y + 49 - 30);
                         }
@@ -1267,7 +1267,7 @@ public class HUDPopupRenderer {
                         layout.setText(veHUD.fontCapSKill, "Chí mạng+" + item.getChiso()[3] + "%");
                         veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + 1020 - 350, y + 49 - 30);
                         kc += layout.width + 1;
-                        if (item.getSetkichhoat() != null) {
+                        if (item.getSetkichhoat() != null && !item.getSetkichhoat().equals("null")) {
                             layout.setText(veHUD.fontCapSKill, ",Set " + item.getSetkichhoat());
                             veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + kc + 1020 - 350, y + 49 - 30);
                         }
@@ -1326,7 +1326,7 @@ public class HUDPopupRenderer {
                                 layout.setText(veHUD.fontCapSKill, "Giáp+" + item.getChiso()[4]);
                                 veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + 1020 - 350, y + 49 - 30);
                                 kc += layout.width + 1;
-                                if (item.getSetkichhoat() != null) {
+                                if (item.getSetkichhoat() != null && !item.getSetkichhoat().equals("null")) {
                                     layout.setText(veHUD.fontCapSKill, ",Set " + item.getSetkichhoat());
                                     veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + kc + 1020 - 350, y + 49 - 30);
                                 }
@@ -1336,7 +1336,7 @@ public class HUDPopupRenderer {
                                 layout.setText(veHUD.fontCapSKill, "HP+" + item.getChiso()[9]);
                                 veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + 1020 - 350, y + 49 - 30);
                                 kc += layout.width + 1;
-                                if (item.getSetkichhoat() != null) {
+                                if (item.getSetkichhoat() != null && !item.getSetkichhoat().equals("null")) {
                                     layout.setText(veHUD.fontCapSKill, ",Set " + item.getSetkichhoat());
                                     veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + kc + 1020 - 350, y + 49 - 30);
                                 }
@@ -1346,7 +1346,7 @@ public class HUDPopupRenderer {
                                 layout.setText(veHUD.fontCapSKill, "Tấn công+" + item.getChiso()[11]);
                                 veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + 1020 - 350, y + 49 - 30);
                                 kc += layout.width + 1;
-                                if (item.getSetkichhoat() != null) {
+                                if (item.getSetkichhoat() != null && !item.getSetkichhoat().equals("null")) {
                                     layout.setText(veHUD.fontCapSKill, ",Set " + item.getSetkichhoat());
                                     veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + kc + 1020 - 350, y + 49 - 30);
                                 }
@@ -1356,7 +1356,7 @@ public class HUDPopupRenderer {
                                 layout.setText(veHUD.fontCapSKill, "KI+" + item.getChiso()[10]);
                                 veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + 1020 - 350, y + 49 - 30);
                                 kc += layout.width + 1;
-                                if (item.getSetkichhoat() != null) {
+                                if (item.getSetkichhoat() != null && !item.getSetkichhoat().equals("null")) {
                                     layout.setText(veHUD.fontCapSKill, ",Set " + item.getSetkichhoat());
                                     veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + kc + 1020 - 350, y + 49 - 30);
                                 }
@@ -1366,7 +1366,7 @@ public class HUDPopupRenderer {
                                 layout.setText(veHUD.fontCapSKill, "Chí mạng+" + item.getChiso()[3] + "%");
                                 veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + 1020 - 350, y + 49 - 30);
                                 kc += layout.width + 1;
-                                if (item.getSetkichhoat() != null) {
+                                if (item.getSetkichhoat() != null && !item.getSetkichhoat().equals("null")) {
                                     layout.setText(veHUD.fontCapSKill, ",Set " + item.getSetkichhoat());
                                     veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + kc + 1020 - 350, y + 49 - 30);
                                 }
@@ -1490,7 +1490,7 @@ public class HUDPopupRenderer {
                             layout.setText(veHUD.fontCapSKill, "Giáp+" + item.getChiso()[4]);
                             veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12, y + 61 - 30);
                             kc += layout.width + 1;
-                            if (item.getSetkichhoat() != null) {
+                            if (item.getSetkichhoat() != null && !item.getSetkichhoat().equals("null")) {
                                 layout.setText(veHUD.fontCapSKill, ",Set " + item.getSetkichhoat());
                                 veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + kc, y + 61 - 30);
                             }
@@ -1500,7 +1500,7 @@ public class HUDPopupRenderer {
                             layout.setText(veHUD.fontCapSKill, "HP+" + item.getChiso()[9]);
                             veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12, y + 61 - 30);
                             kc += layout.width + 1;
-                            if (item.getSetkichhoat() != null) {
+                            if (item.getSetkichhoat() != null && !item.getSetkichhoat().equals("null")) {
                                 layout.setText(veHUD.fontCapSKill, ",Set " + item.getSetkichhoat());
                                 veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + kc, y + 61 - 30);
                             }
@@ -1510,7 +1510,7 @@ public class HUDPopupRenderer {
                             layout.setText(veHUD.fontCapSKill, "Tấn công+" + item.getChiso()[11]);
                             veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12, y + 61 - 30);
                             kc += layout.width + 1;
-                            if (item.getSetkichhoat() != null) {
+                            if (item.getSetkichhoat() != null && !item.getSetkichhoat().equals("null")) {
                                 layout.setText(veHUD.fontCapSKill, ",Set " + item.getSetkichhoat());
                                 veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + kc, y + 61 - 30);
                             }
@@ -1520,7 +1520,7 @@ public class HUDPopupRenderer {
                             layout.setText(veHUD.fontCapSKill, "KI+" + item.getChiso()[10]);
                             veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12, y + 61 - 30);
                             kc += layout.width + 1;
-                            if (item.getSetkichhoat() != null) {
+                            if (item.getSetkichhoat() != null && !item.getSetkichhoat().equals("null")) {
                                 layout.setText(veHUD.fontCapSKill, ",Set " + item.getSetkichhoat());
                                 veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + kc, y + 61 - 30);
                             }
@@ -1530,7 +1530,7 @@ public class HUDPopupRenderer {
                             layout.setText(veHUD.fontCapSKill, "Chí mạng+" + item.getChiso()[3] + "%");
                             veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12, y + 61 - 30);
                             kc += layout.width + 1;
-                            if (item.getSetkichhoat() != null) {
+                            if (item.getSetkichhoat() != null && !item.getSetkichhoat().equals("null")) {
                                 layout.setText(veHUD.fontCapSKill, ",Set " + item.getSetkichhoat());
                                 veHUD.fontCapSKill.draw(batch, layout, 3 + 70 + 12 + kc, y + 61 - 30);
                             }

@@ -5,11 +5,13 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 
 import com.dang.dragonboy.giao_dien_ngoai.ManHinhKhoiDong;
-import com.dang.dragonboy.giao_dien_trong.ManHinhNhaGohan;
 import com.dang.dragonboy.network.*;
 import com.dang.dragonboy.du_lieu.*;
 import java.util.*;
 import com.dang.dragonboy.item.*;
+import com.dang.dragonboy.network.DTO.DeTuTheoUser;
+import com.dang.dragonboy.network.DTO.ItemCanLuu;
+import com.dang.dragonboy.network.DTO.UserResponse;
 
 public class Main extends Game {
 
@@ -44,13 +46,15 @@ public class Main extends Game {
         Map<String, String> savedUser = LocalStorage.loadLastUser();
         if (savedUser != null) {
             String token = savedUser.get("access_token");
-            String username = savedUser.get("lastUsername");
+            String sessionId = savedUser.get("lastUsername");
 
             // ✅ Gọi API /profile để kiểm tra token còn hạn không
             UserResponse profile = ApiService.getProfile(token);
 
             if (profile != null) {
                 State_Management.setUserResponse(profile);
+                State_Management.setSessionId(sessionId);
+                State_Management.setToken(token);
             } else {
                 System.out.println("Token hết hạn hoặc không hợp lệ → yêu cầu đăng nhập lại");
             }

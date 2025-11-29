@@ -1,26 +1,31 @@
 package com.dang.dragonboy.network;
 
+import com.dang.dragonboy.network.DTO.ItemCanLuu;
 import com.google.gson.Gson;
-import com.dang.dragonboy.item.*;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.*;
+import com.dang.dragonboy.du_lieu.State_Management;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 public class ApiItemService {
-    private static final String BASE_URL = "https://backendgamewebnestjs-production.up.railway.app/api/items";
+    private static final String BASE_URL = "http://localhost:3000/item";
     private static final Gson gson = new Gson();
 
     // Lưu danh sách item của user
     public static boolean saveItems(String username, List<ItemCanLuu> items) {
         try {
-            URL url = new URL(BASE_URL + "/add-multiple/" + username);
+            URL url = new URL(BASE_URL + "/items");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-            conn.setRequestMethod("POST");
+            conn.setRequestMethod("PUT");
             conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            conn.setRequestProperty("Authorization", "Bearer " + State_Management.getToken());
             conn.setDoOutput(true);
 
             // Convert list item thành JSON
@@ -64,16 +69,19 @@ public class ApiItemService {
     }
 
     // Lấy danh sách item từ server
-    public static List<ItemCanLuu> getItems(String username) {
+    public static List<ItemCanLuu> getItems() {
         try {
-            URL url = new URL(BASE_URL + "/user/" + username);
+            URL url = new URL(BASE_URL + "/user-items");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
             conn.setRequestMethod("GET");
-            conn.setConnectTimeout(5000);
-            conn.setReadTimeout(5000);
+            conn.setRequestProperty("Authorization", "Bearer " + State_Management.getToken());
+            conn.setConnectTimeout(10000);
+            conn.setReadTimeout(10000);
 
             int status = conn.getResponseCode();
+            System.out.println("HTTP status: " + status);
+
             if (status == 200 || status == 201) {
                 try (BufferedReader br = new BufferedReader(
                     new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
@@ -83,79 +91,22 @@ public class ApiItemService {
                         response.append(line.trim());
                     }
                     String jsonResponse = response.toString();
-                    System.out.println("Response JSON: " + jsonResponse);
+//                    System.out.println("Response JSON: " + jsonResponse);
 
-                    // parse JSON array -> List<Item>
-                    ItemCanLuu[] itemsArray = gson.fromJson(jsonResponse, ItemCanLuu[].class);
-                    return java.util.Arrays.asList(itemsArray);
+                    // Parse JSON object trước
+                    JsonObject obj = gson.fromJson(jsonResponse, JsonObject.class);
+
+                    // Lấy array bên trong key "items"
+                    JsonArray itemsArray = obj.getAsJsonArray("items");
+
+                    // Chuyển JsonArray thành List<ItemCanLuu>
+                    ItemCanLuu[] items = gson.fromJson(itemsArray, ItemCanLuu[].class);
+                    return Arrays.asList(items);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return java.util.Collections.emptyList();
-    }
-
-    public static boolean addItem(String username, Item item) {
-        try {
-            URL url = new URL(BASE_URL + "/add/" + username);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-            conn.setDoOutput(true);
-
-            String jsonInput = gson.toJson(item);
-            try (OutputStream os = conn.getOutputStream()) {
-                byte[] input = jsonInput.getBytes(StandardCharsets.UTF_8);
-                os.write(input, 0, input.length);
-            }
-
-            int status = conn.getResponseCode();
-            if (status == 200 || status == 201) return true;
-            return false;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public static boolean updateItem(Long itemId, Item item) {
-        try {
-            URL url = new URL(BASE_URL + "/" + itemId);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-            conn.setRequestMethod("PUT");
-            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-            conn.setDoOutput(true);
-
-            String jsonInput = gson.toJson(item);
-            try (OutputStream os = conn.getOutputStream()) {
-                byte[] input = jsonInput.getBytes(StandardCharsets.UTF_8);
-                os.write(input, 0, input.length);
-            }
-
-            int status = conn.getResponseCode();
-            if (status == 200 || status == 201) return true;
-            return false;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public static boolean deleteItem(Long itemId) {
-        try {
-            URL url = new URL(BASE_URL + "/" + itemId);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("DELETE");
-
-            int status = conn.getResponseCode();
-            if (status == 200 || status == 201) return true;
-            return false;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
+        return Collections.emptyList();
     }
 }
