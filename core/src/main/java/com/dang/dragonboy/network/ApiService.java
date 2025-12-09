@@ -6,6 +6,7 @@ import java.net.URL;
 
 import com.dang.dragonboy.du_lieu.LocalStorage;
 import com.dang.dragonboy.du_lieu.State_Management;
+import com.dang.dragonboy.network.DTO.DeTuTheoUser;
 import com.dang.dragonboy.network.DTO.ItemWeb;
 import com.dang.dragonboy.network.DTO.UserResponse;
 import com.google.gson.Gson;
@@ -157,7 +158,7 @@ public class ApiService {
                     State_Management.setAuth_id(auth_id);
                     State_Management.setRefresh_token(refresh_token);
                     LocalStorage.saveLastUser(State_Management.getSessionId(), access_token); // Lưu vào file JSON
-                    System.out.println("verify otp thanh cong");
+//                    System.out.println("verify otp thanh cong");
                     return ApiService.getProfile(access_token);
                 }
                 return null;
@@ -215,6 +216,9 @@ public class ApiService {
 
             user.daVaoTaiKhoanLanDau = u.get("daVaoTaiKhoanLanDau").getAsBoolean();
             user.coDeTu = u.get("coDeTu").getAsBoolean();
+            if ( user.coDeTu ) {
+                user.deTu = getDeTu(token);
+            }
             State_Management.setAuth_id(u.get("auth_id").getAsInt());
 
             if (u.has("danhSachVatPhamWeb")) {
@@ -230,6 +234,46 @@ public class ApiService {
             State_Management.getUserResponse().biBan = role_biBan[1].equals("true") ? true : false;
             State_Management.getUserResponse().role = role_biBan[0];
             return user;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static DeTuTheoUser getDeTu(String token) {
+        try {
+            URL profileUrl = new URL(BASE_URL + "/detu/de-tu/");
+            HttpURLConnection conn = (HttpURLConnection) profileUrl.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Authorization", "Bearer " + token);
+            conn.setConnectTimeout(5000);
+            conn.setReadTimeout(5000);
+
+            int status = conn.getResponseCode();
+            if (status != 200) {
+                System.err.println("Token không hợp lệ hoặc hết hạn: HTTP " + status);
+                return null;
+            }
+
+            BufferedReader br = new BufferedReader(
+                new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8)
+            );
+            StringBuilder response = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                response.append(line.trim());
+            }
+            br.close();
+
+            JsonObject root = JsonParser.parseString(response.toString()).getAsJsonObject();
+            JsonObject u = root.getAsJsonObject("detu");
+
+            DeTuTheoUser deTuTheoUser = new DeTuTheoUser();
+
+            deTuTheoUser.sucManh = parseProtoLong(u.getAsJsonObject("sucManh"));
+
+            return deTuTheoUser;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -285,6 +329,9 @@ public class ApiService {
     }
 
     public static boolean saveGame(UserResponse user) {
+        if (user.coDeTu) {
+            saveGameDeTu(user.deTu);
+        }
         try {
             Gson gson = new Gson();
 
@@ -316,6 +363,71 @@ public class ApiService {
             URL url = new URL(BASE_URL + "/user/save-game");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("PUT");
+            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+//            System.out.println(State_Management.getToken());
+            conn.setRequestProperty("Authorization", "Bearer " + State_Management.getToken());
+            conn.setDoOutput(true);
+
+            try (OutputStream os = conn.getOutputStream()) {
+                os.write(jsonInput.getBytes(StandardCharsets.UTF_8));
+            }
+
+            int code = conn.getResponseCode();
+
+            if (code == 200 || code == 201) {
+                return true;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean saveGameDeTu(DeTuTheoUser deTuTheoUser) {
+        try {
+            Gson gson = new Gson();
+
+            JsonObject json = new JsonObject();
+            json.addProperty("sucManh", deTuTheoUser.sucManh);
+
+            String jsonInput = gson.toJson(json);
+
+            URL url = new URL(BASE_URL + "/detu/save-game");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("PUT");
+            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+//            System.out.println(State_Management.getToken());
+            conn.setRequestProperty("Authorization", "Bearer " + State_Management.getToken());
+            conn.setDoOutput(true);
+
+            try (OutputStream os = conn.getOutputStream()) {
+                os.write(jsonInput.getBytes(StandardCharsets.UTF_8));
+            }
+
+            int code = conn.getResponseCode();
+
+            if (code == 200 || code == 201) {
+                return true;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean taoDeTu() {
+        try {
+            Gson gson = new Gson();
+
+            JsonObject json = new JsonObject();
+
+            String jsonInput = gson.toJson(json);
+
+            URL url = new URL(BASE_URL + "/detu/create-de-tu");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
 //            System.out.println(State_Management.getToken());
             conn.setRequestProperty("Authorization", "Bearer " + State_Management.getToken());
@@ -479,16 +591,16 @@ public class ApiService {
                     ItemWeb[] items = gson.fromJson(itemsArray, ItemWeb[].class);
 
                     if (items == null) {
-                        System.out.println("Deserialization failed, items is null!");
+//                        System.out.println("Deserialization failed, items is null!");
                     } else {
-                        System.out.println("Deserialization success, items length: " + items.length);
+//                        System.out.println("Deserialization success, items length: " + items.length);
                     }
 
                     List<ItemWeb> list = Arrays.asList(items);
                     List<Integer> ids = new ArrayList<>();
                     for (ItemWeb item : list) {
                         ids.add(item.itemId);
-                        System.out.println(item.itemId);
+//                        System.out.println(item.itemId);
                     }
                     return ids;
                 }
@@ -503,15 +615,16 @@ public class ApiService {
     public static boolean useItemWeb(String username, int itemId) {
         HttpURLConnection conn = null;
         try {
-            URL url = new URL(BASE_URL + "/useItemWeb");
+            URL url = new URL(BASE_URL + "/user/use-item-web");
             conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
+            conn.setRequestMethod("DELETE");
             conn.setRequestProperty("Content-Type", "application/json"); // chuẩn JSON
             conn.setRequestProperty("Accept", "application/json");
+            conn.setRequestProperty("Authorization", "Bearer " + State_Management.getToken());
             conn.setDoOutput(true); // để gửi body
 
             // JSON body thủ công
-            String jsonInputString = String.format("{\"username\":\"%s\",\"itemId\":%d}", username, itemId);
+            String jsonInputString = String.format("{\"itemId\":%d}",  itemId);
             System.out.println("Sending JSON: " + jsonInputString);
 
             try (OutputStream os = conn.getOutputStream()) {
