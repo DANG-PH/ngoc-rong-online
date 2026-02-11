@@ -11,6 +11,7 @@ dependencies {
   api "com.badlogicgames.gdx:gdx:$gdxVersion"
 
   implementation "com.google.code.gson:gson:2.11.0"
+  implementation 'io.socket:socket.io-client:2.1.0'
 
   if(enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion";

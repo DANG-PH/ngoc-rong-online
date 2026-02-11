@@ -1,6 +1,8 @@
 package com.dang.dragonboy.nhan_vat;
 
 import com.badlogic.gdx.graphics.Texture;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -8,6 +10,8 @@ import java.util.Map;
 public class NhanVatXuLy {
     public static boolean dangMacCaiTrang = false;
     public static boolean dangMacAvatar = false;
+    private static final Map<Texture, String> PathTexture = new HashMap<>();
+
     // ==== CAITRANG (dạng cố định) ====
     public static NhanVatCauHinh loadCaiTrang(String tenCaiTrang) {
         String path = "nhanvat/caitrang/" + tenCaiTrang + "/";
@@ -16,35 +20,35 @@ public class NhanVatXuLy {
         String itemvanbay = "vatpham/vanbay/";
         String itemglt = "vatpham/vatphamgame/giapluyentap/";
 
-        Texture dau_dung = new Texture(path + "daudung.png");
-        Texture dau_chay = new Texture(path + "dauchay.png");
+        Texture dau_dung = loadTexture(path + "daudung.png");
+        Texture dau_chay = loadTexture(path + "dauchay.png");
 
-        Texture than_dung = new Texture(path + "thandung.png");
-        Texture than_nhay = new Texture(path + "thannhay.png");
-        Texture than_roi = new Texture(path + "thanroi.png");
+        Texture than_dung = loadTexture(path + "thandung.png");
+        Texture than_nhay = loadTexture(path + "thannhay.png");
+        Texture than_roi = loadTexture(path + "thanroi.png");
         Texture[] than_chay = {
-            new Texture(path + "thanchay (1).png"),
-            new Texture(path + "thanchay (2).png"),
-            new Texture(path + "thanchay (3).png"),
-            new Texture(path + "thanchay (4).png"),
-            new Texture(path + "thanchay (5).png")
+            loadTexture(path + "thanchay (1).png"),
+            loadTexture(path + "thanchay (2).png"),
+            loadTexture(path + "thanchay (3).png"),
+            loadTexture(path + "thanchay (4).png"),
+            loadTexture(path + "thanchay (5).png")
         };
-        Texture than_bay = new Texture(path + "thannhay.png");
+        Texture than_bay = loadTexture(path + "thannhay.png");
 
-        Texture chan_dung = new Texture(path + "chandung.png");
-        Texture chan_nhay = new Texture(path + "channhay.png");
-        Texture chan_roi = new Texture(path + "chanroi.png");
+        Texture chan_dung = loadTexture(path + "chandung.png");
+        Texture chan_nhay = loadTexture(path + "channhay.png");
+        Texture chan_roi = loadTexture(path + "chanroi.png");
         Texture[] chan_chay = {
-            new Texture(path + "chanchay (1).png"),
-            new Texture(path + "chanchay (2).png"),
-            new Texture(path + "chanchay (3).png"),
-            new Texture(path + "chanchay (4).png"),
-            new Texture(path + "chanchay (5).png")
+            loadTexture(path + "chanchay (1).png"),
+            loadTexture(path + "chanchay (2).png"),
+            loadTexture(path + "chanchay (3).png"),
+            loadTexture(path + "chanchay (4).png"),
+            loadTexture(path + "chanchay (5).png")
         };
-        Texture chan_bay = new Texture(path + "chanbay.png");
+        Texture chan_bay = loadTexture(path + "chanbay.png");
 
-        Texture chan_gong = new Texture(path + "changong.png");
-        Texture than_thu = new Texture(path + "thanthu.png");
+        Texture chan_gong = loadTexture(path + "changong.png");
+        Texture than_thu = loadTexture(path + "thanthu.png");
 
         Map<TrangThai, List<DoLechModular>> lech = CaiTrangOffset.getOffset(tenCaiTrang);
         if (
@@ -96,35 +100,35 @@ public class NhanVatXuLy {
         String itemvanbay = "vatpham/vanbay/";
         String itemglt = "vatpham/vatphamgame/giapluyentap/";
 
-        Texture dau_dung = new Texture(avatarPath + "daudung.png");
-        Texture dau_chay = new Texture(avatarPath + "dauchay.png");
+        Texture dau_dung = loadTexture(avatarPath + "daudung.png");
+        Texture dau_chay = loadTexture(avatarPath + "dauchay.png");
 
-        Texture than_dung = new Texture(aoPath + "thandung.png");
-        Texture than_nhay = new Texture(aoPath + "thannhay.png");
-        Texture than_roi = new Texture(aoPath + "thanroi.png");
+        Texture than_dung = loadTexture(aoPath + "thandung.png");
+        Texture than_nhay = loadTexture(aoPath + "thannhay.png");
+        Texture than_roi = loadTexture(aoPath + "thanroi.png");
         Texture[] than_chay = {
-            new Texture(aoPath + "thanchay (1).png"),
-            new Texture(aoPath + "thanchay (2).png"),
-            new Texture(aoPath + "thanchay (3).png"),
-            new Texture(aoPath + "thanchay (4).png"),
-            new Texture(aoPath + "thanchay (5).png")
+            loadTexture(aoPath + "thanchay (1).png"),
+            loadTexture(aoPath + "thanchay (2).png"),
+            loadTexture(aoPath + "thanchay (3).png"),
+            loadTexture(aoPath + "thanchay (4).png"),
+            loadTexture(aoPath + "thanchay (5).png")
         };
-        Texture than_bay = new Texture(aoPath + "thannhay.png");
+        Texture than_bay = loadTexture(aoPath + "thannhay.png");
 
-        Texture chan_dung = new Texture(quanPath + "chandung.png");
-        Texture chan_nhay = new Texture(quanPath + "channhay.png");
-        Texture chan_roi = new Texture(quanPath + "chanroi.png");
+        Texture chan_dung = loadTexture(quanPath + "chandung.png");
+        Texture chan_nhay = loadTexture(quanPath + "channhay.png");
+        Texture chan_roi = loadTexture(quanPath + "chanroi.png");
         Texture[] chan_chay = {
-            new Texture(quanPath + "chanchay (1).png"),
-            new Texture(quanPath + "chanchay (2).png"),
-            new Texture(quanPath + "chanchay (3).png"),
-            new Texture(quanPath + "chanchay (4).png"),
-            new Texture(quanPath + "chanchay (5).png")
+            loadTexture(quanPath + "chanchay (1).png"),
+            loadTexture(quanPath + "chanchay (2).png"),
+            loadTexture(quanPath + "chanchay (3).png"),
+            loadTexture(quanPath + "chanchay (4).png"),
+            loadTexture(quanPath + "chanchay (5).png")
         };
-        Texture chan_bay = new Texture(quanPath + "chanbay.png");
+        Texture chan_bay = loadTexture(quanPath + "chanbay.png");
 
-        Texture chan_gong = new Texture(quanPath + "changong.png");
-        Texture than_thu = new Texture(aoPath + "thanthu.png");
+        Texture chan_gong = loadTexture(quanPath + "changong.png");
+        Texture than_thu = loadTexture(aoPath + "thanthu.png");
 
         Map<TrangThai, List<DoLechModular>> lech = AvatarDoOffset.getOffset(avatar, ao, quan);
         dangMacCaiTrang = false;
@@ -170,5 +174,15 @@ public class NhanVatXuLy {
     }
     public static void setDangMacCaiTrang(boolean dangmacct){
         dangMacCaiTrang = dangmacct;
+    }
+
+    private static Texture loadTexture(String path) {
+        Texture tex = new Texture(path);
+        PathTexture.put(tex, path);
+        return tex;
+    }
+
+    public static String getPathFromTexture(Texture texture) {
+        return PathTexture.get(texture);
     }
 }

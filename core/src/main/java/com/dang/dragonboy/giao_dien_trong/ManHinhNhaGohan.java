@@ -22,6 +22,7 @@ import com.dang.dragonboy.he_thong.ThongTinChuyenMap;
 //Giao dien ngoai
 import com.dang.dragonboy.giao_dien_ngoai.ManHinhSplash;
 //NhanVat
+import com.dang.dragonboy.nhan_vat.MultiplayerRenderer;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.nhan_vat.NhanVatCauHinh;
 import com.dang.dragonboy.nhan_vat.NhanVatXuLy;
@@ -29,6 +30,7 @@ import com.dang.dragonboy.nhan_vat.NhanVatXuLy;
 import com.dang.dragonboy.hien_thi.QuanLyCamera;
 import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.hien_thi.SkillNhanVat;
+import com.dang.dragonboy.websocket.GameSocket;
 import com.dang.dragonboy.xu_ly_map.MapCoBan;
 import com.dang.dragonboy.xu_ly_map.MapNhaGohan;
 // dữ liệu
@@ -167,6 +169,7 @@ public class ManHinhNhaGohan implements Screen {
                     thongtin.hud.getDuLieuNguoiChoi().deTu.datToaDo(875 + (nhanVat.getFlipX() ? 50f : -50f), 175);
                 }
                 this.mapLangAru = thongtin.mapTr;
+                GameSocket.guiSetMap( "Làng Aru", "Nhà Gôhan", thongtin.nhanVat);
             }
             if (thongtin.mapSau != null) {
                 this.map = thongtin.mapSau;
@@ -405,6 +408,7 @@ public class ManHinhNhaGohan implements Screen {
             danhSachNpc.get(i).ve(batch,thoiGianTichLuy);
         }
 
+        MultiplayerRenderer.render(batch, thoiGianTichLuy, hudRenderer);
         nhanVat.ve(batch, thoiGianTichLuy);
 
         boolean duocVeDiemCanDen = true;

@@ -12,6 +12,8 @@ import com.dang.dragonboy.item.*;
 import com.dang.dragonboy.network.DTO.DeTuTheoUser;
 import com.dang.dragonboy.network.DTO.ItemCanLuu;
 import com.dang.dragonboy.network.DTO.UserResponse;
+import com.dang.dragonboy.nhan_vat.AssetsDemo;
+import com.dang.dragonboy.websocket.GameSocket;
 
 public class Main extends Game {
 
@@ -19,6 +21,8 @@ public class Main extends Game {
 
     @Override
     public void create() {
+        AssetsDemo.loadOnce();
+
         assetManager = new AssetManager();
 
         // load trước các texture nặng (NPC Hải Đăng : gacha, vé quay…)
@@ -149,6 +153,12 @@ public class Main extends Game {
 
         if (assetManager != null) {
             assetManager.dispose();
+        }
+
+        if (GameSocket.isConnected()) {
+            System.out.println("🔌 Disconnect socket before exit");
+            GameSocket.socket.disconnect();
+            GameSocket.socket.close(); // optional nhưng nên có
         }
     }
 }

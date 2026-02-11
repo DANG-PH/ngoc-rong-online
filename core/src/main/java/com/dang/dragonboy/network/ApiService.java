@@ -9,6 +9,7 @@ import com.dang.dragonboy.du_lieu.State_Management;
 import com.dang.dragonboy.network.DTO.DeTuTheoUser;
 import com.dang.dragonboy.network.DTO.ItemWeb;
 import com.dang.dragonboy.network.DTO.UserResponse;
+import com.dang.dragonboy.websocket.GameSocket;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import java.nio.charset.StandardCharsets;
@@ -21,7 +22,7 @@ public class ApiService {
     private static final String BASE_URL = "http://localhost:3000";
     private static final Gson gson = new Gson();
 
-    public static boolean register(String username, String password, String realname, String email) {
+    public static boolean register(String username, String password, String realname, String email, String gameName) {
         try {
             URL url = new URL(BASE_URL + "/auth/register");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -35,8 +36,8 @@ public class ApiService {
             conn.setDoOutput(true);
 
             String jsonInput = String.format(
-                "{\"username\":\"%s\",\"realname\":\"%s\",\"password\":\"%s\",\"email\":\"%s\"}",
-                username, realname, password, email
+                "{\"username\":\"%s\",\"realname\":\"%s\",\"password\":\"%s\",\"email\":\"%s\",\"gameName\":\"%s\"}",
+                username, realname, password, email, gameName
             );
 
             try (OutputStream os = conn.getOutputStream()) {
@@ -159,6 +160,10 @@ public class ApiService {
                     State_Management.setRefresh_token(refresh_token);
                     LocalStorage.saveLastUser(State_Management.getSessionId(), access_token); // Lưu vào file JSON
 //                    System.out.println("verify otp thanh cong");
+
+                    if (!GameSocket.isConnected()) {
+                        GameSocket.connect(access_token);
+                    }
                     return ApiService.getProfile(access_token);
                 }
                 return null;
@@ -213,6 +218,7 @@ public class ApiService {
             user.x = u.get("x").getAsFloat();
             user.y = u.get("y").getAsFloat();
             user.mapHienTai = u.get("mapHienTai").getAsString();
+            user.gameName = u.get("gameName").getAsString();
 
             user.daVaoTaiKhoanLanDau = u.get("daVaoTaiKhoanLanDau").getAsBoolean();
             user.coDeTu = u.get("coDeTu").getAsBoolean();

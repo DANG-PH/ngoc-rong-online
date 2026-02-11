@@ -19,9 +19,11 @@ import com.dang.dragonboy.he_thong.ThaoTac;
 import com.dang.dragonboy.he_thong.ThongTinChuyenMap;
 import com.dang.dragonboy.hien_thi.SkillNhanVat;
 import com.dang.dragonboy.hien_thi.VeHUD;
+import com.dang.dragonboy.nhan_vat.MultiplayerRenderer;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.nhan_vat.NhanVatCauHinh;
 import com.dang.dragonboy.nhan_vat.NhanVatXuLy;
+import com.dang.dragonboy.websocket.GameSocket;
 import com.dang.dragonboy.xu_ly_map.MapCoBan;
 import com.dang.dragonboy.xu_ly_map.MapDoiHoaCuc;
 import com.dang.dragonboy.hien_thi.QuanLyCamera;
@@ -73,6 +75,7 @@ public class ManHinhDoiHoaCuc implements Screen {
                     thongtin.hud.getDuLieuNguoiChoi().deTu.datToaDo(5 + (thongtin.nhanVat.getFlipX() ? 50f : -50f), 175);
                 }
                 mapLangAru = thongtin.mapTr;
+                GameSocket.guiSetMap( "Làng Aru", "Đồi Hoa Cúc", thongtin.nhanVat);
             }
             nhanVat = thongtin.nhanVat;
             hud = thongtin.hud;
@@ -105,7 +108,7 @@ public class ManHinhDoiHoaCuc implements Screen {
                 State_Management.getUserResponse().hanhTinh, State_Management.getUserResponse().nhanVat
             );
             nhanVat = haidang;
-            nhanVat.setTen(State_Management.getUserResponse().tenNhanVat); // set tên nhân vật trong nhanvat.java
+            nhanVat.setTen(State_Management.getUserResponse().gameName); // set tên nhân vật trong nhanvat.java
             hud.setNhanVat(nhanVat);// load cái này để đổi avt theo ct
             hud.setCamera(camManager);
             nhanVat.setHUD(hud);
@@ -290,6 +293,7 @@ public class ManHinhDoiHoaCuc implements Screen {
         }
         map.capNhatNpc();
 
+        MultiplayerRenderer.render(batch, thoiGianTichLuy, hud);
         nhanVat.ve(batch, thoiGianTichLuy);
         boolean duocVeDiemCanDen = true;
         for (Npc npc : danhSachNpc) {

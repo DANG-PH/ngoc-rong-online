@@ -17,6 +17,8 @@ import com.dang.dragonboy.nhan_vat.van_bay.VanBayCauHinh;
 import com.dang.dragonboy.hien_thi.VeHUD;
 import java.util.List;
 import java.util.ArrayList;
+
+import com.dang.dragonboy.websocket.GameSocket;
 import com.dang.dragonboy.xu_ly_map.HitboxDat;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
@@ -46,6 +48,7 @@ public class NhanVat {
     private Texture chan_dung, chan_nhay, chan_roi,chan_gong;
     private Texture[] chan_chay;
     private Texture chan_bay;
+    public String dauPath, chanPath, thanPath;
 
     public Texture[] ttnl = new Texture[4];
     public Texture[] bom = new Texture[2];
@@ -76,14 +79,14 @@ public class NhanVat {
     private boolean flipX = false;
 
     // Offset để tùy chỉnh vị trí đầu/thân theo trạng thái
-    private float lechThanX = 0f, lechThanY = 0f;
-    private float lechDauX = 0f, lechDauY = 0f;
-    private float lechChanX = 0f, lechChanY = 0f;
+    public float lechThanX = 0f, lechThanY = 0f;
+    public float lechDauX = 0f, lechDauY = 0f;
+    public float lechChanX = 0f, lechChanY = 0f;
 
-    private String tenVanBay = "base";
+    public String tenVanBay = "base";
 
     private VanBayCauHinh vanBayCauHinh;
-    private int frameVanBay = 0;
+    public int frameVanBay = 0;
     private float timeVanBay = 0f;
 
     public boolean dangMangVanBay = false;
@@ -214,13 +217,19 @@ public class NhanVat {
     private Texture[] clickdichuyen = new Texture[4];
     private float thoiGianHienDiemCanDen = 0; // đếm thời gian từ lúc click
     private boolean dangHienDiemCanDen = false;
+    public boolean chanDiChuyenToaDo1Lan = false; // chan animation di chuyen toa do
 
-    private float timeChoHienBay;
+    public float timeChoHienBay;
     private float timeDoiFramesHuyHieu,timeDoiFramesDeoLung,timeDoiFramesAura,timeDoiFramesTtnl,timeDoiFramesQckk,timeHieuUngHuytSao;
     public boolean chuaSetTimeHuytSao = true;
     private Texture[] auraChan = new Texture[4];
 
     public void setToaDoMucTieu(float x, float y) {
+        if (chanDiChuyenToaDo1Lan) {
+            chanDiChuyenToaDo1Lan = false;
+            return;
+        }
+
         this.x_muc_tieu = x;
         this.y_muc_tieu = y;
         this.x_check_npc = x;
@@ -231,6 +240,7 @@ public class NhanVat {
     }
 
     public void veDiemCanDen(SpriteBatch batch) {
+        if (this.veHUD.daClickVaoPlayer) return;
         if (!dangHienDiemCanDen) return;
 
         thoiGianHienDiemCanDen += Gdx.graphics.getDeltaTime();
@@ -1369,6 +1379,12 @@ public class NhanVat {
         x = Math.max(gioiHanXMin, Math.min(x, gioiHanXMax-rong));
 
         y =Math.max(gioiHanYMin, Math.min(y, gioiHanYMax-cao));
+
+        try {
+            GameSocket.guiPlayerMove(this);
+        } catch (Exception e) {
+
+        }
     }
     public void setFlipTrai() {
         flipX = true;
@@ -1723,6 +1739,12 @@ public class NhanVat {
                     }
                 }
             }
+
+            // Lấy string path texture đang vẽ hiện tại để gửi cho backend làm multiplayer
+            this.dauPath = NhanVatXuLy.getPathFromTexture(dauVe);
+            this.chanPath = NhanVatXuLy.getPathFromTexture(chanVe);
+            this.thanPath = NhanVatXuLy.getPathFromTexture(thanVe);
+
             if (veHUD.timeChoBienKhi > 0) {
                 int tick = (int)(veHUD.timeChoBienKhi * 10);
                 int tick1 = (int)(veHUD.timeChoBienKhi * 15);

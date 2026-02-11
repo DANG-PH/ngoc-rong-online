@@ -233,7 +233,16 @@ public class ThaoTac extends InputAdapter {
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         int y = Gdx.graphics.getHeight() - screenY;
         if (!hud.vuaKeoHanhTrangPhai && !hud.vuaKeoHanhTrangTrai) {
-            hud.xuLyClick(screenX, y);
+            float viewportWidth = camera.camera.viewportWidth;
+            float viewportHeight = camera.camera.viewportHeight;
+
+            float camX = camera.camera.position.x;
+            float camY = camera.camera.position.y;
+
+            float worldX = camX - viewportWidth * 0.5f + screenX;
+            float worldY = camY - viewportHeight * 0.5f + y;
+
+            hud.xuLyClick(screenX, y, worldX, worldY);
         }
 //        if (hud.daClickVaoNpc) {
 //            hud.npcHienTai.xuLyClick(screenX, y);

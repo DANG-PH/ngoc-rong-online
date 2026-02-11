@@ -102,7 +102,7 @@ public class DuLieuNguoiChoi {
                            int soDauThan, long vang, long ngoc,
                            String capBac,int[] capSkill,String[] tenSkill,String[][] motaSkill,int capcaydau,
                            int GiamSatThuongNhanVat) {
-        this.ten = ten;
+        this.ten = State_Management.getUserResponse().gameName;
         this.sucManh = State_Management.getUserResponse().sucManh;
         this.theLuc = theLuc;
         this.HpHienTai = HpHienTai;

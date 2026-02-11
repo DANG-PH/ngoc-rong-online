@@ -44,6 +44,7 @@ dependencies {
   implementation project(':core')
   implementation("com.badlogicgames.gdx:gdx-tools:$gdxVersion"){exclude group: 'com.badlogicgames.gdx', module: 'gdx-backend-lwjgl'}
   implementation "com.google.code.gson:gson:2.11.0"
+  implementation 'io.socket:socket.io-client:2.1.0'
 
   if(enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-backend-lwjgl3:$graalHelperVersion"

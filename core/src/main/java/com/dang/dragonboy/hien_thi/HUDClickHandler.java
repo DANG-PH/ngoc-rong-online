@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.utils.Align;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
+import com.dang.dragonboy.nhan_vat.MultiplayerRenderer;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.item.Item;
 import com.dang.dragonboy.item.LoaiItem;
@@ -29,11 +30,13 @@ public class HUDClickHandler {
         nutX = new Texture("hud/giaodientrong/nutX.png");
     }
 
-    public void xuLyClick(int x, int y) {
+    public void xuLyClick(int x, int y, float worldX, float worldY) {
         // check click NPC đặt ở đây để cùng thời điểm với xử lí click của hud
         if (veHUD.daClickVaoNpc) {
             veHUD.npcHienTai.xuLyClick(x, y);
         }
+
+        MultiplayerRenderer.checkClick(worldX, worldY, veHUD);
 
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();

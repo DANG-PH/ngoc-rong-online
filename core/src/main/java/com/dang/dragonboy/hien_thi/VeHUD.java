@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import com.badlogic.gdx.audio.Music;
 import java.util.LinkedList;
 import com.dang.dragonboy.he_thong.TrangThaiChu;
+import com.dang.dragonboy.websocket.GameSocket;
+import com.dang.dragonboy.websocket.PlayerState;
 import com.dang.dragonboy.xu_ly_map.MapDoiHoaCuc;
 import com.dang.dragonboy.xu_ly_map.MapLangAru;
 import com.dang.dragonboy.xu_ly_map.MapNhaGohan;
@@ -82,7 +84,7 @@ public class VeHUD {
     public Texture oskill, oskillclick;
     public Texture nutpopup;
 
-    public BitmapFont font,fontNgayGioHienTai, fontChucnang,fontChucnang1, fontDauThan, fontNhiemVu, fontNhiemVu1, fontNhiemVuChuaLam, fontMotaNhiemVu, fontvangngoc, fontsm, fontSkilldaco, fontSkillchuaco, fontMotaSkill, fontCapSKill, fontMotaNoiTai, fontTiemNang, fontTenSkill, fontchat, fontMotaNganSkill, fontMotaNganSkill1, fontSkillchuaco1, fontMotaHanhTrang, fontMotaHanhTrang1, fontText, fontMoTaQuyDoiVe, fontMotaChucNangNpc;
+    public BitmapFont fontTen,font,fontNgayGioHienTai, fontChucnang,fontChucnang1, fontDauThan, fontNhiemVu, fontNhiemVu1, fontNhiemVuChuaLam, fontMotaNhiemVu, fontvangngoc, fontsm, fontSkilldaco, fontSkillchuaco, fontMotaSkill, fontCapSKill, fontMotaNoiTai, fontTiemNang, fontTenSkill, fontchat, fontMotaNganSkill, fontMotaNganSkill1, fontSkillchuaco1, fontMotaHanhTrang, fontMotaHanhTrang1, fontText, fontMoTaQuyDoiVe, fontMotaChucNangNpc;
     public GlyphLayout layout;
 
     public SkillNhanVat[] skillIcons;
@@ -348,6 +350,13 @@ public class VeHUD {
 
     public boolean dangHienPopupNhanVatPhai = false;
     public float timeChoTatPopupNpc = 0f;
+
+    // Phần logic cho việc click vào Người chơi khác
+    public PlayerState playerDuocChon;
+    public boolean daClickVaoPlayer = false;
+    public boolean vuaThoatPlayer = false;
+    public Texture muiTen;
+    public Texture[] clickMuiTen = new Texture[4];
 
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data;
@@ -627,6 +636,14 @@ public class VeHUD {
         fontMotaNganSkill = generator3.generateFont(param3);
         generator3.dispose();
 
+        FreeTypeFontGenerator generator4 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchinh.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter param4 = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        param4.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
+            "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ Đ";
+        param4.size = 21;
+        fontTen = generator4.generateFont(param4);
+        generator4.dispose();
+
         String[] tenFile = {
             "", // 0 là tắt nhạc nên để trống
             "khauthitamphi.mp3",
@@ -646,6 +663,12 @@ public class VeHUD {
             nhacNen[i] = Gdx.audio.newMusic(Gdx.files.internal("nhacnen/" + tenFile[i]));
             nhacNen[i].setLooping(true);
             nhacNen[i].setVolume(0.5f);
+        }
+
+        muiTen = new Texture("hud/giaodientrong/clicknpc.png");
+
+        for (int i = 0; i < 4; i++) {
+            clickMuiTen[i] = new Texture("hieuung/hieuunggame/click_npc/"+(i+1)+".png");
         }
     }
 
@@ -1660,6 +1683,12 @@ public class VeHUD {
                             dangHienTinNhanChat = true;
                             dangHienKhungChat = false;
                             nutduocchon = -1;
+
+                            try {
+                                GameSocket.guiChat(tinNhanChat);
+                            } catch (Exception e) {
+
+                            }
                         }
                     }
                 } else if (trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.GIOI_THIEU_GAME) {
@@ -1763,8 +1792,8 @@ public class VeHUD {
             dauThanRenderH = Math.min(dauThanRenderH, 53f);
         }
     }
-    public void xuLyClick(int x, int y) {
-        clickHandler.xuLyClick(x, y);
+    public void xuLyClick(int x, int y, float worldX, float worldY) {
+        clickHandler.xuLyClick(x, y, worldX, worldY);
     }
 
     public void hienPopupNhanVat() {

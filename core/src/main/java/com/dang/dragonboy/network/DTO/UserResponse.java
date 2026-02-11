@@ -6,6 +6,7 @@ public class UserResponse {
     public Long id;
     public String username;
     public String password;
+    public String gameName;
 
     // dữ liệu luu từ server
     public long vang;
@@ -22,7 +23,6 @@ public class UserResponse {
 
     public String hanhTinh = "traidat";
     public String nhanVat = "Goku";
-    public String tenNhanVat = "admin";
 
     public boolean coDeTu;
 

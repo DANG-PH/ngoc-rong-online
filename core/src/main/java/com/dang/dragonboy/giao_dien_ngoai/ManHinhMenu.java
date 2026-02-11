@@ -10,14 +10,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
+import com.dang.dragonboy.du_lieu.LocalStorage;
 import com.dang.dragonboy.du_lieu.State_Management;
 import com.dang.dragonboy.giao_dien_trong.ManHinhDoiHoaCuc;
 import com.dang.dragonboy.giao_dien_trong.ManHinhLangAru;
 import com.dang.dragonboy.he_thong.Main;
 import com.dang.dragonboy.giao_dien_trong.ManHinhNhaGohan;
+import com.dang.dragonboy.websocket.GameSocket;
 
 import java.util.Base64;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 enum TrangThaiManHinhMenu {
     NONE,
@@ -115,6 +118,11 @@ public class ManHinhMenu implements Screen {
                                     } else if (State_Management.getUserResponse().mapHienTai.equals("Đồi Hoa Cúc")) {
                                         nextScreen = (new ManHinhSplash(game, new ManHinhDoiHoaCuc(game, null)));
                                     }
+                                }
+                                if (!GameSocket.isConnected()) {
+                                    Map<String, String> savedUser = LocalStorage.loadLastUser();
+                                    String token = savedUser.get("access_token");
+                                    GameSocket.connect(token);
                                 }
                             } else {
                                 trangThaiManHinh = TrangThaiManHinhMenu.BAN;

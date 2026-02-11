@@ -1,5 +1,6 @@
 package com.dang.dragonboy.giao_dien_ngoai;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Gdx;
@@ -21,6 +22,7 @@ enum TrangThaiManHinh {
     NONE,
     DANGKY_STEP1,
     DANGKY_STEP2,
+    DANGKY_STEP3,
     VERIFY_OTP,
     THONGBAO,
 }
@@ -60,6 +62,9 @@ public class ManHinhDoiTaiKhoan implements Screen {
     private String RealnameDky = "";
     private boolean oNhapEmailDuocChonDky = false;
     private boolean oNhapRealnameDuocChonDky = false;
+
+    private String GameNameDky = "";
+    private boolean oNhapGameNameDuocChonDky = false;
 
     private String maOTP = "";
     private String maCapcha = "";
@@ -180,6 +185,19 @@ public class ManHinhDoiTaiKhoan implements Screen {
                         }
                     }
                 }
+                else if (trangThaiManHinh == TrangThaiManHinh.DANGKY_STEP3) {
+                    if (oNhapGameNameDuocChonDky) {
+                        if (character == '\b') {
+                            if (!GameNameDky.isEmpty()) {
+                                GameNameDky = GameNameDky.substring(0, GameNameDky.length() - 1);
+                            }
+                        } else if (Character.toString(character).matches("[a-zA-Z0-9 @ .]")) {
+                            if (GameNameDky.length() < 50) {
+                                GameNameDky += character;
+                            }
+                        }
+                    }
+                }
                 else if (trangThaiManHinh == TrangThaiManHinh.VERIFY_OTP) {
                     if (oNhapMaOTP) {
                         if (character == '\b') {
@@ -219,7 +237,9 @@ public class ManHinhDoiTaiKhoan implements Screen {
                 }
                 if (nutManHinhDangKyChon == 0) {
                     nutManHinhDangKyChon = -1;
-                    if (maCapcha.equals(this.maRandomCapcha)) {
+                    boolean duDieuKien = maCapcha.equals(this.maRandomCapcha);
+                    duDieuKien = true; // Dev
+                    if (duDieuKien) {
                         new Thread(() -> {
                             UserResponse user = ApiService.verifyOTP(State_Management.getSessionId(), maOTP);
 
@@ -275,15 +295,15 @@ public class ManHinhDoiTaiKhoan implements Screen {
                 }
             }
 
-            if (trangThaiManHinh == TrangThaiManHinh.DANGKY_STEP2) {
+            if (trangThaiManHinh == TrangThaiManHinh.DANGKY_STEP3) {
                 if (nutManHinhDangKyChon == 1) {
-                    trangThaiManHinh = TrangThaiManHinh.DANGKY_STEP1;
+                    trangThaiManHinh = TrangThaiManHinh.DANGKY_STEP2;
                     nutManHinhDangKyChon = -1;
                 }
                 if (nutManHinhDangKyChon == 0) {
                     nutManHinhDangKyChon = -1;
                     new Thread(() -> {
-                        boolean ok = ApiService.register(tenTaiKhoanDky, matKhauDky, RealnameDky, tenEmailDky);
+                        boolean ok = ApiService.register(tenTaiKhoanDky, matKhauDky, RealnameDky, tenEmailDky, GameNameDky);
 
                         Gdx.app.postRunnable(() -> {
                             if (ok) {
@@ -296,6 +316,17 @@ public class ManHinhDoiTaiKhoan implements Screen {
                 }
             }
 
+            if (trangThaiManHinh == TrangThaiManHinh.DANGKY_STEP2) {
+                if (nutManHinhDangKyChon == 1) {
+                    trangThaiManHinh = TrangThaiManHinh.DANGKY_STEP1;
+                    nutManHinhDangKyChon = -1;
+                }
+                if (nutManHinhDangKyChon == 0) {
+                    nutManHinhDangKyChon = -1;
+                    trangThaiManHinh = TrangThaiManHinh.DANGKY_STEP3;
+                }
+            }
+
             if (trangThaiManHinh == TrangThaiManHinh.DANGKY_STEP1) {
                 if (nutManHinhDangKyChon == 1) {
                     trangThaiManHinh = TrangThaiManHinh.NONE;
@@ -304,18 +335,6 @@ public class ManHinhDoiTaiKhoan implements Screen {
                 if (nutManHinhDangKyChon == 0) {
                     nutManHinhDangKyChon = -1;
                     trangThaiManHinh = TrangThaiManHinh.DANGKY_STEP2;
-//
-//                    new Thread(() -> {
-//                        boolean ok = ApiService.register(tenTaiKhoanDky, matKhauDky);
-//
-//                        Gdx.app.postRunnable(() -> {
-//                            if (ok) {
-//                                System.out.println("Đăng ký thành công!");
-//                            } else {
-//                                System.out.println("Đăng ký thất bại!");
-//                            }
-//                        });
-//                    }).start();
                 }
             }
 
