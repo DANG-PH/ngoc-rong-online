@@ -52,6 +52,8 @@ public class DuLieuNguoiChoi {
     private ArrayList<Item> hanhTrang = new ArrayList<>();
     private ArrayList<Item> hanhTrangDangMac = new ArrayList<>(8);
     private ArrayList<Item> hanhTrangRuongDo = new ArrayList<>();
+    public ArrayList<Item> hanhTrangGiaoDich = new ArrayList<>();
+    public ArrayList<Item> hanhTrangGiaoDichPlayer2 = new ArrayList<>(); // hanh trang mà người kia giao dịch cho
     public final int MAXRUONGDO = 20;
     public final int MAXHANHTRANG = 50;
 
@@ -150,6 +152,14 @@ public class DuLieuNguoiChoi {
     }
 
     public boolean themItemVaoHanhTrang(Item item) {
+        boolean ketQua = themItemVaoHanhTrangNoSave(item);
+        if (ketQua) {
+            luuDuLieuItem();
+        }
+        return ketQua;
+    }
+
+    private boolean themItemVaoHanhTrangNoSave(Item item) {
         if (hanhTrang.size() < MAXHANHTRANG) {
             if (item.getLoai() != LoaiItem.NGOCRONG &&
                 item.getLoai() != LoaiItem.PHUTRO &&
@@ -162,8 +172,7 @@ public class DuLieuNguoiChoi {
                     if ((itemm.getLoai() == LoaiItem.NGOCRONG ||
                         item.getLoai() == LoaiItem.PHUTRO ||
                         item.getLoai() == LoaiItem.NANGSKILL ||
-                        item.getLoai() == LoaiItem.VE_QUAY_NPC_HAIDANG
-                        )
+                        item.getLoai() == LoaiItem.VE_QUAY_NPC_HAIDANG)
                         && itemm.getId().equals(item.getId())) {
                         itemm.tangSoLuong(item.getSoLuong());
                         daSoHuuItem = true;
@@ -173,11 +182,11 @@ public class DuLieuNguoiChoi {
                     hanhTrang.add(item);
                 }
             }
+            return true;
         } else {
-            veHUD.setTinNhanPet("Cần ít nhất 1 ô trống",2f);
+            veHUD.setTinNhanPet("Cần ít nhất 1 ô trống", 2f);
             return false;
         }
-        return true;
     }
 
     public ArrayList<Item> getHanhTrangDangMac() {
@@ -1108,4 +1117,101 @@ public class DuLieuNguoiChoi {
         return itemDB;
     }
 
+    public boolean luuDuLieuItem() {
+        UserResponse currentUser = State_Management.getUserResponse();
+        if (currentUser != null) {
+
+            // Gom danh sách tất cả item
+            List<ItemCanLuu> allItems = new ArrayList<>();
+
+            // Thêm tất cả item từ các danh sách vào allItems
+            if (State_Management.getDuLieuNguoiChoi() != null) {
+                DuLieuNguoiChoi duLieu = State_Management.getDuLieuNguoiChoi();
+
+                // Hành trang
+                if (duLieu.getHanhTrang() != null) {
+                    for (Item item : duLieu.getHanhTrang()) {
+                        ItemCanLuu converted = State_Management.getDuLieuNguoiChoi().convertItem(item, "hanhtrang");
+                        if (converted != null) allItems.add(converted);
+                    }
+                }
+
+                // Hành trang đang mặc
+                if (duLieu.getHanhTrangDangMac() != null) {
+                    for (Item item : duLieu.getHanhTrangDangMac()) {
+                        ItemCanLuu converted = State_Management.getDuLieuNguoiChoi().convertItem(item, "hanhtrangdangmac");
+                        if (converted != null) allItems.add(converted);
+                    }
+                }
+
+                // Rương đồ
+                if (duLieu.getHanhTrangRuongDo() != null) {
+                    for (Item item : duLieu.getHanhTrangRuongDo()) {
+                        ItemCanLuu converted = State_Management.getDuLieuNguoiChoi().convertItem(item, "ruongdo");
+                        if (converted != null) allItems.add(converted);
+                    }
+                }
+
+                // Hành trang đệ tử
+                if (duLieu.coDeTu() && duLieu.deTu != null && duLieu.deTu.getHanhTrangDangMac() != null) {
+                    for (Item item : duLieu.deTu.getHanhTrangDangMac()) {
+                        ItemCanLuu converted = State_Management.getDuLieuNguoiChoi().convertItem(item, "hanhtrangdetu");
+                        if (converted != null) allItems.add(converted);
+                    }
+                }
+            }
+
+            // Gửi lên backend
+            List<ItemCanLuu> listItem = ApiItemService.saveItems(State_Management.getUserResponse().username, allItems);
+            setLaiHanhTrangTuDatabase(listItem);
+            return true;
+        }
+        return false;
+    }
+
+    public void setLaiHanhTrangTuDatabase(List<ItemCanLuu> listItem) {
+        if (listItem != null) {
+            Gson gson = new Gson();
+            hanhTrang.clear();
+            hanhTrangRuongDo.clear();
+            hanhTrangDangMac.clear();
+            {
+                for (int i = 0; i < 8; i++) {
+                    hanhTrangDangMac.add(null);
+                }
+            }
+            if (this.coDeTu()) {
+                this.deTu.getHanhTrangDangMac().clear();
+                {
+                    for (int i = 0; i < 6; i++) {
+                        this.deTu.getHanhTrangDangMac().add(null);
+                    }
+                }
+            }
+            for (ItemCanLuu item : listItem) {
+                Item itemCLient = new Item(
+                    item.maItem, item.ten, LoaiItem.valueOf(item.loai),
+                    item.linkTexture,
+                    item.moTa, item.soLuong,
+                    gson.fromJson(item.chiso, int[].class),
+                    item.hanhTinh, Long.parseLong(item.sucManhYeuCau), item.setKichHoat, item.soSaoPhaLe, item.soSaoPhaLeCuongHoa, item.soCap, item.hanSuDung
+                );
+                itemCLient.id = item.id;
+                switch (item.viTri) {
+                    case "hanhtrang":
+                        this.themItemVaoHanhTrangNoSave(itemCLient);
+                        break;
+                    case "ruongdo":
+                        this.themItemVaoHanhTrangRuongDo(itemCLient);
+                        break;
+                    case "hanhtrangdangmac":
+                        veHUD.xulyitem.macDoVuaLogin(itemCLient);
+                        break;
+                    case "hanhtrangdetu":
+                        veHUD.xulyitem.macDoVuaLoginDeTu(itemCLient);
+                        break;
+                }
+            }
+        }
+    }
 }

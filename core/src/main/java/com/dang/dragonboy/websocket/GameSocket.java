@@ -23,7 +23,7 @@ public class GameSocket {
             headers.put("Authorization", Collections.singletonList("Bearer " + token));
             opts.extraHeaders = headers;
 
-            socket = IO.socket("http://localhost:3000/ws-game", opts);
+            socket = IO.socket("https://api.chienbinhrongthieng.online/ws-game", opts);
 
             socket.on(Socket.EVENT_CONNECT, args -> {
                 System.out.println("WS CONNECTED");
@@ -72,6 +72,21 @@ public class GameSocket {
         });
         socket.on("playerSync", WorldState::onPlayerSync);
         socket.on("playerChat", WorldState::onPlayerChat);
+        socket.on("notification", args -> {
+            WorldState.onNotification(args);
+        });
+        socket.on("trade:request", args -> {
+            WorldState.onTradeItem(args);
+        });
+        socket.on("trade:open", args -> {
+            WorldState.onTradeOpen(args);
+        });
+        socket.on("trade:cancelled", args -> {
+            WorldState.onTradeCancel(args);
+        });
+        socket.on("trade:offer:update", args -> {
+            WorldState.onTradeUpdate(args);
+        });
     }
 
     public static boolean isConnected() {
@@ -102,6 +117,7 @@ public class GameSocket {
             data.put("tenVanBay", nhanVat.tenVanBay);
             data.put("rong", nhanVat.rong);
             data.put("cao", nhanVat.cao);
+            data.put("avatar", nhanVat.doiavatar());
 
             socket.emit("setMap", data);
         } catch (Exception e) {
@@ -131,6 +147,7 @@ public class GameSocket {
         data.put("tenVanBay", nhanVat.tenVanBay);
         data.put("rong", nhanVat.rong);
         data.put("cao", nhanVat.cao);
+        data.put("avatar", nhanVat.doiavatar());
 
         socket.emit("player-move", data);
     }
@@ -140,5 +157,49 @@ public class GameSocket {
         data.put("message", tinNhan);
 
         socket.emit("player-chat", data);
+    }
+
+    public static void guiNotification(String tinNhan) throws Exception {
+        JSONObject data = new JSONObject();
+        data.put("tinNhan", tinNhan);
+
+        socket.emit("send-notification", data);
+    }
+
+    public static void guiReqTradeItem(int targetId) throws Exception {
+        JSONObject data = new JSONObject();
+        data.put("targetId", targetId);
+
+        socket.emit("trade:request", data);
+    }
+
+    public static void tradeAccept(int fromUserId) throws Exception {
+        JSONObject data = new JSONObject();
+        data.put("fromUserId", fromUserId);
+
+        socket.emit("trade:accept", data);
+    }
+
+    public static void tradeCancel(int withUserId) throws Exception {
+        JSONObject data = new JSONObject();
+        data.put("withUserId", withUserId);
+
+        socket.emit("trade:cancel", data);
+    }
+
+    public static void tradeOfferAdd(int withUserId, int itemId) throws Exception {
+        JSONObject data = new JSONObject();
+        data.put("withUserId", withUserId);
+        data.put("itemId", itemId);
+
+        socket.emit("trade:offer:add", data);
+    }
+
+    public static void tradeOfferRemove(int withUserId, int itemId) throws Exception {
+        JSONObject data = new JSONObject();
+        data.put("withUserId", withUserId);
+        data.put("itemId", itemId);
+
+        socket.emit("trade:offer:remove", data);
     }
 }

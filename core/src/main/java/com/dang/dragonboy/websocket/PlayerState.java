@@ -1,4 +1,5 @@
 package com.dang.dragonboy.websocket;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -25,6 +26,7 @@ public class PlayerState {
     public String dau;
     public String than;
     public String chan;
+    public String avatar;
     public float timeChoHienBay;
     public float lechThanX;
     public float lechDauX;
@@ -51,6 +53,9 @@ public class PlayerState {
 
     public boolean dangGanPlayer1 = false;
     public float timeClickOChat = 0f;
+
+    public ChucNangPlayer chucNangPlayer = ChucNangPlayer.NONE;
+    public float timeChoThucHienChucNang = 0f;
 
     public void ve(SpriteBatch batch, float thoiGian, VeHUD veHUD) {
         TrangThai trangThai = TrangThai.valueOf(this.trangthai);
@@ -151,6 +156,23 @@ public class PlayerState {
         veHUD.layout.setText(veHUD.fontTen, this.gameName);
         veHUD.fontTen.draw(batch,veHUD.layout,x+(rong - veHUD.layout.width)/2f,y+cao+30);
 
+        // Ve mui ten click Player
+        float tenY = y + cao + 30;
+        if (dangClickPlayer) {
+            batch.draw(veHUD.muiTen, x + (rong - veHUD.muiTen.getWidth() * 0.5f) / 2f, tenY, veHUD.muiTen.getWidth() * 0.5f, veHUD.muiTen.getHeight() * 0.5f);
+        }
+
+        // Nếu click nhiều lần
+        if (dangClickPlayer2) {
+            batch.draw(veHUD.clickMuiTen[frameMuiTen], x + (rong - veHUD.clickMuiTen[frameMuiTen].getWidth() * 0.5f) / 2f, tenY, veHUD.clickMuiTen[frameMuiTen].getWidth() * 0.5f, veHUD.clickMuiTen[frameMuiTen].getHeight() * 0.5f);
+        }
+
+        // Nếu khoảng cách player 1 và player 2 < 150 pixel thì hiển thị bảng trên đầu
+        if (dangGanPlayer1) {
+            Texture oVe = timeClickOChat > 0f ? veHUD.ochatclick : veHUD.ochat;
+            batch.draw(oVe, x + (rong-oVe.getWidth()*0.35f)/2f, y + cao + 50, oVe.getWidth()*0.35f, oVe.getHeight()*0.35f);
+        }
+
         if (this.dangHienTinNhan) {
             veHUD.layout.setText(
                 veHUD.fontchat,
@@ -176,23 +198,6 @@ public class PlayerState {
             float duoiX = this.dir == -1 ? x + rong + 20 : x - 20;
             batch.draw(veHUD.duoichat, duoiX, y + cao + 15, 16 * flipScale, 16);
             veHUD.fontchat.draw(batch, veHUD.layout, x + (rong - 200) / 2f + 10f, y + cao + 30 + 18f + veHUD.layout.height);
-        }
-
-        // Ve mui ten click Player
-        float tenY = y + cao + 30;
-        if (dangClickPlayer) {
-            batch.draw(veHUD.muiTen, x + (rong - veHUD.muiTen.getWidth() * 0.5f) / 2f, tenY, veHUD.muiTen.getWidth() * 0.5f, veHUD.muiTen.getHeight() * 0.5f);
-        }
-
-        // Nếu click nhiều lần
-        if (dangClickPlayer2) {
-            batch.draw(veHUD.clickMuiTen[frameMuiTen], x + (rong - veHUD.clickMuiTen[frameMuiTen].getWidth() * 0.5f) / 2f, tenY, veHUD.clickMuiTen[frameMuiTen].getWidth() * 0.5f, veHUD.clickMuiTen[frameMuiTen].getHeight() * 0.5f);
-        }
-
-        // Nếu khoảng cách player 1 và player 2 < 150 pixel thì hiển thị bảng trên đầu
-        if (dangGanPlayer1) {
-            Texture oVe = timeClickOChat > 0f ? veHUD.ochatclick : veHUD.ochat;
-            batch.draw(oVe, x + (rong-oVe.getWidth()*0.35f)/2f, y + cao + 50, oVe.getWidth()*0.35f, oVe.getHeight()*0.35f);
         }
     }
 
@@ -239,6 +244,34 @@ public class PlayerState {
             if (timeClickOChat <= 0) {
                 timeClickOChat = 0;
                 // Set mở popup bằng true ở đây, sau co the dung enum
+                veHUD.dangHienKhungChung = true;
+            }
+        }
+
+        // Nếu trạng thái bị thay đổi
+        if (chucNangPlayer != ChucNangPlayer.NONE && timeChoThucHienChucNang <= 0f) {
+            timeChoThucHienChucNang = 0.3f;
+        }
+
+        if (timeChoThucHienChucNang > 0f) {
+            timeChoThucHienChucNang -= Gdx.graphics.getDeltaTime();
+            if (timeChoThucHienChucNang <= 0f) {
+                // Switch case chức năng đã chọn để thực hiện
+                // call api, gửi event websocket, ...
+                switch (chucNangPlayer) {
+                    case GIAO_DICH -> {
+                        try {
+                            GameSocket.guiReqTradeItem(this.userId);
+                            veHUD.playerGiaoDich = this;
+                        } catch (Exception e) {
+
+                        }
+                    }
+                }
+
+                // Bước cuối là reset về trạng thái ban đầu
+                timeChoThucHienChucNang = 0f;
+                chucNangPlayer = ChucNangPlayer.NONE;
             }
         }
     }
@@ -262,18 +295,17 @@ public class PlayerState {
                 if (!dangClickPlayer) {
                     dangClickPlayer = true;
                     nhanVat.vuaClick = false;
+                    thucHienHanhDongPlayer(nhanVat.getVeHUD());
                 } else {
                     if (nhanVat.vuaClick) {
                         dangClickPlayer2 = true;
                         nhanVat.vuaClick = false;
-                        thucHienHanhDongPlayer(nhanVat.getVeHUD());
                     }
                 }
             } else {
                 dangClickPlayer = false;
                 dangClickPlayer2 = false;
                 nhanVat.getVeHUD().daClickVaoPlayer = false;
-                nhanVat.getVeHUD().playerDuocChon = null;
                 dangGanPlayer1 = false;
             }
         }

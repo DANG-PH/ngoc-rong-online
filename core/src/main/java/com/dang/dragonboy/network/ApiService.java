@@ -19,8 +19,21 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.JsonArray;
 
 public class ApiService {
-    private static final String BASE_URL = "http://localhost:3000";
+    private static final String BASE_URL = "https://api.chienbinhrongthieng.online";
     private static final Gson gson = new Gson();
+
+    public static boolean healthCheck() {
+        try {
+            URL url = new URL(BASE_URL + "/health");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setConnectTimeout(5000);
+            conn.setReadTimeout(5000);
+            return conn.getResponseCode() == 200;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
     public static boolean register(String username, String password, String realname, String email, String gameName) {
         try {
@@ -352,6 +365,7 @@ public class ApiService {
             userObj.addProperty("mapHienTai", user.mapHienTai);
             userObj.addProperty("daVaoTaiKhoanLanDau", user.daVaoTaiKhoanLanDau);
             userObj.addProperty("coDeTu", user.coDeTu);
+            userObj.addProperty("gameName", user.gameName);
 
             // danhSachVatPhamWeb (array)
             JsonArray arr = new JsonArray();

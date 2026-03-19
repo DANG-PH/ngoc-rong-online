@@ -153,7 +153,7 @@ public class admin_thanhle extends renderUInpc {
             case DAC_BIET -> ds = danhSachItemDacBiet;
         }
 
-        NPC_CUA_HANG.render_item(batch,274,veHUD, ds, indexItemDuocChon[trangThaiCuaHang.ordinal()]);
+        NPC_CUA_HANG.render_item(true, batch,274,veHUD, ds, indexItemDuocChon[trangThaiCuaHang.ordinal()]);
 
         veHUD.renderHUDThongBaoPopupNhanVatPhai(batch);
     }

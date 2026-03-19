@@ -27,8 +27,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.audio.Music;
 import java.util.LinkedList;
 import com.dang.dragonboy.he_thong.TrangThaiChu;
-import com.dang.dragonboy.websocket.GameSocket;
-import com.dang.dragonboy.websocket.PlayerState;
+import com.dang.dragonboy.websocket.*;
 import com.dang.dragonboy.xu_ly_map.MapDoiHoaCuc;
 import com.dang.dragonboy.xu_ly_map.MapLangAru;
 import com.dang.dragonboy.xu_ly_map.MapNhaGohan;
@@ -98,7 +97,7 @@ public class VeHUD {
     public Texture popupNhanVat;
     public Texture nutX;
     public boolean dangHienPopup = false;
-    //    public boolean vuaMoPopup = false;
+    public boolean vuaMoPopup = false;
     public boolean vuaTatPopup = false;
     private NhanVat nhanVat;
     public Texture texAvt = null;
@@ -211,7 +210,7 @@ public class VeHUD {
     public boolean dangChonHanhTrangPhai = false;
     public boolean dangChonHanhTrangTrai = false;
 
-    public Music[] nhacNen = new Music[12];
+    public Music[] nhacNen = new Music[13];
 
     public float timeMiniGame = 60f;
     public int ketQuaGiaiTruoc;
@@ -357,6 +356,19 @@ public class VeHUD {
     public boolean vuaThoatPlayer = false;
     public Texture muiTen;
     public Texture[] clickMuiTen = new Texture[4];
+
+    public boolean dangHienKhungChung = false;
+
+    // giao dich 2 nguoi choi
+    public boolean dangCoYeuCauGiaoDich = false;
+    public float timeChapNhanGiaoDich = 0f;
+    public PlayerState playerGiaoDich;
+    public float scrollX_trade = 0f;
+    public boolean tradeTextDone = false;
+
+    public boolean dangGiaoDich = false;
+    public TrangThaiHanhTrangGd trangThaiHanhTrangGd = TrangThaiHanhTrangGd.ITEM_CHO;
+    public int indexItemGiaoDich = -1;
 
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data;
@@ -656,7 +668,8 @@ public class VeHUD {
             "thoigiansetraloi.mp3",
             "suthatdaboquen.mp3",
             "khonglayduocvo.mp3",
-            "seasons.mp3"
+            "seasons.mp3",
+            "vokichcuaem.mp3"
         };
 
         for (int i = 1; i < tenFile.length; i++) {
@@ -972,6 +985,17 @@ public class VeHUD {
             batch.draw(nenflash,0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
             batch.setColor(1, 1, 1, 1);
         }
+        // yc gd
+        if (dangCoYeuCauGiaoDich) {
+          HUDTradeItem.render(batch, this);
+        }
+
+        // gd
+        if (dangGiaoDich) {
+            KhungGiaoDich.render(batch);
+        }
+
+        //
         ruongDo.renderRuongDo(batch);
         renderLuaChonCayDau(batch);
         if (daClickVaoNpc) {
@@ -979,6 +1003,12 @@ public class VeHUD {
         }
         renderPopup(batch);
         renderPetChat(batch);
+
+        if (dangHienKhungChung) {
+            if (playerDuocChon != null) {
+                KhungChung.renderKhungTrai(AssetMulti.getTexture(playerDuocChon.avatar), this, batch, "Thần Trái Đất\nSức mạnh: 10 tỷ", playerDuocChon.gameName, "Bạn muốn làm gì", 1, new String[]{"Kết bạn","Giao dịch","Thách đấu"});
+            }
+        }
 
         batch.end();
         if (timeGlow>0) {
@@ -1035,6 +1065,15 @@ public class VeHUD {
         }
     }
     public void update(float delta) {
+        //Gd 2 nguoi choi
+        if (timeChapNhanGiaoDich > 0f) {
+            timeChapNhanGiaoDich -= delta;
+            if (timeChapNhanGiaoDich <= 0) {
+                timeChapNhanGiaoDich = 0;
+                dangCoYeuCauGiaoDich = false;
+            }
+        }
+
         //nut X tat popup NPC
         capNhatTimeChoTatPopupNpc(delta);
         //fps
@@ -1087,7 +1126,7 @@ public class VeHUD {
                         setTinNhanPet("Cần chờ "+(int)(delayHopTheThuong/60f)+" phút nữa để hợp thể Fushion Dance",2);
                     }
                 } else if (trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.NHAC_NEN) {
-                    String[] chucNang = {"Tắt nhạc","Khẩu thị tâm phi","Đếm ngày xa em","Kẻ theo đuổi ánh sáng","Tháp rơi tự do","Điều anh biết","DanDan Kokoro Hikareteku","Sao mình chưa nắm tay nhau","Thời gian sẽ trả lời","Sự thật đã bỏ quên", "Không lấy được vợ","Seasons"};
+                    String[] chucNang = {"Tắt nhạc","Khẩu thị tâm phi","Đếm ngày xa em","Kẻ theo đuổi ánh sáng","Tháp rơi tự do","Điều anh biết","DanDan Kokoro Hikareteku","Sao mình chưa nắm tay nhau","Thời gian sẽ trả lời","Sự thật đã bỏ quên", "Không lấy được vợ","Seasons","Vở kịch của em"};
                     if (oChiSoDangChon == 0) {
                         for (int i = 1; i < nhacNen.length; i++) {
                             if (nhacNen[i].isPlaying()) nhacNen[i].stop();
@@ -1284,124 +1323,183 @@ public class VeHUD {
         if (nutClickTimer3 > 0){
             nutClickTimer3 -= Gdx.graphics.getDeltaTime();
             if (nutClickTimer3 <= 0) {
-                if (trangThaiChucNangHUD == TrangThaiChucNangHUD.HANH_TRANG || trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU || dangHienRuongDo || dangHienPopupNhanVatPhai) {
-                    // mac do
-                    if (nuthanhtrangchon == 1) {
-                        // MẶC ITEM
-                        xuLyDungItem();
-                    } else if (nuthanhtrangchon == 2) {
-                        dangHienThongBao = true;
-                        DangHienPopupThongTin1 = false;
-                        TimeChoHienPopup = 0;
-                    } else if (nuthanhtrangchon == 3) {
-                        if (!dangHienRuongDo) {
-                            if (duLieuNguoiChoi.deTu.getSucManh() >= 1_500_000) {
-                                if (duLieuNguoiChoi.deTu.getSucManh() >= itemm.getSucManhYeuCau()) {
-                                    boolean duDieuKien = false;
-                                    if (duLieuNguoiChoi.deTu.getHanhtinh().equals(itemm.getHanhtinh()) || itemm.getHanhtinh().equals("all")) {
-                                        duDieuKien = true;
-                                    }
-                                    if (duDieuKien) {
-                                        xulyitem.macDoChoDe(hangTrangDangChon);
-                                        if (!(trangThaiChucNangHUDChucNang==TrangThaiChucNangHUD_ChucNang.DE_TU)) {
-                                            trangThaiChucNangHUD = TrangThaiChucNangHUD.CHUC_NANG;
-                                            trangThaiChucNangHUDChucNang=TrangThaiChucNangHUD_ChucNang.DE_TU;
-                                            scrollYPhai = 0;
-                                            scrollYTrai = 0;
+                if (dangHienPopup || dangHienRuongDo) {
+                    if (trangThaiChucNangHUD == TrangThaiChucNangHUD.HANH_TRANG || trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU || dangHienRuongDo || dangHienPopupNhanVatPhai) {
+                        // mac do
+                        if (nuthanhtrangchon == 1) {
+                            // MẶC ITEM
+                            xuLyDungItem();
+                        } else if (nuthanhtrangchon == 2) {
+                            dangHienThongBao = true;
+                            DangHienPopupThongTin1 = false;
+                            TimeChoHienPopup = 0;
+                        } else if (nuthanhtrangchon == 3) {
+                            if (!dangHienRuongDo) {
+                                if (duLieuNguoiChoi.deTu.getSucManh() >= 1_500_000) {
+                                    if (duLieuNguoiChoi.deTu.getSucManh() >= itemm.getSucManhYeuCau()) {
+                                        boolean duDieuKien = false;
+                                        if (duLieuNguoiChoi.deTu.getHanhtinh().equals(itemm.getHanhtinh()) || itemm.getHanhtinh().equals("all")) {
+                                            duDieuKien = true;
                                         }
-                                        if (!duLieuNguoiChoi.deTu.getTrangthai().equals("Về nhà")) {
-                                            duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Cám ơn sư phụ", 3f);
+                                        if (duDieuKien) {
+                                            xulyitem.macDoChoDe(hangTrangDangChon);
+                                            if (!(trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU)) {
+                                                trangThaiChucNangHUD = TrangThaiChucNangHUD.CHUC_NANG;
+                                                trangThaiChucNangHUDChucNang = TrangThaiChucNangHUD_ChucNang.DE_TU;
+                                                scrollYPhai = 0;
+                                                scrollYTrai = 0;
+                                            }
+                                            if (!duLieuNguoiChoi.deTu.getTrangthai().equals("Về nhà")) {
+                                                duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Cám ơn sư phụ", 3f);
+                                            }
+                                        } else {
+                                            if (!duLieuNguoiChoi.deTu.getHanhtinh().equals(itemm.getHanhtinh())) {
+                                                String ht;
+                                                switch (itemm.getHanhtinh()) {
+                                                    case "traidat":
+                                                        ht = "Trái Đất";
+                                                        break;
+                                                    case "xayda":
+                                                        ht = "Sayda";
+                                                        break;
+                                                    case "namek":
+                                                        ht = "Namếc";
+                                                        break;
+                                                    default:
+                                                        ht = "";
+                                                }
+                                                setTinNhanPet("Đệ tử không thể mặc đồ " + ht, 2f);
+                                            }
                                         }
                                     } else {
-                                        if (!duLieuNguoiChoi.deTu.getHanhtinh().equals(itemm.getHanhtinh())) {
-                                            String ht;
-                                            switch (itemm.getHanhtinh()) {
-                                                case "traidat":
-                                                    ht = "Trái Đất";
-                                                    break;
-                                                case "xayda":
-                                                    ht = "Sayda";
-                                                    break;
-                                                case "namek":
-                                                    ht = "Namếc";
-                                                    break;
-                                                default:
-                                                    ht = "";
-                                            }
-                                            setTinNhanPet("Đệ tử không thể mặc đồ " + ht, 2f);
-                                        }
+                                        setTinNhanPet("Đệ tử cần thêm " + formatVangNgoc(itemm.getSucManhYeuCau() - duLieuNguoiChoi.deTu.getSucManh()) + " sức mạnh nữa", 2f);
                                     }
                                 } else {
-                                    setTinNhanPet("Đệ tử cần thêm " + formatVangNgoc(itemm.getSucManhYeuCau() - duLieuNguoiChoi.deTu.getSucManh()) + " sức mạnh nữa", 2f);
+                                    setTinNhanPet("Đệ tử cần lên 1tr5 sức mạnh", 2f);
                                 }
-                            } else {
-                                setTinNhanPet("Đệ tử cần lên 1tr5 sức mạnh", 2f);
+                                hangTrangDangChon = -1;
+                                hangTrangDeTuDangChon = -1;
+                                DangHienPopupThongTin1 = false;
+                                TimeChoHienPopup = 0;
+                            } else if (dangHienRuongDo) {
+                                if (duLieuNguoiChoi.getHanhTrangRuongDo().size() < duLieuNguoiChoi.MAXRUONGDO) {
+                                    duLieuNguoiChoi.getHanhTrang().remove(itemm);
+                                }
+                                duLieuNguoiChoi.themItemVaoHanhTrangRuongDo(itemm);
+                                hangTrangDangChon = -1;
+                                hanhTrangRuongDoDangChon = -1;
+                                DangHienPopupThongTin1 = false;
+                                TimeChoHienPopup = 0;
                             }
-                            hangTrangDangChon = -1;
-                            hangTrangDeTuDangChon = -1;
-                            DangHienPopupThongTin1 = false;
-                            TimeChoHienPopup = 0;
-                        } else if (dangHienRuongDo) {
-                            if (duLieuNguoiChoi.getHanhTrangRuongDo().size() < duLieuNguoiChoi.MAXRUONGDO) {
-                                duLieuNguoiChoi.getHanhTrang().remove(itemm);
+                        } else if (nuthanhtrangchon == 4) {
+                            if (trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU) {
+                                xulyitem.goDoChoDe(hangTrangDeTuDangChon);
+                                DangHienPopupThongTin2 = false;
+                                TimeChoHienPopup = 0;
+                            } else if (dangHienRuongDo) {
+                                if (duLieuNguoiChoi.getHanhTrang().size() < 50) {
+                                    duLieuNguoiChoi.getHanhTrangRuongDo().remove(itemm);
+                                }
+                                duLieuNguoiChoi.themItemVaoHanhTrang(itemm);
+                                DangHienPopupThongTin3 = false;
+                                TimeChoHienPopup = 0;
                             }
-                            duLieuNguoiChoi.themItemVaoHanhTrangRuongDo(itemm);
-                            hangTrangDangChon = -1;
-                            hanhTrangRuongDoDangChon = -1;
-                            DangHienPopupThongTin1 = false;
-                            TimeChoHienPopup = 0;
-                        }
-                    } else if (nuthanhtrangchon == 4) {
-                        if (trangThaiChucNangHUDChucNang==TrangThaiChucNangHUD_ChucNang.DE_TU) {
-                            xulyitem.goDoChoDe(hangTrangDeTuDangChon);
-                            DangHienPopupThongTin2 = false;
-                            TimeChoHienPopup = 0;
-                        } else if (dangHienRuongDo) {
-                            if (duLieuNguoiChoi.getHanhTrang().size() < 50) {
-                                duLieuNguoiChoi.getHanhTrangRuongDo().remove(itemm);
+                        } else if (nuthanhtrangchon == 5) {
+                            if (trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU) {
+                                DangHienPopupThongTin2 = false;
+                                TimeChoHienPopup = 0;
+                            } else if (dangHienRuongDo) {
+                                DangHienPopupThongTin3 = false;
+                                TimeChoHienPopup = 0;
                             }
-                            duLieuNguoiChoi.themItemVaoHanhTrang(itemm);
-                            DangHienPopupThongTin3 = false;
-                            TimeChoHienPopup = 0;
                         }
-                    } else if (nuthanhtrangchon == 5) {
-                        if (trangThaiChucNangHUDChucNang==TrangThaiChucNangHUD_ChucNang.DE_TU) {
-                            DangHienPopupThongTin2 = false;
-                            TimeChoHienPopup = 0;
-                        } else if (dangHienRuongDo) {
-                            DangHienPopupThongTin3 = false;
-                            TimeChoHienPopup = 0;
+                    } else if (trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.NONE_CSMM) {
+                        if (nuthanhtrangchon == 2) {
+                            trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE;
+                        } else if (nuthanhtrangchon == 1) {
+                            trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.HUONG_DAN_THEM_CSMM;
+                        } else {
+                            trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.THAM_GIA_CSMM;
+                        }
+                    } else if (trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.HUONG_DAN_THEM_CSMM) {
+                        if (nuthanhtrangchon == 1) {
+                            trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE_CSMM;
+                        }
+                    } else if (trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.NONE_CHAN_LE) {
+                        if (nuthanhtrangchon == 2) {
+                            trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE;
+                        } else if (nuthanhtrangchon == 1) {
+                            trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.HUONG_DAN_THEM_CHAN_LE;
+                        } else {
+                            trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.THAM_GIA_CHAN_LE;
+                        }
+                    } else if (trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.HUONG_DAN_THEM_CHAN_LE) {
+                        if (nuthanhtrangchon == 1) {
+                            trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE_CHAN_LE;
+                        }
+                    } else if (trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.NONE) {
+                        if (nuthanhtrangchon == 0) {
+                            trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE_CSMM;
+                        } else if (nuthanhtrangchon == 1) {
+                            trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE_CHAN_LE;
                         }
                     }
-                } else if (trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.NONE_CSMM) {
-                    if (nuthanhtrangchon == 2) {
-                        trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE;
-                    } else if (nuthanhtrangchon == 1) {
-                        trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.HUONG_DAN_THEM_CSMM;
-                    } else {
-                        trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.THAM_GIA_CSMM;
+                } else if (dangGiaoDich) {
+                    if (trangThaiHanhTrangGd == TrangThaiHanhTrangGd.HANH_TRANG) {
+                        boolean duDieuKien =
+                            (this.itemm.getLoai() == LoaiItem.AO  ||
+                                this.itemm.getLoai() == LoaiItem.QUAN ||
+                                this.itemm.getLoai() == LoaiItem.GIAY ||
+                                this.itemm.getLoai() == LoaiItem.GANG ||
+                                this.itemm.getLoai() == LoaiItem.RADA) && hangTrangDangChon >= 8;
+
+                        if (duDieuKien) {
+                            switch ((int) nuthanhtrangchon) {
+                                case 1 -> {
+                                    // Call event websocket push item vào
+                                    try {
+                                        GameSocket.tradeOfferAdd(playerGiaoDich.userId, itemm.id);
+                                    } catch(Exception e) {
+
+                                    }
+                                    this.duLieuNguoiChoi.getHanhTrang().remove(itemm);
+                                    this.duLieuNguoiChoi.hanhTrangGiaoDich.add(itemm);
+                                    hangTrangDangChon = -1;
+                                    DangHienPopupThongTin1 = false;
+                                    TimeChoHienPopup = 0;
+                                }
+                                case 2 -> {
+                                    hangTrangDangChon = -1;
+                                    DangHienPopupThongTin1 = false;
+                                    TimeChoHienPopup = 0;
+                                }
+                            }
+                        } else {
+                            switch ((int) nuthanhtrangchon) {
+                                case 1 -> {
+                                    try {
+                                        GameSocket.tradeOfferRemove(playerGiaoDich.userId, itemm.id);
+                                    } catch(Exception e) {
+
+                                    }
+                                    hangTrangDangChon = -1;
+                                    DangHienPopupThongTin1 = false;
+                                    TimeChoHienPopup = 0;
+                                }
+                            }
+                        }
                     }
-                } else if (trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.HUONG_DAN_THEM_CSMM) {
-                    if (nuthanhtrangchon == 1) {
-                        trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE_CSMM;
-                    }
-                } else if (trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.NONE_CHAN_LE) {
-                    if (nuthanhtrangchon == 2) {
-                        trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE;
-                    } else if (nuthanhtrangchon == 1) {
-                        trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.HUONG_DAN_THEM_CHAN_LE;
-                    } else {
-                        trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.THAM_GIA_CHAN_LE;
-                    }
-                } else if (trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.HUONG_DAN_THEM_CHAN_LE) {
-                    if (nuthanhtrangchon == 1) {
-                        trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE_CHAN_LE;
-                    }
-                } else if (trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.NONE) {
-                    if (nuthanhtrangchon == 0) {
-                        trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE_CSMM;
-                    } else if (nuthanhtrangchon == 1){
-                        trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE_CHAN_LE;
+
+                    if (trangThaiHanhTrangGd == TrangThaiHanhTrangGd.ITEM_CHO) {
+                        switch ((int) nuthanhtrangchon) {
+                            case 1 -> {
+                                this.duLieuNguoiChoi.getHanhTrang().add(itemm);
+                                this.duLieuNguoiChoi.hanhTrangGiaoDich.remove(itemm);
+                                hangTrangDangChon = -1;
+                                DangHienPopupThongTin3 = false;
+                                TimeChoHienPopup = 0;
+                            }
+                        }
                     }
                 }
             }

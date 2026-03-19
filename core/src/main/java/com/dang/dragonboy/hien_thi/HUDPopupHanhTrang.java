@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Align;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.item.LoaiItem;
 import com.dang.dragonboy.nhan_vat.NhanVat;
+import com.dang.dragonboy.websocket.TrangThaiHanhTrangGd;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle.*;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.thay_hieu.*;
 
@@ -1120,7 +1121,8 @@ public class HUDPopupHanhTrang {
 
         // Các trường hợp popup item chung
         if ((veHUD.trangThaiChucNangHUD == TrangThaiChucNangHUD.HANH_TRANG && veHUD.dangHienPopup) ||
-            (veHUD.trangThaiChucNangHUD == TrangThaiChucNangHUD.CHUC_NANG && veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU && veHUD.dangChonHanhTrangPhai)){
+            (veHUD.trangThaiChucNangHUD == TrangThaiChucNangHUD.CHUC_NANG && veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU && veHUD.dangChonHanhTrangPhai)
+        ){
 //            (veHUD.daClickVaoNpc && veHUD.dangChonHanhTrangPhai && veHUD.dangHienPopupNhanVatPhai && !(veHUD.npcHienTai.npcHUDrender.ui_npc instanceof admin_thanhle))) {
 
             if (veHUD.itemm != null) {
@@ -1134,6 +1136,30 @@ public class HUDPopupHanhTrang {
                         veHUD.itemm.getLoai() == LoaiItem.RADA) && duLieuNguoiChoi.coDeTu()) {
                     veDanhSachNut(batch, new String[]{"Cho đệ tử"},2, 3, PopupX, PopupY, xCongThem, (int)veHUD.nuthanhtrangchon,veHUD.nutClickTimer3);
                 }
+            }
+        }
+
+        if (veHUD.dangGiaoDich && veHUD.trangThaiHanhTrangGd == TrangThaiHanhTrangGd.HANH_TRANG) {
+            if (veHUD.itemm != null) {
+                boolean duDieuKien =
+                    (veHUD.itemm.getLoai() == LoaiItem.AO  ||
+                    veHUD.itemm.getLoai() == LoaiItem.QUAN ||
+                    veHUD.itemm.getLoai() == LoaiItem.GIAY ||
+                    veHUD.itemm.getLoai() == LoaiItem.GANG ||
+                    veHUD.itemm.getLoai() == LoaiItem.RADA) && oHanhTrangDangChon >= 8;
+                String[] labels;
+                if (duDieuKien) {
+                    labels = new String[] {"Giao dịch", "Thoát"};
+                } else {
+                    labels = new String[] {"Thoát"};
+                }
+                veDanhSachNut(batch, labels,0, 1, PopupX, PopupY, xCongThem, (int)veHUD.nuthanhtrangchon, veHUD.nutClickTimer3);
+            }
+        }
+
+        if (veHUD.dangGiaoDich && veHUD.trangThaiHanhTrangGd == TrangThaiHanhTrangGd.ITEM_CHO) {
+            if (veHUD.itemm != null) {
+                veDanhSachNut(batch, new String[]{"Lấy ra"}, 0, 1, PopupX, PopupY, xCongThem, (int)veHUD.nuthanhtrangchon, veHUD.nutClickTimer3);
             }
         }
 

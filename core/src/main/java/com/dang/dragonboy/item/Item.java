@@ -3,6 +3,7 @@ package com.dang.dragonboy.item;
 import com.badlogic.gdx.graphics.Texture;
 
 public class Item {
+    public int id;
     private String maItem;
     private String ten;
     private transient LoaiItem loaiItem;

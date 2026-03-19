@@ -16,6 +16,7 @@ import com.dang.dragonboy.giao_dien_trong.ManHinhDoiHoaCuc;
 import com.dang.dragonboy.giao_dien_trong.ManHinhLangAru;
 import com.dang.dragonboy.he_thong.Main;
 import com.dang.dragonboy.giao_dien_trong.ManHinhNhaGohan;
+import com.dang.dragonboy.network.ApiService;
 import com.dang.dragonboy.websocket.GameSocket;
 
 import java.util.Base64;
@@ -24,7 +25,8 @@ import java.util.Map;
 
 enum TrangThaiManHinhMenu {
     NONE,
-    BAN
+    BAN,
+    SERVER_ERROR
 }
 
 public class ManHinhMenu implements Screen {
@@ -46,6 +48,8 @@ public class ManHinhMenu implements Screen {
     private float nutClickTimer = 0f;
     private int nutDuocChon = -1;
 
+    private Boolean serverOnline = null; // null = chưa check
+
     private Object mayChu; // biến lưu máy chủ đc chọn
     public ManHinhMenu(Main game ,Object mayChu) {
         this.game = game;
@@ -53,10 +57,15 @@ public class ManHinhMenu implements Screen {
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
         layout = new GlyphLayout();
+
+        new Thread(() -> {
+            serverOnline = ApiService.healthCheck();
+        }).start();
     }
 
     @Override
     public void render(float delta) {
+        if (serverOnline != null && !serverOnline && trangThaiManHinh != TrangThaiManHinhMenu.SERVER_ERROR) trangThaiManHinh = TrangThaiManHinhMenu.SERVER_ERROR;
         if (Gdx.input.justTouched()) {
             int mouseX = Gdx.input.getX();
             int mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
@@ -83,13 +92,22 @@ public class ManHinhMenu implements Screen {
                     mouseY >= nutY && mouseY <= nutY + 50) {
                     timeClickNutThongBao = 0.1f;
                 }
+            } else if (trangThaiManHinh == TrangThaiManHinhMenu.SERVER_ERROR) {
+                float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
+                float nutY = 70;
+                if (mouseX >= nutX && mouseX <= nutX + 140 &&
+                    mouseY >= nutY && mouseY <= nutY + 50) {
+                    timeClickNutThongBao = 0.1f;
+                }
             }
         }
 
         if (timeClickNutThongBao > 0) {
             timeClickNutThongBao -= delta;
             if (timeClickNutThongBao <= 0) {
-                trangThaiManHinh = TrangThaiManHinhMenu.NONE;
+                if (trangThaiManHinh != TrangThaiManHinhMenu.SERVER_ERROR) {
+                    trangThaiManHinh = TrangThaiManHinhMenu.NONE;
+                }
             }
         }
 
@@ -228,7 +246,7 @@ public class ManHinhMenu implements Screen {
                     "Máy chủ: Vũ trụ " + mayChu
                 };
                 if ("HAIDANG1".equals(mayChu)) {
-                    labels[3] = "Máy chủ: HAIDANG1";
+                    labels[2] = "Máy chủ: HAIDANG1";
                 }
                 int[] ys = {320, 255, 190, 125};
                 int[] textYs = {350, 284, 219, 154};
@@ -272,13 +290,22 @@ public class ManHinhMenu implements Screen {
             batch.draw(timeClickNutThongBao > 0 ? nutclick1 : nutdn1, nutX, nutY, 140, 50);
             layout.setText(font, "OK");
             font.draw(batch, layout, nutX + (140 - layout.width) / 2f, nutY + 30);
+        } else if (trangThaiManHinh == TrangThaiManHinhMenu.SERVER_ERROR) {
+            batch.draw(anhThongBao, (Gdx.graphics.getWidth() - 740) / 2f, 85, 740, 168);
+            layout.setText(font, "Máy chủ mất kết nối, vui lòng thử lại sau");
+            font.draw(batch, layout, (Gdx.graphics.getWidth() - layout.width) / 2, 180);
+            float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
+            float nutY = 70;
+            batch.draw(timeClickNutThongBao > 0 ? nutclick1 : nutdn1, nutX, nutY, 140, 50);
+            layout.setText(font, "OK");
+            font.draw(batch, layout, nutX + (140 - layout.width) / 2f, nutY + 30);
         }
 
         layout.setText(fontSplash, "Xóa dữ liệu");
         fontSplash.setColor(1, 1, 1, 1);
         fontSplash.draw(batch, layout, Gdx.graphics.getWidth() - layout.width - 10, 30);
 
-        layout.setText(fontThuong, "chienbinhrongthieng.online");
+        layout.setText(fontThuong, "nronline.vercel.app");
         fontThuong.setColor(1, 1, 1, 1);
         fontThuong.draw(batch, layout, Gdx.graphics.getWidth() - layout.width - 10, 600);
 
@@ -316,7 +343,7 @@ public class ManHinhMenu implements Screen {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 18;
-        parameter.characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?., Xóa dữ liệu Đă ậ ở ớ ổ à ả á ế ủ vũ trụ ơ : ị ò ê đ ư ợ ỗ ợ ể ã";
+        parameter.characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?., Xóa dữ liệu Đă ậ ở ớ ổ à ả á ế ủ vũ trụ ơ : ị ò ê đ ư ợ ỗ ợ ể ã máy chủ mất kết nối vui lòng thử lại sau";
         font = generator.generateFont(parameter);
         parameter.size = 14;
         fontSplash = generator.generateFont(parameter);

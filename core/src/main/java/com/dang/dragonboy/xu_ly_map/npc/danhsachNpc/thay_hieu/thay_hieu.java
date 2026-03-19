@@ -351,7 +351,7 @@ public class thay_hieu extends renderUInpc {
             veHUD.layout.setText(veHUD.fontTenSkill, "Nâng cấp");
             veHUD.fontTenSkill.draw(batch, veHUD.layout, (350 - 140) / 2f + (140 - veHUD.layout.width) / 2f, 444-danhSachItemCuongHoa.size()*50-50-2f+50/2f+veHUD.layout.height/2f);
 
-            NPC_CUA_HANG.render_item(batch, 344, veHUD, danhSachItemCuongHoa, indexItemDuocChon);
+            NPC_CUA_HANG.render_item(true, batch, 344, veHUD, danhSachItemCuongHoa, indexItemDuocChon);
         } else {
             veHUD.layout.setText(
                 veHUD.fontTenSkill,

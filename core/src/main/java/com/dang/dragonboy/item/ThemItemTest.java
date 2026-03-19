@@ -2,11 +2,13 @@ package com.dang.dragonboy.item;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.graphics.Texture;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
+import com.dang.dragonboy.du_lieu.State_Management;
 import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.network.ApiItemService;
 import com.dang.dragonboy.network.DTO.ItemCanLuu;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.nhan_vat.NhanVatXuLy;
+import com.dang.dragonboy.websocket.GameSocket;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_haidang.admin_haidang;
 import com.google.gson.Gson;
 
@@ -26,53 +28,8 @@ public class ThemItemTest {
         this.duLieu = duLieu;
     }
     public void themItemTest() {
-        Gson gson = new Gson();
         List<ItemCanLuu> itemTuDatabase = ApiItemService.getItems();
-        for (ItemCanLuu item : itemTuDatabase) {
-            switch (item.viTri) {
-                case "hanhtrang":
-                    duLieu.themItemVaoHanhTrang(new Item(
-                        item.maItem, item.ten, LoaiItem.valueOf(item.loai),
-                        item.linkTexture,
-                        item.moTa, item.soLuong,
-                        gson.fromJson(item.chiso, int[].class),
-                        item.hanhTinh, Long.parseLong(item.sucManhYeuCau), item.setKichHoat, item.soSaoPhaLe, item.soSaoPhaLeCuongHoa, item.soCap, item.hanSuDung
-                    ));
-                    break;
-                case "ruongdo":
-                    duLieu.themItemVaoHanhTrangRuongDo(new Item(
-                        item.maItem, item.ten, LoaiItem.valueOf(item.loai),
-                        item.linkTexture,
-                        item.moTa, item.soLuong,
-                        gson.fromJson(item.chiso, int[].class),
-                        item.hanhTinh, Long.parseLong(item.sucManhYeuCau), item.setKichHoat, item.soSaoPhaLe, item.soSaoPhaLeCuongHoa, item.soCap, item.hanSuDung
-                    ));
-                    break;
-                case "hanhtrangdangmac":
-                    veHUD.xulyitem.macDoVuaLogin(
-                        new Item(
-                            item.maItem, item.ten, LoaiItem.valueOf(item.loai),
-                            item.linkTexture,
-                            item.moTa, item.soLuong,
-                            gson.fromJson(item.chiso, int[].class),
-                            item.hanhTinh, Long.parseLong(item.sucManhYeuCau), item.setKichHoat, item.soSaoPhaLe, item.soSaoPhaLeCuongHoa, item.soCap, item.hanSuDung
-                        )
-                    );
-                    break;
-                case "hanhtrangdetu":
-                    veHUD.xulyitem.macDoVuaLoginDeTu(
-                        new Item(
-                            item.maItem, item.ten, LoaiItem.valueOf(item.loai),
-                            item.linkTexture,
-                            item.moTa, item.soLuong,
-                            gson.fromJson(item.chiso, int[].class),
-                            item.hanhTinh, Long.parseLong(item.sucManhYeuCau), item.setKichHoat, item.soSaoPhaLe, item.soSaoPhaLeCuongHoa, item.soCap, item.hanSuDung
-                        )
-                    );
-                    break;
-            }
-        }
-
+        this.duLieu.setLaiHanhTrangTuDatabase(itemTuDatabase);
 
 //        duLieu.themItemVaoHanhTrang(new Item(
 //            "bongtaic1", "Bông tai Porata", LoaiItem.BONGTAI,
@@ -1153,6 +1110,11 @@ public class ThemItemTest {
         ));
     }
     public void themQuaTuDieuUocRongThan() {
+        try{
+            GameSocket.guiNotification(State_Management.getUserResponse().gameName+" vừa gọi rồng tại "+this.veHUD.layTenMap());
+        } catch (Exception e) {
+
+        }
         if (veHUD.ngocRongUoc.equals("1sao")) {
             switch (veHUD.nutduocchon) {
                 case 0:
@@ -1439,6 +1401,11 @@ public class ThemItemTest {
                 Item item = this.randomBongTai();
                 mangAnh[chiso] = item.getId().contains("c2") ? ui.randomBongTai[0] : ui.randomBongTai[1];
                 duLieu.themItemVaoHanhTrang(item);
+                try{
+                    GameSocket.guiNotification(State_Management.getUserResponse().gameName+" vừa nhận "+item.getTenItem()+" tại sự kiện");
+                } catch (Exception e) {
+
+                }
                 break;
             case 1:
                 duLieu.themItemVaoHanhTrang(new Item(
@@ -1451,14 +1418,20 @@ public class ThemItemTest {
                 mangAnh[chiso] = ui.vatPhamGachaKrandom[1];
                 break;
             case 2:
-                duLieu.themItemVaoHanhTrang(new Item(
+                Item CtGohanBeast = new Item(
                     "gohan_beast", "Cải trang Gohan Beast", LoaiItem.CAITRANG,
                     "nhanvat/caitrang/gohan_beast/daudung.png",
                     "Cải trang thành Gohan Beast", 1,
                     new int[]{0,0,0,10,0,0,30,0,40,0,0,0,0},
                     nhanVat.getHanhtinh(), 10_000_000L, null, 0, 0, 0, -1
-                ));
+                );
+                duLieu.themItemVaoHanhTrang(CtGohanBeast);
                 mangAnh[chiso] = ui.vatPhamGachaKrandom[2];
+                try{
+                    GameSocket.guiNotification(State_Management.getUserResponse().gameName+" vừa nhận "+CtGohanBeast.getTenItem()+" tại sự kiện");
+                } catch (Exception e) {
+
+                }
                 break;
             case 3:
                 int soNgocCong = MathUtils.random(10,70);
@@ -1477,16 +1450,27 @@ public class ThemItemTest {
                     case "luoi_hai" : mangAnh[chiso] = ui.randomDeoLung[6];break;
                 }
                 duLieu.themItemVaoHanhTrang(itemDeoLung);
+                try{
+                    GameSocket.guiNotification(State_Management.getUserResponse().gameName+" vừa nhận "+itemDeoLung.getTenItem()+" tại sự kiện");
+                } catch (Exception e) {
+
+                }
                 break;
             case 5:
-                duLieu.themItemVaoHanhTrang(new Item(
+                Item CtBlackGoku = new Item(
                     "goku_black_rose", "Cải trang Super Black Goku", LoaiItem.CAITRANG,
                     "nhanvat/caitrang/goku_black_rose/daudung.png",
                     "Cải trang thành Super Black Goku", 1,
                     new int[]{0,0,0,0,0,0,45,45,45,0,0,0,0},
                     "all", 40_000_000_000L, null, 0, 0, 0, -1
-                ));
+                );
+                duLieu.themItemVaoHanhTrang(CtBlackGoku);
                 mangAnh[chiso] = ui.vatPhamGachaKrandom[5];
+                try{
+                    GameSocket.guiNotification(State_Management.getUserResponse().gameName+" vừa nhận "+CtBlackGoku.getTenItem()+" tại sự kiện");
+                } catch (Exception e) {
+
+                }
                 break;
             case 6:
                 Item itemNr = randomNgocRong();
@@ -1503,6 +1487,11 @@ public class ThemItemTest {
                 Item itemGenshin = this.randomGenshin();
                 mangAnh[chiso] = itemGenshin.getId().equals("xiao") ? ui.randomGenShin[0] : ui.randomGenShin[1];
                 duLieu.themItemVaoHanhTrang(itemGenshin);
+                try{
+                    GameSocket.guiNotification(State_Management.getUserResponse().gameName+" vừa nhận "+itemGenshin.getTenItem()+" tại sự kiện");
+                } catch (Exception e) {
+
+                }
                 break;
             case 9:
                 duLieu.themItemVaoHanhTrang(new Item(
@@ -1539,6 +1528,11 @@ public class ThemItemTest {
                     case "xayda_toi_thuong" : mangAnh[chiso] = ui.randomHuyHieu[3];break;
                 }
                 duLieu.themItemVaoHanhTrang(itemHuyHieu);
+                try{
+                    GameSocket.guiNotification(State_Management.getUserResponse().gameName+" vừa nhận "+itemHuyHieu.getTenItem()+" tại sự kiện");
+                } catch (Exception e) {
+
+                }
                 break;
             case 13:
                 int soVangCongg = MathUtils.random(5_000_000,50_000_000);

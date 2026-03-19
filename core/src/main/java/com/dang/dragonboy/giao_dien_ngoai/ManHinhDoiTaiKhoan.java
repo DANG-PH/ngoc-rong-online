@@ -101,7 +101,7 @@ public class ManHinhDoiTaiKhoan implements Screen {
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        param.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ẩ ể http:// ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ ễ ằ ừ — ẳ ữ ỗ ằ ễ ỗ ừ ẵ ê : ĩ ≤";
+        param.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ" + "ớờởỡợắằẳẵặấầẩẫậếềểễệốồổỗộứừửữựíìỉĩịóòỏõọúùủũụ" + "ỚỜỞỠỢẮẰẲẴẶẤẦẨẪẬẾỀỂỄỆỐỒỔỖỘỨỪỬỮỰÍÌỈĨỊÓÒỎÕỌÚÙỦŨỤ" + ".,;:!?'\"-()[]{}/@#$%^&*+=<>|\\~`" + "http://https://www._" + " —–·•…" + "0123456789";
         param.size = 18;
         font = generator.generateFont(param);
         param.size = 17;
@@ -123,8 +123,8 @@ public class ManHinhDoiTaiKhoan implements Screen {
                             if (!tenTaiKhoan.isEmpty()) {
                                 tenTaiKhoan = tenTaiKhoan.substring(0, tenTaiKhoan.length() - 1);
                             }
-                        } else if (Character.toString(character).matches("[a-zA-Z0-9]")) {
-                            if (tenTaiKhoan.length() < 20) {
+                        } else if (Character.toString(character).matches("[a-zA-Z0-9 !@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?`~]")) {
+                            if (tenTaiKhoan.length() < 30) {
                                 tenTaiKhoan += character;
                             }
                         }
@@ -133,8 +133,8 @@ public class ManHinhDoiTaiKhoan implements Screen {
                             if (!matKhau.isEmpty()) {
                                 matKhau = matKhau.substring(0, matKhau.length() - 1);
                             }
-                        } else if (Character.toString(character).matches("[a-zA-Z0-9]")) {
-                            if (matKhau.length() < 20) {
+                        } else if (Character.toString(character).matches("[a-zA-Z0-9 !@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?`~]")) {
+                            if (matKhau.length() < 30) {
                                 matKhau += character;
                             }
                         }
@@ -145,8 +145,8 @@ public class ManHinhDoiTaiKhoan implements Screen {
                             if (!tenTaiKhoanDky.isEmpty()) {
                                 tenTaiKhoanDky = tenTaiKhoanDky.substring(0, tenTaiKhoanDky.length() - 1);
                             }
-                        } else if (Character.toString(character).matches("[a-zA-Z0-9]")) {
-                            if (tenTaiKhoanDky.length() < 20) {
+                        } else if (Character.toString(character).matches("[a-zA-Z0-9 !@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?`~]")) {
+                            if (tenTaiKhoanDky.length() < 30) {
                                 tenTaiKhoanDky += character;
                             }
                         }
@@ -155,8 +155,8 @@ public class ManHinhDoiTaiKhoan implements Screen {
                             if (!matKhauDky.isEmpty()) {
                                 matKhauDky = matKhauDky.substring(0, matKhauDky.length() - 1);
                             }
-                        } else if (Character.toString(character).matches("[a-zA-Z0-9]")) {
-                            if (matKhauDky.length() < 20) {
+                        } else if (Character.toString(character).matches("[a-zA-Z0-9 !@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?`~]")) {
+                            if (matKhauDky.length() < 30) {
                                 matKhauDky += character;
                             }
                         }
@@ -168,7 +168,7 @@ public class ManHinhDoiTaiKhoan implements Screen {
                             if (!tenEmailDky.isEmpty()) {
                                 tenEmailDky = tenEmailDky.substring(0, tenEmailDky.length() - 1);
                             }
-                        } else if (Character.toString(character).matches("[a-zA-Z0-9 @ .]")) {
+                        } else if (Character.toString(character).matches("[a-zA-Z0-9 !@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?`~]")) {
                             if (tenEmailDky.length() < 50) {
                                 tenEmailDky += character;
                             }
@@ -178,8 +178,8 @@ public class ManHinhDoiTaiKhoan implements Screen {
                             if (!RealnameDky.isEmpty()) {
                                 RealnameDky = RealnameDky.substring(0, RealnameDky.length() - 1);
                             }
-                        } else if (Character.toString(character).matches("[a-zA-Z0-9]")) {
-                            if (RealnameDky.length() < 20) {
+                        } else if (Character.toString(character).matches("[a-zA-Z0-9 !@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?`~]")) {
+                            if (RealnameDky.length() < 30) {
                                 RealnameDky += character;
                             }
                         }
@@ -191,7 +191,7 @@ public class ManHinhDoiTaiKhoan implements Screen {
                             if (!GameNameDky.isEmpty()) {
                                 GameNameDky = GameNameDky.substring(0, GameNameDky.length() - 1);
                             }
-                        } else if (Character.toString(character).matches("[a-zA-Z0-9 @ .]")) {
+                        } else if (Character.toString(character).matches("[a-zA-Z0-9 !@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?`~]")) {
                             if (GameNameDky.length() < 50) {
                                 GameNameDky += character;
                             }
@@ -204,7 +204,7 @@ public class ManHinhDoiTaiKhoan implements Screen {
                             if (!maOTP.isEmpty()) {
                                 maOTP= maOTP.substring(0, maOTP.length() - 1);
                             }
-                        } else if (Character.toString(character).matches("[a-zA-Z0-9 @ .]")) {
+                        } else if (Character.toString(character).matches("[a-zA-Z0-9 !@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?`~]")) {
                             if (maOTP.length() < 50) {
                                 maOTP += character;
                             }
@@ -214,8 +214,8 @@ public class ManHinhDoiTaiKhoan implements Screen {
                             if (!maCapcha.isEmpty()) {
                                 maCapcha = maCapcha.substring(0, maCapcha.length() - 1);
                             }
-                        } else if (Character.toString(character).matches("[a-zA-Z0-9]")) {
-                            if (maCapcha.length() < 20) {
+                        } else if (Character.toString(character).matches("[a-zA-Z0-9 !@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?`~]")) {
+                            if (maCapcha.length() < 30) {
                                 maCapcha += character;
                             }
                         }
@@ -297,8 +297,8 @@ public class ManHinhDoiTaiKhoan implements Screen {
 
             if (trangThaiManHinh == TrangThaiManHinh.DANGKY_STEP3) {
                 if (nutManHinhDangKyChon == 1) {
-                    trangThaiManHinh = TrangThaiManHinh.DANGKY_STEP2;
                     nutManHinhDangKyChon = -1;
+                    trangThaiManHinh = TrangThaiManHinh.DANGKY_STEP2;
                 }
                 if (nutManHinhDangKyChon == 0) {
                     nutManHinhDangKyChon = -1;
@@ -308,6 +308,12 @@ public class ManHinhDoiTaiKhoan implements Screen {
                         Gdx.app.postRunnable(() -> {
                             if (ok) {
                                 System.out.println("Đăng ký thành công!");
+                                trangThaiManHinh = TrangThaiManHinh.NONE;
+                                tenTaiKhoanDky = "";
+                                matKhauDky = "";
+                                tenEmailDky = "";
+                                RealnameDky = "";
+                                GameNameDky = "";
                             } else {
                                 System.out.println("Đăng ký thất bại!");
                             }
@@ -371,6 +377,8 @@ public class ManHinhDoiTaiKhoan implements Screen {
                 } else if (trangThaiManHinh == TrangThaiManHinh.VERIFY_OTP) {
                     oNhapMaOTP = true;
                     oNhapMaCapcha = false;
+                } else if (trangThaiManHinh == TrangThaiManHinh.DANGKY_STEP3) {
+                    oNhapGameNameDuocChonDky = true;
                 }
             } else if (mouseX >= oX && mouseX <= oX + 340 && mouseY >= oY2 && mouseY <= oY2 + 40) {
                 if (trangThaiManHinh == TrangThaiManHinh.NONE) {
@@ -399,6 +407,8 @@ public class ManHinhDoiTaiKhoan implements Screen {
                 } else if (trangThaiManHinh == TrangThaiManHinh.VERIFY_OTP) {
                     oNhapMaOTP = false;
                     oNhapMaCapcha = false;
+                } else if (trangThaiManHinh == TrangThaiManHinh.DANGKY_STEP3) {
+                    oNhapGameNameDuocChonDky = false;
                 }
             }
             if (trangThaiManHinh == TrangThaiManHinh.THONGBAO) {
@@ -442,6 +452,9 @@ public class ManHinhDoiTaiKhoan implements Screen {
                 if (trangThaiManHinh == TrangThaiManHinh.VERIFY_OTP) {
                     thoiGianHienNutClick = 0.1f;
                     nutManHinhDangKyChon = 0;
+                } if (trangThaiManHinh == TrangThaiManHinh.DANGKY_STEP3) {
+                    thoiGianHienNutClick = 0.1f;
+                    nutManHinhDangKyChon = 0;
                 }
             }
 
@@ -459,6 +472,9 @@ public class ManHinhDoiTaiKhoan implements Screen {
                     nutManHinhDangKyChon = 1;
                 }
                 if (trangThaiManHinh == TrangThaiManHinh.VERIFY_OTP) {
+                    thoiGianHienNutClick = 0.1f;
+                    nutManHinhDangKyChon = 1;
+                } if (trangThaiManHinh == TrangThaiManHinh.DANGKY_STEP3) {
                     thoiGianHienNutClick = 0.1f;
                     nutManHinhDangKyChon = 1;
                 }
@@ -499,7 +515,7 @@ public class ManHinhDoiTaiKhoan implements Screen {
         if (trangThaiManHinh == TrangThaiManHinh.THONGBAO) {
             batch.begin();
             batch.draw(anhThongBao, (Gdx.graphics.getWidth() - 740) / 2f, 85, 740, 168);
-            layout.setText(font, "Để lấy lại mật khẩu xin vui lòng truy cập website https://chienbinhrongthieng.online");
+            layout.setText(font, "Để lấy lại mật khẩu xin vui lòng truy cập website https://nronline.vercel.app");
             font.draw(batch, layout, (Gdx.graphics.getWidth() - layout.width) / 2, 180);
             float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
             float nutY = 70;
@@ -545,7 +561,7 @@ public class ManHinhDoiTaiKhoan implements Screen {
 
             batch.draw(logo, 355, 325, 320, 210);
 
-            layout.setText(fontThuong, "chienbinhrongthieng.online");
+            layout.setText(fontThuong, "nronline.vercel.app");
             fontThuong.setColor(1, 1, 1, 1);
             fontThuong.draw(batch, layout, Gdx.graphics.getWidth() - layout.width - 10, 600);
             layout.setText(fontThuong, "V0.0.0");
@@ -614,7 +630,7 @@ public class ManHinhDoiTaiKhoan implements Screen {
 
             batch.draw(logo, 355, 325, 320, 210);
 
-            layout.setText(fontThuong, "chienbinhrongthieng.online");
+            layout.setText(fontThuong, "nronline.vercel.app");
             fontThuong.setColor(1, 1, 1, 1);
             fontThuong.draw(batch, layout, Gdx.graphics.getWidth() - layout.width - 10, 600);
             layout.setText(fontThuong, "V0.0.0");
@@ -672,7 +688,7 @@ public class ManHinhDoiTaiKhoan implements Screen {
 
             batch.draw(logo, 355, 325, 320, 210);
 
-            layout.setText(fontThuong, "chienbinhrongthieng.online");
+            layout.setText(fontThuong, "nronline.vercel.app");
             fontThuong.setColor(1, 1, 1, 1);
             fontThuong.draw(batch, layout, Gdx.graphics.getWidth() - layout.width - 10, 600);
             layout.setText(fontThuong, "V0.0.0");
@@ -686,6 +702,62 @@ public class ManHinhDoiTaiKhoan implements Screen {
 
             batch.draw(thoiGianHienNutClick > 0 && nutManHinhDangKyChon == 0 ? nutclick : nutdn, nutOkX, nutOkY, 142, 48);
             layout.setText(font, "OK");
+            font.draw(batch, layout, nutOkX + (142 - layout.width) / 2, nutOkY + 30);
+
+            batch.draw(thoiGianHienNutClick > 0 && nutManHinhDangKyChon == 1 ? nutclick : nutdn, nutQuenX, nutQuenY, 142, 48);
+            layout.setText(font, "Quay lại");
+            font.draw(batch, layout, nutQuenX + (142 - layout.width) / 2, nutQuenY + 30);
+
+            batch.end();
+        }
+
+        if (trangThaiManHinh == TrangThaiManHinh.DANGKY_STEP3) {
+
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(108f / 255f, 74f / 255f, 0f, 1f);
+            shapeRenderer.rect((Gdx.graphics.getWidth() - 369) / 2f, 214 - 49, 369, 214);
+            shapeRenderer.end();
+
+            batch.begin();
+            float kdnW = 365;
+            float kdnH = 210;
+            batch.draw(khungdangnhap, (Gdx.graphics.getWidth() - kdnW) / 2f, kdnH - 43, kdnW, kdnH);
+
+            float oX = (Gdx.graphics.getWidth() - 320) / 2f;
+            float oY1 = 272; // ô trên → nhập GameName
+            float oY2 = 196; // ô dưới → text cố định "Chào mừng bạn!"
+
+            // Ô trên: nhập tên nhân vật
+            if (GameNameDky.isEmpty()) {
+                fontText.setColor(1.0f, 0.956f, 0.863f, 1f);
+                layout.setText(fontText, "Tên nhân vật trong game");
+            } else {
+                fontText.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1f);
+                layout.setText(fontText, GameNameDky);
+            }
+            fontText.draw(batch, layout, oX + 10, oY1 + 25);
+
+            // Ô dưới: text cố định, không nhập được
+            fontText.setColor(1.0f, 0.956f, 0.863f, 1f);
+            layout.setText(fontText, "Chào mừng bạn tới NRO!");
+            fontText.draw(batch, layout, oX + 10, oY2 + 25);
+
+            batch.draw(logo, 355, 325, 320, 210);
+
+            layout.setText(fontThuong, "nronline.vercel.app");
+            fontThuong.setColor(1, 1, 1, 1);
+            fontThuong.draw(batch, layout, Gdx.graphics.getWidth() - layout.width - 10, 600);
+            layout.setText(fontThuong, "V0.0.0");
+            fontThuong.draw(batch, layout, Gdx.graphics.getWidth() - layout.width - 10, 580);
+
+            font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+            float nutOkX = (Gdx.graphics.getWidth() - kdnW) / 2f + 18;
+            float nutOkY = kdnH - 110;
+            float nutQuenX = (Gdx.graphics.getWidth() - kdnW) / 2f + 200;
+            float nutQuenY = kdnH - 110;
+
+            batch.draw(thoiGianHienNutClick > 0 && nutManHinhDangKyChon == 0 ? nutclick : nutdn, nutOkX, nutOkY, 142, 48);
+            layout.setText(font, "Đăng ký");
             font.draw(batch, layout, nutOkX + (142 - layout.width) / 2, nutOkY + 30);
 
             batch.draw(thoiGianHienNutClick > 0 && nutManHinhDangKyChon == 1 ? nutclick : nutdn, nutQuenX, nutQuenY, 142, 48);
@@ -730,7 +802,7 @@ public class ManHinhDoiTaiKhoan implements Screen {
 
             batch.draw(logo, 355, 325, 320, 210);
 
-            layout.setText(fontThuong, "chienbinhrongthieng.online");
+            layout.setText(fontThuong, "nronline.vercel.app");
             fontThuong.setColor(1, 1, 1, 1);
             fontThuong.draw(batch, layout, Gdx.graphics.getWidth() - layout.width - 10, 600);
             layout.setText(fontThuong, "V0.0.0");

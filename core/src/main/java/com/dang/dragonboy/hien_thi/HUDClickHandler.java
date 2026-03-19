@@ -10,6 +10,9 @@ import com.dang.dragonboy.nhan_vat.MultiplayerRenderer;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.item.Item;
 import com.dang.dragonboy.item.LoaiItem;
+import com.dang.dragonboy.websocket.ChucNangPlayer;
+import com.dang.dragonboy.websocket.GameSocket;
+import com.dang.dragonboy.websocket.KhungGiaoDich;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_haidang.admin_haidang;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle.TrangThaiChucNang_CUA_HANG_admin_thanhle;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle.*;
@@ -31,6 +34,42 @@ public class HUDClickHandler {
     }
 
     public void xuLyClick(int x, int y, float worldX, float worldY) {
+        HUDTradeItem.checkClick(x, y, worldX, worldY);
+        if (veHUD.dangHienKhungChung) {
+            float viewY = 35;
+            float viewHeight = 444 - 35;
+            int KhoangCachItem = 49;
+            int tongSoO = 3;
+
+            // Kiểm tra có click vào vùng không
+            if (x >= 3 && x <= 3 + 344 && y >= viewY && y <= viewY + viewHeight) {
+                // Tính tọa độ tương đối trong khung scroll
+                float relativeY = y - viewY;
+
+                // Tính vị trí click từ đỉnh danh sách cuộn
+                float realY = veHUD.scrollYPhai + (viewHeight - relativeY);
+
+                int index = (int)(realY / KhoangCachItem);
+
+                if (index >= 0 && index < tongSoO) {
+                    veHUD.playerDuocChon.chucNangPlayer = ChucNangPlayer.values()[index+1];
+                }
+            }
+
+            if (x > 350 && x <= 1020) {
+                veHUD.scrollYPhai = 0;
+                veHUD.oChiSoDangChon = -1;
+                veHUD.dangHienKhungChung = false;
+            }
+
+            return;
+        }
+
+        if (veHUD.dangGiaoDich) {
+            KhungGiaoDich.checkClick(x, y, worldX, worldY);
+            return;
+        }
+
         // check click NPC đặt ở đây để cùng thời điểm với xử lí click của hud
         if (veHUD.daClickVaoNpc) {
             veHUD.npcHienTai.xuLyClick(x, y);
@@ -971,7 +1010,7 @@ public class HUDClickHandler {
         }
     }
 
-    public boolean checkChuotTrongNut(float chuotX, float chuotY,float nutX, float nutY, float nutW ,float nutH) {
+    public static boolean checkChuotTrongNut(float chuotX, float chuotY,float nutX, float nutY, float nutW ,float nutH) {
         if (chuotX >= nutX && chuotX <= nutX + nutW && chuotY >= nutY && chuotY <= nutY + nutH) {
             return true;
         }

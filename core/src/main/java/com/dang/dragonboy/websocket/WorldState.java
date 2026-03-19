@@ -1,7 +1,19 @@
 package com.dang.dragonboy.websocket;
 
+import com.badlogic.gdx.Gdx;
+import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
+import com.dang.dragonboy.du_lieu.State_Management;
+import com.dang.dragonboy.hien_thi.VeHUD;
+import com.dang.dragonboy.item.Item;
+import com.dang.dragonboy.item.LoaiItem;
+import com.dang.dragonboy.network.ApiItemService;
+import com.dang.dragonboy.network.DTO.ItemCanLuu;
+import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -133,6 +145,8 @@ public class WorldState {
             ps.rong = (float) obj.optDouble("rong", ps.rong);
             ps.cao = (float) obj.optDouble("cao", ps.cao);
 
+            ps.avatar = obj.optString("avatar", ps.avatar);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -152,6 +166,141 @@ public class WorldState {
             ps.dangHienTinNhan = true;
             ps.timeHienTinNhan = 0f;
             ps.tinNhanHien = obj.optString("message", ps.tinNhanHien);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void onNotification(Object... args) {
+        if (args.length == 0) return;
+        try {
+            JSONObject obj = toJsonObject(args[0]);
+            String tinNhan = obj.optString("tinNhan","");
+            State_Management.getDuLieuNguoiChoi().veHUD.setTinNhanPet(tinNhan, 2f);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void onTradeItem(Object... args) {
+        if (args.length == 0) return;
+        try {
+            JSONObject obj = toJsonObject(args[0]);
+            int fromUserId = obj.optInt("fromUserId",-1);
+            PlayerState ps = players.get(fromUserId);
+            if (ps == null) return;
+
+            VeHUD veHUD = State_Management.getVeHUD();
+            veHUD.dangCoYeuCauGiaoDich = true;
+            veHUD.timeChapNhanGiaoDich = 20f;
+            veHUD.playerGiaoDich = ps;
+            veHUD.scrollX_trade = 0f;
+            veHUD.tradeTextDone = false;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void onTradeOpen(Object... args) {
+        if (args.length == 0) return;
+        try {
+            JSONObject obj = toJsonObject(args[0]);
+            int fromUserId = obj.optInt("with",-1);
+            PlayerState ps = players.get(fromUserId);
+            if (ps == null) return;
+
+            VeHUD veHUD = State_Management.getVeHUD();
+            // Set thông tin giao dịch
+            veHUD.scrollYPhai = 0;
+            veHUD.oChiSoDangChon = -1;
+            veHUD.dangHienKhungChung = false;
+
+            veHUD.dangGiaoDich = true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void onTradeCancel(Object... args) {
+        if (args.length == 0) return;
+        try {
+            JSONObject obj = toJsonObject(args[0]);
+
+            VeHUD veHUD = State_Management.getVeHUD();
+            DuLieuNguoiChoi duLieuNguoiChoi = veHUD.getDuLieuNguoiChoi();
+            // Set thông tin giao dịch
+            veHUD.dangGiaoDich = false;
+
+            for (Item item : duLieuNguoiChoi.hanhTrangGiaoDich) {
+                duLieuNguoiChoi.hanhTrangGiaoDich.remove(item);
+                duLieuNguoiChoi.getHanhTrang().add(item);
+            }
+
+            duLieuNguoiChoi.hanhTrangGiaoDichPlayer2.clear();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void onTradeUpdate(Object... args) {
+        if (args.length == 0) return;
+        try {
+            JSONObject obj = toJsonObject(args[0]);
+
+            VeHUD veHUD = State_Management.getVeHUD();
+            DuLieuNguoiChoi duLieuNguoiChoi = veHUD.getDuLieuNguoiChoi();
+
+            duLieuNguoiChoi.hanhTrangGiaoDichPlayer2.clear();
+
+            int fromUserId = obj.optInt("from",-1);
+            List<Integer> listIdItem = new ArrayList<>();
+            JSONArray items = obj.optJSONArray("items");
+            if (items != null) {
+                System.out.println("=== items JSON gốc ===");
+                System.out.println(items.toString(2)); // in đẹp
+
+                for (int i = 0; i < items.length(); i++) {
+                    JSONObject item = items.getJSONObject(i);
+                    System.out.println("Keys của item[" + i + "]: " + item.keys());
+
+                    int itemId = item.optInt("itemId"); // có thể key không phải "itemId"
+                    System.out.println("itemId = " + itemId);
+                    listIdItem.add(itemId);
+                }
+            }
+            if (listIdItem.size() > 0) {
+                new Thread(() -> {
+                    List<ItemCanLuu> itemss = ApiItemService.getItemsByItemIds(listIdItem);
+
+                    if (itemss != null && !itemss.isEmpty()) {
+                        // Post về Main Thread trước khi tạo Item (có Texture)
+                        Gdx.app.postRunnable(() -> {
+                            Gson gson = new Gson();
+                            for (ItemCanLuu item : itemss) {
+                                Item itemClient = new Item(
+                                    item.maItem, item.ten, LoaiItem.valueOf(item.loai),
+                                    item.linkTexture,
+                                    item.moTa, item.soLuong,
+                                    gson.fromJson(item.chiso, int[].class),
+                                    item.hanhTinh, Long.parseLong(item.sucManhYeuCau),
+                                    item.setKichHoat, item.soSaoPhaLe,
+                                    item.soSaoPhaLeCuongHoa, item.soCap, item.hanSuDung
+                                );
+                                itemClient.id = item.id;
+                                duLieuNguoiChoi.hanhTrangGiaoDichPlayer2.add(itemClient);
+                            }
+                            System.out.println("Đã add xong, size: "
+                                + duLieuNguoiChoi.hanhTrangGiaoDichPlayer2.size());
+                        });
+                    } else {
+                        System.out.println("itemss null hoặc rỗng");
+                    }
+                }).start();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -216,6 +365,8 @@ public class WorldState {
         ps.cao = (float) obj.optDouble("cao", ps.cao);
 
         ps.gameName = (String) obj.optString("gameName", ps.gameName);
+
+        ps.avatar = obj.optString("avatar", ps.avatar);
 
         return ps;
     }

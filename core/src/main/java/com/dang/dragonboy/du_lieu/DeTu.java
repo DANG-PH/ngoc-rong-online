@@ -1608,85 +1608,90 @@ public class DeTu {
         }
 
         if (diChuyenXungQuanh) {
-            float huongDi = Math.signum(xSuPhu+nhanVat.getRong()/2f + (diQuaPhai ? 55f+rong_de_tu/2f : -55f-rong_de_tu/2f));
 
+            // 1. Tính target và hướng
+            float targetX = xSuPhu + nhanVat.getRong() / 2f
+                + (diQuaPhai
+                ? 55f + rong_de_tu / 2f
+                : -55f - rong_de_tu / 2f);
+
+            float currentX = this.x + rong_de_tu / 2f;
+            float huongDi = Math.signum(targetX - currentX);
+
+            // 2. Nếu đang đợi đổi hướng (flip)
             if (dangDoiFlip) {
                 vx = 0;
                 timeChuyenHuong += delta;
                 this.trangThai = TrangThaiDeTu.DUNG_YEN;
+
                 if (timeChuyenHuong > 2f) {
-                    diQuaPhai = x < xSuPhu;
-                    flipX = !diQuaPhai;
-                    this.trangThai = TrangThaiDeTu.DI_CHUYEN;
+                    diQuaPhai = currentX < xSuPhu + nhanVat.getRong() / 2f;
                     dangDoiFlip = false;
                     timeChuyenHuong = 0;
+                    this.trangThai = TrangThaiDeTu.DI_CHUYEN;
                 }
-            } else {
-                if (Math.abs(xSuPhu+nhanVat.getRong()/2f + (diQuaPhai ? 55f+rong_de_tu/2f : -55f-rong_de_tu/2f)- (this.x+rong_de_tu/2f)) <= 8f) {
+                return;
+            }
+
+            // 3. Nếu đã tới điểm tuần tra
+            if (Math.abs(targetX - currentX) <= 8f) {
+                dangDoiFlip = true;
+                vx = 0;
+                timeChuyenHuong = 0;
+                return;
+            }
+
+            // 4. Check vật cản phía trước
+            float xKiemTra = x + (huongDi > 0 ? rong_de_tu + 4 : -4);
+            float yKiemTra = y - 1;
+
+            boolean coDatPhiaTruoc = false;
+            boolean biChanPhiaTruoc = false;
+
+            for (HitboxDat dat : danhSachDat) {
+                if (dat.vaChamTuTren(xKiemTra, yKiemTra, 1, 1, 0)) {
+                    coDatPhiaTruoc = true;
+                }
+                if (huongDi > 0 && dat.vaChamBenPhai(x, y, rong_de_tu, cao_de_tu)) {
+                    biChanPhiaTruoc = true;
+                } else if (huongDi < 0 && dat.vaChamBenTrai(x, y, rong_de_tu, cao_de_tu)) {
+                    biChanPhiaTruoc = true;
+                }
+            }
+
+            // 5. Xử lý kẹt / đi tiếp
+            boolean biKet = biChanPhiaTruoc || !coDatPhiaTruoc;
+
+            if (biKet) {
+                soLanBiKet++;
+
+                if (soLanBiKet >= 2) {
+                    diChuyenXungQuanh = false;
+                    soLanBiKet = 0;
+                    camDiChuyenXungQuanh = true;
+
+                    String[] text = {
+                        "Con không qua được!",
+                        "Chỗ này bị chắn mất rồi...",
+                        "Hình như không đi tiếp được...",
+                        "Sư phụ, chỗ này bí lắm!"
+                    };
+                    setTinNhanDeTuChat(text[MathUtils.random(text.length - 1)], 1.5f);
+                } else {
                     dangDoiFlip = true;
                     vx = 0;
                     timeChuyenHuong = 0;
-                } else {
-                    // === Kiểm tra có đất phía trước và không đâm tường ===
-                    float xKiemTra = x + (diQuaPhai ? rong_de_tu + 4 : -4);
-                    float yKiemTra = y - 1; // ngay dưới chân
-                    boolean coDatPhiaTruoc = false;
-                    boolean biChanPhiaTruoc = false;
-
-                    for (HitboxDat dat : danhSachDat) {
-                        if (dat.vaChamTuTren(xKiemTra, yKiemTra, 1, 1, 0)) {
-                            coDatPhiaTruoc = true;
-                        }
-                        if (diQuaPhai && dat.vaChamBenPhai(x, y, rong_de_tu, cao_de_tu)) {
-                            biChanPhiaTruoc = true;
-                        } else if (!diQuaPhai && dat.vaChamBenTrai(x, y, rong_de_tu, cao_de_tu)) {
-                            biChanPhiaTruoc = true;
-                        }
-                    }
-                    if (!coDatPhiaTruoc && ySuPhu < y) {
-                        // Nếu đi được thì reset đếm kẹt
-                        soLanBiKet = 0;
-
-                        // Cho đi bình thường
-                        boolean matQuaySangPhai = !flipX;
-                        if ((huongDi > 0 && matQuaySangPhai) || (huongDi < 0 && !matQuaySangPhai)) {
-                            vx = huongDi * tocDoDiChuyen * 0.65f;
-                        } else {
-                            vx = -huongDi * tocDoDiChuyen * 0.65f;
-                        }
-                    } else if (!coDatPhiaTruoc || biChanPhiaTruoc) {
-                        // Nếu bị kẹt liên tục thì reset vòng chạy
-                        soLanBiKet++;
-
-                        if (soLanBiKet >= 2) {
-                            diChuyenXungQuanh = false;
-                            soLanBiKet = 0;
-                            camDiChuyenXungQuanh = true;
-                            String[] text = {
-                                "Con không qua được!",
-                                "Chỗ này bị chắn mất rồi...",
-                                "Hình như không đi tiếp được...",
-                                "Sư phụ, chỗ này bí lắm!"
-                            };
-                            setTinNhanDeTuChat(text[MathUtils.random(text.length-1)], 1.5f);
-                        } else {
-                            dangDoiFlip = true;
-                            vx = 0;
-                            timeChuyenHuong = 0;
-                        }
-                    } else {
-                        // Nếu đi được thì reset đếm kẹt
-                        soLanBiKet = 0;
-
-                        // Cho đi bình thường
-                        boolean matQuaySangPhai = !flipX;
-                        if ((huongDi > 0 && matQuaySangPhai) || (huongDi < 0 && !matQuaySangPhai)) {
-                            vx = huongDi * tocDoDiChuyen * 0.65f;
-                        } else {
-                            vx = -huongDi * tocDoDiChuyen * 0.65f;
-                        }
-                    }
                 }
+                return;
+            }
+
+            // 6. Đi bình thường
+            soLanBiKet = 0;
+            vx = huongDi * tocDoDiChuyen * 0.65f;
+
+            // 7. Quay mặt theo hướng di chuyển
+            if (huongDi != 0) {
+                flipX = (huongDi < 0);
             }
         }
         // Dash tức thời nếu cách quá xa và cooldown đã hồi

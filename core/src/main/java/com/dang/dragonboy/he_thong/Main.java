@@ -119,8 +119,8 @@ public class Main extends Game {
             }
 
             // Gửi lên backend
-            boolean success = ApiItemService.saveItems(State_Management.getUserResponse().username, allItems);
-            if (success) {
+            List<ItemCanLuu> listItem = ApiItemService.saveItems(State_Management.getUserResponse().username, allItems);
+            if (listItem != null) {
                 System.out.println("Đã lưu toàn bộ item của user " + State_Management.getUserResponse().username + " thành công!");
             } else {
                 System.err.println("Lỗi khi lưu item cho user " + State_Management.getUserResponse().username);

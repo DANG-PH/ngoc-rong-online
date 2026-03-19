@@ -5,160 +5,240 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
 import com.dang.dragonboy.he_thong.Main;
 
 public class ManHinhKhoiDong implements Screen {
-    private Main game; // ko có dòng này thì biến ko thể xài setScreen
-    private Texture logogame,logoptit1,logoptit2,logochu1,logochu2,nen;
+    private Main game;
+    private Texture logogame, logoptit1, logoptit2, logochu1, logochu2, nen;
     private SpriteBatch batch;
+    private ShapeRenderer shapeRenderer;
+    private BitmapFont font;
     private float thoiGian = 0f;
-    //bắt buộc phải truyền kiểu class Main vào vì java là nn lập trình tĩnh , bên kia this ko cần vì nằm trong class main rồi
+
+    // fields update
+    private volatile boolean updateChecked = false;
+    private volatile boolean needUpdate = false;
+    private volatile boolean isDownloading = false;
+    private volatile float downloadProgress = 0f;
+    private String downloadUrl = null;
+    private String serverVersion = null;
+    private String localVersion = null;
+    private static final float TIMEOUT_CHECK = 8f;
+
     public ManHinhKhoiDong(Main game) {
-        this.game = game; //ko có dòng này thì game của class = null nên setScreen ko có tác dụng phải gán để các file sau còn xài được render và các thứ của hàm Main
+        this.game = game;
         batch = new SpriteBatch();
+        shapeRenderer = new ShapeRenderer();
+        font = new BitmapFont();
     }
 
     @Override
     public void show() {
-        logogame = new Texture("hud/giaodienngoai/chung/logogame.png");
+        logogame  = new Texture("hud/giaodienngoai/chung/logogame.png");
         logoptit1 = new Texture("hud/giaodienngoai/chung/logoptit1.png");
         logoptit2 = new Texture("hud/giaodienngoai/chung/logoptit2.png");
-        logochu1 = new Texture("hud/giaodienngoai/chung/logochu1.png");
-        logochu2 = new Texture("hud/giaodienngoai/chung/logochu2.png");
-        nen = new Texture("hud/giaodienngoai/chung/nen.png");
+        logochu1  = new Texture("hud/giaodienngoai/chung/logochu1.png");
+        logochu2  = new Texture("hud/giaodienngoai/chung/logochu2.png");
+        nen       = new Texture("hud/giaodienngoai/chung/nen.png");
+        new Thread(this::checkUpdate).start();
     }
 
     @Override
     public void render(float delta) {
-        // dùng bình thường để test game
-//        thoiGian += delta;
-//
-//        Gdx.gl.glClearColor(1, 1, 1, 1);
-//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//
-//        batch.begin();
-//        float scaledWidth = logogame.getWidth();
-//        float scaledHeight = logogame.getHeight();
-//        float x = (Gdx.graphics.getWidth() - scaledWidth) / 2f;
-//        float y = (Gdx.graphics.getHeight() - scaledHeight) / 2f;
-//        batch.draw(logogame, x, y, scaledWidth, scaledHeight);
-//        batch.end();
-//
-//        if (thoiGian > 2f) {
-//            game.setScreen(new ManHinhSplash(game));
-//        }
-
-        // Dùng khi phát hành
         thoiGian += delta;
 
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        float alpha;
-        if (thoiGian<=0.8f) {
-            alpha = 1-(0.8f-thoiGian)/0.8f;
-        } else {
-            alpha = 1;
-        }
+
+        // ── Vẽ logo fade-in ──────────────────────────────────────────
+        float alpha = (thoiGian <= 0.8f) ? 1 - (0.8f - thoiGian) / 0.8f : 1f;
         batch.begin();
-        float scaledWidth = logogame.getWidth();
+        float scaledWidth  = logogame.getWidth();
         float scaledHeight = logogame.getHeight();
-        float x = (Gdx.graphics.getWidth() - scaledWidth) / 2f;
+        float x = (Gdx.graphics.getWidth()  - scaledWidth)  / 2f;
         float y = (Gdx.graphics.getHeight() - scaledHeight) / 2f;
         batch.setColor(1f, 1f, 1f, alpha);
         batch.draw(logogame, x, y, scaledWidth, scaledHeight);
         batch.setColor(1f, 1f, 1f, 1f);
         batch.end();
 
-        if (thoiGian > 3f) {
+        // ── Vẽ progress bar khi đang download ────────────────────────
+        if (isDownloading) {
+            float barX      = 100f;
+            float barY      = 50f;
+            float barWidth  = Gdx.graphics.getWidth() - 200f;
+            float barHeight = 20f;
+
+            shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix()); // ← FIX BUG 2
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(0.3f, 0.3f, 0.3f, 1f);
+            shapeRenderer.rect(barX, barY, barWidth, barHeight);
+            shapeRenderer.setColor(0f, 0.8f, 0.2f, 1f);
+            shapeRenderer.rect(barX, barY, barWidth * downloadProgress, barHeight);
+            shapeRenderer.end();
+
+            batch.begin();
+            font.setColor(0f, 0f, 0f, 1f);
+            font.draw(batch,
+                "DOWNLOAD NEW VERSION - HAI DANG GAME... " + (int)(downloadProgress * 100) + "%",
+                barX, barY + 40f);
+            batch.end();
+        }
+
+        // ── Chuyển màn hình: đủ 3s + không download + (đã check xong HOẶC timeout 8s) ──
+        if (thoiGian > 3f && !isDownloading && !needUpdate
+            && (updateChecked || thoiGian > TIMEOUT_CHECK)) { // ← FIX BUG 1
             game.setScreen(new ManHinhSplash(game));
         }
 
-        // Dùng khi show dự án
-//        thoiGian += delta;
-//
-//        Gdx.gl.glClearColor(1, 1, 1, 1);
-//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//        if (thoiGian>2.5f) {
-//            float alpha = 0;
-//            if (thoiGian > 3f) {
-//                if (thoiGian <= 4f) {
-//                    alpha = 1 - (4f - thoiGian) / 1f;
-//                } else {
-//                    alpha = 1;
-//                }
-//            }
-//            float alphanen;
-//            if (thoiGian <= 3f) {
-//                alphanen = 1 - (3f - thoiGian) / 0.5f;
-//            } else {
-//                alphanen = 1;
-//            }
-//            batch.begin();
-//            float scaledWidth1 = logoptit1.getWidth()*0.24f;
-//            float scaledHeight1 = logoptit1.getHeight()*0.24f;
-//            float x1 = (Gdx.graphics.getWidth() - scaledWidth1) / 2f - 200f-150f;
-//            float y1 = (Gdx.graphics.getHeight() - scaledHeight1) / 2f + 40f;
-//            float scaledWidth2 = logoptit2.getWidth();
-//            float scaledHeight2 = logoptit2.getHeight();
-//            float x2 = (Gdx.graphics.getWidth() - scaledWidth2) / 2f + 200f-240f;
-//            float y2 = (Gdx.graphics.getHeight() - scaledHeight2) / 2f + 33f;
-//            batch.setColor(1,1,1,alphanen);
-//            batch.draw(nen,(1020-nen.getWidth()*0.677f),0,nen.getWidth()*0.677f,nen.getHeight()*0.677f);
-//            batch.setColor(1f, 1f, 1f, alpha);
-//            batch.draw(logoptit1, x1, y1, scaledWidth1, scaledHeight1);
-//            batch.draw(logochu1,  x1+(scaledWidth1-logochu1.getWidth()*0.40f)/2f, y1-35,logochu1.getWidth()*0.40f,logochu1.getHeight()*0.40f);
-//            batch.draw(logoptit2, x2, y2, scaledWidth2, scaledHeight2);
-//            batch.draw(logochu2,  x2+(scaledWidth2-logochu2.getWidth()*0.40f)/2f, y2-50,logochu2.getWidth()*0.40f,logochu2.getHeight()*0.40f);
-//            batch.setColor(1f, 1f, 1f, 1f);
-//            batch.end();
-//
-//            if (thoiGian > 5f) {
-//                game.setScreen(new ManHinhSplash(game));
-//            }
-//        } else {
-//            float alpha;
-//            if (thoiGian<=2.5f && thoiGian>2f) {
-//                alpha = (2.5f-thoiGian)/0.5f;
-//            } else {
-//                if (thoiGian<0.5f) {
-//                    alpha = 1-(0.5f-thoiGian)/0.5f;
-//                } else {
-//                    alpha = 1;
-//                }
-//            }
-//            batch.begin();
-//            float scaledWidth = logogame.getWidth();
-//            float scaledHeight = logogame.getHeight();
-//            float x = (Gdx.graphics.getWidth() - scaledWidth) / 2f;
-//            float y = (Gdx.graphics.getHeight() - scaledHeight) / 2f;
-//            batch.setColor(1f, 1f, 1f, alpha);
-//            batch.draw(logogame, x, y, scaledWidth, scaledHeight);
-//            batch.setColor(1f, 1f, 1f, 1f);
-//            batch.end();
-//        }
+        // ── Kích hoạt download khi phát hiện có update ───────────────
+        if (updateChecked && needUpdate && !isDownloading) {
+            needUpdate = false;
+            isDownloading = true;
+
+            new Thread(() -> {
+                try {
+                    System.out.println("Downloading new version...");
+                    downloadNewJar(downloadUrl);
+                    startNewJar();
+                    Gdx.app.exit();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    isDownloading = false;
+                }
+            }).start();
+        }
     }
 
-    @Override
-    public void resize(int width, int height) {}
-
-    @Override
-    public void pause() {}
-
-    @Override
-    public void resume() {}
-
-    @Override
-    public void hide() {}
+    @Override public void resize(int width, int height) {}
+    @Override public void pause() {}
+    @Override public void resume() {}
+    @Override public void hide() {}
 
     @Override
     public void dispose() {
         logogame.dispose();
         batch.dispose();
+        shapeRenderer.dispose();
+        font.dispose();
         logoptit1.dispose();
         logoptit2.dispose();
         logochu1.dispose();
         logochu2.dispose();
         nen.dispose();
+    }
+
+    private void checkUpdate() {
+        try {
+            java.nio.file.Path path = java.nio.file.Paths.get("app/version.txt");
+            localVersion = java.nio.file.Files.exists(path)
+                ? java.nio.file.Files.readString(path).trim()
+                : "dev";
+
+            java.net.URL url = new java.net.URL(
+                "https://raw.githubusercontent.com/DANG-PH/NRO_ONLINE/master/version.json");
+            java.io.BufferedReader reader =
+                new java.io.BufferedReader(new java.io.InputStreamReader(url.openStream()));
+            String json = reader.lines().collect(java.util.stream.Collectors.joining());
+
+            org.json.JSONObject obj = new org.json.JSONObject(json);
+            serverVersion = obj.getString("version");
+            downloadUrl   = obj.getString("jar");
+
+            if (!localVersion.equals("dev") && !serverVersion.equals(localVersion)) {
+                needUpdate = true;
+            } else {
+                System.out.println("VERSION DEV - bỏ qua update");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        updateChecked = true;
+    }
+
+    private void downloadNewJar(String urlStr) throws Exception {
+        // ── Follow redirect (GitHub Releases trả về HTTP 302) ────────
+        java.net.HttpURLConnection connection =
+            (java.net.HttpURLConnection) new java.net.URL(urlStr).openConnection();
+        connection.setInstanceFollowRedirects(true);
+        connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+        connection.connect();
+
+        int fileSize = connection.getContentLength(); // -1 nếu server không trả về
+        java.io.InputStream in = connection.getInputStream();
+        java.nio.file.Path newJar = java.nio.file.Paths.get("app/nro_new.jar");
+
+        // ── Tải từng chunk, cập nhật progress ────────────────────────
+        try (java.io.OutputStream out = java.nio.file.Files.newOutputStream(newJar)) {
+            byte[] buffer = new byte[8192];
+            long downloaded = 0;
+            int bytesRead;
+            while ((bytesRead = in.read(buffer)) != -1) {
+                out.write(buffer, 0, bytesRead);
+                downloaded += bytesRead;
+                if (fileSize > 0) {
+                    downloadProgress = (float) downloaded / fileSize; // render() đọc liên tục
+                }
+            }
+        }
+        in.close();
+
+        // ── Kiểm tra file tải về có đủ kích thước không ──────────────
+        long downloadedSize = java.nio.file.Files.size(newJar);
+        if (fileSize > 0 && downloadedSize < fileSize * 0.99) {
+            // Xóa file lỗi, ném exception → catch bên render() → isDownloading = false
+            java.nio.file.Files.deleteIfExists(newJar);
+            throw new Exception("Download không hoàn chỉnh: " + downloadedSize + "/" + fileSize + " bytes");
+        }
+
+        downloadProgress = 1f; // đảm bảo hiện 100% trước khi thoát
+    }
+
+    private void startNewJar() throws Exception {
+        String os = System.getProperty("os.name").toLowerCase();
+
+        if (os.contains("win")) {
+            String script =
+                "@echo off\r\n" +
+                    "cd /d \"%~dp0\"\r\n" +
+                    "cd ..\r\n" +
+                    // vòng lặp chờ đến khi xóa được jar cũ
+                    ":waitloop\r\n" +
+                    "del /f /q \"app\\NgocRongOnline-1.0.0.jar\" 2>nul\r\n" +
+                    "if exist \"app\\NgocRongOnline-1.0.0.jar\" (\r\n" +
+                    "    timeout /t 1 /nobreak > nul\r\n" +
+                    "    goto waitloop\r\n" +
+                    ")\r\n" +
+                    // xóa xong mới đổi tên và tiếp tục
+                    "rename \"app\\nro_new.jar\" \"NgocRongOnline-1.0.0.jar\"\r\n" +
+                    "(echo " + serverVersion + ")> \"app\\version.txt\"\r\n" +
+                    "start \"\" runtime\\bin\\javaw -jar \"app\\NgocRongOnline-1.0.0.jar\"\r\n" +
+                    "del \"app\\updater.bat\"\r\n";
+
+            java.nio.file.Path scriptPath = java.nio.file.Paths.get("app/updater.bat");
+            java.nio.file.Files.writeString(scriptPath, script);
+            String batPath = java.nio.file.Paths.get("app/updater.bat")
+                .toAbsolutePath().toString();
+            new ProcessBuilder("cmd", "/c", batPath).start();// bỏ inheritIO để không hiện cửa sổ CMD
+
+        } else {
+            String script =
+                "#!/bin/bash\n" +
+                    "cd \"$(dirname \"$0\")\"\n" +
+                    "sleep 2\n" +
+                    "rm -f app/NgocRongOnline-1.0.0.jar\n" +
+                    "mv app/nro_new.jar app/NgocRongOnline-1.0.0.jar\n" +
+                    "echo '" + serverVersion + "' > app/version.txt\n" +
+                    "runtime/bin/java -jar app/NgocRongOnline-1.0.0.jar &\n" +
+                    "rm -- \"$0\"\n";
+
+            java.nio.file.Path scriptPath = java.nio.file.Paths.get("app/updater.sh");
+            java.nio.file.Files.writeString(scriptPath, script);
+            scriptPath.toFile().setExecutable(true);
+            new ProcessBuilder("bash", "app/updater.sh").start();
+        }
     }
 }
