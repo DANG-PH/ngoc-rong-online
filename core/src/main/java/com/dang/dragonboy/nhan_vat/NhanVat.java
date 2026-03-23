@@ -224,6 +224,9 @@ public class NhanVat {
     public boolean chuaSetTimeHuytSao = true;
     private Texture[] auraChan = new Texture[4];
 
+    private float moveTimer = 0f;
+    private static final float MOVE_INTERVAL = 0.05f;
+
     public void setToaDoMucTieu(float x, float y) {
         if (chanDiChuyenToaDo1Lan) {
             chanDiChuyenToaDo1Lan = false;
@@ -1380,10 +1383,12 @@ public class NhanVat {
 
         y =Math.max(gioiHanYMin, Math.min(y, gioiHanYMax-cao));
 
-        try {
-            GameSocket.guiPlayerMove(this);
-        } catch (Exception e) {
-
+        this.moveTimer += Gdx.graphics.getDeltaTime();
+        if (moveTimer >= MOVE_INTERVAL) {
+            try {
+                GameSocket.guiPlayerMove(this);
+            } catch (Exception e) {}
+            moveTimer = 0f;
         }
     }
     public void setFlipTrai() {

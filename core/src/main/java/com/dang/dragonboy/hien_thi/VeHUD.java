@@ -1458,7 +1458,7 @@ public class VeHUD {
                                 case 1 -> {
                                     // Call event websocket push item vào
                                     try {
-                                        GameSocket.tradeOfferAdd(playerGiaoDich.userId, itemm.id);
+                                        GameSocket.tradeOfferAdd(playerGiaoDich.userId, itemm.uuid);
                                     } catch(Exception e) {
 
                                     }
@@ -1478,7 +1478,7 @@ public class VeHUD {
                             switch ((int) nuthanhtrangchon) {
                                 case 1 -> {
                                     try {
-                                        GameSocket.tradeOfferRemove(playerGiaoDich.userId, itemm.id);
+                                        GameSocket.tradeOfferRemove(playerGiaoDich.userId, itemm.uuid);
                                     } catch(Exception e) {
 
                                     }

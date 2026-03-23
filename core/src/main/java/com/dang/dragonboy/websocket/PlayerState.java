@@ -16,6 +16,7 @@ import com.dang.dragonboy.nhan_vat.TrangThai;
 import com.dang.dragonboy.xu_ly_map.npc.LoaiNPC;
 
 public class PlayerState {
+    public float serverX, serverY; // lerp
     public int userId;
     public float x;
     public float y;
@@ -202,6 +203,18 @@ public class PlayerState {
     }
 
     public void capNhat(VeHUD veHUD) {
+        float delta = Gdx.graphics.getDeltaTime();
+
+        float lerpSpeed = 12f;
+        x += (serverX - x) * lerpSpeed * delta;
+        y += (serverY - y) * lerpSpeed * delta;
+
+        // Snap nếu quá xa (ví dụ teleport map)
+        float dist = (float) Math.sqrt((serverX - x) * (serverX - x) + (serverY - y) * (serverY - y));
+        if (dist > 200f) {
+            x = serverX;
+            y = serverY;
+        }
         // Cho time tin nhắn 3s
         if (this.dangHienTinNhan) {
             timeHienTinNhan += Gdx.graphics.getDeltaTime();

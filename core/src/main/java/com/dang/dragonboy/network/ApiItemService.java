@@ -120,13 +120,13 @@ public class ApiItemService {
         return Collections.emptyList();
     }
 
-    // lấy items từ itemIds
-    public static List<ItemCanLuu> getItemsByItemIds(List<Integer> itemIds) {
+    // lấy items từ itemUuids
+    public static List<ItemCanLuu> getItemsByItemUuids(List<String> itemUuids) {
         new Thread(() -> {
 
         }).start();
         try {
-            URL url = new URL(BASE_URL + "/itemIds");
+            URL url = new URL(BASE_URL + "/itemUuids");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
             conn.setRequestMethod("POST");
@@ -140,11 +140,11 @@ public class ApiItemService {
             JsonObject body = new JsonObject();
             JsonArray arr = new JsonArray();
 
-            for (Integer id : itemIds) {
+            for (String id : itemUuids) {
                 arr.add(id);
             }
 
-            body.add("itemIds", arr);
+            body.add("itemUuids", arr);
 
             String jsonBody = gson.toJson(body);
 

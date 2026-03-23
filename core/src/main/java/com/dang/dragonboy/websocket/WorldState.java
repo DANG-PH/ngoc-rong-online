@@ -116,8 +116,8 @@ public class WorldState {
             if (ps == null) return;
 
             // ===== Transform =====
-            ps.x = (float) obj.optDouble("x", ps.x);
-            ps.y = (float) obj.optDouble("y", ps.y);
+            ps.serverX = (float) obj.optDouble("x", ps.serverX);
+            ps.serverY = (float) obj.optDouble("y", ps.serverY);
             ps.dir = obj.optInt("dir", ps.dir);
 
             // ===== State =====
@@ -257,24 +257,18 @@ public class WorldState {
             duLieuNguoiChoi.hanhTrangGiaoDichPlayer2.clear();
 
             int fromUserId = obj.optInt("from",-1);
-            List<Integer> listIdItem = new ArrayList<>();
+            List<String> listIdItem = new ArrayList<>();
             JSONArray items = obj.optJSONArray("items");
             if (items != null) {
-                System.out.println("=== items JSON gốc ===");
-                System.out.println(items.toString(2)); // in đẹp
-
                 for (int i = 0; i < items.length(); i++) {
                     JSONObject item = items.getJSONObject(i);
-                    System.out.println("Keys của item[" + i + "]: " + item.keys());
-
-                    int itemId = item.optInt("itemId"); // có thể key không phải "itemId"
-                    System.out.println("itemId = " + itemId);
-                    listIdItem.add(itemId);
+                    String itemUuid = item.optString("itemUuid");
+                    listIdItem.add(itemUuid);
                 }
             }
             if (listIdItem.size() > 0) {
                 new Thread(() -> {
-                    List<ItemCanLuu> itemss = ApiItemService.getItemsByItemIds(listIdItem);
+                    List<ItemCanLuu> itemss = ApiItemService.getItemsByItemUuids(listIdItem);
 
                     if (itemss != null && !itemss.isEmpty()) {
                         // Post về Main Thread trước khi tạo Item (có Texture)
@@ -290,7 +284,7 @@ public class WorldState {
                                     item.setKichHoat, item.soSaoPhaLe,
                                     item.soSaoPhaLeCuongHoa, item.soCap, item.hanSuDung
                                 );
-                                itemClient.id = item.id;
+                                itemClient.uuid = item.uuid;
                                 duLieuNguoiChoi.hanhTrangGiaoDichPlayer2.add(itemClient);
                             }
                             System.out.println("Đã add xong, size: "
@@ -300,6 +294,30 @@ public class WorldState {
                         System.out.println("itemss null hoặc rỗng");
                     }
                 }).start();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void onAddItem(Object... args) {
+        if (args.length == 0) return;
+        try {
+            System.out.println("CHECK DONE");
+            JSONObject obj = toJsonObject(args[0]);
+
+            VeHUD veHUD = State_Management.getVeHUD();
+            DuLieuNguoiChoi duLieuNguoiChoi = veHUD.getDuLieuNguoiChoi();
+
+            int tmpId = obj.optInt("tmpId",-1);
+            String uuid = obj.optString("uuid","");
+
+            for (Item item : duLieuNguoiChoi.getHanhTrang()) {
+                if (item.tmpId == tmpId) {
+                    item.uuid = uuid;
+                    item.tmpId = -1;
+                    System.out.println("DONE UUID");
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

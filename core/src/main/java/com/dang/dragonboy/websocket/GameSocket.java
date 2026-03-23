@@ -1,10 +1,14 @@
 package com.dang.dragonboy.websocket;
 
+import com.dang.dragonboy.du_lieu.State_Management;
+import com.dang.dragonboy.item.Item;
+import com.dang.dragonboy.network.DTO.ItemCanLuu;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import org.json.JSONObject;
 import java.util.*;
+import com.google.gson.Gson;
 
 public class GameSocket {
 
@@ -86,6 +90,9 @@ public class GameSocket {
         });
         socket.on("trade:offer:update", args -> {
             WorldState.onTradeUpdate(args);
+        });
+        socket.on("addItem", args -> {
+            WorldState.onAddItem(args);
         });
     }
 
@@ -187,19 +194,32 @@ public class GameSocket {
         socket.emit("trade:cancel", data);
     }
 
-    public static void tradeOfferAdd(int withUserId, int itemId) throws Exception {
+    public static void tradeOfferAdd(int withUserId, String itemUuid) throws Exception {
         JSONObject data = new JSONObject();
         data.put("withUserId", withUserId);
-        data.put("itemId", itemId);
+        data.put("itemUuid", itemUuid);
 
         socket.emit("trade:offer:add", data);
     }
 
-    public static void tradeOfferRemove(int withUserId, int itemId) throws Exception {
+    public static void tradeOfferRemove(int withUserId, String itemUuid) throws Exception {
         JSONObject data = new JSONObject();
         data.put("withUserId", withUserId);
-        data.put("itemId", itemId);
+        data.put("itemUuid", itemUuid);
 
         socket.emit("trade:offer:remove", data);
+    }
+
+    public static void addItem(int tmpId, Item item, String viTri) throws Exception {
+        ItemCanLuu converted = State_Management.getDuLieuNguoiChoi().convertItem(item, viTri);
+
+        Gson gson = new Gson();
+        JSONObject itemJson = new JSONObject(gson.toJson(converted)); // ← fix chỗ này
+
+        JSONObject data = new JSONObject();
+        data.put("tmpId", tmpId);
+        data.put("item", itemJson);
+
+        socket.emit("add-item", data);
     }
 }

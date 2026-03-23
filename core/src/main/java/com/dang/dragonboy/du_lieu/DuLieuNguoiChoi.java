@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import com.dang.dragonboy.network.DTO.DeTuTheoUser;
 import com.dang.dragonboy.network.DTO.ItemCanLuu;
 import com.dang.dragonboy.network.DTO.UserResponse;
+import com.dang.dragonboy.websocket.GameSocket;
 import com.google.gson.Gson;
 import com.badlogic.gdx.Gdx;
 import com.dang.dragonboy.item.Item;
@@ -154,7 +155,9 @@ public class DuLieuNguoiChoi {
     public boolean themItemVaoHanhTrang(Item item) {
         boolean ketQua = themItemVaoHanhTrangNoSave(item);
         if (ketQua) {
-            luuDuLieuItem();
+            int tmpId = (int)(System.currentTimeMillis() % 1000000);
+            item.tmpId = tmpId;
+            luuDuLieuItem(item, tmpId, "hanhtrang");
         }
         return ketQua;
     }
@@ -1114,59 +1117,17 @@ public class DuLieuNguoiChoi {
         itemDB.chiso = gson.toJson(item.getChiso());
 
         itemDB.viTri = viTri;
+
+        itemDB.uuid = item.uuid;
         return itemDB;
     }
 
-    public boolean luuDuLieuItem() {
-        UserResponse currentUser = State_Management.getUserResponse();
-        if (currentUser != null) {
+    public void luuDuLieuItem(Item item,int tmpId, String viTri) {
+        try {
+            GameSocket.addItem(tmpId, item, viTri);
+        } catch(Exception e) {
 
-            // Gom danh sách tất cả item
-            List<ItemCanLuu> allItems = new ArrayList<>();
-
-            // Thêm tất cả item từ các danh sách vào allItems
-            if (State_Management.getDuLieuNguoiChoi() != null) {
-                DuLieuNguoiChoi duLieu = State_Management.getDuLieuNguoiChoi();
-
-                // Hành trang
-                if (duLieu.getHanhTrang() != null) {
-                    for (Item item : duLieu.getHanhTrang()) {
-                        ItemCanLuu converted = State_Management.getDuLieuNguoiChoi().convertItem(item, "hanhtrang");
-                        if (converted != null) allItems.add(converted);
-                    }
-                }
-
-                // Hành trang đang mặc
-                if (duLieu.getHanhTrangDangMac() != null) {
-                    for (Item item : duLieu.getHanhTrangDangMac()) {
-                        ItemCanLuu converted = State_Management.getDuLieuNguoiChoi().convertItem(item, "hanhtrangdangmac");
-                        if (converted != null) allItems.add(converted);
-                    }
-                }
-
-                // Rương đồ
-                if (duLieu.getHanhTrangRuongDo() != null) {
-                    for (Item item : duLieu.getHanhTrangRuongDo()) {
-                        ItemCanLuu converted = State_Management.getDuLieuNguoiChoi().convertItem(item, "ruongdo");
-                        if (converted != null) allItems.add(converted);
-                    }
-                }
-
-                // Hành trang đệ tử
-                if (duLieu.coDeTu() && duLieu.deTu != null && duLieu.deTu.getHanhTrangDangMac() != null) {
-                    for (Item item : duLieu.deTu.getHanhTrangDangMac()) {
-                        ItemCanLuu converted = State_Management.getDuLieuNguoiChoi().convertItem(item, "hanhtrangdetu");
-                        if (converted != null) allItems.add(converted);
-                    }
-                }
-            }
-
-            // Gửi lên backend
-            List<ItemCanLuu> listItem = ApiItemService.saveItems(State_Management.getUserResponse().username, allItems);
-            setLaiHanhTrangTuDatabase(listItem);
-            return true;
         }
-        return false;
     }
 
     public void setLaiHanhTrangTuDatabase(List<ItemCanLuu> listItem) {
@@ -1196,7 +1157,7 @@ public class DuLieuNguoiChoi {
                     gson.fromJson(item.chiso, int[].class),
                     item.hanhTinh, Long.parseLong(item.sucManhYeuCau), item.setKichHoat, item.soSaoPhaLe, item.soSaoPhaLeCuongHoa, item.soCap, item.hanSuDung
                 );
-                itemCLient.id = item.id;
+                itemCLient.uuid = item.uuid;
                 switch (item.viTri) {
                     case "hanhtrang":
                         this.themItemVaoHanhTrangNoSave(itemCLient);

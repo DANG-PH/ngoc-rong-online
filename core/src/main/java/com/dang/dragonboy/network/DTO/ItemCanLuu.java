@@ -1,8 +1,7 @@
 package com.dang.dragonboy.network.DTO;
 
 public class ItemCanLuu {
-
-    public Integer id;
+    public String uuid;
     public String maItem;
     public String ten;
     public String loai;
