@@ -121,9 +121,10 @@ public class ManHinhMenu implements Screen {
         if (timeClickNutThongBao > 0) {
             timeClickNutThongBao -= delta;
             if (timeClickNutThongBao <= 0) {
-                if (trangThaiManHinh != TrangThaiManHinhMenu.SERVER_ERROR) {
-                    trangThaiManHinh = TrangThaiManHinhMenu.NONE;
+                if (trangThaiManHinh == TrangThaiManHinhMenu.SERVER_ERROR) {
+                    serverOnline = true;
                 }
+                trangThaiManHinh = TrangThaiManHinhMenu.NONE;
             }
         }
 
@@ -140,58 +141,61 @@ public class ManHinhMenu implements Screen {
             if (State_Management.getUserResponse() != null) {
                 switch (nutDuocChon) {
                     case 0:
-                        if (State_Management.getUserResponse() != null) {
-                            if (!State_Management.getUserResponse().biBan) {
-                                if (!State_Management.getUserResponse().daVaoTaiKhoanLanDau) {
-                                    nextScreen = new ManHinhSplash(game, new ManHinhNhaGohan(game, "admin", "traidat", "Goku", null));
-                                } else {
-                                    if (State_Management.getUserResponse().mapHienTai.equals("Nhà Gôhan")) {
+                        serverOnline = ApiService.healthCheck();
+                        if (serverOnline) {
+                            if (State_Management.getUserResponse() != null) {
+                                if (!State_Management.getUserResponse().biBan) {
+                                    if (!State_Management.getUserResponse().daVaoTaiKhoanLanDau) {
                                         nextScreen = new ManHinhSplash(game, new ManHinhNhaGohan(game, "admin", "traidat", "Goku", null));
-                                    } else if (State_Management.getUserResponse().mapHienTai.equals("Làng Aru")) {
-                                        nextScreen = (new ManHinhSplash(game, new ManHinhLangAru(game, null)));
-                                    } else if (State_Management.getUserResponse().mapHienTai.equals("Đồi Hoa Cúc")) {
-                                        nextScreen = (new ManHinhSplash(game, new ManHinhDoiHoaCuc(game, null)));
-                                    }
-                                }
-                                if (!GameSocket.isConnected()) {
-                                    String token = State_Management.getToken();
-
-                                    new Thread(() -> {
-                                        try {
-                                            URL url = new URL("https://api.dangpham.id.vn/game/play");
-                                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                                            conn.setRequestMethod("POST");
-                                            conn.setRequestProperty("Authorization", "Bearer " + token);
-                                            conn.setRequestProperty("Content-Type", "application/json");
-                                            conn.setDoOutput(true);
-
-                                            int responseCode = conn.getResponseCode();
-
-                                            if (responseCode == 200 || responseCode == 201) {
-                                                Scanner scanner = new Scanner(conn.getInputStream());
-                                                StringBuilder responseBody = new StringBuilder();
-                                                while (scanner.hasNextLine()) responseBody.append(scanner.nextLine());
-                                                scanner.close();
-
-                                                JSONObject json = new JSONObject(responseBody.toString());
-                                                String gameSessionId = json.getString("gameSessionId");
-                                                State_Management.gameSessionId = gameSessionId;
-
-                                                conn.disconnect();
-                                                GameSocket.connect(token);
-                                            } else {
-                                                System.out.println("/play thất bại: " + responseCode);
-                                                conn.disconnect();
-                                            }
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
+                                    } else {
+                                        if (State_Management.getUserResponse().mapHienTai.equals("Nhà Gôhan")) {
+                                            nextScreen = new ManHinhSplash(game, new ManHinhNhaGohan(game, "admin", "traidat", "Goku", null));
+                                        } else if (State_Management.getUserResponse().mapHienTai.equals("Làng Aru")) {
+                                            nextScreen = (new ManHinhSplash(game, new ManHinhLangAru(game, null)));
+                                        } else if (State_Management.getUserResponse().mapHienTai.equals("Đồi Hoa Cúc")) {
+                                            nextScreen = (new ManHinhSplash(game, new ManHinhDoiHoaCuc(game, null)));
                                         }
-                                    }).start();
+                                    }
+                                    if (!GameSocket.isConnected()) {
+                                        String token = State_Management.getToken();
+
+                                        new Thread(() -> {
+                                            try {
+                                                URL url = new URL("https://api.dangpham.id.vn/game/play");
+                                                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                                                conn.setRequestMethod("POST");
+                                                conn.setRequestProperty("Authorization", "Bearer " + token);
+                                                conn.setRequestProperty("Content-Type", "application/json");
+                                                conn.setDoOutput(true);
+
+                                                int responseCode = conn.getResponseCode();
+
+                                                if (responseCode == 200 || responseCode == 201) {
+                                                    Scanner scanner = new Scanner(conn.getInputStream());
+                                                    StringBuilder responseBody = new StringBuilder();
+                                                    while (scanner.hasNextLine())
+                                                        responseBody.append(scanner.nextLine());
+                                                    scanner.close();
+
+                                                    JSONObject json = new JSONObject(responseBody.toString());
+                                                    String gameSessionId = json.getString("gameSessionId");
+                                                    State_Management.gameSessionId = gameSessionId;
+
+                                                    conn.disconnect();
+                                                    GameSocket.connect(token);
+                                                } else {
+                                                    System.out.println("/play thất bại: " + responseCode);
+                                                    conn.disconnect();
+                                                }
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                        }).start();
+                                    }
+                                } else {
+                                    trangThaiManHinh = TrangThaiManHinhMenu.BAN;
                                 }
                             } else {
-                                trangThaiManHinh = TrangThaiManHinhMenu.BAN;
-                            }
-                        } else {
 //                            UserResponse user = ApiService.login("ad", "1");
 //                            if (user != null) {
 //                                System.out.println("Đăng nhập thành công!");
@@ -214,6 +218,7 @@ public class ManHinhMenu implements Screen {
 //                                    nextScreen = (new ManHinhSplash(game, new ManHinhDoiHoaCuc(game, null)));
 //                                }
 //                            }
+                            }
                         }
                         break;
                     case 1:
@@ -349,7 +354,7 @@ public class ManHinhMenu implements Screen {
         } else if (trangThaiManHinh == TrangThaiManHinhMenu.FORCE_LOGOUT) {  // THÊM
             batch.draw(anhThongBao, (Gdx.graphics.getWidth() - 740) / 2f, 85, 740, 168);
             font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
-            layout.setText(font, "Tài khoản được đăng nhập tại nơi khác!");
+            layout.setText(font, State_Management.getForceLogoutMessage());
             font.draw(batch, layout, (Gdx.graphics.getWidth() - layout.width) / 2, 180);
             float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
             float nutY = 70;

@@ -699,12 +699,32 @@ public class VeHUD {
             State_Management.setRefresh_token("");
             State_Management.setAuth_id(0);
             State_Management.setRole("");
-            State_Management.setForceLogoutMessage("");
             State_Management.setForceLogout(false);
             State_Management.resetAll(); // gọi cuối vì có thể null nhiều thứ
 
             // 3. Chuyển màn hình — sau khi state đã sạch
             Main game = State_Management.game;
+            State_Management.setForceLogoutMessage("Tài khoản được đăng nhập tại nơi khác!");
+            game.setScreen(new ManHinhMenu(game, null, true));
+        }
+        if (GameSocket.isReconnecting || GameSocket.retryCount > 0) {
+            batch.draw(anhThongBao, (Gdx.graphics.getWidth() - 740) / 2f, 85, 740, 168);
+            font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+            layout.setText(font, "Kết nối thất bại, đang thử lại lần " + GameSocket.retryCount + "/" + GameSocket.MAX_RETRY);
+            font.draw(batch, layout, (Gdx.graphics.getWidth() - layout.width) / 2, 180);
+        }
+        if (GameSocket.retryCount == GameSocket.MAX_RETRY) {
+            GameSocket.disconnect();
+            State_Management.setToken("");
+            State_Management.setSessionId("");
+            State_Management.setRefresh_token("");
+            State_Management.setAuth_id(0);
+            State_Management.setRole("");
+            State_Management.setForceLogout(false);
+            State_Management.resetAll(); // gọi cuối vì có thể null nhiều thứ
+
+            Main game = State_Management.game;
+            State_Management.setForceLogoutMessage("Kết nối bị gián đoạn, về màn hình chính.");
             game.setScreen(new ManHinhMenu(game, null, true));
         }
         float deltaTime = Gdx.graphics.getDeltaTime();

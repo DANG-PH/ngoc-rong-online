@@ -18,8 +18,8 @@ public class GameSocket {
     private static boolean eventsRegistered = false;
     public static boolean isReconnecting = false;
     private static boolean isManualDisconnect = false;
-    private static final int MAX_RETRY = 5;
-    private static int retryCount = 0;
+    public static final int MAX_RETRY = 5;
+    public static int retryCount = 0;
 
     public static void connect(String token) {
         if (isConnected()) return;
@@ -75,7 +75,8 @@ public class GameSocket {
         isReconnecting = true;
         retryCount++;
 
-        long delay = (long) Math.pow(2, retryCount) * 1000L;
+//        long delay = (long) Math.pow(2, retryCount) * 1000L;
+        long delay = 5 * 1000L;
 
         new Thread(() -> {
             try {

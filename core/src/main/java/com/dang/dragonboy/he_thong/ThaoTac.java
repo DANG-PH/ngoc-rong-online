@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 
 import com.dang.dragonboy.hien_thi.*;
 import com.dang.dragonboy.nhan_vat.NhanVat;
+import com.dang.dragonboy.websocket.GameSocket;
 import com.dang.dragonboy.websocket.TrangThaiHanhTrangGd;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_dungle.TrangThaiChucNang_admin_dungle;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_haidang.admin_haidang;
@@ -27,6 +28,7 @@ public class ThaoTac extends InputAdapter {
 
     @Override
     public boolean keyDown(int keycode) {
+        if (GameSocket.isReconnecting || GameSocket.retryCount > 0) return true;
         if (hud.timeChoHopThe == 0 && !hud.dangHienDauThan && !hud.daClickVaoNpc && !hud.dangHienPopup && !hud.dangHienRuongDo && !hud.dangHienDieuUocRongThan && hud.timeChoBienKhi == 0) {
             switch (keycode) {
                 case Input.Keys.LEFT:
@@ -103,6 +105,7 @@ public class ThaoTac extends InputAdapter {
 
     @Override
     public boolean keyUp(int keycode) {
+        if (GameSocket.isReconnecting || GameSocket.retryCount > 0) return true;
         switch (keycode) {
             case Input.Keys.LEFT:
                 nhanVat.dungTrai();
@@ -118,6 +121,7 @@ public class ThaoTac extends InputAdapter {
     }
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if (GameSocket.isReconnecting || GameSocket.retryCount > 0) return true;
         int y = Gdx.graphics.getHeight() - screenY;
         if (button == Input.Buttons.LEFT && !hud.dangGiaoDich && !hud.dangHienKhungChung && !hud.dangHienPopup && !hud.dangHienRuongDo && !hud.daClickVaoNpc) {
             camera.batDauKeoCamera(screenX, screenY);
@@ -203,6 +207,7 @@ public class ThaoTac extends InputAdapter {
     }
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+        if (GameSocket.isReconnecting || GameSocket.retryCount > 0) return true;
         int y = Gdx.graphics.getHeight() - screenY;
         camera.keoCamera(screenX, screenY);
         if (!hud.DangHienPopupThongTin1 && !hud.DangHienPopupThongTin2 && !hud.DangHienPopupThongTin3) {
@@ -232,6 +237,7 @@ public class ThaoTac extends InputAdapter {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        if (GameSocket.isReconnecting || GameSocket.retryCount > 0) return true;
         int y = Gdx.graphics.getHeight() - screenY;
         if (!hud.vuaKeoHanhTrangPhai && !hud.vuaKeoHanhTrangTrai) {
             float viewportWidth = camera.camera.viewportWidth;
@@ -275,6 +281,7 @@ public class ThaoTac extends InputAdapter {
     }
     @Override
     public boolean scrolled(float amountX, float amountY) {
+        if (GameSocket.isReconnecting || GameSocket.retryCount > 0) return true;
         // chỉ xử lý khi đang mở popup và chọn mục hành trang
         if (hud.dangHienPopup && (hud.trangThaiChucNangHUD == TrangThaiChucNangHUD.HANH_TRANG || hud.trangThaiChucNangHUD == TrangThaiChucNangHUD.KY_NANG || hud.trangThaiChucNangHUD == TrangThaiChucNangHUD.CHUC_NANG) && !hud.dangHienThongBao && !hud.DangHienPopupThongTin1 && !hud.DangHienPopupThongTin && !hud.DangHienPopupThongTin2 && !(hud.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.MINIGAME)) {
             if (!(hud.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU)) {
@@ -319,6 +326,7 @@ public class ThaoTac extends InputAdapter {
     }
     @Override
     public boolean keyTyped(char character) {
+        if (GameSocket.isReconnecting || GameSocket.retryCount > 0) return true;
         if (hud.dangHienKhungChat) {
             if (character == '\b') {
                 if (!hud.tinNhanChat.isEmpty()) {
