@@ -155,7 +155,7 @@ public class DuLieuNguoiChoi {
     public boolean themItemVaoHanhTrang(Item item) {
         boolean ketQua = themItemVaoHanhTrangNoSave(item);
         if (ketQua) {
-            int tmpId = (int)(System.currentTimeMillis() % 1000000);
+            int tmpId = (int)(System.currentTimeMillis() % 1000000)+(int)(Math.random()*100f);
             item.tmpId = tmpId;
             luuDuLieuItem(item, tmpId, "hanhtrang");
         }

@@ -18,10 +18,14 @@ import com.dang.dragonboy.he_thong.Main;
 import com.dang.dragonboy.giao_dien_trong.ManHinhNhaGohan;
 import com.dang.dragonboy.network.ApiService;
 import com.dang.dragonboy.websocket.GameSocket;
+import org.json.JSONObject;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Base64;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.Scanner;
 
 enum TrangThaiManHinhMenu {
     NONE,
@@ -138,9 +142,39 @@ public class ManHinhMenu implements Screen {
                                     }
                                 }
                                 if (!GameSocket.isConnected()) {
-                                    Map<String, String> savedUser = LocalStorage.loadLastUser();
-                                    String token = savedUser.get("access_token");
-                                    GameSocket.connect(token);
+                                    String token = State_Management.getToken();
+
+                                    new Thread(() -> {
+                                        try {
+                                            URL url = new URL("https://api.dangpham.id.vn/game/play");
+                                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                                            conn.setRequestMethod("POST");
+                                            conn.setRequestProperty("Authorization", "Bearer " + token);
+                                            conn.setRequestProperty("Content-Type", "application/json");
+                                            conn.setDoOutput(true);
+
+                                            int responseCode = conn.getResponseCode();
+
+                                            if (responseCode == 200 || responseCode == 201) {
+                                                Scanner scanner = new Scanner(conn.getInputStream());
+                                                StringBuilder responseBody = new StringBuilder();
+                                                while (scanner.hasNextLine()) responseBody.append(scanner.nextLine());
+                                                scanner.close();
+
+                                                JSONObject json = new JSONObject(responseBody.toString());
+                                                String gameSessionId = json.getString("gameSessionId");
+                                                State_Management.gameSessionId = gameSessionId;
+
+                                                conn.disconnect();
+                                                GameSocket.connect(token);
+                                            } else {
+                                                System.out.println("/play thất bại: " + responseCode);
+                                                conn.disconnect();
+                                            }
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }).start();
                                 }
                             } else {
                                 trangThaiManHinh = TrangThaiManHinhMenu.BAN;

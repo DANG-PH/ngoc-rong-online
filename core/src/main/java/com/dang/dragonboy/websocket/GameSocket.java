@@ -9,40 +9,56 @@ import io.socket.client.Socket;
 import org.json.JSONObject;
 import java.util.*;
 import com.google.gson.Gson;
+import java.net.URL;
+import java.net.HttpURLConnection;
 
 public class GameSocket {
 
     public static Socket socket;
     private static boolean eventsRegistered = false;
+    public static boolean isReconnecting = false;
+    private static boolean isManualDisconnect = false;
+    private static final int MAX_RETRY = 5;
+    private static int retryCount = 0;
 
     public static void connect(String token) {
         if (isConnected()) return;
+        if (isReconnecting) return;
 
         try {
             IO.Options opts = new IO.Options();
             opts.transports = new String[]{"websocket"};
+            opts.reconnection = false;
 
-            // ✅ HEADER ĐÚNG KIỂU
-            Map<String, List<String>> headers = new HashMap<>();
-            headers.put("Authorization", Collections.singletonList("Bearer " + token));
-            opts.extraHeaders = headers;
+            // Gửi token + gameSessionId qua auth thay vì extraHeaders
+            Map<String, String> auth = new HashMap<>();
+            auth.put("token", token);
+            auth.put("gameSessionId", State_Management.gameSessionId);
+            opts.auth = auth;
 
-            socket = IO.socket("https://api.chienbinhrongthieng.online/ws-game", opts);
+            socket = IO.socket("https://api.dangpham.id.vn/ws-game", opts);
 
             socket.on(Socket.EVENT_CONNECT, args -> {
                 System.out.println("WS CONNECTED");
+                retryCount = 0;
+                isReconnecting = false;
                 if (!eventsRegistered) {
                     registerGameEvents();
                     eventsRegistered = true;
+                    isManualDisconnect = false;
                 }
             });
 
             socket.on(Socket.EVENT_CONNECT_ERROR, args -> {
                 System.out.println("WS CONNECT ERROR: " + args[0]);
+                scheduleReconnect();
             });
 
             socket.on(Socket.EVENT_DISCONNECT, args -> {
-                System.out.println("WS DISCONNECTED");
+                String reason = args.length > 0 ? args[0].toString() : "";
+                if (!reason.equals("io server disconnect")) {
+                    scheduleReconnect();
+                }
             });
 
             socket.connect();
@@ -52,47 +68,141 @@ public class GameSocket {
         }
     }
 
+    private static void scheduleReconnect() {
+        if (isReconnecting || isManualDisconnect) return;
+        if (retryCount >= MAX_RETRY) return;
+
+        isReconnecting = true;
+        retryCount++;
+
+        long delay = (long) Math.pow(2, retryCount) * 1000L;
+
+        new Thread(() -> {
+            try {
+                Thread.sleep(delay);
+            } catch (InterruptedException ignored) {}
+
+            if (isManualDisconnect) return;
+
+            callPlayThenConnect();
+        }).start();
+    }
+
+    private static void callPlayThenConnect() {
+        new Thread(() -> {
+            try {
+                if (isManualDisconnect) return;
+
+                URL url = new URL("https://api.dangpham.id.vn/game/play");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Authorization", "Bearer " + State_Management.getToken());
+                conn.setRequestProperty("Content-Type", "application/json");
+                conn.setDoOutput(true);
+
+                int responseCode = conn.getResponseCode();
+
+                if (responseCode == 200 || responseCode == 201) {
+                    // Đọc gameSessionId từ response
+                    Scanner scanner = new Scanner(conn.getInputStream());
+                    StringBuilder responseBody = new StringBuilder();
+                    while (scanner.hasNextLine()) responseBody.append(scanner.nextLine());
+                    scanner.close();
+
+                    JSONObject json = new JSONObject(responseBody.toString());
+                    String gameSessionId = json.getString("gameSessionId");
+                    State_Management.gameSessionId = gameSessionId;
+
+                    System.out.println("/play success → gameSessionId: " + gameSessionId);
+                    isReconnecting = false;
+
+                    if (socket != null) {
+                        socket.off();
+                        socket.close();
+                    }
+                    eventsRegistered = false;
+                    connect(State_Management.getToken());
+
+                } else if (responseCode == 401) {
+                    System.out.println("Token expired, need re-login");
+                    handleTokenExpired();
+                } else {
+                    System.out.println("/play failed: " + responseCode);
+                    isReconnecting = false;
+                    scheduleReconnect();
+                }
+
+                conn.disconnect();
+            } catch (Exception e) {
+                e.printStackTrace();
+                isReconnecting = false;
+                scheduleReconnect();
+            }
+        }).start();
+    }
+
+    public static void disconnect() {
+        eventsRegistered = false;
+        isManualDisconnect = true;
+        retryCount = MAX_RETRY;
+        if (socket != null) socket.disconnect();
+    }
+
+    private static void handleTokenExpired() {
+        retryCount = MAX_RETRY;
+        State_Management.setForceLogout(true);
+        State_Management.setForceLogoutMessage("Phiên đăng nhập đã hết hạn hoặc bị thu hồi");
+    }
+
     private static void registerGameEvents() {
         socket.on("mapSnapshot", args -> {
             System.out.println("===== mapSnapshot =====");
             System.out.println("args.length = " + args.length);
-
             for (int i = 0; i < args.length; i++) {
                 System.out.println("args[" + i + "] class = " + args[i].getClass());
                 System.out.println("args[" + i + "] value = " + args[i]);
             }
-
             WorldState.onMapSnapshot(args);
         });
+
         socket.on("playerSpawn", args -> {
             System.out.println("===== playerSpawn =====");
             System.out.println(args[0]);
             WorldState.onPlayerSpawn(args);
         });
+
         socket.on("playerDespawn", args -> {
             System.out.println("===== playerDespawn =====");
             System.out.println(args[0]);
             WorldState.onPlayerDespawn(args);
         });
+
         socket.on("playerSync", WorldState::onPlayerSync);
         socket.on("playerChat", WorldState::onPlayerChat);
-        socket.on("notification", args -> {
-            WorldState.onNotification(args);
-        });
-        socket.on("trade:request", args -> {
-            WorldState.onTradeItem(args);
-        });
-        socket.on("trade:open", args -> {
-            WorldState.onTradeOpen(args);
-        });
-        socket.on("trade:cancelled", args -> {
-            WorldState.onTradeCancel(args);
-        });
-        socket.on("trade:offer:update", args -> {
-            WorldState.onTradeUpdate(args);
-        });
-        socket.on("addItem", args -> {
-            WorldState.onAddItem(args);
+
+        socket.on("notification", args -> WorldState.onNotification(args));
+        socket.on("trade:request", args -> WorldState.onTradeItem(args));
+        socket.on("trade:open", args -> WorldState.onTradeOpen(args));
+        socket.on("trade:cancelled", args -> WorldState.onTradeCancel(args));
+        socket.on("trade:offer:update", args -> WorldState.onTradeUpdate(args));
+        socket.on("addItem", args -> WorldState.onAddItem(args));
+
+        socket.on("force_logout", args -> {
+            try {
+                JSONObject data = (JSONObject) args[0];
+                String message = data.getString("message");
+
+                System.out.println("FORCE LOGOUT: " + message);
+
+                State_Management.setForceLogout(true);
+                State_Management.setForceLogoutMessage(message);
+
+                retryCount = MAX_RETRY;
+                eventsRegistered = false;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
     }
 

@@ -1,5 +1,6 @@
 package com.dang.dragonboy.du_lieu;
 
+import com.dang.dragonboy.he_thong.Main;
 import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.network.DTO.UserResponse;
 import com.dang.dragonboy.nhan_vat.NhanVat;
@@ -16,6 +17,10 @@ public class State_Management {
     private static String refresh_token = "";
     private static int auth_id = 0;
     private static String role = "";
+    private static boolean forceLogout = false;
+    private static String forceLogoutMessage = "";
+    public static Main game;
+    public static String gameSessionId;
 
     public static void setDuLieuStateManagement(NhanVat nhanvatt, VeHUD veHUDD,DuLieuNguoiChoi duLieuNguoiChoii) {
         duLieuNguoiChoi = duLieuNguoiChoii;
@@ -29,6 +34,14 @@ public class State_Management {
 
     public static DuLieuNguoiChoi getDuLieuNguoiChoi() {
         return duLieuNguoiChoi;
+    }
+
+    public static void resetAll() {
+        veHUD = null;
+        nhanVat = null;
+        userResponse = null;
+        duLieuNguoiChoi = null;
+        gameSessionId = null;
     }
 
     public static VeHUD getVeHUD() {
@@ -94,4 +107,9 @@ public class State_Management {
     public static void setDuLieuNguoiChoi(DuLieuNguoiChoi duLieuNguoiChoii) {
         duLieuNguoiChoi = duLieuNguoiChoii;
     }
+
+    public static boolean isForceLogout() { return forceLogout; }
+    public static void setForceLogout(boolean value) { forceLogout = value; }
+    public static String getForceLogoutMessage() { return forceLogoutMessage; }
+    public static void setForceLogoutMessage(String msg) { forceLogoutMessage = msg; }
 }

@@ -110,7 +110,6 @@ public class KhungGiaoDich {
         }
 
         if (duLieuNguoiChoi.hanhTrangGiaoDichPlayer2.size() > 0) {
-            System.out.println("HIỆN ĐƯỢC GIAO DỊCH");
             NPC_CUA_HANG.render_item(false, batch, 344, veHUD, veHUD.getDuLieuNguoiChoi().hanhTrangGiaoDichPlayer2, veHUD.indexItemGiaoDich);
         }
     }

@@ -65,6 +65,8 @@ public class Main extends Game {
         } else {
             System.out.println("Chưa có người dùng nào, yêu cầu đăng nhập");
         }
+
+        State_Management.game = this;
     }
 
     @Override

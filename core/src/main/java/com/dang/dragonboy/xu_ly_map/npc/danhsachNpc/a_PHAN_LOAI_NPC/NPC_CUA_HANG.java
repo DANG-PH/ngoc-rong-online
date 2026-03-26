@@ -49,7 +49,7 @@ public class NPC_CUA_HANG {
                     veIconItem(batch,width,veHUD, item,viewX, y);
                     veTenSoLuong(batch,width,veHUD, item,viewX, y);
                     veChiTietItem(batch,width,veHUD, item,viewX, y);
-                    if (veHUD.npcHienTai != null && veHUD.npcHienTai.npcHUDrender.ui_npc instanceof admin_thanhle) {
+                    if (veHUD.npcHienTai != null && veHUD.daClickVaoNpc && veHUD.npcHienTai.npcHUDrender.ui_npc instanceof admin_thanhle) {
                         veGiaItem(batch,veHUD, item, y);
                     }
                 }

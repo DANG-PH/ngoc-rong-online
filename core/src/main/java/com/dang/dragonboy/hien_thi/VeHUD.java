@@ -14,6 +14,8 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Align;
 import com.dang.dragonboy.du_lieu.State_Management;
+import com.dang.dragonboy.giao_dien_ngoai.ManHinhMenu;
+import com.dang.dragonboy.he_thong.Main;
 import com.dang.dragonboy.item.LoaiItem;
 import com.dang.dragonboy.nhan_vat.*;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
@@ -686,6 +688,25 @@ public class VeHUD {
     }
 
     public void render(SpriteBatch batch) {
+        if (State_Management.isForceLogout()) {
+            Gdx.input.setInputProcessor(null);
+            // 1. Ngắt WS TRƯỚC TIÊN — trước khi làm bất cứ điều gì khác
+            GameSocket.disconnect();
+
+            // 2. Reset state
+            State_Management.setToken("");
+            State_Management.setSessionId("");
+            State_Management.setRefresh_token("");
+            State_Management.setAuth_id(0);
+            State_Management.setRole("");
+            State_Management.setForceLogoutMessage("");
+            State_Management.setForceLogout(false);
+            State_Management.resetAll(); // gọi cuối vì có thể null nhiều thứ
+
+            // 3. Chuyển màn hình — sau khi state đã sạch
+            Main game = State_Management.game;
+            game.setScreen(new ManHinhMenu(game, null));
+        }
         float deltaTime = Gdx.graphics.getDeltaTime();
 
         if (duLieuNguoiChoi.coDeTu()) {
@@ -1477,11 +1498,6 @@ public class VeHUD {
                         } else {
                             switch ((int) nuthanhtrangchon) {
                                 case 1 -> {
-                                    try {
-                                        GameSocket.tradeOfferRemove(playerGiaoDich.userId, itemm.uuid);
-                                    } catch(Exception e) {
-
-                                    }
                                     hangTrangDangChon = -1;
                                     DangHienPopupThongTin1 = false;
                                     TimeChoHienPopup = 0;
@@ -1493,6 +1509,11 @@ public class VeHUD {
                     if (trangThaiHanhTrangGd == TrangThaiHanhTrangGd.ITEM_CHO) {
                         switch ((int) nuthanhtrangchon) {
                             case 1 -> {
+                                try {
+                                    GameSocket.tradeOfferRemove(playerGiaoDich.userId, itemm.uuid);
+                                } catch(Exception e) {
+
+                                }
                                 this.duLieuNguoiChoi.getHanhTrang().add(itemm);
                                 this.duLieuNguoiChoi.hanhTrangGiaoDich.remove(itemm);
                                 hangTrangDangChon = -1;

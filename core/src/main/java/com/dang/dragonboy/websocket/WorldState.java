@@ -15,6 +15,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * WorldState
@@ -31,6 +33,9 @@ public class WorldState {
      * key   : userId
      * value : PlayerState
      */
+    private static final ExecutorService tradeExecutor = Executors.newSingleThreadExecutor();
+    private static final Gson gson = new Gson();
+
     public static ConcurrentHashMap<Integer, PlayerState> players =
         new ConcurrentHashMap<>();
 
@@ -231,12 +236,15 @@ public class WorldState {
 
             VeHUD veHUD = State_Management.getVeHUD();
             DuLieuNguoiChoi duLieuNguoiChoi = veHUD.getDuLieuNguoiChoi();
-            // Set thông tin giao dịch
+
             veHUD.dangGiaoDich = false;
 
-            for (Item item : duLieuNguoiChoi.hanhTrangGiaoDich) {
-                duLieuNguoiChoi.hanhTrangGiaoDich.remove(item);
-                duLieuNguoiChoi.getHanhTrang().add(item);
+            // Copy ra list mới trước, rồi mới xử lý
+            List<Item> itemsToReturn = new ArrayList<>(duLieuNguoiChoi.hanhTrangGiaoDich);
+            duLieuNguoiChoi.hanhTrangGiaoDich.clear(); // xóa sạch trước
+
+            for (Item item : itemsToReturn) {
+                duLieuNguoiChoi.themItemVaoHanhTrang(item); // rồi trả về hành trang
             }
 
             duLieuNguoiChoi.hanhTrangGiaoDichPlayer2.clear();
@@ -254,50 +262,55 @@ public class WorldState {
             VeHUD veHUD = State_Management.getVeHUD();
             DuLieuNguoiChoi duLieuNguoiChoi = veHUD.getDuLieuNguoiChoi();
 
-            duLieuNguoiChoi.hanhTrangGiaoDichPlayer2.clear();
+            String action = obj.optString("action", "");
+            String itemUuid = obj.optString("itemUuid", "");
 
-            int fromUserId = obj.optInt("from",-1);
-            List<String> listIdItem = new ArrayList<>();
-            JSONArray items = obj.optJSONArray("items");
-            if (items != null) {
-                for (int i = 0; i < items.length(); i++) {
-                    JSONObject item = items.getJSONObject(i);
-                    String itemUuid = item.optString("itemUuid");
-                    listIdItem.add(itemUuid);
+            if (action.isEmpty() || itemUuid.isEmpty()) return;
+
+            switch (action) {
+                case "add" -> {
+                    tradeExecutor.submit(() -> {
+                        List<String> listt = new ArrayList<>();
+                        listt.add(itemUuid);
+                        List<ItemCanLuu> itemData = ApiItemService.getItemsByItemUuids(listt);
+
+                        // Check cả null lẫn empty trước khi get(0)
+                        if (itemData == null || itemData.isEmpty()) return;
+
+                        Gdx.app.postRunnable(() -> {
+                            boolean exists = duLieuNguoiChoi.hanhTrangGiaoDichPlayer2
+                                .stream().anyMatch(i -> i.uuid.equals(itemUuid));
+                            if (exists) return;
+
+                            duLieuNguoiChoi.hanhTrangGiaoDichPlayer2.add(buildItem(itemData.get(0)));
+                        });
+                    });
+                }
+                case "remove" -> {
+                    // Không cần gọi API
+                    Gdx.app.postRunnable(() ->
+                        duLieuNguoiChoi.hanhTrangGiaoDichPlayer2
+                            .removeIf(i -> i.uuid.equals(itemUuid))
+                    );
                 }
             }
-            if (listIdItem.size() > 0) {
-                new Thread(() -> {
-                    List<ItemCanLuu> itemss = ApiItemService.getItemsByItemUuids(listIdItem);
 
-                    if (itemss != null && !itemss.isEmpty()) {
-                        // Post về Main Thread trước khi tạo Item (có Texture)
-                        Gdx.app.postRunnable(() -> {
-                            Gson gson = new Gson();
-                            for (ItemCanLuu item : itemss) {
-                                Item itemClient = new Item(
-                                    item.maItem, item.ten, LoaiItem.valueOf(item.loai),
-                                    item.linkTexture,
-                                    item.moTa, item.soLuong,
-                                    gson.fromJson(item.chiso, int[].class),
-                                    item.hanhTinh, Long.parseLong(item.sucManhYeuCau),
-                                    item.setKichHoat, item.soSaoPhaLe,
-                                    item.soSaoPhaLeCuongHoa, item.soCap, item.hanSuDung
-                                );
-                                itemClient.uuid = item.uuid;
-                                duLieuNguoiChoi.hanhTrangGiaoDichPlayer2.add(itemClient);
-                            }
-                            System.out.println("Đã add xong, size: "
-                                + duLieuNguoiChoi.hanhTrangGiaoDichPlayer2.size());
-                        });
-                    } else {
-                        System.out.println("itemss null hoặc rỗng");
-                    }
-                }).start();
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private static Item buildItem(ItemCanLuu item) {
+        Item itemClient = new Item(
+            item.maItem, item.ten, LoaiItem.valueOf(item.loai),
+            item.linkTexture, item.moTa, item.soLuong,
+            gson.fromJson(item.chiso, int[].class),
+            item.hanhTinh, Long.parseLong(item.sucManhYeuCau),
+            item.setKichHoat, item.soSaoPhaLe,
+            item.soSaoPhaLeCuongHoa, item.soCap, item.hanSuDung
+        );
+        itemClient.uuid = item.uuid;
+        return itemClient;
     }
 
     public static void onAddItem(Object... args) {

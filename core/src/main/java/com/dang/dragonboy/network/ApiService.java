@@ -19,7 +19,7 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.JsonArray;
 
 public class ApiService {
-    private static final String BASE_URL = "https://api.chienbinhrongthieng.online";
+    private static final String BASE_URL = "https://api.dangpham.id.vn";
     private static final Gson gson = new Gson();
 
     public static boolean healthCheck() {
@@ -73,6 +73,7 @@ public class ApiService {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            conn.setRequestProperty("x-platform", "game");
             conn.setConnectTimeout(5000);
             conn.setReadTimeout(5000);
             conn.setDoOutput(true);
@@ -134,6 +135,7 @@ public class ApiService {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            conn.setRequestProperty("x-platform", "game");
             conn.setConnectTimeout(5000);
             conn.setReadTimeout(5000);
             conn.setDoOutput(true);
@@ -174,9 +176,6 @@ public class ApiService {
                     LocalStorage.saveLastUser(State_Management.getSessionId(), access_token); // Lưu vào file JSON
 //                    System.out.println("verify otp thanh cong");
 
-                    if (!GameSocket.isConnected()) {
-                        GameSocket.connect(access_token);
-                    }
                     return ApiService.getProfile(access_token);
                 }
                 return null;

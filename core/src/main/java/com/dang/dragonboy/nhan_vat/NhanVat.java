@@ -13,6 +13,8 @@ import com.badlogic.gdx.utils.Align;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.du_lieu.State_Management;
 import com.dang.dragonboy.du_lieu.TrangThaiDeTu;
+import com.dang.dragonboy.giao_dien_ngoai.ManHinhMenu;
+import com.dang.dragonboy.he_thong.Main;
 import com.dang.dragonboy.nhan_vat.van_bay.VanBayCauHinh;
 import com.dang.dragonboy.hien_thi.VeHUD;
 import java.util.List;
