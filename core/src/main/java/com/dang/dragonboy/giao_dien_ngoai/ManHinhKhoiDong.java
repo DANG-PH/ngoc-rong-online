@@ -50,7 +50,7 @@ public class ManHinhKhoiDong implements Screen {
     };
 
     // Cho DEV
-    private static final boolean DEBUG_DOWNLOAD_UI = true;
+    private static final boolean DEBUG_DOWNLOAD_UI = false;
 
     public ManHinhKhoiDong(Main game) {
         this.game = game;
