@@ -705,7 +705,7 @@ public class VeHUD {
 
             // 3. Chuyển màn hình — sau khi state đã sạch
             Main game = State_Management.game;
-            game.setScreen(new ManHinhMenu(game, null));
+            game.setScreen(new ManHinhMenu(game, null, true));
         }
         float deltaTime = Gdx.graphics.getDeltaTime();
 

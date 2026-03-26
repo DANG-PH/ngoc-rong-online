@@ -248,7 +248,7 @@ public class ManHinhDoiTaiKhoan implements Screen {
                                     System.out.println("Đăng nhập thành công!");
                                     State_Management.setUserResponse(user);
                                     System.out.println(user);
-                                    game.setScreen(new ManHinhMenu(game, null));
+                                    game.setScreen(new ManHinhMenu(game, null, false));
                                 } else {
                                     System.out.println("Đăng nhập thất bại!");
                                 }
@@ -286,7 +286,7 @@ public class ManHinhDoiTaiKhoan implements Screen {
                     }).start();
                 }
                 else if (chuyenManHinhDong) {
-                    game.setScreen(new ManHinhMenu(game, null));
+                    game.setScreen(new ManHinhMenu(game, null, false));
                     chuyenManHinhDong = false;
                 } else if (isQuenMKPressed) {
                     trangThaiManHinh = TrangThaiManHinh.THONGBAO;

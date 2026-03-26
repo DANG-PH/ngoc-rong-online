@@ -299,7 +299,7 @@ public class ManHinhChoiMoi implements Screen {
                 chuyenManHinhMayChu = false;
             }
             if (chuyenManHinhDong) {
-                game.setScreen(new ManHinhMenu(game,null));
+                game.setScreen(new ManHinhMenu(game,null, false));
                 chuyenManHinhDong = false;
             }
             if (chuyenManHinhTaoMoi) {

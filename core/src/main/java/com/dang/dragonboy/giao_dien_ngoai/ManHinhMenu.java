@@ -30,7 +30,8 @@ import java.util.Scanner;
 enum TrangThaiManHinhMenu {
     NONE,
     BAN,
-    SERVER_ERROR
+    SERVER_ERROR,
+    FORCE_LOGOUT
 }
 
 public class ManHinhMenu implements Screen {
@@ -55,12 +56,16 @@ public class ManHinhMenu implements Screen {
     private Boolean serverOnline = null; // null = chưa check
 
     private Object mayChu; // biến lưu máy chủ đc chọn
-    public ManHinhMenu(Main game ,Object mayChu) {
+    public ManHinhMenu(Main game ,Object mayChu, boolean isForceLogout) {
         this.game = game;
         this.mayChu = (mayChu != null) ? mayChu : 1; // Nếu null thì mặc định là 1
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
         layout = new GlyphLayout();
+
+        if (isForceLogout) {
+            this.trangThaiManHinh = TrangThaiManHinhMenu.FORCE_LOGOUT;
+        }
 
         new Thread(() -> {
             serverOnline = ApiService.healthCheck();
@@ -97,6 +102,13 @@ public class ManHinhMenu implements Screen {
                     timeClickNutThongBao = 0.1f;
                 }
             } else if (trangThaiManHinh == TrangThaiManHinhMenu.SERVER_ERROR) {
+                float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
+                float nutY = 70;
+                if (mouseX >= nutX && mouseX <= nutX + 140 &&
+                    mouseY >= nutY && mouseY <= nutY + 50) {
+                    timeClickNutThongBao = 0.1f;
+                }
+            } else if (trangThaiManHinh == TrangThaiManHinhMenu.FORCE_LOGOUT) {
                 float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
                 float nutY = 70;
                 if (mouseX >= nutX && mouseX <= nutX + 140 &&
@@ -326,7 +338,18 @@ public class ManHinhMenu implements Screen {
             font.draw(batch, layout, nutX + (140 - layout.width) / 2f, nutY + 30);
         } else if (trangThaiManHinh == TrangThaiManHinhMenu.SERVER_ERROR) {
             batch.draw(anhThongBao, (Gdx.graphics.getWidth() - 740) / 2f, 85, 740, 168);
+            font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
             layout.setText(font, "Máy chủ mất kết nối, vui lòng thử lại sau");
+            font.draw(batch, layout, (Gdx.graphics.getWidth() - layout.width) / 2, 180);
+            float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
+            float nutY = 70;
+            batch.draw(timeClickNutThongBao > 0 ? nutclick1 : nutdn1, nutX, nutY, 140, 50);
+            layout.setText(font, "OK");
+            font.draw(batch, layout, nutX + (140 - layout.width) / 2f, nutY + 30);
+        } else if (trangThaiManHinh == TrangThaiManHinhMenu.FORCE_LOGOUT) {  // THÊM
+            batch.draw(anhThongBao, (Gdx.graphics.getWidth() - 740) / 2f, 85, 740, 168);
+            font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+            layout.setText(font, "Tài khoản được đăng nhập tại nơi khác!");
             font.draw(batch, layout, (Gdx.graphics.getWidth() - layout.width) / 2, 180);
             float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
             float nutY = 70;
@@ -377,7 +400,7 @@ public class ManHinhMenu implements Screen {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 18;
-        parameter.characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?., Xóa dữ liệu Đă ậ ở ớ ổ à ả á ế ủ vũ trụ ơ : ị ò ê đ ư ợ ỗ ợ ể ã máy chủ mất kết nối vui lòng thử lại sau";
+        parameter.characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?., Xóa dữ liệu Đă ậ ở ớ ổ à ả á ế ủ vũ trụ ơ : ị ò ê đ ư ợ ỗ ợ ể ã máy chủ mất kết nối vui lòng thử lại sau tài khoản được đăng nhập tại nơi khác";
         font = generator.generateFont(parameter);
         parameter.size = 14;
         fontSplash = generator.generateFont(parameter);
