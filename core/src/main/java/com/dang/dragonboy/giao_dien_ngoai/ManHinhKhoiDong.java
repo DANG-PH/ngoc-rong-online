@@ -1,10 +1,13 @@
 package com.dang.dragonboy.giao_dien_ngoai;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
@@ -15,7 +18,7 @@ public class ManHinhKhoiDong implements Screen {
     private Texture logogame, logoptit1, logoptit2, logochu1, logochu2, nen;
     private SpriteBatch batch;
     private ShapeRenderer shapeRenderer;
-    private BitmapFont font;
+    private BitmapFont font, fontTo;
     private float thoiGian = 0f;
 
     // fields update
@@ -28,11 +31,39 @@ public class ManHinhKhoiDong implements Screen {
     private String localVersion = null;
     private static final float TIMEOUT_CHECK = 8f;
 
+    // ── Text cycling ──
+    private float textTimer = 0f;
+    private int textIndex = 0;
+    private float textAlpha = 1f;
+    private boolean fadingOut = false;
+    private static final float SHOW_TIME = 2.5f;   // giữ text bao lâu
+    private static final float FADE_TIME = 0.4f;   // thời gian fade
+    private static final String[] TIPS = {
+        "Dragon Boy - Game nhập vai thế giới ảo",
+        "Trang bị hiếm không tự đến - hãy kiên nhẫn và cày cuốc!",
+        "PK sòng phẳng, chơi đẹp - đó mới là cao thủ thực sự.",
+        "Chơi game quá 180 phút có thể ảnh hưởng đến sức khỏe.",
+        "Khám phá hàng trăm quái vật và kỹ năng độc đáo!",
+        "Giao dịch vật phẩm - cùng nhau mở ra một thế giới mới!",
+        "Hãy nghỉ ngơi 10 phút sau mỗi giờ chơi.",
+        "Cập nhật thường xuyên để có trải nghiệm tốt nhất.",
+    };
+
+    // Cho DEV
+    private static final boolean DEBUG_DOWNLOAD_UI = true;
+
     public ManHinhKhoiDong(Main game) {
         this.game = game;
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
-        font = new BitmapFont();
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchinh.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        param.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ ễ ằ ừ — ẳ ữ ỗ ằ ễ ỗ ừ ẵ ê : ĩ ≤";
+        param.size = 18;
+        font = generator.generateFont(param);
+        param.size = 22;
+        fontTo = generator.generateFont(param);
+        generator.dispose();
     }
 
     @Override
@@ -44,6 +75,20 @@ public class ManHinhKhoiDong implements Screen {
         logochu2  = new Texture("hud/giaodienngoai/chung/logochu2.png");
         nen       = new Texture("hud/giaodienngoai/chung/nen.png");
         new Thread(this::checkUpdate).start();
+
+        if (DEBUG_DOWNLOAD_UI) {
+            serverVersion = "v2.8.9";
+            isDownloading = true;
+            // Giả lập progress tăng dần
+            new Thread(() -> {
+                try {
+                    while (downloadProgress < 1f) {
+                        downloadProgress += 0.01f;
+                        Thread.sleep(500); // tăng 1% mỗi 500ms
+                    }
+                } catch (InterruptedException ignored) {}
+            }).start();
+        }
     }
 
     @Override
@@ -80,11 +125,44 @@ public class ManHinhKhoiDong implements Screen {
             shapeRenderer.rect(barX, barY, barWidth * downloadProgress, barHeight);
             shapeRenderer.end();
 
+            // Chuẩn bị nội dung dòng fade
+            // textIndex=0 → hiện header, sau đó mới chạy tips
+            String fadeText = (textIndex == 0)
+                ? "Đang tải phiên bản " + serverVersion + "..."
+                : TIPS[textIndex - 1];
+
+            // Cập nhật cycling
+            textTimer += delta;
+            if (!fadingOut && textTimer >= SHOW_TIME) {
+                fadingOut = true;
+                textTimer = 0f;
+            }
+            if (fadingOut) {
+                textAlpha = 1f - (textTimer / FADE_TIME);
+                if (textTimer >= FADE_TIME) {
+                    fadingOut = false;
+                    textTimer = 0f;
+                    textAlpha = 1f;
+                    textIndex = (textIndex + 1) % (TIPS.length + 1); // +1 cho slot header
+                }
+            }
+
             batch.begin();
-            font.setColor(0f, 0f, 0f, 1f);
-            font.draw(batch,
-                "DOWNLOAD NEW VERSION - HAI DANG GAME... " + (int)(downloadProgress * 100) + "%",
-                barX, barY + 40f);
+
+            // % cố định phía trên bar
+            fontTo.setColor(0f, 0f, 0f, 1f);
+            String pct = "DOWNLOAD NEW VERSION - HAI DANG GAME... " +(int)(downloadProgress * 100) + "%";
+            GlyphLayout pctLayout = new GlyphLayout(fontTo, pct);
+            fontTo.draw(batch, pct,
+                (Gdx.graphics.getWidth() - pctLayout.width) / 2f, barY + 48f);
+
+            // Dòng fade bên dưới bar
+            font.setColor(0.2f, 0.2f, 0.2f, textAlpha);
+            GlyphLayout fadeLayout = new GlyphLayout(font, fadeText);
+            font.draw(batch, fadeText,
+                (Gdx.graphics.getWidth() - fadeLayout.width) / 2f, barY - 20f);
+
+            font.setColor(1f, 1f, 1f, 1f);
             batch.end();
         }
 
