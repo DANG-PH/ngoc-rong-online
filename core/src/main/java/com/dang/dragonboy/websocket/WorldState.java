@@ -59,6 +59,13 @@ public class WorldState {
                 PlayerState ps = parsePlayer(obj);
                 if (ps != null) {
                     players.put(ps.userId, ps);
+                    System.out.println("[MapSnapshot] Thêm player userId=" + ps.userId
+                        + " gameName=" + ps.gameName
+                        + " x=" + ps.x + " y=" + ps.y
+                        + " trangthai=" + ps.trangthai
+                        + " chan=" + ps.chan
+                        + " than=" + ps.than
+                        + " dau=" + ps.dau);
                 }
             }
         } catch (Exception e) {
@@ -371,6 +378,8 @@ public class WorldState {
 
         ps.x = (float) obj.optDouble("x", 0);
         ps.y = (float) obj.optDouble("y", 0);
+        ps.serverX = ps.x;
+        ps.serverY = ps.y;
         ps.dir = obj.optInt("dir", 1);
         ps.trangthai = obj.optString("trangthai", "DUNG_YEN");
 

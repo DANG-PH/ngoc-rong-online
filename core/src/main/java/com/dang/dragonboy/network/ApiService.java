@@ -436,38 +436,30 @@ public class ApiService {
         return false;
     }
 
-    public static boolean taoDeTu() {
-        try {
-            Gson gson = new Gson();
+    public static void taoDeTu() {
+        new Thread(() -> {
+            try {
+                Gson gson = new Gson();
+                JsonObject json = new JsonObject();
+                String jsonInput = gson.toJson(json);
 
-            JsonObject json = new JsonObject();
+                URL url = new URL(BASE_URL + "/detu/create-de-tu");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+                conn.setRequestProperty("Authorization", "Bearer " + State_Management.getToken());
+                conn.setDoOutput(true);
 
-            String jsonInput = gson.toJson(json);
+                try (OutputStream os = conn.getOutputStream()) {
+                    os.write(jsonInput.getBytes(StandardCharsets.UTF_8));
+                }
 
-            URL url = new URL(BASE_URL + "/detu/create-de-tu");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-//            System.out.println(State_Management.getToken());
-            conn.setRequestProperty("Authorization", "Bearer " + State_Management.getToken());
-            conn.setDoOutput(true);
-
-            try (OutputStream os = conn.getOutputStream()) {
-                os.write(jsonInput.getBytes(StandardCharsets.UTF_8));
+                conn.getResponseCode();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-            int code = conn.getResponseCode();
-
-            if (code == 200 || code == 201) {
-                return true;
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
+        }).start();
     }
-
 
     public static void saveGameAsync(UserResponse user) {
         new Thread(() -> {

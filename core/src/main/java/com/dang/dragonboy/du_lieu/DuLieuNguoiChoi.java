@@ -859,20 +859,6 @@ public class DuLieuNguoiChoi {
             deTu.setDanhSachDat(nhanVat.danhSachDat);
             deTu.setGioiHanToaDo(nhanVat.getGioiHanXMax(), nhanVat.getGioiHanYMax());
             ApiService.taoDeTu();
-            UserResponse currentUser = State_Management.getUserResponse();
-            currentUser.vang = vang;
-            currentUser.ngoc = ngoc;
-            currentUser.sucManh = sucManh;
-            currentUser.mapHienTai = veHUD.layTenMap();
-            currentUser.x = nhanVat.getX();
-            currentUser.y = nhanVat.getY();
-            currentUser.coDeTu = true;
-
-            DeTuTheoUser deTuTheoUser = new DeTuTheoUser();
-
-            deTuTheoUser.sucManh = this.deTu.getSucManh();
-            currentUser.deTu = deTuTheoUser;
-            ApiService.saveGameAsync(currentUser);
         }
     }
 
@@ -907,9 +893,7 @@ public class DuLieuNguoiChoi {
                     currentUser.deTu = deTuTheoUser;
                 }
                 if (currentUser != null) {
-                    new Thread(() -> {
-                        ApiService.saveGameAsync(currentUser);
-                    }).start();;
+                    ApiService.saveGameAsync(currentUser);
                 }
             }
         }

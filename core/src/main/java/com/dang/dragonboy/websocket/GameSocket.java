@@ -157,12 +157,6 @@ public class GameSocket {
 
     private static void registerGameEvents() {
         socket.on("mapSnapshot", args -> {
-            System.out.println("===== mapSnapshot =====");
-            System.out.println("args.length = " + args.length);
-            for (int i = 0; i < args.length; i++) {
-                System.out.println("args[" + i + "] class = " + args[i].getClass());
-                System.out.println("args[" + i + "] value = " + args[i]);
-            }
             WorldState.onMapSnapshot(args);
         });
 

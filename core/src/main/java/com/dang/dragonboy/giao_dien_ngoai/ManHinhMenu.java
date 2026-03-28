@@ -405,7 +405,7 @@ public class ManHinhMenu implements Screen {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 18;
-        parameter.characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?., Xóa dữ liệu Đă ậ ở ớ ổ à ả á ế ủ vũ trụ ơ : ị ò ê đ ư ợ ỗ ợ ể ã máy chủ mất kết nối vui lòng thử lại sau tài khoản được đăng nhập tại nơi khác";
+        parameter.characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?., Xóa dữ liệu Đă ậ ở ớ ổ à ả á ế ủ vũ trụ ơ : ị ò ê đ ư ợ ỗ ợ ể ã máy chủ mất kết nối vui lòng thử lại sau tài khoản được đăng nhập tại nơi khác kết nối bị gián đoạn quay về màn hình chính";
         font = generator.generateFont(parameter);
         parameter.size = 14;
         fontSplash = generator.generateFont(parameter);

@@ -713,7 +713,7 @@ public class VeHUD {
             layout.setText(font, "Kết nối thất bại, đang thử lại lần " + GameSocket.retryCount + "/" + GameSocket.MAX_RETRY);
             font.draw(batch, layout, (Gdx.graphics.getWidth() - layout.width) / 2, 180);
         }
-        if (GameSocket.retryCount == GameSocket.MAX_RETRY) {
+        if (GameSocket.retryCount == GameSocket.MAX_RETRY && !State_Management.isForceLogout()) {
             GameSocket.disconnect();
             State_Management.setToken("");
             State_Management.setSessionId("");

@@ -277,40 +277,56 @@ public class ManHinhKhoiDong implements Screen {
 
     private void startNewJar() throws Exception {
         String os = System.getProperty("os.name").toLowerCase();
+        String jarName = "NgocRongOnline-1.0.0.jar";
 
         if (os.contains("win")) {
             String script =
                 "@echo off\r\n" +
                     "cd /d \"%~dp0\"\r\n" +
                     "cd ..\r\n" +
-                    // vòng lặp chờ đến khi xóa được jar cũ
+
+                    // Kill đúng PID từ file
+                    "if exist \"app\\app.pid\" (\r\n" +
+                    "    set /p OLD_PID=<\"app\\app.pid\"\r\n" +
+                    "    taskkill /PID %OLD_PID% /F >nul 2>&1\r\n" +
+                    "    del \"app\\app.pid\"\r\n" +
+                    ")\r\n" +
+                    "timeout /t 2 /nobreak > nul\r\n" +
+
+                    // Vòng lặp chờ xóa được jar cũ
                     ":waitloop\r\n" +
-                    "del /f /q \"app\\NgocRongOnline-1.0.0.jar\" 2>nul\r\n" +
-                    "if exist \"app\\NgocRongOnline-1.0.0.jar\" (\r\n" +
+                    "del /f /q \"app\\" + jarName + "\" 2>nul\r\n" +
+                    "if exist \"app\\" + jarName + "\" (\r\n" +
                     "    timeout /t 1 /nobreak > nul\r\n" +
                     "    goto waitloop\r\n" +
                     ")\r\n" +
-                    // xóa xong mới đổi tên và tiếp tục
-                    "rename \"app\\nro_new.jar\" \"NgocRongOnline-1.0.0.jar\"\r\n" +
+
+                    "rename \"app\\nro_new.jar\" \"" + jarName + "\"\r\n" +
                     "(echo " + serverVersion + ")> \"app\\version.txt\"\r\n" +
-                    "start \"\" runtime\\bin\\javaw -jar \"app\\NgocRongOnline-1.0.0.jar\"\r\n" +
-                    "del \"app\\updater.bat\"\r\n";
+                    "start \"\" runtime\\bin\\javaw -jar \"app\\" + jarName + "\"\r\n" +
+                    "del \"%~f0\"\r\n";
 
             java.nio.file.Path scriptPath = java.nio.file.Paths.get("app/updater.bat");
             java.nio.file.Files.writeString(scriptPath, script);
-            String batPath = java.nio.file.Paths.get("app/updater.bat")
-                .toAbsolutePath().toString();
-            new ProcessBuilder("cmd", "/c", batPath).start();// bỏ inheritIO để không hiện cửa sổ CMD
+            new ProcessBuilder("cmd", "/c", scriptPath.toAbsolutePath().toString()).start();
 
         } else {
             String script =
                 "#!/bin/bash\n" +
-                    "cd \"$(dirname \"$0\")\"\n" +
-                    "sleep 2\n" +
-                    "rm -f app/NgocRongOnline-1.0.0.jar\n" +
-                    "mv app/nro_new.jar app/NgocRongOnline-1.0.0.jar\n" +
+                    "cd \"$(dirname \"$0\")/..\"\n" +
+
+                    // Kill đúng PID từ file
+                    "if [ -f \"app/app.pid\" ]; then\n" +
+                    "    kill -9 $(cat app/app.pid) 2>/dev/null\n" +
+                    "    rm -f app/app.pid\n" +
+                    "fi\n" +
+                    "sleep 1\n" +
+
+                    // Xóa và thay thế
+                    "rm -f \"app/" + jarName + "\"\n" +
+                    "mv \"app/nro_new.jar\" \"app/" + jarName + "\"\n" +
                     "echo '" + serverVersion + "' > app/version.txt\n" +
-                    "runtime/bin/java -jar app/NgocRongOnline-1.0.0.jar &\n" +
+                    "runtime/bin/java -jar \"app/" + jarName + "\" &\n" +
                     "rm -- \"$0\"\n";
 
             java.nio.file.Path scriptPath = java.nio.file.Paths.get("app/updater.sh");

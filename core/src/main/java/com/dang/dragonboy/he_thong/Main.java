@@ -21,6 +21,7 @@ public class Main extends Game {
 
     @Override
     public void create() {
+        savePid();
         AssetsDemo.loadOnce();
 
         assetManager = new AssetManager();
@@ -145,9 +146,7 @@ public class Main extends Game {
                     currentUser.deTu = deTuTheoUser;
                 }
                 if (currentUser != null) {
-                    new Thread(() -> {
-                        ApiService.saveGameAsync(currentUser);
-                    }).start();
+                    ApiService.saveGame(currentUser);
                 }
             }
             System.out.println("Đã lưu dữ liệu lần cuối trước khi thoát game!");
@@ -159,8 +158,25 @@ public class Main extends Game {
 
         if (GameSocket.isConnected()) {
             System.out.println("🔌 Disconnect socket before exit");
-            GameSocket.socket.disconnect();
-            GameSocket.socket.close(); // optional nhưng nên có
+            GameSocket.disconnect();
+        }
+    }
+
+    private static void savePid() {
+        try {
+            java.nio.file.Path appDir = java.nio.file.Paths.get("app");
+            if (!java.nio.file.Files.exists(appDir)) {
+                System.out.println("Chạy ở môi trường dev, bỏ qua lưu PID");
+                return;
+            }
+            long pid = ProcessHandle.current().pid();
+            java.nio.file.Files.writeString(
+                appDir.resolve("app.pid"),
+                String.valueOf(pid)
+            );
+            System.out.println("Saved PID: " + pid);
+        } catch (Exception e) {
+            System.err.println("Không thể lưu PID: " + e.getMessage());
         }
     }
 }

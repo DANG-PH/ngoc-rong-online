@@ -227,7 +227,15 @@ public class NhanVat {
     private Texture[] auraChan = new Texture[4];
 
     private float moveTimer = 0f;
-    private static final float MOVE_INTERVAL = 0.05f;
+    private static final float MOVE_INTERVAL = 0.05f; // 20 lần/giây - mượt
+    // Trade-off ở đây là nếu tăng lên thì trải nghiệm người chơi giảm nhưng server tải ít hơn
+    // Để mức trung bình 20 lần/s, có thể điều chỉnh sau
+
+    // Thay vì gửi 10 lần/s thì tối ưu thêm là nếu x, y hoặc trạng thái khác lần gần nhất mới gửi
+    private float lastSentX = -9999f;
+    private float lastSentY = -9999f;
+    private TrangThai lastSentTrangThai = null;
+    private static final float POSITION_THRESHOLD = 1f; // Khoảng cách được coi là đã dịch chuyển ( x_mới - x_last_sent > là gửi ) ( tương tự với y )
 
     public void setToaDoMucTieu(float x, float y) {
         if (chanDiChuyenToaDo1Lan) {
@@ -1384,14 +1392,6 @@ public class NhanVat {
         x = Math.max(gioiHanXMin, Math.min(x, gioiHanXMax-rong));
 
         y =Math.max(gioiHanYMin, Math.min(y, gioiHanYMax-cao));
-
-        this.moveTimer += Gdx.graphics.getDeltaTime();
-        if (moveTimer >= MOVE_INTERVAL) {
-            try {
-                GameSocket.guiPlayerMove(this);
-            } catch (Exception e) {}
-            moveTimer = 0f;
-        }
     }
     public void setFlipTrai() {
         flipX = true;
@@ -1751,6 +1751,46 @@ public class NhanVat {
             this.dauPath = NhanVatXuLy.getPathFromTexture(dauVe);
             this.chanPath = NhanVatXuLy.getPathFromTexture(chanVe);
             this.thanPath = NhanVatXuLy.getPathFromTexture(thanVe);
+
+            // ⚠️ QUAN TRỌNG: Phải lấy path texture TRƯỚC khi gửi socket
+            // vì dauPath/chanPath/thanPath được cập nhật trong ve(), không phải capNhat()
+            // Nếu gửi trong capNhat() thì sẽ gửi path của frame trước → client khác render sai animation
+            this.moveTimer += Gdx.graphics.getDeltaTime();
+
+            float dxx = Math.abs(x - lastSentX);
+            float dyy = Math.abs(y - lastSentY);
+            boolean posChanged = dxx > POSITION_THRESHOLD || dyy > POSITION_THRESHOLD;
+            boolean stateChanged = trangThai != lastSentTrangThai;
+
+            // Tối ưu băng thông: chỉ gửi khi có thay đổi thực sự
+            // Thay vì gửi 10 lần/giây liên tục bất kể đứng yên hay di chuyển
+            if (stateChanged) {
+                // Gửi NGAY khi đổi trạng thái, không chờ timer
+                // Lý do: nếu chờ timer (0.1s), có thể xảy ra tình huống:
+                //   - Frame N:   gửi x=100, trangthai=DI_CHUYEN
+                //   - Frame N+1: player dừng, trangthai=DUNG_YEN, nhưng timer chưa đủ
+                //   - Frame N+2: x,y không đổi nên posChanged=false, stateChanged=false → không gửi
+                //   → Client khác mãi thấy animation chạy dù player đã đứng yên
+                try {
+                    GameSocket.guiPlayerMove(this);
+                    lastSentX = x;
+                    lastSentY = y;
+                    lastSentTrangThai = trangThai;
+                    moveTimer = 0f; // reset để tránh gửi 2 lần liên tiếp
+                } catch (Exception e) {}
+            } else if (moveTimer >= MOVE_INTERVAL) {
+                // Gửi theo timer (10 lần/giây) khi đang di chuyển
+                // Chỉ gửi nếu x hoặc y thực sự thay đổi (đứng yên = không gửi gì)
+                if (posChanged) {
+                    try {
+                        GameSocket.guiPlayerMove(this);
+                        lastSentX = x;
+                        lastSentY = y;
+                        lastSentTrangThai = trangThai;
+                    } catch (Exception e) {}
+                }
+                moveTimer = 0f;
+            }
 
             if (veHUD.timeChoBienKhi > 0) {
                 int tick = (int)(veHUD.timeChoBienKhi * 10);
