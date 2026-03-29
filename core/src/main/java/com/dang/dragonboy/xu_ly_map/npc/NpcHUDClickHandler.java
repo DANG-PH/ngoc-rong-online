@@ -313,7 +313,7 @@ public class NpcHUDClickHandler {
                 if (ui.trangThai == TrangThaiChucNang_thay_hieu.CHUC_NANG_PHA_LE &&
                     ui.trangThaiPhaLe == TrangThaiChucNang_PHA_LE_thay_hieu.PHA_LE_HOA_TRANG_BI) {
 
-                    if (!ui.danhSachItemCuongHoa.isEmpty()) {
+                    if (!duLieuNguoiChoi.danhSachItemCuongHoa.isEmpty()) {
                         float viewY = 35;
                         float viewHeight = 444 - 35;
                         int KhoangCachItem = 49;
@@ -323,7 +323,7 @@ public class NpcHUDClickHandler {
                             float realY = veHUD.scrollYTrai + (viewHeight - relativeY);
                             int index = (int) (realY / KhoangCachItem);
                             ui.indexItemDuocChon = index;
-                            ArrayList<Item> danhSach = ui.danhSachItemCuongHoa;
+                            ArrayList<Item> danhSach = duLieuNguoiChoi.danhSachItemCuongHoa;
                             if (index < danhSach.toArray().length) {
                                 Item item = danhSach.get(index);
                                 veHUD.itemm = item;
@@ -340,16 +340,16 @@ public class NpcHUDClickHandler {
                         }
 
                         // nut nang cap
-                        if (checkChuotTrongNut(x, y, (350 - 140) / 2f, 444 - ui.danhSachItemCuongHoa.size() * 50 - 50 - 2f, 140, 50)) {
+                        if (checkChuotTrongNut(x, y, (350 - 140) / 2f, 444 - duLieuNguoiChoi.danhSachItemCuongHoa.size() * 50 - 50 - 2f, 140, 50)) {
                             ui.timeClickNutPhaLeHoaTrangBi = 0.3f;
                         }
                     }
 
                     if (!veHUD.DangHienPopupThongTin1 && !veHUD.DangHienPopupThongTin3 && !veHUD.dangHienThongBao) {
                         if (x > 350 && x <= 1020 - 350) {
-                            if (!ui.danhSachItemCuongHoa.isEmpty()) {
-                                duLieuNguoiChoi.themItemVaoHanhTrang(ui.danhSachItemCuongHoa.get(0));
-                                ui.danhSachItemCuongHoa.remove(ui.danhSachItemCuongHoa.get(0));
+                            if (!duLieuNguoiChoi.danhSachItemCuongHoa.isEmpty()) {
+                                duLieuNguoiChoi.themItemVaoHanhTrang(duLieuNguoiChoi.danhSachItemCuongHoa.get(0));
+                                duLieuNguoiChoi.danhSachItemCuongHoa.remove(duLieuNguoiChoi.danhSachItemCuongHoa.get(0));
                             }
                         }
                     }

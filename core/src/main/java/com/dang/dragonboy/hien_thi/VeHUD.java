@@ -1486,7 +1486,7 @@ public class VeHUD {
                         }
                     }
                 } else if (dangGiaoDich) {
-                    if (trangThaiHanhTrangGd == TrangThaiHanhTrangGd.HANH_TRANG) {
+                    if (trangThaiHanhTrangGd == TrangThaiHanhTrangGd.HANH_TRANG && dangChonHanhTrangTrai) {
                         boolean duDieuKien =
                             (this.itemm.getLoai() == LoaiItem.AO  ||
                                 this.itemm.getLoai() == LoaiItem.QUAN ||
@@ -1526,7 +1526,7 @@ public class VeHUD {
                         }
                     }
 
-                    if (trangThaiHanhTrangGd == TrangThaiHanhTrangGd.ITEM_CHO) {
+                    if (trangThaiHanhTrangGd == TrangThaiHanhTrangGd.ITEM_CHO && dangChonHanhTrangTrai) {
                         switch ((int) nuthanhtrangchon) {
                             case 1 -> {
                                 try {
@@ -1536,6 +1536,16 @@ public class VeHUD {
                                 }
                                 this.duLieuNguoiChoi.getHanhTrang().add(itemm);
                                 this.duLieuNguoiChoi.hanhTrangGiaoDich.remove(itemm);
+                                hangTrangDangChon = -1;
+                                DangHienPopupThongTin3 = false;
+                                TimeChoHienPopup = 0;
+                            }
+                        }
+                    }
+
+                    if (dangChonHanhTrangPhai) {
+                        switch ((int) nuthanhtrangchon) {
+                            case 1 -> {
                                 hangTrangDangChon = -1;
                                 DangHienPopupThongTin3 = false;
                                 TimeChoHienPopup = 0;

@@ -129,7 +129,9 @@ public class ThaoTac extends InputAdapter {
 
         if (hud.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU ||
             hud.dangHienRuongDo ||
-            hud.dangHienPopupNhanVatPhai )
+            hud.dangHienPopupNhanVatPhai ||
+            hud.dangGiaoDich
+        )
         {
             if (!hud.DangHienPopupThongTin1 && !hud.DangHienPopupThongTin2 && !hud.DangHienPopupThongTin3) {
                 if (screenX >= 1020 - 360 && screenX <= 1020 && y > 0 && y <= 444) {
@@ -144,7 +146,7 @@ public class ThaoTac extends InputAdapter {
         }
         // Kéo hành trang sư phụ bên trái (chỉ khi không mở đệ tử)
         if (button == Input.Buttons.LEFT &&
-            ((hud.trangThaiHanhTrangGd == TrangThaiHanhTrangGd.HANH_TRANG && hud.dangGiaoDich) || hud.trangThaiChucNangHUD == TrangThaiChucNangHUD.HANH_TRANG || hud.trangThaiChucNangHUD == TrangThaiChucNangHUD.KY_NANG || hud.trangThaiChucNangHUD == TrangThaiChucNangHUD.CHUC_NANG) &&
+            (hud.trangThaiChucNangHUD == TrangThaiChucNangHUD.HANH_TRANG || hud.trangThaiChucNangHUD == TrangThaiChucNangHUD.KY_NANG || hud.trangThaiChucNangHUD == TrangThaiChucNangHUD.CHUC_NANG) &&
             !(hud.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU) &&
             !(hud.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.MINIGAME) &&
             !hud.dangHienRuongDo &&
@@ -182,6 +184,30 @@ public class ThaoTac extends InputAdapter {
         // Kéo hành trang sư phụ bên phải (chỉ khi mở popup đệ tử hoac ruong do, và đang chọn sư phụ)
         if (button == Input.Buttons.LEFT &&
             (hud.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU || hud.dangHienRuongDo || hud.dangHienPopupNhanVatPhai) &&
+            hud.dangChonHanhTrangPhai &&
+            !hud.DangHienPopupThongTin1 &&
+            screenX >= 1020 - 360 && screenX <= 1020 &&
+            y > 0 && y <= 444) {
+
+            hud.keoHanhTrangPhai = true;
+            hud.keoHanhTrangTrai = false;
+            yCuKeoPhai = screenY;
+        }
+
+        // Kéo hành trang player1 bên trái
+        if (button == Input.Buttons.LEFT &&
+            (hud.trangThaiHanhTrangGd == TrangThaiHanhTrangGd.HANH_TRANG && hud.dangGiaoDich) &&
+            hud.dangChonHanhTrangTrai &&
+            screenX > 0 && screenX <= 350 &&
+            y > 0 && y <= 444) {
+
+            hud.keoHanhTrangTrai = true;
+            yCuKeoTrai = screenY;
+        }
+
+        // Kéo hành trang player2 bên phải
+        if (button == Input.Buttons.LEFT &&
+            hud.dangGiaoDich &&
             hud.dangChonHanhTrangPhai &&
             !hud.DangHienPopupThongTin1 &&
             screenX >= 1020 - 360 && screenX <= 1020 &&

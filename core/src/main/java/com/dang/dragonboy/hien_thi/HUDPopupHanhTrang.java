@@ -1139,7 +1139,7 @@ public class HUDPopupHanhTrang {
             }
         }
 
-        if (veHUD.dangGiaoDich && veHUD.trangThaiHanhTrangGd == TrangThaiHanhTrangGd.HANH_TRANG) {
+        if (veHUD.dangGiaoDich && veHUD.trangThaiHanhTrangGd == TrangThaiHanhTrangGd.HANH_TRANG && veHUD.dangChonHanhTrangTrai) {
             if (veHUD.itemm != null) {
                 boolean duDieuKien =
                     (veHUD.itemm.getLoai() == LoaiItem.AO  ||
@@ -1157,9 +1157,15 @@ public class HUDPopupHanhTrang {
             }
         }
 
-        if (veHUD.dangGiaoDich && veHUD.trangThaiHanhTrangGd == TrangThaiHanhTrangGd.ITEM_CHO) {
+        if (veHUD.dangGiaoDich && veHUD.trangThaiHanhTrangGd == TrangThaiHanhTrangGd.ITEM_CHO && veHUD.dangChonHanhTrangTrai) {
             if (veHUD.itemm != null) {
                 veDanhSachNut(batch, new String[]{"Lấy ra"}, 0, 1, PopupX, PopupY, xCongThem, (int)veHUD.nuthanhtrangchon, veHUD.nutClickTimer3);
+            }
+        }
+
+        if (veHUD.dangGiaoDich && veHUD.dangChonHanhTrangPhai) {
+            if (veHUD.itemm != null) {
+                veDanhSachNut(batch, new String[]{"OK"}, 0, 1, PopupX, PopupY, xCongThem, (int)veHUD.nuthanhtrangchon, veHUD.nutClickTimer3);
             }
         }
 

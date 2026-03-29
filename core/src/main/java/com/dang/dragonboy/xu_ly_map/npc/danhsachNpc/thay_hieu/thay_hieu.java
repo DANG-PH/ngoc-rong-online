@@ -30,7 +30,6 @@ public class thay_hieu extends renderUInpc {
     public TrangThaiChucNang_thay_hieu trangThai = TrangThaiChucNang_thay_hieu.NONE;
     public TrangThaiChucNang_PHA_LE_HOA_TRANG_BI_thay_hieu trangThaiNangCap = TrangThaiChucNang_PHA_LE_HOA_TRANG_BI_thay_hieu.NONE;
 
-    public ArrayList<Item> danhSachItemCuongHoa = new ArrayList<>();
     public int nutChucNangDangChon = -1;
     public float timeClickNut = 0f;
 
@@ -156,8 +155,8 @@ public class thay_hieu extends renderUInpc {
                 timeChoHanhTrangTrai = 0;
                 switch (nutDuocChonHanhTrangTrai) {
                     case 0 :
-                        danhSachItemCuongHoa.remove(veHUD.itemm);
-                        duLieuNguoiChoi.themItemVaoHanhTrang(veHUD.itemm);
+                        duLieuNguoiChoi.danhSachItemCuongHoa.remove(veHUD.itemm);
+                        duLieuNguoiChoi.themItemVaoHanhTrangNoSave(veHUD.itemm);
                         veHUD.hangTrangDangChon = -1;
                         indexItemDuocChon = -1;
                         break;
@@ -178,7 +177,7 @@ public class thay_hieu extends renderUInpc {
                 switch (nutDuocChonHanhTrangPhai) {
                     case 1 :
                         String loi = null;
-                        if (!danhSachItemCuongHoa.isEmpty()) loi = "Chỉ có thể nâng cấp 1 vật phẩm cùng lúc";
+                        if (!duLieuNguoiChoi.danhSachItemCuongHoa.isEmpty()) loi = "Chỉ có thể nâng cấp 1 vật phẩm cùng lúc";
                         if (veHUD.itemm.getLoai() != LoaiItem.AO &&
                             veHUD.itemm.getLoai() != LoaiItem.QUAN &&
                             veHUD.itemm.getLoai() != LoaiItem.GANG &&
@@ -190,7 +189,7 @@ public class thay_hieu extends renderUInpc {
                         if (!duLieuNguoiChoi.getHanhTrang().contains(veHUD.itemm)) loi = "Bạn cần gỡ đồ ra để nâng cấp";
                         if (loi == null) {
                             duLieuNguoiChoi.getHanhTrang().remove(veHUD.itemm);
-                            danhSachItemCuongHoa.add(veHUD.itemm);
+                            duLieuNguoiChoi.danhSachItemCuongHoa.add(veHUD.itemm);
                             veHUD.hangTrangDangChon = -1;
                             indexItemDuocChon = -1;
                         } else {
@@ -214,8 +213,8 @@ public class thay_hieu extends renderUInpc {
             if (timeClickNutPhaLeHoaTrangBi<=0) {
                 timeClickNutPhaLeHoaTrangBi = 0;
                 String loi = null;
-                if (danhSachItemCuongHoa.isEmpty()) loi = "Vui lòng chọn vật phẩm";
-                if (danhSachItemCuongHoa.get(0).getSoSaoPhaLe() >= 7) loi = "Số sao pha lê đã đạt cấp tối đa";
+                if (duLieuNguoiChoi.danhSachItemCuongHoa.isEmpty()) loi = "Vui lòng chọn vật phẩm";
+                if (duLieuNguoiChoi.danhSachItemCuongHoa.get(0).getSoSaoPhaLe() >= 7) loi = "Số sao pha lê đã đạt cấp tối đa";
                 if (loi == null) {
                     trangThaiNangCap = TrangThaiChucNang_PHA_LE_HOA_TRANG_BI_thay_hieu.POPUP_XAC_NHAN;
                 } else {
@@ -230,7 +229,7 @@ public class thay_hieu extends renderUInpc {
                 if (nutChucNangDangChon_pha_le_hoa == 1) soLanCuongHoa = 10;
                 else if (nutChucNangDangChon_pha_le_hoa == 2) soLanCuongHoa = 100;
                 if (nutChucNangDangChon_pha_le_hoa == 0) {
-                    Item item = danhSachItemCuongHoa.get(0);
+                    Item item = duLieuNguoiChoi.danhSachItemCuongHoa.get(0);
                     String loi = null;
                     if (duLieuNguoiChoi.getVang() < vangNangCapTheoSao[item.getSoSaoPhaLe()])
                         loi = "Bạn không đủ vàng";
@@ -245,7 +244,7 @@ public class thay_hieu extends renderUInpc {
                     }
                 }
                 if (nutChucNangDangChon_pha_le_hoa == 1 || nutChucNangDangChon_pha_le_hoa == 2) {
-                    Item item = danhSachItemCuongHoa.get(0);
+                    Item item = duLieuNguoiChoi.danhSachItemCuongHoa.get(0);
                     String loi = null;
                     if (duLieuNguoiChoi.getVang() < vangNangCapTheoSao[item.getSoSaoPhaLe()])
                         loi = "Bạn không đủ vàng";
@@ -288,7 +287,7 @@ public class thay_hieu extends renderUInpc {
             timeHienManHinhPhaLeHoa -= delta;
             if (timeHienManHinhPhaLeHoa <= 2) {
                 if (!daRanDom) {
-                    Item item = danhSachItemCuongHoa.get(0);
+                    Item item = duLieuNguoiChoi.danhSachItemCuongHoa.get(0);
                     int so = MathUtils.random(1, 100);
                     boolean nangCapThanhCong = so <= tiLeNangCapTheoSao[item.getSoSaoPhaLe()];
                     npc.dangHienTinNhanChat = true;
@@ -301,7 +300,7 @@ public class thay_hieu extends renderUInpc {
                     timeHienManHinhPhaLeHoa = 0;
                     trangThaiNangCap = TrangThaiChucNang_PHA_LE_HOA_TRANG_BI_thay_hieu.NONE;
                     if (thanhCongNangCap) {
-                        danhSachItemCuongHoa.get(0).tangSoSaoPhaLe();
+                        duLieuNguoiChoi.danhSachItemCuongHoa.get(0).tangSoSaoPhaLe();
                     }
                     daRanDom = false;
                 }
@@ -345,13 +344,13 @@ public class thay_hieu extends renderUInpc {
         veHUD.layout.setText(veHUD.fontTenSkill, "Nâng cấp");
         veHUD.fontTenSkill.draw(batch, veHUD.layout, (350 - veHUD.layout.width) / 2f, 444 + 35);
 
-        if (!danhSachItemCuongHoa.isEmpty()) {
-            batch.draw(timeClickNutPhaLeHoaTrangBi > 0 ? veHUD.nutclick : veHUD.nutdn, (350 - 140) / 2f, 444-danhSachItemCuongHoa.size()*50-50-2f, 140, 50);
+        if (!duLieuNguoiChoi.danhSachItemCuongHoa.isEmpty()) {
+            batch.draw(timeClickNutPhaLeHoaTrangBi > 0 ? veHUD.nutclick : veHUD.nutdn, (350 - 140) / 2f, 444-duLieuNguoiChoi.danhSachItemCuongHoa.size()*50-50-2f, 140, 50);
             veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
             veHUD.layout.setText(veHUD.fontTenSkill, "Nâng cấp");
-            veHUD.fontTenSkill.draw(batch, veHUD.layout, (350 - 140) / 2f + (140 - veHUD.layout.width) / 2f, 444-danhSachItemCuongHoa.size()*50-50-2f+50/2f+veHUD.layout.height/2f);
+            veHUD.fontTenSkill.draw(batch, veHUD.layout, (350 - 140) / 2f + (140 - veHUD.layout.width) / 2f, 444-duLieuNguoiChoi.danhSachItemCuongHoa.size()*50-50-2f+50/2f+veHUD.layout.height/2f);
 
-            NPC_CUA_HANG.render_item(true, batch, 344, veHUD, danhSachItemCuongHoa, indexItemDuocChon);
+            NPC_CUA_HANG.render_item(true, batch, 344, veHUD, duLieuNguoiChoi.danhSachItemCuongHoa, indexItemDuocChon);
         } else {
             veHUD.layout.setText(
                 veHUD.fontTenSkill,
@@ -367,7 +366,7 @@ public class thay_hieu extends renderUInpc {
         veHUD.renderHUDThongBaoPopupNhanVatPhai(batch);
 
         if (trangThaiNangCap == TrangThaiChucNang_PHA_LE_HOA_TRANG_BI_thay_hieu.POPUP_XAC_NHAN) {
-            Item item = danhSachItemCuongHoa.get(0);
+            Item item = duLieuNguoiChoi.danhSachItemCuongHoa.get(0);
             BitmapFont fontVeKhung = veHUD.fontTenSkill;
             fontVeKhung.getData().markupEnabled = true;
             String textPhu = item.getMoTa();
@@ -404,13 +403,13 @@ public class thay_hieu extends renderUInpc {
         npc.timeLauLauChat = 0;
         float flipScale = !npc.flipX ? -1f : 1f;
         float rong = npc.taiAnh.chan.getWidth()*0.5f;
-        float xVe = !npc.flipX ? npc.getX() + rong - (rong-danhSachItemCuongHoa.get(0).getTexture().getWidth()/2f)/2f + 3f : npc.getX()+(rong-danhSachItemCuongHoa.get(0).getTexture().getWidth()/2f)/2f - 3f;
+        float xVe = !npc.flipX ? npc.getX() + rong - (rong-duLieuNguoiChoi.danhSachItemCuongHoa.get(0).getTexture().getWidth()/2f)/2f + 3f : npc.getX()+(rong-duLieuNguoiChoi.danhSachItemCuongHoa.get(0).getTexture().getWidth()/2f)/2f - 3f;
         if (timeHienManHinhPhaLeHoa > 2) {
             int tick = (int)(timeHienManHinhPhaLeHoa * 3);
             if (tick % 2 == 0) {
                 veHUD.timeGlow = 0.06f;
                 veHUD.clickX = npc.getX()+rong/2f;
-                veHUD.clickY = npc.getY()+danhSachItemCuongHoa.get(0).getTexture().getHeight()/4f;
+                veHUD.clickY = npc.getY()+duLieuNguoiChoi.danhSachItemCuongHoa.get(0).getTexture().getHeight()/4f;
             }
         }
         if (timeHienManHinhPhaLeHoaX10 > 2) {
@@ -418,7 +417,7 @@ public class thay_hieu extends renderUInpc {
             if (tick % 2 == 0) {
                 veHUD.timeGlow = 0.06f;
                 veHUD.clickX = npc.getX()+rong/2f;
-                veHUD.clickY = npc.getY()+danhSachItemCuongHoa.get(0).getTexture().getHeight()/4f;
+                veHUD.clickY = npc.getY()+duLieuNguoiChoi.danhSachItemCuongHoa.get(0).getTexture().getHeight()/4f;
             }
         }
         batch.end();
@@ -428,7 +427,7 @@ public class thay_hieu extends renderUInpc {
             veHUD.shapeRenderer.setProjectionMatrix(veHUD.camManager.uiCamera.combined);
         }
         batch.begin();
-        batch.draw(danhSachItemCuongHoa.get(0).getTexture(),xVe,npc.getY(),danhSachItemCuongHoa.get(0).getTexture().getWidth()/2f * flipScale,danhSachItemCuongHoa.get(0).getTexture().getHeight()/2f);
+        batch.draw(duLieuNguoiChoi.danhSachItemCuongHoa.get(0).getTexture(),xVe,npc.getY(),duLieuNguoiChoi.danhSachItemCuongHoa.get(0).getTexture().getWidth()/2f * flipScale,duLieuNguoiChoi.danhSachItemCuongHoa.get(0).getTexture().getHeight()/2f);
         batch.setProjectionMatrix(veHUD.camManager.uiCamera.combined);
     }
 
@@ -438,7 +437,7 @@ public class thay_hieu extends renderUInpc {
         int so = MathUtils.random(1, 100);
         boolean nangCapThanhCong = so <= tiLeNangCapTheoSao[item.getSoSaoPhaLe()];
         if (nangCapThanhCong) {
-            danhSachItemCuongHoa.get(0).tangSoSaoPhaLe();
+            duLieuNguoiChoi.danhSachItemCuongHoa.get(0).tangSoSaoPhaLe();
         }
         return nangCapThanhCong;
     }

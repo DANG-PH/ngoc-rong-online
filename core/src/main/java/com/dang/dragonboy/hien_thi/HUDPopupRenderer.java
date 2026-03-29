@@ -148,7 +148,7 @@ public class HUDPopupRenderer {
             layout.setText(veHUD.fontsm,"Giáp: "+(int)duLieuNguoiChoi.getGiapNhanVat()+", ST Crit: "+(int)duLieuNguoiChoi.getSatThuongChiMangSuDung()+"%");
             veHUD.fontsm.draw(batch,layout,125,520);
 
-            this.veHanhTrangNhanVat(batch);
+            this.veHanhTrangNhanVat(batch, false);
         }
 
 
@@ -1408,7 +1408,7 @@ public class HUDPopupRenderer {
         Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
     }
 
-    public static void veHanhTrangNhanVat(SpriteBatch batch) {
+    public static void veHanhTrangNhanVat(SpriteBatch batch, boolean isHaiPopup) {
         VeHUD veHUD = State_Management.getVeHUD();
         DuLieuNguoiChoi duLieuNguoiChoi = veHUD.getDuLieuNguoiChoi();
         GlyphLayout layout = veHUD.layout;
@@ -1424,13 +1424,19 @@ public class HUDPopupRenderer {
         int tongSoTrangBi = soTrangBi + soKhac;
 
         float totalHeight = tongSoTrangBi * KhoangCachItem;
-        veHUD.maxScrollPhai = Math.max(0, totalHeight - viewHeight);
+        if (isHaiPopup) {
+            veHUD.maxScrollTrai = Math.max(0, totalHeight - viewHeight);
+        } else {
+            veHUD.maxScrollPhai = Math.max(0, totalHeight - viewHeight);
+        }
+
+        float scrollMax = isHaiPopup ? veHUD.maxScrollTrai : veHUD.maxScrollPhai;
 
         batch.flush();
         Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
         Gdx.gl.glScissor(0, (int)viewY, 350, (int)viewHeight);
         // Vị trí bắt đầu vẽ từ trên xuống
-        float startY = viewY + viewHeight - KhoangCachItem + veHUD.scrollYPhai;
+        float startY = viewY + viewHeight - KhoangCachItem + (isHaiPopup ? veHUD.scrollYTrai : veHUD.scrollYPhai);
 
         ArrayList<Item> danhSachDangMac = duLieuNguoiChoi.getHanhTrangDangMac();
         for (int i = 0; i < soTrangBi; i++) {

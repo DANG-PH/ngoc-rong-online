@@ -55,6 +55,7 @@ public class DuLieuNguoiChoi {
     private ArrayList<Item> hanhTrangRuongDo = new ArrayList<>();
     public ArrayList<Item> hanhTrangGiaoDich = new ArrayList<>();
     public ArrayList<Item> hanhTrangGiaoDichPlayer2 = new ArrayList<>(); // hanh trang mà người kia giao dịch cho
+    public ArrayList<Item> danhSachItemCuongHoa = new ArrayList<>();
     public final int MAXRUONGDO = 20;
     public final int MAXHANHTRANG = 50;
 
@@ -162,7 +163,7 @@ public class DuLieuNguoiChoi {
         return ketQua;
     }
 
-    private boolean themItemVaoHanhTrangNoSave(Item item) {
+    public boolean themItemVaoHanhTrangNoSave(Item item) {
         if (hanhTrang.size() < MAXHANHTRANG) {
             if (item.getLoai() != LoaiItem.NGOCRONG &&
                 item.getLoai() != LoaiItem.PHUTRO &&

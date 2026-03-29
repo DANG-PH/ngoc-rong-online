@@ -230,6 +230,8 @@ public class WorldState {
             veHUD.dangHienKhungChung = false;
 
             veHUD.dangGiaoDich = true;
+            veHUD.scrollYTrai = 0;
+            veHUD.scrollYPhai = 0;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -245,13 +247,15 @@ public class WorldState {
             DuLieuNguoiChoi duLieuNguoiChoi = veHUD.getDuLieuNguoiChoi();
 
             veHUD.dangGiaoDich = false;
+            veHUD.scrollYTrai = 0;
+            veHUD.scrollYPhai = 0;
 
             // Copy ra list mới trước, rồi mới xử lý
             List<Item> itemsToReturn = new ArrayList<>(duLieuNguoiChoi.hanhTrangGiaoDich);
             duLieuNguoiChoi.hanhTrangGiaoDich.clear(); // xóa sạch trước
 
             for (Item item : itemsToReturn) {
-                duLieuNguoiChoi.themItemVaoHanhTrang(item); // rồi trả về hành trang
+                duLieuNguoiChoi.themItemVaoHanhTrangNoSave(item); // rồi trả về hành trang
             }
 
             duLieuNguoiChoi.hanhTrangGiaoDichPlayer2.clear();

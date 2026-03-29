@@ -88,6 +88,26 @@ public class Main extends Game {
             if (State_Management.getDuLieuNguoiChoi() != null) {
                 DuLieuNguoiChoi duLieu = State_Management.getDuLieuNguoiChoi();
 
+                List<Item> itemsToReturn = new ArrayList<>(duLieu.hanhTrangGiaoDich);
+                duLieu.hanhTrangGiaoDich.clear(); // xóa sạch trước
+                for (Item item : itemsToReturn) {
+                    duLieu.themItemVaoHanhTrangNoSave(item); // rồi trả về hành trang
+                }
+
+                List<Item> itemsToReturnNPCThayHieu = new ArrayList<>(duLieu.danhSachItemCuongHoa);
+                duLieu.danhSachItemCuongHoa.clear(); // xóa sạch trước
+                for (Item item : itemsToReturnNPCThayHieu) {
+                    duLieu.themItemVaoHanhTrangNoSave(item); // rồi trả về hành trang
+                }
+
+                if (duLieu.veHUD.dangGiaoDich) {
+                    try {
+                        GameSocket.tradeCancel(duLieu.veHUD.playerGiaoDich.userId);
+                    } catch (Exception e) {
+
+                    }
+                }
+
                 // Hành trang
                 if (duLieu.getHanhTrang() != null) {
                     for (Item item : duLieu.getHanhTrang()) {

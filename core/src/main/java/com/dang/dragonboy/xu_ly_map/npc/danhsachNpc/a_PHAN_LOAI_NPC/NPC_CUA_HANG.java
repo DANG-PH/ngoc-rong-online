@@ -30,8 +30,7 @@ public class NPC_CUA_HANG {
         batch.flush();
         Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
         Gdx.gl.glScissor((int) viewX, (int) viewY, 350, (int) viewHeight);
-
-        float startY = viewY + viewHeight - khoangCachItem + scrollMax;
+        float startY = viewY + viewHeight - khoangCachItem + (benTrai ? veHUD.scrollYTrai : veHUD.scrollYPhai);
 
         for (int i = 0; i < tongSoRuongDo; i++) {
             float y = startY - i * khoangCachItem;
@@ -61,7 +60,10 @@ public class NPC_CUA_HANG {
         batch.end();
 
         if (veHUD.DangHienPopupThongTin3 && veHUD.TimeChoHienPopup <= 0) {
-            veHUD.PopupHanhTrang(veHUD.shapeRenderer, batch, oChiSoCanXet, false);
+            boolean benPhai = !benTrai;
+            if ((benPhai && veHUD.dangChonHanhTrangPhai) || (benTrai && veHUD.dangChonHanhTrangTrai)) {
+                veHUD.PopupHanhTrang(veHUD.shapeRenderer, batch, oChiSoCanXet, !benTrai);
+            }
         }
         batch.begin();
     }
