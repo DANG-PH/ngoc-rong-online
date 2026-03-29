@@ -1,5 +1,7 @@
 package com.dang.dragonboy.websocket;
 
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -18,8 +20,12 @@ import java.util.ArrayList;
 
 
 public class KhungGiaoDich {
+    public static String textNutGiaoDich = "Khóa";
+    public static float timeClickNutGiaoDich = 0f;
+
     public static void render(SpriteBatch batch) {
         VeHUD veHUD = State_Management.getVeHUD();
+        capNhat(veHUD);
         GlyphLayout layout = veHUD.layout;
         DuLieuNguoiChoi duLieuNguoiChoi = veHUD.getDuLieuNguoiChoi();
 
@@ -106,6 +112,14 @@ public class KhungGiaoDich {
             }
             case ITEM_CHO -> {
                 NPC_CUA_HANG.render_item(true, batch, 344, veHUD, veHUD.getDuLieuNguoiChoi().hanhTrangGiaoDich, veHUD.indexItemGiaoDich);
+                int soLuongItem = veHUD.getDuLieuNguoiChoi().hanhTrangGiaoDich.size();
+                Texture nutVe = timeClickNutGiaoDich > 0f ? veHUD.nutclick : veHUD.nutdn;
+                batch.draw(nutVe, 260, 400 - 50 * soLuongItem, 80, 40);
+                veHUD.font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
+                layout.setText(veHUD.font, textNutGiaoDich);
+                float textX = 260 + (80 - layout.width) / 2f;
+                float textY = 400 - 50 * soLuongItem + (40 - layout.height) / 2f + layout.height;
+                veHUD.font.draw(batch, layout, textX, textY);
             }
         }
 
@@ -246,6 +260,7 @@ public class KhungGiaoDich {
         }
 
         if (veHUD.trangThaiHanhTrangGd == TrangThaiHanhTrangGd.ITEM_CHO && veHUD.dangChonHanhTrangTrai) {
+            // Click item
             float viewY = 35;
             float viewHeight = 444 - 35;
             int KhoangCachItem = 49;
@@ -271,6 +286,12 @@ public class KhungGiaoDich {
                         veHUD.vuaMoPopupThongTin = true;
                     }
                 }
+            }
+
+            // Click nut Giao dich
+            int soLuongItem = veHUD.getDuLieuNguoiChoi().hanhTrangGiaoDich.size();
+            if (HUDClickHandler.checkChuotTrongNut(x, y, 260, 400 - 50 * soLuongItem, 80, 40)) {
+                timeClickNutGiaoDich = 0.3f;
             }
         }
 
@@ -340,6 +361,28 @@ public class KhungGiaoDich {
                 if (x > 1 + 1020 - 350 && x < 115 + 1020 - 350 && y >= yNut && y <= yNut + 115) {
                     veHUD.nutClickTimer3 = 0.3f;
                     veHUD.nuthanhtrangchon = 1;
+                }
+            }
+        }
+    }
+
+    public static void capNhat(VeHUD veHUD) {
+        if (timeClickNutGiaoDich > 0) {
+            timeClickNutGiaoDich -= Gdx.graphics.getDeltaTime();
+            if (timeClickNutGiaoDich <= 0) {
+                timeClickNutGiaoDich = 0;
+                if (textNutGiaoDich.equals("Khóa")) {
+                    try {
+                        GameSocket.tradeLock(veHUD.playerGiaoDich.userId);
+                    } catch (Exception e) {
+
+                    }
+                } else if (textNutGiaoDich.equals("Gửi")) {
+                    try {
+                        GameSocket.tradeConfirm(veHUD.playerGiaoDich.userId);
+                    } catch (Exception e) {
+
+                    }
                 }
             }
         }

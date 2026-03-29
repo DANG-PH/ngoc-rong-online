@@ -260,6 +260,8 @@ public class WorldState {
 
             duLieuNguoiChoi.hanhTrangGiaoDichPlayer2.clear();
 
+            KhungGiaoDich.textNutGiaoDich = "Khóa";
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -306,6 +308,53 @@ public class WorldState {
                 }
             }
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void onTradeBothLock(Object... args) {
+        try {
+            VeHUD veHUD = State_Management.getVeHUD();
+            DuLieuNguoiChoi duLieuNguoiChoi = veHUD.getDuLieuNguoiChoi();
+            System.out.println("HELLO");
+
+            KhungGiaoDich.textNutGiaoDich = "Check...";
+            GameSocket.tradeCheck(veHUD.playerGiaoDich.userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void onTradeCheckOk(Object... args) {
+        try {
+            VeHUD veHUD = State_Management.getVeHUD();
+            DuLieuNguoiChoi duLieuNguoiChoi = veHUD.getDuLieuNguoiChoi();
+
+            KhungGiaoDich.textNutGiaoDich = "Gửi";
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void onTradeSuccess(Object... args) {
+        try {
+            VeHUD veHUD = State_Management.getVeHUD();
+            DuLieuNguoiChoi duLieuNguoiChoi = veHUD.getDuLieuNguoiChoi();
+
+            veHUD.dangGiaoDich = false;
+            veHUD.scrollYTrai = 0;
+            veHUD.scrollYPhai = 0;
+
+            duLieuNguoiChoi.hanhTrangGiaoDich.clear(); // xóa sạch item đã gửi player2
+
+            for (Item item : duLieuNguoiChoi.hanhTrangGiaoDichPlayer2) {
+                duLieuNguoiChoi.themItemVaoHanhTrangNoSave(item);
+            }
+
+            duLieuNguoiChoi.hanhTrangGiaoDichPlayer2.clear();
+
+            KhungGiaoDich.textNutGiaoDich = "Khóa";
         } catch (Exception e) {
             e.printStackTrace();
         }

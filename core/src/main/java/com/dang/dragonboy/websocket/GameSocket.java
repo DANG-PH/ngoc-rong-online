@@ -1,5 +1,6 @@
 package com.dang.dragonboy.websocket;
 
+import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.du_lieu.State_Management;
 import com.dang.dragonboy.item.Item;
 import com.dang.dragonboy.network.DTO.ItemCanLuu;
@@ -180,6 +181,9 @@ public class GameSocket {
         socket.on("trade:open", args -> WorldState.onTradeOpen(args));
         socket.on("trade:cancelled", args -> WorldState.onTradeCancel(args));
         socket.on("trade:offer:update", args -> WorldState.onTradeUpdate(args));
+        socket.on("trade:bothLocked", WorldState::onTradeBothLock);
+        socket.on("trade:check:ok", WorldState::onTradeCheckOk);
+        socket.on("trade:success", WorldState::onTradeSuccess);
         socket.on("addItem", args -> WorldState.onAddItem(args));
 
         socket.on("force_logout", args -> {
@@ -313,6 +317,31 @@ public class GameSocket {
         data.put("itemUuid", itemUuid);
 
         socket.emit("trade:offer:remove", data);
+    }
+
+    public static void tradeLock(int withUserId) throws Exception {
+        KhungGiaoDich.textNutGiaoDich = "Đợi...";
+        JSONObject data = new JSONObject();
+        data.put("withUserId", withUserId);
+
+        socket.emit("trade:lock", data);
+    }
+
+    public static void tradeCheck(int withUserId) throws Exception {
+        DuLieuNguoiChoi duLieuNguoiChoi = State_Management.getDuLieuNguoiChoi();
+        JSONObject data = new JSONObject();
+        data.put("withUserId", withUserId);
+        data.put("oConTrongBanThan", duLieuNguoiChoi.MAXHANHTRANG - duLieuNguoiChoi.getHanhTrang().size());
+
+        socket.emit("trade:check", data);
+    }
+
+    public static void tradeConfirm(int withUserId) throws Exception {
+        DuLieuNguoiChoi duLieuNguoiChoi = State_Management.getDuLieuNguoiChoi();
+        JSONObject data = new JSONObject();
+        data.put("withUserId", withUserId);
+
+        socket.emit("trade:confirm", data);
     }
 
     public static void addItem(int tmpId, Item item, String viTri) throws Exception {
