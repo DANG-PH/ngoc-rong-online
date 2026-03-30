@@ -371,6 +371,7 @@ public class VeHUD {
     public boolean dangGiaoDich = false;
     public TrangThaiHanhTrangGd trangThaiHanhTrangGd = TrangThaiHanhTrangGd.ITEM_CHO;
     public int indexItemGiaoDich = -1;
+    public int indexItemGiaoDichPlayer2 = -1;
 
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data;
@@ -1487,12 +1488,7 @@ public class VeHUD {
                     }
                 } else if (dangGiaoDich) {
                     if (trangThaiHanhTrangGd == TrangThaiHanhTrangGd.HANH_TRANG && dangChonHanhTrangTrai) {
-                        boolean duDieuKien =
-                            (this.itemm.getLoai() == LoaiItem.AO  ||
-                                this.itemm.getLoai() == LoaiItem.QUAN ||
-                                this.itemm.getLoai() == LoaiItem.GIAY ||
-                                this.itemm.getLoai() == LoaiItem.GANG ||
-                                this.itemm.getLoai() == LoaiItem.RADA) && hangTrangDangChon >= 8;
+                        boolean duDieuKien = hangTrangDangChon >= 8;
 
                         if (duDieuKien) {
                             switch ((int) nuthanhtrangchon) {

@@ -1141,12 +1141,7 @@ public class HUDPopupHanhTrang {
 
         if (veHUD.dangGiaoDich && veHUD.trangThaiHanhTrangGd == TrangThaiHanhTrangGd.HANH_TRANG && veHUD.dangChonHanhTrangTrai) {
             if (veHUD.itemm != null) {
-                boolean duDieuKien =
-                    (veHUD.itemm.getLoai() == LoaiItem.AO  ||
-                    veHUD.itemm.getLoai() == LoaiItem.QUAN ||
-                    veHUD.itemm.getLoai() == LoaiItem.GIAY ||
-                    veHUD.itemm.getLoai() == LoaiItem.GANG ||
-                    veHUD.itemm.getLoai() == LoaiItem.RADA) && oHanhTrangDangChon >= 8;
+                boolean duDieuKien = oHanhTrangDangChon >= 8;
                 String[] labels;
                 if (duDieuKien) {
                     labels = new String[] {"Giao dịch", "Thoát"};

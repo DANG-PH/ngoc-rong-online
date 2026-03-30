@@ -124,7 +124,7 @@ public class KhungGiaoDich {
         }
 
         if (duLieuNguoiChoi.hanhTrangGiaoDichPlayer2.size() > 0) {
-            NPC_CUA_HANG.render_item(false, batch, 344, veHUD, veHUD.getDuLieuNguoiChoi().hanhTrangGiaoDichPlayer2, veHUD.indexItemGiaoDich);
+            NPC_CUA_HANG.render_item(false, batch, 344, veHUD, veHUD.getDuLieuNguoiChoi().hanhTrangGiaoDichPlayer2, veHUD.indexItemGiaoDichPlayer2);
         }
     }
 
@@ -305,7 +305,7 @@ public class KhungGiaoDich {
                 float relativeY = y - viewY;
                 float realY = veHUD.scrollYPhai + (viewHeight - relativeY);
                 int index = (int) (realY / KhoangCachItem);
-                veHUD.indexItemGiaoDich = index;
+                veHUD.indexItemGiaoDichPlayer2 = index;
                 ArrayList<Item> danhSach = veHUD.getDuLieuNguoiChoi().hanhTrangGiaoDichPlayer2;
                 if (index < danhSach.toArray().length) {
                     Item item = danhSach.get(index);
@@ -383,6 +383,9 @@ public class KhungGiaoDich {
                     } catch (Exception e) {
 
                     }
+                } else {
+                    // Đang Đợi... hoặc đang Check...
+                    veHUD.setTinNhanPet("Vui lòng kiên nhẫn", 2f);
                 }
             }
         }
