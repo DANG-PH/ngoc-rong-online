@@ -397,6 +397,107 @@ public class WorldState {
         }
     }
 
+    public static void onUseSkill(Object... args) {
+        if (args.length == 0) return;
+        try {
+            JSONObject obj = toJsonObject(args[0]);
+            int userId = obj.optInt("userId",-1);
+            String skillId = obj.optString("skillId");
+
+            if (State_Management.getAuth_id() == userId) return;
+            PlayerState ps = players.get(userId);
+            if (ps == null) return;
+
+            switch (skillId) {
+                case "Tái tạo năng lượng" -> {
+                    ps.dangTtnl = true;
+                }
+                case "Biến hình" -> {
+                    ps.timeChoBienKhi = 2f;
+                }
+                case "Huýt sáo" -> {
+//                    ps.timeHuytSao = 45f;
+                    ps.dangHuytSao = true;
+                    ps.chuaSetTimeHuytSao = true;
+                }
+            }
+
+            System.out.println("Vẽ animation skill");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void onCancelSkill(Object... args) {
+        if (args.length == 0) return;
+        try {
+            JSONObject obj = toJsonObject(args[0]);
+            int userId = obj.optInt("userId",-1);
+            String skillId = obj.optString("skillId");
+
+            if (State_Management.getAuth_id() == userId) return;
+            PlayerState ps = players.get(userId);
+            if (ps == null) return;
+
+            switch (skillId) {
+                case "Tái tạo năng lượng" -> {
+                    ps.huyTtnl();
+                }
+                case "Biến hình" -> {
+                    ps.huyBienKhi();
+                }
+                case "Huýt sáo" -> {
+                    ps.huyHuytSao();
+                }
+            }
+
+            System.out.println("Hủy animation skill");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void onSyncSkills(Object... args) {
+        if (args.length == 0) return;
+        try {
+            JSONArray arr = toJsonArray(args[0]);
+
+            for (int i = 0; i < arr.length(); i++) {
+                JSONObject obj = arr.getJSONObject(i);
+                int userId    = obj.optInt("userId", -1);
+                String skillId = obj.optString("skillId");
+                long startedAt = obj.optLong("startedAt");
+                long now = System.currentTimeMillis();
+                long elapsedMs = now - startedAt;
+                float elapsed = elapsedMs / 1000f;
+
+                if (State_Management.getAuth_id() == userId) return;
+                PlayerState ps = players.get(userId);
+                if (ps == null) return;
+
+                switch (skillId) {
+                    case "Tái tạo năng lượng" -> {
+                        ps.dangTtnl = true;
+                    }
+                    case "Biến hình" -> {
+                        float totalTime = 2f;
+                        float remaining = totalTime - elapsed;
+                        if (remaining > 0) {
+                            ps.timeChoBienKhi = remaining;
+                        }
+                    }
+                    case "Huýt sáo" -> {
+//                        ps.timeHuytSao = 45f;
+                        ps.dangHuytSao = true;
+                        ps.chuaSetTimeHuytSao = true;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /* ================= HELPER ================= */
 
     /** Convert dữ liệu WebSocket → JSONArray an toàn */

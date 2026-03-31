@@ -3,6 +3,8 @@ package com.dang.dragonboy.hien_thi;
 import java.time.ZonedDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -1089,6 +1091,11 @@ public class VeHUD {
             if (oSkills[index] == 3 && timeCoolDownBienKhi == 0 && duLieuNguoiChoi.getKiHienTai()>=duLieuNguoiChoi.getKiHopThe()*0.1f && !dangBienKhi && timeChoBienKhi==0) {
                 timeChoBienKhi = 2f;
                 duLieuNguoiChoi.giamKiHienTai(duLieuNguoiChoi.getKiHopThe()*0.1f);
+                try {
+                    GameSocket.useSkill(nhanVat.getTenSkill(oSkills[index] + 1, "xayda"), (int) (timeChoBienKhi + timeBienKhiMAX));
+                } catch (Exception e) {
+
+                }
             }
             if (oSkills[index] == 2 && timeCoolDownTtnl == 0) {
                 timeTtnl = timeTtnlMax;
@@ -1096,6 +1103,11 @@ public class VeHUD {
                 dangTtnl = true;
                 hpHoiTtnl = 3+1*duLieuNguoiChoi.getCapSkill(2);
                 KiHoiTtnl = 3+1*duLieuNguoiChoi.getCapSkill(2);
+                try {
+                    GameSocket.useSkill(nhanVat.getTenSkill(oSkills[index] + 1, "xayda"), (int)timeTtnlMax);
+                } catch (Exception e) {
+
+                }
             }
             if (oSkills[index] == 5 && timeCoolDownHuytSao == 0) {
                 timeHuytSao = 10+5*duLieuNguoiChoi.getCapSkill(5);
@@ -1103,6 +1115,11 @@ public class VeHUD {
                 dangHuytSao = true;
                 nhanVat.chuaSetTimeHuytSao = true;
                 hpTangHuytSao = (30+10*duLieuNguoiChoi.getCapSkill(5));
+                try {
+                    GameSocket.useSkill(nhanVat.getTenSkill(oSkills[index] + 1, "xayda"), (int)timeHuytSao);
+                } catch (Exception e) {
+
+                }
             }
         }
     }
@@ -1600,7 +1617,7 @@ public class VeHUD {
         if (timeTtnl>0) {
             timeTtnl -= delta;
             if (timeTtnl <= 0) {
-                huyTtnl();
+                if (dangTtnl) huyTtnl();
             }
         }
 
@@ -1614,8 +1631,7 @@ public class VeHUD {
         if (timeHuytSao>0) {
             timeHuytSao -= delta;
             if (timeHuytSao <= 0) {
-                timeHuytSao = 0;
-                dangHuytSao = false;
+                huyHuytSao();
             }
         }
 
@@ -2367,8 +2383,7 @@ public class VeHUD {
                             if (itemm.getSoLuong() == 0) {
                                 duLieuNguoiChoi.getHanhTrang().remove(itemm);
                             }
-                            timeHuytSao = 0;
-                            dangHuytSao = false;
+                            huyHuytSao();
                             timeCoolDownHuytSao = 0;
                             setTinNhanPet("Kỹ năng Huýt Sáo đạt cấp " + duLieuNguoiChoi.getCapSkill(5), 2f);
                         } else {
@@ -2383,7 +2398,7 @@ public class VeHUD {
                             if (itemm.getSoLuong() == 0) {
                                 duLieuNguoiChoi.getHanhTrang().remove(itemm);
                             }
-                            huyTtnl();
+                            if (dangTtnl) huyTtnl();
                             timeCoolDownTtnl = 0;
                             setTinNhanPet("Tái tạo năng lượng đạt cấp " + duLieuNguoiChoi.getCapSkill(2), 2f);
                         } else {
@@ -2497,10 +2512,29 @@ public class VeHUD {
         dangTtnl = false;
         timeNhayLanTiepTtnl = 1f;
         timeThongBaoHoiPhucTtnl = 0f;
+        try {
+            GameSocket.cancelSkill(nhanVat.getTenSkill(3, "xayda"));
+        } catch (Exception e) {
+
+        }
+    }
+    public void huyHuytSao() {
+        timeHuytSao = 0;
+        dangHuytSao = false;
+        try {
+            GameSocket.cancelSkill(nhanVat.getTenSkill(6, "xayda"));
+        } catch (Exception e) {
+
+        }
     }
     public void huyBienKhi() {
         dangBienKhi = false;
         timeSauBienKhi = 0.6f;
+        try {
+            GameSocket.cancelSkill(nhanVat.getTenSkill(4, "xayda"));
+        } catch (Exception e) {
+
+        }
         if (dangHopThe) {
             String hopTheDuocChon = dangHopTheThuong ? "hop_the_thuong_"+nhanVat.getHanhtinh() : (bongTaiDangDung.equals("bongtaic1") ? "bong_tai_1_"+nhanVat.getHanhtinh() : bongTaiDangDung.equals("bongtaic2") ? "bong_tai_2_"+nhanVat.getHanhtinh() : "bong_tai_3_"+nhanVat.getHanhtinh() );
             NhanVatCauHinh c2 = Doicaitrang(hopTheDuocChon);

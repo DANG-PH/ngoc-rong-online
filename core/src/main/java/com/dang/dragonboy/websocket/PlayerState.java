@@ -8,12 +8,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Align;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
+import com.dang.dragonboy.du_lieu.State_Management;
 import com.dang.dragonboy.hien_thi.VeHUD;
-import com.dang.dragonboy.nhan_vat.AssetMulti;
-import com.dang.dragonboy.nhan_vat.AssetsDemo;
-import com.dang.dragonboy.nhan_vat.NhanVat;
-import com.dang.dragonboy.nhan_vat.TrangThai;
+import com.dang.dragonboy.item.Item;
+import com.dang.dragonboy.nhan_vat.*;
 import com.dang.dragonboy.xu_ly_map.npc.LoaiNPC;
+
+import java.util.ArrayList;
 
 public class PlayerState {
     public float serverX, serverY; // lerp
@@ -57,6 +58,20 @@ public class PlayerState {
 
     public ChucNangPlayer chucNangPlayer = ChucNangPlayer.NONE;
     public float timeChoThucHienChucNang = 0f;
+
+    // Skill
+    public float timeChoBienKhi = 0;
+    public boolean dangBienKhi = false;
+    public float timeSauBienKhi = 0;
+
+    public boolean dangTtnl = false;
+
+    public boolean dangHuytSao = false;
+//    public float timeHuytSao = 0f; // Mở ra khi cần time để tính time tăng hp
+
+    private float timeDoiFramesTtnl,timeDoiFramesQckk,timeHieuUngHuytSao;
+    public boolean chuaSetTimeHuytSao = true;
+    private int frameTtnl = 0, frameBom = 0;
 
     public void ve(SpriteBatch batch, float thoiGian, VeHUD veHUD) {
         TrangThai trangThai = TrangThai.valueOf(this.trangthai);
@@ -174,6 +189,30 @@ public class PlayerState {
             batch.draw(oVe, x + (rong-oVe.getWidth()*0.35f)/2f, y + cao + 50, oVe.getWidth()*0.35f, oVe.getHeight()*0.35f);
         }
 
+        if (timeChoBienKhi > 0) {
+            int tick = (int)(timeChoBienKhi * 10);
+            int tick1 = (int)(timeChoBienKhi * 15);
+            if (tick1 % 2 == 0) {
+                veQckk(batch,x + rong/2f+5f*flipScale, y + cao / 2f);
+            }
+            if (tick % 2 == 0) {
+                veTaiTaoNangLuong(batch,x + rong/2f+5f*flipScale,y);
+            }
+        }
+        if (timeSauBienKhi < 0.6f && timeSauBienKhi > 0) {
+            if (timeSauBienKhi > 0.35f) {
+                veTaiTaoNangLuong(batch,x + rong/2f+5f*flipScale,y);
+            }
+        }
+        if (dangTtnl) {
+            float offsetX = 5f;
+            if (dangBienKhi) offsetX = -5f;
+            veTaiTaoNangLuong(batch,x + rong/2f+offsetX*flipScale,y);
+        }
+        if (dangHuytSao) {
+            veHuytSao(batch);
+        }
+
         if (this.dangHienTinNhan) {
             veHUD.layout.setText(
                 veHUD.fontchat,
@@ -287,6 +326,14 @@ public class PlayerState {
                 chucNangPlayer = ChucNangPlayer.NONE;
             }
         }
+
+        if (timeChoBienKhi > 0) {
+            timeChoBienKhi -= delta;
+            if (timeChoBienKhi <= 0) {
+                timeChoBienKhi = 0;
+                dangBienKhi = true;
+            }
+        }
     }
 
     public void checkClick(float x_check, float y_check, NhanVat nhanVat) {
@@ -327,5 +374,105 @@ public class PlayerState {
     public void thucHienHanhDongPlayer(VeHUD veHUD) {
         veHUD.daClickVaoPlayer = true;
         veHUD.playerDuocChon = this;
+    }
+
+    public void huyTtnl() {
+        dangTtnl = false;
+    }
+    public void huyHuytSao() {
+//        timeHuytSao = 0;
+        dangHuytSao = false;
+    }
+    public void huyBienKhi() {
+        dangBienKhi = false;
+        timeSauBienKhi = 0.6f;
+    }
+
+    public void veTaiTaoNangLuong(SpriteBatch batch,float x, float y) {
+        VeHUD veHUD = State_Management.getVeHUD();
+        timeDoiFramesTtnl += Gdx.graphics.getDeltaTime();
+        if (timeDoiFramesTtnl > 0.06f) {
+            frameTtnl = (frameTtnl+1)%veHUD.getDuLieuNguoiChoi().nhanVat.ttnl.length;
+            timeDoiFramesTtnl = 0;
+        }
+        float tl = 0.5f;
+        if (this.dangBienKhi) tl = 0.55f;
+        batch.draw(veHUD.getDuLieuNguoiChoi().nhanVat.ttnl[frameTtnl],x-veHUD.getDuLieuNguoiChoi().nhanVat.ttnl[frameTtnl].getWidth()*tl/2f,y,veHUD.getDuLieuNguoiChoi().nhanVat.ttnl[frameTtnl].getWidth()*tl,veHUD.getDuLieuNguoiChoi().nhanVat.ttnl[frameTtnl].getHeight()*tl);
+    }
+
+    public void veQckk(SpriteBatch batch,float x, float y) {
+        VeHUD veHUD = State_Management.getVeHUD();
+        timeDoiFramesQckk += Gdx.graphics.getDeltaTime();
+        if (timeDoiFramesQckk > 0.1f) {
+            frameBom = (frameBom+1)%veHUD.getDuLieuNguoiChoi().nhanVat.bom.length;
+            timeDoiFramesQckk = 0;
+        }
+        batch.setColor(1,1,1,0.9f);
+        batch.draw(veHUD.getDuLieuNguoiChoi().nhanVat.bom[frameBom],x-veHUD.getDuLieuNguoiChoi().nhanVat.bom[frameBom].getWidth()*0.5f/2f,y-veHUD.getDuLieuNguoiChoi().nhanVat.bom[frameBom].getHeight()*0.5f/2f,veHUD.getDuLieuNguoiChoi().nhanVat.bom[frameBom].getWidth()*0.5f,veHUD.getDuLieuNguoiChoi().nhanVat.bom[frameBom].getHeight()*0.5f);
+        batch.setColor(1,1,1,1f);
+    }
+
+    public void veHuytSao(SpriteBatch batch) {
+        VeHUD veHUD = State_Management.getVeHUD();
+        Texture[] saoDo = veHUD.getDuLieuNguoiChoi().nhanVat.saoDo;
+        Texture[] saoVang = veHUD.getDuLieuNguoiChoi().nhanVat.saoVang;
+        Texture[] saoXanh = veHUD.getDuLieuNguoiChoi().nhanVat.saoXanh;
+
+        if (chuaSetTimeHuytSao) {
+            timeHieuUngHuytSao = 0.9f;
+            chuaSetTimeHuytSao = false;
+        }
+
+        float x_sao_base = x + rong / 2f - 10;
+        float y_sao_base = y + cao + 10f;
+        float tiLe = 0.5f;
+
+        timeHieuUngHuytSao -= Gdx.graphics.getDeltaTime();
+        if (timeHieuUngHuytSao < 0) timeHieuUngHuytSao = 0;
+
+        float t = timeHieuUngHuytSao % 0.3f;
+
+        if (t >= 0.25f && t < 0.3f) {
+            batch.draw(saoDo[0], x_sao_base, y_sao_base,
+                saoDo[0].getWidth()*tiLe, saoDo[0].getHeight()*tiLe);
+        }
+        else if (t >= 0.2f && t < 0.25f) {
+            batch.draw(saoDo[0], x_sao_base, y_sao_base+5f,
+                saoDo[0].getWidth()*tiLe, saoDo[0].getHeight()*tiLe);
+            batch.draw(saoXanh[0], x_sao_base+25f, y_sao_base-12f,
+                saoXanh[0].getWidth()*tiLe, saoXanh[0].getHeight()*tiLe);
+        }
+        else if (t >= 0.15f && t < 0.2f) {
+            batch.draw(saoDo[1], x_sao_base, y_sao_base+5f,
+                saoDo[1].getWidth()*tiLe, saoDo[1].getHeight()*tiLe);
+            batch.draw(saoXanh[0], x_sao_base+25f, y_sao_base-12f,
+                saoXanh[0].getWidth()*tiLe, saoXanh[0].getHeight()*tiLe);
+            batch.draw(saoVang[0], x_sao_base+45f, y_sao_base-21f,
+                saoVang[0].getWidth()*tiLe, saoVang[0].getHeight()*tiLe);
+        }
+        else if (t >= 0.1f && t < 0.15f) {
+            batch.draw(saoDo[1], x_sao_base, y_sao_base+8f,
+                saoDo[1].getWidth()*tiLe, saoDo[1].getHeight()*tiLe);
+            batch.draw(saoXanh[1], x_sao_base+20f, y_sao_base-9f,
+                saoXanh[1].getWidth()*tiLe, saoXanh[1].getHeight()*tiLe);
+            batch.draw(saoVang[0], x_sao_base+50f, y_sao_base-21f,
+                saoVang[0].getWidth()*tiLe, saoVang[0].getHeight()*tiLe);
+        }
+        else if (t >= 0.05f && t < 0.1f) {
+            batch.draw(saoDo[2], x_sao_base-5f, y_sao_base+3f,
+                saoDo[2].getWidth()*tiLe, saoDo[2].getHeight()*tiLe);
+            batch.draw(saoXanh[2], x_sao_base+15f, y_sao_base-14f,
+                saoXanh[2].getWidth()*tiLe, saoXanh[2].getHeight()*tiLe);
+            batch.draw(saoVang[1], x_sao_base+60f, y_sao_base-19f,
+                saoVang[1].getWidth()*tiLe, saoVang[1].getHeight()*tiLe);
+        }
+        else if (t > 0f && t < 0.05f) {
+            batch.draw(saoDo[2], x_sao_base-15f, y_sao_base-13f,
+                saoDo[2].getWidth()*tiLe, saoDo[2].getHeight()*tiLe);
+            batch.draw(saoXanh[2], x_sao_base+13f, y_sao_base-9f,
+                saoXanh[2].getWidth()*tiLe, saoXanh[2].getHeight()*tiLe);
+            batch.draw(saoVang[1], x_sao_base+63f, y_sao_base-14f,
+                saoVang[1].getWidth()*tiLe, saoVang[1].getHeight()*tiLe);
+        }
     }
 }

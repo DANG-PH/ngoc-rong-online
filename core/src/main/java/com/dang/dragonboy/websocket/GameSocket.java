@@ -184,6 +184,9 @@ public class GameSocket {
         socket.on("trade:bothLocked", WorldState::onTradeBothLock);
         socket.on("trade:check:ok", WorldState::onTradeCheckOk);
         socket.on("trade:success", WorldState::onTradeSuccess);
+        socket.on("cancelSkill", WorldState::onCancelSkill);
+        socket.on("useSkill", WorldState::onUseSkill);
+        socket.on("syncSkills", WorldState::onSyncSkills);
         socket.on("addItem", args -> WorldState.onAddItem(args));
 
         socket.on("force_logout", args -> {
@@ -355,5 +358,20 @@ public class GameSocket {
         data.put("item", itemJson);
 
         socket.emit("add-item", data);
+    }
+
+    public static void useSkill(String skillId, int timeSkill) throws Exception {
+        JSONObject data = new JSONObject();
+        data.put("skillId", skillId);
+        data.put("timeSkill", timeSkill);
+
+        socket.emit("use-skill", data);
+    }
+
+    public static void cancelSkill(String skillId) throws Exception {
+        JSONObject data = new JSONObject();
+        data.put("skillId", skillId);
+
+        socket.emit("cancel-skill", data);
     }
 }

@@ -286,7 +286,7 @@ public class HUDTinhToanChiSo {
                 duLieuNguoiChoi.tangKiHienTai(duLieuNguoiChoi.getKiHopThe()*veHUD.KiHoiTtnl/100f);
             }
             if (duLieuNguoiChoi.getKiHienTai() == duLieuNguoiChoi.getKiHopThe() && duLieuNguoiChoi.getHpHienTai() == duLieuNguoiChoi.getHpHopThe() && veHUD.timeTtnl <= veHUD.timeTtnlMax-2f) {
-                veHUD.huyTtnl();
+                if (veHUD.dangTtnl) veHUD.huyTtnl();
                 veHUD.dangHienTinNhanChat = true;
                 veHUD.tinNhanChat = "Phục hồi năng lượng\n" + "100%";
             }

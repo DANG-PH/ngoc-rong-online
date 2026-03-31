@@ -54,9 +54,9 @@ public class NhanVat {
 
     public Texture[] ttnl = new Texture[4];
     public Texture[] bom = new Texture[2];
-    private Texture[] saoDo = new Texture[3];
-    private Texture[] saoXanh = new Texture[3];
-    private Texture[] saoVang = new Texture[2];
+    public Texture[] saoDo = new Texture[3];
+    public Texture[] saoXanh = new Texture[3];
+    public Texture[] saoVang = new Texture[2];
     private int frameTtnl = 0, frameBom = 0, frameSaoXanh, frameSaoDo, frameSaoVang;
 
     // Cho animation chạy
@@ -1182,11 +1182,11 @@ public class NhanVat {
             return;
         }
         if (!dangDungDat && veHUD.timeTtnl <= veHUD.timeTtnlMax-0.4f) {
-            veHUD.huyTtnl();
+            if (veHUD.dangTtnl) veHUD.huyTtnl();
         }
         if (veHUD.timeTtnl < 8f) {
             if (phimTraiDangGiu || phimNhayDangGiu || phimPhaiDangGiu) {
-                veHUD.huyTtnl();
+                if (veHUD.dangTtnl) veHUD.huyTtnl();
             }
         }
         if (veHUD.dangTtnl) {
