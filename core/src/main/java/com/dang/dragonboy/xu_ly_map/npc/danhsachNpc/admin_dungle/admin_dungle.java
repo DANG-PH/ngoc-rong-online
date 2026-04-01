@@ -313,6 +313,9 @@ public class admin_dungle extends renderUInpc {
                         break;
                     }
                     case 2:
+                        if (duLieuNguoiChoi.danhSachVatPhamWeb.isEmpty()) {
+                            veHUD.setTinNhanPet("Không có vật phẩm", 2f);
+                        }
                         List<Integer> ds = new ArrayList<>(duLieuNguoiChoi.danhSachVatPhamWeb);
                         final int[] soItemNhan = {0};
 
