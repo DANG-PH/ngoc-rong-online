@@ -66,10 +66,6 @@ public class ManHinhMenu implements Screen {
         if (isForceLogout) {
             this.trangThaiManHinh = TrangThaiManHinhMenu.FORCE_LOGOUT;
         }
-
-        new Thread(() -> {
-            serverOnline = ApiService.healthCheck();
-        }).start();
     }
 
     @Override

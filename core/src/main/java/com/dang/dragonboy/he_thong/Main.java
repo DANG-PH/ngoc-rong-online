@@ -165,9 +165,7 @@ public class Main extends Game {
                     deTuTheoUser.sucManh = State_Management.getDuLieuNguoiChoi().deTu.getSucManh();
                     currentUser.deTu = deTuTheoUser;
                 }
-                if (currentUser != null) {
-                    ApiService.saveGame(currentUser);
-                }
+                ApiService.saveGame(currentUser);
             }
             System.out.println("Đã lưu dữ liệu lần cuối trước khi thoát game!");
         }

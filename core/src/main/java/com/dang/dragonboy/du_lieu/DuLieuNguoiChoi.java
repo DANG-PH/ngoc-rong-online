@@ -41,8 +41,8 @@ public class DuLieuNguoiChoi {
     private int soDauThan;
     private long vang;
     private long ngoc;
-    private long vangNapTuWeb;
-    private long ngocNapTuWeb;
+    public long vangNapTuWeb;
+    public long ngocNapTuWeb;
     public List<Integer> danhSachVatPhamWeb = new ArrayList<>();
     private String capBac;
     private int[] capSkill = new int[9];  // Mặc định toàn 0
@@ -91,8 +91,7 @@ public class DuLieuNguoiChoi {
 
     private boolean daNhanQuaTanThu = false;
 
-    private float timeCapNhatAPISaveDuLieu = 5f;
-    private float timeCapNhatAPILayDuLieuThayDoi = 5f;
+    private float timeCapNhatAPISaveDuLieu = 20f;
 
     // Constructor
     public DuLieuNguoiChoi(String ten, long sucManh, int theLuc,
@@ -859,7 +858,7 @@ public class DuLieuNguoiChoi {
             );
             deTu.setDanhSachDat(nhanVat.danhSachDat);
             deTu.setGioiHanToaDo(nhanVat.getGioiHanXMax(), nhanVat.getGioiHanYMax());
-            ApiService.taoDeTu();
+            if (taoDeLanDau) ApiService.taoDeTu();
         }
     }
 
@@ -877,7 +876,7 @@ public class DuLieuNguoiChoi {
         if (timeCapNhatAPISaveDuLieu > 0) {
             timeCapNhatAPISaveDuLieu -= Gdx.graphics.getDeltaTime();
             if (timeCapNhatAPISaveDuLieu <= 0) {
-                timeCapNhatAPISaveDuLieu = 5f;
+                timeCapNhatAPISaveDuLieu = 20f; // sync data 20s/lần
                 UserResponse currentUser = State_Management.getUserResponse();
                 currentUser.vang = vang;
                 currentUser.ngoc = ngoc;
@@ -895,61 +894,6 @@ public class DuLieuNguoiChoi {
                 }
                 if (currentUser != null) {
                     ApiService.saveGameAsync(currentUser);
-                }
-            }
-        }
-
-        // Giữ thời gian cập nhật
-        if (timeCapNhatAPILayDuLieuThayDoi > 0) {
-            timeCapNhatAPILayDuLieuThayDoi -= Gdx.graphics.getDeltaTime();
-            if (timeCapNhatAPILayDuLieuThayDoi <= 0) {
-                timeCapNhatAPILayDuLieuThayDoi = 5f; // reset 5s
-                UserResponse user = State_Management.getUserResponse();
-
-                if (user != null) {
-
-                    // --- THREAD 1: LẤY BALANCE (vàng, ngọc) ---
-                    new Thread(() -> {
-                        long[] balance = ApiService.getBalance();
-                        if (balance != null) {
-                            Gdx.app.postRunnable(() -> {
-                                // xử lý vàng
-                                if (balance[0] > vangNapTuWeb) {
-                                    veHUD.setTinNhanPet("Bạn vừa nạp " +
-                                        veHUD.formatVangNgoc(balance[0] - vangNapTuWeb) + " vàng", 2f);
-                                } else if (balance[0] < vangNapTuWeb) {
-                                    veHUD.setTinNhanPet("Bạn vừa nhận " +
-                                        veHUD.formatVangNgoc(vangNapTuWeb - balance[0]) + " vàng", 2f);
-                                }
-
-                                // xử lý ngọc
-                                if (balance[1] > ngocNapTuWeb) {
-                                    veHUD.setTinNhanPet("Bạn vừa nạp " +
-                                        veHUD.formatVangNgoc(balance[1] - ngocNapTuWeb) + " ngọc", 2f);
-                                } else if (balance[1] < ngocNapTuWeb) {
-                                    veHUD.setTinNhanPet("Bạn vừa nhận " +
-                                        veHUD.formatVangNgoc(ngocNapTuWeb - balance[1]) + " ngọc", 2f);
-                                }
-
-                                // cập nhật giá trị local
-                                vangNapTuWeb = balance[0];
-                                ngocNapTuWeb = balance[1];
-                            });
-                        }
-                    }).start();
-
-                    // --- THREAD 2: LẤY ITEMS ---
-                    new Thread(() -> {
-                        List<Integer> ds = ApiService.getItemsWeb(user.username);
-                        if (ds != null) {
-                            Gdx.app.postRunnable(() -> {
-                                if (ds.size() > danhSachVatPhamWeb.size()) {
-                                    veHUD.setTinNhanPet("Bạn vừa mua đồ từ web", 2f);
-                                }
-                                danhSachVatPhamWeb = new ArrayList<>(ds);
-                            });
-                        }
-                    }).start();
                 }
             }
         }

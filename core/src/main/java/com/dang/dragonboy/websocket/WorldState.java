@@ -7,6 +7,7 @@ import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.item.Item;
 import com.dang.dragonboy.item.LoaiItem;
 import com.dang.dragonboy.network.ApiItemService;
+import com.dang.dragonboy.network.ApiService;
 import com.dang.dragonboy.network.DTO.ItemCanLuu;
 import com.google.gson.Gson;
 import org.json.JSONArray;
@@ -185,10 +186,20 @@ public class WorldState {
 
     public static void onNotification(Object... args) {
         if (args.length == 0) return;
+
         try {
             JSONObject obj = toJsonObject(args[0]);
-            String tinNhan = obj.optString("tinNhan","");
-            State_Management.getDuLieuNguoiChoi().veHUD.setTinNhanPet(tinNhan, 2f);
+
+            String type = obj.optString("type", "");
+
+            if ("NAP_TIEN".equals(type)) {
+                handleNapTien(obj);
+            } else {
+                // fallback: chỉ hiển thị message
+                String tinNhan = obj.optString("tinNhan", "");
+                State_Management.getDuLieuNguoiChoi()
+                    .veHUD.setTinNhanPet(tinNhan, 2f);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -563,5 +574,42 @@ public class WorldState {
         ps.avatar = obj.optString("avatar", ps.avatar);
 
         return ps;
+    }
+
+    private static void handleNapTien(JSONObject obj) {
+        JSONObject data = obj.optJSONObject("data");
+        if (data == null) return;
+
+        DuLieuNguoiChoi duLieu = State_Management.getDuLieuNguoiChoi();
+        String loai = data.optString("loai", "");
+
+        // Có 2 cách
+        // Cách 1(đang dùng): lấy data từ socket và thêm trực tiếp
+        // => ưu: server giảm tải, client tốc độ cực nhanh
+        // => nhược: phải sync lại mỗi lần user reconnect để tránh mất data hoặc sai UX/UI
+        // Cách 2: lấy data từ backend thay vì websocket
+        // => ưu: data luôn đúng
+        // => nhược: tốc độ chậm hơn rõ rệt, server phải chịu tải nhiều hơn
+        if ("ITEM".equals(loai)) {
+            int itemId = data.optInt("itemId", -1);
+            int quantity = data.optInt("quantity", 1);
+
+            for (int i = 0; i < quantity; i++) {
+                duLieu.danhSachVatPhamWeb.add(itemId);
+            }
+
+        } else {
+            long soLuong = data.optLong("soLuong", 0);
+
+            if ("VANG".equals(loai)) {
+                duLieu.vangNapTuWeb += soLuong;
+            } else if ("NGOC".equals(loai)) {
+                duLieu.ngocNapTuWeb += soLuong;
+            }
+        }
+
+        // hiển thị message
+        String tinNhan = obj.optString("tinNhan", "");
+        duLieu.veHUD.setTinNhanPet(tinNhan, 2f);
     }
 }

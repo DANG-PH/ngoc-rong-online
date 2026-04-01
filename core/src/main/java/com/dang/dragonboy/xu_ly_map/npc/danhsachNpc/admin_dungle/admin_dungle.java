@@ -285,12 +285,8 @@ public class admin_dungle extends renderUInpc {
                             Gdx.app.postRunnable(() -> {
                                 if (used) {
                                     duLieuNguoiChoi.tangVang(soVangDung); // cộng trực tiếp vào vàng thường
-                                    State_Management.getUserResponse().vangNapTuWeb -= soVangDung;
-                                    State_Management.getUserResponse().vang += soVangDung;
-                                    ApiService.saveGameAsync(State_Management.getUserResponse());
-
                                     veHUD.setTinNhanPet("Bạn vừa nhận " + veHUD.formatVangNgoc(soVangDung) + " vàng", 2f);
-                                    duLieuNguoiChoi.setVangNapTuWeb(duLieuNguoiChoi.getVangNapTuWeb()-soVangDung);
+                                    duLieuNguoiChoi.vangNapTuWeb -= soVangDung;
                                 }
                                 if (!used) {
                                     veHUD.setTinNhanPet("Vui lòng nạp tiền", 2f);
@@ -306,12 +302,8 @@ public class admin_dungle extends renderUInpc {
                             Gdx.app.postRunnable(() -> {
                                 if (used) {
                                     duLieuNguoiChoi.tangNgoc(soNgocDung); // cộng trực tiếp vào ngọc thường
-                                    State_Management.getUserResponse().ngocNapTuWeb -= soNgocDung;
-                                    State_Management.getUserResponse().ngoc += soNgocDung;
-                                    ApiService.saveGameAsync(State_Management.getUserResponse());
-
                                     veHUD.setTinNhanPet("Bạn vừa nhận " + veHUD.formatVangNgoc(soNgocDung) + " ngọc", 2f);
-                                    duLieuNguoiChoi.setNgocNapTuWeb(duLieuNguoiChoi.getNgocNapTuWeb()-soNgocDung);
+                                    duLieuNguoiChoi.ngocNapTuWeb -= soNgocDung;
                                 }
                                 if (!used) {
                                     veHUD.setTinNhanPet("Vui lòng nạp tiền", 2f);
