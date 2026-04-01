@@ -47,7 +47,6 @@ public class Main extends Game {
         // hoặc dùng màn hình khởi động rồi mới vào game
          this.setScreen(new ManHinhKhoiDong(this));
 
-
         Map<String, String> savedUser = LocalStorage.loadLastUser();
         if (savedUser != null) {
             String token = savedUser.get("access_token");
@@ -66,7 +65,6 @@ public class Main extends Game {
         } else {
             System.out.println("Chưa có người dùng nào, yêu cầu đăng nhập");
         }
-
         State_Management.game = this;
     }
 
@@ -78,14 +76,13 @@ public class Main extends Game {
     @Override
     public void dispose() {
         UserResponse currentUser = State_Management.getUserResponse();
+        // Check xem vào màn hình menu chưa, hoặc có currenUser chưa
         if (currentUser != null) {
-            String username = currentUser.username;
-
-            // Gom danh sách tất cả item
-            List<ItemCanLuu> allItems = new ArrayList<>();
-
-            // Thêm tất cả item từ các danh sách vào allItems
+            // Check xem đã vào game chưa, hoặc có duLieu chưa, tránh việc sync rỗng làm mất item user
             if (State_Management.getDuLieuNguoiChoi() != null) {
+                // Gom danh sách tất cả item
+                List<ItemCanLuu> allItems = new ArrayList<>();
+
                 DuLieuNguoiChoi duLieu = State_Management.getDuLieuNguoiChoi();
 
                 List<Item> itemsToReturn = new ArrayList<>(duLieu.hanhTrangGiaoDich);
@@ -139,14 +136,14 @@ public class Main extends Game {
                         if (converted != null) allItems.add(converted);
                     }
                 }
-            }
 
-            // Gửi lên backend
-            List<ItemCanLuu> listItem = ApiItemService.saveItems(State_Management.getUserResponse().username, allItems);
-            if (listItem != null) {
-                System.out.println("Đã lưu toàn bộ item của user " + State_Management.getUserResponse().username + " thành công!");
-            } else {
-                System.err.println("Lỗi khi lưu item cho user " + State_Management.getUserResponse().username);
+                // Gửi lên backend
+                List<ItemCanLuu> listItem = ApiItemService.saveItems(State_Management.getUserResponse().username, allItems);
+                if (listItem != null) {
+                    System.out.println("Đã lưu toàn bộ item của user " + State_Management.getUserResponse().username + " thành công!");
+                } else {
+                    System.err.println("Lỗi khi lưu item cho user " + State_Management.getUserResponse().username);
+                }
             }
 
             // Lưu dữ liệu user cuối
@@ -167,7 +164,6 @@ public class Main extends Game {
                 }
                 ApiService.saveGame(currentUser);
             }
-            System.out.println("Đã lưu dữ liệu lần cuối trước khi thoát game!");
         }
 
         if (assetManager != null) {
