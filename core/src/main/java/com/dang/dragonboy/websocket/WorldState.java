@@ -586,9 +586,9 @@ public class WorldState {
         // Có 2 cách
         // Cách 1(đang dùng): lấy data từ socket và thêm trực tiếp
         // => ưu: server giảm tải, client tốc độ cực nhanh
-        // => nhược: phải sync lại mỗi lần user reconnect để tránh mất data hoặc sai UX/UI
+        // => nhược: phải sync lại khi cần để tránh mất data hoặc sai UX/UI
         // Cách 2: lấy data từ backend thay vì websocket
-        // => ưu: data luôn đúng
+        // => ưu: data có thể đúng hơn ở vài trường hợp
         // => nhược: tốc độ chậm hơn rõ rệt, server phải chịu tải nhiều hơn
         if ("ITEM".equals(loai)) {
             int itemId = data.optInt("itemId", -1);
