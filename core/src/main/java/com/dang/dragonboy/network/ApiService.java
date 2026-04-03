@@ -8,6 +8,7 @@ import com.dang.dragonboy.du_lieu.LocalStorage;
 import com.dang.dragonboy.du_lieu.State_Management;
 import com.dang.dragonboy.network.DTO.DeTuTheoUser;
 import com.dang.dragonboy.network.DTO.ItemWeb;
+import com.dang.dragonboy.network.DTO.UseItemResponse;
 import com.dang.dragonboy.network.DTO.UserResponse;
 import com.dang.dragonboy.websocket.GameSocket;
 import com.google.gson.Gson;
@@ -623,20 +624,26 @@ public class ApiService {
     }
 
     // ====== Gọi API sử dụng item web ======
-    public static boolean useItemWeb(String username, int itemId) {
+    public static List<Integer> useItemWeb(String username, List<Integer> itemIds) {
         HttpURLConnection conn = null;
         try {
             URL url = new URL(BASE_URL + "/user/use-item-web");
             conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("DELETE");
-            conn.setRequestProperty("Content-Type", "application/json"); // chuẩn JSON
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
             conn.setRequestProperty("Accept", "application/json");
             conn.setRequestProperty("Authorization", "Bearer " + State_Management.getToken());
-            conn.setDoOutput(true); // để gửi body
+            conn.setConnectTimeout(5000);
+            conn.setReadTimeout(5000);
+            conn.setDoOutput(true);
 
-            // JSON body thủ công
-            String jsonInputString = String.format("{\"itemId\":%d}",  itemId);
-            System.out.println("Sending JSON: " + jsonInputString);
+            Gson gson = new Gson();
+
+            // build request body
+            Map<String, Object> body = new HashMap<>();
+            body.put("itemIds", itemIds);
+
+            String jsonInputString = gson.toJson(body);
 
             try (OutputStream os = conn.getOutputStream()) {
                 byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
@@ -644,33 +651,34 @@ public class ApiService {
             }
 
             int status = conn.getResponseCode();
-            if (status == 200 || status == 201) {
+
+            if (status == 200) {
                 try (BufferedReader br = new BufferedReader(
                     new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
-                    StringBuilder response = new StringBuilder();
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        response.append(line.trim());
+
+                    UseItemResponse response = gson.fromJson(br, UseItemResponse.class);
+
+                    if (response != null && response.successItemIds != null) {
+                        return response.successItemIds;
                     }
-                    System.out.println("UseItemWeb success: " + response.toString());
                 }
-                return true;
             } else {
                 try (BufferedReader br = new BufferedReader(
                     new InputStreamReader(conn.getErrorStream(), StandardCharsets.UTF_8))) {
                     String line;
                     StringBuilder error = new StringBuilder();
                     while ((line = br.readLine()) != null) error.append(line.trim());
-                    System.err.println("UseItemWeb failed: " + error.toString());
+                    System.err.println("Batch failed: " + error.toString());
                 }
             }
 
         } catch (Exception e) {
-            System.err.println("Exception in useItemWeb: " + e.getMessage());
+            System.err.println("Exception in useItemWebBatch: " + e.getMessage());
             e.printStackTrace();
         } finally {
             if (conn != null) conn.disconnect();
         }
-        return false;
+
+        return new ArrayList<>();
     }
 }

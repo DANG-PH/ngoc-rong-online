@@ -315,28 +315,37 @@ public class admin_dungle extends renderUInpc {
                     case 2:
                         if (duLieuNguoiChoi.danhSachVatPhamWeb.isEmpty()) {
                             veHUD.setTinNhanPet("Không có vật phẩm", 2f);
+                            break;
                         }
-                        List<Integer> ds = new ArrayList<>(duLieuNguoiChoi.danhSachVatPhamWeb);
-                        final int[] soItemNhan = {0};
+
+                        // Lọc chỉ lấy những item mà hành trang còn đủ chỗ
+                        List<Integer> dsGuiBatch = new ArrayList<>();
+                        for (int itemId : duLieuNguoiChoi.danhSachVatPhamWeb) {
+                            if (!duLieuNguoiChoi.duChoTrongHanhTrang(dsGuiBatch.size() + 1)) break;
+                            dsGuiBatch.add(itemId);
+                        }
+
+                        if (dsGuiBatch.isEmpty()) {
+                            veHUD.setTinNhanPet("Hành trang đã đầy", 2f);
+                            break;
+                        }
 
                         new Thread(() -> {
-                            List<Integer> itemsNhan = new ArrayList<>();
-                            for (int x : ds) {
-                                if (!duLieuNguoiChoi.duChoTrongHanhTrang(1)) break;
+                            // Gọi 1 lần duy nhất với toàn bộ list
+                            List<Integer> successIds = ApiService.useItemWeb(
+                                State_Management.getUserResponse().username,
+                                dsGuiBatch
+                            );
 
-                                boolean success = ApiService.useItemWeb(State_Management.getUserResponse().username, x);
-                                if (success) itemsNhan.add(x);
-                                else break;
-                            }
-
-                            if (!itemsNhan.isEmpty()) {
+                            if (successIds != null && !successIds.isEmpty()) {
                                 Gdx.app.postRunnable(() -> {
-                                    for (int x : itemsNhan) {
-                                        duLieuNguoiChoi.themItemVaoHanhTrang(veHUD.themItemTest.themVatPhamWebTheoId(x));
-                                        duLieuNguoiChoi.danhSachVatPhamWeb.remove((Integer)x);
-                                        soItemNhan[0]++;
+                                    for (int itemId : successIds) {
+                                        duLieuNguoiChoi.themItemVaoHanhTrang(
+                                            veHUD.themItemTest.themVatPhamWebTheoId(itemId)
+                                        );
+                                        duLieuNguoiChoi.danhSachVatPhamWeb.remove((Integer) itemId);
                                     }
-                                    veHUD.setTinNhanPet("Bạn vừa nhận " + soItemNhan[0] + " quà từ web", 2f);
+                                    veHUD.setTinNhanPet("Bạn vừa nhận " + successIds.size() + " quà từ web", 2f);
                                 });
                             }
                         }).start();
