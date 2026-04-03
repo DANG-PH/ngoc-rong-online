@@ -783,11 +783,13 @@ public class VeHUD {
 
         if (!dangHienKhungChat && !daClickVaoNpc && !dangHienDauThan && !(timeHienRongThan<=300-2.1f && timeHienRongThan>0)) {
             // RENDER SAU ẢNH ĐẬU THẦN ( trắng )
+            shapeRenderer.setProjectionMatrix(camManager.uiCamera.combined);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(1f, 1f, 1f, 1f);
             shapeRenderer.rect(screenWidth - 75 - 10 + 10, 10 + 10, 53, dauThanRenderH);
             shapeRenderer.end();
             Gdx.gl.glEnable(GL20.GL_BLEND);
+            shapeRenderer.setProjectionMatrix(camManager.uiCamera.combined);
             shapeRenderer.setColor(0f, 0f, 0f, 0.55f);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.triangle(0,  screenHeight / 4f * 3 - 10, 0,  screenHeight / 4f * 3 + 38 + 10, 19+10f, screenHeight / 4f * 3 + 19f);
@@ -856,6 +858,7 @@ public class VeHUD {
                     if (oSkills[i] == 3 && timeCoolDownBienKhi>0) {
                         batch.end();
                         Gdx.gl.glEnable(GL20.GL_BLEND);
+                        shapeRenderer.setProjectionMatrix(camManager.uiCamera.combined);
                         shapeRenderer.setColor(0f, 0f, 0f, 0.4f);
                         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
                         shapeRenderer.rect(x + 6.9f,skillY + 6.9f,oskillW - 13.8f,(oskillH - 13.8f)*timeCoolDownBienKhi/(500-20*duLieuNguoiChoi.getCapSkill(3)));
@@ -869,6 +872,7 @@ public class VeHUD {
                     if (oSkills[i] == 2 && timeCoolDownTtnl>0) {
                         batch.end();
                         Gdx.gl.glEnable(GL20.GL_BLEND);
+                        shapeRenderer.setProjectionMatrix(camManager.uiCamera.combined);
                         shapeRenderer.setColor(0f, 0f, 0f, 0.4f);
                         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
                         shapeRenderer.rect(x + 6.9f,skillY + 6.9f,oskillW - 13.8f,(oskillH - 13.8f)*timeCoolDownTtnl/20);
@@ -882,6 +886,7 @@ public class VeHUD {
                     if (oSkills[i] == 5 && timeCoolDownHuytSao>0) {
                         batch.end();
                         Gdx.gl.glEnable(GL20.GL_BLEND);
+                        shapeRenderer.setProjectionMatrix(camManager.uiCamera.combined);
                         shapeRenderer.setColor(0f, 0f, 0f, 0.4f);
                         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
                         shapeRenderer.rect(x + 6.9f,skillY + 6.9f,oskillW - 13.8f,(oskillH - 13.8f)*timeCoolDownHuytSao/180f);
@@ -933,6 +938,7 @@ public class VeHUD {
         //khung chat
         if (dangHienKhungChat) {
             batch.end();
+            shapeRenderer.setProjectionMatrix(camManager.uiCamera.combined);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
             shapeRenderer.rect((Gdx.graphics.getWidth() - 528) / 2f - 2f, 35 -1f, 528 +4f, 149 +3f);

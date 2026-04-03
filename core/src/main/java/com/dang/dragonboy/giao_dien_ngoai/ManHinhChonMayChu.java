@@ -123,6 +123,7 @@ public class ManHinhChonMayChu implements Screen {
         if (scrollX_cay <= -340) scrollX_cay += 340;
         if (scrollX_thap <= -340) scrollX_thap += 340;
 
+        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(25 / 255f, 176 / 255f, 248 / 255f, 1);
         shapeRenderer.rect(0, 460, 1020, 150);

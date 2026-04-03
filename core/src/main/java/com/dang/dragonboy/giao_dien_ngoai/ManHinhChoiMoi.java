@@ -110,6 +110,7 @@ public class ManHinhChoiMoi implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         // Chỉnh màu shapeRenderer theo hành tinh
         switch (hanhTinhDuocChon) {
