@@ -629,7 +629,7 @@ public class ApiService {
         try {
             URL url = new URL(BASE_URL + "/user/use-item-web");
             conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
+            conn.setRequestMethod("DELETE");
             conn.setRequestProperty("Content-Type", "application/json");
             conn.setRequestProperty("Accept", "application/json");
             conn.setRequestProperty("Authorization", "Bearer " + State_Management.getToken());

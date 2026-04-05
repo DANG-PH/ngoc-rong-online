@@ -911,7 +911,7 @@ public class HUDXulyitem {
 
         // 7. Trả áo cũ vào hành trang
         if (!vut) {
-            duLieuNguoiChoi.themItemVaoHanhTrang(aoCu);
+            duLieuNguoiChoi.themItemVaoHanhTrangNoSave(aoCu);
         }
     }
 
@@ -1023,7 +1023,7 @@ public class HUDXulyitem {
         kichHoatSetHienTaiDeTu();
 
         // 7. Trả áo cũ vào hành trang
-        duLieuNguoiChoi.themItemVaoHanhTrang(aoCu);
+        duLieuNguoiChoi.themItemVaoHanhTrangNoSave(aoCu);
     }
 
     private void macQuanMoi(Item item, int indexx, ArrayList<Item> danhSach){
@@ -1133,7 +1133,7 @@ public class HUDXulyitem {
 
         // 7. Trả quần cũ vào hành trang
         if (!vut) {
-            duLieuNguoiChoi.themItemVaoHanhTrang(quanCu);
+            duLieuNguoiChoi.themItemVaoHanhTrangNoSave(quanCu);
         }
     }
 
@@ -1247,7 +1247,7 @@ public class HUDXulyitem {
         kichHoatSetHienTaiDeTu();
 
         // 7. Trả quần cũ vào hành trang
-        duLieuNguoiChoi.themItemVaoHanhTrang(quanCu);
+        duLieuNguoiChoi.themItemVaoHanhTrangNoSave(quanCu);
     }
 
     private void macGangMoi(Item item, int indexx, ArrayList<Item> danhSach){
@@ -1327,7 +1327,7 @@ public class HUDXulyitem {
 
         // 6. Trả găng cũ vào hành trang
         if (!vut) {
-            duLieuNguoiChoi.themItemVaoHanhTrang(gangCu);
+            duLieuNguoiChoi.themItemVaoHanhTrangNoSave(gangCu);
         }
     }
 
@@ -1407,7 +1407,7 @@ public class HUDXulyitem {
         kichHoatSetHienTaiDeTu();
 
         // 6. Trả găng cũ vào hành trang
-        duLieuNguoiChoi.themItemVaoHanhTrang(gangCu);
+        duLieuNguoiChoi.themItemVaoHanhTrangNoSave(gangCu);
     }
 
     private void macGiayMoi(Item item, int indexx, ArrayList<Item> danhSach){
@@ -1488,7 +1488,7 @@ public class HUDXulyitem {
 
         // 6. Trả giày cũ vào hành trang
         if (!vut) {
-            duLieuNguoiChoi.themItemVaoHanhTrang(giayCu);
+            duLieuNguoiChoi.themItemVaoHanhTrangNoSave(giayCu);
         }
     }
 
@@ -1571,7 +1571,7 @@ public class HUDXulyitem {
         kichHoatSetHienTaiDeTu();
 
         // 6. Trả giày cũ vào hành trang
-        duLieuNguoiChoi.themItemVaoHanhTrang(giayCu);
+        duLieuNguoiChoi.themItemVaoHanhTrangNoSave(giayCu);
     }
 
     private void macRadaMoi(Item item, int indexx, ArrayList<Item> danhSach){
@@ -1652,7 +1652,7 @@ public class HUDXulyitem {
 
         // 6. Trả rada cũ vào hành trang
         if (!vut) {
-            duLieuNguoiChoi.themItemVaoHanhTrang(radaCu);
+            duLieuNguoiChoi.themItemVaoHanhTrangNoSave(radaCu);
         }
     }
 
@@ -1737,7 +1737,7 @@ public class HUDXulyitem {
         kichHoatSetHienTaiDeTu();
 
         // 6. Trả rada cũ vào hành trang
-        duLieuNguoiChoi.themItemVaoHanhTrang(radaCu);
+        duLieuNguoiChoi.themItemVaoHanhTrangNoSave(radaCu);
     }
 
     private void macCaiTrangMoi(Item item, int indexx, ArrayList<Item> danhSach, boolean caiTrangDangMac, boolean laCaiTrangMoi) {
@@ -1862,7 +1862,7 @@ public class HUDXulyitem {
         Item caiTrangCu = new Item(idCu, tenCu, loai, veHUD.iconct, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, null,0,0,0,hansudung);
         giamchiso(chisocu);
         if (!vut) {
-            duLieuNguoiChoi.themItemVaoHanhTrang(caiTrangCu);
+            duLieuNguoiChoi.themItemVaoHanhTrangNoSave(caiTrangCu);
         }
         NhanVatXuLy.setDangMacAvatar(false);
         NhanVatXuLy.setDangMacCaiTrang(false);
@@ -1897,7 +1897,7 @@ public class HUDXulyitem {
 
         Item caiTrangCu = new Item(idCu, tenCu, loai, veHUD.iconctDeTu, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, null,0,0,0,hansudung);
         giamchisoDeTu(chisocu);
-        duLieuNguoiChoi.themItemVaoHanhTrang(caiTrangCu);
+        duLieuNguoiChoi.themItemVaoHanhTrangNoSave(caiTrangCu);
         if (!duLieuNguoiChoi.deTu.dangBienKhi) {
             DeTuCauHinh c2 = veHUD.Doi_avt_ao_quan_DeTu(duLieuNguoiChoi.deTu.getHanhtinh(), duLieuNguoiChoi.deTu.getHanhtinh() + "_base", veHUD.aodetudangmac, veHUD.quandetudangmac);
             duLieuNguoiChoi.deTu.fixCaiTrang(
@@ -1959,7 +1959,7 @@ public class HUDXulyitem {
         Item giapLuyenTapCu = new Item(idCu, tenCu, loaiCu, veHUD.giaplt, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, null,sosaocu,sosaocuonghoacu,0,hansudung);
         giamchiso(chisocu);
         if (!vut) {
-            duLieuNguoiChoi.themItemVaoHanhTrang(giapLuyenTapCu);
+            duLieuNguoiChoi.themItemVaoHanhTrangNoSave(giapLuyenTapCu);
         }
         veHUD.giaplt = null;
         veHUD.dangMacGiapLuyenTap = false;
@@ -2015,7 +2015,7 @@ public class HUDXulyitem {
         Item vanBayCu = new Item(idCu, tenCu, loaiCu, veHUD.vanbay, motacu, 1, chisocu,hanhtinhcu,sucmanhyeucaucu, null,0,0,0,-1);
         giamchiso(chisocu);
         if (!vut) {
-            duLieuNguoiChoi.themItemVaoHanhTrang(vanBayCu);
+            duLieuNguoiChoi.themItemVaoHanhTrangNoSave(vanBayCu);
         }
         veHUD.vanbay = null;
         nhanVat.dangMangVanBay = false;

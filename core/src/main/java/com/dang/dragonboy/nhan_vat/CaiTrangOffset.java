@@ -9,8 +9,8 @@ public class CaiTrangOffset {
     static {
         OFFSET_CAI_TRANG.put("goku_black", taoGokuBlack());
         OFFSET_CAI_TRANG.put("goku_black_rose", taoGokuBlackRose());
-        OFFSET_CAI_TRANG.put("bong_tai_3_xayda", taoVegitoXeno());
-        OFFSET_CAI_TRANG.put("bong_tai_3_traidat", taoVegito());
+        OFFSET_CAI_TRANG.put("bong_tai_3_xayda", taoVegito());
+        OFFSET_CAI_TRANG.put("bong_tai_3_traidat", taoVegitoXeno());
         OFFSET_CAI_TRANG.put("bong_tai_2_xayda", taoVegitoSsj());
         OFFSET_CAI_TRANG.put("bong_tai_2_traidat", taoVegitoSsj());
         OFFSET_CAI_TRANG.put("gohan_beast", taoGohanBeast());

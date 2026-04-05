@@ -1465,7 +1465,7 @@ public class VeHUD {
                                 if (duLieuNguoiChoi.getHanhTrang().size() < 50) {
                                     duLieuNguoiChoi.getHanhTrangRuongDo().remove(itemm);
                                 }
-                                duLieuNguoiChoi.themItemVaoHanhTrang(itemm);
+                                duLieuNguoiChoi.themItemVaoHanhTrangNoSave(itemm);
                                 DangHienPopupThongTin3 = false;
                                 TimeChoHienPopup = 0;
                             }

@@ -348,7 +348,7 @@ public class NpcHUDClickHandler {
                     if (!veHUD.DangHienPopupThongTin1 && !veHUD.DangHienPopupThongTin3 && !veHUD.dangHienThongBao) {
                         if (x > 350 && x <= 1020 - 350) {
                             if (!duLieuNguoiChoi.danhSachItemCuongHoa.isEmpty()) {
-                                duLieuNguoiChoi.themItemVaoHanhTrang(duLieuNguoiChoi.danhSachItemCuongHoa.get(0));
+                                duLieuNguoiChoi.themItemVaoHanhTrangNoSave(duLieuNguoiChoi.danhSachItemCuongHoa.get(0));
                                 duLieuNguoiChoi.danhSachItemCuongHoa.remove(duLieuNguoiChoi.danhSachItemCuongHoa.get(0));
                             }
                         }
