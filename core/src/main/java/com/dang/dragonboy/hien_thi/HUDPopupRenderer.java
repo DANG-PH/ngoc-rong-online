@@ -767,7 +767,7 @@ public class HUDPopupRenderer {
                         " - linkedin.com/in/ledinhthanh\n" +
                         "\n" +
                         "Hotline hỗ trợ: 0396.436.954 (8h - 22h hàng ngày)\n" +
-                        "Trang chủ dự án: chienbinhrongthieng.online\n" +
+                        "Trang chủ dự án: chienbinhrongthieng.com\n" +
                         "Fanpage: fb.com/profile.php?id=61576541835732\n" +
                         "Zalo hỗ trợ: 0396.436.954\n",
                     new Color(83 / 255f, 41 / 255f, 5 / 255f, 1),
@@ -789,7 +789,7 @@ public class HUDPopupRenderer {
                 Gdx.gl.glScissor(0, (int) viewY, 350, (int) viewHeight);
                 layout.setText(
                     veHUD.font,
-                    "Vui lòng theo dõi tại trang web:" + "\n" + "chienbinhrongthieng.online",
+                    "Vui lòng theo dõi tại trang web:" + "\n" + "chienbinhrongthieng.com",
                     new Color(83 / 255f, 41 / 255f, 5 / 255f, 1),
                     320,
                     Align.left,
