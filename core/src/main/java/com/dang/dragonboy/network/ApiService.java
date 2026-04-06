@@ -2,6 +2,7 @@ package com.dang.dragonboy.network;
 
 import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 
 import com.dang.dragonboy.du_lieu.LocalStorage;
@@ -12,6 +13,10 @@ import com.dang.dragonboy.network.DTO.UseItemResponse;
 import com.dang.dragonboy.network.DTO.UserResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import com.google.gson.JsonParser;
@@ -156,10 +161,6 @@ public class ApiService {
                 JsonObject jsonObject = JsonParser.parseString(response.toString()).getAsJsonObject();
                 String sessionId = jsonObject.get("sessionId").getAsString();
 
-                if (sessionId != null) {
-                    State_Management.setSessionId(sessionId); // Lưu token nếu cần
-//                    LocalStorage.saveLastUser(username, token); // Lưu vào file JSON
-                }
                 return sessionId;
             } else {
                 System.err.println("Đăng nhập thất bại, mã lỗi HTTP: " + status);
@@ -215,7 +216,6 @@ public class ApiService {
                     State_Management.setRole(role);
                     State_Management.setAuth_id(auth_id);
                     State_Management.setRefresh_token(refresh_token);
-                    LocalStorage.saveLastUser(State_Management.getSessionId(), access_token); // Lưu vào file JSON
 //                    System.out.println("verify otp thanh cong");
 
                     return ApiService.getProfile(access_token);
@@ -293,6 +293,9 @@ public class ApiService {
 
             State_Management.getUserResponse().biBan = role_biBan[1].equals("true") ? true : false;
             State_Management.getUserResponse().role = role_biBan[0];
+            State_Management.getUserResponse().username = role_biBan[2];
+
+            LocalStorage.saveLastUser(State_Management.getUserResponse().username, token); // Lưu vào file JSON
             return user;
 
         } catch (Exception e) {
@@ -369,10 +372,12 @@ public class ApiService {
             JsonObject jsonObject = JsonParser.parseString(response.toString()).getAsJsonObject();
             String role = jsonObject.get("role").getAsString();
             String biBan = jsonObject.get("biBan").getAsString();
+            String username = jsonObject.get("username").getAsString();
 
-            String[] a = new String[2];
+            String[] a = new String[3];
             a[0] = role;
             a[1] = biBan;
+            a[2] = username;
 
             return a;
 
@@ -622,7 +627,7 @@ public class ApiService {
     }
 
     // ====== Gọi API lấy danh sách item web ======
-    public static List<Integer> getItemsWeb(String username) {
+    public static List<Integer> getItemsWeb() {
         try {
             URL url = new URL(BASE_URL + "/user/item-web");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -665,7 +670,7 @@ public class ApiService {
     }
 
     // ====== Gọi API sử dụng item web ======
-    public static List<Integer> useItemWeb(String username, List<Integer> itemIds) {
+    public static List<Integer> useItemWeb(List<Integer> itemIds) {
         HttpURLConnection conn = null;
         try {
             URL url = new URL(BASE_URL + "/user/use-item-web");
@@ -721,5 +726,43 @@ public class ApiService {
         }
 
         return new ArrayList<>();
+    }
+
+    public static LoginWithGoogleResponse loginWithGoogle(String idToken) {
+        try {
+            String body = "{\"tokenFromGoogle\":\"" + idToken + "\"}";
+
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/auth/login-google"))
+                .header("Content-Type", "application/json")
+                .header("x-platform", "game")
+                .POST(HttpRequest.BodyPublishers.ofString(body))
+                .build();
+
+            HttpResponse<String> response = client.send(request,
+                HttpResponse.BodyHandlers.ofString());
+
+            // ✅ Dùng Gson thay vì parse thủ công
+            JsonObject json = JsonParser.parseString(response.body()).getAsJsonObject();
+
+            LoginWithGoogleResponse result = new LoginWithGoogleResponse();
+            result.accessToken  = json.get("access_token").getAsString();
+            result.refreshToken = json.get("refresh_token").getAsString();
+            result.authId       = json.get("auth_id").getAsInt();
+            result.register     = json.has("register") && json.get("register").getAsBoolean();
+            return result;
+
+        } catch (Exception e) {
+            System.out.println("loginWithGoogle lỗi: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public static class LoginWithGoogleResponse {
+        public String accessToken;
+        public String refreshToken;
+        public int authId;
+        public boolean register;
     }
 }

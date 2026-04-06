@@ -18,7 +18,7 @@ public class ApiItemService {
     private static final Gson gson = new Gson();
 
     // Lưu danh sách item của user
-    public static List<ItemCanLuu> saveItems(String username, List<ItemCanLuu> items) {
+    public static List<ItemCanLuu> saveItems(List<ItemCanLuu> items) {
         try {
             URL url = new URL(BASE_URL + "/items");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();

@@ -303,11 +303,6 @@ public class ManHinhMenu implements Screen {
             batch.draw(logo, 355, 360, 320, 200);
             String[] labels;
             if (State_Management.getUserResponse() != null) {
-                String username = new String(
-                    Base64.getDecoder().decode(State_Management.getSessionId()),
-                    StandardCharsets.UTF_8
-                );
-                State_Management.getUserResponse().username = username;
                 labels = new String[]{
                     tenHienThi,
                     "Chơi mới",
@@ -336,7 +331,7 @@ public class ManHinhMenu implements Screen {
                 };
 
                 if ("HAIDANG1".equals(mayChu)) {
-                    labels[3] = "Máy chủ: HAIDANG1";
+                    labels[2] = "Máy chủ: HAIDANG1";
                 }
                 int[] ys = {320, 255, 190};
                 int[] textYs = {350, 284, 219};
@@ -423,7 +418,7 @@ public class ManHinhMenu implements Screen {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 18;
-        parameter.characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?., Xóa dữ liệu Đă ậ ở ớ ổ à ả á ế ủ vũ trụ ơ : ị ò ê đ ư ợ ỗ ợ ể ã máy chủ mất kết nối vui lòng thử lại sau tài khoản được đăng nhập tại nơi khác kết nối bị gián đoạn quay về màn hình chính";
+        parameter.characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?.,  @ ! , % # Xóa dữ liệu Đă ậ ở ớ ổ à ả á ế ủ vũ trụ ơ : ị ò ê đ ư ợ ỗ ợ ể ã máy chủ mất kết nối vui lòng thử lại sau tài khoản được đăng nhập tại nơi khác kết nối bị gián đoạn quay về màn hình chính";
         font = generator.generateFont(parameter);
         parameter.size = 14;
         fontSplash = generator.generateFont(parameter);

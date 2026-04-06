@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.InputAdapter;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.dang.dragonboy.du_lieu.LocalStorage;
 import com.dang.dragonboy.network.DTO.UserResponse;
 
 import com.dang.dragonboy.du_lieu.State_Management;
@@ -78,6 +79,10 @@ public class ManHinhDoiTaiKhoan implements Screen {
     private boolean oNhapMatKhauDuocChon = false;
 
     private int nutManHinhDangKyChon = -1;
+
+    private String sessionId = "";
+
+    private boolean isGooglePressed = false;
 
     public ManHinhDoiTaiKhoan(Main game) {
         this.game = game;
@@ -241,7 +246,7 @@ public class ManHinhDoiTaiKhoan implements Screen {
                     duDieuKien = true; // Dev
                     if (duDieuKien) {
                         new Thread(() -> {
-                            UserResponse user = ApiService.verifyOTP(State_Management.getSessionId(), maOTP);
+                            UserResponse user = ApiService.verifyOTP(this.sessionId, maOTP);
 
                             Gdx.app.postRunnable(() -> {
                                 if (user != null) {
@@ -279,6 +284,7 @@ public class ManHinhDoiTaiKhoan implements Screen {
 //                                System.out.println("Đăng nhập thất bại!");
 //                            }
                             if (sessionId != null) {
+                                this.sessionId = sessionId;
                                 trangThaiManHinh = TrangThaiManHinh.VERIFY_OTP;
                                 this.maRandomCapcha = taoCaptcha6KyTu();
                             }
@@ -355,6 +361,7 @@ public class ManHinhDoiTaiKhoan implements Screen {
             isDongPressed = false;
             isQuenMKPressed = false;
             isDangKyPressed = false;
+            isGooglePressed = false;
         }
 
         if (Gdx.input.justTouched()) {
@@ -484,6 +491,50 @@ public class ManHinhDoiTaiKhoan implements Screen {
                 isDangKyPressed = true;
                 thoiGianHienNutClick = 0.1f;
             }
+
+            float nutGoogleX = (Gdx.graphics.getWidth() - 200) / 2f;
+            float nutGoogleY = 20;
+            if (mouseX >= nutGoogleX && mouseX <= nutGoogleX + 200
+                && mouseY >= nutGoogleY && mouseY <= nutGoogleY + 50) {
+                isGooglePressed = true;
+                thoiGianHienNutClick = 0.1f;
+
+                GoogleOAuth2Desktop.login(new GoogleOAuth2Desktop.Callback() {
+                    @Override
+                    public void onSuccess(String idToken) {
+                        new Thread(() -> {
+                            ApiService.LoginWithGoogleResponse res =
+                                ApiService.loginWithGoogle(idToken);
+
+                            if (res != null) {
+                                State_Management.setToken(res.accessToken);
+                                State_Management.setAuth_id(res.authId);
+                                State_Management.setRefresh_token(res.refreshToken);
+
+                                // Gọi getProfile
+                                UserResponse user = ApiService.getProfile(res.accessToken);
+
+                                Gdx.app.postRunnable(() -> {
+                                    if (user != null) {
+                                        game.setScreen(new ManHinhMenu(game, null, false));
+                                    } else {
+                                        System.out.println("Google login thất bại: không lấy được profile");
+                                    }
+                                });
+                            } else {
+                                Gdx.app.postRunnable(() ->
+                                    System.out.println("Google login thất bại"));
+                            }
+                        }).start();
+                    }
+
+                    @Override
+                    public void onFailure(String error) {
+                        Gdx.app.postRunnable(() ->
+                            System.out.println("Lỗi: " + error));
+                    }
+                });
+            }
         }
 
         scrollX_cay -= 30 * delta;
@@ -591,6 +642,11 @@ public class ManHinhDoiTaiKhoan implements Screen {
             layout.setText(font, "Quên M.Khẩu");
             font.draw(batch, layout, nutQuenX + (142 - layout.width) / 2, nutQuenY + 30);
 
+            float nutGoogleX = (Gdx.graphics.getWidth() - 200) / 2f;
+            float nutGoogleY = nutDongY;
+            batch.draw(isGooglePressed ? nutclick : nutdn, nutGoogleX, nutGoogleY, 200, 48);
+            layout.setText(font, "Đăng nhập Google");
+            font.draw(batch, layout, nutGoogleX + (200 - layout.width) / 2, nutGoogleY + 30);
             batch.end();
         }
 

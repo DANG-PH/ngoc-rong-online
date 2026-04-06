@@ -5,7 +5,6 @@ import java.util.*;
 public class UserResponse {
     public Long id;
     public String username;
-    public String password;
     public String gameName;
 
     // dữ liệu luu từ server

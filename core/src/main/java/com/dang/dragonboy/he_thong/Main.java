@@ -50,14 +50,13 @@ public class Main extends Game {
         Map<String, String> savedUser = LocalStorage.loadLastUser();
         if (savedUser != null) {
             String token = savedUser.get("access_token");
-            String sessionId = savedUser.get("lastUsername");
+            String username = savedUser.get("lastUsername");
 
             // ✅ Gọi API /profile để kiểm tra token còn hạn không
             UserResponse profile = ApiService.getProfile(token);
 
             if (profile != null) {
                 State_Management.setUserResponse(profile);
-                State_Management.setSessionId(sessionId);
                 State_Management.setToken(token);
             } else {
                 System.out.println("Token hết hạn hoặc không hợp lệ → yêu cầu đăng nhập lại");
@@ -140,7 +139,7 @@ public class Main extends Game {
                 // Gửi lên backend
                 new Thread(() -> {
                     List<ItemCanLuu> listItem =
-                        ApiItemService.saveItems(State_Management.getUserResponse().username, allItems);
+                        ApiItemService.saveItems(allItems);
 
                     if (listItem != null) {
                         System.out.println("Save OK");

@@ -698,7 +698,6 @@ public class VeHUD {
 
             // 2. Reset state
             State_Management.setToken("");
-            State_Management.setSessionId("");
             State_Management.setRefresh_token("");
             State_Management.setAuth_id(0);
             State_Management.setRole("");
@@ -719,7 +718,6 @@ public class VeHUD {
         if (GameSocket.retryCount == GameSocket.MAX_RETRY && !State_Management.isForceLogout()) {
             GameSocket.disconnect();
             State_Management.setToken("");
-            State_Management.setSessionId("");
             State_Management.setRefresh_token("");
             State_Management.setAuth_id(0);
             State_Management.setRole("");

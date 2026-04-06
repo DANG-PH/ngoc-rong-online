@@ -333,7 +333,6 @@ public class admin_dungle extends renderUInpc {
                         new Thread(() -> {
                             // Gọi 1 lần duy nhất với toàn bộ list
                             List<Integer> successIds = ApiService.useItemWeb(
-                                State_Management.getUserResponse().username,
                                 dsGuiBatch
                             );
 

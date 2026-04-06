@@ -13,7 +13,6 @@ public class State_Management {
     private static VeHUD veHUD = null;
     private static NhanVat nhanVat = null;
     private static String token = "";
-    private static String sessionId = "";
     private static String refresh_token = "";
     private static int auth_id = 0;
     private static String role = "";
@@ -94,14 +93,6 @@ public class State_Management {
 
     public static void setAuth_id(int auth_idd) {
         auth_id = auth_idd;
-    }
-
-    public static String getSessionId() {
-        return sessionId;
-    }
-
-    public static void setSessionId(String sessionIdd) {
-        sessionId = sessionIdd;
     }
 
     public static void setDuLieuNguoiChoi(DuLieuNguoiChoi duLieuNguoiChoii) {
