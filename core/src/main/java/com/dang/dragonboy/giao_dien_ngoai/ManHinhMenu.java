@@ -57,6 +57,14 @@ public class ManHinhMenu implements Screen {
 
     private Boolean serverOnline = null; // null = chưa check
 
+    private volatile boolean dangKetNoi = false;
+    private float dotTimer = 0f;
+    private int soCham = 1; // 1, 2, hoặc 3
+    private volatile TrangThaiApiGetBan ketQuaKiemTraBan = null; // null = chưa có kết quả
+    private float thoiGianChoHttp = 0f;
+    private static final float NGUONG_HIEN_CHAM = 0.3f; // chờ 0.3s mới hiện
+    private String tenHienThi = "";
+
     private Object mayChu; // biến lưu máy chủ đc chọn
     public ManHinhMenu(Main game ,Object mayChu, boolean isForceLogout) {
         this.game = game;
@@ -72,8 +80,87 @@ public class ManHinhMenu implements Screen {
 
     @Override
     public void render(float delta) {
+        if (dangKetNoi) {
+            if (thoiGianChoHttp >= NGUONG_HIEN_CHAM) {
+                // Chỉ chạy animation sau 0.3s
+                dotTimer += delta;
+                if (dotTimer >= 0.4f) {
+                    dotTimer = 0f;
+                    soCham = (soCham % 3) + 1;
+                }
+                tenHienThi = "Đang kiểm tra" + ".".repeat(soCham);
+            }
+
+            // Kiểm tra kết quả từ background thread
+            if (ketQuaKiemTraBan != null) {
+                dangKetNoi = false;
+                TrangThaiApiGetBan kq = ketQuaKiemTraBan;
+                ketQuaKiemTraBan = null;
+
+                UserResponse user = State_Management.getUserResponse();
+                String token = State_Management.getToken();
+                if (kq == TrangThaiApiGetBan.PASS) {
+                    if (!user.daVaoTaiKhoanLanDau) {
+                        game.setScreen(new ManHinhSplash(game, () -> new ManHinhNhaGohan(game, "admin", "traidat", "Goku", null)));
+                    } else {
+                        if (user.mapHienTai.equals("Nhà Gôhan")) {
+                            game.setScreen(new ManHinhSplash(game, () -> new ManHinhNhaGohan(game, "admin", "traidat", "Goku", null)));
+                        } else if (user.mapHienTai.equals("Làng Aru")) {
+                            game.setScreen(new ManHinhSplash(game, () -> new ManHinhLangAru(game, null)));
+                        } else if (user.mapHienTai.equals("Đồi Hoa Cúc")) {
+                            game.setScreen(new ManHinhSplash(game, () -> new ManHinhDoiHoaCuc(game, null)));
+                        }
+                    }
+                    if (!GameSocket.isConnected()) {
+                        new Thread(() -> {
+                            try {
+                                URL url = new URL("https://api.dangpham.id.vn/game/play");
+                                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                                conn.setRequestMethod("POST");
+                                conn.setRequestProperty("Authorization", "Bearer " + token);
+                                conn.setRequestProperty("Content-Type", "application/json");
+                                conn.setDoOutput(true);
+
+                                int responseCode = conn.getResponseCode();
+
+                                if (responseCode == 200 || responseCode == 201) {
+                                    Scanner scanner = new Scanner(conn.getInputStream());
+                                    StringBuilder responseBody = new StringBuilder();
+                                    while (scanner.hasNextLine())
+                                        responseBody.append(scanner.nextLine());
+                                    scanner.close();
+
+                                    JSONObject json = new JSONObject(responseBody.toString());
+                                    String gameSessionId = json.getString("gameSessionId");
+                                    State_Management.gameSessionId = gameSessionId;
+
+                                    conn.disconnect();
+                                    GameSocket.connect(token);
+                                } else {
+                                    System.out.println("/play thất bại: " + responseCode);
+                                    conn.disconnect();
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }).start();
+                    }
+                } else if (kq == TrangThaiApiGetBan.BAN) {
+                    trangThaiManHinh = TrangThaiManHinhMenu.BAN;
+                } else if (kq == TrangThaiApiGetBan.SERVER_ERROR) {
+                    serverOnline = false;
+                }
+            }
+        } else {
+            // Set tên bình thường khi không kết nối
+            UserResponse userResponse = State_Management.getUserResponse();
+            if (userResponse != null) {
+                String username = userResponse.username;
+                tenHienThi = "TK. " + username;
+            }
+        }
         if (serverOnline != null && !serverOnline && trangThaiManHinh != TrangThaiManHinhMenu.SERVER_ERROR) trangThaiManHinh = TrangThaiManHinhMenu.SERVER_ERROR;
-        if (Gdx.input.justTouched()) {
+        if (Gdx.input.justTouched() && !dangKetNoi) {
             int mouseX = Gdx.input.getX();
             int mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
             if (trangThaiManHinh == TrangThaiManHinhMenu.NONE) {
@@ -141,58 +228,16 @@ public class ManHinhMenu implements Screen {
             if (user != null) {
                 switch (nutDuocChon) {
                     case 0:
-                        TrangThaiApiGetBan trangThai = ApiService.isNotBanned(token);
-                        if (trangThai == TrangThaiApiGetBan.PASS) {
-                            if (!user.daVaoTaiKhoanLanDau) {
-                                nextScreen = new ManHinhSplash(game, new ManHinhNhaGohan(game, "admin", "traidat", "Goku", null));
-                            } else {
-                                if (user.mapHienTai.equals("Nhà Gôhan")) {
-                                    nextScreen = new ManHinhSplash(game, new ManHinhNhaGohan(game, "admin", "traidat", "Goku", null));
-                                } else if (user.mapHienTai.equals("Làng Aru")) {
-                                    nextScreen = (new ManHinhSplash(game, new ManHinhLangAru(game, null)));
-                                } else if (user.mapHienTai.equals("Đồi Hoa Cúc")) {
-                                    nextScreen = (new ManHinhSplash(game, new ManHinhDoiHoaCuc(game, null)));
-                                }
-                            }
-                            if (!GameSocket.isConnected()) {
-                                new Thread(() -> {
-                                    try {
-                                        URL url = new URL("https://api.dangpham.id.vn/game/play");
-                                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                                        conn.setRequestMethod("POST");
-                                        conn.setRequestProperty("Authorization", "Bearer " + token);
-                                        conn.setRequestProperty("Content-Type", "application/json");
-                                        conn.setDoOutput(true);
+                        // Thay vì gọi ApiService.isNotBanned(token) trực tiếp:
+                        dangKetNoi = true;
+                        ketQuaKiemTraBan = null;
+                        dotTimer = 0f;
+                        soCham = 1;
 
-                                        int responseCode = conn.getResponseCode();
-
-                                        if (responseCode == 200 || responseCode == 201) {
-                                            Scanner scanner = new Scanner(conn.getInputStream());
-                                            StringBuilder responseBody = new StringBuilder();
-                                            while (scanner.hasNextLine())
-                                                responseBody.append(scanner.nextLine());
-                                            scanner.close();
-
-                                            JSONObject json = new JSONObject(responseBody.toString());
-                                            String gameSessionId = json.getString("gameSessionId");
-                                            State_Management.gameSessionId = gameSessionId;
-
-                                            conn.disconnect();
-                                            GameSocket.connect(token);
-                                        } else {
-                                            System.out.println("/play thất bại: " + responseCode);
-                                            conn.disconnect();
-                                        }
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                }).start();
-                            }
-                        } else if (trangThai == TrangThaiApiGetBan.BAN) {
-                            trangThaiManHinh = TrangThaiManHinhMenu.BAN;
-                        } else if (trangThai == TrangThaiApiGetBan.SERVER_ERROR) {
-                            serverOnline = false;
-                        }
+                        new Thread(() -> {
+                            TrangThaiApiGetBan kq = ApiService.isNotBanned(token);
+                            ketQuaKiemTraBan = kq; // render thread đọc biến này
+                        }).start();
                         break;
                     case 1:
                         nextScreen = new ManHinhChoiMoi(game);
@@ -264,7 +309,7 @@ public class ManHinhMenu implements Screen {
                 );
                 State_Management.getUserResponse().username = username;
                 labels = new String[]{
-                    "TK. " + username,
+                    tenHienThi,
                     "Chơi mới",
                     "Đổi tài khoản",
                     "Máy chủ: Vũ trụ " + mayChu

@@ -1,4 +1,5 @@
 package com.dang.dragonboy.item;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.graphics.Texture;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
@@ -28,8 +29,15 @@ public class ThemItemTest {
         this.duLieu = duLieu;
     }
     public void themItemTest() {
-        List<ItemCanLuu> itemTuDatabase = ApiItemService.getItems();
-        this.duLieu.setLaiHanhTrangTuDatabase(itemTuDatabase);
+        new Thread(() -> {
+            // HTTP chạy trên background thread
+            List<ItemCanLuu> itemTuDatabase = ApiItemService.getItems();
+
+            // Xử lý data + update GL objects phải về GL thread
+            Gdx.app.postRunnable(() -> {
+                this.duLieu.setLaiHanhTrangTuDatabase(itemTuDatabase);
+            });
+        }).start();
 
 //        duLieu.themItemVaoHanhTrang(new Item(
 //            "bongtaic1", "Bông tai Porata", LoaiItem.BONGTAI,

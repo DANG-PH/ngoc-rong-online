@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
 import com.dang.dragonboy.he_thong.Main;
 
+import java.util.function.Supplier;
+
 public class ManHinhSplash implements Screen {
     private Main game;
     private Texture splashImage;
@@ -20,6 +22,7 @@ public class ManHinhSplash implements Screen {
     private Texture logo;
     private Screen manHinhTiepTheo;
     private boolean hienLogoVaChu;
+    private Supplier<Screen> manHinhTiepTheoSupplier;
     // Constructor dùng cho splash khởi động ban đầu → menu
     public ManHinhSplash(Main game) {
         this(game, null, false);
@@ -27,6 +30,14 @@ public class ManHinhSplash implements Screen {
     // Splash khi bấm nút: có màn tiếp theo & hiển thị logo/chữ
     public ManHinhSplash(Main game, Screen manHinhTiepTheo) {
         this(game, manHinhTiepTheo, true);
+    }
+    // Constructor mới dùng Supplier - tạo Screen LAZY
+    public ManHinhSplash(Main game, Supplier<Screen> supplier) {
+        this.game = game;
+        this.manHinhTiepTheoSupplier = supplier;
+        this.hienLogoVaChu = true;
+        layout = new GlyphLayout();
+        batch = new SpriteBatch();
     }
     // Constructor chính
     public ManHinhSplash(Main game, Screen manHinhTiepTheo, boolean hienLogoVaChu) {
@@ -76,10 +87,12 @@ public class ManHinhSplash implements Screen {
         batch.end();
 
         if (thoiGian > 1f) {
-            if (manHinhTiepTheo != null) {
+            if (manHinhTiepTheoSupplier != null) {
+                game.setScreen(manHinhTiepTheoSupplier.get()); // tạo ở đây, lag bị che
+            } else if (manHinhTiepTheo != null) {
                 game.setScreen(manHinhTiepTheo);
             } else {
-                game.setScreen(new ManHinhMenu(game,null, false));
+                game.setScreen(new ManHinhMenu(game, null, false));
             }
         }
     }
