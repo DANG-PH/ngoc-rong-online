@@ -10,7 +10,6 @@ import com.dang.dragonboy.network.DTO.DeTuTheoUser;
 import com.dang.dragonboy.network.DTO.ItemWeb;
 import com.dang.dragonboy.network.DTO.UseItemResponse;
 import com.dang.dragonboy.network.DTO.UserResponse;
-import com.dang.dragonboy.websocket.GameSocket;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import java.nio.charset.StandardCharsets;
@@ -33,6 +32,48 @@ public class ApiService {
             return conn.getResponseCode() == 200;
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    public static TrangThaiApiGetBan isNotBanned(String token) {
+        try {
+            URL url = new URL(BASE_URL + "/auth/ban");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Authorization", "Bearer " + token);
+            conn.setConnectTimeout(2000);
+            conn.setReadTimeout(2000);
+
+            int status = conn.getResponseCode();
+
+            if (status < 200 || status >= 300) {
+                return TrangThaiApiGetBan.SERVER_ERROR;
+            }
+
+            BufferedReader reader = new BufferedReader(
+                new InputStreamReader(conn.getInputStream())
+            );
+
+            StringBuilder response = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
+            }
+            reader.close();
+
+            JsonObject json = JsonParser
+                .parseString(response.toString())
+                .getAsJsonObject();
+
+            if (!json.has("success") || json.get("success").isJsonNull()) {
+                return TrangThaiApiGetBan.SERVER_ERROR;
+            }
+
+            return json.get("success").getAsBoolean() ? TrangThaiApiGetBan.PASS : TrangThaiApiGetBan.BAN;
+
+        } catch (Exception e) {
+            return TrangThaiApiGetBan.SERVER_ERROR;
         }
     }
 

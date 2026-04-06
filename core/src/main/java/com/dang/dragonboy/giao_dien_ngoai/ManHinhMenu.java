@@ -17,6 +17,8 @@ import com.dang.dragonboy.giao_dien_trong.ManHinhLangAru;
 import com.dang.dragonboy.he_thong.Main;
 import com.dang.dragonboy.giao_dien_trong.ManHinhNhaGohan;
 import com.dang.dragonboy.network.ApiService;
+import com.dang.dragonboy.network.DTO.UserResponse;
+import com.dang.dragonboy.network.TrangThaiApiGetBan;
 import com.dang.dragonboy.websocket.GameSocket;
 import org.json.JSONObject;
 
@@ -134,87 +136,62 @@ public class ManHinhMenu implements Screen {
         }
         if (nutClickTimer <= 0 && nutDuocChon != -1) {
             Screen nextScreen = null;
-            if (State_Management.getUserResponse() != null) {
+            String token = State_Management.getToken();
+            UserResponse user = State_Management.getUserResponse();
+            if (user != null) {
                 switch (nutDuocChon) {
                     case 0:
-                        serverOnline = ApiService.healthCheck();
-                        if (serverOnline) {
-                            if (State_Management.getUserResponse() != null) {
-                                if (!State_Management.getUserResponse().biBan) {
-                                    if (!State_Management.getUserResponse().daVaoTaiKhoanLanDau) {
-                                        nextScreen = new ManHinhSplash(game, new ManHinhNhaGohan(game, "admin", "traidat", "Goku", null));
-                                    } else {
-                                        if (State_Management.getUserResponse().mapHienTai.equals("Nhà Gôhan")) {
-                                            nextScreen = new ManHinhSplash(game, new ManHinhNhaGohan(game, "admin", "traidat", "Goku", null));
-                                        } else if (State_Management.getUserResponse().mapHienTai.equals("Làng Aru")) {
-                                            nextScreen = (new ManHinhSplash(game, new ManHinhLangAru(game, null)));
-                                        } else if (State_Management.getUserResponse().mapHienTai.equals("Đồi Hoa Cúc")) {
-                                            nextScreen = (new ManHinhSplash(game, new ManHinhDoiHoaCuc(game, null)));
-                                        }
-                                    }
-                                    if (!GameSocket.isConnected()) {
-                                        String token = State_Management.getToken();
-
-                                        new Thread(() -> {
-                                            try {
-                                                URL url = new URL("https://api.dangpham.id.vn/game/play");
-                                                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                                                conn.setRequestMethod("POST");
-                                                conn.setRequestProperty("Authorization", "Bearer " + token);
-                                                conn.setRequestProperty("Content-Type", "application/json");
-                                                conn.setDoOutput(true);
-
-                                                int responseCode = conn.getResponseCode();
-
-                                                if (responseCode == 200 || responseCode == 201) {
-                                                    Scanner scanner = new Scanner(conn.getInputStream());
-                                                    StringBuilder responseBody = new StringBuilder();
-                                                    while (scanner.hasNextLine())
-                                                        responseBody.append(scanner.nextLine());
-                                                    scanner.close();
-
-                                                    JSONObject json = new JSONObject(responseBody.toString());
-                                                    String gameSessionId = json.getString("gameSessionId");
-                                                    State_Management.gameSessionId = gameSessionId;
-
-                                                    conn.disconnect();
-                                                    GameSocket.connect(token);
-                                                } else {
-                                                    System.out.println("/play thất bại: " + responseCode);
-                                                    conn.disconnect();
-                                                }
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                            }
-                                        }).start();
-                                    }
-                                } else {
-                                    trangThaiManHinh = TrangThaiManHinhMenu.BAN;
-                                }
+                        TrangThaiApiGetBan trangThai = ApiService.isNotBanned(token);
+                        if (trangThai == TrangThaiApiGetBan.PASS) {
+                            if (!user.daVaoTaiKhoanLanDau) {
+                                nextScreen = new ManHinhSplash(game, new ManHinhNhaGohan(game, "admin", "traidat", "Goku", null));
                             } else {
-//                            UserResponse user = ApiService.login("ad", "1");
-//                            if (user != null) {
-//                                System.out.println("Đăng nhập thành công!");
-//                                // Truy cập dữ liệu backend trả về
-//
-//                                State_Management.setUserResponse(user);
-//                                System.out.println("x: " + State_Management.getUserResponse().x + ", y: " + State_Management.getUserResponse().y);
-//                                game.setScreen(new ManHinhMenu(game, null));
-//                            } else {
-//                                System.out.println("Đăng nhập thất bại!");
-//                            }
-//                            if (!State_Management.getUserResponse().daVaoTaiKhoanLanDau) {
-//                                nextScreen = new ManHinhSplash(game, new ManHinhNhaGohan(game, "admin", "traidat", "Goku", null));
-//                            } else {
-//                                if (State_Management.getUserResponse().mapHienTai.equals("Nhà Gôhan")) {
-//                                    nextScreen = new ManHinhSplash(game, new ManHinhNhaGohan(game, "admin", "traidat", "Goku", null));
-//                                } else if (State_Management.getUserResponse().mapHienTai.equals("Làng Aru")) {
-//                                    nextScreen = (new ManHinhSplash(game, new ManHinhLangAru(game, null)));
-//                                } else if (State_Management.getUserResponse().mapHienTai.equals("Đồi Hoa Cúc")) {
-//                                    nextScreen = (new ManHinhSplash(game, new ManHinhDoiHoaCuc(game, null)));
-//                                }
-//                            }
+                                if (user.mapHienTai.equals("Nhà Gôhan")) {
+                                    nextScreen = new ManHinhSplash(game, new ManHinhNhaGohan(game, "admin", "traidat", "Goku", null));
+                                } else if (user.mapHienTai.equals("Làng Aru")) {
+                                    nextScreen = (new ManHinhSplash(game, new ManHinhLangAru(game, null)));
+                                } else if (user.mapHienTai.equals("Đồi Hoa Cúc")) {
+                                    nextScreen = (new ManHinhSplash(game, new ManHinhDoiHoaCuc(game, null)));
+                                }
                             }
+                            if (!GameSocket.isConnected()) {
+                                new Thread(() -> {
+                                    try {
+                                        URL url = new URL("https://api.dangpham.id.vn/game/play");
+                                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                                        conn.setRequestMethod("POST");
+                                        conn.setRequestProperty("Authorization", "Bearer " + token);
+                                        conn.setRequestProperty("Content-Type", "application/json");
+                                        conn.setDoOutput(true);
+
+                                        int responseCode = conn.getResponseCode();
+
+                                        if (responseCode == 200 || responseCode == 201) {
+                                            Scanner scanner = new Scanner(conn.getInputStream());
+                                            StringBuilder responseBody = new StringBuilder();
+                                            while (scanner.hasNextLine())
+                                                responseBody.append(scanner.nextLine());
+                                            scanner.close();
+
+                                            JSONObject json = new JSONObject(responseBody.toString());
+                                            String gameSessionId = json.getString("gameSessionId");
+                                            State_Management.gameSessionId = gameSessionId;
+
+                                            conn.disconnect();
+                                            GameSocket.connect(token);
+                                        } else {
+                                            System.out.println("/play thất bại: " + responseCode);
+                                            conn.disconnect();
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }).start();
+                            }
+                        } else if (trangThai == TrangThaiApiGetBan.BAN) {
+                            trangThaiManHinh = TrangThaiManHinhMenu.BAN;
+                        } else if (trangThai == TrangThaiApiGetBan.SERVER_ERROR) {
+                            serverOnline = false;
                         }
                         break;
                     case 1:
