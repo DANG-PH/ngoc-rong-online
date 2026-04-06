@@ -138,12 +138,16 @@ public class Main extends Game {
                 }
 
                 // Gửi lên backend
-                List<ItemCanLuu> listItem = ApiItemService.saveItems(State_Management.getUserResponse().username, allItems);
-                if (listItem != null) {
-                    System.out.println("Đã lưu toàn bộ item của user " + State_Management.getUserResponse().username + " thành công!");
-                } else {
-                    System.err.println("Lỗi khi lưu item cho user " + State_Management.getUserResponse().username);
-                }
+                new Thread(() -> {
+                    List<ItemCanLuu> listItem =
+                        ApiItemService.saveItems(State_Management.getUserResponse().username, allItems);
+
+                    if (listItem != null) {
+                        System.out.println("Save OK");
+                    } else {
+                        System.err.println("Save fail");
+                    }
+                }).start();
             }
 
             // Lưu dữ liệu user cuối
@@ -162,7 +166,7 @@ public class Main extends Game {
                     deTuTheoUser.sucManh = State_Management.getDuLieuNguoiChoi().deTu.getSucManh();
                     currentUser.deTu = deTuTheoUser;
                 }
-                ApiService.saveGame(currentUser);
+                ApiService.saveGameAsync(currentUser);
             }
         }
 
