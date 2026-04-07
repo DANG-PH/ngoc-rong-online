@@ -13,9 +13,8 @@ import java.util.concurrent.*;
 
 public class GoogleOAuth2Desktop {
 
-    private static final String CLIENT_ID    = "977963570920-h0qat6jqr0j309m1326blhmu7516g0rj.apps.googleusercontent.com";
-    private static final String REDIRECT_URI = "http://localhost:8888/callback";
-
+    private static final String CLIENT_ID     = "977963570920-mtgqrosdib14ulgd185mkbcgk7gi4cpf.apps.googleusercontent.com";
+    private static final String CLIENT_SECRET = "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";
     public interface Callback {
         void onSuccess(String idToken);
         void onFailure(String error);
@@ -57,36 +56,35 @@ public class GoogleOAuth2Desktop {
 
     public static void login(Callback callback) {
         new Thread(() -> {
+            HttpServer server = null;
             try {
                 // Tạo nonce chống replay attack
                 String nonce = generateNonce();
 
                 // Tạo local server chờ redirect về
                 CompletableFuture<String> future = new CompletableFuture<>();
-                HttpServer server = HttpServer.create(new InetSocketAddress(8888), 0);
-
+                server = HttpServer.create(new InetSocketAddress(0), 0);
+                int port = server.getAddress().getPort();
+                String redirectUri = "http://127.0.0.1:" + port + "/callback";
                 server.createContext("/callback", exchange -> {
                     try {
                         String query = exchange.getRequestURI().getQuery();
+                        Map<String, String> params = parseQuery(query);
+                        String code = params.get("code");
+                        String error = params.get("error");
 
-                        if (query != null && query.contains("id_token")) {
-                            // Lần 2: JS gửi lại với id_token trong query
-                            Map<String, String> params = parseQuery(query);
-                            String idToken = params.get("id_token");
-
-                            String html = GameTemplates.SUCCESS_PAGE;
-                            sendHtml(exchange, html);
-
+                        if (code != null) {
+                            String idToken = exchangeCodeForToken(code, redirectUri);
+                            sendHtml(exchange, GameTemplates.SUCCESS_PAGE);
                             if (!future.isDone()) future.complete(idToken);
-
                         } else {
-                            // Lần 1: Google redirect về với fragment
-                            String html = GameTemplates.LOADING_PAGE;
-                            sendHtml(exchange, html);
+                            // Google trả về error=access_denied khi user bấm Cancel
+                            String errorMsg = error != null ? error : "Không nhận được code từ Google";
+                            sendHtml(exchange, GameTemplates.ERROR_PAGE);
+                            if (!future.isDone()) future.completeExceptionally(new Exception(errorMsg));
                         }
                     } catch (Exception e) {
-                        // Nuốt lỗi, tránh crash — connection đóng sớm là bình thường
-                        System.out.println("callback exchange lỗi (bình thường): " + e.getMessage());
+                        System.out.println("callback lỗi: " + e.getMessage());
                     }
                 });
 
@@ -96,11 +94,11 @@ public class GoogleOAuth2Desktop {
 
                 // Mở browser
                 String authUrl = "https://accounts.google.com/o/oauth2/v2/auth"
-                    + "?client_id="     + URLEncoder.encode(CLIENT_ID, "UTF-8")
-                    + "&redirect_uri="  + URLEncoder.encode(REDIRECT_URI, "UTF-8")
-                    + "&response_type=" + URLEncoder.encode("token id_token", "UTF-8")  // ← thêm encode
-                    + "&scope="         + URLEncoder.encode("openid email profile", "UTF-8")
-                    + "&nonce="         + nonce
+                    + "?client_id="             + URLEncoder.encode(CLIENT_ID, "UTF-8")
+                    + "&redirect_uri="          + URLEncoder.encode(redirectUri, "UTF-8")
+                    + "&response_type=code"     // ← đổi thành "code"
+                    + "&scope="                 + URLEncoder.encode("openid email profile", "UTF-8")
+                    + "&nonce="                 + nonce
                     + "&prompt=login";
 
 //                không có prompt        → Google tự đăng nhập luôn nếu đã có session
@@ -108,7 +106,9 @@ public class GoogleOAuth2Desktop {
 //                prompt=login           → luôn bắt nhập lại password
 //                prompt=consent         → luôn hiện màn hình xin quyền
 
-                Desktop.getDesktop().browse(new URI(authUrl));
+                System.out.println("Desktop supported = " + Desktop.isDesktopSupported());
+                System.out.println("OS = " + System.getProperty("os.name"));
+                openBrowser(authUrl);
 
                 // Chờ tối đa 3 phút
                 String idToken = future.get(3, TimeUnit.MINUTES);
@@ -124,6 +124,11 @@ public class GoogleOAuth2Desktop {
                 callback.onFailure("Hết thời gian đăng nhập");
             } catch (Exception e) {
                 callback.onFailure(e.getMessage());
+            } finally {
+                if (server != null) {
+                    server.stop(0);
+                    System.out.println("Server stopped");
+                }
             }
         }).start();
     }
@@ -197,5 +202,120 @@ public class GoogleOAuth2Desktop {
         return map;
         // kết quả: { "id_token" → "ABC", "token_type" → "Bearer" }
     }
+
+    private static void openBrowser(String url) {
+        try {
+            System.out.println("Opening browser: " + url);
+
+            if (Desktop.isDesktopSupported()) {
+                Desktop desktop = Desktop.getDesktop();
+                if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                    desktop.browse(new URI(url));
+                    return;
+                }
+            }
+
+            String os = System.getProperty("os.name").toLowerCase();
+
+            if (os.contains("win")) {
+                Runtime.getRuntime().exec(new String[]{"cmd", "/c", "start", url});
+            } else if (os.contains("mac")) {
+                Runtime.getRuntime().exec(new String[]{"open", url});
+            } else {
+                Runtime.getRuntime().exec(new String[]{"xdg-open", url});
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Không mở được browser. Copy link này:");
+            System.out.println(url);
+        }
+    }
+
+    private static String exchangeCodeForToken(String code, String redirectUri) throws Exception {
+        String body = "code="          + URLEncoder.encode(code, "UTF-8")
+            + "&client_id="            + URLEncoder.encode(CLIENT_ID, "UTF-8")
+            + "&client_secret="          + URLEncoder.encode(CLIENT_SECRET, "UTF-8")
+            + "&redirect_uri="         + URLEncoder.encode(redirectUri, "UTF-8")
+            + "&grant_type=authorization_code";
+
+        HttpURLConnection conn = (HttpURLConnection) new URL("https://oauth2.googleapis.com/token").openConnection();
+        conn.setRequestMethod("POST");
+        conn.setDoOutput(true);
+        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        conn.getOutputStream().write(body.getBytes(StandardCharsets.UTF_8));
+
+        Scanner sc = new Scanner(conn.getInputStream(), "UTF-8");
+        String response = sc.useDelimiter("\\A").next();
+        sc.close();
+
+        // Parse id_token từ JSON response
+        for (String part : response.replace("{", "").replace("}", "").split(",")) {
+            part = part.trim();
+            if (part.startsWith("\"id_token\"")) {
+                return part.split(":", 2)[1].replace("\"", "").trim();
+            }
+        }
+        throw new Exception("Không tìm thấy id_token. Response: " + response);
+    }
 }
 
+/*
+ * ============================================================
+ * FLOW THAY ĐỔI: Implicit → Authorization Code
+ * ============================================================
+ *
+ * FLOW CŨ (Implicit Flow — response_type=token id_token):
+ *   - Google redirect về /callback#id_token=ABC (fragment)
+ *   - Server Java KHÔNG đọc được fragment vì browser không gửi # lên server
+ *   - Phải dùng trick: trả HTML + JS về browser
+ *   - JS đọc fragment rồi redirect lại /callback?id_token=ABC (query)
+ *   - Server mới đọc được id_token
+ *   - Vấn đề 1: Google đã tắt Implicit Flow cho Desktop App → lỗi unsupported_response_type
+ *   - Vấn đề 2: nếu cố áp dụng follow đó thì server java phải lắng nghe 1 port
+ *               -> xuất hiện 2 vấn đề conflict nhau
+ *               -> nếu server chỉ bind 1 port (ví dụ 8888) thì logic chạy ổn nhưng nếu muốn scale lên multi cùng lúc hoặc port đang bị chặn,...
+ *               -> nếu server bind port mà os cấp random thì lúc này gg cloud platform cần add 65k port(điều này gần như là không thể)
+ *
+ * FLOW MỚI (Authorization Code Flow — response_type=code):
+ *   - Google redirect về /callback?code=ABC (query, không phải fragment)
+ *   - Server Java đọc code trực tiếp từ query → không cần JS trick nữa
+ *   - Server gọi POST https://oauth2.googleapis.com/token với:
+ *       code, client_id, client_secret, redirect_uri, grant_type=authorization_code
+ *   - Google trả về JSON: { "id_token": "...", "access_token": "..." }
+ *   - Parse id_token từ JSON → hoàn tất
+ *   - LOADING_PAGE không còn cần thiết nữa
+ *
+ * ============================================================
+ * exchangeCodeForToken(String code, String redirectUri)
+ * ============================================================
+ *
+ *   Đổi authorization code (dùng 1 lần, hết hạn nhanh) lấy id_token thật.
+ *
+ *   Input:
+ *     - code       : code Google trả về trong query /callback?code=ABC
+ *     - redirectUri: phải khớp chính xác với redirect_uri đã gửi lúc mở browser
+ *                    (Google dùng để xác minh, không phải để redirect thêm lần nữa)
+ *
+ *   POST body gửi lên https://oauth2.googleapis.com/token:
+ *     - code             : authorization code
+ *     - client_id        : định danh app
+ *     - client_secret    : Desktop App vẫn cần secret (khác với PKCE flow)
+ *     - redirect_uri     : phải khớp với lúc request
+ *     - grant_type       : cố định là "authorization_code"
+ *
+ *   Response JSON:
+ *     { "access_token": "...", "id_token": "...", "expires_in": 3599, ... }
+ *
+ *   Parse thủ công (không dùng thư viện JSON) → tìm field "id_token" → trả về.
+ *
+ * ============================================================
+ * LƯU Ý BẢO MẬT
+ * ============================================================
+ *
+ *   - client_secret nằm trong code → chỉ an toàn cho desktop app (người dùng tin tưởng)
+ *   - Về lý thuyết user có thể decompile và lấy secret → nhưng đây là limitation
+ *     của Desktop OAuth, Google chấp nhận rủi ro này (documented)
+ *   - TODO: kiểm tra nonce trong id_token có khớp với nonce đã gửi không
+ *           → đảm bảo token do chính request này tạo ra, không phải replay attack
+ */
