@@ -2,8 +2,6 @@ package com.dang.dragonboy.network;
 
 import com.badlogic.gdx.Gdx;
 import com.dang.dragonboy.network.Templates.GameTemplates;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpServer;
 import java.awt.Desktop;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
@@ -21,149 +19,104 @@ public class GoogleOAuth2Desktop {
     }
 
     /*
-    login() chạy trong Thread mới
-    │
-    ├─ tạo future (hộp rỗng)
-    ├─ tạo HttpServer lắng nghe cổng 8888
-    ├─ đăng ký xử lý /callback (chưa chạy, chỉ đăng ký)
-    ├─ server.start()
-    ├─ mở browser → https://accounts.google.com/...
-    │
-    ├─ future.get(3 phút)  ◄─── CHẶN LẠI, ngủ chờ ở đây
-    │         │
-    │         │            ┌─── Thread HTTP (do server tạo) ───────────────┐
-    │         │            │                                                │
-    │         │            │  Google redirect về /callback#id_token=ABC    │
-    │         │            │  → query rỗng → vào nhánh else                │
-    │         │            │  → trả HTML + JS cho browser                  │
-    │         │            │                                                │
-    │         │            │  JS chạy trong browser:                       │
-    │         │            │    hash = "#id_token=ABC"                     │
-    │         │            │    redirect → /callback?id_token=ABC          │
-    │         │            │                                                │
-    │         │            │  Browser gọi lại /callback?id_token=ABC       │
-    │         │            │  → query có id_token → vào nhánh if           │
-    │         │            │  → parseQuery → idToken = "ABC"               │
-    │         │            │  → trả HTML "Đăng nhập thành công"            │
-    │         │            │  → future.complete("ABC")  ← bỏ vào hộp      │
-    │         │            └────────────────────────────────────────────────┘
-    │         │
-    │         └─── thức dậy, idToken = "ABC"
-    │
-    ├─ server.stop()
-    ├─ callback.onSuccess(idToken) -> xong
-    * */
+    setSoTimeout(180000)
+    openBrowser(authUrl)
+    accept()  ←─── BLOCK tại đây chờ...
+                   │
+                   │  có request trong 3p
+                   ▼
+    // Đọc HTTP request        ← chạy tiếp
+    BufferedReader reader = ...
+    requestLine = reader.readLine()
 
+    // Parse code
+    ...
+
+    // Trả HTML
+    out.write(...)
+    client.close()
+
+    // Gọi callback
+    callback.onSuccess(idToken)  hoặc  callback.onFailure(...)
+    Còn nếu không có request trong 3p:
+    accept()  ←─── chờ hết 180s
+                   │
+                   │  timeout!
+                   ▼
+    catch (SocketTimeoutException e) {
+        callback.onFailure("Hết thời gian đăng nhập")  ← nhảy thẳng vào đây
+    }
+    * */
     public static void login(Callback callback) {
         new Thread(() -> {
-            HttpServer server = null;
+            java.net.ServerSocket serverSocket = null;
             try {
-                // Tạo nonce chống replay attack
                 String nonce = generateNonce();
 
-                // Tạo local server chờ redirect về
-                CompletableFuture<String> future = new CompletableFuture<>();
-                server = HttpServer.create(new InetSocketAddress(0), 0);
-                int port = server.getAddress().getPort();
+                // Dùng ServerSocket thuần thay HttpServer
+                serverSocket = new java.net.ServerSocket(0); // port random
+                serverSocket.setSoTimeout(180000); // 3 phút
+                int port = serverSocket.getLocalPort();
+
                 String redirectUri = "http://127.0.0.1:" + port + "/callback";
-                server.createContext("/callback", exchange -> {
-                    try {
-                        String query = exchange.getRequestURI().getQuery();
-                        Map<String, String> params = parseQuery(query);
-                        String code = params.get("code");
-                        String error = params.get("error");
-
-                        if (code != null) {
-                            String idToken = exchangeCodeForToken(code, redirectUri);
-                            sendHtml(exchange, GameTemplates.SUCCESS_PAGE);
-                            if (!future.isDone()) future.complete(idToken);
-                        } else {
-                            // Google trả về error=access_denied khi user bấm Cancel
-                            String errorMsg = error != null ? error : "Không nhận được code từ Google";
-                            sendHtml(exchange, GameTemplates.ERROR_PAGE);
-                            if (!future.isDone()) future.completeExceptionally(new Exception(errorMsg));
-                        }
-                    } catch (Exception e) {
-                        System.out.println("callback lỗi: " + e.getMessage());
-                    }
-                });
-
-                // có req về thì server tạo 1 thread(java) mới để xử lí
-                server.setExecutor(Executors.newFixedThreadPool(4)); // tối đa 4 thread
-                server.start();
-
-                // Mở browser
                 String authUrl = "https://accounts.google.com/o/oauth2/v2/auth"
-                    + "?client_id="             + URLEncoder.encode(CLIENT_ID, "UTF-8")
-                    + "&redirect_uri="          + URLEncoder.encode(redirectUri, "UTF-8")
-                    + "&response_type=code"     // ← đổi thành "code"
-                    + "&scope="                 + URLEncoder.encode("openid email profile", "UTF-8")
-                    + "&nonce="                 + nonce
+                    + "?client_id="    + URLEncoder.encode(CLIENT_ID, "UTF-8")
+                    + "&redirect_uri=" + URLEncoder.encode(redirectUri, "UTF-8")
+                    + "&response_type=code"
+                    + "&scope="        + URLEncoder.encode("openid email profile", "UTF-8")
+                    + "&nonce="        + nonce
                     + "&prompt=login";
 
-//                không có prompt        → Google tự đăng nhập luôn nếu đã có session
-//                prompt=select_account  → luôn hiện màn hình chọn tài khoản
-//                prompt=login           → luôn bắt nhập lại password
-//                prompt=consent         → luôn hiện màn hình xin quyền
-
-                System.out.println("Desktop supported = " + Desktop.isDesktopSupported());
-                System.out.println("OS = " + System.getProperty("os.name"));
                 openBrowser(authUrl);
 
-                // Chờ tối đa 3 phút
-                String idToken = future.get(3, TimeUnit.MINUTES);
-                server.stop(0);
+                java.net.Socket client = serverSocket.accept(); // block đến khi có kết nối
 
-                if (idToken != null) {
-                    callback.onSuccess(idToken);
-                } else {
-                    callback.onFailure("Không lấy được id_token");
+                // Đọc HTTP request
+                java.io.BufferedReader reader = new java.io.BufferedReader(
+                    new java.io.InputStreamReader(client.getInputStream()));
+                String requestLine = reader.readLine(); // "GET /callback?code=xxx HTTP/1.1"
+
+                // Parse code từ request line
+                String code = null;
+                String error = null;
+                if (requestLine != null && requestLine.contains("?")) {
+                    String query = requestLine.split(" ")[1]; // "/callback?code=xxx"
+                    query = query.substring(query.indexOf("?") + 1); // "code=xxx"
+                    Map<String, String> params = parseQuery(query);
+                    code = params.get("code");
+                    error = params.get("error");
                 }
 
-            } catch (TimeoutException e) {
+                // Trả HTML về browser
+                String html = code != null ? GameTemplates.SUCCESS_PAGE : GameTemplates.ERROR_PAGE;
+                byte[] htmlBytes = html.getBytes(StandardCharsets.UTF_8);
+                java.io.OutputStream out = client.getOutputStream();
+                out.write(("HTTP/1.1 200 OK\r\n"
+                    + "Content-Type: text/html; charset=UTF-8\r\n"
+                    + "Content-Length: " + htmlBytes.length + "\r\n"
+                    + "Connection: close\r\n"
+                    + "\r\n").getBytes());
+                out.write(htmlBytes);
+                out.flush();
+                client.close();
+
+                if (code != null) {
+                    String idToken = exchangeCodeForToken(code, redirectUri);
+                    callback.onSuccess(idToken);
+                } else {
+                    callback.onFailure(error != null ? error : "Không nhận được code");
+                }
+
+            } catch (java.net.SocketTimeoutException e) {
                 callback.onFailure("Hết thời gian đăng nhập");
             } catch (Exception e) {
                 callback.onFailure(e.getMessage());
             } finally {
-                if (server != null) {
-                    server.stop(0);
-                    System.out.println("Server stopped");
+                if (serverSocket != null) {
+                    try { serverSocket.close(); } catch (Exception ignored) {}
                 }
             }
         }).start();
-    }
-
-    /*
-    exchange chứa cả request lẫn response của một kết nối cụ thể.
-    Browser                          Server Java
-      │                                   │
-      │  GET /callback ─────────────────► │
-      │                                   │  exchange = cái kết nối này
-      │                                   │  exchange.getRequestURI()  → đọc request
-      │                                   │  exchange.getResponseBody() → ghi response
-      │  ◄──────── HTML ─────────────────  │
-    exchange.getResponseBody() trả về stream ghi thẳng vào socket của browser đang chờ — server biết ghi vào đâu vì exchange đại diện cho đúng cái kết nối đó.
-    Mỗi request đến thì server tạo 1 exchange riêng, nên không bao giờ nhầm giữa các browser/request khác nhau.
-
-    exchange là đại diện cho 1 cặp request - response.
-    Giống req và res trong NestJS/Express, nhưng gộp làm 1:
-    typescript// NestJS - tách riêng 2 object
-    handler(@Req() req, @Res() res) {
-        req.query      // đọc query
-        res.send(html) // gửi response
-    }
-    java// Java low level - gộp chung 1 object
-    handler(HttpExchange exchange) {
-        exchange.getRequestURI().getQuery() // đọc query
-        exchange.getResponseBody()          // gửi response
-    }
-    * */
-    private static void sendHtml(HttpExchange exchange, String html) throws Exception {
-        byte[] bytes = html.getBytes(StandardCharsets.UTF_8);
-        exchange.getResponseHeaders().set("Content-Type", "text/html; charset=UTF-8");
-        exchange.sendResponseHeaders(200, bytes.length);
-        exchange.getResponseBody().write(bytes);
-        exchange.getResponseBody().close();
     }
 
     // Tạo chuỗi ngẫu nhiên để chống replay attack.

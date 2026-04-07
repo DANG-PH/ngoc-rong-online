@@ -14,9 +14,6 @@ import com.dang.dragonboy.network.DTO.UserResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import com.google.gson.JsonParser;
@@ -729,34 +726,53 @@ public class ApiService {
     }
 
     public static LoginWithGoogleResponse loginWithGoogle(String idToken) {
+        HttpURLConnection conn = null;
         try {
             String body = "{\"tokenFromGoogle\":\"" + idToken + "\"}";
 
-            HttpClient client = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/auth/login-google"))
-                .header("Content-Type", "application/json")
-                .header("x-platform", "game")
-                .POST(HttpRequest.BodyPublishers.ofString(body))
-                .build();
+            URL url = new URL(BASE_URL + "/auth/login-google");
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("Accept", "application/json");
+            conn.setRequestProperty("x-platform", "game");
+            conn.setConnectTimeout(10000);
+            conn.setReadTimeout(10000);
+            conn.setDoOutput(true);
 
-            HttpResponse<String> response = client.send(request,
-                HttpResponse.BodyHandlers.ofString());
+            try (OutputStream os = conn.getOutputStream()) {
+                os.write(body.getBytes(StandardCharsets.UTF_8));
+            }
 
-            // ✅ Dùng Gson thay vì parse thủ công
-            JsonObject json = JsonParser.parseString(response.body()).getAsJsonObject();
+            int status = conn.getResponseCode();
 
-            LoginWithGoogleResponse result = new LoginWithGoogleResponse();
-            result.accessToken  = json.get("access_token").getAsString();
-            result.refreshToken = json.get("refresh_token").getAsString();
-            result.authId       = json.get("auth_id").getAsInt();
-            result.register     = json.has("register") && json.get("register").getAsBoolean();
-            return result;
+            if (status == 200 || status == 201) {
+                try (BufferedReader br = new BufferedReader(
+                    new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
+
+                    JsonObject json = JsonParser.parseReader(br).getAsJsonObject();
+
+                    LoginWithGoogleResponse result = new LoginWithGoogleResponse();
+                    result.accessToken  = json.get("access_token").getAsString();
+                    result.refreshToken = json.get("refresh_token").getAsString();
+                    result.authId       = json.get("auth_id").getAsInt();
+                    result.register     = json.has("register") && json.get("register").getAsBoolean();
+                    return result;
+                }
+            } else {
+                try (BufferedReader br = new BufferedReader(
+                    new InputStreamReader(conn.getErrorStream(), StandardCharsets.UTF_8))) {
+                    StringBuilder error = new StringBuilder();
+                    String line;
+                    while ((line = br.readLine()) != null) error.append(line.trim());
+                }
+            }
 
         } catch (Exception e) {
-            System.out.println("loginWithGoogle lỗi: " + e.getMessage());
-            return null;
+        } finally {
+            if (conn != null) conn.disconnect();
         }
+        return null;
     }
 
     public static class LoginWithGoogleResponse {
