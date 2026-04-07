@@ -119,122 +119,132 @@ public class GameTemplates {
     <head>
         <meta charset="UTF-8">
         <style>
-            @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Rajdhani:wght@400;600&display=swap');
-            * { margin: 0; padding: 0; box-sizing: border-box; }
+                @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Rajdhani:wght@400;600&display=swap');
+                * { margin: 0; padding: 0; box-sizing: border-box; }
 
-            body {
-                font-family: 'Rajdhani', sans-serif;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                background: radial-gradient(ellipse at center, #2b0000 0%, #050000 70%);
-                overflow: hidden;
-            }
+                body {
+                    font-family: 'Rajdhani', sans-serif;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100vh;
+                    background: radial-gradient(ellipse at center, #2a0505 0%, #050000 70%);
+                    overflow: hidden;
+                }
 
-            .particles { position: fixed; width: 100%; height: 100%; pointer-events: none; }
-            .particle {
-                position: absolute;
-                width: 3px; height: 3px;
-                border-radius: 50%;
-                animation: float linear infinite;
-                opacity: 0;
-            }
-            @keyframes float {
-                0%   { transform: translateY(100vh) scale(0); opacity: 0; }
-                10%  { opacity: 1; }
-                90%  { opacity: 1; }
-                100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
-            }
+                .particles { position: fixed; width: 100%; height: 100%; pointer-events: none; }
+                .particle {
+                    position: absolute;
+                    width: 3px; height: 3px;
+                    border-radius: 50%;
+                    animation: float linear infinite;
+                    opacity: 0;
+                }
 
-            .card {
-                position: relative;
-                background: linear-gradient(145deg, rgba(50,5,5,0.95), rgba(10,0,0,0.98));
-                border: 1px solid rgba(200,30,30,0.4);
-                border-radius: 20px;
-                padding: 48px 56px;
-                text-align: center;
-                box-shadow:
-                    0 0 40px rgba(200, 30, 30, 0.25),
-                    0 0 80px rgba(255, 80, 0, 0.1),
-                    inset 0 1px 0 rgba(255,255,255,0.05);
-                animation: appear 0.6s ease-out;
-            }
-            @keyframes appear {
-                from { opacity: 0; transform: scale(0.85) translateY(20px); }
-                to   { opacity: 1; transform: scale(1) translateY(0); }
-            }
+                @keyframes float {
+                    0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+                    10%  { opacity: 1; }
+                    90%  { opacity: 1; }
+                    100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+                }
 
-            .corner { position: absolute; width: 16px; height: 16px; border-color: #cc0000; border-style: solid; }
-            .corner.tl { top: 10px; left: 10px;   border-width: 2px 0 0 2px; }
-            .corner.tr { top: 10px; right: 10px;  border-width: 2px 2px 0 0; }
-            .corner.bl { bottom: 10px; left: 10px;  border-width: 0 0 2px 2px; }
-            .corner.br { bottom: 10px; right: 10px; border-width: 0 2px 2px 0; }
+                .card {
+                    position: relative;
+                    background: linear-gradient(145deg, rgba(50,5,5,0.97), rgba(10,0,0,0.99));
+                    border: 1px solid rgba(220,50,50,0.45);
+                    border-radius: 20px;
+                    padding: 48px 56px;
+                    text-align: center;
+                    box-shadow:
+                        0 0 40px rgba(220, 50, 50, 0.25),
+                        0 0 80px rgba(255, 100, 0, 0.1),
+                        inset 0 1px 0 rgba(255,255,255,0.04);
+                    animation: appear 0.6s ease-out, shake 0.5s ease-out 0.5s;
+                }
 
-            .avatar-ring { position: relative; width: 110px; height: 110px; margin: 0 auto 24px; }
-            .avatar-ring::before {
-                content: '';
-                position: absolute;
-                inset: -4px;
-                border-radius: 50%;
-                /* Hào quang đỏ - hồng đỏ - cam lửa của Goku God */
-                background: conic-gradient(#cc0000, #ff4500, #ff6b6b, #cc0000);
-                animation: spin 2s linear infinite;
-            }
-            @keyframes spin { to { transform: rotate(360deg); } }
+                @keyframes appear {
+                    from { opacity: 0; transform: scale(0.85) translateY(20px); }
+                    to   { opacity: 1; transform: scale(1) translateY(0); }
+                }
 
-            .avatar-ring img {
-                position: relative;
-                width: 100%; height: 100%;
-                border-radius: 50%;
-                object-fit: cover;
-                object-position: center top;
-                border: 3px solid #050000;
-                z-index: 1;
-            }
+                @keyframes shake {
+                    0%,100% { transform: translateX(0); }
+                    20% { transform: translateX(-6px); }
+                    40% { transform: translateX(6px); }
+                    60% { transform: translateX(-4px); }
+                    80% { transform: translateX(4px); }
+                }
 
-            .badge {
-                display: inline-block;
-                background: linear-gradient(90deg, #cc0000, #880000);
-                color: #fff;
-                font-size: 11px;
-                font-weight: 600;
-                letter-spacing: 3px;
-                text-transform: uppercase;
-                padding: 4px 14px;
-                border-radius: 20px;
-                margin-bottom: 16px;
-            }
+                .corner { position: absolute; width: 16px; height: 16px; border-color: #dc3232; border-style: solid; }
+                .corner.tl { top: 10px; left: 10px;  border-width: 2px 0 0 2px; }
+                .corner.tr { top: 10px; right: 10px;  border-width: 2px 2px 0 0; }
+                .corner.bl { bottom: 10px; left: 10px;  border-width: 0 0 2px 2px; }
+                .corner.br { bottom: 10px; right: 10px;  border-width: 0 2px 2px 0; }
 
-            h2 {
-                font-family: 'Cinzel', serif;
-                font-size: 26px;
-                color: #fff;
-                text-shadow: 0 0 15px rgba(200, 30, 30, 0.9);
-                margin-bottom: 10px;
-                letter-spacing: 1px;
-            }
+                .avatar-ring { position: relative; width: 110px; height: 110px; margin: 0 auto 24px; }
+                .avatar-ring::before {
+                    content: '';
+                    position: absolute;
+                    inset: -4px;
+                    border-radius: 50%;
+                    background: conic-gradient(#dc2626, #f97316, #fbbf24, #ef4444, #dc2626);
+                    animation: spin 2s linear infinite;
+                }
 
-            p { color: #ff9999; font-size: 15px; letter-spacing: 1px; }
+                @keyframes spin { to { transform: rotate(360deg); } }
 
-            .divider {
-                width: 60px; height: 1px;
-                background: linear-gradient(90deg, transparent, #cc0000, transparent);
-                margin: 20px auto;
-            }
+                .avatar-ring img {
+                    position: relative;
+                    width: 100%; height: 100%;
+                    border-radius: 50%;
+                    object-fit: cover;
+                    border: 3px solid #050000;
+                    z-index: 1;
+                }
 
-            .power-bar { width: 180px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; margin: 16px auto 0; overflow: hidden; }
-            .power-fill {
-                height: 100%; width: 0%;
-                background: linear-gradient(90deg, #cc0000, #ff6b6b);
-                border-radius: 2px;
-                animation: fill 1.2s ease-out 0.3s forwards;
-                box-shadow: 0 0 8px #cc0000;
-            }
-            @keyframes fill { to { width: 100%; } }
-        </style>
+                .badge {
+                    display: inline-block;
+                    background: linear-gradient(90deg, #b91c1c, #dc2626);
+                    color: #fca5a5;
+                    font-size: 11px;
+                    font-weight: 600;
+                    letter-spacing: 3px;
+                    text-transform: uppercase;
+                    padding: 4px 14px;
+                    border-radius: 20px;
+                    margin-bottom: 16px;
+                }
+
+                h2 {
+                    font-family: 'Cinzel', serif;
+                    font-size: 26px;
+                    color: #fff;
+                    text-shadow: 0 0 15px rgba(220, 50, 50, 0.9);
+                    margin-bottom: 10px;
+                    letter-spacing: 1px;
+                }
+
+                p { color: #fca5a5; font-size: 15px; letter-spacing: 1px; }
+
+                .divider {
+                    width: 60px; height: 1px;
+                    background: linear-gradient(90deg, transparent, #dc2626, transparent);
+                    margin: 20px auto;
+                }
+
+                .power-bar { width: 180px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; margin: 16px auto 0; overflow: hidden; }
+                .power-fill {
+                    height: 100%; width: 0%;
+                    background: linear-gradient(90deg, #dc2626, #f97316, #fbbf24);
+                    border-radius: 2px;
+                    animation: fill 1.2s ease-out 0.3s forwards;
+                    box-shadow: 0 0 8px #dc2626;
+                }
+                @keyframes fill { to { width: 100%; } }
+            </style>
     </head>
     <body>
+
         <div class="particles" id="particles"></div>
 
         <div class="card">
@@ -244,7 +254,7 @@ public class GameTemplates {
             <div class="corner br"></div>
 
             <div class="avatar-ring">
-                <img src="https://avatarfiles.alphacoders.com/857/85715.png" alt="goku god"/>
+                <img src="https://avatarfiles.alphacoders.com/857/85715.png" alt="avatar"/>
             </div>
 
             <div class="badge">Ngọc Rồng Online</div>
@@ -253,8 +263,7 @@ public class GameTemplates {
 
             <div class="divider"></div>
 
-            <p>Đã hủy hoặc có lỗi xảy ra.</p>
-            <p>Quay lại game và thử lại!</p>
+            <p>Sai tài khoản hoặc mật khẩu!</p>
 
             <div class="power-bar">
                 <div class="power-fill"></div>
@@ -269,8 +278,7 @@ public class GameTemplates {
                 p.style.left = Math.random() * 100 + 'vw';
                 p.style.animationDuration = (3 + Math.random() * 4) + 's';
                 p.style.animationDelay = (Math.random() * 5) + 's';
-                // Tông đỏ - hồng đỏ - cam lửa
-                const colors = ['#cc0000','#ff4500','#ff6b6b','#ffaaaa'];
+                const colors = ['#dc2626','#ef4444','#f97316','#fbbf24','#fff1f1'];
                 p.style.background = colors[Math.floor(Math.random() * colors.length)];
                 container.appendChild(p);
             }
