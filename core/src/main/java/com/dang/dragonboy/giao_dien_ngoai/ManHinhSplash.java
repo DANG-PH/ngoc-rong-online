@@ -87,6 +87,24 @@ public class ManHinhSplash implements Screen {
         batch.end();
 
         if (thoiGian > 1f) {
+            /*
+            Chỗ này có trade off
+            Tại sao lúc mới vào game cần gọi new Constructor map ở đây
+            Còn khi vào game thì khi chuyển map gọi trực tiếp new Map rồi truyền map đó vào đây
+
+            Tại vì constructor của các map khởi tạo lag chủ yếu ở phần VeHUD, NhanVat, DuLieuNguoiChoi
+            Những cái này khi vừa vào game phải tạo từ đầu, dẫn đến nếu gọi new Map ở màn hình menu lúc vừa vào game
+            -> Dẫn đến đơ tại màn hình menu
+            Còn khi đã vào game rồi, chuyển map thì k cần tạo NhanVat, VeHUD, ... nữa
+            Constructor thì dùng các data cũ
+            nên giảm lag và có thể new trực tiếp
+
+            Constructor ở đây có tác dụng có thể fetch api gọi để lấy data NPC
+
+            nên là khi đã trong game thì npc sẽ luôn được xuất hiện
+            còn khi vừa vào game thì gọi constructor ở đây ( tại vì k muốn màn hình menu bị đơ dẫn đến UX kém)
+            nhưng trade off là khi vừa vào game gọi constructor ở đây thì sẽ fetch api chậm hơn trước khi vào game nếu mạng kém
+            */
             if (manHinhTiepTheoSupplier != null) {
                 game.setScreen(manHinhTiepTheoSupplier.get()); // tạo ở đây, lag bị che
             } else if (manHinhTiepTheo != null) {

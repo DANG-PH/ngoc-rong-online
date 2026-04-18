@@ -31,6 +31,7 @@ public abstract class MapCoBan {
         MapDataCache cache = MapDataCache.getInstance();
         if (cache.daCo(mapId)) {
             apDungDuLieuServer(cache.lay(mapId));
+            System.out.println("Có data sẵn từ cache HIT");
             onHoanThanh.run();
             return;
         }

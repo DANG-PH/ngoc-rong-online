@@ -12,6 +12,8 @@ import com.dang.dragonboy.network.DTO.DeTuTheoUser;
 import com.dang.dragonboy.network.DTO.ItemWeb;
 import com.dang.dragonboy.network.DTO.UseItemResponse;
 import com.dang.dragonboy.network.DTO.UserResponse;
+import com.dang.dragonboy.xu_ly_map.MapDataCache;
+import com.dang.dragonboy.xu_ly_map.MapIdHelper;
 import com.dang.dragonboy.xu_ly_map.NpcServerData;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -219,7 +221,20 @@ public class ApiService {
                     State_Management.setRefresh_token(refresh_token);
 //                    System.out.println("verify otp thanh cong");
 
-                    return ApiService.getProfile(access_token);
+                    UserResponse user = ApiService.getProfile(access_token);
+
+                    // Prefetch trước và đưa vào cache để giải quyết bài toán delay NPC
+                    // Đọc comment phần thoiGian > 1f trong ManHinhSplash
+                    if (user != null) {
+                        int mapId = MapIdHelper.layMapId(user.mapHienTai);
+                        if (mapId != 0) {
+                            ApiService.layNpcCuaMap(mapId, data -> {
+                                MapDataCache.getInstance().luu(mapId, data);
+                            });
+                        }
+                    }
+
+                    return user;
                 }
                 return null;
             } else {
