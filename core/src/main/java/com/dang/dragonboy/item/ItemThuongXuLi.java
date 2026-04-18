@@ -2,6 +2,7 @@ package com.dang.dragonboy.item;
 
 import java.util.*;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
 public class ItemThuongXuLi {
@@ -18,6 +19,21 @@ public class ItemThuongXuLi {
     private static final Map<String, Map<LoaiItem, int[]>> CHISO_ITEM = new HashMap<>();
     // Dữ liệu sức mạnh yêu cầu theo hành tinh + id + loại
     private static final Map<String, Map<LoaiItem, Long>> SMYC_ITEM = new HashMap<>();
+
+    // Mapping tên → (id, loai, hanhTinh)
+    private record ItemInfo(String id, LoaiItem loai, String hanhTinh) {}
+
+    private static final Map<String, ItemInfo> TEN_TO_INFO = new HashMap<>();
+
+    static {
+        TEN_TO_INFO.put("Áo võ kame",   new ItemInfo("set_cam", LoaiItem.AO,   "traidat"));
+        TEN_TO_INFO.put("Quần võ kame", new ItemInfo("set_cam", LoaiItem.QUAN, "traidat"));
+        TEN_TO_INFO.put("Găng võ kame", new ItemInfo("set_cam", LoaiItem.GANG, "traidat"));
+        TEN_TO_INFO.put("Giày võ kame", new ItemInfo("set_cam", LoaiItem.GIAY, "traidat"));
+        TEN_TO_INFO.put("Rada cấp 1",   new ItemInfo("rada1",   LoaiItem.RADA, "all"));
+        TEN_TO_INFO.put("Bông tai Porata", new ItemInfo("bongtaic1", LoaiItem.BONGTAI, "all"));
+        TEN_TO_INFO.put("Giáp luyện tập cấp 1", new ItemInfo("glt_c1", LoaiItem.GIAPLUYENTAP, "all"));
+    }
 
     static {
         // Ví dụ set_cam traidat
@@ -105,5 +121,37 @@ public class ItemThuongXuLi {
             };
         }
         return null;
+    }
+
+    public static Item taoItemTuTen(String tenItem) {
+        ItemInfo info = TEN_TO_INFO.get(tenItem);
+        if (info == null) {
+            Gdx.app.error("ItemThuongXuLi", "Không tìm thấy item: " + tenItem);
+            return null;
+        }
+
+        // Item đặc biệt — không dùng taoItemThuong được vì constructor khác
+        if (info.loai() == LoaiItem.BONGTAI) {
+            return new Item(
+                "bongtaic1", "Bông tai Porata", LoaiItem.BONGTAI,
+                "vatpham/vatphamgame/bongtai/bongtaic1.png",
+                "Sử dụng để hợp thể với đệ tử", 1,
+                new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+                "all", 1500000L, null, 0, 0, 0, -1
+            );
+        }
+
+        if (info.loai() == LoaiItem.GIAPLUYENTAP) {
+            return new Item(
+                "glt_c1", "Giáp luyện tập cấp 1", LoaiItem.GIAPLUYENTAP,
+                "vatpham/vatphamgame/giapluyentap/gltc1.png",
+                "Khi mặc vào sẽ tích lũy thời gian luyện tập, khi cởi ra nếu sẽ tăng sức đánh 10% và Crit 15%, ST Crit 30%", 1,
+                new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+                "all", 10_000_000L, null, 0, 0, 0, 0
+            );
+        }
+
+        // Item thường — dùng taoItemThuong
+        return taoItemThuong(info.id(), info.loai(), info.hanhTinh());
     }
 }

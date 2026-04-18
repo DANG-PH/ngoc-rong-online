@@ -8,23 +8,17 @@ import java.net.URL;
 import com.badlogic.gdx.Gdx;
 import com.dang.dragonboy.du_lieu.LocalStorage;
 import com.dang.dragonboy.du_lieu.State_Management;
-import com.dang.dragonboy.network.DTO.DeTuTheoUser;
-import com.dang.dragonboy.network.DTO.ItemWeb;
-import com.dang.dragonboy.network.DTO.UseItemResponse;
-import com.dang.dragonboy.network.DTO.UserResponse;
+import com.dang.dragonboy.network.DTO.*;
 import com.dang.dragonboy.xu_ly_map.MapDataCache;
 import com.dang.dragonboy.xu_ly_map.MapIdHelper;
 import com.dang.dragonboy.xu_ly_map.NpcServerData;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Consumer;
 
-import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-import com.google.gson.JsonArray;
 
 public class ApiService {
     private static final String BASE_URL = "https://api.dangpham.id.vn";
@@ -804,7 +798,7 @@ public class ApiService {
     public static void layNpcCuaMap(int mapId, Consumer<List<NpcServerData>> onHoanThanh) {
         new Thread(() -> {
             try {
-                URL url = new URL("https://api.ngocrongdark.com/game-data/map/npcs?map_id=" + mapId);
+                URL url = new URL(BASE_URL +"/game-data/map/npcs?map_id=" + mapId);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setConnectTimeout(5000);
@@ -845,6 +839,57 @@ public class ApiService {
 
             } catch (Exception e) {
                 Gdx.app.error("ApiService", "layNpcCuaMap exception", e);
+            }
+        }).start();
+    }
+
+    public static void layShopCuaNpc(int npcBaseId, Consumer<List<ShopItemServerData>> onHoanThanh) {
+        new Thread(() -> {
+            try {
+                URL url = new URL(BASE_URL +"/game-data/npc-shop?npc_base_id=" + npcBaseId);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setConnectTimeout(5000);
+                conn.setReadTimeout(5000);
+
+                int status = conn.getResponseCode();
+                if (status != 200) {
+                    Gdx.app.error("ApiService", "layShopCuaNpc thất bại, HTTP: " + status);
+                    return;
+                }
+
+                BufferedReader br = new BufferedReader(
+                    new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8)
+                );
+                StringBuilder response = new StringBuilder();
+                String line;
+                while ((line = br.readLine()) != null) response.append(line.trim());
+                br.close();
+
+                JsonArray itemsArray = JsonParser.parseString(response.toString())
+                    .getAsJsonObject()
+                    .getAsJsonArray("items");
+
+                List<ShopItemServerData> danhSach = new ArrayList<>();
+                for (var element : itemsArray) {
+                    JsonObject obj = element.getAsJsonObject();
+                    ShopItemServerData item = new ShopItemServerData();
+                    item.id         = obj.get("id").getAsInt();
+                    item.tenItem    = obj.get("tenItem").getAsString();
+                    JsonElement giaEl = obj.get("gia");
+                    item.gia = giaEl.isJsonObject()
+                        ? ApiService.parseProtoLong(giaEl.getAsJsonObject())
+                        : giaEl.getAsLong();
+                    item.loaiTien   = obj.get("loaiTien").getAsString();
+                    item.tab        = obj.get("tab").getAsString();
+                    item.is_active  = obj.get("is_active").getAsBoolean();
+                    danhSach.add(item);
+                }
+
+                onHoanThanh.accept(danhSach);
+
+            } catch (Exception e) {
+                Gdx.app.error("ApiService", "layShopCuaNpc exception", e);
             }
         }).start();
     }

@@ -3,48 +3,32 @@ package com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle;
 import com.badlogic.gdx.graphics.Texture;
 import com.dang.dragonboy.item.Item;
 import com.dang.dragonboy.item.LoaiItem;
+import com.dang.dragonboy.network.DTO.ShopItemServerData;
+import com.dang.dragonboy.xu_ly_map.npc.ShopCache;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class ItemGia {
-    private static final Map<String, Map<LoaiTien, Long>> bangGia = new HashMap<>();
+    private static final int NPC_BASE_ID = 3;
 
-    static {
-        themGia("Áo võ kame",LoaiTien.VANG, 500_000L);
-        themGia("Quần võ kame",LoaiTien.VANG, 450_000L);
-        themGia("Găng võ kame",LoaiTien.VANG, 800_000L);
-        themGia("Giày võ kame", LoaiTien.VANG,350_000L);
-        themGia("Rada cấp 1", LoaiTien.VANG,10_000L);
-        themGia("Găng thần linh",LoaiTien.VANG, 1_000_000_000L);
-        themGia("Bông tai Porata",LoaiTien.NGOC, 1000);
-        themGia("Giáp luyện tập cấp 1",LoaiTien.VANG, 10_000_000L);
-    }
-
-    // Hàm tiện ích để thêm giá
-    private static void themGia(String tenItem, LoaiTien loaiTien, long giaTien) {
-        Map<LoaiTien, Long> gia = bangGia.get(tenItem);
-        if (gia == null) {
-            gia = new HashMap<>();
-            bangGia.put(tenItem, gia);
-        }
-        gia.put(loaiTien, giaTien);
-    }
-
-    // Lấy giá theo loại tiền
     public static long layGiaItem(Item item) {
-        Map<LoaiTien, Long> gia = bangGia.get(item.getTenItem());
-        if (gia == null) return 0L;
-
-        LoaiTien loai = layLoaiTien(item);
-        return gia.getOrDefault(loai, 0L);
+        ShopItemServerData data = timTrongCache(item.getTenItem());
+        return data != null ? data.gia : 0L;
     }
 
     public static LoaiTien layLoaiTien(Item item) {
-        Map<LoaiTien, Long> gia = bangGia.get(item.getTenItem());
-        for (LoaiTien loai : gia.keySet()) {
-            return loai; // vì chỉ có 1 phần tử
+        ShopItemServerData data = timTrongCache(item.getTenItem());
+        if (data == null) return LoaiTien.VANG;
+        return data.loaiTien.equals("NGOC") ? LoaiTien.NGOC : LoaiTien.VANG;
+    }
+
+    private static ShopItemServerData timTrongCache(String tenItem) {
+        ShopCache cache = ShopCache.getInstance();
+        if (!cache.daCo(NPC_BASE_ID)) return null;
+        for (ShopItemServerData s : cache.lay(NPC_BASE_ID)) {
+            if (s.tenItem.equals(tenItem)) return s;
         }
-        return null; // nếu không có;
+        return null;
     }
 }

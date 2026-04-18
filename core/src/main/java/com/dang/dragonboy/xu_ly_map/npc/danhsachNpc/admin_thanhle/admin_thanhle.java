@@ -13,8 +13,11 @@ import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.item.Item;
 import com.dang.dragonboy.item.ItemThuongXuLi;
 import com.dang.dragonboy.item.LoaiItem;
+import com.dang.dragonboy.network.ApiService;
+import com.dang.dragonboy.network.DTO.ShopItemServerData;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.xu_ly_map.npc.Npc;
+import com.dang.dragonboy.xu_ly_map.npc.ShopCache;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.a_PHAN_LOAI_NPC.NPC_CUA_HANG;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.renderUInpc;
 
@@ -46,11 +49,37 @@ public class admin_thanhle extends renderUInpc {
 
     public float[] scrollYTrai = new float[3];
 
+    private static final int NPC_BASE_ID = 3;
+
     public admin_thanhle(Npc npc, VeHUD veHUD, DuLieuNguoiChoi duLieuNguoiChoi, NhanVat nhanVat) {
         super(npc, veHUD, duLieuNguoiChoi, nhanVat);
-        themItemVaoDanhSachAoQuan();
-        themItemVaoDanhSachPhuKien();
-        themItemVaoDanhSachDacBiet();
+        ShopCache cache = ShopCache.getInstance();
+        if (cache.daCo(NPC_BASE_ID)) {
+            apDungDuLieuShop(cache.lay(NPC_BASE_ID));
+        } else {
+            ApiService.layShopCuaNpc(NPC_BASE_ID, data -> {
+                cache.luu(NPC_BASE_ID, data);
+                Gdx.app.postRunnable(() -> apDungDuLieuShop(data));
+            });
+        }
+    }
+
+    private void apDungDuLieuShop(List<ShopItemServerData> data) {
+        danhSachItemAoQuan.clear();
+        danhSachItemPhuKien.clear();
+        danhSachItemDacBiet.clear();
+
+        for (ShopItemServerData s : data) {
+            if (!s.is_active) continue;
+            Item item = ItemThuongXuLi.taoItemTuTen(s.tenItem);
+            if (item == null) continue;
+
+            switch (s.tab) {
+                case "AO_QUAN"  -> danhSachItemAoQuan.add(item);
+                case "PHU_KIEN" -> danhSachItemPhuKien.add(item);
+                case "DAC_BIET" -> danhSachItemDacBiet.add(item);
+            }
+        }
     }
 
     @Override
