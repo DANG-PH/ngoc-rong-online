@@ -60,13 +60,13 @@ public class WorldState {
                 PlayerState ps = parsePlayer(obj);
                 if (ps != null) {
                     players.put(ps.userId, ps);
-                    System.out.println("[MapSnapshot] Thêm player userId=" + ps.userId
-                        + " gameName=" + ps.gameName
-                        + " x=" + ps.x + " y=" + ps.y
-                        + " trangthai=" + ps.trangthai
-                        + " chan=" + ps.chan
-                        + " than=" + ps.than
-                        + " dau=" + ps.dau);
+//                    System.out.println("[MapSnapshot] Thêm player userId=" + ps.userId
+//                        + " gameName=" + ps.gameName
+//                        + " x=" + ps.x + " y=" + ps.y
+//                        + " trangthai=" + ps.trangthai
+//                        + " chan=" + ps.chan
+//                        + " than=" + ps.than
+//                        + " dau=" + ps.dau);
                 }
             }
         } catch (Exception e) {

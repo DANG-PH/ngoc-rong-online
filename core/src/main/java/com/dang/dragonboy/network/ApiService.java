@@ -222,18 +222,6 @@ public class ApiService {
 //                    System.out.println("verify otp thanh cong");
 
                     UserResponse user = ApiService.getProfile(access_token);
-
-                    // Prefetch trước và đưa vào cache để giải quyết bài toán delay NPC
-                    // Đọc comment phần thoiGian > 1f trong ManHinhSplash
-                    if (user != null) {
-                        int mapId = MapIdHelper.layMapId(user.mapHienTai);
-                        if (mapId != 0) {
-                            ApiService.layNpcCuaMap(mapId, data -> {
-                                MapDataCache.getInstance().luu(mapId, data);
-                            });
-                        }
-                    }
-
                     return user;
                 }
                 return null;
@@ -312,6 +300,18 @@ public class ApiService {
             State_Management.getUserResponse().username = role_biBan[2];
 
             LocalStorage.saveLastUser(State_Management.getUserResponse().username, token); // Lưu vào file JSON
+
+            // Prefetch trước và đưa vào cache để giải quyết bài toán delay NPC
+            // Đọc comment phần thoiGian > 1f trong ManHinhSplash
+            // Để ở đây thì vì verify OTP vì xử lí đc cả case login lẫn auto-login khi token lưu vào disk và user vào lại game lần sau k cần login verifyotp nữa
+            if (user != null) {
+                int mapId = MapIdHelper.layMapId(user.mapHienTai);
+                if (mapId != 0) {
+                    ApiService.layNpcCuaMap(mapId, data -> {
+                        MapDataCache.getInstance().luu(mapId, data);
+                    });
+                }
+            }
             return user;
 
         } catch (Exception e) {
