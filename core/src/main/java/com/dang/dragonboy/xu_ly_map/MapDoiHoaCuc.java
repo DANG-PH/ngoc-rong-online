@@ -3,6 +3,9 @@ package com.dang.dragonboy.xu_ly_map;
 import com.dang.dragonboy.xu_ly_map.npc.LoaiNPC;
 
 public class MapDoiHoaCuc extends MapCoBan {
+    public MapDoiHoaCuc() {
+        this.mapId = 3;
+    }
 
     @Override
     public void taiDuLieuMap() {
@@ -11,9 +14,9 @@ public class MapDoiHoaCuc extends MapCoBan {
         danhSachDat.add(new HitboxDat(864, -38-96, 864, 175-48+38+96));
         danhSachDat.add(new HitboxDat(864*2, -38-96, 1248, 175+48+38+96));
         //npc
-        themNpc("admin_dungle", LoaiNPC.NGUOI,250,188);
-        themNpc("thay_hieu", LoaiNPC.NGUOI,864*2+300,188+48);
-        themNpc("admin_huykhoi", LoaiNPC.NGUOI,864*2-150,188-48);
+//        themNpc("admin_dungle", LoaiNPC.NGUOI,250,188);
+//        themNpc("thay_hieu", LoaiNPC.NGUOI,864*2+300,188+48);
+//        themNpc("admin_huykhoi", LoaiNPC.NGUOI,864*2-150,188-48);
     }
     @Override
     public float getChieuRongMap() {

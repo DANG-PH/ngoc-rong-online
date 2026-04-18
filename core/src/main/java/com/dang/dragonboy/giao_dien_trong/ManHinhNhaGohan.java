@@ -159,7 +159,21 @@ public class ManHinhNhaGohan implements Screen {
             hudRenderer.setDuLieuNguoiChoi(duLieu);
             // Tạo map và load địa hình
             map = new MapNhaGohan();
-            map.taiDuLieuMap();
+            map.khoiTao(() -> {
+                // callback này chạy trên GL thread khi API xong
+                // lúc này splash vẫn đang hiện → che hoàn toàn
+                this.danhSachNpc = map.LayDanhSachNpc();
+                this.npcTaiAnhMap = map.getNpcTaiAnhMap();
+                // KHÔNG setup npc.setNhanVat ở đây vì nhanVat chưa chắc ready
+                // chỉ lưu data thôi
+                for (Npc npc : danhSachNpc) {
+                    NpcTaiAnh taiAnhNpc = npcTaiAnhMap.get(npc.getTen());
+                    NpcOffset offsetNpc = map.getNpcOffset(npc.getTen());
+                    npc.setNpcTaiAnh(taiAnhNpc);
+                    npc.setNpcOffset(offsetNpc);
+                    npc.setNhanVat(nhanVat);
+                }
+            });
         } else {
             this.hudRenderer = thongtin.hud;
             this.nhanVat = thongtin.nhanVat;
@@ -175,7 +189,21 @@ public class ManHinhNhaGohan implements Screen {
                 this.map = thongtin.mapSau;
             } else {
                 this.map = new MapNhaGohan();
-                map.taiDuLieuMap();
+                map.khoiTao(() -> {
+                    // callback này chạy trên GL thread khi API xong
+                    // lúc này splash vẫn đang hiện → che hoàn toàn
+                    this.danhSachNpc = map.LayDanhSachNpc();
+                    this.npcTaiAnhMap = map.getNpcTaiAnhMap();
+                    // KHÔNG setup npc.setNhanVat ở đây vì nhanVat chưa chắc ready
+                    // chỉ lưu data thôi
+                    for (Npc npc : danhSachNpc) {
+                        NpcTaiAnh taiAnhNpc = npcTaiAnhMap.get(npc.getTen());
+                        NpcOffset offsetNpc = map.getNpcOffset(npc.getTen());
+                        npc.setNpcTaiAnh(taiAnhNpc);
+                        npc.setNpcOffset(offsetNpc);
+                        npc.setNhanVat(nhanVat);
+                    }
+                });
             }
             if (daAnDuiGa()) {
                 map.themNpc("dui_ga", LoaiNPC.DUIGA, 1178, 205);
@@ -254,16 +282,6 @@ public class ManHinhNhaGohan implements Screen {
 
         nhanVat.setDanhSachDat(map.LayDanhSachDat());
         nhanVat.setGioiHanToaDo(map.getChieuRongMap(), map.getChieuCaoMap(),5,0);
-
-        this.danhSachNpc = map.LayDanhSachNpc();
-        this.npcTaiAnhMap = map.getNpcTaiAnhMap();
-        for (Npc npc : danhSachNpc) {
-            NpcTaiAnh taiAnhNpc = npcTaiAnhMap.get(npc.getTen());
-            NpcOffset offsetNpc = map.getNpcOffset(npc.getTen());
-            npc.setNpcTaiAnh(taiAnhNpc);
-            npc.setNpcOffset(offsetNpc);
-            npc.setNhanVat(nhanVat);
-        }
     }
     private NhanVatCauHinh Doicaitrang(String TenCaiTrang){
         return NhanVatXuLy.xuly_id("caitrang_"+TenCaiTrang);
@@ -402,19 +420,23 @@ public class ManHinhNhaGohan implements Screen {
         float luaaH = luaa.getHeight() * 0.5f;
         batch.draw(luaa,1203,203,luaaW,luaaH);
 
-        map.capNhatNpc();
-        for (int i = 0; i < danhSachNpc.size(); i++) {
-            danhSachNpc.get(i).checkClick(nhanVat.x_check_npc, nhanVat.y_check_npc);
-            danhSachNpc.get(i).ve(batch,thoiGianTichLuy);
+        if (danhSachNpc != null) {
+            map.capNhatNpc();
+            for (int i = 0; i < danhSachNpc.size(); i++) {
+                danhSachNpc.get(i).checkClick(nhanVat.x_check_npc, nhanVat.y_check_npc);
+                danhSachNpc.get(i).ve(batch, thoiGianTichLuy);
+            }
         }
 
         MultiplayerRenderer.render(batch, thoiGianTichLuy, hudRenderer);
         nhanVat.ve(batch, thoiGianTichLuy);
 
         boolean duocVeDiemCanDen = true;
-        for (Npc npc : danhSachNpc) {
-            if (npc.dangClickNpc) {
-                duocVeDiemCanDen = false;
+        if (danhSachNpc != null) {
+            for (Npc npc : danhSachNpc) {
+                if (npc.dangClickNpc) {
+                    duocVeDiemCanDen = false;
+                }
             }
         }
         if (duocVeDiemCanDen) {

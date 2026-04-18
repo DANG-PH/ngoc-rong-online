@@ -5,17 +5,21 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 
+import com.badlogic.gdx.Gdx;
 import com.dang.dragonboy.du_lieu.LocalStorage;
 import com.dang.dragonboy.du_lieu.State_Management;
 import com.dang.dragonboy.network.DTO.DeTuTheoUser;
 import com.dang.dragonboy.network.DTO.ItemWeb;
 import com.dang.dragonboy.network.DTO.UseItemResponse;
 import com.dang.dragonboy.network.DTO.UserResponse;
+import com.dang.dragonboy.xu_ly_map.NpcServerData;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.function.Consumer;
+
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.JsonArray;
@@ -780,5 +784,53 @@ public class ApiService {
         public String refreshToken;
         public int authId;
         public boolean register;
+    }
+
+    public static void layNpcCuaMap(int mapId, Consumer<List<NpcServerData>> onHoanThanh) {
+        new Thread(() -> {
+            try {
+                URL url = new URL("https://api.ngocrongdark.com/game-data/map/npcs?map_id=" + mapId);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setConnectTimeout(5000);
+                conn.setReadTimeout(5000);
+
+                int status = conn.getResponseCode();
+                if (status != 200) {
+                    Gdx.app.error("ApiService", "layNpcCuaMap thất bại, HTTP: " + status);
+                    return;
+                }
+
+                BufferedReader br = new BufferedReader(
+                    new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8)
+                );
+                StringBuilder response = new StringBuilder();
+                String line;
+                while ((line = br.readLine()) != null) response.append(line.trim());
+                br.close();
+
+                JsonArray npcsArray = JsonParser.parseString(response.toString())
+                    .getAsJsonObject()
+                    .getAsJsonArray("npcs");
+
+                List<NpcServerData> danhSach = new ArrayList<>();
+                for (var element : npcsArray) {
+                    JsonObject obj = element.getAsJsonObject();
+                    NpcServerData npc = new NpcServerData();
+                    npc.id         = obj.get("id").getAsInt();
+                    npc.ten_npc    = obj.get("ten_npc").getAsString();
+                    npc.loai_npc   = obj.get("loai_npc").getAsString();
+                    npc.x          = obj.get("x").getAsFloat();
+                    npc.y          = obj.get("y").getAsFloat();
+                    npc.is_active  = obj.get("is_active").getAsBoolean();
+                    danhSach.add(npc);
+                }
+
+                Gdx.app.postRunnable(() -> onHoanThanh.accept(danhSach));
+
+            } catch (Exception e) {
+                Gdx.app.error("ApiService", "layNpcCuaMap exception", e);
+            }
+        }).start();
     }
 }

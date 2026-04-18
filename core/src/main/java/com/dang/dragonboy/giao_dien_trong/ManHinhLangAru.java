@@ -99,7 +99,21 @@ public class ManHinhLangAru implements Screen {
             // Tạo map và load địa hình
             if (thongtin.mapSau == null) {
                 map = new MapLangAru();
-                map.taiDuLieuMap();
+                map.khoiTao(() -> {
+                    // callback này chạy trên GL thread khi API xong
+                    // lúc này splash vẫn đang hiện → che hoàn toàn
+                    this.danhSachNpc = map.LayDanhSachNpc();
+                    this.npcTaiAnhMap = map.getNpcTaiAnhMap();
+                    // KHÔNG setup npc.setNhanVat ở đây vì nhanVat chưa chắc ready
+                    // chỉ lưu data thôi
+                    for (Npc npc : danhSachNpc) {
+                        NpcTaiAnh taiAnhNpc = npcTaiAnhMap.get(npc.getTen());
+                        NpcOffset offsetNpc = map.getNpcOffset(npc.getTen());
+                        npc.setNpcTaiAnh(taiAnhNpc);
+                        npc.setNpcOffset(offsetNpc);
+                        npc.setNhanVat(nhanVat);
+                    }
+                });
             } else {
                 map = thongtin.mapSau;
             }
@@ -165,7 +179,21 @@ public class ManHinhLangAru implements Screen {
             hud.setDuLieuNguoiChoi(duLieu);
             // Tạo map và load địa hình
             map = new MapLangAru();
-            map.taiDuLieuMap();
+            map.khoiTao(() -> {
+                // callback này chạy trên GL thread khi API xong
+                // lúc này splash vẫn đang hiện → che hoàn toàn
+                this.danhSachNpc = map.LayDanhSachNpc();
+                this.npcTaiAnhMap = map.getNpcTaiAnhMap();
+                // KHÔNG setup npc.setNhanVat ở đây vì nhanVat chưa chắc ready
+                // chỉ lưu data thôi
+                for (Npc npc : danhSachNpc) {
+                    NpcTaiAnh taiAnhNpc = npcTaiAnhMap.get(npc.getTen());
+                    NpcOffset offsetNpc = map.getNpcOffset(npc.getTen());
+                    npc.setNpcTaiAnh(taiAnhNpc);
+                    npc.setNpcOffset(offsetNpc);
+                    npc.setNhanVat(nhanVat);
+                }
+            });
             this.rongMap = map.getChieuRongMap();
             this.caoMap = map.getChieuCaoMap();
             this.hud.mapHienTai = map;
@@ -222,16 +250,6 @@ public class ManHinhLangAru implements Screen {
 
         nhanVat.setDanhSachDat(map.LayDanhSachDat());
         nhanVat.setGioiHanToaDo(map.getChieuRongMap(), map.getChieuCaoMap(),5,0);
-
-        this.danhSachNpc = map.LayDanhSachNpc();
-        this.npcTaiAnhMap = map.getNpcTaiAnhMap();
-        for (Npc npc : danhSachNpc) {
-            NpcTaiAnh taiAnhNpc = npcTaiAnhMap.get(npc.getTen());
-            NpcOffset offsetNpc = map.getNpcOffset(npc.getTen());
-            npc.setNpcTaiAnh(taiAnhNpc);
-            npc.setNpcOffset(offsetNpc);
-            npc.setNhanVat(nhanVat);
-        }
     }
 
     @Override
@@ -325,18 +343,22 @@ public class ManHinhLangAru implements Screen {
         float luaaH = luaa.getHeight() * 0.5f;
         batch.draw(luaa,273,190,luaaW,luaaH);
 
-        for (int i = 0; i < danhSachNpc.size(); i++) {
-            danhSachNpc.get(i).checkClick(nhanVat.x_check_npc, nhanVat.y_check_npc);
-            danhSachNpc.get(i).ve(batch,thoiGianTichLuy);
+        if (danhSachNpc != null) {
+            for (int i = 0; i < danhSachNpc.size(); i++) {
+                danhSachNpc.get(i).checkClick(nhanVat.x_check_npc, nhanVat.y_check_npc);
+                danhSachNpc.get(i).ve(batch, thoiGianTichLuy);
+            }
+            map.capNhatNpc();
         }
-        map.capNhatNpc();
 
         MultiplayerRenderer.render(batch, thoiGianTichLuy, hud);
         nhanVat.ve(batch, thoiGianTichLuy);
         boolean duocVeDiemCanDen = true;
-        for (Npc npc : danhSachNpc) {
-            if (npc.dangClickNpc) {
-                duocVeDiemCanDen = false;
+        if (danhSachNpc != null) {
+            for (Npc npc : danhSachNpc) {
+                if (npc.dangClickNpc) {
+                    duocVeDiemCanDen = false;
+                }
             }
         }
         if (duocVeDiemCanDen) {

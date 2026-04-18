@@ -118,6 +118,8 @@ public class GameTemplates {
     <html>
     <head>
         <meta charset="UTF-8">
+        <title>Ngọc Rồng Online</title>
+        <link rel="icon" type="image/png" href="https://napcard.net/wp-content/uploads/2020/02/nap-ngoc-rong-online.png">
         <style>
                 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Rajdhani:wght@400;600&display=swap');
                 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -291,6 +293,8 @@ public class GameTemplates {
     <html>
     <head>
         <meta charset="UTF-8">
+        <title>Ngọc Rồng Online</title>
+        <link rel="icon" type="image/png" href="https://napcard.net/wp-content/uploads/2020/02/nap-ngoc-rong-online.png">
         <style>
                 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Rajdhani:wght@400;600&display=swap');
                 * { margin: 0; padding: 0; box-sizing: border-box; }
