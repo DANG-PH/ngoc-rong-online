@@ -100,6 +100,16 @@ public class ManHinhDoiHoaCuc implements Screen {
                 });
             } else {
                 map = thongtin.mapSau;
+                // Map cũ đã có NPC rồi, lấy thẳng ra dùng
+                this.danhSachNpc = map.LayDanhSachNpc();
+                this.npcTaiAnhMap = map.getNpcTaiAnhMap();
+                for (Npc npc : danhSachNpc) {
+                    NpcTaiAnh taiAnhNpc = npcTaiAnhMap.get(npc.getTen());
+                    NpcOffset offsetNpc = map.getNpcOffset(npc.getTen());
+                    npc.setNpcTaiAnh(taiAnhNpc);
+                    npc.setNpcOffset(offsetNpc);
+                    npc.setNhanVat(nhanVat);
+                }
             }
             this.rongMap = map.getChieuRongMap();
             this.caoMap = map.getChieuCaoMap();

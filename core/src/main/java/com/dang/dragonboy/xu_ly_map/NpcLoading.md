@@ -13,6 +13,7 @@
 4. [Tại sao gọi khoiTao() trong constructor thay vì show()](#4-tại-sao-gọi-khoitao-trong-constructor-thay-vì-show)
 5. [Flow hoàn chỉnh](#5-flow-hoàn-chỉnh)
 6. [Lưu ý và best practices](#6-lưu-ý-và-best-practices)
+7. [So sánh: Data ở Client vs Data ở Server](#7-so-sánh-data-ở-client-vs-data-ở-server)
 
 ---
 
@@ -373,3 +374,147 @@ public void xoaToanBoCache() {
 ### Không dùng Gdx.net
 
 Code dùng `HttpURLConnection` trong thread thủ công thay vì `Gdx.net`. Lý do: `Gdx.net` callback không đảm bảo về GL thread trên mọi platform (Android vs Desktop behavior khác nhau). Cách thủ công + `postRunnable` explicit rõ ràng và nhất quán hơn.
+
+---
+
+## 7. So sánh: Data ở Client vs Data ở Server
+
+### 7.1 Tổng quan
+
+| Tiêu chí | Cách cũ (hardcode client) | Cách mới (server + cache) |
+|---|---|---|
+| Startup time | 0ms | 200–500ms lần đầu, 0ms lần sau |
+| Render performance | Như nhau | Như nhau |
+| User thấy lag? | Không | Không (splash che) |
+| Worst case | Không có | NPC pop ra nếu mạng > 2 giây |
+| Deploy NPC mới | Rebuild + release client | Gọi API admin, có ngay |
+| Sửa tọa độ NPC | Rebuild + release client | Gọi API admin, có ngay |
+| Bật/tắt NPC | Không làm được | `is_active = false` |
+| Thêm map mới | Viết code + release | Thêm DB + khai báo mapId |
+
+---
+
+### 7.2 Hiệu năng và Latency
+
+**Lần đầu vào map:**
+
+```
+Cách cũ:   Constructor → 0ms   → map ready
+Cách mới:  Constructor → API call (200–500ms nền) → map ready
+
+Người chơi cảm nhận: như nhau — splash che hết
+```
+
+**Lần 2+ vào map:**
+
+```
+Cách cũ:   Constructor → 0ms   → map ready
+Cách mới:  Constructor → cache hit (0ms) → map ready
+
+Người chơi cảm nhận: như nhau, thậm chí cách mới nhanh hơn vì
+không cần đọc và parse file hardcode nếu map phức tạp
+```
+
+**Trong render() mỗi frame:**
+
+```
+Cách cũ:   danhSachNpc đã có → vẽ bình thường
+Cách mới:  danhSachNpc đã có → vẽ bình thường
+
+Hoàn toàn như nhau — 0 overhead sau khi load xong
+```
+
+**Kết luận:** Cách mới không làm chậm game trong runtime. Chi phí duy nhất là HTTP call lần đầu, và nó chạy hoàn toàn trong background.
+
+---
+
+### 7.3 UX — Người chơi thấy gì
+
+**Happy path (mạng bình thường ~200ms):**
+
+```
+Cách cũ:  bấm nút → splash → vào map → NPC có sẵn ✅
+Cách mới: bấm nút → splash → vào map → NPC có sẵn ✅
+
+Hoàn toàn giống nhau từ góc nhìn người chơi
+```
+
+**Worst case (mạng chậm >2 giây):**
+
+```
+Cách cũ:  không có worst case — data local luôn có sẵn
+Cách mới: bấm nút → splash → vào map → NPC pop ra sau ~1 giây
+
+→ Game không crash, nhân vật vẫn đi được, chỉ NPC hiện muộn
+→ Đây là graceful degradation, không phải bug
+```
+
+**Tại sao production game chọn lag cuối thay vì lag đầu:**
+
+```
+Lag đầu (constructor trên GL thread):
+  bấm nút → màn hình đứng im 500ms → user nghĩ game treo → trải nghiệm tệ
+
+Lag cuối (NPC pop ra):
+  bấm nút → splash hiện ngay → vào map → NPC hiện sau → user chấp nhận được
+```
+
+Feedback visual ngay lập tức quan trọng hơn data đầy đủ ngay lập tức. Đây là nguyên tắc UX cơ bản của mọi game production.
+
+---
+
+### 7.4 Trade-off Admin có thể customize
+
+Đây là lợi ích lớn nhất của cách mới — **không cần release client mới** để thay đổi NPC.
+
+**Những gì admin làm được ngay lập tức qua API:**
+
+```
+✅ Thêm NPC mới vào map
+   POST /game-data/npc-spawn
+   → Người chơi restart game thấy ngay (hoặc xóa cache)
+
+✅ Sửa tọa độ NPC
+   PATCH /game-data/npc-spawn
+   → Không cần đụng 1 dòng Java nào
+
+✅ Bật/tắt NPC tạm thời
+   PATCH /game-data/npc-spawn { is_active: false }
+   → Event game, bảo trì, seasonal content
+
+✅ Thêm map mới hoàn toàn
+   POST /game-data/map
+   → Client chỉ cần khai báo mapId, còn lại server lo
+
+✅ Xóa NPC
+   DELETE /game-data/npc-spawn
+   → Không để lại artifact trong code
+```
+
+**Những gì vẫn cần release client:**
+
+```
+❌ Thêm loại NPC hoàn toàn mới (LoaiNPC enum chưa có)
+❌ Thêm animation, texture mới cho NPC
+❌ Thay đổi hitbox map
+❌ Logic tương tác NPC mới
+```
+
+Tóm lại: **data thay đổi → server lo, logic thay đổi → client mới**. Đây là đường ranh giới đúng đắn.
+
+---
+
+### 7.5 Tại sao trade-off này đúng đắn
+
+Cách cũ (hardcode) phù hợp khi:
+- Team nhỏ, 1 dev làm hết
+- Game không update thường xuyên
+- Không có admin panel
+
+Cách mới (server) phù hợp khi:
+- Có nhiều map, nhiều NPC cần quản lý
+- Admin cần điều chỉnh game mà không phụ thuộc dev
+- Muốn làm event, seasonal content linh hoạt
+- Game đang scale lên
+
+Với ngocrongdark hiện tại — có admin panel, có nhiều map, cần thêm NPC linh hoạt — cách mới là lựa chọn đúng. Chi phí bỏ ra (200–500ms API lần đầu, bị che bởi splash) nhỏ hơn nhiều so với lợi ích (deploy không cần release client).
