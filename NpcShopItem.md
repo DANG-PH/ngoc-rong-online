@@ -1,104 +1,128 @@
-# Game Data Service — Tài liệu kỹ thuật Client
+# NPC Shop Item — Tài liệu kỹ thuật Client
 
 ## Mục lục
 
 1. [Tổng quan](#1-tổng-quan)
-2. [Flow hoàn chỉnh](#2-flow-hoàn-chỉnh)
-    - [Login → Prefetch](#21-login--prefetch)
-    - [Vào map lần đầu](#22-vào-map-lần-đầu)
-    - [Vào map lần 2+](#23-vào-map-lần-2)
-    - [Mở shop NPC lần đầu](#24-mở-shop-npc-lần-đầu)
-    - [Mở shop NPC lần 2+](#25-mở-shop-npc-lần-2)
-3. [Các file thêm mới](#3-các-file-thêm-mới)
-    - [NpcServerData](#31-npcserverdatajava)
-    - [MapDataCache](#32-mapdatacachejava)
-    - [MapIdHelper](#33-mapidhelperjava)
-    - [ShopItemServerData](#34-shopitemserverdatajava)
-    - [ShopCache](#35-shopcachejava)
-4. [Các file đã sửa](#4-các-file-đã-sửa)
-    - [ApiService](#41-apiservicejava)
-    - [MapCoBan](#42-mapcobanjava)
-    - [MapDoiHoaCuc / MapLangAru / MapNhaGohan](#43-mapxxx-subclass)
-    - [ManHinhXxx — constructor](#44-manhinhxxx--constructor)
-    - [ManHinhXxx — show](#45-manhinhxxx--show)
-    - [ManHinhXxx — render](#46-manhinhxxx--render)
-    - [ItemThuongXuLi](#47-itemthuongxulijava)
-    - [ItemGia](#48-itemgiajava)
-    - [admin_thanhle](#49-admin_thanhlejs)
-5. [Lưu ý và best practices](#5-lưu-ý-và-best-practices)
+2. [So sánh: Logic cũ vs Logic mới](#2-so-sánh-logic-cũ-vs-logic-mới)
+    - [Flow logic cũ](#21-flow-logic-cũ)
+    - [Flow logic mới](#22-flow-logic-mới)
+    - [Vấn đề của cách cũ](#23-vấn-đề-của-cách-cũ)
+3. [Flow hoàn chỉnh](#3-flow-hoàn-chỉnh)
+    - [Mở shop lần đầu](#31-mở-shop-lần-đầu)
+    - [Mở shop lần 2+](#32-mở-shop-lần-2)
+4. [Bảng các hàm](#4-bảng-các-hàm)
+5. [Các file thêm mới](#5-các-file-thêm-mới)
+    - [ShopItemServerData](#51-shopitemserverdatajava)
+    - [ShopCache](#52-shopcachejava)
+6. [Các file đã sửa](#6-các-file-đã-sửa)
+    - [ApiService](#61-apiservicejava)
+    - [ItemThuongXuLi](#62-itemthuongxulijava)
+    - [ItemGia](#63-itemgiajava)
+    - [admin_thanhle](#64-admin_thanhlejs)
+7. [Lưu ý và best practices](#7-lưu-ý-và-best-practices)
 
 ---
 
 ## 1. Tổng quan
 
-Mục tiêu: toàn bộ data game (NPC spawn, shop item) được load từ server thay vì hardcode client. Admin thay đổi data không cần release client mới. Client dùng lazy loading + in-memory cache để đảm bảo 0ms delay với người chơi ở mọi trạng thái.
-
-**Nguyên tắc chung:**
-- Data thay đổi → server quản lý
-- Logic và presentation → client quản lý
-- I/O luôn chạy trong thread riêng, không block GL thread
-- Cache xuyên suốt session — gọi API 1 lần duy nhất mỗi resource
-
----
-
-## 2. Flow hoàn chỉnh
-
-### 2.1 Login → Prefetch
+Mục tiêu: danh sách item trong shop NPC được load từ server thay vì hardcode client. Admin thêm/sửa/xóa/bật tắt item mà không cần release client mới.
 
 ```
-verifyOTP() / getProfile() thành công
+Server API GET /game-data/npc-shop?npc_base_id={id}
     │
-    ├─ biết user.mapHienTai
-    ├─ MapIdHelper.layMapId(mapHienTai) → mapId
-    └─ ApiService.layNpcCuaMap(mapId, data -> {
-            MapDataCache.luu(mapId, data)  ← chạy nền, không block
-       })
-
-[Menu hiện ngay, user đọc UI]
-
-[API trả về ~200-500ms sau, cache đã có sẵn]
-```
-
-Người chơi không chờ thêm giây nào. Prefetch chạy song song hoàn toàn.
-
----
-
-### 2.2 Vào map lần đầu
-
-```
-User bấm nút → ManHinhSplash constructor
-                    → Supplier.get() → new ManHinhXxx()
-                                          → map.khoiTao(() -> {
-                                                cache hit? → apDungDuLieuServer()
-                                                cache miss? → gọi API nền
-                                            })
-                    ↓
-               Splash hiện ~1 giây
-                    ↓
-               thoiGian > 1f → game.setScreen(manHinhDaTao)
-                    ↓
-               show() → render() frame 1 → NPC có sẵn ✅
-```
-
-Splash che toàn bộ thời gian chờ. Người chơi không thấy gì bất thường.
-
----
-
-### 2.3 Vào map lần 2+
-
-```
-User chuyển map → new ManHinhXxx(thongtin)
+    ▼
+ApiService.layShopCuaNpc()   ← HTTP GET trong thread riêng
     │
-    ├─ thongtin.mapSau != null
-    ├─ map = thongtin.mapSau  ← object cũ, NPC đã có sẵn
-    └─ danhSachNpc = map.LayDanhSachNpc()  ← lấy thẳng, 0ms
+    ▼
+ShopCache                    ← lưu theo npcBaseId, lần sau không gọi API
+    │
+    ▼
+apDungDuLieuShop()           ← clear + rebuild danhSachItem theo tab
+    │
+    ▼
+ItemThuongXuLi.taoItemTuTen() ← mapping tenItem (server) → Item object (client)
+    │
+    ▼
+danhSachItemAoQuan / PhuKien / DacBiet  ← sẵn sàng để render
 ```
-
-Siêu mượt — không gọi API, không đụng cache, lấy thẳng object cũ.
 
 ---
 
-### 2.4 Mở shop NPC lần đầu
+## 2. So sánh: Logic cũ vs Logic mới
+
+### 2.1 Flow logic cũ
+
+```
+admin_thanhle constructor
+    │
+    ├─ themItemVaoDanhSachAoQuan()
+    │       └─ ItemThuongXuLi.taoItemThuong("set_cam", AO, "traidat")  ← hardcode
+    │
+    ├─ themItemVaoDanhSachPhuKien()
+    │       └─ ItemThuongXuLi.taoItemThuong("set_cam", GANG, "traidat") ← hardcode
+    │
+    └─ themItemVaoDanhSachDacBiet()
+            └─ new Item("bongtaic1", "Bông tai Porata", ..., 1500000L, ...)  ← giá hardcode
+
+render() → NPC_CUA_HANG.render_item()
+    └─ veGiaItem()
+            └─ ItemGia.layGiaItem(item)
+                    └─ bangGia.get(item.getTenItem())  ← Map hardcode trong static block
+```
+
+Toàn bộ data nằm trong client code. Mỗi thay đổi đều cần rebuild và release.
+
+---
+
+### 2.2 Flow logic mới
+
+```
+admin_thanhle constructor
+    │
+    ├─ ShopCache.daCo(3)?
+    │       YES → apDungDuLieuShop(cache)  ← 0ms
+    │       NO  → ApiService.layShopCuaNpc(3, callback)
+    │                   │
+    │              [Thread riêng chạy nền]
+    │              HTTP GET /game-data/npc-shop?npc_base_id=3
+    │              parse JSON → List<ShopItemServerData>
+    │              ShopCache.luu(3, data)
+    │              Gdx.app.postRunnable(() -> apDungDuLieuShop(data))
+    │
+    └─ apDungDuLieuShop(data)
+            ├─ clear 3 danh sách
+            └─ loop ShopItemServerData
+                    ├─ is_active check
+                    ├─ ItemThuongXuLi.taoItemTuTen(s.tenItem)
+                    │       └─ TEN_TO_INFO.get(tenItem) → ItemInfo
+                    │               └─ taoItemThuong(id, loai, hanhTinh)
+                    └─ add vào đúng tab (AO_QUAN / PHU_KIEN / DAC_BIET)
+
+render() → NPC_CUA_HANG.render_item()
+    └─ veGiaItem()
+            └─ ItemGia.layGiaItem(item)
+                    └─ ShopCache.lay(3) → tìm theo tenItem → data.gia  ← từ server
+```
+
+Data đến từ server. Admin thay đổi không cần động đến client.
+
+---
+
+### 2.3 Vấn đề của cách cũ
+
+| Vấn đề | Cách cũ | Cách mới |
+|---|---|---|
+| Thêm item vào shop | Sửa code + rebuild + release | POST API, có ngay session tiếp theo |
+| Xóa item khỏi shop | Sửa code + rebuild + release | `is_active = false` qua API |
+| Sửa giá item | Sửa `ItemGia` + rebuild + release | PATCH API, có ngay session tiếp theo |
+| Giá bị sai | Có thể — `keySet()` không ổn định | Không thể — đọc thẳng từ server data |
+| NPC shop mới | Viết toàn bộ hardcode từ đầu | Copy pattern, set `NPC_BASE_ID` riêng |
+
+---
+
+## 3. Flow hoàn chỉnh
+
+### 3.1 Mở shop lần đầu
 
 ```
 User click admin_thanhle → new admin_thanhle()
@@ -110,21 +134,24 @@ User click admin_thanhle → new admin_thanhle()
             Gdx.app.postRunnable(() -> apDungDuLieuShop(data))
        })
             │
-       API trả về
+       API trả về ~200ms
             │
-       apDungDuLieuShop() → rebuild danhSachItem theo tab
+       apDungDuLieuShop()
+            ├─ danhSachItemAoQuan.clear()
+            ├─ danhSachItemPhuKien.clear()
+            ├─ danhSachItemDacBiet.clear()
+            └─ loop data → taoItemTuTen() → add vào đúng tab
+            │
        render() → shop hiện item ✅
 ```
 
----
-
-### 2.5 Mở shop NPC lần 2+
+### 3.2 Mở shop lần 2+
 
 ```
 User click admin_thanhle → new admin_thanhle()
     │
     ├─ ShopCache.daCo(3) == true
-    └─ apDungDuLieuShop(ShopCache.lay(3))  ← 0ms
+    └─ apDungDuLieuShop(ShopCache.lay(3))  ← 0ms, không gọi API
             │
        danhSachItem có ngay
        render() → shop hiện item ngay lập tức ✅
@@ -132,90 +159,38 @@ User click admin_thanhle → new admin_thanhle()
 
 ---
 
-## 3. Các file thêm mới
+## 4. Bảng các hàm
 
-### 3.1 NpcServerData.java
+| Hàm | File | Tác dụng | Gọi khi nào |
+|---|---|---|---|
+| `layShopCuaNpc(npcBaseId, callback)` | `ApiService` | HTTP GET shop data, parse JSON, gọi callback | Constructor `admin_thanhle` khi cache miss |
+| `parseProtoLong(obj)` | `ApiService` | Convert `{low, high}` proto int64 → Java long | Trong `layShopCuaNpc` khi parse field `gia` |
+| `daCo(npcBaseId)` | `ShopCache` | Kiểm tra cache có data của NPC chưa | Constructor `admin_thanhle` trước khi gọi API |
+| `lay(npcBaseId)` | `ShopCache` | Lấy data từ cache | `apDungDuLieuShop` khi cache hit |
+| `luu(npcBaseId, data)` | `ShopCache` | Lưu data vào cache | Callback của `layShopCuaNpc` sau khi fetch xong |
+| `taoItemTuTen(tenItem)` | `ItemThuongXuLi` | Mapping tên item (server string) → `Item` object | Trong `apDungDuLieuShop` khi loop data |
+| `taoItemThuong(id, loai, hanhTinh)` | `ItemThuongXuLi` | Tạo Item thường từ id + loại + hành tinh | Được gọi bởi `taoItemTuTen` cho item thường |
+| `apDungDuLieuShop(data)` | `admin_thanhle` | Clear + rebuild 3 danhSachItem từ server data | Sau khi có data (cache hit hoặc API về) |
+| `layGiaItem(item)` | `ItemGia` | Lấy giá của item từ ShopCache | `veGiaItem()` trong `NPC_CUA_HANG` khi render |
+| `layLoaiTien(item)` | `ItemGia` | Lấy loại tiền (VANG/NGOC) từ ShopCache | `veGiaItem()` và khi user mua item |
+| `timTrongCache(tenItem)` | `ItemGia` | Tìm `ShopItemServerData` theo tên trong cache | Private helper dùng nội bộ trong `ItemGia` |
+
+---
+
+## 5. Các file thêm mới
+
+### 5.1 ShopItemServerData.java
 
 ```
 package: com.dang.dragonboy.network.DTO
 ```
 
-DTO ánh xạ 1-1 với JSON response từ `GET /game-data/map/npcs`. Chỉ chứa data, không có logic.
-
-```java
-public class NpcServerData {
-    public int id;
-    public String ten_npc;
-    public String loai_npc;
-    public float x;
-    public float y;
-    public boolean is_active;
-}
-```
-
-**Tại sao tách DTO riêng thay vì dùng class `Npc`:** `Npc` là game object có texture, animation, state — không nên trộn lẫn với raw server data. Thay đổi API response không ảnh hưởng game logic.
-
----
-
-### 3.2 MapDataCache.java
-
-```
-package: com.dang.dragonboy.xu_ly_map
-```
-
-Singleton cache — lưu NPC data theo `mapId`.
-
-```java
-public class MapDataCache {
-    private static final MapDataCache INSTANCE = new MapDataCache();
-    private final Map<Integer, List<NpcServerData>> cache = new HashMap<>();
-
-    public static MapDataCache getInstance() { return INSTANCE; }
-    public boolean daCo(int mapId) { return cache.containsKey(mapId); }
-    public List<NpcServerData> lay(int mapId) { return cache.get(mapId); }
-    public void luu(int mapId, List<NpcServerData> data) { cache.put(mapId, data); }
-}
-```
-
----
-
-### 3.3 MapIdHelper.java
-
-```
-package: com.dang.dragonboy.xu_ly_map
-```
-
-Mapping tên map (server string) → mapId (server int). Dùng cho prefetch sau login.
-
-```java
-public class MapIdHelper {
-    public static int layMapId(String tenMap) {
-        switch (tenMap) {
-            case "Nhà Gôhan":    return 1;
-            case "Làng Aru":     return 2;
-            case "Đồi Hoa Cúc":  return 3;
-            default: return 0;
-        }
-    }
-}
-```
-
-**Quan trọng:** ID phải khớp với DB server. Sai ID → prefetch fetch sai map → cache miss mãi mãi. Thêm map mới phải cập nhật file này đồng thời với server.
-
----
-
-### 3.4 ShopItemServerData.java
-
-```
-package: com.dang.dragonboy.network.DTO
-```
-
-DTO ánh xạ 1-1 với JSON response từ `GET /game-data/npc-shop`.
+DTO ánh xạ 1-1 với JSON response từ API. Chỉ chứa data, không có logic.
 
 ```java
 public class ShopItemServerData {
     public int id;
-    public String tenItem;
+    public String tenItem;  // "Bông tai Porata" — key khớp với TEN_TO_INFO
     public long gia;        // đã parse từ proto int64
     public String loaiTien; // "VANG" | "NGOC"
     public String tab;      // "AO_QUAN" | "PHU_KIEN" | "DAC_BIET"
@@ -223,15 +198,17 @@ public class ShopItemServerData {
 }
 ```
 
+**Tại sao tách DTO riêng thay vì dùng class `Item`:** `Item` là game object có texture, animation, state — không nên trộn lẫn với raw server data. Thay đổi API response không ảnh hưởng game logic.
+
 ---
 
-### 3.5 ShopCache.java
+### 5.2 ShopCache.java
 
 ```
 package: com.dang.dragonboy.xu_ly_map.npc
 ```
 
-Singleton cache — lưu shop data theo `npcBaseId`. Giống `MapDataCache`.
+Singleton cache — lưu shop data theo `npcBaseId`. Pattern giống `MapDataCache`.
 
 ```java
 public class ShopCache {
@@ -245,239 +222,182 @@ public class ShopCache {
 }
 ```
 
+**Trade-off:** Cache không tự invalidate. Admin update giá trên server → người chơi không thấy cho đến khi restart game. Chấp nhận được với game kiểu này.
+
 ---
 
-## 4. Các file đã sửa
+## 6. Các file đã sửa
 
-### 4.1 ApiService.java
+### 6.1 ApiService.java
 
-Thêm 2 method:
-
-**`layNpcCuaMap`** — fetch NPC spawn theo map:
-
-```java
-public static void layNpcCuaMap(int mapId, Consumer<List<NpcServerData>> onHoanThanh) {
-    new Thread(() -> {
-        // HTTP GET /game-data/map/npcs?map_id={mapId}
-        // parse JSON → List<NpcServerData>
-        onHoanThanh.accept(danhSach); // không wrap postRunnable
-    }).start();
-}
-```
-
-**`layShopCuaNpc`** — fetch shop item theo NPC:
+**Thêm method `layShopCuaNpc`:**
 
 ```java
 public static void layShopCuaNpc(int npcBaseId, Consumer<List<ShopItemServerData>> onHoanThanh) {
     new Thread(() -> {
-        // HTTP GET /game-data/npc-shop?npc_base_id={npcBaseId}
-        // parse JSON → List<ShopItemServerData>
-        // gia cần parse proto int64:
-        JsonElement giaEl = obj.get("gia");
-        item.gia = giaEl.isJsonObject()
-            ? ApiService.parseProtoLong(giaEl.getAsJsonObject())
-            : giaEl.getAsLong();
+        try {
+            URL url = new URL("https://api.ngocrongdark.com/game-data/npc-shop?npc_base_id=" + npcBaseId);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setConnectTimeout(5000);
+            conn.setReadTimeout(5000);
 
-        onHoanThanh.accept(danhSach); // không wrap postRunnable
+            // ... đọc response ...
+
+            JsonArray itemsArray = JsonParser.parseString(response.toString())
+                .getAsJsonObject()
+                .getAsJsonArray("items");
+
+            List<ShopItemServerData> danhSach = new ArrayList<>();
+            for (var element : itemsArray) {
+                JsonObject obj = element.getAsJsonObject();
+                ShopItemServerData item = new ShopItemServerData();
+                item.tenItem   = obj.get("tenItem").getAsString();
+                item.loaiTien  = obj.get("loaiTien").getAsString();
+                item.tab       = obj.get("tab").getAsString();
+                item.is_active = obj.get("is_active").getAsBoolean();
+
+                // Parse proto int64 — gia trả về dạng { low, high, unsigned }
+                JsonElement giaEl = obj.get("gia");
+                item.gia = giaEl.isJsonObject()
+                    ? ApiService.parseProtoLong(giaEl.getAsJsonObject())
+                    : giaEl.getAsLong();
+
+                danhSach.add(item);
+            }
+
+            onHoanThanh.accept(danhSach); // không wrap postRunnable — không đụng GL object
+
+        } catch (Exception e) {
+            Gdx.app.error("ApiService", "layShopCuaNpc exception", e);
+        }
     }).start();
 }
 ```
 
-**Thêm vào `getProfile()`** — prefetch NPC map hiện tại ngay sau login:
+**Tại sao không wrap `postRunnable`:** Callback chỉ lưu vào HashMap — không đụng GL object. Chỗ nào cần GL thread thì caller tự wrap, ví dụ `apDungDuLieuShop` đụng `danhSachItem` nên caller wrap `postRunnable` trước khi gọi.
+
+**Tại sao parse proto int64:** Server dùng protobuf `int64` cho field `gia`. Khi serialize sang JSON, protobuf không trả về number thẳng mà trả về object `{ low, high, unsigned }`. Dùng `.getAsLong()` thẳng sẽ crash. Phải dùng `parseProtoLong()` có sẵn:
 
 ```java
-// Cuối getProfile(), sau khi đã có user.mapHienTai
-int mapId = MapIdHelper.layMapId(user.mapHienTai);
-if (mapId != 0) {
-    ApiService.layNpcCuaMap(mapId, data -> {
-        MapDataCache.getInstance().luu(mapId, data);
-    });
+// Server trả về:
+// "gia": { "low": 500000, "high": 0, "unsigned": false }
+
+// Parse:
+public static long parseProtoLong(JsonObject obj) {
+    long low  = obj.get("low").getAsLong();
+    long high = obj.get("high").getAsLong();
+    return (high << 32) + (low & 0xffffffffL);
 }
-```
-
-**Tại sao callback không wrap `postRunnable`:** Callback chỉ lưu vào HashMap — không đụng GL object. Chỗ nào cần GL thread thì caller tự wrap `Gdx.app.postRunnable()`.
-
----
-
-### 4.2 MapCoBan.java
-
-Thêm `mapId` field và 2 method:
-
-```java
-protected int mapId; // subclass gán trong constructor, mặc định 0 = không có server data
-
-public void khoiTao(Runnable onHoanThanh) {
-    taiDuLieuMap(); // hitbox local, sync, xong ngay
-
-    if (mapId == 0) { onHoanThanh.run(); return; }
-
-    MapDataCache cache = MapDataCache.getInstance();
-    if (cache.daCo(mapId)) {
-        apDungDuLieuServer(cache.lay(mapId));
-        onHoanThanh.run();
-        return;
-    }
-
-    ApiService.layNpcCuaMap(mapId, danhSach -> {
-        cache.luu(mapId, danhSach);
-        apDungDuLieuServer(danhSach);
-        onHoanThanh.run();
-    });
-}
-
-private void apDungDuLieuServer(List<NpcServerData> danhSach) {
-    for (NpcServerData npc : danhSach) {
-        if (!npc.is_active) continue;
-        LoaiNPC loai = LoaiNPC.valueOf(npc.loai_npc);
-        themNpc(npc.ten_npc, loai, npc.x, npc.y);
-    }
-}
-```
-
-**`khoiTao()` thay thế hoàn toàn `taiDuLieuMap()`** khi gọi từ bên ngoài. Caller không cần biết bên trong có cache hay API hay local.
-
----
-
-### 4.3 MapXxx subclass
-
-Mỗi map subclass chỉ cần thêm `mapId` trong constructor, xóa `themNpc` loại NGUOI (server lo):
-
-```java
-public class MapLangAru extends MapCoBan {
-    public MapLangAru() {
-        this.mapId = 2; // khớp với DB
-    }
-
-    @Override
-    public void taiDuLieuMap() {
-        // Chỉ còn hitbox
-        danhSachDat.add(new HitboxDat(-70, -38, 2540, 175+38));
-        // Không còn themNpc NGUOI — server lo
-    }
-}
-```
-
-NPC loại đặc biệt (CAYDAU, RUONGDO, DUIGA) vẫn `themNpc()` trong `taiDuLieuMap()` như bình thường.
-
----
-
-### 4.4 ManHinhXxx — constructor
-
-Gọi `khoiTao()` thay vì `taiDuLieuMap()`. Callback setup NPC luôn trong constructor:
-
-```java
-// Nhánh thongtin != null, mapSau == null:
-map = new MapLangAru();
-map.khoiTao(() -> {
-    this.danhSachNpc = map.LayDanhSachNpc();
-    this.npcTaiAnhMap = map.getNpcTaiAnhMap();
-    for (Npc npc : danhSachNpc) {
-        npc.setNpcTaiAnh(npcTaiAnhMap.get(npc.getTen()));
-        npc.setNpcOffset(map.getNpcOffset(npc.getTen()));
-        npc.setNhanVat(nhanVat); // nhanVat đã gán trước khoiTao() → an toàn
-    }
-});
-
-// Nhánh thongtin != null, mapSau != null:
-map = thongtin.mapSau;
-this.danhSachNpc = map.LayDanhSachNpc(); // object cũ, lấy thẳng
-this.npcTaiAnhMap = map.getNpcTaiAnhMap();
-for (Npc npc : danhSachNpc) {
-    npc.setNpcTaiAnh(npcTaiAnhMap.get(npc.getTen()));
-    npc.setNpcOffset(map.getNpcOffset(npc.getTen()));
-    npc.setNhanVat(nhanVat);
-}
-```
-
-**Tại sao gọi trong constructor thay vì `show()`:**
-
-```
-Constructor trong splash → API chạy nền trong splash (~1 giây)
-show() → API đã xong → NPC có sẵn ngay frame đầu
-
-Nếu gọi trong show():
-show() sau splash → API bắt đầu lúc này → NPC pop ra sau ~300ms
+// → 500000L
 ```
 
 ---
 
-### 4.5 ManHinhXxx — show()
+### 6.2 ItemThuongXuLi.java
 
-Xóa toàn bộ khối setup NPC — constructor đã lo:
+**Cũ — không có mapping ngược:**
 
 ```java
-// Chỉ giữ lại:
-nhanVat.setDanhSachDat(map.LayDanhSachDat());
-nhanVat.setGioiHanToaDo(map.getChieuRongMap(), map.getChieuCaoMap(), 5, 0);
-// Không còn đụng NPC ở đây
+// Chỉ có taoItemThuong(id, loai, hanhTinh)
+// Không có cách nào đi từ tên → Item
+// admin_thanhle phải tự new Item() thủ công:
+
+public void themItemVaoDanhSachDacBiet() {
+    danhSachItemDacBiet.add(new Item(
+        "bongtaic1", "Bông tai Porata", LoaiItem.BONGTAI,
+        "vatpham/vatphamgame/bongtai/bongtaic1.png",
+        "Sử dụng để hợp thể với đệ tử", 1,
+        new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+        "all", 1500000L, null, 0, 0, 0, -1
+    ));
+}
+// → Giá hardcode thẳng vào constructor Item
+// → Thêm item mới phải sửa code + rebuild
 ```
 
----
-
-### 4.6 ManHinhXxx — render()
-
-Guard null cho `danhSachNpc` — vì API có thể chưa trả về khi render frame đầu:
+**Mới — thêm `TEN_TO_INFO` và `taoItemTuTen()`:**
 
 ```java
-if (danhSachNpc != null) {
-    for (int i = 0; i < danhSachNpc.size(); i++) {
-        danhSachNpc.get(i).checkClick(nhanVat.x_check_npc, nhanVat.y_check_npc);
-        danhSachNpc.get(i).ve(batch, thoiGianTichLuy);
-    }
-    map.capNhatNpc();
-}
-
-boolean duocVeDiemCanDen = true;
-if (danhSachNpc != null) {
-    for (Npc npc : danhSachNpc) {
-        if (npc.dangClickNpc) { duocVeDiemCanDen = false; }
-    }
-}
-```
-
----
-
-### 4.7 ItemThuongXuLi.java
-
-Thêm `TEN_TO_INFO` và `taoItemTuTen()` — mapping ngược từ tên → Item object:
-
-```java
+// Thêm record để lưu thông tin mapping
 private record ItemInfo(String id, LoaiItem loai, String hanhTinh) {}
 
+// Map tên (server) → (id, loai, hanhTinh) để gọi taoItemThuong()
 private static final Map<String, ItemInfo> TEN_TO_INFO = new HashMap<>();
 
 static {
-    TEN_TO_INFO.put("Áo võ kame",           new ItemInfo("set_cam",  LoaiItem.AO,           "traidat"));
-    TEN_TO_INFO.put("Quần võ kame",          new ItemInfo("set_cam",  LoaiItem.QUAN,         "traidat"));
-    TEN_TO_INFO.put("Găng võ kame",          new ItemInfo("set_cam",  LoaiItem.GANG,         "traidat"));
-    TEN_TO_INFO.put("Giày võ kame",          new ItemInfo("set_cam",  LoaiItem.GIAY,         "traidat"));
-    TEN_TO_INFO.put("Rada cấp 1",            new ItemInfo("rada1",    LoaiItem.RADA,         "all"));
-    TEN_TO_INFO.put("Bông tai Porata",       new ItemInfo("bongtaic1",LoaiItem.BONGTAI,      "all"));
-    TEN_TO_INFO.put("Giáp luyện tập cấp 1", new ItemInfo("glt_c1",   LoaiItem.GIAPLUYENTAP, "all"));
+    TEN_TO_INFO.put("Áo võ kame",           new ItemInfo("set_cam",   LoaiItem.AO,           "traidat"));
+    TEN_TO_INFO.put("Quần võ kame",          new ItemInfo("set_cam",   LoaiItem.QUAN,         "traidat"));
+    TEN_TO_INFO.put("Găng võ kame",          new ItemInfo("set_cam",   LoaiItem.GANG,         "traidat"));
+    TEN_TO_INFO.put("Giày võ kame",          new ItemInfo("set_cam",   LoaiItem.GIAY,         "traidat"));
+    TEN_TO_INFO.put("Rada cấp 1",            new ItemInfo("rada1",     LoaiItem.RADA,         "all"));
+    TEN_TO_INFO.put("Bông tai Porata",       new ItemInfo("bongtaic1", LoaiItem.BONGTAI,      "all"));
+    TEN_TO_INFO.put("Giáp luyện tập cấp 1", new ItemInfo("glt_c1",    LoaiItem.GIAPLUYENTAP, "all"));
 }
 
+// Method mới — mapping ngược tên → Item
 public static Item taoItemTuTen(String tenItem) {
     ItemInfo info = TEN_TO_INFO.get(tenItem);
     if (info == null) {
         Gdx.app.error("ItemThuongXuLi", "Không tìm thấy item: " + tenItem);
-        return null;
+        return null; // graceful — shop bỏ qua item không biết
     }
-    // Item đặc biệt xử lý riêng constructor
-    // Item thường gọi taoItemThuong()
+
+    // Item đặc biệt có constructor riêng
+    if (info.loai() == LoaiItem.BONGTAI) {
+        return new Item("bongtaic1", "Bông tai Porata", LoaiItem.BONGTAI, ...);
+    }
+    if (info.loai() == LoaiItem.GIAPLUYENTAP) {
+        return new Item("glt_c1", "Giáp luyện tập cấp 1", LoaiItem.GIAPLUYENTAP, ...);
+    }
+
+    // Item thường — tái sử dụng taoItemThuong() có sẵn
+    return taoItemThuong(info.id(), info.loai(), info.hanhTinh());
 }
 ```
 
-**Thêm item mới:** 1 dòng vào `TEN_TO_INFO` + 1 record vào DB — không đụng gì khác.
+**Thay đổi so với cũ:**
+- Thêm `record ItemInfo` — giữ 3 thông tin cần thiết để tạo Item
+- Thêm `TEN_TO_INFO` static map — lookup O(1)
+- Thêm `taoItemTuTen()` — entry point từ server data vào Item object
+- Giữ nguyên `taoItemThuong()` — tái sử dụng lại, không sửa
 
 ---
 
-### 4.8 ItemGia.java
+### 6.3 ItemGia.java
 
-Bỏ hoàn toàn hardcode `bangGia`. Đọc thẳng từ `ShopCache`:
+**Cũ — hardcode toàn bộ giá:**
 
 ```java
 public class ItemGia {
-    private static final int NPC_BASE_ID = 3;
+    // Nested Map — dễ nhầm khi lookup
+    private static final Map<String, Map<LoaiTien, Long>> bangGia = new HashMap<>();
+
+    static {
+        themGia("Áo võ kame",   LoaiTien.VANG, 500_000L);
+        themGia("Quần võ kame", LoaiTien.VANG, 450_000L);
+        // ...
+    }
+
+    public static LoaiTien layLoaiTien(Item item) {
+        Map<LoaiTien, Long> gia = bangGia.get(item.getTenItem());
+        for (LoaiTien loai : gia.keySet()) {
+            return loai; // ← BUG TIỀM ẨN: HashMap.keySet() không đảm bảo thứ tự
+        }
+        return null;
+    }
+}
+// Vấn đề:
+// 1. Giá hardcode → admin muốn sửa giá phải release client mới
+// 2. layLoaiTien() dùng keySet() iteration → không ổn định nếu có 2 loại tiền
+// 3. Thêm item mới phải sửa 2 chỗ: ItemGia + admin_thanhle
+```
+
+**Mới — đọc từ ShopCache:**
+
+```java
+public class ItemGia {
+    private static final int NPC_BASE_ID = 3; // admin_thanhle
 
     public static long layGiaItem(Item item) {
         ShopItemServerData data = timTrongCache(item.getTenItem());
@@ -501,26 +421,63 @@ public class ItemGia {
 }
 ```
 
-**Xóa hoàn toàn:** static block `bangGia`, `themGia()`, nested `Map<LoaiTien, Long>`, vòng for `keySet()` không ổn định.
+**Thay đổi so với cũ:**
+- Xóa hoàn toàn `bangGia`, `themGia()`, nested `Map<LoaiTien, Long>`
+- Xóa vòng for `keySet()` không ổn định
+- Đọc thẳng từ `ShopCache` — giá luôn đồng bộ với server
+- Admin sửa giá trên server → có hiệu lực ngay session tiếp theo
 
 ---
 
-### 4.9 admin_thanhle.java
+### 6.4 admin_thanhle.java
 
-Bỏ `themItemVaoDanhSach...()` hardcode. Constructor fetch từ server:
+**Cũ — hardcode toàn bộ item trong constructor:**
+
+```java
+public admin_thanhle(...) {
+    super(...);
+    themItemVaoDanhSachAoQuan();   // hardcode
+    themItemVaoDanhSachPhuKien();  // hardcode
+    themItemVaoDanhSachDacBiet();  // hardcode
+}
+
+public void themItemVaoDanhSachAoQuan() {
+    danhSachItemAoQuan.add(ItemThuongXuLi.taoItemThuong("set_cam", LoaiItem.AO, "traidat"));
+    danhSachItemAoQuan.add(ItemThuongXuLi.taoItemThuong("set_cam", LoaiItem.QUAN, "traidat"));
+}
+
+public void themItemVaoDanhSachDacBiet() {
+    danhSachItemDacBiet.add(new Item(
+        "bongtaic1", "Bông tai Porata", LoaiItem.BONGTAI,
+        "vatpham/vatphamgame/bongtai/bongtaic1.png",
+        "Sử dụng để hợp thể với đệ tử", 1,
+        new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+        "all", 1500000L, null, 0, 0, 0, -1  // ← giá hardcode
+    ));
+}
+// Vấn đề:
+// Thêm item → sửa code → rebuild → release
+// Xóa item → sửa code → rebuild → release
+// Sửa giá  → sửa ItemGia + sửa code → rebuild → release
+```
+
+**Mới — fetch từ server, cache lại:**
 
 ```java
 private static final int NPC_BASE_ID = 3;
 
 public admin_thanhle(...) {
     super(...);
+
     ShopCache cache = ShopCache.getInstance();
     if (cache.daCo(NPC_BASE_ID)) {
+        // Cache hit — 0ms, không gọi API
         apDungDuLieuShop(cache.lay(NPC_BASE_ID));
     } else {
+        // Cache miss — fetch API nền, shop rỗng đến khi có data
         ApiService.layShopCuaNpc(NPC_BASE_ID, data -> {
             cache.luu(NPC_BASE_ID, data);
-            Gdx.app.postRunnable(() -> apDungDuLieuShop(data));
+            Gdx.app.postRunnable(() -> apDungDuLieuShop(data)); // GL thread
         });
     }
 }
@@ -529,10 +486,12 @@ private void apDungDuLieuShop(List<ShopItemServerData> data) {
     danhSachItemAoQuan.clear();
     danhSachItemPhuKien.clear();
     danhSachItemDacBiet.clear();
+
     for (ShopItemServerData s : data) {
-        if (!s.is_active) continue;
+        if (!s.is_active) continue; // admin bật tắt từ server
         Item item = ItemThuongXuLi.taoItemTuTen(s.tenItem);
-        if (item == null) continue;
+        if (item == null) continue; // item không biết → bỏ qua, không crash
+
         switch (s.tab) {
             case "AO_QUAN"  -> danhSachItemAoQuan.add(item);
             case "PHU_KIEN" -> danhSachItemPhuKien.add(item);
@@ -542,102 +501,44 @@ private void apDungDuLieuShop(List<ShopItemServerData> data) {
 }
 ```
 
-**Xóa hoàn toàn:** `themItemVaoDanhSachAoQuan()`, `themItemVaoDanhSachPhuKien()`, `themItemVaoDanhSachDacBiet()`.
+**Thay đổi so với cũ:**
+- Xóa `themItemVaoDanhSachAoQuan()`, `themItemVaoDanhSachPhuKien()`, `themItemVaoDanhSachDacBiet()`
+- Thêm `apDungDuLieuShop()` — rebuild từ server data
+- Constructor check cache trước, chỉ gọi API khi cần
+- `is_active` check — admin bật tắt item không cần release client
 
 ---
 
-## 5. Lưu ý và best practices
+## 7. Lưu ý và best practices
 
-### ID phải khớp với DB
+### NPC_BASE_ID phải khớp DB
 
 ```java
-// MapIdHelper
-case "Làng Aru": return 2;
-
-// MapLangAru
-this.mapId = 2;
-
-// admin_thanhle
-private static final int NPC_BASE_ID = 3;
+private static final int NPC_BASE_ID = 3; // admin_thanhle trong DB
 ```
 
-Sai ID → cache sai key → miss cache mãi mãi → double fetch mỗi lần vào. Thêm map/NPC mới phải update đồng thời client và server.
+Sai ID → fetch đúng endpoint nhưng cache sai key → miss cache mãi mãi → double fetch mỗi lần click NPC. Kiểm tra DB trước khi deploy.
 
----
+### Thêm item mới vào shop
 
-### Thread safety
+Chỉ cần 2 bước, không release client:
 
-`danhSachNpc` và `danhSachItem` được gán trong GL thread (nhờ `postRunnable`) và đọc trong `render()` cũng trên GL thread → không có race condition. Callback của `layNpcCuaMap` và `layShopCuaNpc` không wrap `postRunnable` vì chỉ lưu HashMap — caller tự wrap khi cần đụng GL object.
-
----
-
-### Graceful degradation
-
-API lỗi → NPC/shop không hiện, map vẫn chơi được (hitbox vẫn có). Tốt hơn crash. Người chơi ra vào lại map/NPC sẽ retry tự động vì cache chưa được luu.
-
----
-
-### UX — tại sao không cảm thấy lag
-
-| Thời điểm | Người chơi thấy | Thực tế |
-|---|---|---|
-| Login | Menu hiện ngay | NPC prefetch nền |
-| Bấm vào game | Splash hiện ngay | Constructor + API chạy nền |
-| Vào map lần đầu | NPC có sẵn | Cache hit từ prefetch |
-| Vào map lần 2+ | NPC có sẵn | Object map cũ / cache hit |
-| Mở shop lần đầu | Shop có thể rỗng ~200ms | API đang fetch |
-| Mở shop lần 2+ | Item có sẵn ngay | Cache hit |
-
-Worst case duy nhất: mạng cực chậm khiến API chưa xong khi splash kết thúc → NPC pop ra sau vào map. Không phải lỗi thiết kế, là infrastructure issue.
-
----
-
-### Thêm map mới
-
-1. Tạo `MapXxx extends MapCoBan`, set `this.mapId = N`
-2. Thêm `case "Tên Map": return N` vào `MapIdHelper`
-3. Thêm record vào DB — không đụng gì khác
-
----
-
-### Thêm NPC shop mới (NPC khác admin_thanhle)
-
-1. Tạo class NPC mới tương tự `admin_thanhle`, set `NPC_BASE_ID` riêng
-2. Thêm item vào DB qua API admin
-3. Thêm mapping vào `TEN_TO_INFO` nếu có item mới
-4. Không đụng `ShopCache`, `ApiService`, `ItemGia`
-
----
-
-### Thêm item mới vào shop hiện có
-
-1. Thêm 1 dòng vào `TEN_TO_INFO` trong `ItemThuongXuLi`
+1. Thêm 1 dòng vào `TEN_TO_INFO` trong `ItemThuongXuLi` (nếu là item hoàn toàn mới)
 2. POST `/game-data/npc-shop` với data item mới
-3. Không release client mới
 
----
+### Thêm NPC shop mới
 
-### Cache invalidation nếu cần
+Tạo class tương tự `admin_thanhle` với `NPC_BASE_ID` riêng. Không đụng `ShopCache`, `ApiService`, `ItemGia`.
 
-```java
-// MapDataCache / ShopCache
-public void xoaCache(int id) { cache.remove(id); }
-public void xoaToanBoCache() { cache.clear(); }
-```
+### Shop rỗng lần đầu click
 
-Gọi sau khi nhận WebSocket event update từ server nếu muốn live reload.
+Lần đầu click NPC khi cache chưa có → shop hiện trống ~200ms. Chấp nhận được vì animation mở shop đã che phần lớn thời gian này. Không dùng fallback hardcode vì sẽ tạo inconsistency giữa data server và data hiển thị.
 
----
+### Cache invalidation
 
-### Parse proto int64
-
-Server dùng protobuf `int64` → JSON serialize thành `{ low, high, unsigned }`. Luôn dùng `parseProtoLong()` có sẵn trong `ApiService`:
+Cache tồn tại suốt session. Nếu cần reload live:
 
 ```java
-JsonElement giaEl = obj.get("gia");
-item.gia = giaEl.isJsonObject()
-    ? ApiService.parseProtoLong(giaEl.getAsJsonObject())
-    : giaEl.getAsLong();
+ShopCache.getInstance().xoaCache(NPC_BASE_ID);
+// Lần click NPC tiếp theo sẽ fetch lại từ server
 ```
-
-Không dùng `.getAsLong()` thẳng trên proto int64 field — số lớn sẽ bị sai âm thầm.
