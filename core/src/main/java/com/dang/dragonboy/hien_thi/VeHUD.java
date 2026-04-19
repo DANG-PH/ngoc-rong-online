@@ -715,7 +715,7 @@ public class VeHUD {
             layout.setText(font, "Kết nối thất bại, đang thử lại lần " + GameSocket.retryCount + "/" + GameSocket.MAX_RETRY);
             font.draw(batch, layout, (Gdx.graphics.getWidth() - layout.width) / 2, 180);
         }
-        if (GameSocket.retryCount == GameSocket.MAX_RETRY && !State_Management.isForceLogout()) {
+        if (GameSocket.retryCount == GameSocket.MAX_RETRY && !GameSocket.isManualDisconnect && !State_Management.isForceLogout()) {
             GameSocket.disconnect();
             State_Management.setToken("");
             State_Management.setRefresh_token("");
@@ -1256,6 +1256,22 @@ public class VeHUD {
                             trangThaiChucNangHUDChucNang = TrangThaiChucNangHUD_ChucNang.NHAC_NEN;
                         } else if (oChiSoDangChon == 8) {
                             trangThaiChucNangHUDChucNang = TrangThaiChucNangHUD_ChucNang.TAI_KHOAN;
+                        } else if (oChiSoDangChon == 9) {
+                            Gdx.input.setInputProcessor(null);
+                            // 1. Ngắt WS TRƯỚC TIÊN — trước khi làm bất cứ điều gì khác
+                            GameSocket.disconnect();
+
+                            // 2. Reset state
+                            State_Management.setToken("");
+                            State_Management.setRefresh_token("");
+                            State_Management.setAuth_id(0);
+                            State_Management.setRole("");
+                            State_Management.setForceLogout(false);
+                            State_Management.resetAll(); // gọi cuối vì có thể null nhiều thứ
+
+                            // 3. Chuyển màn hình — sau khi state đã sạch
+                            Main game = State_Management.game;
+                            game.setScreen(new ManHinhMenu(game, null, false));
                         }
                     } else {
                         if (oChiSoDangChon == 0) {
@@ -1268,6 +1284,22 @@ public class VeHUD {
                             trangThaiChucNangHUDChucNang = TrangThaiChucNangHUD_ChucNang.NHAC_NEN;
                         } else if (oChiSoDangChon == 7) {
                             trangThaiChucNangHUDChucNang = TrangThaiChucNangHUD_ChucNang.TAI_KHOAN;
+                        } else if (oChiSoDangChon == 8) {
+                            Gdx.input.setInputProcessor(null);
+                            // 1. Ngắt WS TRƯỚC TIÊN — trước khi làm bất cứ điều gì khác
+                            GameSocket.disconnect();
+
+                            // 2. Reset state
+                            State_Management.setToken("");
+                            State_Management.setRefresh_token("");
+                            State_Management.setAuth_id(0);
+                            State_Management.setRole("");
+                            State_Management.setForceLogout(false);
+                            State_Management.resetAll(); // gọi cuối vì có thể null nhiều thứ
+
+                            // 3. Chuyển màn hình — sau khi state đã sạch
+                            Main game = State_Management.game;
+                            game.setScreen(new ManHinhMenu(game, null, false));
                         }
                     }
                 }

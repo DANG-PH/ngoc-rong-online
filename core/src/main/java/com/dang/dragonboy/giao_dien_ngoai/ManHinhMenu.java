@@ -74,6 +74,7 @@ public class ManHinhMenu implements Screen {
         layout = new GlyphLayout();
 
         if (isForceLogout) {
+            System.out.println("FORCE");
             this.trangThaiManHinh = TrangThaiManHinhMenu.FORCE_LOGOUT;
         }
     }

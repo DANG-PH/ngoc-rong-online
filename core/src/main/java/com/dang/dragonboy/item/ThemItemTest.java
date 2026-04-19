@@ -1289,7 +1289,7 @@ public class ThemItemTest {
                             "nhanvat/caitrang/goku_black_rose/daudung.png",
                             "Cải trang thành Super Black Goku", 1,
                             new int[]{0, 0, 0, 0, 0, 0, 45, 45, 45, 0, 0, 0, 0},
-                            "all", 40_000_000_000L, null, 0, 0, 0, -1
+                            "all", 1000L, null, 0, 0, 0, -1
                         );
                         veHUD.setTinNhanPet("Bạn vừa khai phá SSJ ROSE",2f);
                     } else {
@@ -1299,12 +1299,12 @@ public class ThemItemTest {
                             "nhanvat/caitrang/goku_black/daudung.png",
                             "Cải trang thành Black Goku", 1,
                             new int[]{0, 0, 0, 0, 0, 0, 35, 35, 35, 0, 0, 0, 0},
-                            "all", 40_000_000_000L, null, 0, 0, 0, -1
+                            "all", 1000L, null, 0, 0, 0, -1
                         );
                         veHUD.setTinNhanPet("Bạn vừa trở thành black goku",2f);
                     }
                     duLieu.themItemVaoHanhTrang(itemMoi);
-                    if (duLieu.getSucManh() >= 40_000_000_000L) {
+                    if (duLieu.getSucManh() >= 1000L) {
                         int viTriMoi = duLieu.getHanhTrang().size() - 1;
                         veHUD.hangTrangDangChon = viTriMoi + 8;
                         veHUD.xulyitem.macDo(veHUD.hangTrangDangChon);
@@ -1650,7 +1650,7 @@ public class ThemItemTest {
                 "nhanvat/caitrang/goku_black_rose/daudung.png",
                 "Cải trang thành Super Black Goku", 1,
                 new int[]{0,0,0,0,0,0,45,45,45,0,0,0,0},
-                "all", 40_000_000_000L, null, 0, 0, 0, -1
+                "all", 2_000L, null, 0, 0, 0, -1
                 );
             case 2: return new Item(
                 "trung_de_tu", "Trứng đệ tử", LoaiItem.PHUTRO,

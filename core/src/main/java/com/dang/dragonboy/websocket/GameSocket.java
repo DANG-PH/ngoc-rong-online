@@ -18,7 +18,7 @@ public class GameSocket {
     public static Socket socket;
     private static boolean eventsRegistered = false;
     public static boolean isReconnecting = false;
-    private static boolean isManualDisconnect = false;
+    public static boolean isManualDisconnect = false;
     public static final int MAX_RETRY = 5;
     public static int retryCount = 0;
 
@@ -146,12 +146,11 @@ public class GameSocket {
     public static void disconnect() {
         eventsRegistered = false;
         isManualDisconnect = true;
-        retryCount = MAX_RETRY;
         if (socket != null) socket.disconnect();
     }
 
     private static void handleTokenExpired() {
-        retryCount = MAX_RETRY;
+        isManualDisconnect = true;
         State_Management.setForceLogout(true);
         State_Management.setForceLogoutMessage("Phiên đăng nhập đã hết hạn hoặc bị thu hồi");
     }
