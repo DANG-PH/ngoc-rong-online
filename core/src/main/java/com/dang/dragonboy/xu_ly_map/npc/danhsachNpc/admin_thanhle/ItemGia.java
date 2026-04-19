@@ -27,7 +27,7 @@ public class ItemGia {
         ShopCache cache = ShopCache.getInstance();
         if (!cache.daCo(NPC_BASE_ID)) return null;
         for (ShopItemServerData s : cache.lay(NPC_BASE_ID)) {
-            if (s.tenItem.equals(tenItem)) return s;
+            if (s.ten_item.equals(tenItem)) return s;
         }
         return null;
     }

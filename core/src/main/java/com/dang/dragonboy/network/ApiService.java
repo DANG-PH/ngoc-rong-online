@@ -875,7 +875,9 @@ public class ApiService {
                     JsonObject obj = element.getAsJsonObject();
                     ShopItemServerData item = new ShopItemServerData();
                     item.id         = obj.get("id").getAsInt();
-                    item.tenItem    = obj.get("tenItem").getAsString();
+                    item.item_base_id = obj.get("item_base_id").getAsInt();
+                    item.ten_item     = obj.get("ten_item").getAsString();
+                    item.ma_item      = obj.get("ma_item").getAsString();
                     JsonElement giaEl = obj.get("gia");
                     item.gia = giaEl.isJsonObject()
                         ? ApiService.parseProtoLong(giaEl.getAsJsonObject())

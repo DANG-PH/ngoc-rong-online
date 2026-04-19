@@ -304,18 +304,21 @@ public class ManHinhChoiMoi implements Screen {
                 chuyenManHinhDong = false;
             }
             if (chuyenManHinhTaoMoi) {
-                String nhanvat = hanhtinhVaNhanvat[hanhTinhDuocChon][nhanVatDuocChon+1];
-                switch (hanhTinhDuocChon){
-                    case 0:
-                        game.setScreen(new ManHinhSplash(game, new ManHinhNhaGohan(game,tenNguoiChoi,"traidat",nhanvat,null)));
-                        break;
-                    case 1:
-                        game.setScreen(new ManHinhSplash(game, new ManHinhNhaBroly(game,tenNguoiChoi,"xayda",nhanvat)));
-                        break;
-                    case 2:
-                        game.setScreen(new ManHinhSplash(game, new ManHinhNhaGohan(game,tenNguoiChoi,"traidat",nhanvat,null)));
-                        break;
-                }
+//                String nhanvat = hanhtinhVaNhanvat[hanhTinhDuocChon][nhanVatDuocChon+1];
+//                switch (hanhTinhDuocChon){
+//                    case 0:
+//                        game.setScreen(new ManHinhSplash(game, new ManHinhNhaGohan(game,tenNguoiChoi,"traidat",nhanvat,null)));
+//                        break;
+//                    case 1:
+//                        game.setScreen(new ManHinhSplash(game, new ManHinhNhaBroly(game,tenNguoiChoi,"xayda",nhanvat)));
+//                        break;
+//                    case 2:
+//                        game.setScreen(new ManHinhSplash(game, new ManHinhNhaGohan(game,tenNguoiChoi,"traidat",nhanvat,null)));
+//                        break;
+//                }
+                ManHinhDoiTaiKhoan nextScreen = new ManHinhDoiTaiKhoan(game);
+                nextScreen.setTenTaiKhoan(tenNguoiChoi);
+                game.setScreen(new ManHinhSplash(game, nextScreen));
                 chuyenManHinhTaoMoi = false;
             }
 

@@ -91,6 +91,14 @@ public class ManHinhDoiTaiKhoan implements Screen {
         layout = new GlyphLayout();
     }
 
+    // Dùng cho ManHinhChoiMoi khi người chơi bấm tạo mới tk, và set màn sang màn này
+    public void setTenTaiKhoan(String tenNhanVat) {
+        this.tenTaiKhoanDky = tenNhanVat;
+        this.RealnameDky = tenNhanVat;
+        this.GameNameDky = tenNhanVat;
+        this.trangThaiManHinh = TrangThaiManHinh.DANGKY_STEP1;
+    }
+
     @Override public void show() {
         sky = new Texture("hud/giaodienngoai/"+"traidat"+ "/" + "sky_" + "traidat" + ".png");
         nuixa = new Texture("hud/giaodienngoai/"+"traidat"+ "/" + "nuixa_" + "traidat" + ".png");
@@ -492,48 +500,50 @@ public class ManHinhDoiTaiKhoan implements Screen {
                 thoiGianHienNutClick = 0.1f;
             }
 
-            float nutGoogleX = (Gdx.graphics.getWidth() - 200) / 2f;
-            float nutGoogleY = 20;
-            if (mouseX >= nutGoogleX && mouseX <= nutGoogleX + 200
-                && mouseY >= nutGoogleY && mouseY <= nutGoogleY + 50) {
-                isGooglePressed = true;
-                thoiGianHienNutClick = 0.1f;
+            if (trangThaiManHinh == TrangThaiManHinh.NONE) {
+                float nutGoogleX = (Gdx.graphics.getWidth() - 200) / 2f;
+                float nutGoogleY = 20;
+                if (mouseX >= nutGoogleX && mouseX <= nutGoogleX + 200
+                    && mouseY >= nutGoogleY && mouseY <= nutGoogleY + 50) {
+                    isGooglePressed = true;
+                    thoiGianHienNutClick = 0.1f;
 
-                GoogleOAuth2Desktop.login(new GoogleOAuth2Desktop.Callback() {
-                    @Override
-                    public void onSuccess(String idToken) {
-                        new Thread(() -> {
-                            ApiService.LoginWithGoogleResponse res =
-                                ApiService.loginWithGoogle(idToken);
+                    GoogleOAuth2Desktop.login(new GoogleOAuth2Desktop.Callback() {
+                        @Override
+                        public void onSuccess(String idToken) {
+                            new Thread(() -> {
+                                ApiService.LoginWithGoogleResponse res =
+                                    ApiService.loginWithGoogle(idToken);
 
-                            if (res != null) {
-                                State_Management.setToken(res.accessToken);
-                                State_Management.setAuth_id(res.authId);
-                                State_Management.setRefresh_token(res.refreshToken);
+                                if (res != null) {
+                                    State_Management.setToken(res.accessToken);
+                                    State_Management.setAuth_id(res.authId);
+                                    State_Management.setRefresh_token(res.refreshToken);
 
-                                // Gọi getProfile
-                                UserResponse user = ApiService.getProfile(res.accessToken);
+                                    // Gọi getProfile
+                                    UserResponse user = ApiService.getProfile(res.accessToken);
 
-                                Gdx.app.postRunnable(() -> {
-                                    if (user != null) {
-                                        game.setScreen(new ManHinhMenu(game, null, false));
-                                    } else {
-                                        System.out.println("Google login thất bại: không lấy được profile");
-                                    }
-                                });
-                            } else {
-                                Gdx.app.postRunnable(() ->
-                                    System.out.println("Google login thất bại"));
-                            }
-                        }).start();
-                    }
+                                    Gdx.app.postRunnable(() -> {
+                                        if (user != null) {
+                                            game.setScreen(new ManHinhMenu(game, null, false));
+                                        } else {
+                                            System.out.println("Google login thất bại: không lấy được profile");
+                                        }
+                                    });
+                                } else {
+                                    Gdx.app.postRunnable(() ->
+                                        System.out.println("Google login thất bại"));
+                                }
+                            }).start();
+                        }
 
-                    @Override
-                    public void onFailure(String error) {
-                        Gdx.app.postRunnable(() ->
-                            System.out.println("Lỗi: " + error));
-                    }
-                });
+                        @Override
+                        public void onFailure(String error) {
+                            Gdx.app.postRunnable(() ->
+                                System.out.println("Lỗi: " + error));
+                        }
+                    });
+                }
             }
         }
 

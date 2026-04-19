@@ -71,7 +71,7 @@ public class admin_thanhle extends renderUInpc {
 
         for (ShopItemServerData s : data) {
             if (!s.is_active) continue;
-            Item item = ItemThuongXuLi.taoItemTuTen(s.tenItem);
+            Item item = ItemThuongXuLi.taoItemTuTen(s.ten_item);
             if (item == null) continue;
 
             switch (s.tab) {
