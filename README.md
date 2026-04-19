@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://i.pinimg.com/736x/41/19/12/411912a0598fbae0462b0136c3e978ca.jpg" width="220" alt="Ngọc Rồng Online">
+  <img src="https://i.pinimg.com/originals/fd/91/b1/fd91b1715061efc79dbb6678aea0f9b9.gif" width="220" alt="Ngọc Rồng Online">
 </p>
 
 <h2 align="center">Ngọc Rồng Online – Java Multiplayer Game</h2>
@@ -49,37 +49,6 @@ Hiện tại:
 ### Infrastructure
 - Ubuntu VPS
 - Docker (microservice architecture)
-
----
-
-## 4. ▶️ Cách chạy game
-
-1. Tải file release
-2. Giải nén file `.zip`
-3. Chạy file:
-
-```
-NgocRongOnline.exe
-```
-
----
-
-## 6. 👤 Tác giả
-
-**Phạm Hải Đăng**
-
-Backend Developer – Game Developer
-
-- 📫 Email: dangph.ptit@gmail.com  
-- 🌐 GitHub: https://github.com/DANG-PH
-
----
-
-## ⭐ Mục tiêu dự án
-
-- Xây dựng hệ thống game multiplayer từ đầu  
-- Áp dụng kiến trúc microservice cho game server  
-- Nghiên cứu networking và đồng bộ trạng thái player
 
 ---
 
