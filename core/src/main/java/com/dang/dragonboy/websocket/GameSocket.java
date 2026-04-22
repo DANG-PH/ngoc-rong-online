@@ -37,7 +37,7 @@ public class GameSocket {
             auth.put("gameSessionId", State_Management.gameSessionId);
             opts.auth = auth;
 
-            socket = IO.socket("https://api.dangpham.id.vn/ws-game", opts);
+            socket = IO.socket("https://ws.dangpham.id.vn/ws-game", opts);
 
             socket.on(Socket.EVENT_CONNECT, args -> {
                 System.out.println("WS CONNECTED");
