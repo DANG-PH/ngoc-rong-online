@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://i.pinimg.com/736x/41/19/12/411912a0598fbae0462b0136c3e978ca.jpg" width="220" alt="Ngọc Rồng Online">
+  <img src="https://i.pinimg.com/originals/fd/91/b1/fd91b1715061efc79dbb6678aea0f9b9.gif" width="220" alt="Ngọc Rồng Online">
 </p>
 
 <h2 align="center">Ngọc Rồng Online – Java Multiplayer Game</h2>
@@ -13,11 +13,11 @@
 
 ## 1. 🔧 Tính năng hiện tại
 
-- Hệ thống đăng nhập / tạo nhân vật  
-- Multiplayer: người chơi có thể kết nối server  
-- Hiển thị người chơi theo thời gian thực trong cùng map  
-- Đồng bộ vị trí và trạng thái nhân vật  
-- Client game xây dựng bằng **LibGDX**  
+- Hệ thống đăng nhập / tạo nhân vật
+- Multiplayer: người chơi có thể kết nối server
+- Hiển thị người chơi theo thời gian thực trong cùng map
+- Đồng bộ vị trí và trạng thái nhân vật
+- Client game xây dựng bằng **LibGDX**
 - Server API xây dựng bằng **NestJS**
 
 ---
@@ -28,9 +28,9 @@ Dự án vẫn đang trong quá trình phát triển.
 
 Hiện tại:
 
-- Người chơi có thể đăng nhập và thấy nhau trong map  
-- Hệ thống đánh nhau (combat) chưa hoàn thiện  
-- Chưa có quái vật (monster) hoặc NPC  
+- Người chơi có thể đăng nhập và thấy nhau trong map
+- Hệ thống đánh nhau (combat) chưa hoàn thiện
+- Chưa có quái vật (monster) hoặc NPC
 - Gameplay đang được phát triển thêm
 
 ---
@@ -49,37 +49,6 @@ Hiện tại:
 ### Infrastructure
 - Ubuntu VPS
 - Docker (microservice architecture)
-
----
-
-## 4. ▶️ Cách chạy game
-
-1. Tải file release
-2. Giải nén file `.zip`
-3. Chạy file:
-
-```
-NgocRongOnline.exe
-```
-
----
-
-## 6. 👤 Tác giả
-
-**Phạm Hải Đăng**
-
-Backend Developer – Game Developer
-
-- 📫 Email: dangph.ptit@gmail.com  
-- 🌐 GitHub: https://github.com/DANG-PH
-
----
-
-## ⭐ Mục tiêu dự án
-
-- Xây dựng hệ thống game multiplayer từ đầu  
-- Áp dụng kiến trúc microservice cho game server  
-- Nghiên cứu networking và đồng bộ trạng thái player
 
 ---
 
