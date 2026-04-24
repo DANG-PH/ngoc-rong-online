@@ -12,6 +12,7 @@ public class AssetMulti {
     private static final Map<String, NhanVatCauHinh> SKIN_CACHE = new HashMap<>();
     private static final Map<String, Texture> TEXTURE_CACHE = new HashMap<>();
     private static final Map<String, VanBayCauHinh> VAN_BAY_CACHE = new HashMap<>();
+    private static final Map<String, Texture[]> DEO_LUNG_CACHE = new HashMap<>();
 
     // =====================================================
     // ===================== PUBLIC API ====================
@@ -75,6 +76,17 @@ public class AssetMulti {
         }
     }
 
+    public static Texture[] getDeoLung(String itemId, int soAnh) {
+        return DEO_LUNG_CACHE.computeIfAbsent(itemId, id -> {
+            Texture[] textures = new Texture[soAnh];
+            for (int i = 0; i < soAnh; i++) {
+                textures[i] = getTexture("vatpham/vatphamgame/deo_lung/" + id + "/" + (i + 1) + ".png");
+                // Dùng getTexture() có sẵn → TEXTURE_CACHE lo, không new Texture trực tiếp
+            }
+            return textures;
+        });
+    }
+
     // =====================================================
     // ===================== DISPOSE =======================
     // =====================================================
@@ -84,5 +96,6 @@ public class AssetMulti {
         TEXTURE_CACHE.clear();
         VAN_BAY_CACHE.clear();
         SKIN_CACHE.clear();
+        DEO_LUNG_CACHE.clear();
     }
 }

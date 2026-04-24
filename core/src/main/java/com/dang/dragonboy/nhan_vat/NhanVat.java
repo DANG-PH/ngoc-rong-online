@@ -1573,10 +1573,10 @@ public class NhanVat {
                 case  "kiem_vip" : soAnh = 7; break;
             }
             if (veHUD.chuaSetUpAnhDeoLung) {
-                veHUD.anhDeoLung = new Texture[soAnh];
-                for (int i = 0; i < soAnh; i++) {
-                    veHUD.anhDeoLung[i] = new Texture("vatpham/vatphamgame/deo_lung/" + veHUD.deoLungDangDung.getId() + "/" + (i + 1) + ".png");
-                }
+                veHUD.anhDeoLung = AssetMulti.getDeoLung(
+                    veHUD.deoLungDangDung.getId(),
+                    soAnh
+                );
                 veHUD.chuaSetUpAnhDeoLung = false;
             }
             timeDoiFramesDeoLung+=Gdx.graphics.getDeltaTime();

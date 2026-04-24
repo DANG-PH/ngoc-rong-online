@@ -1,5 +1,6 @@
 package com.dang.dragonboy.websocket;
 
+import com.badlogic.gdx.Gdx;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.du_lieu.State_Management;
 import com.dang.dragonboy.item.Item;
@@ -44,9 +45,14 @@ public class GameSocket {
                 retryCount = 0;
                 isReconnecting = false;
                 if (!eventsRegistered) {
+                    // Lần đầu connect
                     registerGameEvents();
                     eventsRegistered = true;
                     isManualDisconnect = false;
+                } else {
+                    // Reconnect (dưới hoặc trên 10s)
+                    // Push lại state thật vì A, C, D có thể đang thấy state cũ
+                    syncMyState();
                 }
             });
 
@@ -156,26 +162,43 @@ public class GameSocket {
     }
 
     private static void registerGameEvents() {
-        socket.on("mapSnapshot", args -> {
-            WorldState.onMapSnapshot(args);
-        });
+        // ===== PLAYER STATE (đụng Texture → postRunnable) =====
+        socket.on("mapSnapshot", args ->
+            Gdx.app.postRunnable(() -> WorldState.onMapSnapshot(args)));
 
-        socket.on("playerSpawn", args -> {
-            System.out.println("===== playerSpawn =====");
-            System.out.println(args[0]);
-            WorldState.onPlayerSpawn(args);
-        });
+        socket.on("playerSpawn", args ->
+            Gdx.app.postRunnable(() -> {
+                System.out.println("===== playerSpawn =====");
+                System.out.println(args[0]);
+                WorldState.onPlayerSpawn(args);
+            }));
 
-        socket.on("playerDespawn", args -> {
-            System.out.println("===== playerDespawn =====");
-            System.out.println(args[0]);
-            WorldState.onPlayerDespawn(args);
-        });
+        socket.on("playerDespawn", args ->
+            Gdx.app.postRunnable(() -> {
+                System.out.println("===== playerDespawn =====");
+                System.out.println(args[0]);
+                WorldState.onPlayerDespawn(args);
+            }));
 
-        socket.on("playerSync", WorldState::onPlayerSync);
-        socket.on("playerChat", WorldState::onPlayerChat);
+        // Race condition không đáng kể với game → không cần postRunnable
+        socket.on("playerSync", args -> WorldState.onPlayerSync(args));
+        socket.on("playerChat", args -> WorldState.onPlayerChat(args));
 
-        socket.on("notification", args -> WorldState.onNotification(args));
+        // ===== SKILL (không đụng Texture) =====
+        socket.on("useSkill", args -> WorldState.onUseSkill(args));
+        socket.on("cancelSkill", args -> WorldState.onCancelSkill(args));
+        socket.on("syncSkills", args -> WorldState.onSyncSkills(args));
+
+        // ===== DEO LUNG (đụng Texture → postRunnable) =====
+        socket.on("useDeoLung", args ->
+            Gdx.app.postRunnable(() -> WorldState.onPlayerUseDeoLung(args)));
+        socket.on("cancelDeoLung", args ->
+            Gdx.app.postRunnable(() -> WorldState.onPlayerCancelDeoLung(args)));
+
+        // ===== ITEM (không đụng Texture) =====
+        socket.on("addItem", args -> WorldState.onAddItem(args));
+
+        // ===== TRADE (không đụng Texture) =====
         socket.on("trade:request", args -> WorldState.onTradeItem(args));
         socket.on("trade:open", args -> WorldState.onTradeOpen(args));
         socket.on("trade:cancelled", args -> WorldState.onTradeCancel(args));
@@ -183,11 +206,11 @@ public class GameSocket {
         socket.on("trade:bothLocked", WorldState::onTradeBothLock);
         socket.on("trade:check:ok", WorldState::onTradeCheckOk);
         socket.on("trade:success", WorldState::onTradeSuccess);
-        socket.on("cancelSkill", WorldState::onCancelSkill);
-        socket.on("useSkill", WorldState::onUseSkill);
-        socket.on("syncSkills", WorldState::onSyncSkills);
-        socket.on("addItem", args -> WorldState.onAddItem(args));
 
+        // ===== NOTIFICATION (không đụng Texture) =====
+        socket.on("notification", args -> WorldState.onNotification(args));
+
+        // ===== FORCE LOGOUT =====
         socket.on("force_logout", args -> {
             try {
                 JSONObject data = (JSONObject) args[0];
@@ -200,7 +223,6 @@ public class GameSocket {
 
                 retryCount = MAX_RETRY;
                 eventsRegistered = false;
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -268,6 +290,17 @@ public class GameSocket {
         data.put("avatar", nhanVat.doiavatar());
 
         socket.emit("player-move", data);
+    }
+
+    public static void guiDeoLung(String maItem) throws Exception {
+        JSONObject data = new JSONObject();
+        data.put("deoLungDung", maItem);
+
+        socket.emit("use-deo-lung", data);
+    }
+
+    public static void guiCancelDeoLung() throws Exception {
+        socket.emit("cancel-deo-lung");
     }
 
     public static void guiChat(String tinNhan) throws Exception {
@@ -372,5 +405,21 @@ public class GameSocket {
         data.put("skillId", skillId);
 
         socket.emit("cancel-skill", data);
+    }
+
+    private static void syncMyState() {
+        try {
+            JSONObject data = new JSONObject();
+            // deoLungDangDung là maItem đang đeo, null nếu không đeo
+            String maItem = State_Management.getVeHUD().deoLungDangDung.getId();
+            if (maItem != null) {
+                data.put("deoLungDung", maItem);
+            } else {
+                data.put("deoLungDung", JSONObject.NULL);
+            }
+            socket.emit("sync-my-state", data);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

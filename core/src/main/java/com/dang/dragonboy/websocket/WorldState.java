@@ -5,6 +5,7 @@ import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.du_lieu.State_Management;
 import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.item.Item;
+import com.dang.dragonboy.item.ItemData;
 import com.dang.dragonboy.item.LoaiItem;
 import com.dang.dragonboy.network.ApiItemService;
 import com.dang.dragonboy.network.ApiService;
@@ -159,6 +160,46 @@ public class WorldState {
             ps.cao = (float) obj.optDouble("cao", ps.cao);
 
             ps.avatar = obj.optString("avatar", ps.avatar);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void onPlayerUseDeoLung(Object... args) {
+        if (args.length == 0) return;
+
+        try {
+            JSONObject obj = toJsonObject(args[0]);
+            int userId = obj.optInt("userId", -1);
+            if (userId == -1) return;
+
+            PlayerState ps = players.get(userId);
+            if (ps == null) return;
+
+            ps.dangDungDeoLung = true;
+            ps.deoLungDangDung = layItemDeoLungTheoMaItem(obj.optString("deoLungDung"));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void onPlayerCancelDeoLung(Object... args) {
+        if (args.length == 0) return;
+
+        try {
+            JSONObject obj = toJsonObject(args[0]);
+            int userId = obj.optInt("userId", -1);
+            if (userId == -1) return;
+
+            PlayerState ps = players.get(userId);
+            if (ps == null) return;
+
+            ps.dangDungDeoLung = false;
+            ps.deoLungDangDung = null;
+            ps.chuaSetUpAnhDeoLung = true;
+            ps.framesDeoLung = 0;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -573,6 +614,20 @@ public class WorldState {
 
         ps.avatar = obj.optString("avatar", ps.avatar);
 
+        // ===== Đeo lưng =====
+        // deoLungDung có trong mapSnapshot vì server lưu thẳng vào GAME:PLAYER:${userId}
+        // null nếu player chưa đeo hoặc đã cancel → dangDungDeoLung = false
+        String deoLungDung = obj.optString("deoLungDung", null);
+        if (deoLungDung != null && !deoLungDung.isEmpty()) {
+            ps.dangDungDeoLung = true;
+            ps.deoLungDangDung = layItemDeoLungTheoMaItem(deoLungDung);
+        } else {
+            ps.dangDungDeoLung = false;
+            ps.deoLungDangDung = null;
+            ps.chuaSetUpAnhDeoLung = true;
+            ps.framesDeoLung = 0;
+        }
+
         return ps;
     }
 
@@ -611,5 +666,17 @@ public class WorldState {
         // hiển thị message
         String tinNhan = obj.optString("tinNhan", "");
         duLieu.veHUD.setTinNhanPet(tinNhan, 2f);
+    }
+
+    public static Item layItemDeoLungTheoMaItem(String maItem){
+        if (maItem == null) return null;
+
+        for (Item item : ItemData.danhSachItemDeoLung) {
+            if (item.getId().equals(maItem)) {
+                return item;
+            }
+        }
+
+        return null;
     }
 }

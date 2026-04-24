@@ -1830,6 +1830,11 @@ public class VeHUD {
                             if (dangDungDeoLung && deoLungDangDung == danhSach.get(hangTrangDangChon-8)) {
                                 dangDungDeoLung = false;
                                 chuaSetUpAnhDeoLung = true;
+                                try {
+                                    GameSocket.guiCancelDeoLung();
+                                } catch (Exception e) {
+
+                                }
                             }
                             danhSach.remove(hangTrangDangChon - 8);
                         } else {
@@ -2379,9 +2384,19 @@ public class VeHUD {
                     dangDungDeoLung = false;
                     framesDeoLung = 0;
                     chuaSetUpAnhDeoLung = true;
+                    try {
+                        GameSocket.guiCancelDeoLung();
+                    } catch (Exception e) {
+
+                    }
                 } else {
                     dangDungDeoLung = true;
                     deoLungDangDung = itemm;
+                    try {
+                        GameSocket.guiDeoLung(deoLungDangDung.getId());
+                    } catch (Exception e) {
+
+                    }
                 }
             }
             if (itemm.getLoai() == LoaiItem.AURA) {

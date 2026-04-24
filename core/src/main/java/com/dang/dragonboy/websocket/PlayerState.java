@@ -73,6 +73,13 @@ public class PlayerState {
     public boolean chuaSetTimeHuytSao = true;
     private int frameTtnl = 0, frameBom = 0;
 
+    public boolean dangDungDeoLung = false;
+    public boolean chuaSetUpAnhDeoLung = true;
+    public Texture[] anhDeoLung;
+    public int framesDeoLung = 0;
+    public Item deoLungDangDung = null;
+    public float timeDoiFramesDeoLung = 0;
+
     public void ve(SpriteBatch batch, float thoiGian, VeHUD veHUD) {
         TrangThai trangThai = TrangThai.valueOf(this.trangthai);
 
@@ -104,6 +111,33 @@ public class PlayerState {
         float flipScale = this.dir;
         float anchorX = this.dir == -1 ? x + rong : x;
         float offsetChanX = this.dir == -1 ? -this.lechChanX :  this.lechChanX;
+
+        if (this.dangDungDeoLung && this.deoLungDangDung != null && !(trangThai == TrangThai.BAY_NGANG && !dangMangVanBay) && !(trangThai == TrangThai.DI_CHUYEN) && !(trangThai == TrangThai.GONG) && !(trangThai == TrangThai.THU)){
+            int soAnh = 2;
+            switch (this.deoLungDangDung.getId()) {
+                case "dao" : soAnh = 8; break;
+                case  "kiem_vip" : soAnh = 7; break;
+            }
+            if (this.chuaSetUpAnhDeoLung) {
+                this.anhDeoLung = AssetMulti.getDeoLung(
+                    this.deoLungDangDung.getId(),
+                    soAnh
+                );
+                this.chuaSetUpAnhDeoLung = false;
+            }
+            timeDoiFramesDeoLung+=Gdx.graphics.getDeltaTime();
+            float timeDoiFrames = 0.2f;
+            if (timeDoiFramesDeoLung>timeDoiFrames) {
+                this.framesDeoLung = (this.framesDeoLung + 1) % soAnh;
+                timeDoiFramesDeoLung=0;
+            }
+            float offsetX = 0;
+            float offsetY = 0;
+            if (trangThai == TrangThai.ROI) offsetY = 10f;
+            float anchorXDeoLung = this.dir == -1 ? x + rong  + (this.anhDeoLung[this.framesDeoLung].getWidth() * 0.45f)*4.5f/10f-(rong/10f) - offsetX : x  - (this.anhDeoLung[this.framesDeoLung].getWidth() * 0.45f)*4.5f/10f+(rong/10f) + offsetX;
+            batch.draw(this.anhDeoLung[this.framesDeoLung], anchorXDeoLung, y+daoDong+(cao/3f)-25f + offsetY, this.anhDeoLung[this.framesDeoLung].getWidth() * 0.45f * flipScale, this.anhDeoLung[this.framesDeoLung].getHeight() * 0.45f);
+        }
+
         if (trangThai != TrangThai.BAY_NGANG) {
             batch.draw(chanVe, anchorX + offsetChanX, y + this.lechChanY, chanW * flipScale, chanH);
 
