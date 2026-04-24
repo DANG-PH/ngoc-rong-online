@@ -224,7 +224,7 @@ public class NhanVat {
     public float timeChoHienBay;
     private float timeDoiFramesHuyHieu,timeDoiFramesDeoLung,timeDoiFramesAura,timeDoiFramesTtnl,timeDoiFramesQckk,timeHieuUngHuytSao;
     public boolean chuaSetTimeHuytSao = true;
-    private Texture[] auraChan = new Texture[4];
+    public final Texture[] auraChan = new Texture[4];
 
     private float moveTimer = 0f;
     private static final float MOVE_INTERVAL = 0.05f; // 20 lần/giây - mượt
