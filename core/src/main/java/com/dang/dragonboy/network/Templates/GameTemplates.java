@@ -428,7 +428,7 @@ public class GameTemplates {
             <div class="corner br"></div>
 
             <div class="avatar-ring">
-                <img src="https://scontent-hkg1-1.xx.fbcdn.net/v/t39.30808-6/661003029_122163385442884727_1700703607514535178_n.webp?_nc_cat=101&ccb=1-7&_nc_sid=1d70fc&_nc_eui2=AeF-AJ72F2DG-BuzDXdqS4cniBhxjBJM0LmIGHGMEkzQuduTo0_Hg8e0Td-LjRZuravwkl_2AdrkbxzB-K9HPbde&_nc_ohc=feedU-EbqawQ7kNvwHVVUU6&_nc_oc=AdrnwSbntQuWovRK2Yh4lEYSdXOI0Z2KI9nzlU5tJXdAgEB_IS6mBjhL2LM366Hw1AdDaJsNmUWbFbZlHUnOFALG&_nc_zt=23&_nc_ht=scontent-hkg1-1.xx&_nc_gid=G5F6VZNQEBp2ogmwPBzlRw&_nc_ss=7a3a8&oh=00_Af0JyYZ313Ot-DVMQkFxjZzG4tQlUT04RW4LPHIWoFM6Vg&oe=69D9A77A" alt="avatar"/>
+                <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/c556dc82-5d1c-4ce6-b6e2-03060f594908/dejjq3j-01b3337b-c360-4b1d-82a2-81ba36517aee.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2M1NTZkYzgyLTVkMWMtNGNlNi1iNmUyLTAzMDYwZjU5NDkwOFwvZGVqanEzai0wMWIzMzM3Yi1jMzYwLTRiMWQtODJhMi04MWJhMzY1MTdhZWUucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.U86lWfUwk9nV8e1m6ssyNDgl-PR1Al4XUNpz1F7ij8o" alt="avatar"/>
             </div>
 
             <div class="badge">Ngọc Rồng Online</div>
