@@ -329,13 +329,14 @@ public class PlayerState {
             veHUD.fontchat.draw(batch, veHUD.layout, x + (rong - 200) / 2f + 10f, y + cao + 30 + 18f + veHUD.layout.height);
         }
 
-        if (this.dangDungAura && trangThai == TrangThai.DUNG_YEN) {
-            Texture[] auraChan = State_Management.getNhanVat().auraChan;
-            float tiLe = 0.35f;
-            if (this.dangBienKhi) tiLe = 0.55f;
-            float anchorX2 = this.dir == -1 ? x + rong + (auraChan[this.framesAura].getWidth()*tiLe-rong)/2f : x - (auraChan[this.framesAura].getWidth()*tiLe-rong)/2f;
-            batch.draw(auraChan[this.framesAura], anchorX2, y, auraChan[this.framesAura].getWidth() * tiLe * flipScale, auraChan[this.framesAura].getHeight() * tiLe);
-        }
+        // Tạm thời player khác k cần vẽ aura dưới chân tránh gây rối (và tạm thời cũng k có chiều rộng của chân để vẽ)
+//        if (this.dangDungAura && trangThai == TrangThai.DUNG_YEN) {
+//            Texture[] auraChan = State_Management.getNhanVat().auraChan;
+//            float tiLe = 0.35f;
+//            if (this.dangBienKhi) tiLe = 0.55f;
+//            float anchorX2 = this.dir == -1 ? x + rong + (auraChan[this.framesAura].getWidth()*tiLe-rong)/2f + tiLe*10f : x - (auraChan[this.framesAura].getWidth()*tiLe-rong)/2f - tiLe*10f;
+//            batch.draw(auraChan[this.framesAura], anchorX2, y, auraChan[this.framesAura].getWidth() * tiLe * flipScale, auraChan[this.framesAura].getHeight() * tiLe);
+//        }
     }
 
     public void capNhat(VeHUD veHUD) {
