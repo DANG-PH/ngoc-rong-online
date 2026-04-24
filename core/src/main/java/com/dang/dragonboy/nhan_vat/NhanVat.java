@@ -1518,9 +1518,7 @@ public class NhanVat {
 
         if (veHUD.dangDungHuyHieu && veHUD.timeChoHopThe == 0 && duDieuKien && !(veHUD.dangDungAura)){
             if (veHUD.chuaSetUpAnhHuyHieu) {
-                for (int i = 0; i < 6; i++) {
-                    veHUD.anhHuyHieu[i] = new Texture("vatpham/vatphamgame/huy_hieu/" + veHUD.huyHieuDangDung.getId() + "/" + (i + 1) + ".png");
-                }
+                veHUD.anhHuyHieu = AssetMulti.getHuyHieu(veHUD.huyHieuDangDung.getId());
                 veHUD.chuaSetUpAnhHuyHieu = false;
             }
             timeDoiFramesHuyHieu+=Gdx.graphics.getDeltaTime();
@@ -1551,9 +1549,7 @@ public class NhanVat {
                 tiLe = 0.5f;
             }
             if (veHUD.chuaSetUpAnhAura) {
-                for (int i = 0; i < 4; i++) {
-                    veHUD.anhAura[i] = new Texture("vatpham/vatphamgame/aura/" + veHUD.auraDangDung.getId() + "/" + (i + 1) + ".png");
-                }
+                veHUD.anhAura = AssetMulti.getAura(veHUD.auraDangDung.getId());
                 veHUD.chuaSetUpAnhAura = false;
             }
             timeDoiFramesAura+=Gdx.graphics.getDeltaTime();

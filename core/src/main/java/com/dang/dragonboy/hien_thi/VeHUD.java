@@ -1822,16 +1822,26 @@ public class VeHUD {
                                 dangDungAura = false;
                                 timeChoBuffAuraTieuDoiTruong = 0f;
                                 chuaSetUpAnhAura = true;
+                                try {
+                                    GameSocket.guiCancelCosmetic(GameSocket.FIELD_AURA);
+                                } catch (Exception e) {
+
+                                }
                             }
                             if (dangDungHuyHieu && huyHieuDangDung == danhSach.get(hangTrangDangChon-8)) {
                                 dangDungHuyHieu = false;
                                 chuaSetUpAnhHuyHieu = true;
+                                try {
+                                    GameSocket.guiCancelCosmetic(GameSocket.FIELD_HUY_HIEU);
+                                } catch (Exception e) {
+
+                                }
                             }
                             if (dangDungDeoLung && deoLungDangDung == danhSach.get(hangTrangDangChon-8)) {
                                 dangDungDeoLung = false;
                                 chuaSetUpAnhDeoLung = true;
                                 try {
-                                    GameSocket.guiCancelDeoLung();
+                                    GameSocket.guiCancelCosmetic(GameSocket.FIELD_DEO_LUNG);
                                 } catch (Exception e) {
 
                                 }
@@ -2308,9 +2318,19 @@ public class VeHUD {
                 if (dangDungHuyHieu) {
                     dangDungHuyHieu = false;
                     chuaSetUpAnhHuyHieu = true;
+                    try {
+                        GameSocket.guiCancelCosmetic(GameSocket.FIELD_HUY_HIEU);
+                    } catch (Exception e) {
+
+                    }
                 } else {
                     dangDungHuyHieu = true;
                     huyHieuDangDung = itemm;
+                    try {
+                        GameSocket.guiCosmetic(GameSocket.FIELD_HUY_HIEU, huyHieuDangDung.getId());
+                    } catch (Exception e) {
+
+                    }
                 }
             }
             if (itemm.getLoai() == LoaiItem.HOPQUA) {
@@ -2385,7 +2405,7 @@ public class VeHUD {
                     framesDeoLung = 0;
                     chuaSetUpAnhDeoLung = true;
                     try {
-                        GameSocket.guiCancelDeoLung();
+                        GameSocket.guiCancelCosmetic(GameSocket.FIELD_DEO_LUNG);
                     } catch (Exception e) {
 
                     }
@@ -2393,7 +2413,7 @@ public class VeHUD {
                     dangDungDeoLung = true;
                     deoLungDangDung = itemm;
                     try {
-                        GameSocket.guiDeoLung(deoLungDangDung.getId());
+                        GameSocket.guiCosmetic(GameSocket.FIELD_DEO_LUNG, deoLungDangDung.getId());
                     } catch (Exception e) {
 
                     }
@@ -2404,9 +2424,19 @@ public class VeHUD {
                     dangDungAura = false;
                     timeChoBuffAuraTieuDoiTruong = 0f;
                     chuaSetUpAnhAura = true;
+                    try {
+                        GameSocket.guiCancelCosmetic(GameSocket.FIELD_AURA);
+                    } catch (Exception e) {
+
+                    }
                 } else {
                     dangDungAura = true;
                     auraDangDung = itemm;
+                    try {
+                        GameSocket.guiCosmetic(GameSocket.FIELD_AURA, auraDangDung.getId());
+                    } catch (Exception e) {
+
+                    }
                 }
             }
             if (itemm.getLoai() == LoaiItem.NANGSKILL) {

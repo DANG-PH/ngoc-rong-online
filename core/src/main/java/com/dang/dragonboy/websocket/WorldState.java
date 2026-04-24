@@ -166,9 +166,8 @@ public class WorldState {
         }
     }
 
-    public static void onPlayerUseDeoLung(Object... args) {
+    public static void onPlayerUseCosmetic(Object... args) {
         if (args.length == 0) return;
-
         try {
             JSONObject obj = toJsonObject(args[0]);
             int userId = obj.optInt("userId", -1);
@@ -177,17 +176,18 @@ public class WorldState {
             PlayerState ps = players.get(userId);
             if (ps == null) return;
 
-            ps.dangDungDeoLung = true;
-            ps.deoLungDangDung = layItemDeoLungTheoMaItem(obj.optString("deoLungDung"));
+            String field = obj.optString("field");
+            String value = obj.optString("value");
 
+            System.out.println("COSMETIC: "+field+", VALUE: "+value);
+            applyCosmetic(ps, field, value);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void onPlayerCancelDeoLung(Object... args) {
+    public static void onPlayerCancelCosmetic(Object... args) {
         if (args.length == 0) return;
-
         try {
             JSONObject obj = toJsonObject(args[0]);
             int userId = obj.optInt("userId", -1);
@@ -196,11 +196,9 @@ public class WorldState {
             PlayerState ps = players.get(userId);
             if (ps == null) return;
 
-            ps.dangDungDeoLung = false;
-            ps.deoLungDangDung = null;
-            ps.chuaSetUpAnhDeoLung = true;
-            ps.framesDeoLung = 0;
+            String field = obj.optString("field");
 
+            clearCosmetic(ps, field);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -614,19 +612,9 @@ public class WorldState {
 
         ps.avatar = obj.optString("avatar", ps.avatar);
 
-        // ===== Đeo lưng =====
-        // deoLungDung có trong mapSnapshot vì server lưu thẳng vào GAME:PLAYER:${userId}
-        // null nếu player chưa đeo hoặc đã cancel → dangDungDeoLung = false
-        String deoLungDung = obj.optString("deoLungDung", null);
-        if (deoLungDung != null && !deoLungDung.isEmpty()) {
-            ps.dangDungDeoLung = true;
-            ps.deoLungDangDung = layItemDeoLungTheoMaItem(deoLungDung);
-        } else {
-            ps.dangDungDeoLung = false;
-            ps.deoLungDangDung = null;
-            ps.chuaSetUpAnhDeoLung = true;
-            ps.framesDeoLung = 0;
-        }
+        applyOrClearFromSnapshot(ps, obj, GameSocket.FIELD_DEO_LUNG);
+        applyOrClearFromSnapshot(ps, obj, GameSocket.FIELD_HUY_HIEU);
+        applyOrClearFromSnapshot(ps, obj, GameSocket.FIELD_AURA);
 
         return ps;
     }
@@ -668,15 +656,64 @@ public class WorldState {
         duLieu.veHUD.setTinNhanPet(tinNhan, 2f);
     }
 
-    public static Item layItemDeoLungTheoMaItem(String maItem){
+    public static Item layItemTheoMaItem(Item[] danhSachItem, String maItem){
         if (maItem == null) return null;
 
-        for (Item item : ItemData.danhSachItemDeoLung) {
+        for (Item item : danhSachItem) {
             if (item.getId().equals(maItem)) {
                 return item;
             }
         }
 
         return null;
+    }
+
+    private static void applyCosmetic(PlayerState ps, String field, String value) {
+        switch (field) {
+            case GameSocket.FIELD_DEO_LUNG:
+                ps.dangDungDeoLung = true;
+                ps.deoLungDangDung = layItemTheoMaItem(ItemData.danhSachItemDeoLung, value);
+                break;
+            case GameSocket.FIELD_HUY_HIEU:
+                ps.dangDungHuyHieu = true;
+                ps.huyHieuDangDung = layItemTheoMaItem(ItemData.danhSachItemHuyHieu, value);
+                break;
+            case GameSocket.FIELD_AURA:
+                ps.dangDungAura = true;
+                ps.auraDangDung = layItemTheoMaItem(ItemData.danhSachItemAura, value);
+                break;
+        }
+    }
+
+    private static void clearCosmetic(PlayerState ps, String field) {
+        switch (field) {
+            case GameSocket.FIELD_DEO_LUNG:
+                ps.dangDungDeoLung = false;
+                ps.deoLungDangDung = null;
+                ps.chuaSetUpAnhDeoLung = true;
+                ps.framesDeoLung = 0;
+                break;
+            case GameSocket.FIELD_HUY_HIEU:
+                ps.dangDungHuyHieu = false;
+                ps.huyHieuDangDung = null;
+                ps.chuaSetUpAnhHuyHieu = true;
+                ps.framesHuyHieu = 0;
+                break;
+            case GameSocket.FIELD_AURA:
+                ps.dangDungAura = false;
+                ps.auraDangDung = null;
+                ps.chuaSetUpAnhAura = true;
+                ps.framesAura = 0;
+                break;
+        }
+    }
+
+    private static void applyOrClearFromSnapshot(PlayerState ps, JSONObject obj, String field) {
+        String value = obj.optString(field, null);
+        if (value != null && !value.isEmpty()) {
+            applyCosmetic(ps, field, value);
+        } else {
+            clearCosmetic(ps, field);
+        }
     }
 }

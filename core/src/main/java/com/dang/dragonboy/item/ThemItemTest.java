@@ -721,32 +721,7 @@ public class ThemItemTest {
     }
     public Item randomHuyHieu() {
         // Danh sách item các vật phẩm đeo lưng
-        Item[] danhSachItem = new Item[]{
-            new Item(
-                "thien_tu", "Huy hiệu Thiên Tử", LoaiItem.HUYHIEU,
-                "vatpham/vatphamgame/huy_hieu/thien_tu/icon.png",
-                "Thiên mệnh tại thân - Thống ngự càn khôn", 1,
-                new int[]{0,0,0,0,0,0,10,10,10,0,0,0,0},
-                "all", 10_000_000L, null, 0, 0, 0, -1),
-            new Item(
-                "trum_cuoi", "Huy hiệu Trùm cuối", LoaiItem.HUYHIEU,
-                "vatpham/vatphamgame/huy_hieu/trum_cuoi/icon.png",
-                "Vinh quang vô địch - Đỉnh cao sức mạnh", 1,
-                new int[]{0,0,0,5,0,5,0,0,10,0,0,0,0},
-                "all", 10_000_000L, null, 0, 0, 0, -1),
-            new Item(
-                nhanVat.getHanhtinh()+"_toi_thuong", "Huy hiệu Tối Thượng", LoaiItem.HUYHIEU,
-                "vatpham/vatphamgame/huy_hieu/"+nhanVat.getHanhtinh()+"_toi_thuong/icon.png",
-                "Biểu tượng của người thống trị - Sức mạnh tối thượng không ai sánh kịp", 1,
-                new int[]{0,0,0,10,0,10,0,0,0,0,0,0,0},
-                "all", 10_000_000L, null, 0, 0, 0, -1),
-            new Item(
-                "xayda"+"_toi_thuong", "Huy hiệu Tối Thượng", LoaiItem.HUYHIEU,
-                "vatpham/vatphamgame/huy_hieu/"+"xayda"+"_toi_thuong/icon.png",
-                "Biểu tượng của người thống trị - Sức mạnh tối thượng không ai sánh kịp", 1,
-                new int[]{0,0,0,0,0,0,20,0,0,0,0,0,10},
-                "all", 10_000_000L, null, 0, 0, 0, -1),
-        };
+        Item[] danhSachItem = ItemData.danhSachItemHuyHieu;
 
         // Random chọn item
         Item itemDuocChon = danhSachItem[MathUtils.random(danhSachItem.length - 1)];
@@ -782,21 +757,7 @@ public class ThemItemTest {
     }
     public Item randomAura() {
         // Danh sách item các vật phẩm đeo lưng
-        Item[] danhSachItem = new Item[]{
-            new Item(
-                "tan_hon_rong_namek", "Aura Long Hồn Thượng Giới", LoaiItem.AURA,
-                "vatpham/vatphamgame/aura/tan_hon_rong_namek/icon.png",
-                "Di vật tối thượng lưu lạc từ cõi Thượng Giới, kết tinh linh hồn bất diệt của Rồng Thần. [Hiệu ứng] KI > 70%: +10% Sức đánh hoặc +10% HP tùy trang bị. KI < 20%: +10% Chí mạng hoặc +10% Giảm sát thương tùy trang bị. Nếu không có trang bị phù hợp các hiệu ứng được chia đều", 1,
-                new int[]{0,0,0,8,0,8,8,0,0,0,0,0,8},
-                "all", 10_000_000L, null, 0, 0, 0, -1),
-
-            new Item(
-                "tieu_doi_truong", "Aura Tiểu Đội Trưởng", LoaiItem.AURA,
-                "vatpham/vatphamgame/aura/tieu_doi_truong/icon.png",
-                "Hào quang thủ lĩnh. [Hiệu ứng] Đứng yên: +10% HP tối đa. Di chuyển hoặc tấn công: +10% Sức đánh.", 1,
-                new int[]{0,0,0,0,0,0,10,10,10,0,0,0,0},
-                "all", 10_000_000L, null, 0, 0, 0, -1)
-        };
+        Item[] danhSachItem = ItemData.danhSachItemAura;
 
         // Random chọn item
         Item itemDuocChon = danhSachItem[MathUtils.random(danhSachItem.length - 1)];
@@ -1293,9 +1254,19 @@ public class ThemItemTest {
                         if (veHUD.dangDungHuyHieu) {
                             veHUD.dangDungHuyHieu = false;
                             veHUD.chuaSetUpAnhHuyHieu = true;
+                            try {
+                                GameSocket.guiCancelCosmetic(GameSocket.FIELD_HUY_HIEU);
+                            } catch (Exception e) {
+
+                            }
                         }
                         veHUD.dangDungHuyHieu = true;
                         veHUD.huyHieuDangDung = duLieu.getHanhTrang().get(duLieu.getHanhTrang().size() - 1);
+                        try {
+                            GameSocket.guiCosmetic(GameSocket.FIELD_HUY_HIEU, veHUD.huyHieuDangDung.getId());
+                        } catch (Exception e) {
+
+                        }
                     }
                     break;
                 case 3:
@@ -1321,9 +1292,19 @@ public class ThemItemTest {
                             if (veHUD.dangDungAura) {
                                 veHUD.dangDungAura = false;
                                 veHUD.chuaSetUpAnhAura = true;
+                                try {
+                                    GameSocket.guiCancelCosmetic(GameSocket.FIELD_AURA);
+                                } catch (Exception e) {
+
+                                }
                             }
                             veHUD.dangDungAura = true;
                             veHUD.auraDangDung = duLieu.getHanhTrang().get(duLieu.getHanhTrang().size() - 1);
+                            try {
+                                GameSocket.guiCosmetic(GameSocket.FIELD_AURA, veHUD.auraDangDung.getId());
+                            } catch (Exception e) {
+
+                            }
                         }
                     } else {
                         duLieu.themItemVaoHanhTrang(veHUD.themItemTest.randomDeoLung());
@@ -1332,7 +1313,7 @@ public class ThemItemTest {
                                 veHUD.dangDungDeoLung = false;
                                 veHUD.chuaSetUpAnhDeoLung = true;
                                 try {
-                                    GameSocket.guiCancelDeoLung();
+                                    GameSocket.guiCancelCosmetic(GameSocket.FIELD_DEO_LUNG);
                                 } catch (Exception e) {
 
                                 }
@@ -1340,7 +1321,7 @@ public class ThemItemTest {
                             veHUD.dangDungDeoLung = true;
                             veHUD.deoLungDangDung = duLieu.getHanhTrang().get(duLieu.getHanhTrang().size() - 1);
                             try {
-                                GameSocket.guiDeoLung(veHUD.deoLungDangDung.getId());
+                                GameSocket.guiCosmetic(GameSocket.FIELD_DEO_LUNG, veHUD.deoLungDangDung.getId());
                             } catch (Exception e) {
 
                             }

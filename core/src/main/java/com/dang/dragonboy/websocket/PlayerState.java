@@ -80,6 +80,20 @@ public class PlayerState {
     public Item deoLungDangDung = null;
     public float timeDoiFramesDeoLung = 0;
 
+    public boolean dangDungHuyHieu = false;
+    public boolean chuaSetUpAnhHuyHieu = true;
+    public Texture[] anhHuyHieu = new Texture[6];
+    public int framesHuyHieu = 0;
+    public Item huyHieuDangDung = null;
+    public float timeDoiFramesHuyHieu = 0;
+
+    public boolean dangDungAura = false;
+    public boolean chuaSetUpAnhAura = true;
+    public Texture[] anhAura = new Texture[4];
+    public int framesAura = 0;
+    public Item auraDangDung = null;
+    public float timeDoiFramesAura = 0;
+
     public void ve(SpriteBatch batch, float thoiGian, VeHUD veHUD) {
         if (chan.isEmpty() || dau.isEmpty() || than.isEmpty()) return;
         TrangThai trangThai = TrangThai.valueOf(this.trangthai);
@@ -113,6 +127,46 @@ public class PlayerState {
         float anchorX = this.dir == -1 ? x + rong : x;
         float offsetChanX = this.dir == -1 ? -this.lechChanX :  this.lechChanX;
 
+        if (this.dangDungHuyHieu && this.huyHieuDangDung != null && !(this.dangDungAura)){
+            if (this.chuaSetUpAnhHuyHieu) {
+                this.anhHuyHieu = AssetMulti.getHuyHieu(this.huyHieuDangDung.getId());
+                this.chuaSetUpAnhHuyHieu = false;
+            }
+            timeDoiFramesHuyHieu+=Gdx.graphics.getDeltaTime();
+            if (timeDoiFramesHuyHieu>0.03f) {
+                this.framesHuyHieu = (this.framesHuyHieu + 1) % this.anhHuyHieu.length;
+                timeDoiFramesHuyHieu=0;
+            }
+            batch.draw(this.anhHuyHieu[this.framesHuyHieu], x - (this.anhHuyHieu[this.framesHuyHieu].getWidth() * 0.55f - rong) / 2f, y + cao + 35f + daoDong, this.anhHuyHieu[this.framesHuyHieu].getWidth() * 0.55f, this.anhHuyHieu[this.framesHuyHieu].getHeight() * 0.55f);
+        }
+        if (this.dangDungAura && this.auraDangDung != null && !(trangThai == TrangThai.BAY_NGANG && !dangMangVanBay) && !(trangThai == TrangThai.DI_CHUYEN)){
+            float offsetX = 0;
+            float offsetY = 0;
+            float tiLe = 0;
+            if (this.auraDangDung.getId().equals("tan_hon_rong_namek")) {
+                offsetX = 12f;
+                if (trangThai == TrangThai.ROI) offsetY = 10f;
+                tiLe = 0.5f;
+            }
+            if (this.auraDangDung.getId().equals("tieu_doi_truong")) {
+                offsetX = 5f;
+                offsetY = 25f;
+                if (trangThai == TrangThai.ROI) offsetY = 35f;
+                tiLe = 0.5f;
+            }
+            if (this.chuaSetUpAnhAura) {
+                this.anhAura = AssetMulti.getAura(this.auraDangDung.getId());
+                this.chuaSetUpAnhAura = false;
+            }
+            timeDoiFramesAura+=Gdx.graphics.getDeltaTime();
+            float timeDoiFrames = 0.1f;
+            if (timeDoiFramesAura>timeDoiFrames) {
+                this.framesAura = (this.framesAura + 1) % this.anhAura.length;
+                timeDoiFramesAura=0;
+            }
+            float anchorXAura = this.dir == -1 ? x + rong  + (this.anhAura[this.framesAura].getWidth() * tiLe)*4.5f/10f-(rong/10f) - offsetX : x  - (this.anhAura[this.framesAura].getWidth() * tiLe)*4.5f/10f+(rong/10f) + offsetX;
+            batch.draw(this.anhAura[this.framesAura], anchorXAura, y+daoDong+(cao/3f)-25f + offsetY, this.anhAura[this.framesAura].getWidth() * tiLe * flipScale, this.anhAura[this.framesAura].getHeight() * tiLe);
+        }
         if (this.dangDungDeoLung && this.deoLungDangDung != null && !(trangThai == TrangThai.BAY_NGANG && !dangMangVanBay) && !(trangThai == TrangThai.DI_CHUYEN) && !(trangThai == TrangThai.GONG) && !(trangThai == TrangThai.THU)){
             int soAnh = 2;
             switch (this.deoLungDangDung.getId()) {

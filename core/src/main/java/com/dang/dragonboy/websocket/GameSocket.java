@@ -190,10 +190,10 @@ public class GameSocket {
         socket.on("syncSkills", args -> WorldState.onSyncSkills(args));
 
         // ===== DEO LUNG (đụng Texture → postRunnable) =====
-        socket.on("useDeoLung", args ->
-            Gdx.app.postRunnable(() -> WorldState.onPlayerUseDeoLung(args)));
-        socket.on("cancelDeoLung", args ->
-            Gdx.app.postRunnable(() -> WorldState.onPlayerCancelDeoLung(args)));
+        socket.on("useCosmetic", args ->
+            Gdx.app.postRunnable(() -> WorldState.onPlayerUseCosmetic(args)));
+        socket.on("cancelCosmetic", args ->
+            Gdx.app.postRunnable(() -> WorldState.onPlayerCancelCosmetic(args)));
 
         // ===== ITEM (không đụng Texture) =====
         socket.on("addItem", args -> WorldState.onAddItem(args));
@@ -292,15 +292,22 @@ public class GameSocket {
         socket.emit("player-move", data);
     }
 
-    public static void guiDeoLung(String maItem) throws Exception {
-        JSONObject data = new JSONObject();
-        data.put("deoLungDung", maItem);
+    // Gộp 3 loại vào 1 event, field tương ứng enum CosmeticField
+    public static final String FIELD_DEO_LUNG = "deoLungDung";
+    public static final String FIELD_HUY_HIEU = "huyHieuDung";
+    public static final String FIELD_AURA     = "auraDung";
 
-        socket.emit("use-deo-lung", data);
+    public static void guiCosmetic(String field, String maItem) throws Exception {
+        JSONObject data = new JSONObject();
+        data.put("field", field);
+        data.put("value", maItem);
+        socket.emit("use-cosmetic", data);
     }
 
-    public static void guiCancelDeoLung() throws Exception {
-        socket.emit("cancel-deo-lung");
+    public static void guiCancelCosmetic(String field) throws Exception {
+        JSONObject data = new JSONObject();
+        data.put("field", field);
+        socket.emit("cancel-cosmetic", data);
     }
 
     public static void guiChat(String tinNhan) throws Exception {
@@ -410,13 +417,19 @@ public class GameSocket {
     private static void syncMyState() {
         try {
             JSONObject data = new JSONObject();
-            // deoLungDangDung là maItem đang đeo, null nếu không đeo
-            String maItem = State_Management.getVeHUD().deoLungDangDung.getId();
-            if (maItem != null) {
-                data.put("deoLungDung", maItem);
-            } else {
-                data.put("deoLungDung", JSONObject.NULL);
-            }
+
+            String deoLung = State_Management.getVeHUD().deoLungDangDung != null
+                ? State_Management.getVeHUD().deoLungDangDung.getId() : null;
+            data.put(FIELD_DEO_LUNG, deoLung != null ? deoLung : JSONObject.NULL);
+
+            String huyHieu = State_Management.getVeHUD().huyHieuDangDung != null
+                ? State_Management.getVeHUD().huyHieuDangDung.getId() : null;
+            data.put(FIELD_HUY_HIEU, huyHieu != null ? huyHieu : JSONObject.NULL);
+
+            String aura = State_Management.getVeHUD().auraDangDung != null
+                ? State_Management.getVeHUD().auraDangDung.getId() : null;
+            data.put(FIELD_AURA, aura != null ? aura : JSONObject.NULL);
+
             socket.emit("sync-my-state", data);
         } catch (Exception e) {
             e.printStackTrace();

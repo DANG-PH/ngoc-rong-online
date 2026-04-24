@@ -13,6 +13,8 @@ public class AssetMulti {
     private static final Map<String, Texture> TEXTURE_CACHE = new HashMap<>();
     private static final Map<String, VanBayCauHinh> VAN_BAY_CACHE = new HashMap<>();
     private static final Map<String, Texture[]> DEO_LUNG_CACHE = new HashMap<>();
+    private static final Map<String, Texture[]> HUY_HIEU_CACHE = new HashMap<>();
+    private static final Map<String, Texture[]> AURA_CACHE = new HashMap<>();
 
     // =====================================================
     // ===================== PUBLIC API ====================
@@ -87,6 +89,26 @@ public class AssetMulti {
         });
     }
 
+    public static Texture[] getHuyHieu(String itemId) {
+        return HUY_HIEU_CACHE.computeIfAbsent(itemId, id -> {
+            Texture[] textures = new Texture[6];
+            for (int i = 0; i < 6; i++) {
+                textures[i] = getTexture("vatpham/vatphamgame/huy_hieu/" + id + "/" + (i + 1) + ".png");
+            }
+            return textures;
+        });
+    }
+
+    public static Texture[] getAura(String itemId) {
+        return AURA_CACHE.computeIfAbsent(itemId, id -> {
+            Texture[] textures = new Texture[4];
+            for (int i = 0; i < 4; i++) {
+                textures[i] = getTexture("vatpham/vatphamgame/aura/" + id + "/" + (i + 1) + ".png");
+            }
+            return textures;
+        });
+    }
+
     // =====================================================
     // ===================== DISPOSE =======================
     // =====================================================
@@ -97,5 +119,7 @@ public class AssetMulti {
         VAN_BAY_CACHE.clear();
         SKIN_CACHE.clear();
         DEO_LUNG_CACHE.clear();
+        HUY_HIEU_CACHE.clear();
+        AURA_CACHE.clear();
     }
 }
