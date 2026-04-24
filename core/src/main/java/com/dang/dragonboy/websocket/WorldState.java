@@ -589,9 +589,9 @@ public class WorldState {
         ps.dir = obj.optInt("dir", 1);
         ps.trangthai = obj.optString("trangthai", "DUNG_YEN");
 
-        ps.dau = obj.optString("dau", null);
-        ps.than = obj.optString("than", null);
-        ps.chan = obj.optString("chan", null);
+        ps.dau = obj.optString("dau", "");
+        ps.than = obj.optString("than", "");
+        ps.chan = obj.optString("chan", "");
 
         // ===== Animation =====
         ps.frameVanBay = obj.optInt("frameVanBay", ps.frameVanBay);

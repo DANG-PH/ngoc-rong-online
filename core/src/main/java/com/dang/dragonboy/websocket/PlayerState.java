@@ -25,9 +25,9 @@ public class PlayerState {
     public float cao;
     public String trangthai;
     public int dir;
-    public String dau;
-    public String than;
-    public String chan;
+    public String dau = "";
+    public String than = "";
+    public String chan = "";
     public String avatar;
     public float timeChoHienBay;
     public float lechThanX;
@@ -81,6 +81,7 @@ public class PlayerState {
     public float timeDoiFramesDeoLung = 0;
 
     public void ve(SpriteBatch batch, float thoiGian, VeHUD veHUD) {
+        if (chan.isEmpty() || dau.isEmpty() || than.isEmpty()) return;
         TrangThai trangThai = TrangThai.valueOf(this.trangthai);
 
         float daoDong;
