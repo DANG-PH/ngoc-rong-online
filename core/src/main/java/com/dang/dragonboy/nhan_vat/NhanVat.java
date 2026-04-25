@@ -1081,6 +1081,13 @@ public class NhanVat {
         this.rong_chan = chan_dung.getWidth() * tiLe;
         this.cao = chan_dung.getHeight() * tiLe + than_dung.getHeight() * tiLe + dau_dung.getHeight() * 0.15f;
         this.lechTheoTrangThai = lechTheoTrangThai;
+
+        // Đổi ảnh thì sync cho players khác luôn
+        try {
+            GameSocket.guiPlayerMove(this);
+        } catch (Exception e) {
+            // log, alert
+        }
     }
 
     public String doiavatar(){
