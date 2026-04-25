@@ -236,6 +236,7 @@ public class NhanVat {
     private float lastSentY = -9999f;
     private TrangThai lastSentTrangThai = null;
     private static final float POSITION_THRESHOLD = 1f; // Khoảng cách được coi là đã dịch chuyển ( x_mới - x_last_sent > là gửi ) ( tương tự với y )
+    private boolean vuaFixCaiTrang = false;
 
     public void setToaDoMucTieu(float x, float y) {
         if (chanDiChuyenToaDo1Lan) {
@@ -1083,11 +1084,7 @@ public class NhanVat {
         this.lechTheoTrangThai = lechTheoTrangThai;
 
         // Đổi ảnh thì sync cho players khác luôn
-        try {
-            GameSocket.guiPlayerMove(this);
-        } catch (Exception e) {
-            // log, alert
-        }
+        vuaFixCaiTrang = true;
     }
 
     public String doiavatar(){
@@ -1767,13 +1764,14 @@ public class NhanVat {
 
             // Tối ưu băng thông: chỉ gửi khi có thay đổi thực sự
             // Thay vì gửi 10 lần/giây liên tục bất kể đứng yên hay di chuyển
-            if (stateChanged) {
+            if (stateChanged || vuaFixCaiTrang) {
                 // Gửi NGAY khi đổi trạng thái, không chờ timer
                 // Lý do: nếu chờ timer (0.1s), có thể xảy ra tình huống:
                 //   - Frame N:   gửi x=100, trangthai=DI_CHUYEN
                 //   - Frame N+1: player dừng, trangthai=DUNG_YEN, nhưng timer chưa đủ
                 //   - Frame N+2: x,y không đổi nên posChanged=false, stateChanged=false → không gửi
                 //   → Client khác mãi thấy animation chạy dù player đã đứng yên
+                if (vuaFixCaiTrang) vuaFixCaiTrang = false;
                 try {
                     GameSocket.guiPlayerMove(this);
                     lastSentX = x;
