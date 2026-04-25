@@ -2,6 +2,7 @@ package com.dang.dragonboy.du_lieu;
 
 import com.dang.dragonboy.he_thong.Main;
 import com.dang.dragonboy.hien_thi.VeHUD;
+import com.dang.dragonboy.network.DTO.RongThanState;
 import com.dang.dragonboy.network.DTO.UserResponse;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 
@@ -20,6 +21,7 @@ public class State_Management {
     private static String forceLogoutMessage = "";
     public static Main game;
     public static String gameSessionId;
+    private static RongThanState rongThanState = null;
 
     public static void setDuLieuStateManagement(NhanVat nhanvatt, VeHUD veHUDD,DuLieuNguoiChoi duLieuNguoiChoii) {
         duLieuNguoiChoi = duLieuNguoiChoii;
@@ -41,6 +43,7 @@ public class State_Management {
         userResponse = null;
         duLieuNguoiChoi = null;
         gameSessionId = null;
+        rongThanState = null;
     }
 
     public static VeHUD getVeHUD() {
@@ -93,6 +96,14 @@ public class State_Management {
 
     public static void setAuth_id(int auth_idd) {
         auth_id = auth_idd;
+    }
+
+    public static RongThanState getRongThanState() {
+        return rongThanState;
+    }
+
+    public static void setRongThanState(RongThanState state) {
+        rongThanState = state;
     }
 
     public static void setDuLieuNguoiChoi(DuLieuNguoiChoi duLieuNguoiChoii) {

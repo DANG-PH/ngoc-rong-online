@@ -305,8 +305,8 @@ public class VeHUD {
     public String ngocRongUoc = "";
     public boolean dangHienDieuUocRongThan = false;
     public float timeHienRongThan = 0f;
-    public float timeDelayUocRong = 0f;
     public boolean daUocRongThan = false;
+    public String[] idsCanTim = new String[0];
 
     public boolean dangDungHuyHieu = false;
     public boolean chuaSetUpAnhHuyHieu = true;
@@ -2212,106 +2212,71 @@ public class VeHUD {
                 }
             }
             if (itemm.getLoai() == LoaiItem.NGOCRONG) {
-                if (timeDelayUocRong == 0 || duLieuNguoiChoi.getTen().equals("admin")) {
-                    if (!itemm.getTenItem().contains("Ngọc rồng đen")) {
-                        if (itemm.getId().equals("nr3s") || itemm.getId().equals("nr2s") || itemm.getId().equals("nr1s")) {
-                            String[] idsCanTim = new String[0];
-                            if (itemm.getId().equals("nr3s")) {
-                                idsCanTim = new String[]{"nr3s", "nr4s", "nr5s", "nr6s", "nr7s"};
-                                ngocRongUoc = "3sao";
-                                tinNhanPet = "Bạn vừa gọi rồng thần shenron 3 sao";
-                            } else if (itemm.getId().equals("nr2s")) {
-                                idsCanTim = new String[]{"nr2s", "nr3s", "nr4s", "nr5s", "nr6s", "nr7s"};
-                                ngocRongUoc = "2sao";
-                                tinNhanPet = "Bạn vừa gọi rồng thần shenron 2 sao";
-                            } else if (itemm.getId().equals("nr1s")) {
-                                idsCanTim = new String[]{"nr1s", "nr2s", "nr3s", "nr4s", "nr5s", "nr6s", "nr7s"};
-                                ngocRongUoc = "1sao";
-                                tinNhanPet = "Bạn vừa gọi rồng thần shenron 1 sao";
-                            }
-                            boolean duTatCa = true;
-                            ArrayList<Item> danhSach = duLieuNguoiChoi.getHanhTrang();
-                            for (String idCanTim : idsCanTim) {
-                                boolean timThay = false;
-                                for (Item item : danhSach) {
-                                    if (item != null && idCanTim.equals(item.getId())) {
-                                        timThay = true;
-                                        break;
-                                    }
-                                }
-                                if (!timThay) {
-                                    duTatCa = false; // thiếu ít nhất 1 id
+                if (!itemm.getTenItem().contains("Ngọc rồng đen")) {
+                    if (itemm.getId().equals("nr3s") || itemm.getId().equals("nr2s") || itemm.getId().equals("nr1s")) {
+                        if (itemm.getId().equals("nr3s")) {
+                            idsCanTim = new String[]{"nr3s", "nr4s", "nr5s", "nr6s", "nr7s"};
+                            ngocRongUoc = "3sao";
+                            tinNhanPet = "Bạn vừa gọi rồng thần shenron 3 sao";
+                        } else if (itemm.getId().equals("nr2s")) {
+                            idsCanTim = new String[]{"nr2s", "nr3s", "nr4s", "nr5s", "nr6s", "nr7s"};
+                            ngocRongUoc = "2sao";
+                            tinNhanPet = "Bạn vừa gọi rồng thần shenron 2 sao";
+                        } else if (itemm.getId().equals("nr1s")) {
+                            idsCanTim = new String[]{"nr1s", "nr2s", "nr3s", "nr4s", "nr5s", "nr6s", "nr7s"};
+                            ngocRongUoc = "1sao";
+                            tinNhanPet = "Bạn vừa gọi rồng thần shenron 1 sao";
+                        }
+                        boolean duTatCa = true;
+                        ArrayList<Item> danhSach = duLieuNguoiChoi.getHanhTrang();
+                        for (String idCanTim : idsCanTim) {
+                            boolean timThay = false;
+                            for (Item item : danhSach) {
+                                if (item != null && idCanTim.equals(item.getId())) {
+                                    timThay = true;
                                     break;
                                 }
                             }
-                            if (duTatCa) {
-                                dangHienTinNhanPet = true;
-                                timeHienTinNhanPet = 2f;
-                                for (String idCanTim : idsCanTim) {
-                                    for (Item item : danhSach) {
-                                        if (item != null && idCanTim.equals(item.getId())) {
-                                            item.giamSoLuong(1);
-                                            if (item.getSoLuong() == 0) {
-                                                danhSach.remove(item);
-                                            }
-                                            break;
-                                        }
-                                    }
-                                }
-                                dangHienDieuUocRongThan = true;
-                                timeHienRongThan = 300f;
-                                dangHienPopup = false;
-                            } else {
-                                setTinNhanPet("Không đủ ngọc rồng",2f);
+                            if (!timThay) {
+                                duTatCa = false; // thiếu ít nhất 1 id
+                                break;
                             }
+                        }
+                        if (duTatCa) {
+                            GameSocket.guiUocRongThan("Ngọc Rồng Thường");
                         } else {
-                            setTinNhanPet("Chỉ được gọi rồng bằng ngọc rồng 1, 2, 3 sao",2f);
+                            setTinNhanPet("Không đủ ngọc rồng",2f);
                         }
                     } else {
-                        if (itemm.getId().equals("nr1sd")) {
-                            String[] idsCanTim = new String[0];
-                            idsCanTim = new String[]{"nr1sd", "nr2sd", "nr3sd", "nr4sd", "nr5sd", "nr6sd", "nr7sd"};
-                            ngocRongUoc = "1saoden";
-                            boolean duTatCa = true;
-                            ArrayList<Item> danhSach = duLieuNguoiChoi.getHanhTrang();
-                            for (String idCanTim : idsCanTim) {
-                                boolean timThay = false;
-                                for (Item item : danhSach) {
-                                    if (item != null && idCanTim.equals(item.getId())) {
-                                        timThay = true;
-                                        break;
-                                    }
-                                }
-                                if (!timThay) {
-                                    duTatCa = false; // thiếu ít nhất 1 id
+                        setTinNhanPet("Chỉ được gọi rồng bằng ngọc rồng 1, 2, 3 sao",2f);
+                    }
+                } else {
+                    if (itemm.getId().equals("nr1sd")) {
+                        idsCanTim = new String[]{"nr1sd", "nr2sd", "nr3sd", "nr4sd", "nr5sd", "nr6sd", "nr7sd"};
+                        ngocRongUoc = "1saoden";
+                        boolean duTatCa = true;
+                        ArrayList<Item> danhSach = duLieuNguoiChoi.getHanhTrang();
+                        for (String idCanTim : idsCanTim) {
+                            boolean timThay = false;
+                            for (Item item : danhSach) {
+                                if (item != null && idCanTim.equals(item.getId())) {
+                                    timThay = true;
                                     break;
                                 }
                             }
-                            if (duTatCa) {
-                                setTinNhanPet("Bạn vừa gọi rồng thần bóng tối",2f);
-                                for (String idCanTim : idsCanTim) {
-                                    for (Item item : danhSach) {
-                                        if (item != null && idCanTim.equals(item.getId())) {
-                                            item.giamSoLuong(1);
-                                            if (item.getSoLuong() == 0) {
-                                                danhSach.remove(item);
-                                            }
-                                            break;
-                                        }
-                                    }
-                                }
-                                dangHienDieuUocRongThan = true;
-                                timeHienRongThan = 300f;
-                                dangHienPopup = false;
-                            } else {
-                                setTinNhanPet("Không đủ ngọc rồng",2f);
+                            if (!timThay) {
+                                duTatCa = false; // thiếu ít nhất 1 id
+                                break;
                             }
-                        } else {
-                            setTinNhanPet("Chỉ được gọi rồng bóng tối bằng ngọc rồng 1 sao đen",2f);
                         }
+                        if (duTatCa) {
+                            GameSocket.guiUocRongThan("Ngọc Rồng Sao Đen");
+                        } else {
+                            setTinNhanPet("Không đủ ngọc rồng",2f);
+                        }
+                    } else {
+                        setTinNhanPet("Chỉ được gọi rồng bóng tối bằng ngọc rồng 1 sao đen",2f);
                     }
-                } else {
-                    setTinNhanPet("Ngọc rồng cần khôi phục trong "+(int)(timeDelayUocRong/60f)+" phút nữa",2f);
                 }
             }
             if (itemm.getLoai() == LoaiItem.HUYHIEU) {

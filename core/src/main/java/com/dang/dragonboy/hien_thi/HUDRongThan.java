@@ -4,13 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Align;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
+import com.dang.dragonboy.du_lieu.State_Management;
 import com.dang.dragonboy.item.Item;
 import com.dang.dragonboy.nhan_vat.NhanVat;
+import com.dang.dragonboy.websocket.GameSocket;
 
 import java.util.ArrayList;
 
@@ -20,12 +23,12 @@ public class HUDRongThan {
     private ShapeRenderer shapeRenderer;
     private DuLieuNguoiChoi duLieuNguoiChoi;
     private NhanVat nhanVat;
-    public Texture[] hieuUngRongThan = new Texture[21];
-    public Texture[] luaRongThan = new Texture[2];
-    public Texture[] rongThan = new Texture[9];
-    public Texture[] luaRongThanDen = new Texture[2];
-    public Texture[] rongThanDen = new Texture[9];
-    public Texture[] setRongThanDen = new Texture[5];
+    public static Texture[] hieuUngRongThan = new Texture[21];
+    public static Texture[] luaRongThan = new Texture[2];
+    public static Texture[] rongThan = new Texture[9];
+    public static Texture[] luaRongThanDen = new Texture[2];
+    public static Texture[] rongThanDen = new Texture[9];
+    public static Texture[] setRongThanDen = new Texture[5];
 
     public HUDRongThan(VeHUD veHUD, DuLieuNguoiChoi duLieuNguoiChoi, NhanVat nhanVat) {
         layout = new GlyphLayout();
@@ -53,12 +56,6 @@ public class HUDRongThan {
         }
     }
     public void capNhatThoiGian(float delta) {
-        if (veHUD.timeDelayUocRong>0) {
-            veHUD.timeDelayUocRong-=delta;
-            if (veHUD.timeDelayUocRong<=0) {
-                veHUD.timeDelayUocRong = 0;
-            }
-        }
         if (veHUD.timeHienRongThan>0) {
             veHUD.timeHienRongThan-=delta;
             if (veHUD.timeHienRongThan<=1f) {
@@ -75,52 +72,14 @@ public class HUDRongThan {
                 veHUD.ngocRongUoc = "";
                 veHUD.dangHienDieuUocRongThan = false;
                 veHUD.daUocRongThan = false;
-                veHUD.timeDelayUocRong = 600f;
+                GameSocket.guiUocXongRongThan();
             }
         }
     }
     public void chonDieuUocRongThan(SpriteBatch batch) {
         if (veHUD.timeHienRongThan<=0) return;
-        float daoDong = (float) Math.sin(nhanVat.thoiGianTichLuy) ;
-        boolean flipX = nhanVat.getFlipX();
-        if (nhanVat.getGioiHanXMax()-nhanVat.getX()<150f) {
-            flipX = true;
-        }
-        if (nhanVat.getX()<150f) {
-            flipX = false;
-        }
-        float offsetX = flipX ? -120f : 120f;
-        float flipscale = flipX ? -1f : 1f;
-        // ve rong than
-        if (veHUD.timeHienRongThan<=300f-2.1f) {
-            batch.setProjectionMatrix(veHUD.camManager.camera.combined);
-            if (veHUD.ngocRongUoc.equals("1saoden")) {
-                Texture luaDuocChon = ((int) (veHUD.timeHienRongThan * 10) % 2 == 0 ? luaRongThanDen[0] : luaRongThanDen[1]);
-                batch.draw(rongThanDen[7], nhanVat.getX() + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThanDen[7].getWidth() * 2f : 0), nhanVat.getY(), rongThanDen[7].getWidth() * 2f * flipscale, rongThanDen[7].getHeight() * 2f);
-                batch.draw(rongThanDen[6], nhanVat.getX() + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThanDen[7].getWidth() * 2f + 75 : -75f), nhanVat.getY() + rongThanDen[7].getHeight() * 2f - 10f + daoDong, rongThanDen[6].getWidth() * 2f * flipscale, rongThanDen[6].getHeight() * 2f);
-                batch.draw(rongThanDen[5], nhanVat.getX() + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThanDen[7].getWidth() * 2f + 78 : -78f), nhanVat.getY() + rongThanDen[7].getHeight() * 2f + rongThanDen[6].getHeight() * 2f - 18f, rongThanDen[5].getWidth() * 2f * flipscale, rongThanDen[5].getHeight() * 2f);
-                batch.draw(rongThanDen[8], nhanVat.getX() + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThanDen[7].getWidth() * 2f + 5 : -5f), nhanVat.getY() + rongThanDen[7].getHeight() * 2f + rongThanDen[6].getHeight() * 2f - 18f + daoDong * 1.1f, rongThanDen[8].getWidth() * 2f * flipscale, rongThanDen[8].getHeight() * 2f);
-                batch.draw(rongThanDen[2], nhanVat.getX() + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThanDen[7].getWidth() * 2f + 78 : -78f), nhanVat.getY() + rongThanDen[7].getHeight() * 2f + rongThanDen[6].getHeight() * 2f + rongThanDen[5].getHeight() * 2f - 26f, rongThanDen[2].getWidth() * 2f * flipscale, rongThanDen[2].getHeight() * 2f);
-                batch.draw(rongThanDen[3], nhanVat.getX() + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThanDen[7].getWidth() * 2f - 25 : 25f), nhanVat.getY() + rongThanDen[7].getHeight() * 2f + rongThanDen[6].getHeight() * 2f + rongThanDen[5].getHeight() * 2f + rongThanDen[2].getHeight() * 2f - 26f, rongThanDen[3].getWidth() * 2f * flipscale, rongThanDen[3].getHeight() * 2f);
-                batch.draw(rongThanDen[1], nhanVat.getX() + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThanDen[7].getWidth() * 2f + 147 : -147f), nhanVat.getY() + rongThanDen[7].getHeight() * 2f + rongThanDen[6].getHeight() * 2f + rongThanDen[5].getHeight() * 2f - 20f + daoDong * 0.8f, rongThanDen[1].getWidth() * 2f * flipscale, rongThanDen[1].getHeight() * 2f);
-                batch.draw(rongThanDen[0], nhanVat.getX() + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThanDen[7].getWidth() * 2f + 75 : -75f), nhanVat.getY() + rongThanDen[7].getHeight() * 2f + rongThanDen[6].getHeight() * 2f + rongThanDen[5].getHeight() * 2f + rongThanDen[2].getHeight() * 2f - 50f + daoDong * 1.2f, rongThanDen[0].getWidth() * 2f * flipscale, rongThanDen[0].getHeight() * 2f);
-                batch.draw(rongThanDen[4], nhanVat.getX() + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThanDen[7].getWidth() * 2f + 5 : -5f), nhanVat.getY() + rongThanDen[7].getHeight() * 2f + rongThanDen[6].getHeight() * 2f - 10f + daoDong * 0.7f, rongThanDen[4].getWidth() * 2f * flipscale, rongThanDen[4].getHeight() * 2f);
-                batch.draw(luaDuocChon, nhanVat.getX() + offsetX - luaDuocChon.getWidth() * 2f / 3f, nhanVat.getY(), luaDuocChon.getWidth() * 2f, luaDuocChon.getHeight() * 2f);
-            } else {
-                Texture luaDuocChon = ((int) (veHUD.timeHienRongThan * 10) % 2 == 0 ? luaRongThan[0] : luaRongThan[1]);
-                batch.draw(rongThan[7], nhanVat.getX() + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThan[7].getWidth() * 2f : 0), nhanVat.getY(), rongThan[7].getWidth() * 2f * flipscale, rongThan[7].getHeight() * 2f);
-                batch.draw(rongThan[6], nhanVat.getX() + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThan[7].getWidth() * 2f + 75 : -75f), nhanVat.getY() + rongThan[7].getHeight() * 2f - 10f + daoDong, rongThan[6].getWidth() * 2f * flipscale, rongThan[6].getHeight() * 2f);
-                batch.draw(rongThan[5], nhanVat.getX() + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThan[7].getWidth() * 2f + 78 : -78f), nhanVat.getY() + rongThan[7].getHeight() * 2f + rongThan[6].getHeight() * 2f - 18f, rongThan[5].getWidth() * 2f * flipscale, rongThan[5].getHeight() * 2f);
-                batch.draw(rongThan[8], nhanVat.getX() + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThan[7].getWidth() * 2f + 5 : -5f), nhanVat.getY() + rongThan[7].getHeight() * 2f + rongThan[6].getHeight() * 2f - 18f + daoDong * 1.1f, rongThan[8].getWidth() * 2f * flipscale, rongThan[8].getHeight() * 2f);
-                batch.draw(rongThan[2], nhanVat.getX() + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThan[7].getWidth() * 2f + 78 : -78f), nhanVat.getY() + rongThan[7].getHeight() * 2f + rongThan[6].getHeight() * 2f + rongThan[5].getHeight() * 2f - 26f, rongThan[2].getWidth() * 2f * flipscale, rongThan[2].getHeight() * 2f);
-                batch.draw(rongThan[3], nhanVat.getX() + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThan[7].getWidth() * 2f - 25 : 25f), nhanVat.getY() + rongThan[7].getHeight() * 2f + rongThan[6].getHeight() * 2f + rongThan[5].getHeight() * 2f + rongThan[2].getHeight() * 2f - 26f, rongThan[3].getWidth() * 2f * flipscale, rongThan[3].getHeight() * 2f);
-                batch.draw(rongThan[1], nhanVat.getX() + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThan[7].getWidth() * 2f + 147 : -147f), nhanVat.getY() + rongThan[7].getHeight() * 2f + rongThan[6].getHeight() * 2f + rongThan[5].getHeight() * 2f - 20f + daoDong * 0.8f, rongThan[1].getWidth() * 2f * flipscale, rongThan[1].getHeight() * 2f);
-                batch.draw(rongThan[0], nhanVat.getX() + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThan[7].getWidth() * 2f + 75 : -75f), nhanVat.getY() + rongThan[7].getHeight() * 2f + rongThan[6].getHeight() * 2f + rongThan[5].getHeight() * 2f + rongThan[2].getHeight() * 2f - 50f + daoDong * 1.2f, rongThan[0].getWidth() * 2f * flipscale, rongThan[0].getHeight() * 2f);
-                batch.draw(rongThan[4], nhanVat.getX() + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThan[7].getWidth() * 2f + 5 : -5f), nhanVat.getY() + rongThan[7].getHeight() * 2f + rongThan[6].getHeight() * 2f - 10f + daoDong * 0.7f, rongThan[4].getWidth() * 2f * flipscale, rongThan[4].getHeight() * 2f);
-                batch.draw(luaDuocChon, nhanVat.getX() + offsetX - luaDuocChon.getWidth() * 2f / 3f, nhanVat.getY(), luaDuocChon.getWidth() * 2f, luaDuocChon.getHeight() * 2f);
-            }
-            batch.setProjectionMatrix(veHUD.camManager.uiCamera.combined);
-        }
+        float offsetX = 120f;
+
         if (veHUD.timeHienRongThan<=1) return;
         float timeMax = 300f;
         float step = 0.1f;
@@ -256,6 +215,51 @@ public class HUDRongThan {
         }
         if (hieuUngRongThan != null) {
             for (Texture tex : hieuUngRongThan) if (tex != null) tex.dispose();
+        }
+    }
+
+    public static void veRongThan(SpriteBatch batch, String ngocRongUoc, int nguoiUocRong, float xRong, float yRong) {
+        VeHUD veHUD = State_Management.getVeHUD();
+        NhanVat nhanVat = State_Management.getNhanVat();
+        float daoDong = (float) Math.sin(nhanVat.thoiGianTichLuy);
+        float offsetX = 120f;
+        boolean flipX = false;
+        float flipscale = 1;
+        // ve rong than
+        boolean dieuKien;
+        if (nguoiUocRong == State_Management.getUserResponse().id) {
+            // Người gọi thì đợi vài giây để chạy animation lóe sáng
+            dieuKien = veHUD.timeHienRongThan <= 300f - 2.1f;
+        } else {
+            dieuKien = true;
+        }
+        if (dieuKien) {
+            batch.setProjectionMatrix(veHUD.camManager.camera.combined);
+            if (ngocRongUoc.equals("Ngọc Rồng Sao Đen")) {
+                Texture luaDuocChon = ((int) (veHUD.timeHienRongThan * 10) % 2 == 0 ? luaRongThanDen[0] : luaRongThanDen[1]);
+                batch.draw(rongThanDen[7], xRong + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThanDen[7].getWidth() * 2f : 0), yRong, rongThanDen[7].getWidth() * 2f * flipscale, rongThanDen[7].getHeight() * 2f);
+                batch.draw(rongThanDen[6], xRong + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThanDen[7].getWidth() * 2f + 75 : -75f), yRong + rongThanDen[7].getHeight() * 2f - 10f + daoDong, rongThanDen[6].getWidth() * 2f * flipscale, rongThanDen[6].getHeight() * 2f);
+                batch.draw(rongThanDen[5], xRong + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThanDen[7].getWidth() * 2f + 78 : -78f), yRong + rongThanDen[7].getHeight() * 2f + rongThanDen[6].getHeight() * 2f - 18f, rongThanDen[5].getWidth() * 2f * flipscale, rongThanDen[5].getHeight() * 2f);
+                batch.draw(rongThanDen[8], xRong + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThanDen[7].getWidth() * 2f + 5 : -5f), yRong + rongThanDen[7].getHeight() * 2f + rongThanDen[6].getHeight() * 2f - 18f + daoDong * 1.1f, rongThanDen[8].getWidth() * 2f * flipscale, rongThanDen[8].getHeight() * 2f);
+                batch.draw(rongThanDen[2], xRong + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThanDen[7].getWidth() * 2f + 78 : -78f), yRong + rongThanDen[7].getHeight() * 2f + rongThanDen[6].getHeight() * 2f + rongThanDen[5].getHeight() * 2f - 26f, rongThanDen[2].getWidth() * 2f * flipscale, rongThanDen[2].getHeight() * 2f);
+                batch.draw(rongThanDen[3], xRong + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThanDen[7].getWidth() * 2f - 25 : 25f), yRong + rongThanDen[7].getHeight() * 2f + rongThanDen[6].getHeight() * 2f + rongThanDen[5].getHeight() * 2f + rongThanDen[2].getHeight() * 2f - 26f, rongThanDen[3].getWidth() * 2f * flipscale, rongThanDen[3].getHeight() * 2f);
+                batch.draw(rongThanDen[1], xRong + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThanDen[7].getWidth() * 2f + 147 : -147f), yRong + rongThanDen[7].getHeight() * 2f + rongThanDen[6].getHeight() * 2f + rongThanDen[5].getHeight() * 2f - 20f + daoDong * 0.8f, rongThanDen[1].getWidth() * 2f * flipscale, rongThanDen[1].getHeight() * 2f);
+                batch.draw(rongThanDen[0], xRong + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThanDen[7].getWidth() * 2f + 75 : -75f), yRong + rongThanDen[7].getHeight() * 2f + rongThanDen[6].getHeight() * 2f + rongThanDen[5].getHeight() * 2f + rongThanDen[2].getHeight() * 2f - 50f + daoDong * 1.2f, rongThanDen[0].getWidth() * 2f * flipscale, rongThanDen[0].getHeight() * 2f);
+                batch.draw(rongThanDen[4], xRong + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThanDen[7].getWidth() * 2f + 5 : -5f), yRong + rongThanDen[7].getHeight() * 2f + rongThanDen[6].getHeight() * 2f - 10f + daoDong * 0.7f, rongThanDen[4].getWidth() * 2f * flipscale, rongThanDen[4].getHeight() * 2f);
+                batch.draw(luaDuocChon, xRong + offsetX - luaDuocChon.getWidth() * 2f / 3f, yRong, luaDuocChon.getWidth() * 2f, luaDuocChon.getHeight() * 2f);
+            } else {
+                Texture luaDuocChon = ((int) (veHUD.timeHienRongThan * 10) % 2 == 0 ? luaRongThan[0] : luaRongThan[1]);
+                batch.draw(rongThan[7], xRong + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThan[7].getWidth() * 2f : 0), yRong, rongThan[7].getWidth() * 2f * flipscale, rongThan[7].getHeight() * 2f);
+                batch.draw(rongThan[6], xRong + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThan[7].getWidth() * 2f + 75 : -75f), yRong + rongThan[7].getHeight() * 2f - 10f + daoDong, rongThan[6].getWidth() * 2f * flipscale, rongThan[6].getHeight() * 2f);
+                batch.draw(rongThan[5], xRong + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThan[7].getWidth() * 2f + 78 : -78f), yRong + rongThan[7].getHeight() * 2f + rongThan[6].getHeight() * 2f - 18f, rongThan[5].getWidth() * 2f * flipscale, rongThan[5].getHeight() * 2f);
+                batch.draw(rongThan[8], xRong + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThan[7].getWidth() * 2f + 5 : -5f), yRong + rongThan[7].getHeight() * 2f + rongThan[6].getHeight() * 2f - 18f + daoDong * 1.1f, rongThan[8].getWidth() * 2f * flipscale, rongThan[8].getHeight() * 2f);
+                batch.draw(rongThan[2], xRong + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThan[7].getWidth() * 2f + 78 : -78f), yRong + rongThan[7].getHeight() * 2f + rongThan[6].getHeight() * 2f + rongThan[5].getHeight() * 2f - 26f, rongThan[2].getWidth() * 2f * flipscale, rongThan[2].getHeight() * 2f);
+                batch.draw(rongThan[3], xRong + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThan[7].getWidth() * 2f - 25 : 25f), yRong + rongThan[7].getHeight() * 2f + rongThan[6].getHeight() * 2f + rongThan[5].getHeight() * 2f + rongThan[2].getHeight() * 2f - 26f, rongThan[3].getWidth() * 2f * flipscale, rongThan[3].getHeight() * 2f);
+                batch.draw(rongThan[1], xRong + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThan[7].getWidth() * 2f + 147 : -147f), yRong + rongThan[7].getHeight() * 2f + rongThan[6].getHeight() * 2f + rongThan[5].getHeight() * 2f - 20f + daoDong * 0.8f, rongThan[1].getWidth() * 2f * flipscale, rongThan[1].getHeight() * 2f);
+                batch.draw(rongThan[0], xRong + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThan[7].getWidth() * 2f + 75 : -75f), yRong + rongThan[7].getHeight() * 2f + rongThan[6].getHeight() * 2f + rongThan[5].getHeight() * 2f + rongThan[2].getHeight() * 2f - 50f + daoDong * 1.2f, rongThan[0].getWidth() * 2f * flipscale, rongThan[0].getHeight() * 2f);
+                batch.draw(rongThan[4], xRong + offsetX - luaDuocChon.getWidth() * 2f / 3f + (flipX ? rongThan[7].getWidth() * 2f + 5 : -5f), yRong + rongThan[7].getHeight() * 2f + rongThan[6].getHeight() * 2f - 10f + daoDong * 0.7f, rongThan[4].getWidth() * 2f * flipscale, rongThan[4].getHeight() * 2f);
+                batch.draw(luaDuocChon, xRong + offsetX - luaDuocChon.getWidth() * 2f / 3f, yRong, luaDuocChon.getWidth() * 2f, luaDuocChon.getHeight() * 2f);
+            }
         }
     }
 }

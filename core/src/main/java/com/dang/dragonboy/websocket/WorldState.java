@@ -10,6 +10,7 @@ import com.dang.dragonboy.item.LoaiItem;
 import com.dang.dragonboy.network.ApiItemService;
 import com.dang.dragonboy.network.ApiService;
 import com.dang.dragonboy.network.DTO.ItemCanLuu;
+import com.dang.dragonboy.network.DTO.RongThanState;
 import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -240,6 +241,78 @@ public class WorldState {
                     .veHUD.setTinNhanPet(tinNhan, 2f);
             }
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void onRongThanResult(Object... args) {
+        if (args.length == 0) return;
+
+        try {
+            JSONObject obj = toJsonObject(args[0]);
+            boolean duocGoiRong = obj.optBoolean("duocGoiRong", false);
+            String message = obj.optString("message", "Ngọc rồng cần hồi phục");
+            VeHUD veHUD = State_Management.getVeHUD();
+            ArrayList<Item> danhSach = veHUD.getDuLieuNguoiChoi().getHanhTrang();
+
+            if (duocGoiRong) {
+                for (String idCanTim : veHUD.idsCanTim) {
+                    for (Item item : danhSach) {
+                        if (item != null && idCanTim.equals(item.getId())) {
+                            item.giamSoLuong(1);
+                            if (item.getSoLuong() == 0) {
+                                danhSach.remove(item);
+                            }
+                            break;
+                        }
+                    }
+                }
+                veHUD.dangHienDieuUocRongThan = true;
+                veHUD.timeHienRongThan = 300f;
+                veHUD.dangHienPopup = false;
+                // Chỉ hiện popup, k hiện rồng
+                // Vẽ rồng và map tối ở hàm dưới
+            } else {
+                veHUD.setTinNhanPet(message, 2f);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void onRongThan(Object... args) {
+        if (args.length == 0) return;
+
+        try {
+            JSONObject obj = toJsonObject(args[0]);
+            boolean mapToi = obj.optBoolean("mapToi", false);
+            VeHUD veHUD = State_Management.getVeHUD();
+
+            if (!mapToi) {
+                // Xóa rồng thần
+                State_Management.setRongThanState(null);
+                return;
+            }
+
+            int nguoiUoc = obj.optInt("nguoiUoc");
+            PlayerState ps = players.get(nguoiUoc);
+            if (ps == null) return; // chỉ guard khi mapToi=true
+
+            String map = obj.optString("map");
+            double x = obj.optDouble("x");
+            double y = obj.optDouble("y");
+            String ngocRongUoc = obj.optString("ngocRongUoc");
+
+            RongThanState state = new RongThanState();
+            state.x = x;
+            state.y = y;
+            state.map = map;
+            state.nguoiUoc = ps;
+            state.ngocRongUoc = ngocRongUoc;
+            State_Management.setRongThanState(state);
+
+            veHUD.setTinNhanPet("Người chơi " + ps.gameName + " vừa gọi rồng thần tại " + map, 2f);
         } catch (Exception e) {
             e.printStackTrace();
         }

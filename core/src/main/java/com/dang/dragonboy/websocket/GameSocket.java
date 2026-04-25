@@ -210,6 +210,10 @@ public class GameSocket {
         // ===== NOTIFICATION (không đụng Texture) =====
         socket.on("notification", args -> WorldState.onNotification(args));
 
+        // ===== Gọi Rồng Thần =====
+        socket.on("uocRongThanResult", args -> WorldState.onRongThanResult(args));
+        socket.on("uocRongThan", args -> WorldState.onRongThan(args));
+
         // ===== FORCE LOGOUT =====
         socket.on("force_logout", args -> {
             try {
@@ -322,6 +326,25 @@ public class GameSocket {
         data.put("tinNhan", tinNhan);
 
         socket.emit("send-notification", data);
+    }
+
+    public static void guiUocRongThan(String ngocRongUoc) {
+        try {
+            JSONObject data = new JSONObject();
+            data.put("ngocRongUoc", ngocRongUoc);
+
+            socket.emit("uoc-rong-than", data);
+        } catch (Exception e) {
+            // log, alert
+        }
+    }
+
+    public static void guiUocXongRongThan() {
+        try {
+            socket.emit("uoc-xong");
+        } catch (Exception e) {
+            // log, alert
+        }
     }
 
     public static void guiReqTradeItem(int targetId) throws Exception {

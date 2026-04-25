@@ -1037,11 +1037,6 @@ public class ThemItemTest {
         ));
     }
     public void themQuaTuDieuUocRongThan() {
-        try{
-            GameSocket.guiNotification(State_Management.getUserResponse().gameName+" vừa gọi rồng tại "+this.veHUD.layTenMap());
-        } catch (Exception e) {
-
-        }
         if (veHUD.ngocRongUoc.equals("1sao")) {
             switch (veHUD.nutduocchon) {
                 case 0:

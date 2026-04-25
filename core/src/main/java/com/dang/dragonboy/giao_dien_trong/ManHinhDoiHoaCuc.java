@@ -17,8 +17,10 @@ import com.dang.dragonboy.giao_dien_ngoai.ManHinhSplash;
 import com.dang.dragonboy.he_thong.Main;
 import com.dang.dragonboy.he_thong.ThaoTac;
 import com.dang.dragonboy.he_thong.ThongTinChuyenMap;
+import com.dang.dragonboy.hien_thi.HUDRongThan;
 import com.dang.dragonboy.hien_thi.SkillNhanVat;
 import com.dang.dragonboy.hien_thi.VeHUD;
+import com.dang.dragonboy.network.DTO.RongThanState;
 import com.dang.dragonboy.nhan_vat.MultiplayerRenderer;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.nhan_vat.NhanVatCauHinh;
@@ -38,6 +40,7 @@ import java.util.Map;
 
 public class ManHinhDoiHoaCuc implements Screen {
     private Main game;
+    public static final String MAP_NAME = "Đồi Hoa Cúc";
     private ShapeRenderer shapeRenderer;
     private ThongTinChuyenMap thongtin;
     private SpriteBatch batch;
@@ -294,10 +297,12 @@ public class ManHinhDoiHoaCuc implements Screen {
         shapeRenderer.end();
         batch.begin();
         batch.end();
-        if (hud.timeHienRongThan<=300-2.1f && hud.timeHienRongThan>0) {
+
+        RongThanState rongThanState = State_Management.getRongThanState();
+        if (rongThanState != null && rongThanState.map.equals(MAP_NAME)) {
             shapeRenderer.setProjectionMatrix(camManager.uiCamera.combined);
             Gdx.gl.glEnable(GL20.GL_BLEND);
-            if (hud.ngocRongUoc.equals("1saoden")) {
+            if (rongThanState.ngocRongUoc.equals("Ngọc Rồng Sao Đen")) {
                 shapeRenderer.setColor(0f, 0f, 0f, 0.6f);
             } else {
                 shapeRenderer.setColor(0f, 0f, 0f, 0.5f);
@@ -307,6 +312,7 @@ public class ManHinhDoiHoaCuc implements Screen {
             shapeRenderer.end();
             shapeRenderer.setProjectionMatrix(camManager.camera.combined);
         }
+
         batch.begin();
 
         //background gần
@@ -321,6 +327,10 @@ public class ManHinhDoiHoaCuc implements Screen {
                 danhSachNpc.get(i).ve(batch, thoiGianTichLuy);
             }
             map.capNhatNpc();
+        }
+
+        if (rongThanState != null && rongThanState.map.equals(MAP_NAME)) {
+            HUDRongThan.veRongThan(batch, rongThanState.ngocRongUoc, rongThanState.nguoiUoc.userId,(float) rongThanState.x,(float) rongThanState.y);
         }
 
         MultiplayerRenderer.render(batch, thoiGianTichLuy, hud);

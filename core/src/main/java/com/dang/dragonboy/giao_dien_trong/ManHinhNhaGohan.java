@@ -22,6 +22,8 @@ import com.dang.dragonboy.he_thong.ThongTinChuyenMap;
 //Giao dien ngoai
 import com.dang.dragonboy.giao_dien_ngoai.ManHinhSplash;
 //NhanVat
+import com.dang.dragonboy.hien_thi.HUDRongThan;
+import com.dang.dragonboy.network.DTO.RongThanState;
 import com.dang.dragonboy.nhan_vat.MultiplayerRenderer;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import com.dang.dragonboy.nhan_vat.NhanVatCauHinh;
@@ -44,6 +46,7 @@ import com.dang.dragonboy.xu_ly_map.npc.NpcOffset;
 
 public class ManHinhNhaGohan implements Screen {
     //quan trong
+    public static final String MAP_NAME = "Nhà Gôhan";
     private final Main game;
     private final NhanVat nhanVat;
     private final ShapeRenderer shapeRenderer;
@@ -373,10 +376,12 @@ public class ManHinhNhaGohan implements Screen {
         }
 
         batch.end();
-        if (hudRenderer.timeHienRongThan<=300-2.1f && hudRenderer.timeHienRongThan>0) {
+
+        RongThanState rongThanState = State_Management.getRongThanState();
+        if (rongThanState != null && rongThanState.map.equals(MAP_NAME)) {
             shapeRenderer.setProjectionMatrix(camManager.uiCamera.combined);
             Gdx.gl.glEnable(GL20.GL_BLEND);
-            if (hudRenderer.ngocRongUoc.equals("1saoden")) {
+            if (rongThanState.ngocRongUoc.equals("Ngọc Rồng Sao Đen")) {
                 shapeRenderer.setColor(0f, 0f, 0f, 0.6f);
             } else {
                 shapeRenderer.setColor(0f, 0f, 0f, 0.5f);
@@ -436,6 +441,10 @@ public class ManHinhNhaGohan implements Screen {
                 danhSachNpc.get(i).checkClick(nhanVat.x_check_npc, nhanVat.y_check_npc);
                 danhSachNpc.get(i).ve(batch, thoiGianTichLuy);
             }
+        }
+
+        if (rongThanState != null && rongThanState.map.equals(MAP_NAME)) {
+            HUDRongThan.veRongThan(batch, rongThanState.ngocRongUoc, rongThanState.nguoiUoc.userId,(float) rongThanState.x,(float) rongThanState.y);
         }
 
         MultiplayerRenderer.render(batch, thoiGianTichLuy, hudRenderer);
