@@ -6,6 +6,7 @@ public class RongThanState {
     public double x;
     public double y;
     public String map;
-    public PlayerState nguoiUoc;
+    public int nguoiUocId;
+    public String gameNameNguoiUoc;
     public String ngocRongUoc;
 }

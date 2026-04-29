@@ -17,8 +17,10 @@ public class Lwjgl3Launcher {
     private static Lwjgl3ApplicationConfiguration layCauHinh() {
         Lwjgl3ApplicationConfiguration cauHinh = new Lwjgl3ApplicationConfiguration();
         cauHinh.setTitle("Github DANG-PH");
-        cauHinh.useVsync(true);
-        cauHinh.setForegroundFPS(Lwjgl3ApplicationConfiguration.getDisplayMode().refreshRate + 1);
+//        cauHinh.useVsync(true);
+//        cauHinh.setForegroundFPS(Lwjgl3ApplicationConfiguration.getDisplayMode().refreshRate + 1);
+        cauHinh.useVsync(false);
+        cauHinh.setForegroundFPS(60); // Máy nào FPS cũng cố định 60, k để máy mạnh fps 120, 140,...
         cauHinh.setWindowedMode(1020, 610);
         cauHinh.setWindowIcon("hud/giaodienngoai/chung/icon128_1.png", "hud/giaodienngoai/chung/icon32_1.png", "hud/giaodienngoai/chung/icon16_1.png");
         cauHinh.setResizable(false);   // Không cho kéo giãn cửa sổ

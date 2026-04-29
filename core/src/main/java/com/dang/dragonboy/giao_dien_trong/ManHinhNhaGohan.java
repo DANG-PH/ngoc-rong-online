@@ -444,7 +444,7 @@ public class ManHinhNhaGohan implements Screen {
         }
 
         if (rongThanState != null && rongThanState.map.equals(MAP_NAME)) {
-            HUDRongThan.veRongThan(batch, rongThanState.ngocRongUoc, rongThanState.nguoiUoc.userId,(float) rongThanState.x,(float) rongThanState.y);
+            HUDRongThan.veRongThan(batch, rongThanState.ngocRongUoc, rongThanState.nguoiUocId,(float) rongThanState.x,(float) rongThanState.y);
         }
 
         MultiplayerRenderer.render(batch, thoiGianTichLuy, hudRenderer);

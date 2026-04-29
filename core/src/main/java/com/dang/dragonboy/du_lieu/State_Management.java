@@ -114,4 +114,8 @@ public class State_Management {
     public static void setForceLogout(boolean value) { forceLogout = value; }
     public static String getForceLogoutMessage() { return forceLogoutMessage; }
     public static void setForceLogoutMessage(String msg) { forceLogoutMessage = msg; }
+
+    public static String getCurrentMap() {
+        return veHUD.layTenMap();
+    }
 }

@@ -210,7 +210,6 @@ public class ManHinhLangAru implements Screen {
             this.rongMap = map.getChieuRongMap();
             this.caoMap = map.getChieuCaoMap();
             this.hud.mapHienTai = map;
-            System.out.print("hello");
         }
     }
 
@@ -367,7 +366,7 @@ public class ManHinhLangAru implements Screen {
         }
 
         if (rongThanState != null && rongThanState.map.equals(MAP_NAME)) {
-            HUDRongThan.veRongThan(batch, rongThanState.ngocRongUoc, rongThanState.nguoiUoc.userId,(float) rongThanState.x,(float) rongThanState.y);
+            HUDRongThan.veRongThan(batch, rongThanState.ngocRongUoc, rongThanState.nguoiUocId,(float) rongThanState.x,(float) rongThanState.y);
         }
 
         MultiplayerRenderer.render(batch, thoiGianTichLuy, hud);

@@ -287,18 +287,14 @@ public class WorldState {
         try {
             JSONObject obj = toJsonObject(args[0]);
             boolean mapToi = obj.optBoolean("mapToi", false);
-            VeHUD veHUD = State_Management.getVeHUD();
 
             if (!mapToi) {
-                // Xóa rồng thần
                 State_Management.setRongThanState(null);
                 return;
             }
 
             int nguoiUoc = obj.optInt("nguoiUoc");
-            PlayerState ps = players.get(nguoiUoc);
-            if (ps == null) return; // chỉ guard khi mapToi=true
-
+            String gameName = obj.optString("gameNameNguoiUoc", "");
             String map = obj.optString("map");
             double x = obj.optDouble("x");
             double y = obj.optDouble("y");
@@ -308,11 +304,15 @@ public class WorldState {
             state.x = x;
             state.y = y;
             state.map = map;
-            state.nguoiUoc = ps;
+            state.nguoiUocId = nguoiUoc;
+            state.gameNameNguoiUoc = gameName;
             state.ngocRongUoc = ngocRongUoc;
             State_Management.setRongThanState(state);
 
-            veHUD.setTinNhanPet("Người chơi " + ps.gameName + " vừa gọi rồng thần tại " + map, 2f);
+            VeHUD veHUD = State_Management.getVeHUD();
+            if (veHUD != null && !gameName.isEmpty()) {
+                veHUD.setTinNhanPet("Người chơi " + gameName + " vừa gọi rồng thần tại " + map, 2f);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -440,7 +440,6 @@ public class WorldState {
         try {
             VeHUD veHUD = State_Management.getVeHUD();
             DuLieuNguoiChoi duLieuNguoiChoi = veHUD.getDuLieuNguoiChoi();
-            System.out.println("HELLO");
 
             KhungGiaoDich.textNutGiaoDich = "Check...";
             GameSocket.tradeCheck(veHUD.playerGiaoDich.userId);

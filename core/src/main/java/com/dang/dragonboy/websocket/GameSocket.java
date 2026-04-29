@@ -54,6 +54,9 @@ public class GameSocket {
                     // Push lại state thật vì A, C, D có thể đang thấy state cũ
                     syncMyState();
                 }
+
+                // === connect Go sau khi Socket.IO master OK ===
+                GameSocketGo.connect(token);
             });
 
             socket.on(Socket.EVENT_CONNECT_ERROR, args -> {
@@ -66,6 +69,9 @@ public class GameSocket {
                 if (!reason.equals("io server disconnect")) {
                     scheduleReconnect();
                 }
+
+                // === master mất → kill luôn slave ===
+                GameSocketGo.disconnect();
             });
 
             socket.connect();
@@ -152,6 +158,7 @@ public class GameSocket {
     public static void disconnect() {
         eventsRegistered = false;
         isManualDisconnect = true;
+        GameSocketGo.disconnect();
         if (socket != null) socket.disconnect();
     }
 
@@ -181,7 +188,7 @@ public class GameSocket {
             }));
 
         // Race condition không đáng kể với game → không cần postRunnable
-        socket.on("playerSync", args -> WorldState.onPlayerSync(args));
+//        socket.on("playerSync", args -> WorldState.onPlayerSync(args)); // PlayerSync giờ đến từ Go k phải NestJS nữa
         socket.on("playerChat", args -> WorldState.onPlayerChat(args));
 
         // ===== SKILL (không đụng Texture) =====
@@ -271,29 +278,33 @@ public class GameSocket {
 
 
     public static void guiPlayerMove(NhanVat nhanVat) throws Exception {
-        JSONObject data = new JSONObject();
-        data.put("x", nhanVat.getX());
-        data.put("y", nhanVat.getY());
-        data.put("trangthai", nhanVat.getTrangThai().name());
-        data.put("dir", nhanVat.getFlipX() ? -1 : 1);
-        data.put("dau", nhanVat.dauPath);
-        data.put("than", nhanVat.thanPath);
-        data.put("chan", nhanVat.chanPath);
-        data.put("lechDauX", nhanVat.lechDauX);
-        data.put("lechDauY", nhanVat.lechDauY);
-        data.put("lechThanX", nhanVat.lechThanX);
-        data.put("lechThanY", nhanVat.lechThanY);
-        data.put("lechChanX", nhanVat.lechChanX);
-        data.put("lechChanY", nhanVat.lechChanY);
-        data.put("timeChoHienBay", nhanVat.timeChoHienBay);
-        data.put("frameVanBay", nhanVat.frameVanBay);
-        data.put("dangMangVanBay", nhanVat.dangMangVanBay);
-        data.put("tenVanBay", nhanVat.tenVanBay);
-        data.put("rong", nhanVat.rong);
-        data.put("cao", nhanVat.cao);
-        data.put("avatar", nhanVat.doiavatar());
+        // Cách cho NestJS + socketIO + json
+//        JSONObject data = new JSONObject();
+//        data.put("x", nhanVat.getX());
+//        data.put("y", nhanVat.getY());
+//        data.put("trangthai", nhanVat.getTrangThai().name());
+//        data.put("dir", nhanVat.getFlipX() ? -1 : 1);
+//        data.put("dau", nhanVat.dauPath);
+//        data.put("than", nhanVat.thanPath);
+//        data.put("chan", nhanVat.chanPath);
+//        data.put("lechDauX", nhanVat.lechDauX);
+//        data.put("lechDauY", nhanVat.lechDauY);
+//        data.put("lechThanX", nhanVat.lechThanX);
+//        data.put("lechThanY", nhanVat.lechThanY);
+//        data.put("lechChanX", nhanVat.lechChanX);
+//        data.put("lechChanY", nhanVat.lechChanY);
+//        data.put("timeChoHienBay", nhanVat.timeChoHienBay);
+//        data.put("frameVanBay", nhanVat.frameVanBay);
+//        data.put("dangMangVanBay", nhanVat.dangMangVanBay);
+//        data.put("tenVanBay", nhanVat.tenVanBay);
+//        data.put("rong", nhanVat.rong);
+//        data.put("cao", nhanVat.cao);
+//        data.put("avatar", nhanVat.doiavatar());
+//
+//        socket.emit("player-move", data);
 
-        socket.emit("player-move", data);
+        // Cách mới: Go + websocket thuần + binary data (chỉ move cần vì đây là hot path và cần mượt)
+        GameSocketGo.guiPlayerMove(nhanVat);
     }
 
     // Gộp 3 loại vào 1 event, field tương ứng enum CosmeticField
