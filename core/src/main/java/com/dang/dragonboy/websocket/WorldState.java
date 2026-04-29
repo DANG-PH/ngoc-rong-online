@@ -119,52 +119,97 @@ public class WorldState {
      * ---------------------------------------------------------
      * Update liên tục vị trí, trạng thái, frame animation
      * ========================================================= */
-    public static void onPlayerSync(Object... args) {
-        if (args.length == 0) return;
+//    public static void onPlayerSync(Object... args) {
+//        if (args.length == 0) return;
+//
+//        try {
+//            JSONObject obj = toJsonObject(args[0]);
+//            int userId = obj.optInt("userId", -1);
+//            if (userId == -1) return;
+//
+//            PlayerState ps = players.get(userId);
+//            if (ps == null) return;
+//
+//            // ===== Transform =====
+//            ps.serverX = (float) obj.optDouble("x", ps.serverX);
+//            ps.serverY = (float) obj.optDouble("y", ps.serverY);
+//            ps.dir = obj.optInt("dir", ps.dir);
+//
+//            // ===== State =====
+//            ps.trangthai = obj.optString("trangthai", ps.trangthai);
+//
+//            // ===== Skin =====
+//            ps.dau = obj.optString("dau", ps.dau);
+//            ps.than = obj.optString("than", ps.than);
+//            ps.chan = obj.optString("chan", ps.chan);
+//
+//            // ===== Animation =====
+//            ps.frameVanBay = obj.optInt("frameVanBay", ps.frameVanBay);
+//            ps.timeChoHienBay = (float) obj.optDouble("timeChoHienBay", ps.timeChoHienBay);
+//            ps.dangMangVanBay = (boolean) obj.optBoolean("dangMangVanBay", ps.dangMangVanBay);
+//            ps.tenVanBay = obj.optString("tenVanBay", ps.tenVanBay);
+//
+//            // ===== Offset =====
+//            ps.lechThanX = (float) obj.optDouble("lechThanX", ps.lechThanX);
+//            ps.lechThanY = (float) obj.optDouble("lechThanY", ps.lechThanY);
+//            ps.lechDauX  = (float) obj.optDouble("lechDauX", ps.lechDauX);
+//            ps.lechDauY  = (float) obj.optDouble("lechDauY", ps.lechDauY);
+//            ps.lechChanX = (float) obj.optDouble("lechChanX", ps.lechChanX);
+//            ps.lechChanY = (float) obj.optDouble("lechChanY", ps.lechChanY);
+//
+//            ps.rong = (float) obj.optDouble("rong", ps.rong);
+//            ps.cao = (float) obj.optDouble("cao", ps.cao);
+//
+//            ps.avatar = obj.optString("avatar", ps.avatar);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-        try {
-            JSONObject obj = toJsonObject(args[0]);
-            int userId = obj.optInt("userId", -1);
-            if (userId == -1) return;
+    public static void onPlayerSyncBinary(
+        int userId, float x, float y, String trangthai, int dir,
+        String dau, String than, String chan, float timeChoHienBay,
+        float lechDauX, float lechDauY, float lechThanX, float lechThanY,
+        float lechChanX, float lechChanY,
+        int frameVanBay, boolean dangMangVanBay, String tenVanBay,
+        float rong, float cao, String avatar
+    ) {
+        if (userId == -1) return;
 
-            PlayerState ps = players.get(userId);
-            if (ps == null) return;
+        PlayerState ps = players.get(userId);
+        if (ps == null) return;
 
-            // ===== Transform =====
-            ps.serverX = (float) obj.optDouble("x", ps.serverX);
-            ps.serverY = (float) obj.optDouble("y", ps.serverY);
-            ps.dir = obj.optInt("dir", ps.dir);
+        ps.serverX = x;
+        ps.serverY = y;
+        ps.dir = dir;
+        ps.trangthai = trangthai;
+        ps.dau = dau;
+        ps.than = than;
+        ps.chan = chan;
+        ps.frameVanBay = frameVanBay;
+        ps.timeChoHienBay = timeChoHienBay;
+        ps.dangMangVanBay = dangMangVanBay;
+        ps.tenVanBay = tenVanBay;
+        ps.lechThanX = lechThanX;
+        ps.lechThanY = lechThanY;
+        ps.lechDauX = lechDauX;
+        ps.lechDauY = lechDauY;
+        ps.lechChanX = lechChanX;
+        ps.lechChanY = lechChanY;
+        ps.rong = rong;
+        ps.cao = cao;
+        ps.avatar = avatar;
 
-            // ===== State =====
-            ps.trangthai = obj.optString("trangthai", ps.trangthai);
-
-            // ===== Skin =====
-            ps.dau = obj.optString("dau", ps.dau);
-            ps.than = obj.optString("than", ps.than);
-            ps.chan = obj.optString("chan", ps.chan);
-
-            // ===== Animation =====
-            ps.frameVanBay = obj.optInt("frameVanBay", ps.frameVanBay);
-            ps.timeChoHienBay = (float) obj.optDouble("timeChoHienBay", ps.timeChoHienBay);
-            ps.dangMangVanBay = (boolean) obj.optBoolean("dangMangVanBay", ps.dangMangVanBay);
-            ps.tenVanBay = obj.optString("tenVanBay", ps.tenVanBay);
-
-            // ===== Offset =====
-            ps.lechThanX = (float) obj.optDouble("lechThanX", ps.lechThanX);
-            ps.lechThanY = (float) obj.optDouble("lechThanY", ps.lechThanY);
-            ps.lechDauX  = (float) obj.optDouble("lechDauX", ps.lechDauX);
-            ps.lechDauY  = (float) obj.optDouble("lechDauY", ps.lechDauY);
-            ps.lechChanX = (float) obj.optDouble("lechChanX", ps.lechChanX);
-            ps.lechChanY = (float) obj.optDouble("lechChanY", ps.lechChanY);
-
-            ps.rong = (float) obj.optDouble("rong", ps.rong);
-            ps.cao = (float) obj.optDouble("cao", ps.cao);
-
-            ps.avatar = obj.optString("avatar", ps.avatar);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // Cách lerp snapshot
+//        ps.applyServerSync(
+//            x, y, trangthai, dir,
+//            dau, than, chan, timeChoHienBay,
+//            lechDauX, lechDauY, lechThanX, lechThanY,
+//            lechChanX, lechChanY,
+//            frameVanBay, dangMangVanBay, tenVanBay,
+//            rong, cao, avatar
+//        );
     }
 
     public static void onPlayerUseCosmetic(Object... args) {

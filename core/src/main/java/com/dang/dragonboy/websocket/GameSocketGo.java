@@ -344,34 +344,41 @@ public class GameSocketGo {
             float cao = buf.getFloat();
             String avatar = readString(buf);
 
-            // Build JSONObject để gọi cùng handler với Socket.IO.
-            org.json.JSONObject data = new org.json.JSONObject();
-            data.put("userId", userId);
-            data.put("x", x);
-            data.put("y", y);
-            data.put("trangthai", byteToTrangthai(trangthai));
-            data.put("dir", (int) dir);
-            data.put("dau", dau);
-            data.put("than", than);
-            data.put("chan", chan);
-            data.put("timeChoHienBay", timeChoHienBay);
-            data.put("lechDauX", lechDauX);
-            data.put("lechDauY", lechDauY);
-            data.put("lechThanX", lechThanX);
-            data.put("lechThanY", lechThanY);
-            data.put("lechChanX", lechChanX);
-            data.put("lechChanY", lechChanY);
-            data.put("frameVanBay", frameVanBay);
-            data.put("dangMangVanBay", dangMangVanBay);
-            data.put("tenVanBay", tenVanBay);
-            data.put("rong", rong);
-            data.put("cao", cao);
-            data.put("avatar", avatar);
+//            // Build JSONObject để gọi cùng handler với Socket.IO.
+//            org.json.JSONObject data = new org.json.JSONObject();
+//            data.put("userId", userId);
+//            data.put("x", x);
+//            data.put("y", y);
+//            data.put("trangthai", byteToTrangthai(trangthai));
+//            data.put("dir", (int) dir);
+//            data.put("dau", dau);
+//            data.put("than", than);
+//            data.put("chan", chan);
+//            data.put("timeChoHienBay", timeChoHienBay);
+//            data.put("lechDauX", lechDauX);
+//            data.put("lechDauY", lechDauY);
+//            data.put("lechThanX", lechThanX);
+//            data.put("lechThanY", lechThanY);
+//            data.put("lechChanX", lechChanX);
+//            data.put("lechChanY", lechChanY);
+//            data.put("frameVanBay", frameVanBay);
+//            data.put("dangMangVanBay", dangMangVanBay);
+//            data.put("tenVanBay", tenVanBay);
+//            data.put("rong", rong);
+//            data.put("cao", cao);
+//            data.put("avatar", avatar);
+//
+//            // Gọi cùng callback với Socket.IO playerSync — KHÔNG phải sửa WorldState.
+//            // KHÔNG postRunnable vì WorldState.onPlayerSync hiện tại comment "Race condition không
+//            // đáng kể với game → không cần postRunnable" — giữ nguyên behavior.
+//            WorldState.onPlayerSync(new Object[]{ data });
 
-            // Gọi cùng callback với Socket.IO playerSync — KHÔNG phải sửa WorldState.
-            // KHÔNG postRunnable vì WorldState.onPlayerSync hiện tại comment "Race condition không
-            // đáng kể với game → không cần postRunnable" — giữ nguyên behavior.
-            WorldState.onPlayerSync(new Object[]{ data });
+            WorldState.onPlayerSyncBinary(
+                userId, x, y, byteToTrangthai(trangthai), dir,
+                dau, than, chan, timeChoHienBay,
+                lechDauX, lechDauY, lechThanX, lechThanY, lechChanX, lechChanY,
+                frameVanBay, dangMangVanBay, tenVanBay, rong, cao, avatar
+            );
         } catch (Exception e) {
             e.printStackTrace();
         }
