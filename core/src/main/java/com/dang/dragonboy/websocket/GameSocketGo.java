@@ -74,6 +74,20 @@ public class GameSocketGo {
     // ---------- Clock sync ----------
     public static volatile long clockOffset = 0;
     public static volatile long lastRtt = 40;
+    // Độ dao động của RTT giữa các lần ping liên tiếp (jitter)
+    // Ví dụ cùng lastRtt ~40ms nhưng:
+    //   Mạng ổn: 37, 42, 41, 40, 39   → rttJitter thấp ~2ms
+    //   Mạng yếu: 10, 70, 80, 65, 20  → rttJitter cao ~50ms
+    //
+    // lastRtt dùng để tính clockOffset (đồng bộ đồng hồ client-server).
+    // rttJitter dùng để tính render delay (jitter buffer).
+    // Hai mục đích khác nhau:
+    //   - clockOffset trả lời: "server đang ở thời điểm nào?"
+    //   - renderDelay trả lời: "cần trễ bao lâu để buffer luôn có đủ 2 snapshot?"
+    // clockOffset không cover được render delay vì dù đồng hồ đồng bộ hoàn hảo,
+    // packet vẫn đến không đều (lúc 10ms lúc 70ms) → nếu render delay quá nhỏ
+    // thì buffer rỗng → giật, dù clockOffset hoàn toàn chính xác.
+    public static long rttJitter = 10;
     private static volatile long pingSentAt = 0;
     private static long lastClockSyncAt = 0;
     private static volatile boolean clockReady = false;
@@ -131,6 +145,15 @@ public class GameSocketGo {
                         if (lastRtt == 40) lastRtt = rtt;        // lần đầu
                         else lastRtt = (lastRtt * 7 + rtt) / 8;  // EMA smooth
                     }
+
+                    //  rttDiff = độ dao động giữa 2 lần ping liên tiếp:
+                    //  lần 1: 40ms
+                    //  lần 2: 42ms → rttDiff = |42 - 40| = 2ms
+                    //  lần 3: 80ms → rttDiff = |80 - 42| = 38ms  ← spike
+                    //  lần 4: 45ms → rttDiff = |45 - 80| = 35ms
+                    //  rttJitter = EMA của rttDiff, tức là mức dao động trung bình của ping theo thời gian.
+                    long rttDiff = Math.abs(rtt - lastRtt);
+                    rttJitter = (rttJitter * 7 + rttDiff) / 8; // EMA giống lastRtt
                     waitingPong = false;
                     System.out.println("ĐỔI RTT: "+lastRtt);
                 }
@@ -484,6 +507,11 @@ public class GameSocketGo {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    // Hiển thị ms như game moba/fps
+    public static long getPing() {
+        return lastRtt;
     }
 
     // ====================================================================

@@ -27,8 +27,8 @@ public class PlayerState {
     // để luôn có 2 snapshot bao quanh renderTime → lerp mượt qua jitter network.
     private final Deque<PlayerSnapshot> snapshots = new ArrayDeque<>();
     private final Object snapshotLock = new Object();
-    // TODO: dựa vào clockOffset hoặc RTT để tính jitter buffer (Sau này cần sửa để mượt mà)
-    private static final long RENDER_DELAY_MS = 200;     // render trễ 10ms (server tick 50ms × 3)
+    // TODO: dựa vào clockOffset hoặc RTT để tính jitter buffer (Sau này cần sửa để mượt mà) (DONE)
+//    private static final long RENDER_DELAY_MS = 200;     // render trễ 10ms (server tick 50ms × 3)
     private static final long BUFFER_MAX_AGE_MS = 1000;  // xóa snapshot quá cũ
     public static final MOD_SERVER modServer = MOD_SERVER.GOLANG;
 
@@ -695,7 +695,7 @@ public class PlayerState {
             if (latestSnap != null && (serverTime - latestSnap.time) > 500) {
                 snapshots.clear();
 
-                long currentRenderTime = System.currentTimeMillis() + GameSocketGo.clockOffset - RENDER_DELAY_MS;
+                long currentRenderTime = System.currentTimeMillis() + GameSocketGo.clockOffset - getRenderDelay();
 
                 PlayerSnapshot anchor = new PlayerSnapshot();
                 anchor.time = Math.min(currentRenderTime, serverTime - 50);
@@ -771,7 +771,9 @@ public class PlayerState {
             snapCopy = snapshots.toArray(new PlayerSnapshot[0]);
         }
 
-        long renderTime = System.currentTimeMillis() + GameSocketGo.clockOffset - RENDER_DELAY_MS;
+        // Cần trả lời câu hỏi tại sao cần dùng đồng hồ của server, dùng đồng hồ client xảy ra gì?
+        // Tại sao cần trừ đi delay?
+        long renderTime = System.currentTimeMillis() + GameSocketGo.clockOffset - getRenderDelay();
 
         if (snapCopy[0].time > renderTime) {
             x = snapLatest.x;
@@ -848,5 +850,12 @@ public class PlayerState {
         this.rong = s.rong;
         this.cao = s.cao;
         this.avatar = s.avatar;
+    }
+
+    private static long getRenderDelay() {
+        long oneWay = GameSocketGo.lastRtt / 2;
+        long jitter = GameSocketGo.rttJitter;
+        long tickBuffer = 2 * 50; // 2 tick × 50ms server tick
+        return Math.max(50, Math.min(oneWay + jitter + tickBuffer, 400));
     }
 }
