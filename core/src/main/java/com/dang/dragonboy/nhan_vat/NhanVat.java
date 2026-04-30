@@ -65,7 +65,6 @@ public class NhanVat {
 
     private final float trongLuc = -0.5f;
     private float tocDoDiChuyen = 7f;
-    private final float doCaoDat = 175f;
 
     private final float tiLe = 0.5f;
 
@@ -235,7 +234,7 @@ public class NhanVat {
     private float lastSentX = -9999f;
     private float lastSentY = -9999f;
     private TrangThai lastSentTrangThai = null;
-    private static final float POSITION_THRESHOLD = 1f; // Khoảng cách được coi là đã dịch chuyển ( x_mới - x_last_sent > là gửi ) ( tương tự với y )
+    private static final float POSITION_THRESHOLD = 0.5f; // Khoảng cách được coi là đã dịch chuyển ( x_mới - x_last_sent > là gửi ) ( tương tự với y )
     private boolean vuaFixCaiTrang = false;
 
     public void setToaDoMucTieu(float x, float y) {
@@ -1779,18 +1778,15 @@ public class NhanVat {
                     lastSentTrangThai = trangThai;
                     moveTimer = 0f; // reset để tránh gửi 2 lần liên tiếp
                 } catch (Exception e) {}
-            } else if (moveTimer >= MOVE_INTERVAL) {
-                // Gửi theo timer (10 lần/giây) khi đang di chuyển
-                // Chỉ gửi nếu x hoặc y thực sự thay đổi (đứng yên = không gửi gì)
-                if (posChanged) {
-                    try {
-                        GameSocket.guiPlayerMove(this);
-                        lastSentX = x;
-                        lastSentY = y;
-                        lastSentTrangThai = trangThai;
-                    } catch (Exception e) {}
-                }
-                moveTimer = 0f;
+            } else if (moveTimer >= MOVE_INTERVAL && posChanged) {
+                try {
+                    // gửi
+                    GameSocket.guiPlayerMove(this);
+                    lastSentX = x;
+                    lastSentY = y;
+                    lastSentTrangThai = trangThai;
+                    moveTimer = 0f;  // ← reset chỉ khi gửi
+                } catch (Exception e) {}
             }
 
             if (veHUD.timeChoBienKhi > 0) {

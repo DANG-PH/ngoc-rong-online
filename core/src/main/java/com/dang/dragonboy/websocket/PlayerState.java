@@ -20,17 +20,17 @@ import java.util.Iterator;
 import java.util.ArrayList;
 
 public class PlayerState {
-    public float serverX, serverY; // lerp
     public int userId;
-//    // === INTERPOLATION BUFFER ===
-//    // Lưu các snapshot từ server theo thời gian, render sẽ trễ RENDER_DELAY_MS
-//    // để luôn có 2 snapshot bao quanh renderTime → lerp mượt qua jitter network.
-//    private final Deque<PlayerSnapshot> snapshots = new ArrayDeque<>();
-//    private static final long RENDER_DELAY_MS = 150;     // render trễ 150ms (server tick 50ms × 3)
-//    private static final long BUFFER_MAX_AGE_MS = 1000;  // xóa snapshot quá cũ
-//
-//    // Lưu lại "snapshot mới nhất" để fallback khi buffer chưa đủ data
-//    private PlayerSnapshot latestSnap = null;
+    // === INTERPOLATION BUFFER ===
+    // Lưu các snapshot từ server theo thời gian, render sẽ trễ RENDER_DELAY_MS
+    // để luôn có 2 snapshot bao quanh renderTime → lerp mượt qua jitter network.
+    private final Deque<PlayerSnapshot> snapshots = new ArrayDeque<>();
+    private final Object snapshotLock = new Object();
+    private static final long RENDER_DELAY_MS = 150;     // render trễ 10ms (server tick 50ms × 3)
+    private static final long BUFFER_MAX_AGE_MS = 1000;  // xóa snapshot quá cũ
+
+    // Lưu lại "snapshot mới nhất" để fallback khi buffer chưa đủ data
+    private PlayerSnapshot latestSnap = null;
     public float x;
     public float y;
     public float rong;
@@ -106,8 +106,58 @@ public class PlayerState {
     public Item auraDangDung = null;
     public float timeDoiFramesAura = 0;
 
+    float x_truoc_dash;
+    float y_truoc_dash;
+    boolean flip_truoc_dash = false;
+    float timeTeleport = 0f;
+    float TIME_TELE_PORT_MAX = 0.2f;
+
     public void ve(SpriteBatch batch, float thoiGian, VeHUD veHUD) {
-        if (chan.isEmpty() || dau.isEmpty() || than.isEmpty()) return;
+        if (timeTeleport > 0) {
+            timeTeleport -= Gdx.graphics.getDeltaTime();
+            float alpha;
+            if (timeTeleport > TIME_TELE_PORT_MAX/2) {
+                // Fade in: 0.2 -> 0.1
+                alpha = (TIME_TELE_PORT_MAX - timeTeleport) / (TIME_TELE_PORT_MAX/2);  // 0 → 1
+            } else {
+                // Fade out: 0.1 -> 0
+                alpha = (timeTeleport) / (TIME_TELE_PORT_MAX/2);  // 1 → 0
+            }
+            // Áp dụng alpha
+            batch.setColor(1f, 1f, 1f, alpha);
+
+            Texture chan_tele = veHUD.getDuLieuNguoiChoi().deTu.chan_tele;
+            Texture than_tele = veHUD.getDuLieuNguoiChoi().deTu.than_tele;
+            Texture dau_tele = veHUD.getDuLieuNguoiChoi().deTu.dau_tele;
+
+            float chanW = chan_tele.getWidth() * 0.5f;
+            float chanH = chan_tele.getHeight() * 0.5f;
+            float thanW = than_tele.getWidth() * 0.5f;
+            float thanH = than_tele.getHeight() * 0.5f;
+            float dauW = dau_tele.getWidth() * 0.5f;
+            float dauH = dau_tele.getHeight() * 0.5f;
+
+            float flipScale = flip_truoc_dash ? -1f : 1f;
+            float anchorX = flip_truoc_dash ? x_truoc_dash + chanW : x_truoc_dash;
+
+            batch.draw(chan_tele, anchorX, y_truoc_dash + 5, chanW * flipScale, chanH);
+
+            float thanX = anchorX + (chanW / 2f - thanW / 2f - 7f) * flipScale;
+            float thanY = y_truoc_dash + chanH - 3f;
+            batch.draw(than_tele, thanX, thanY, thanW * flipScale, thanH);
+
+            float dauX = anchorX + (chanW / 2f - dauW / 2f - 1f) * flipScale;
+            float dauY = thanY + thanH - 20;
+            batch.draw(dau_tele, dauX, dauY, dauW * flipScale, dauH);
+
+            // Reset lại màu
+            batch.setColor(1f, 1f, 1f, 1f);
+        }
+
+        if (this.trangthai == null || this.trangthai.isEmpty()) return;
+        if (this.chan == null || this.chan.isEmpty()) return;
+        if (this.dau == null || this.dau.isEmpty()) return;
+        if (this.than == null || this.than.isEmpty()) return;
         TrangThai trangThai = TrangThai.valueOf(this.trangthai);
 
         float daoDong;
@@ -354,19 +404,8 @@ public class PlayerState {
     public void capNhat(VeHUD veHUD) {
         float delta = Gdx.graphics.getDeltaTime();
 
-        float lerpSpeed = 12f;
-        x += (serverX - x) * lerpSpeed * delta;
-        y += (serverY - y) * lerpSpeed * delta;
-
-        // Snap nếu quá xa (ví dụ teleport map)
-        float dist = (float) Math.sqrt((serverX - x) * (serverX - x) + (serverY - y) * (serverY - y));
-        if (dist > 200f) {
-            x = serverX;
-            y = serverY;
-        }
-
-//        // === INTERPOLATION ===
-//        interpolateFromBuffer(delta);
+        // === INTERPOLATION ===
+        interpolateFromBuffer(delta);
 
         // Cho time tin nhắn 3s
         if (this.dangHienTinNhan) {
@@ -589,158 +628,207 @@ public class PlayerState {
                 saoVang[1].getWidth()*tiLe, saoVang[1].getHeight()*tiLe);
         }
     }
-//
-//    /**
-//     * Gọi mỗi khi nhận packet PlayerSync từ server.
-//     * THAY THẾ cho việc set thẳng ps.serverX = x, ps.serverY = y, ps.dau = ..., v.v.
-//     *
-//     * Chỉ push vào buffer — KHÔNG ghi trực tiếp vào field hiển thị.
-//     * capNhat() sẽ lerp giữa 2 snapshot mỗi frame.
-//     */
-//    public void applyServerSync(
-//        float x, float y, String trangthai, int dir,
-//        String dau, String than, String chan, float timeChoHienBay,
-//        float lechDauX, float lechDauY, float lechThanX, float lechThanY,
-//        float lechChanX, float lechChanY,
-//        int frameVanBay, boolean dangMangVanBay, String tenVanBay,
-//        float rong, float cao, String avatar
-//    ) {
-//        PlayerSnapshot snap = new PlayerSnapshot();
-//        snap.time = System.currentTimeMillis();
-//        snap.x = x;
-//        snap.y = y;
-//        snap.trangthai = trangthai;
-//        snap.dir = dir;
-//        snap.dau = dau;
-//        snap.than = than;
-//        snap.chan = chan;
-//        snap.timeChoHienBay = timeChoHienBay;
-//        snap.lechDauX = lechDauX;
-//        snap.lechDauY = lechDauY;
-//        snap.lechThanX = lechThanX;
-//        snap.lechThanY = lechThanY;
-//        snap.lechChanX = lechChanX;
-//        snap.lechChanY = lechChanY;
-//        snap.frameVanBay = frameVanBay;
-//        snap.dangMangVanBay = dangMangVanBay;
-//        snap.tenVanBay = tenVanBay;
-//        snap.rong = rong;
-//        snap.cao = cao;
-//        snap.avatar = avatar;
-//
-//        snapshots.addLast(snap);
-//        latestSnap = snap;
-//
-//        // Cleanup snapshot quá cũ. Buffer bình thường chỉ 3-5 phần tử
-//        // (1 giây ÷ 50ms tick ≈ 20 packet, nhưng filter theo BUFFER_MAX_AGE_MS).
-//        long cutoff = snap.time - BUFFER_MAX_AGE_MS;
-//        while (!snapshots.isEmpty() && snapshots.peekFirst().time < cutoff) {
-//            snapshots.pollFirst();
-//        }
-//
-//        // Init field hiển thị lần đầu — tránh draw vị trí (0,0) khi player vừa xuất hiện.
-//        if (this.dau == null || this.dau.isEmpty()) {
-//            this.x = x;
-//            this.y = y;
-//            this.dau = dau;
-//            this.than = than;
-//            this.chan = chan;
-//            this.trangthai = trangthai;
-//            this.dir = dir;
-//            this.rong = rong;
-//            this.cao = cao;
-//            this.avatar = avatar;
-//            // Các field khác để capNhat() điền sau.
-//        }
-//    }
-//
-//    /**
-//     * Tìm 2 snapshot bao quanh renderTime (= now - RENDER_DELAY_MS) rồi lerp.
-//     *
-//     * Có 3 case:
-//     *   1. Có prev + next bao quanh renderTime → lerp giữa 2 snapshot (HAPPY PATH)
-//     *   2. renderTime > snapshot mới nhất (packet bị trễ/mất) → snap về snapshot cuối
-//     *   3. Buffer rỗng → giữ nguyên vị trí cũ
-//     */
-//    private void interpolateFromBuffer(float delta) {
-//        if (snapshots.isEmpty()) {
-//            return;
-//        }
-//
-//        long renderTime = System.currentTimeMillis() - RENDER_DELAY_MS;
-//
-//        PlayerSnapshot prev = null;
-//        PlayerSnapshot next = null;
-//
-//        // Iterate forward để tìm prev/next.
-//        // Buffer thường chỉ 3-5 phần tử nên O(n) không vấn đề.
-//        PlayerSnapshot last = null;
-//        for (Iterator<PlayerSnapshot> it = snapshots.iterator(); it.hasNext(); ) {
-//            PlayerSnapshot s = it.next();
-//            if (last != null && last.time <= renderTime && s.time >= renderTime) {
-//                prev = last;
-//                next = s;
-//                break;
-//            }
-//            last = s;
-//        }
-//
-//        if (prev != null && next != null) {
-//            // === CASE 1: HAPPY PATH — interpolate ===
-//            long span = next.time - prev.time;
-//            float t = span > 0 ? (renderTime - prev.time) / (float) span : 1f;
-//            if (t < 0f) t = 0f;
-//            if (t > 1f) t = 1f;
-//
-//            x = prev.x + (next.x - prev.x) * t;
-//            y = prev.y + (next.y - prev.y) * t;
-//
-//            // Field discrete — không lerp, lấy snapshot mới hơn (next).
-//            applyDiscreteFromSnapshot(next);
-//
-//        } else if (latestSnap != null) {
-//            // === CASE 2: renderTime đã vượt snapshot mới nhất ===
-//            // Có thể do packet trễ, mất, hoặc player vừa join (chưa đủ buffer).
-//            // Snap nếu quá xa (teleport map), lerp nhẹ nếu gần.
-//            float dx = latestSnap.x - x;
-//            float dy = latestSnap.y - y;
-//            float dist = (float) Math.sqrt(dx * dx + dy * dy);
-//            if (dist > 200f) {
-//                x = latestSnap.x;
-//                y = latestSnap.y;
-//            } else {
-//                float lerpSpeed = 12f;
-//                x += dx * lerpSpeed * delta;
-//                y += dy * lerpSpeed * delta;
-//            }
-//
-//            applyDiscreteFromSnapshot(latestSnap);
-//        }
-//        // CASE 3: buffer rỗng → không làm gì, giữ vị trí hiện tại
-//    }
-//
-//    /**
-//     * Apply field rời rạc (string, int, bool) — không lerp được.
-//     * Tách hàm riêng để case 1 và case 2 cùng dùng.
-//     */
-//    private void applyDiscreteFromSnapshot(PlayerSnapshot s) {
-//        this.trangthai = s.trangthai;
-//        this.dir = s.dir;
-//        this.dau = s.dau;
-//        this.than = s.than;
-//        this.chan = s.chan;
-//        this.timeChoHienBay = s.timeChoHienBay;
-//        this.lechDauX = s.lechDauX;
-//        this.lechDauY = s.lechDauY;
-//        this.lechThanX = s.lechThanX;
-//        this.lechThanY = s.lechThanY;
-//        this.lechChanX = s.lechChanX;
-//        this.lechChanY = s.lechChanY;
-//        this.frameVanBay = s.frameVanBay;
-//        this.dangMangVanBay = s.dangMangVanBay;
-//        this.tenVanBay = s.tenVanBay;
-//        this.rong = s.rong;
-//        this.cao = s.cao;
-//        this.avatar = s.avatar;
-//    }
+
+    /**
+     * Gọi mỗi khi nhận packet PlayerSync từ server.
+     * THAY THẾ cho việc set thẳng ps.serverX = x, ps.serverY = y, ps.dau = ..., v.v.
+     *
+     * Chỉ push vào buffer — KHÔNG ghi trực tiếp vào field hiển thị.
+     * capNhat() sẽ lerp giữa 2 snapshot mỗi frame.
+     */
+    public void applyServerSync(
+        float x, float y, String trangthai, int dir,
+        String dau, String than, String chan, float timeChoHienBay,
+        float lechDauX, float lechDauY, float lechThanX, float lechThanY,
+        float lechChanX, float lechChanY,
+        int frameVanBay, boolean dangMangVanBay, String tenVanBay,
+        float rong, float cao, String avatar, long serverTime
+    ) {
+        PlayerSnapshot snap = new PlayerSnapshot();
+        snap.time = serverTime;
+        snap.x = x;
+        snap.y = y;
+        snap.trangthai = trangthai;
+        snap.dir = dir;
+        snap.dau = dau;
+        snap.than = than;
+        snap.chan = chan;
+        snap.timeChoHienBay = timeChoHienBay;
+        snap.lechDauX = lechDauX;
+        snap.lechDauY = lechDauY;
+        snap.lechThanX = lechThanX;
+        snap.lechThanY = lechThanY;
+        snap.lechChanX = lechChanX;
+        snap.lechChanY = lechChanY;
+        snap.frameVanBay = frameVanBay;
+        snap.dangMangVanBay = dangMangVanBay;
+        snap.tenVanBay = tenVanBay;
+        snap.rong = rong;
+        snap.cao = cao;
+        snap.avatar = avatar;
+
+        synchronized (snapshotLock) {
+            // Gap > 500ms (10 tick) → snapshot cũ không còn giá trị interpolate
+            // Tạo anchor tại vị trí render hiện tại với timestamp = now - RENDER_DELAY_MS
+            // để renderTime nằm đúng giữa anchor và snap mới → happy path ngay lập tức
+            if (latestSnap != null && (serverTime - latestSnap.time) > 500) {
+                snapshots.clear();
+
+                PlayerSnapshot anchor = new PlayerSnapshot();
+                anchor.time = serverTime - RENDER_DELAY_MS;
+                anchor.x = this.x;                   // vị trí render HIỆN TẠI
+                anchor.y = this.y;
+                anchor.trangthai = latestSnap.trangthai;
+                anchor.dir = latestSnap.dir;
+                anchor.dau = latestSnap.dau;
+                anchor.than = latestSnap.than;
+                anchor.chan = latestSnap.chan;
+                anchor.timeChoHienBay = latestSnap.timeChoHienBay;
+                anchor.lechDauX = latestSnap.lechDauX;
+                anchor.lechDauY = latestSnap.lechDauY;
+                anchor.lechThanX = latestSnap.lechThanX;
+                anchor.lechThanY = latestSnap.lechThanY;
+                anchor.lechChanX = latestSnap.lechChanX;
+                anchor.lechChanY = latestSnap.lechChanY;
+                anchor.frameVanBay = latestSnap.frameVanBay;
+                anchor.dangMangVanBay = latestSnap.dangMangVanBay;
+                anchor.tenVanBay = latestSnap.tenVanBay;
+                anchor.rong = latestSnap.rong;
+                anchor.cao = latestSnap.cao;
+                anchor.avatar = latestSnap.avatar;
+
+                snapshots.addLast(anchor);
+            }
+
+            snapshots.addLast(snap);
+            latestSnap = snap;
+
+            // Cleanup snapshot quá cũ. Buffer bình thường chỉ 3-5 phần tử
+            // (1 giây ÷ 50ms tick ≈ 20 packet, nhưng filter theo BUFFER_MAX_AGE_MS).
+            // Không xóa snapshot cuối cùng dù nó cũ:
+            long cutoff = snap.time - BUFFER_MAX_AGE_MS;
+            while (snapshots.size() > 1 &&              // ← giữ lại ít nhất 1
+                snapshots.peekFirst().time < cutoff) {
+                snapshots.pollFirst();
+            }
+            // Snapshot cuối cùng dù cũ vẫn là ground truth vị trí của A — khi A đứng yên thì giữ nguyên vị trí đó là đúng, không cần xóa.
+
+            // Init field hiển thị lần đầu — tránh draw vị trí (0,0) khi player vừa xuất hiện.
+            if (this.dau == null || this.dau.isEmpty()) {
+                this.x = x;
+                this.y = y;
+                this.dau = dau;
+                this.than = than;
+                this.chan = chan;
+                this.trangthai = trangthai;
+                this.dir = dir;
+                this.rong = rong;
+                this.cao = cao;
+                this.avatar = avatar;
+                // Các field khác để capNhat() điền sau.
+            }
+        }
+    }
+
+    /**
+     * Tìm 2 snapshot bao quanh renderTime (= now - RENDER_DELAY_MS) rồi lerp.
+     *
+     * Có 3 case:
+     *   1. Có prev + next bao quanh renderTime → lerp giữa 2 snapshot (HAPPY PATH)
+     *   2. renderTime > snapshot mới nhất (packet bị trễ/mất) → snap về snapshot cuối
+     *   3. Buffer rỗng → giữ nguyên vị trí cũ
+     */
+    private void interpolateFromBuffer(float delta) {
+        final PlayerSnapshot snapLatest;
+        final PlayerSnapshot[] snapCopy;
+
+        synchronized (snapshotLock) {
+            if (snapshots.isEmpty()) return;
+            snapLatest = latestSnap;
+            snapCopy = snapshots.toArray(new PlayerSnapshot[0]);
+        }
+
+        long renderTime = System.currentTimeMillis() + GameSocketGo.clockOffset - RENDER_DELAY_MS;
+
+        if (snapCopy[0].time > renderTime) {
+            x = snapLatest.x;
+            y = snapLatest.y;
+            applyDiscreteFromSnapshot(snapLatest);
+            return;
+        }
+
+        PlayerSnapshot prev = null;
+        PlayerSnapshot next = null;
+        for (int i = 1; i < snapCopy.length; i++) {
+            if (snapCopy[i-1].time <= renderTime && snapCopy[i].time >= renderTime) {
+                prev = snapCopy[i-1];
+                next = snapCopy[i];
+                break;
+            }
+        }
+
+        if (prev != null && next != null) {
+            long span = next.time - prev.time;
+            float t = span > 0 ? (renderTime - prev.time) / (float) span : 1f;
+            t = Math.max(0f, Math.min(1f, t));
+            x = prev.x + (next.x - prev.x) * t;
+            y = prev.y + (next.y - prev.y) * t;
+            applyDiscreteFromSnapshot(next);
+
+        } else {
+            float dx = snapLatest.x - x;
+            float dy = snapLatest.y - y;
+            float dist = (float) Math.sqrt(dx * dx + dy * dy);
+
+            if (dist > 50) {
+                x_truoc_dash = x;
+                y_truoc_dash = y;
+                flip_truoc_dash = (dir == -1);
+                x = snapLatest.x;
+                y = snapLatest.y;
+                timeTeleport = TIME_TELE_PORT_MAX;
+            } else if (dist < 0.5f) {
+                x = snapLatest.x;
+                y = snapLatest.y;
+                applyDiscreteFromSnapshot(snapLatest);
+                return;
+            } else {
+                if (dist > 25f && timeTeleport <= 0) {
+                    x_truoc_dash = x;
+                    y_truoc_dash = y;
+                    flip_truoc_dash = (dir == -1);
+                    timeTeleport = TIME_TELE_PORT_MAX;
+                }
+                x += dx * 12f * delta;
+                y += dy * 12f * delta;
+            }
+
+            applyDiscreteFromSnapshot(snapLatest);
+        }
+    }
+
+    /**
+     * Apply field rời rạc (string, int, bool) — không lerp được.
+     * Tách hàm riêng để case 1 và case 2 cùng dùng.
+     */
+    private void applyDiscreteFromSnapshot(PlayerSnapshot s) {
+        this.trangthai = s.trangthai;
+        this.dir = s.dir;
+        this.dau = s.dau;
+        this.than = s.than;
+        this.chan = s.chan;
+        this.timeChoHienBay = s.timeChoHienBay;
+        this.lechDauX = s.lechDauX;
+        this.lechDauY = s.lechDauY;
+        this.lechThanX = s.lechThanX;
+        this.lechThanY = s.lechThanY;
+        this.lechChanX = s.lechChanX;
+        this.lechChanY = s.lechChanY;
+        this.frameVanBay = s.frameVanBay;
+        this.dangMangVanBay = s.dangMangVanBay;
+        this.tenVanBay = s.tenVanBay;
+        this.rong = s.rong;
+        this.cao = s.cao;
+        this.avatar = s.avatar;
+    }
 }

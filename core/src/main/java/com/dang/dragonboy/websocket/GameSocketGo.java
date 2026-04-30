@@ -48,6 +48,7 @@ public class GameSocketGo {
     private static final byte MSG_HANDSHAKE_ACK  = (byte) 0x80;
     private static final byte MSG_HANDSHAKE_NACK = (byte) 0x81;
     private static final byte MSG_PLAYER_SYNC    = (byte) 0x82;
+    private static final byte MSG_PLAYER_SYNC_BATCH = (byte) 0x83;
 
     // Trangthai enum (khớp với Go enums/trangthai.go và Java TrangThai.java)
     private static final byte TRANGTHAI_DUNG_YEN   = 0;
@@ -68,7 +69,18 @@ public class GameSocketGo {
 
     // CONFIG: đổi thành URL Go server thật khi deploy
     private static final String GO_WS_URL = "wss://ws-go.dangpham.id.vn/ws-game";
-    // Production: "wss://go.dangpham.id.vn/ws-game"
+    // Production: "wss://ws-go.dangpham.id.vn/ws-game"
+
+    // ---------- Clock sync ----------
+    public static volatile long clockOffset = 0;
+    public static volatile long lastRtt = 40;
+    private static volatile boolean clockCalibrated = false;
+    private static volatile long pingSentAt = 0;
+
+    private static void startClockSync() {
+        pingSentAt = System.currentTimeMillis();
+        client.sendPing();
+    }
 
     /**
      * Connect tới Go server. Gọi SAU KHI Socket.IO connect thành công và đã có gameSessionId.
@@ -106,6 +118,11 @@ public class GameSocketGo {
                     if (!isManualDisconnect) {
                         scheduleReconnect();
                     }
+                }
+
+                @Override
+                public void onWebsocketPong(org.java_websocket.WebSocket conn, org.java_websocket.framing.Framedata f) {
+                    lastRtt = System.currentTimeMillis() - pingSentAt;
                 }
 
                 @Override
@@ -282,6 +299,8 @@ public class GameSocketGo {
                 System.out.println("GO handshake OK");
                 handshakeOk = true;
                 retryCount = 0;
+                clockCalibrated = false;
+                startClockSync();
                 break;
 
             case MSG_HANDSHAKE_NACK:
@@ -297,6 +316,10 @@ public class GameSocketGo {
 
             case MSG_PLAYER_SYNC:
                 handlePlayerSync(bytes);
+                break;
+
+            case MSG_PLAYER_SYNC_BATCH:
+                handlePlayerSyncBatch(bytes);
                 break;
 
             default:
@@ -343,6 +366,13 @@ public class GameSocketGo {
             float rong = buf.getFloat();
             float cao = buf.getFloat();
             String avatar = readString(buf);
+            long serverTime = buf.getLong();
+
+            // Calibrate clock 1 lần duy nhất mỗi session
+            if (!clockCalibrated) {
+                clockOffset = serverTime + lastRtt / 2 - System.currentTimeMillis();
+                // serverTime chưa đọc được ở đây nên calibrate trong vòng for ở lần i=0
+            }
 
 //            // Build JSONObject để gọi cùng handler với Socket.IO.
 //            org.json.JSONObject data = new org.json.JSONObject();
@@ -377,8 +407,53 @@ public class GameSocketGo {
                 userId, x, y, byteToTrangthai(trangthai), dir,
                 dau, than, chan, timeChoHienBay,
                 lechDauX, lechDauY, lechThanX, lechThanY, lechChanX, lechChanY,
-                frameVanBay, dangMangVanBay, tenVanBay, rong, cao, avatar
+                frameVanBay, dangMangVanBay, tenVanBay, rong, cao, avatar, serverTime
             );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void handlePlayerSyncBatch(ByteBuffer buf) {
+        try {
+            int count = buf.getShort() & 0xFFFF; // uint16
+            for (int i = 0; i < count; i++) {
+                int userId = buf.getInt();
+                float x = buf.getFloat();
+                float y = buf.getFloat();
+                byte trangthai = buf.get();
+                byte dir = buf.get();
+                String dau = readString(buf);
+                String than = readString(buf);
+                String chan = readString(buf);
+                float timeChoHienBay = buf.getFloat();
+                float lechDauX = buf.getFloat();
+                float lechDauY = buf.getFloat();
+                float lechThanX = buf.getFloat();
+                float lechThanY = buf.getFloat();
+                float lechChanX = buf.getFloat();
+                float lechChanY = buf.getFloat();
+                int frameVanBay = buf.getShort() & 0xFFFF;
+                boolean dangMangVanBay = buf.get() != 0;
+                String tenVanBay = readString(buf);
+                float rong = buf.getFloat();
+                float cao = buf.getFloat();
+                String avatar = readString(buf);
+                long serverTime = buf.getLong();
+
+                // Calibrate clock 1 lần duy nhất mỗi session
+                if (!clockCalibrated) {
+                    clockOffset = serverTime + lastRtt / 2 - System.currentTimeMillis();
+                    // serverTime chưa đọc được ở đây nên calibrate trong vòng for ở lần i=0
+                }
+
+                WorldState.onPlayerSyncBinary(
+                    userId, x, y, byteToTrangthai(trangthai), dir,
+                    dau, than, chan, timeChoHienBay,
+                    lechDauX, lechDauY, lechThanX, lechThanY, lechChanX, lechChanY,
+                    frameVanBay, dangMangVanBay, tenVanBay, rong, cao, avatar, serverTime
+                );
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

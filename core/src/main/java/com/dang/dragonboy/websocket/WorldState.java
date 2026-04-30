@@ -173,43 +173,22 @@ public class WorldState {
         float lechDauX, float lechDauY, float lechThanX, float lechThanY,
         float lechChanX, float lechChanY,
         int frameVanBay, boolean dangMangVanBay, String tenVanBay,
-        float rong, float cao, String avatar
+        float rong, float cao, String avatar, long serverTime
     ) {
         if (userId == -1) return;
 
         PlayerState ps = players.get(userId);
         if (ps == null) return;
 
-        ps.serverX = x;
-        ps.serverY = y;
-        ps.dir = dir;
-        ps.trangthai = trangthai;
-        ps.dau = dau;
-        ps.than = than;
-        ps.chan = chan;
-        ps.frameVanBay = frameVanBay;
-        ps.timeChoHienBay = timeChoHienBay;
-        ps.dangMangVanBay = dangMangVanBay;
-        ps.tenVanBay = tenVanBay;
-        ps.lechThanX = lechThanX;
-        ps.lechThanY = lechThanY;
-        ps.lechDauX = lechDauX;
-        ps.lechDauY = lechDauY;
-        ps.lechChanX = lechChanX;
-        ps.lechChanY = lechChanY;
-        ps.rong = rong;
-        ps.cao = cao;
-        ps.avatar = avatar;
-
-        // Cách lerp snapshot
-//        ps.applyServerSync(
-//            x, y, trangthai, dir,
-//            dau, than, chan, timeChoHienBay,
-//            lechDauX, lechDauY, lechThanX, lechThanY,
-//            lechChanX, lechChanY,
-//            frameVanBay, dangMangVanBay, tenVanBay,
-//            rong, cao, avatar
-//        );
+        // lerp snapshot
+        ps.applyServerSync(
+            x, y, trangthai, dir,
+            dau, than, chan, timeChoHienBay,
+            lechDauX, lechDauY, lechThanX, lechThanY,
+            lechChanX, lechChanY,
+            frameVanBay, dangMangVanBay, tenVanBay,
+            rong, cao, avatar, serverTime
+        );
     }
 
     public static void onPlayerUseCosmetic(Object... args) {
@@ -699,8 +678,6 @@ public class WorldState {
 
         ps.x = (float) obj.optDouble("x", 0);
         ps.y = (float) obj.optDouble("y", 0);
-        ps.serverX = ps.x;
-        ps.serverY = ps.y;
         ps.dir = obj.optInt("dir", 1);
         ps.trangthai = obj.optString("trangthai", "DUNG_YEN");
 

@@ -183,7 +183,7 @@ public class DeTu {
     float x_truoc_dash;
     float y_truoc_dash;
     boolean flip_truoc_dash = false;
-    private Texture dau_tele,than_tele,chan_tele;
+    public Texture dau_tele,than_tele,chan_tele;
     public Texture[] bien_mat = new Texture[3];
     public boolean hoatAnhBienMat = false;
     public float timeHoatAnhBienMat = 0f;
