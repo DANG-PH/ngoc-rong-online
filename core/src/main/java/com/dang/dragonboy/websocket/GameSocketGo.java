@@ -74,11 +74,14 @@ public class GameSocketGo {
     // ---------- Clock sync ----------
     public static volatile long clockOffset = 0;
     public static volatile long lastRtt = 40;
-    private static volatile boolean clockCalibrated = false;
     private static volatile long pingSentAt = 0;
+    private static long lastClockSyncAt = 0;
+    private static volatile boolean clockReady = false;
+    private static volatile boolean waitingPong = false;
 
     private static void startClockSync() {
         pingSentAt = System.currentTimeMillis();
+        waitingPong = true;
         client.sendPing();
     }
 
@@ -122,9 +125,15 @@ public class GameSocketGo {
 
                 @Override
                 public void onWebsocketPong(org.java_websocket.WebSocket conn, org.java_websocket.framing.Framedata f) {
-                    lastRtt = System.currentTimeMillis() - pingSentAt;
+                    if (!waitingPong) return;
+                    long rtt = System.currentTimeMillis() - pingSentAt;
+                    if (rtt > 0 && rtt < 5000) {
+                        if (lastRtt == 40) lastRtt = rtt;        // lần đầu
+                        else lastRtt = (lastRtt * 7 + rtt) / 8;  // EMA smooth
+                    }
+                    waitingPong = false;
+                    System.out.println("ĐỔI RTT: "+lastRtt);
                 }
-
                 @Override
                 public void onError(Exception ex) {
                     System.out.println("GO WS ERROR: " + ex.getMessage());
@@ -299,7 +308,6 @@ public class GameSocketGo {
                 System.out.println("GO handshake OK");
                 handshakeOk = true;
                 retryCount = 0;
-                clockCalibrated = false;
                 startClockSync();
                 break;
 
@@ -314,9 +322,9 @@ public class GameSocketGo {
                 }
                 break;
 
-            case MSG_PLAYER_SYNC:
-                handlePlayerSync(bytes);
-                break;
+//            case MSG_PLAYER_SYNC:
+//                handlePlayerSync(bytes);
+//                break;
 
             case MSG_PLAYER_SYNC_BATCH:
                 handlePlayerSyncBatch(bytes);
@@ -343,76 +351,70 @@ public class GameSocketGo {
      * Convert sang JSONObject để compat với WorldState.onPlayerSync hiện tại
      * (đang nhận args[0] = JSONObject từ Socket.IO). KHÔNG phải sửa WorldState.
      */
-    private static void handlePlayerSync(ByteBuffer buf) {
-        try {
-            int userId = buf.getInt();
-            float x = buf.getFloat();
-            float y = buf.getFloat();
-            byte trangthai = buf.get();
-            byte dir = buf.get();
-            String dau = readString(buf);
-            String than = readString(buf);
-            String chan = readString(buf);
-            float timeChoHienBay = buf.getFloat();
-            float lechDauX = buf.getFloat();
-            float lechDauY = buf.getFloat();
-            float lechThanX = buf.getFloat();
-            float lechThanY = buf.getFloat();
-            float lechChanX = buf.getFloat();
-            float lechChanY = buf.getFloat();
-            int frameVanBay = buf.getShort() & 0xFFFF;
-            boolean dangMangVanBay = buf.get() != 0;
-            String tenVanBay = readString(buf);
-            float rong = buf.getFloat();
-            float cao = buf.getFloat();
-            String avatar = readString(buf);
-            long serverTime = buf.getLong();
-
-            // Calibrate clock 1 lần duy nhất mỗi session
-            if (!clockCalibrated) {
-                clockOffset = serverTime + lastRtt / 2 - System.currentTimeMillis();
-                // serverTime chưa đọc được ở đây nên calibrate trong vòng for ở lần i=0
-            }
-
-//            // Build JSONObject để gọi cùng handler với Socket.IO.
-//            org.json.JSONObject data = new org.json.JSONObject();
-//            data.put("userId", userId);
-//            data.put("x", x);
-//            data.put("y", y);
-//            data.put("trangthai", byteToTrangthai(trangthai));
-//            data.put("dir", (int) dir);
-//            data.put("dau", dau);
-//            data.put("than", than);
-//            data.put("chan", chan);
-//            data.put("timeChoHienBay", timeChoHienBay);
-//            data.put("lechDauX", lechDauX);
-//            data.put("lechDauY", lechDauY);
-//            data.put("lechThanX", lechThanX);
-//            data.put("lechThanY", lechThanY);
-//            data.put("lechChanX", lechChanX);
-//            data.put("lechChanY", lechChanY);
-//            data.put("frameVanBay", frameVanBay);
-//            data.put("dangMangVanBay", dangMangVanBay);
-//            data.put("tenVanBay", tenVanBay);
-//            data.put("rong", rong);
-//            data.put("cao", cao);
-//            data.put("avatar", avatar);
+//    private static void handlePlayerSync(ByteBuffer buf) {
+//        try {
+//            int userId = buf.getInt();
+//            float x = buf.getFloat();
+//            float y = buf.getFloat();
+//            byte trangthai = buf.get();
+//            byte dir = buf.get();
+//            String dau = readString(buf);
+//            String than = readString(buf);
+//            String chan = readString(buf);
+//            float timeChoHienBay = buf.getFloat();
+//            float lechDauX = buf.getFloat();
+//            float lechDauY = buf.getFloat();
+//            float lechThanX = buf.getFloat();
+//            float lechThanY = buf.getFloat();
+//            float lechChanX = buf.getFloat();
+//            float lechChanY = buf.getFloat();
+//            int frameVanBay = buf.getShort() & 0xFFFF;
+//            boolean dangMangVanBay = buf.get() != 0;
+//            String tenVanBay = readString(buf);
+//            float rong = buf.getFloat();
+//            float cao = buf.getFloat();
+//            String avatar = readString(buf);
+//            long serverTime = buf.getLong();
 //
-//            // Gọi cùng callback với Socket.IO playerSync — KHÔNG phải sửa WorldState.
-//            // KHÔNG postRunnable vì WorldState.onPlayerSync hiện tại comment "Race condition không
-//            // đáng kể với game → không cần postRunnable" — giữ nguyên behavior.
-//            WorldState.onPlayerSync(new Object[]{ data });
-
-            WorldState.onPlayerSyncBinary(
-                userId, x, y, byteToTrangthai(trangthai), dir,
-                dau, than, chan, timeChoHienBay,
-                lechDauX, lechDauY, lechThanX, lechThanY, lechChanX, lechChanY,
-                frameVanBay, dangMangVanBay, tenVanBay, rong, cao, avatar, serverTime
-            );
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+////            // Build JSONObject để gọi cùng handler với Socket.IO.
+////            org.json.JSONObject data = new org.json.JSONObject();
+////            data.put("userId", userId);
+////            data.put("x", x);
+////            data.put("y", y);
+////            data.put("trangthai", byteToTrangthai(trangthai));
+////            data.put("dir", (int) dir);
+////            data.put("dau", dau);
+////            data.put("than", than);
+////            data.put("chan", chan);
+////            data.put("timeChoHienBay", timeChoHienBay);
+////            data.put("lechDauX", lechDauX);
+////            data.put("lechDauY", lechDauY);
+////            data.put("lechThanX", lechThanX);
+////            data.put("lechThanY", lechThanY);
+////            data.put("lechChanX", lechChanX);
+////            data.put("lechChanY", lechChanY);
+////            data.put("frameVanBay", frameVanBay);
+////            data.put("dangMangVanBay", dangMangVanBay);
+////            data.put("tenVanBay", tenVanBay);
+////            data.put("rong", rong);
+////            data.put("cao", cao);
+////            data.put("avatar", avatar);
+////
+////            // Gọi cùng callback với Socket.IO playerSync — KHÔNG phải sửa WorldState.
+////            // KHÔNG postRunnable vì WorldState.onPlayerSync hiện tại comment "Race condition không
+////            // đáng kể với game → không cần postRunnable" — giữ nguyên behavior.
+////            WorldState.onPlayerSync(new Object[]{ data });
+//
+//            WorldState.onPlayerSyncBinary(
+//                userId, x, y, byteToTrangthai(trangthai), dir,
+//                dau, than, chan, timeChoHienBay,
+//                lechDauX, lechDauY, lechThanX, lechThanY, lechChanX, lechChanY,
+//                frameVanBay, dangMangVanBay, tenVanBay, rong, cao, avatar, serverTime
+//            );
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     private static void handlePlayerSyncBatch(ByteBuffer buf) {
         try {
@@ -441,18 +443,43 @@ public class GameSocketGo {
                 String avatar = readString(buf);
                 long serverTime = buf.getLong();
 
-                // Calibrate clock 1 lần duy nhất mỗi session
-                if (!clockCalibrated) {
-                    clockOffset = serverTime + lastRtt / 2 - System.currentTimeMillis();
-                    // serverTime chưa đọc được ở đây nên calibrate trong vòng for ở lần i=0
-                }
-
                 WorldState.onPlayerSyncBinary(
                     userId, x, y, byteToTrangthai(trangthai), dir,
                     dau, than, chan, timeChoHienBay,
                     lechDauX, lechDauY, lechThanX, lechThanY, lechChanX, lechChanY,
                     frameVanBay, dangMangVanBay, tenVanBay, rong, cao, avatar, serverTime
                 );
+
+                // Chỉ calibrate 1 lần cho cả batch
+                if (i == 0) {
+                    long now = System.currentTimeMillis();
+                    long newOffset = serverTime + lastRtt / 2 - now;
+
+                    if (!clockReady) {
+                        clockOffset = newOffset;
+
+                        lastClockSyncAt = now;
+                        clockReady = true;
+                        if (client != null && client.isOpen() && !waitingPong) {
+                            startClockSync();
+                        }
+                    } else if (now - lastClockSyncAt > 5_000) {
+                        long delta = Math.abs(newOffset - clockOffset);
+                        if (delta > 200) {
+                            // Hard reset - giống Unity Netcode hardResetThresholdSec=0.2
+                            clockOffset = newOffset;
+                        } else {
+                            // Smooth EMA
+                            clockOffset = (long)(clockOffset * 0.8 + newOffset * 0.2);
+                        }
+                        lastClockSyncAt = now;
+                        if (client != null && client.isOpen() && !waitingPong) {
+                            startClockSync();
+                        }
+                    }
+
+                    System.out.println("ĐỔI clockOffset: "+clockOffset);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

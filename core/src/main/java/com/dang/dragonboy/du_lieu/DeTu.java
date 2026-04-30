@@ -183,7 +183,6 @@ public class DeTu {
     float x_truoc_dash;
     float y_truoc_dash;
     boolean flip_truoc_dash = false;
-    public Texture dau_tele,than_tele,chan_tele;
     public Texture[] bien_mat = new Texture[3];
     public boolean hoatAnhBienMat = false;
     public float timeHoatAnhBienMat = 0f;
@@ -313,10 +312,6 @@ public class DeTu {
 
         this.flipX = flipX;
         this.diQuaPhai = diQuaPhai;
-
-        dau_tele = new Texture("hieuung/hieuunggame/tele/dau.png");
-        than_tele = new Texture("hieuung/hieuunggame/tele/than.png");
-        chan_tele = new Texture("hieuung/hieuunggame/tele/chan.png");
 
         for (int i = 0; i < 3; i++) {
             bien_mat[i] = new Texture("hieuung/hieuunggame/bien_mat/"+(i+1)+".png");
@@ -1760,25 +1755,25 @@ public class DeTu {
             // Áp dụng alpha
             batch.setColor(1f, 1f, 1f, alpha);
 
-            float chanW = chan_tele.getWidth() * tiLe;
-            float chanH = chan_tele.getHeight() * tiLe;
-            float thanW = than_tele.getWidth() * tiLe;
-            float thanH = than_tele.getHeight() * tiLe;
-            float dauW = dau_tele.getWidth() * tiLe;
-            float dauH = dau_tele.getHeight() * tiLe;
+            float chanW = veHUD.chan_tele.getWidth() * tiLe;
+            float chanH = veHUD.chan_tele.getHeight() * tiLe;
+            float thanW = veHUD.than_tele.getWidth() * tiLe;
+            float thanH = veHUD.than_tele.getHeight() * tiLe;
+            float dauW = veHUD.dau_tele.getWidth() * tiLe;
+            float dauH = veHUD.dau_tele.getHeight() * tiLe;
 
             float flipScale = flip_truoc_dash ? -1f : 1f;
             float anchorX = flip_truoc_dash ? x_truoc_dash + chanW : x_truoc_dash;
 
-            batch.draw(chan_tele, anchorX, y_truoc_dash + 5, chanW * flipScale, chanH);
+            batch.draw(veHUD.chan_tele, anchorX, y_truoc_dash + 5, chanW * flipScale, chanH);
 
             float thanX = anchorX + (chanW / 2f - thanW / 2f - 7f) * flipScale;
             float thanY = y_truoc_dash + chanH - 3f;
-            batch.draw(than_tele, thanX, thanY, thanW * flipScale, thanH);
+            batch.draw(veHUD.than_tele, thanX, thanY, thanW * flipScale, thanH);
 
             float dauX = anchorX + (chanW / 2f - dauW / 2f - 1f) * flipScale;
             float dauY = thanY + thanH - 20;
-            batch.draw(dau_tele, dauX, dauY, dauW * flipScale, dauH);
+            batch.draw(veHUD.dau_tele, dauX, dauY, dauW * flipScale, dauH);
 
             // Reset lại màu
             batch.setColor(1f, 1f, 1f, 1f);
@@ -2068,9 +2063,9 @@ public class DeTu {
         if (chan_bay != null) chan_bay.dispose();
 
         // Giải phóng texture teleport
-        if (dau_tele != null) dau_tele.dispose();
-        if (than_tele != null) than_tele.dispose();
-        if (chan_tele != null) chan_tele.dispose();
+        if (veHUD.dau_tele != null) veHUD.dau_tele.dispose();
+        if (veHUD.than_tele != null) veHUD.than_tele.dispose();
+        if (veHUD.chan_tele != null) veHUD.chan_tele.dispose();
 
         // Biến mất
         for (Texture tex : bien_mat) {

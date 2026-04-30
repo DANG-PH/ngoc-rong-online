@@ -20,14 +20,16 @@ import java.util.Iterator;
 import java.util.ArrayList;
 
 public class PlayerState {
+    public float serverX, serverY; // lerp
     public int userId;
     // === INTERPOLATION BUFFER ===
     // Lưu các snapshot từ server theo thời gian, render sẽ trễ RENDER_DELAY_MS
     // để luôn có 2 snapshot bao quanh renderTime → lerp mượt qua jitter network.
     private final Deque<PlayerSnapshot> snapshots = new ArrayDeque<>();
     private final Object snapshotLock = new Object();
-    private static final long RENDER_DELAY_MS = 150;     // render trễ 10ms (server tick 50ms × 3)
+    private static final long RENDER_DELAY_MS = 200;     // render trễ 10ms (server tick 50ms × 3)
     private static final long BUFFER_MAX_AGE_MS = 1000;  // xóa snapshot quá cũ
+    public static final MOD_SERVER modServer = MOD_SERVER.GOLANG;
 
     // Lưu lại "snapshot mới nhất" để fallback khi buffer chưa đủ data
     private PlayerSnapshot latestSnap = null;
@@ -126,9 +128,9 @@ public class PlayerState {
             // Áp dụng alpha
             batch.setColor(1f, 1f, 1f, alpha);
 
-            Texture chan_tele = veHUD.getDuLieuNguoiChoi().deTu.chan_tele;
-            Texture than_tele = veHUD.getDuLieuNguoiChoi().deTu.than_tele;
-            Texture dau_tele = veHUD.getDuLieuNguoiChoi().deTu.dau_tele;
+            Texture chan_tele = veHUD.chan_tele;
+            Texture than_tele = veHUD.than_tele;
+            Texture dau_tele = veHUD.dau_tele;
 
             float chanW = chan_tele.getWidth() * 0.5f;
             float chanH = chan_tele.getHeight() * 0.5f;
@@ -404,8 +406,23 @@ public class PlayerState {
     public void capNhat(VeHUD veHUD) {
         float delta = Gdx.graphics.getDeltaTime();
 
-        // === INTERPOLATION ===
-        interpolateFromBuffer(delta);
+        if (modServer == MOD_SERVER.NESTJS) {
+            float lerpSpeed = 12f;
+            x += (serverX - x) * lerpSpeed * delta;
+            y += (serverY - y) * lerpSpeed * delta;
+
+            // Snap nếu quá xa (ví dụ teleport map)
+            float dist = (float) Math.sqrt((serverX - x) * (serverX - x) + (serverY - y) * (serverY - y));
+            if (dist > 200f) {
+                x = serverX;
+                y = serverY;
+            }
+        }
+
+        if (modServer == MOD_SERVER.GOLANG) {
+            // === INTERPOLATION ===
+            interpolateFromBuffer(delta);
+        }
 
         // Cho time tin nhắn 3s
         if (this.dangHienTinNhan) {
@@ -668,14 +685,19 @@ public class PlayerState {
         snap.avatar = avatar;
 
         synchronized (snapshotLock) {
+            if (latestSnap != null && serverTime <= latestSnap.time) {
+                return;
+            }
             // Gap > 500ms (10 tick) → snapshot cũ không còn giá trị interpolate
             // Tạo anchor tại vị trí render hiện tại với timestamp = now - RENDER_DELAY_MS
             // để renderTime nằm đúng giữa anchor và snap mới → happy path ngay lập tức
             if (latestSnap != null && (serverTime - latestSnap.time) > 500) {
                 snapshots.clear();
 
+                long currentRenderTime = System.currentTimeMillis() + GameSocketGo.clockOffset - RENDER_DELAY_MS;
+
                 PlayerSnapshot anchor = new PlayerSnapshot();
-                anchor.time = serverTime - RENDER_DELAY_MS;
+                anchor.time = Math.min(currentRenderTime, serverTime - 50);
                 anchor.x = this.x;                   // vị trí render HIỆN TẠI
                 anchor.y = this.y;
                 anchor.trangthai = latestSnap.trangthai;
@@ -773,7 +795,7 @@ public class PlayerState {
             t = Math.max(0f, Math.min(1f, t));
             x = prev.x + (next.x - prev.x) * t;
             y = prev.y + (next.y - prev.y) * t;
-            applyDiscreteFromSnapshot(next);
+            applyDiscreteFromSnapshot(t < 0.5f ? prev : next);
 
         } else {
             float dx = snapLatest.x - x;
@@ -787,20 +809,15 @@ public class PlayerState {
                 x = snapLatest.x;
                 y = snapLatest.y;
                 timeTeleport = TIME_TELE_PORT_MAX;
-            } else if (dist < 0.5f) {
+            } else if (dist < 2f) {
                 x = snapLatest.x;
                 y = snapLatest.y;
                 applyDiscreteFromSnapshot(snapLatest);
                 return;
             } else {
-                if (dist > 25f && timeTeleport <= 0) {
-                    x_truoc_dash = x;
-                    y_truoc_dash = y;
-                    flip_truoc_dash = (dir == -1);
-                    timeTeleport = TIME_TELE_PORT_MAX;
-                }
-                x += dx * 12f * delta;
-                y += dy * 12f * delta;
+                float catchupSpeed = Math.min(8f, 4f + dist * 0.1f);  // 4 → 8
+                x += dx * catchupSpeed * delta;
+                y += dy * catchupSpeed * delta;
             }
 
             applyDiscreteFromSnapshot(snapLatest);

@@ -375,6 +375,8 @@ public class VeHUD {
     public int indexItemGiaoDich = -1;
     public int indexItemGiaoDichPlayer2 = -1;
 
+    public Texture dau_tele,than_tele,chan_tele;
+
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data;
         duLieuNguoiChoi.setNhanVat(nhanVat);
@@ -570,6 +572,9 @@ public class VeHUD {
         giapXen = new Texture("vatpham/vatphamgame/phu_tro/giap_xen.png");
         nenTrangNga = new Texture("hud/giaodientrong/ochisosc.png");
         nenTrangNgaClick = new Texture("hud/giaodientrong/ochisoscclick.png");
+        dau_tele = new Texture("hieuung/hieuunggame/tele/dau.png");
+        than_tele = new Texture("hieuung/hieuunggame/tele/than.png");
+        chan_tele = new Texture("hieuung/hieuunggame/tele/chan.png");
         // Load font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
