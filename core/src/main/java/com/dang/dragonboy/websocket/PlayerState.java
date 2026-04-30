@@ -27,6 +27,7 @@ public class PlayerState {
     // để luôn có 2 snapshot bao quanh renderTime → lerp mượt qua jitter network.
     private final Deque<PlayerSnapshot> snapshots = new ArrayDeque<>();
     private final Object snapshotLock = new Object();
+    // TODO: dựa vào clockOffset hoặc RTT để tính jitter buffer (Sau này cần sửa để mượt mà)
     private static final long RENDER_DELAY_MS = 200;     // render trễ 10ms (server tick 50ms × 3)
     private static final long BUFFER_MAX_AGE_MS = 1000;  // xóa snapshot quá cũ
     public static final MOD_SERVER modServer = MOD_SERVER.GOLANG;
