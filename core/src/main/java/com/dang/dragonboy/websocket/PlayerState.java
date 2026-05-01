@@ -114,6 +114,7 @@ public class PlayerState {
     boolean flip_truoc_dash = false;
     float timeTeleport = 0f;
     float TIME_TELE_PORT_MAX = 0.2f;
+    private static final float TIME_TCP_BURST_TRIGGER_TELE = 2f;
 
     public void ve(SpriteBatch batch, float thoiGian, VeHUD veHUD) {
         if (timeTeleport > 0) {
@@ -793,13 +794,29 @@ public class PlayerState {
         }
 
         if (prev != null && next != null) {
+            // Xử lí lerp 2 snap mượt mà
+            // Detect Case teleport cho TCP Burst đợi package đến
             long span = next.time - prev.time;
             float t = span > 0 ? (renderTime - prev.time) / (float) span : 1f;
             t = Math.max(0f, Math.min(1f, t));
-            x = prev.x + (next.x - prev.x) * t;
-            y = prev.y + (next.y - prev.y) * t;
-            applyDiscreteFromSnapshot(t < 0.5f ? prev : next);
 
+            float newX = prev.x + (next.x - prev.x) * t;
+            float newY = prev.y + (next.y - prev.y) * t;
+
+            float jumpDist = (float) Math.sqrt((newX - x) * (newX - x) + (newY - y) * (newY - y));
+            float maxSpeed = getNormalMaxSpeed(this.trangthai);
+
+            // Trigger trail nếu jump > 2x speed bình thường
+            if (jumpDist > maxSpeed * TIME_TCP_BURST_TRIGGER_TELE) {
+                x_truoc_dash = x;
+                y_truoc_dash = y;
+                flip_truoc_dash = (dir == -1);
+                timeTeleport = TIME_TELE_PORT_MAX;
+            }
+
+            x = newX;
+            y = newY;
+            applyDiscreteFromSnapshot(t < 0.5f ? prev : next);
         } else {
             float dx = snapLatest.x - x;
             float dy = snapLatest.y - y;
@@ -857,5 +874,22 @@ public class PlayerState {
         long jitter = GameSocketGo.rttJitter;
         long tickBuffer = 2 * 50; // 2 tick × 50ms server tick
         return Math.max(50, Math.min(oneWay + jitter + tickBuffer, 400));
+    }
+
+    private static float getNormalMaxSpeed(String trangthai) {
+        if (trangthai == null) return 8f;
+        try {
+            TrangThai tt = TrangThai.valueOf(trangthai);
+            switch (tt) {
+                case BAY_NGANG: return 15f;  // Cần verify số này từ NhanVat.java
+                case ROI:       return 12f;  // Hoặc lấy từ vật lý rơi
+                case NHAY:      return 10f;
+                case DI_CHUYEN: return 7f;
+                case DUNG_YEN:
+                default:        return 2f;   // Đứng yên thì jump >2 cũng đáng ngờ
+            }
+        } catch (Exception e) {
+            return 7f;
+        }
     }
 }
