@@ -28,7 +28,7 @@ public class PlayerState {
     private final Deque<PlayerSnapshot> snapshots = new ArrayDeque<>();
     private final Object snapshotLock = new Object();
     // TODO: dựa vào clockOffset hoặc RTT để tính jitter buffer (Sau này cần sửa để mượt mà) (DONE)
-//    private static final long RENDER_DELAY_MS = 200;     // render trễ 10ms (server tick 50ms × 3)
+    private static long RENDER_DELAY_MS = 150;     // render trễ 150ms (server tick 50ms × 3)
     private static final long BUFFER_MAX_AGE_MS = 1000;  // xóa snapshot quá cũ
     public static final MOD_SERVER modServer = MOD_SERVER.GOLANG;
 
@@ -51,7 +51,8 @@ public class PlayerState {
     public float lechThanY;
     public float lechChanX;
     public float lechChanY;
-    public int frameVanBay;
+    public int frameVanBay = 0;
+    public float timeVanBay;
     public boolean dangMangVanBay;
     public String tenVanBay;
     public String gameName;
@@ -114,7 +115,7 @@ public class PlayerState {
     boolean flip_truoc_dash = false;
     float timeTeleport = 0f;
     float TIME_TELE_PORT_MAX = 0.2f;
-    private static final float TIME_TCP_BURST_TRIGGER_TELE = 2f;
+    private static final float TIME_TCP_BURST_TRIGGER_TELE = 4f;
 
     public void ve(SpriteBatch batch, float thoiGian, VeHUD veHUD) {
         if (timeTeleport > 0) {
@@ -506,6 +507,22 @@ public class PlayerState {
                 dangBienKhi = true;
             }
         }
+
+        if (TrangThai.valueOf(this.trangthai) == TrangThai.BAY_NGANG) {
+            timeVanBay += Gdx.graphics.getDeltaTime();
+            if (dangMangVanBay) {
+                if (timeVanBay > 0.12f) {
+                    frameVanBay = (frameVanBay + 1) % AssetMulti.getVanBay(tenVanBay).frames.length;
+                    timeVanBay = 0;
+                }
+            } else {
+                timeChoHienBay += Gdx.graphics.getDeltaTime();
+                if (timeVanBay > 0.02f) {
+                    frameVanBay = (frameVanBay + 1) % AssetMulti.getVanBay(tenVanBay).frames.length;
+                    timeVanBay = 0;
+                }
+            }
+        }
     }
 
     public void checkClick(float x_check, float y_check, NhanVat nhanVat) {
@@ -660,7 +677,7 @@ public class PlayerState {
         String dau, String than, String chan, float timeChoHienBay,
         float lechDauX, float lechDauY, float lechThanX, float lechThanY,
         float lechChanX, float lechChanY,
-        int frameVanBay, boolean dangMangVanBay, String tenVanBay,
+        boolean dangMangVanBay, String tenVanBay,
         float rong, float cao, String avatar, long serverTime
     ) {
         PlayerSnapshot snap = new PlayerSnapshot();
@@ -679,7 +696,6 @@ public class PlayerState {
         snap.lechThanY = lechThanY;
         snap.lechChanX = lechChanX;
         snap.lechChanY = lechChanY;
-        snap.frameVanBay = frameVanBay;
         snap.dangMangVanBay = dangMangVanBay;
         snap.tenVanBay = tenVanBay;
         snap.rong = rong;
@@ -690,16 +706,14 @@ public class PlayerState {
             if (latestSnap != null && serverTime <= latestSnap.time) {
                 return;
             }
-            // Gap > 500ms (10 tick) → snapshot cũ không còn giá trị interpolate
+            // Gap > Delay → snapshot cũ không còn giá trị interpolate
             // Tạo anchor tại vị trí render hiện tại với timestamp = now - RENDER_DELAY_MS
             // để renderTime nằm đúng giữa anchor và snap mới → happy path ngay lập tức
-            if (latestSnap != null && (serverTime - latestSnap.time) > 500) {
+            if (latestSnap != null && (serverTime - latestSnap.time) > getRenderDelay()) {
+                System.out.println("ANCHOR CREATED, gap=" + (serverTime - latestSnap.time));
                 snapshots.clear();
-
-                long currentRenderTime = System.currentTimeMillis() + GameSocketGo.clockOffset - getRenderDelay();
-
                 PlayerSnapshot anchor = new PlayerSnapshot();
-                anchor.time = Math.min(currentRenderTime, serverTime - 50);
+                anchor.time = serverTime - getRenderDelay() - 100;
                 anchor.x = this.x;                   // vị trí render HIỆN TẠI
                 anchor.y = this.y;
                 anchor.trangthai = latestSnap.trangthai;
@@ -714,7 +728,6 @@ public class PlayerState {
                 anchor.lechThanY = latestSnap.lechThanY;
                 anchor.lechChanX = latestSnap.lechChanX;
                 anchor.lechChanY = latestSnap.lechChanY;
-                anchor.frameVanBay = latestSnap.frameVanBay;
                 anchor.dangMangVanBay = latestSnap.dangMangVanBay;
                 anchor.tenVanBay = latestSnap.tenVanBay;
                 anchor.rong = latestSnap.rong;
@@ -772,14 +785,18 @@ public class PlayerState {
             snapCopy = snapshots.toArray(new PlayerSnapshot[0]);
         }
 
-        // Cần trả lời câu hỏi tại sao cần dùng đồng hồ của server, dùng đồng hồ client xảy ra gì?
-        // Tại sao cần trừ đi delay?
+        // Chờ clock sync xong mới lerp
+        // Tránh case clockOffset = 0 → renderTime sai → vượt toàn bộ buffer
+        if (!GameSocketGo.clockReady) return;
+
+        // Đồng hồ server
         long renderTime = System.currentTimeMillis() + GameSocketGo.clockOffset - getRenderDelay();
 
+        // Tất cả package trong tương lai
         if (snapCopy[0].time > renderTime) {
-            x = snapLatest.x;
-            y = snapLatest.y;
-            applyDiscreteFromSnapshot(snapLatest);
+            // renderDelay tăng đột ngột hoặc TCP Burst
+            // Đứng yên, renderTime tự bắt kịp
+            System.out.println("ALL PACKAGE TƯƠNG LAI, TIME: " + System.currentTimeMillis());
             return;
         }
 
@@ -806,12 +823,13 @@ public class PlayerState {
             float jumpDist = (float) Math.sqrt((newX - x) * (newX - x) + (newY - y) * (newY - y));
             float maxSpeed = getNormalMaxSpeed(this.trangthai);
 
-            // Trigger trail nếu jump > 2x speed bình thường
+            // Trigger trail nếu jump > 4x speed bình thường
             if (jumpDist > maxSpeed * TIME_TCP_BURST_TRIGGER_TELE) {
                 x_truoc_dash = x;
                 y_truoc_dash = y;
                 flip_truoc_dash = (dir == -1);
                 timeTeleport = TIME_TELE_PORT_MAX;
+                System.out.println("TCP BURST: Trong nhánh 1, RENDER DELAY: " + getRenderDelay()+", JUMP DIST: "+jumpDist);
             }
 
             x = newX;
@@ -822,13 +840,14 @@ public class PlayerState {
             float dy = snapLatest.y - y;
             float dist = (float) Math.sqrt(dx * dx + dy * dy);
 
-            if (dist > 50) {
+            if (dist > 120) {
                 x_truoc_dash = x;
                 y_truoc_dash = y;
                 flip_truoc_dash = (dir == -1);
                 x = snapLatest.x;
                 y = snapLatest.y;
                 timeTeleport = TIME_TELE_PORT_MAX;
+                System.out.println("Lag, Tele + Snapshot cuối"+ getRenderDelay());
             } else if (dist < 2f) {
                 x = snapLatest.x;
                 y = snapLatest.y;
@@ -838,6 +857,8 @@ public class PlayerState {
                 float catchupSpeed = Math.min(8f, 4f + dist * 0.1f);  // 4 → 8
                 x += dx * catchupSpeed * delta;
                 y += dy * catchupSpeed * delta;
+                System.out.println("Lag, Lerp dần, DIST: "+dist);
+                System.out.println("SNAPLAST-TIME: "+snapLatest.time + ", RENDERTIME: "+renderTime+", DELAYRENDER: "+ getRenderDelay());
             }
 
             applyDiscreteFromSnapshot(snapLatest);
@@ -861,7 +882,6 @@ public class PlayerState {
         this.lechThanY = s.lechThanY;
         this.lechChanX = s.lechChanX;
         this.lechChanY = s.lechChanY;
-        this.frameVanBay = s.frameVanBay;
         this.dangMangVanBay = s.dangMangVanBay;
         this.tenVanBay = s.tenVanBay;
         this.rong = s.rong;
@@ -869,11 +889,24 @@ public class PlayerState {
         this.avatar = s.avatar;
     }
 
-    private static long getRenderDelay() {
+
+    // Gọi từ network thread mỗi khi nhận RTT mới — KHÔNG gọi mỗi frame
+    public static void updateRenderDelay() {
         long oneWay = GameSocketGo.lastRtt / 2;
         long jitter = GameSocketGo.rttJitter;
-        long tickBuffer = 2 * 50; // 2 tick × 50ms server tick
-        return Math.max(50, Math.min(oneWay + jitter + tickBuffer, 400));
+        long tickBuffer = 2 * 50;
+        long target = Math.max(100, Math.min(oneWay + jitter + tickBuffer, 400));
+
+        if (target > RENDER_DELAY_MS) {
+            RENDER_DELAY_MS = (long)(RENDER_DELAY_MS * 0.4 + target * 0.6);
+        } else {
+            RENDER_DELAY_MS = (long)(RENDER_DELAY_MS * 0.6 + target * 0.4);
+        }
+    }
+
+    // Chỉ đọc — không mutate, gọi thoải mái mỗi frame
+    public static long getRenderDelay() {
+        return RENDER_DELAY_MS;
     }
 
     private static float getNormalMaxSpeed(String trangthai) {
@@ -881,12 +914,12 @@ public class PlayerState {
         try {
             TrangThai tt = TrangThai.valueOf(trangthai);
             switch (tt) {
-                case BAY_NGANG: return 15f;  // Cần verify số này từ NhanVat.java
-                case ROI:       return 12f;  // Hoặc lấy từ vật lý rơi
-                case NHAY:      return 10f;
-                case DI_CHUYEN: return 7f;
+                case BAY_NGANG: return 12f;
+                case ROI:       return 25f;
+                case NHAY:      return 20f;
+                case DI_CHUYEN:
                 case DUNG_YEN:
-                default:        return 2f;   // Đứng yên thì jump >2 cũng đáng ngờ
+                default:        return 7f;
             }
         } catch (Exception e) {
             return 7f;

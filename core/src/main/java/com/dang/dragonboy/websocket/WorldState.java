@@ -144,7 +144,6 @@ public class WorldState {
             ps.chan = obj.optString("chan", ps.chan);
 
             // ===== Animation =====
-            ps.frameVanBay = obj.optInt("frameVanBay", ps.frameVanBay);
             ps.timeChoHienBay = (float) obj.optDouble("timeChoHienBay", ps.timeChoHienBay);
             ps.dangMangVanBay = (boolean) obj.optBoolean("dangMangVanBay", ps.dangMangVanBay);
             ps.tenVanBay = obj.optString("tenVanBay", ps.tenVanBay);
@@ -172,7 +171,7 @@ public class WorldState {
         String dau, String than, String chan, float timeChoHienBay,
         float lechDauX, float lechDauY, float lechThanX, float lechThanY,
         float lechChanX, float lechChanY,
-        int frameVanBay, boolean dangMangVanBay, String tenVanBay,
+        boolean dangMangVanBay, String tenVanBay,
         float rong, float cao, String avatar, long serverTime
     ) {
         if (userId == -1) return;
@@ -186,7 +185,7 @@ public class WorldState {
             dau, than, chan, timeChoHienBay,
             lechDauX, lechDauY, lechThanX, lechThanY,
             lechChanX, lechChanY,
-            frameVanBay, dangMangVanBay, tenVanBay,
+            dangMangVanBay, tenVanBay,
             rong, cao, avatar, serverTime
         );
     }
@@ -688,7 +687,6 @@ public class WorldState {
         ps.chan = obj.optString("chan", "");
 
         // ===== Animation =====
-        ps.frameVanBay = obj.optInt("frameVanBay", ps.frameVanBay);
         ps.timeChoHienBay = (float) obj.optDouble("timeChoHienBay", ps.timeChoHienBay);
         ps.dangMangVanBay = (boolean) obj.optBoolean("dangMangVanBay", ps.dangMangVanBay);
         ps.tenVanBay = obj.optString("tenVanBay", ps.tenVanBay);

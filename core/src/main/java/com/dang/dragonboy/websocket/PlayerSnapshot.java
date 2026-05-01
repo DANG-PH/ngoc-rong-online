@@ -23,7 +23,6 @@ public class PlayerSnapshot {
     public float lechDauX, lechDauY;
     public float lechThanX, lechThanY;
     public float lechChanX, lechChanY;
-    public int frameVanBay;
     public boolean dangMangVanBay;
     public String tenVanBay;
     public float rong, cao;

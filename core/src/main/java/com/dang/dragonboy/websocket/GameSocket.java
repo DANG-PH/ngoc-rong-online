@@ -265,7 +265,6 @@ public class GameSocket {
             data.put("lechChanX", nhanVat.lechChanX);
             data.put("lechChanY", nhanVat.lechChanY);
             data.put("timeChoHienBay", nhanVat.timeChoHienBay);
-            data.put("frameVanBay", nhanVat.frameVanBay);
             data.put("dangMangVanBay", nhanVat.dangMangVanBay);
             data.put("tenVanBay", nhanVat.tenVanBay);
             data.put("rong", nhanVat.rong);
@@ -297,7 +296,6 @@ public class GameSocket {
             data.put("lechChanX", nhanVat.lechChanX);
             data.put("lechChanY", nhanVat.lechChanY);
             data.put("timeChoHienBay", nhanVat.timeChoHienBay);
-            data.put("frameVanBay", nhanVat.frameVanBay);
             data.put("dangMangVanBay", nhanVat.dangMangVanBay);
             data.put("tenVanBay", nhanVat.tenVanBay);
             data.put("rong", nhanVat.rong);

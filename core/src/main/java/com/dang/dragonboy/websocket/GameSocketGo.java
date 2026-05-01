@@ -73,7 +73,7 @@ public class GameSocketGo {
 
     // ---------- Clock sync ----------
     public static volatile long clockOffset = 0;
-    public static volatile long lastRtt = 40;
+    public static long lastRtt = 40;
     // Độ dao động của RTT giữa các lần ping liên tiếp (jitter)
     // Ví dụ cùng lastRtt ~40ms nhưng:
     //   Mạng ổn: 37, 42, 41, 40, 39   → rttJitter thấp ~2ms
@@ -90,7 +90,7 @@ public class GameSocketGo {
     public static long rttJitter = 10;
     private static volatile long pingSentAt = 0;
     private static long lastClockSyncAt = 0;
-    private static volatile boolean clockReady = false;
+    public static volatile boolean clockReady = false;
     private static volatile boolean waitingPong = false;
 
     private static void startClockSync() {
@@ -143,7 +143,7 @@ public class GameSocketGo {
                     long rtt = System.currentTimeMillis() - pingSentAt;
                     if (rtt > 0 && rtt < 5000) {
                         if (lastRtt == 40) lastRtt = rtt;        // lần đầu
-                        else lastRtt = (lastRtt * 7 + rtt) / 8;  // EMA smooth
+                        else lastRtt = (lastRtt * 7 + rtt * 3) / 10;  // EMA smooth
                     }
 
                     //  rttDiff = độ dao động giữa 2 lần ping liên tiếp:
@@ -153,8 +153,9 @@ public class GameSocketGo {
                     //  lần 4: 45ms → rttDiff = |45 - 80| = 35ms
                     //  rttJitter = EMA của rttDiff, tức là mức dao động trung bình của ping theo thời gian.
                     long rttDiff = Math.abs(rtt - lastRtt);
-                    rttJitter = (rttJitter * 7 + rttDiff) / 8; // EMA giống lastRtt
+                    rttJitter = (rttJitter * 7 + rttDiff * 3) / 10; // EMA giống lastRtt
                     waitingPong = false;
+                    PlayerState.updateRenderDelay();
                     System.out.println("ĐỔI RTT: "+lastRtt);
                 }
                 @Override
@@ -278,7 +279,6 @@ public class GameSocketGo {
                 + 2 + chanBytes.length
                 + 4                               // timeChoHienBay
                 + 4 * 6                           // lechDau/Than/Chan X/Y
-                + 2                               // frameVanBay
                 + 1                               // dangMangVanBay
                 + 2 + tenVanBayBytes.length
                 + 4 + 4                           // rong, cao
@@ -302,7 +302,6 @@ public class GameSocketGo {
             buf.putFloat((float) nhanVat.lechThanY);
             buf.putFloat((float) nhanVat.lechChanX);
             buf.putFloat((float) nhanVat.lechChanY);
-            buf.putShort((short) nhanVat.frameVanBay);
             buf.put((byte) (nhanVat.dangMangVanBay ? 1 : 0));
             writeString(buf, tenVanBayBytes);
             buf.putFloat((float) nhanVat.rong);
@@ -366,7 +365,6 @@ public class GameSocketGo {
      *   [string dau][string than][string chan]
      *   [float32 timeChoHienBay]
      *   [float32 lechDauX/Y][float32 lechThanX/Y][float32 lechChanX/Y]
-     *   [uint16 frameVanBay][bool dangMangVanBay]
      *   [string tenVanBay]
      *   [float32 rong][float32 cao]
      *   [string avatar]
@@ -391,7 +389,6 @@ public class GameSocketGo {
 //            float lechThanY = buf.getFloat();
 //            float lechChanX = buf.getFloat();
 //            float lechChanY = buf.getFloat();
-//            int frameVanBay = buf.getShort() & 0xFFFF;
 //            boolean dangMangVanBay = buf.get() != 0;
 //            String tenVanBay = readString(buf);
 //            float rong = buf.getFloat();
@@ -416,7 +413,6 @@ public class GameSocketGo {
 ////            data.put("lechThanY", lechThanY);
 ////            data.put("lechChanX", lechChanX);
 ////            data.put("lechChanY", lechChanY);
-////            data.put("frameVanBay", frameVanBay);
 ////            data.put("dangMangVanBay", dangMangVanBay);
 ////            data.put("tenVanBay", tenVanBay);
 ////            data.put("rong", rong);
@@ -432,7 +428,7 @@ public class GameSocketGo {
 //                userId, x, y, byteToTrangthai(trangthai), dir,
 //                dau, than, chan, timeChoHienBay,
 //                lechDauX, lechDauY, lechThanX, lechThanY, lechChanX, lechChanY,
-//                frameVanBay, dangMangVanBay, tenVanBay, rong, cao, avatar, serverTime
+//                dangMangVanBay, tenVanBay, rong, cao, avatar, serverTime
 //            );
 //        } catch (Exception e) {
 //            e.printStackTrace();
@@ -458,7 +454,6 @@ public class GameSocketGo {
                 float lechThanY = buf.getFloat();
                 float lechChanX = buf.getFloat();
                 float lechChanY = buf.getFloat();
-                int frameVanBay = buf.getShort() & 0xFFFF;
                 boolean dangMangVanBay = buf.get() != 0;
                 String tenVanBay = readString(buf);
                 float rong = buf.getFloat();
@@ -470,7 +465,7 @@ public class GameSocketGo {
                     userId, x, y, byteToTrangthai(trangthai), dir,
                     dau, than, chan, timeChoHienBay,
                     lechDauX, lechDauY, lechThanX, lechThanY, lechChanX, lechChanY,
-                    frameVanBay, dangMangVanBay, tenVanBay, rong, cao, avatar, serverTime
+                    dangMangVanBay, tenVanBay, rong, cao, avatar, serverTime
                 );
 
                 // Chỉ calibrate 1 lần cho cả batch
@@ -486,22 +481,26 @@ public class GameSocketGo {
                         if (client != null && client.isOpen() && !waitingPong) {
                             startClockSync();
                         }
+                        System.out.println("ĐỔI clockOffset: "+clockOffset);
                     } else if (now - lastClockSyncAt > 5_000) {
                         long delta = Math.abs(newOffset - clockOffset);
                         if (delta > 200) {
                             // Hard reset - giống Unity Netcode hardResetThresholdSec=0.2
                             clockOffset = newOffset;
+                        } else if (delta > 100) {
+                            clockOffset = (long)(clockOffset * 0.2 + newOffset * 0.8); // nhanh hơn
+                        } else if (delta > 50) {
+                            clockOffset = (long)(clockOffset * 0.4 + newOffset * 0.6); // nhanh hơn
                         } else {
-                            // Smooth EMA
-                            clockOffset = (long)(clockOffset * 0.8 + newOffset * 0.2);
+                            clockOffset = (long)(clockOffset * 0.6 + newOffset * 0.4); // ổn định
                         }
                         lastClockSyncAt = now;
                         if (client != null && client.isOpen() && !waitingPong) {
                             startClockSync();
                         }
+                        System.out.println("ĐỔI clockOffset: "+clockOffset);
                     }
 
-                    System.out.println("ĐỔI clockOffset: "+clockOffset);
                 }
             }
         } catch (Exception e) {
