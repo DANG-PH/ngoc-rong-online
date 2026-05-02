@@ -332,7 +332,10 @@ public class GameSocketGo {
                 retryCount = 0;
                 startClockSync();
                 try {
-                    guiPlayerMove(State_Management.getNhanVat());
+                    NhanVat nv = State_Management.getNhanVat();
+                    if (nv != null && State_Management.getVeHUD() != null) {
+                        guiPlayerMove(nv);
+                    }
                 } catch (Exception ignored) {}
                 break;
 

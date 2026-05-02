@@ -13,6 +13,7 @@ dependencies {
   implementation "com.google.code.gson:gson:2.11.0"
   implementation 'io.socket:socket.io-client:2.1.0'
   implementation 'org.java-websocket:Java-WebSocket:1.5.4'
+  implementation 'org.slf4j:slf4j-nop:2.0.9'
 
   if(enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion";
