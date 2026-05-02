@@ -53,6 +53,11 @@ public class GameSocket {
                     // Reconnect (dưới hoặc trên 10s)
                     // Push lại state thật vì A, C, D có thể đang thấy state cũ
                     syncMyState();
+                    try {
+                        guiPlayerMove(State_Management.getNhanVat());
+                    } catch (Exception e) {
+
+                    }
                 }
 
                 // === connect Go sau khi Socket.IO master OK ===

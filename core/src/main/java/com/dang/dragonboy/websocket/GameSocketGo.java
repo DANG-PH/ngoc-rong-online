@@ -331,6 +331,9 @@ public class GameSocketGo {
                 handshakeOk = true;
                 retryCount = 0;
                 startClockSync();
+                try {
+                    guiPlayerMove(State_Management.getNhanVat());
+                } catch (Exception ignored) {}
                 break;
 
             case MSG_HANDSHAKE_NACK:
