@@ -2089,7 +2089,9 @@ public class VeHUD {
     public void setNhanVat(NhanVat nhanVat) {
         this.nhanVat = nhanVat;
         avtPetTheoHanhTinh = new Texture("nhanvat/npc/npc_pet/"+nhanVat.getHanhtinh()+"/avt.png");
-        if (!nhanVat.getTen().equals("ADMIN")) {
+//        boolean duDieuKienPetPaimon = nhanVat.getTen().equals("ADMIN");
+        boolean duDieuKienPetPaimon = true; // Cho all user trải nghiệm pet paimon
+        if (!duDieuKienPetPaimon) {
             for (int i = 0; i < 2; i++) {
                 framesPet[i] = new Texture("nhanvat/npc/npc_pet/" + "xayda" + "/" + (i + 1) + ".png");
             }
