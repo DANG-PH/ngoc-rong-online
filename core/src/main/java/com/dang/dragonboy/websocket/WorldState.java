@@ -283,6 +283,7 @@ public class WorldState {
             JSONObject obj = toJsonObject(args[0]);
             boolean duocGoiRong = obj.optBoolean("duocGoiRong", false);
             String message = obj.optString("message", "Ngọc rồng cần hồi phục");
+            float timeHienRongThan = (float) obj.optDouble("timeHienRongThan");
             VeHUD veHUD = State_Management.getVeHUD();
             ArrayList<Item> danhSach = veHUD.getDuLieuNguoiChoi().getHanhTrang();
 
@@ -299,7 +300,8 @@ public class WorldState {
                     }
                 }
                 veHUD.dangHienDieuUocRongThan = true;
-                veHUD.timeHienRongThan = 300f;
+                veHUD.TIME_HIEN_RONG_THAN_MAX = timeHienRongThan;
+                veHUD.timeHienRongThan = veHUD.TIME_HIEN_RONG_THAN_MAX;
                 veHUD.dangHienPopup = false;
                 // Chỉ hiện popup, k hiện rồng
                 // Vẽ rồng và map tối ở hàm dưới
@@ -316,32 +318,26 @@ public class WorldState {
 
         try {
             JSONObject obj = toJsonObject(args[0]);
-            boolean mapToi = obj.optBoolean("mapToi", false);
+            String type = obj.optString("type", "");
 
-            if (!mapToi) {
-                State_Management.setRongThanState(null);
-                return;
-            }
+            switch (type) {
+                case "KET_THUC":
+                case "HET_HAN":
+                case "KHONG_ACTIVE":
+                    State_Management.setRongThanState(null);
+                    break;
 
-            int nguoiUoc = obj.optInt("nguoiUoc");
-            String gameName = obj.optString("gameNameNguoiUoc", "");
-            String map = obj.optString("map");
-            double x = obj.optDouble("x");
-            double y = obj.optDouble("y");
-            String ngocRongUoc = obj.optString("ngocRongUoc");
-
-            RongThanState state = new RongThanState();
-            state.x = x;
-            state.y = y;
-            state.map = map;
-            state.nguoiUocId = nguoiUoc;
-            state.gameNameNguoiUoc = gameName;
-            state.ngocRongUoc = ngocRongUoc;
-            State_Management.setRongThanState(state);
-
-            VeHUD veHUD = State_Management.getVeHUD();
-            if (veHUD != null && !gameName.isEmpty()) {
-                veHUD.setTinNhanPet("Người chơi " + gameName + " vừa gọi rồng thần tại " + map, 2f);
+                case "BAT_DAU":
+                case "DANG_ACTIVE":
+                    RongThanState state = new RongThanState();
+                    state.x          = obj.optDouble("x");
+                    state.y          = obj.optDouble("y");
+                    state.map        = obj.optString("map");
+                    state.nguoiUocId = obj.optInt("nguoiUoc");
+                    state.gameNameNguoiUoc = obj.optString("gameNameNguoiUoc", "");
+                    state.ngocRongUoc      = obj.optString("ngocRongUoc");
+                    State_Management.setRongThanState(state);
+                    break;
             }
         } catch (Exception e) {
             e.printStackTrace();

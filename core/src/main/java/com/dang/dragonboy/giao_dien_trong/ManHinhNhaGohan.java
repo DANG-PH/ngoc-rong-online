@@ -377,20 +377,8 @@ public class ManHinhNhaGohan implements Screen {
 
         batch.end();
 
-        RongThanState rongThanState = State_Management.getRongThanState();
-        if (rongThanState != null && rongThanState.map.equals(MAP_NAME)) {
-            shapeRenderer.setProjectionMatrix(camManager.uiCamera.combined);
-            Gdx.gl.glEnable(GL20.GL_BLEND);
-            if (rongThanState.ngocRongUoc.equals("Ngọc Rồng Sao Đen")) {
-                shapeRenderer.setColor(0f, 0f, 0f, 0.6f);
-            } else {
-                shapeRenderer.setColor(0f, 0f, 0f, 0.5f);
-            }
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.rect(0,0,1020,610);
-            shapeRenderer.end();
-            shapeRenderer.setProjectionMatrix(camManager.camera.combined);
-        }
+        // Vẽ map tối nếu đủ điều kiện
+        MapToi.veMapToi(shapeRenderer, camManager, MAP_NAME);
         batch.begin();
 
         //background gần
@@ -443,9 +431,8 @@ public class ManHinhNhaGohan implements Screen {
             }
         }
 
-        if (rongThanState != null && rongThanState.map.equals(MAP_NAME)) {
-            HUDRongThan.veRongThan(batch, rongThanState.ngocRongUoc, rongThanState.nguoiUocId,(float) rongThanState.x,(float) rongThanState.y);
-        }
+        // Vẽ Rồng Thần khi đủ điều kiện
+        MapToi.veRongThan(batch, MAP_NAME);
 
         MultiplayerRenderer.render(batch, thoiGianTichLuy, hudRenderer);
         nhanVat.ve(batch, thoiGianTichLuy);

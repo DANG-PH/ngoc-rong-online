@@ -81,9 +81,9 @@ public class HUDRongThan {
         float offsetX = 120f;
 
         if (veHUD.timeHienRongThan<=1) return;
-        float timeMax = 300f;
+        float timeMax = veHUD.TIME_HIEN_RONG_THAN_MAX;
         float step = 0.1f;
-        if (veHUD.timeHienRongThan>300f-2.1f) {
+        if (veHUD.timeHienRongThan>veHUD.TIME_HIEN_RONG_THAN_MAX-2.1f) {
             int tick = (int) (veHUD.timeHienRongThan * 18);
             if (tick % 2 == 0) {
                 veHUD.veNenFlash = true;
@@ -104,7 +104,7 @@ public class HUDRongThan {
                 batch.setProjectionMatrix(veHUD.camManager.uiCamera.combined);
             }
         }
-        if (veHUD.timeHienRongThan<=300f-2.1f) {
+        if (veHUD.timeHienRongThan<=veHUD.TIME_HIEN_RONG_THAN_MAX-2.1f) {
             String[] listDieuUoc = new String[5];
             if (veHUD.ngocRongUoc.equals("3sao")) {
                 listDieuUoc = new String[]{"Danh Hiệu Thiếu Nhi","Giàu có \n"+"+50 \n Ngọc","+2 Tr \n Sức mạnh \n và tiềm năng","Giàu có \n +5 Tr \n Vàng","Sức Mạnh \n Đổi Skill 1 \n đệ tử"};
@@ -229,7 +229,7 @@ public class HUDRongThan {
         boolean dieuKien;
         if (nguoiUocRong == State_Management.getUserResponse().id) {
             // Người gọi thì đợi vài giây để chạy animation lóe sáng
-            dieuKien = veHUD.timeHienRongThan <= 300f - 2.1f;
+            dieuKien = veHUD.timeHienRongThan <= veHUD.TIME_HIEN_RONG_THAN_MAX - 2.1f;
         } else {
             dieuKien = true;
         }

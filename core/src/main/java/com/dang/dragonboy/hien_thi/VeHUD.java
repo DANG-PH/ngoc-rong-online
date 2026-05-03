@@ -306,6 +306,7 @@ public class VeHUD {
     public String ngocRongUoc = "";
     public boolean dangHienDieuUocRongThan = false;
     public float timeHienRongThan = 0f;
+    public float TIME_HIEN_RONG_THAN_MAX = 60;
     public boolean daUocRongThan = false;
     public String[] idsCanTim = new String[0];
 
@@ -792,7 +793,7 @@ public class VeHUD {
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
 
-        if (!dangHienKhungChat && !daClickVaoNpc && !dangHienDauThan && !(timeHienRongThan<=300-2.1f && timeHienRongThan>0)) {
+        if (!dangHienKhungChat && !daClickVaoNpc && !dangHienDauThan && !(timeHienRongThan<=TIME_HIEN_RONG_THAN_MAX-2.1f && timeHienRongThan>0)) {
             // RENDER SAU ẢNH ĐẬU THẦN ( trắng )
             shapeRenderer.setProjectionMatrix(camManager.uiCamera.combined);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -850,7 +851,7 @@ public class VeHUD {
             fontNgayGioHienTai.draw(batch,layout,40,420);
         }
 
-        if (!dangHienKhungChat && !daClickVaoNpc && !dangHienDauThan && !(timeHienRongThan<=300-2.1f && timeHienRongThan>0)) {
+        if (!dangHienKhungChat && !daClickVaoNpc && !dangHienDauThan && !(timeHienRongThan<=TIME_HIEN_RONG_THAN_MAX-2.1f && timeHienRongThan>0)) {
             // ô chat (góc phải trên)
             int ochatW = 60;
             int ochatH = 60;
@@ -1107,12 +1108,12 @@ public class VeHUD {
         }
     }
     public void chonSkill(int index) {
-        if (index >= 0 && index < 5 && (!dangHienKhungChat && !(timeHienRongThan<=300-2.1f && timeHienRongThan>0))) {
+        if (index >= 0 && index < 5 && (!dangHienKhungChat && !(timeHienRongThan<=TIME_HIEN_RONG_THAN_MAX-2.1f && timeHienRongThan>0))) {
             skillDangChon = index;
         }
     }
     public void dungSkill(int index) {
-        if (index >= 0 && index < 5 && (!dangHienKhungChat && !(timeHienRongThan<=300-2.1f && timeHienRongThan>0))) {
+        if (index >= 0 && index < 5 && (!dangHienKhungChat && !(timeHienRongThan<=TIME_HIEN_RONG_THAN_MAX-2.1f && timeHienRongThan>0))) {
             if (oSkills[index] == 3 && timeCoolDownBienKhi == 0 && duLieuNguoiChoi.getKiHienTai()>=duLieuNguoiChoi.getKiHopThe()*0.1f && !dangBienKhi && timeChoBienKhi==0) {
                 timeChoBienKhi = 2f;
                 duLieuNguoiChoi.giamKiHienTai(duLieuNguoiChoi.getKiHopThe()*0.1f);
