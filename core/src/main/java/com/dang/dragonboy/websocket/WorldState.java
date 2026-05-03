@@ -537,21 +537,21 @@ public class WorldState {
                 if (item.tmpId == tmpId) {
                     item.uuid = uuid;
                     item.tmpId = -1;
-                    System.out.println("DONE UUID");
+                    System.out.println("DONE UUID HANH TRANG");
                 }
             }
             for (Item item : duLieuNguoiChoi.getHanhTrangDangMac()) {
                 if (item.tmpId == tmpId) {
                     item.uuid = uuid;
                     item.tmpId = -1;
-                    System.out.println("DONE UUID");
+                    System.out.println("DONE UUID HANH TRANG DANG MAC");
                 }
             }
             for (Item item : duLieuNguoiChoi.getHanhTrangRuongDo()) {
                 if (item.tmpId == tmpId) {
                     item.uuid = uuid;
                     item.tmpId = -1;
-                    System.out.println("DONE UUID");
+                    System.out.println("DONE UUID HANH TRANG RUONG DO");
                 }
             }
         } catch (Exception e) {
