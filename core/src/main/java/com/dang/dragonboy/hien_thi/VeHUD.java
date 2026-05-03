@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Align;
 import com.dang.dragonboy.du_lieu.State_Management;
 import com.dang.dragonboy.giao_dien_ngoai.ManHinhMenu;
@@ -376,6 +377,8 @@ public class VeHUD {
     public int indexItemGiaoDichPlayer2 = -1;
 
     public Texture dau_tele,than_tele,chan_tele;
+    public Texture[] bien_mat = new Texture[3];
+    public ListHieuUngBienMat listHieuUngBienMat;
 
     public void setDuLieuNguoiChoi(DuLieuNguoiChoi data) {
         this.duLieuNguoiChoi = data;
@@ -575,6 +578,9 @@ public class VeHUD {
         dau_tele = new Texture("hieuung/hieuunggame/tele/dau.png");
         than_tele = new Texture("hieuung/hieuunggame/tele/than.png");
         chan_tele = new Texture("hieuung/hieuunggame/tele/chan.png");
+        for (int i = 0; i < 3; i++) {
+            bien_mat[i] = new Texture("hieuung/hieuunggame/bien_mat/"+(i+1)+".png");
+        }
         // Load font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -693,6 +699,8 @@ public class VeHUD {
         for (int i = 0; i < 4; i++) {
             clickMuiTen[i] = new Texture("hieuung/hieuunggame/click_npc/"+(i+1)+".png");
         }
+
+        listHieuUngBienMat = new ListHieuUngBienMat(this.bien_mat);
     }
 
     public void render(SpriteBatch batch) {
@@ -1326,7 +1334,6 @@ public class VeHUD {
                 dangHienTinNhanChat = false;
                 timeHienTinNhan = 0;
                 tinNhanChat = "";
-                daRanDomChatDeTu = false;
             }
         }
         if (dangHienTinNhanPet) {
@@ -1908,6 +1915,54 @@ public class VeHUD {
                             dangHienTinNhanChat = true;
                             dangHienKhungChat = false;
                             nutduocchon = -1;
+
+                            if (duLieuNguoiChoi.coDeTu()) {
+                                if (tinNhanChat.equals("bao ve") || tinNhanChat.equals("protect")) {
+                                    trangthaide = "Bảo vệ";
+                                    duLieuNguoiChoi.deTu.capNhatTrangThaiDeTu();
+                                } else if (tinNhanChat.equals("tan cong") || tinNhanChat.equals("attack")) {
+                                    trangthaide = "Tấn công";
+                                    duLieuNguoiChoi.deTu.capNhatTrangThaiDeTu();
+                                } else if (tinNhanChat.equals("di theo") || tinNhanChat.equals("follow")) {
+                                    trangthaide = "Đi theo";
+                                    duLieuNguoiChoi.deTu.capNhatTrangThaiDeTu();
+                                } else if (tinNhanChat.equals("ve nha") || tinNhanChat.equals("go home")) {
+                                    trangthaide = "Về nhà";
+                                    duLieuNguoiChoi.deTu.capNhatTrangThaiDeTu();
+                                }
+                                if (tinNhanChat.equals("bien hinh") || tinNhanChat.equals("transformation")) {
+                                    if (duLieuNguoiChoi.deTu.getTenSkill(3) != null && duLieuNguoiChoi.deTu.getTenSkill(3).equals("Biến hình") && duLieuNguoiChoi.deTu.timeCoolDownBienKhi == 0 && duLieuNguoiChoi.deTu.timeChoBienKhi == 0) {
+                                        duLieuNguoiChoi.deTu.timeChoBienKhi = 0.6f;
+                                        duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Dạ sư phụ",3f);
+                                    }
+                                }
+                                if (tinNhanChat.equals("huy bien hinh")) {
+                                    if (duLieuNguoiChoi.deTu.getTenSkill(3) != null && duLieuNguoiChoi.deTu.getTenSkill(3).equals("Biến hình") && duLieuNguoiChoi.deTu.dangBienKhi) {
+                                        duLieuNguoiChoi.deTu.huyBienKhi();
+                                        duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Dạ sư phụ",3f);
+                                    }
+                                }
+                                if (tinNhanChat.contains("ten con la:")) {
+                                    String[] part = tinNhanChat.split(":", -1);
+                                    String tenDeTu = part[1].trim();
+                                    if (duLieuNguoiChoi.deTu.chuaSetTenDeTu) {
+                                        if (!tenDeTu.isEmpty()) {
+                                            duLieuNguoiChoi.deTu.setTenDeTu(tenDeTu);
+                                            String[] text = {
+                                                "Con xin nhận tên " + tenDeTu + " ạ, con sẽ không làm sư phụ thất vọng.",
+                                                "Tên " + tenDeTu + " , đệ tử xin ghi nhớ!",
+                                                "Từ nay con là " + tenDeTu + ", cám ơn sư phụ."
+                                            };
+                                            duLieuNguoiChoi.deTu.setTinNhanDeTuChat(text[MathUtils.random(text.length - 1)], 4f);
+                                            duLieuNguoiChoi.deTu.chuaSetTenDeTu = false;
+                                        } else {
+                                            duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Sư phụ chưa đặt tên rõ ràng cho con...", 4f);
+                                        }
+                                    } else {
+                                        duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Sư phụ, tên con là " + duLieuNguoiChoi.deTu.getTen() + " mà...", 4f);
+                                    }
+                                }
+                            }
 
                             try {
                                 GameSocket.guiChat(tinNhanChat);

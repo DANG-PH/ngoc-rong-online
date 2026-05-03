@@ -107,6 +107,13 @@ public class WorldState {
             JSONObject obj = toJsonObject(args[0]);
             int userId = obj.optInt("userId", -1);
             if (userId != -1) {
+                PlayerState player = players.get(userId);
+                if (player != null) {
+                    VeHUD veHUD = State_Management.getVeHUD();
+                    if (veHUD != null) {
+                        veHUD.listHieuUngBienMat.them(player.x, player.y, player.rong, player.cao, 0f);
+                    }
+                }
                 players.remove(userId);
             }
         } catch (Exception e) {

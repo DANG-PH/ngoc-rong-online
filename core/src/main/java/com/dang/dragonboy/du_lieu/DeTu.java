@@ -183,11 +183,6 @@ public class DeTu {
     float x_truoc_dash;
     float y_truoc_dash;
     boolean flip_truoc_dash = false;
-    public Texture[] bien_mat = new Texture[3];
-    public boolean hoatAnhBienMat = false;
-    public float timeHoatAnhBienMat = 0f;
-    public float x_bien_mat,y_bien_mat;
-    public boolean chuaLayToaDoBienMat = true;
 
     float timeBayKoTienLaiGan = 0;
     float khoangCachCu = -1;
@@ -312,10 +307,6 @@ public class DeTu {
 
         this.flipX = flipX;
         this.diQuaPhai = diQuaPhai;
-
-        for (int i = 0; i < 3; i++) {
-            bien_mat[i] = new Texture("hieuung/hieuunggame/bien_mat/"+(i+1)+".png");
-        }
 
         tangSucManh(0);
     }
@@ -1711,14 +1702,6 @@ public class DeTu {
             // Kích hoạt lại cooldown
             timeCooldownDash = DASH_COOLDOWN;
         }
-        if (!veHUD.renderDeTu) {
-            if (timeHoatAnhBienMat > 0) {
-                timeHoatAnhBienMat -= delta;
-                if (timeHoatAnhBienMat <= 0) {
-                    timeHoatAnhBienMat = 0;
-                }
-            }
-        }
         if (timeDoiDauThan > 0) {
             timeDoiDauThan -= delta;
             if (timeDoiDauThan <= 0) {
@@ -2007,8 +1990,7 @@ public class DeTu {
         } else if (veHUD.trangthaide.equals("Về nhà")) {
             if (!getTrangthai().equals(veHUD.trangthaide) && !veHUD.dangHopThe) {
                 setTinNhanDeTuChat("Ok con về, bibi sư phụ", 1.5f);
-                timeHoatAnhBienMat = 0.3f;
-                chuaLayToaDoBienMat = true;
+                this.veHUD.listHieuUngBienMat.them(this.x, this.y, this.rong_de_tu, this.cao_de_tu, 0.5f);
             }
         }
         setTrangthai(veHUD.trangthaide);
@@ -2068,7 +2050,7 @@ public class DeTu {
         if (veHUD.chan_tele != null) veHUD.chan_tele.dispose();
 
         // Biến mất
-        for (Texture tex : bien_mat) {
+        for (Texture tex : veHUD.bien_mat) {
             if (tex != null) tex.dispose();
         }
 

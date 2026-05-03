@@ -15,6 +15,7 @@ import com.dang.dragonboy.du_lieu.State_Management;
 import com.dang.dragonboy.du_lieu.TrangThaiDeTu;
 import com.dang.dragonboy.giao_dien_ngoai.ManHinhMenu;
 import com.dang.dragonboy.he_thong.Main;
+import com.dang.dragonboy.hien_thi.ListHieuUngBienMat;
 import com.dang.dragonboy.nhan_vat.van_bay.VanBayCauHinh;
 import com.dang.dragonboy.hien_thi.VeHUD;
 import java.util.List;
@@ -1482,6 +1483,12 @@ public class NhanVat {
     }
 
     public void ve(SpriteBatch batch, float thoiGian) {
+        // Vẽ hiệu ứng biến mất
+        if (this.veHUD != null) {
+            this.veHUD.listHieuUngBienMat.ve(batch);
+        }
+
+        // Vẽ người chơi
         boolean duDieuKien = true;
         if (veHUD.dangHopTheThuong) {
             if (veHUD.timeHopTheTHuong < 1.5f ){
@@ -1491,24 +1498,6 @@ public class NhanVat {
             }
         }
         this.thoiGianTichLuy = thoiGian;
-        if (duLieuNguoiChoi.coDeTu()) {
-            if (!veHUD.renderDeTu && duLieuNguoiChoi.deTu.timeHoatAnhBienMat > 0) {
-                if (duLieuNguoiChoi.deTu.chuaLayToaDoBienMat) {
-                    duLieuNguoiChoi.deTu.x_bien_mat = duLieuNguoiChoi.deTu.x;
-                    duLieuNguoiChoi.deTu.y_bien_mat = duLieuNguoiChoi.deTu.y;
-                    duLieuNguoiChoi.deTu.chuaLayToaDoBienMat = false;
-                }
-                float timeMAX = 0.3f;
-                float step = timeMAX / 3;
-                for (int i = 0; i < 3; i++) {
-                    float start = timeMAX - i * step;
-                    float end = timeMAX - (i + 1) * step;
-                    if (duLieuNguoiChoi.deTu.timeHoatAnhBienMat >= end && duLieuNguoiChoi.deTu.timeHoatAnhBienMat <= start) {
-                        batch.draw(duLieuNguoiChoi.deTu.bien_mat[i], duLieuNguoiChoi.deTu.x_bien_mat + (duLieuNguoiChoi.deTu.rong_de_tu - duLieuNguoiChoi.deTu.bien_mat[i].getWidth() * 0.45f) / 2f, duLieuNguoiChoi.deTu.y_bien_mat + (duLieuNguoiChoi.deTu.cao_de_tu - duLieuNguoiChoi.deTu.bien_mat[i].getHeight() * 0.45f) / 2f, duLieuNguoiChoi.deTu.bien_mat[i].getWidth() * 0.45f, duLieuNguoiChoi.deTu.bien_mat[i].getHeight() * 0.45f);
-                    }
-                }
-            }
-        }
 
         float daoDong;
         if (dangMangVanBay) {
@@ -1837,54 +1826,6 @@ public class NhanVat {
                 float duoiX = flipX ? x + rong + 20 : x - 20;
                 batch.draw(veHUD.duoichat, duoiX, y + cao + 15, 16 * flipScale, 16);
                 veHUD.fontchat.draw(batch, layout, x + (rong - 200) / 2f + 10f, y + cao + 30 + 18f + layout.height);
-                if (duLieuNguoiChoi.coDeTu()) {
-                    if (veHUD.tinNhanChat.equals("bao ve") || veHUD.tinNhanChat.equals("protect")) {
-                        veHUD.trangthaide = "Bảo vệ";
-                        duLieuNguoiChoi.deTu.capNhatTrangThaiDeTu();
-                    } else if (veHUD.tinNhanChat.equals("tan cong") || veHUD.tinNhanChat.equals("attack")) {
-                        veHUD.trangthaide = "Tấn công";
-                        duLieuNguoiChoi.deTu.capNhatTrangThaiDeTu();
-                    } else if (veHUD.tinNhanChat.equals("di theo") || veHUD.tinNhanChat.equals("follow")) {
-                        veHUD.trangthaide = "Đi theo";
-                        duLieuNguoiChoi.deTu.capNhatTrangThaiDeTu();
-                    } else if (veHUD.tinNhanChat.equals("ve nha") || veHUD.tinNhanChat.equals("go home")) {
-                        veHUD.trangthaide = "Về nhà";
-                        duLieuNguoiChoi.deTu.capNhatTrangThaiDeTu();
-                    }
-                    if (veHUD.tinNhanChat.equals("bien hinh") || veHUD.tinNhanChat.equals("transformation")) {
-                        if (duLieuNguoiChoi.deTu.getTenSkill(3) != null && duLieuNguoiChoi.deTu.getTenSkill(3).equals("Biến hình") && duLieuNguoiChoi.deTu.timeCoolDownBienKhi == 0 && duLieuNguoiChoi.deTu.timeChoBienKhi == 0) {
-                            duLieuNguoiChoi.deTu.timeChoBienKhi = 0.6f;
-                            duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Dạ sư phụ",3f);
-                        }
-                    }
-                    if (veHUD.tinNhanChat.equals("huy bien hinh")) {
-                        if (duLieuNguoiChoi.deTu.getTenSkill(3) != null && duLieuNguoiChoi.deTu.getTenSkill(3).equals("Biến hình") && duLieuNguoiChoi.deTu.dangBienKhi) {
-                            duLieuNguoiChoi.deTu.huyBienKhi();
-                            duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Dạ sư phụ",3f);
-                        }
-                    }
-                    if (veHUD.tinNhanChat.contains("ten con la:") && !veHUD.daRanDomChatDeTu) {
-                        String[] part = veHUD.tinNhanChat.split(":", -1);
-                        String tenDeTu = part[1].trim();
-                        if (duLieuNguoiChoi.deTu.chuaSetTenDeTu) {
-                            if (!tenDeTu.isEmpty()) {
-                                duLieuNguoiChoi.deTu.setTenDeTu(tenDeTu);
-                                String[] text = {
-                                    "Con xin nhận tên " + tenDeTu + " ạ, con sẽ không làm sư phụ thất vọng.",
-                                    "Tên " + tenDeTu + " , đệ tử xin ghi nhớ!",
-                                    "Từ nay con là " + tenDeTu + ", cám ơn sư phụ."
-                                };
-                                duLieuNguoiChoi.deTu.setTinNhanDeTuChat(text[MathUtils.random(text.length - 1)], 4f);
-                                duLieuNguoiChoi.deTu.chuaSetTenDeTu = false;
-                            } else {
-                                duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Sư phụ chưa đặt tên rõ ràng cho con...", 4f);
-                            }
-                        } else {
-                            duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Sư phụ, tên con là " + duLieuNguoiChoi.deTu.getTen() + " mà...", 4f);
-                        }
-                        veHUD.daRanDomChatDeTu = true;
-                    }
-                }
             }
         } else {
             if (!veHUD.dangHopThe && !veHUD.dangHopTheThuong) {
