@@ -156,7 +156,6 @@ public class GameSocketGo {
                     rttJitter = (rttJitter * 7 + rttDiff * 3) / 10; // EMA giống lastRtt
                     waitingPong = false;
                     PlayerState.updateRenderDelay();
-                    System.out.println("ĐỔI RTT: "+lastRtt);
                 }
                 @Override
                 public void onError(Exception ex) {
@@ -487,7 +486,6 @@ public class GameSocketGo {
                         if (client != null && client.isOpen() && !waitingPong) {
                             startClockSync();
                         }
-                        System.out.println("ĐỔI clockOffset: "+clockOffset);
                     } else if (now - lastClockSyncAt > 5_000) {
                         long delta = Math.abs(newOffset - clockOffset);
                         if (delta > 200) {
@@ -504,7 +502,6 @@ public class GameSocketGo {
                         if (client != null && client.isOpen() && !waitingPong) {
                             startClockSync();
                         }
-                        System.out.println("ĐỔI clockOffset: "+clockOffset);
                     }
 
                 }

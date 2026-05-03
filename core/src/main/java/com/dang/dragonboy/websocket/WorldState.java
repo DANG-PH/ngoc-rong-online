@@ -524,7 +524,6 @@ public class WorldState {
     public static void onAddItem(Object... args) {
         if (args.length == 0) return;
         try {
-            System.out.println("CHECK DONE");
             JSONObject obj = toJsonObject(args[0]);
 
             VeHUD veHUD = State_Management.getVeHUD();
@@ -534,24 +533,21 @@ public class WorldState {
             String uuid = obj.optString("uuid","");
 
             for (Item item : duLieuNguoiChoi.getHanhTrang()) {
-                if (item.tmpId == tmpId) {
+                if (item != null && item.tmpId == tmpId) {
                     item.uuid = uuid;
                     item.tmpId = -1;
-                    System.out.println("DONE UUID HANH TRANG");
                 }
             }
             for (Item item : duLieuNguoiChoi.getHanhTrangDangMac()) {
-                if (item.tmpId == tmpId) {
+                if (item != null && item.tmpId == tmpId) {
                     item.uuid = uuid;
                     item.tmpId = -1;
-                    System.out.println("DONE UUID HANH TRANG DANG MAC");
                 }
             }
             for (Item item : duLieuNguoiChoi.getHanhTrangRuongDo()) {
-                if (item.tmpId == tmpId) {
+                if (item != null && item.tmpId == tmpId) {
                     item.uuid = uuid;
                     item.tmpId = -1;
-                    System.out.println("DONE UUID HANH TRANG RUONG DO");
                 }
             }
         } catch (Exception e) {

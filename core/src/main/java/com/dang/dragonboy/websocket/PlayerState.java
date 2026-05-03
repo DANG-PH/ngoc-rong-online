@@ -714,7 +714,6 @@ public class PlayerState {
             // Tạo anchor tại vị trí render hiện tại với timestamp = now - RENDER_DELAY_MS
             // để renderTime nằm đúng giữa anchor và snap mới → happy path ngay lập tức
             if (latestSnap != null && (serverTime - latestSnap.time) > getRenderDelay()) {
-                System.out.println("ANCHOR CREATED, gap=" + (serverTime - latestSnap.time));
                 snapshots.clear();
                 PlayerSnapshot anchor = new PlayerSnapshot();
                 anchor.time = serverTime - getRenderDelay() - 100;
@@ -800,7 +799,7 @@ public class PlayerState {
         if (snapCopy[0].time > renderTime) {
             // renderDelay tăng đột ngột hoặc TCP Burst
             // Đứng yên, renderTime tự bắt kịp
-            System.out.println("ALL PACKAGE TƯƠNG LAI, TIME: " + System.currentTimeMillis());
+//            System.out.println("ALL PACKAGE TƯƠNG LAI, TIME: " + System.currentTimeMillis());
             return;
         }
 
@@ -833,7 +832,7 @@ public class PlayerState {
                 y_truoc_dash = y;
                 flip_truoc_dash = (dir == -1);
                 timeTeleport = TIME_TELE_PORT_MAX;
-                System.out.println("TCP BURST: Trong nhánh 1, RENDER DELAY: " + getRenderDelay()+", JUMP DIST: "+jumpDist);
+//                System.out.println("TCP BURST: Trong nhánh 1, RENDER DELAY: " + getRenderDelay()+", JUMP DIST: "+jumpDist);
             }
 
             x = newX;
@@ -851,7 +850,7 @@ public class PlayerState {
                 x = snapLatest.x;
                 y = snapLatest.y;
                 timeTeleport = TIME_TELE_PORT_MAX;
-                System.out.println("Lag, Tele + Snapshot cuối"+ getRenderDelay());
+//                System.out.println("Lag, Tele + Snapshot cuối"+ getRenderDelay());
             } else if (dist < 2f) {
                 x = snapLatest.x;
                 y = snapLatest.y;
@@ -861,8 +860,8 @@ public class PlayerState {
                 float catchupSpeed = Math.min(8f, 4f + dist * 0.1f);  // 4 → 8
                 x += dx * catchupSpeed * delta;
                 y += dy * catchupSpeed * delta;
-                System.out.println("Lag, Lerp dần, DIST: "+dist);
-                System.out.println("SNAPLAST-TIME: "+snapLatest.time + ", RENDERTIME: "+renderTime+", DELAYRENDER: "+ getRenderDelay());
+//                System.out.println("Lag, Lerp dần, DIST: "+dist);
+//                System.out.println("SNAPLAST-TIME: "+snapLatest.time + ", RENDERTIME: "+renderTime+", DELAYRENDER: "+ getRenderDelay());
             }
 
             applyDiscreteFromSnapshot(snapLatest);
