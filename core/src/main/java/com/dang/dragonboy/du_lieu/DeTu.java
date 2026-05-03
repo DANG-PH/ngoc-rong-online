@@ -416,14 +416,7 @@ public class DeTu {
         }
         if (sucManh >= 1_500_000 && chuaFixAvtAoQuan) {
             DeTuCauHinh c2 = Doi_avt_ao_quan_DeTu(hanhtinh,hanhtinh+"_base","set_base","set_base");
-            fixCaiTrang(
-                c2.dau_dung_de_tu, c2.dau_chay_de_tu,
-                c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
-                c2.chan_dung_de_tu, c2.chan_nhay_de_tu, c2.chan_roi_de_tu, c2.chan_chay_de_tu,
-                c2.than_bay_de_tu, c2.chan_bay_de_tu,
-                c2.chan_gong_de_tu,c2.than_thu_de_tu,
-                c2.lechMapDeTu
-            );
+            fixCaiTrang(c2);
             texAvtDeTu = new Texture("nhanvat/detu/" + hanhtinh + "/avt" + "lon" + ".png");
             if (!this.getTrangthai().equals("Về nhà") && SucManhCongThem!=0) {
                 setTinNhanDeTuChat("Sư phụ ơi con lên cấp rồi", 3f);
@@ -433,12 +426,12 @@ public class DeTu {
     }
 
     public void tangHpGoc(int HpCongThem,boolean choPhepHienThi){
-        int[] chisoCaiTrang = getChisoCaiTrang(); // chỉ số cải tranga
-        int[] chisoAo = getChisoAo();
-        int[] chisoQuan = getChisoQuan();
-        int[] chisoGang = getChisoGang();
-        int[] chisoGiay = getChisoGiay();
-        int[] chisoRada = getChisoRada();
+        int[] chisoCaiTrang = getChisoTuSlot(5);
+        int[] chisoAo       = getChisoTuSlot(0);
+        int[] chisoQuan     = getChisoTuSlot(1);
+        int[] chisoGang     = getChisoTuSlot(2);
+        int[] chisoGiay     = getChisoTuSlot(3);
+        int[] chisoRada     = getChisoTuSlot(4);
         float tilePhanTramHPctrang = 0;
         float tilePhanTramHPao = 0;
         float tilePhanTramHPquan = 0;
@@ -488,12 +481,12 @@ public class DeTu {
         this.HpDeTu += HpCongThemThucTeNappa;
     }
     public void giamHpGoc(int HpCongThem){
-        int[] chisoCaiTrang = getChisoCaiTrang(); // chỉ số cải trang
-        int[] chisoAo = getChisoAo();
-        int[] chisoQuan = getChisoQuan();
-        int[] chisoGang = getChisoGang();
-        int[] chisoGiay = getChisoGiay();
-        int[] chisoRada = getChisoRada();
+        int[] chisoCaiTrang = getChisoTuSlot(5);
+        int[] chisoAo       = getChisoTuSlot(0);
+        int[] chisoQuan     = getChisoTuSlot(1);
+        int[] chisoGang     = getChisoTuSlot(2);
+        int[] chisoGiay     = getChisoTuSlot(3);
+        int[] chisoRada     = getChisoTuSlot(4);
         float tilePhanTramHPctrang = 0;
         float tilePhanTramHPao = 0;
         float tilePhanTramHPquan = 0;
@@ -537,12 +530,12 @@ public class DeTu {
     }
 
     public void tangKiGoc(int KiCongThem, boolean choPhepHienThi) {
-        int[] chisoCaiTrang = getChisoCaiTrang();
-        int[] chisoAo = getChisoAo();
-        int[] chisoQuan = getChisoQuan();
-        int[] chisoGang = getChisoGang();
-        int[] chisoGiay = getChisoGiay();
-        int[] chisoRada = getChisoRada();
+        int[] chisoCaiTrang = getChisoTuSlot(5);
+        int[] chisoAo       = getChisoTuSlot(0);
+        int[] chisoQuan     = getChisoTuSlot(1);
+        int[] chisoGang     = getChisoTuSlot(2);
+        int[] chisoGiay     = getChisoTuSlot(3);
+        int[] chisoRada     = getChisoTuSlot(4);
 
         float tileCT = 0, tileAo = 0, tileQuan = 0, tileGang = 0, tileGiay = 0, tileRada = 0;
 
@@ -569,12 +562,12 @@ public class DeTu {
         this.KiDeTu += k6;
     }
     public void giamKiGoc(int KiCongThem) {
-        int[] chisoCaiTrang = getChisoCaiTrang();
-        int[] chisoAo = getChisoAo();
-        int[] chisoQuan = getChisoQuan();
-        int[] chisoGang = getChisoGang();
-        int[] chisoGiay = getChisoGiay();
-        int[] chisoRada = getChisoRada();
+        int[] chisoCaiTrang = getChisoTuSlot(5);
+        int[] chisoAo       = getChisoTuSlot(0);
+        int[] chisoQuan     = getChisoTuSlot(1);
+        int[] chisoGang     = getChisoTuSlot(2);
+        int[] chisoGiay     = getChisoTuSlot(3);
+        int[] chisoRada     = getChisoTuSlot(4);
 
         float tileCT = 0, tileAo = 0, tileQuan = 0, tileGang = 0, tileGiay = 0, tileRada = 0;
 
@@ -597,12 +590,12 @@ public class DeTu {
         this.KiDeTu -= k6;
     }
     public void tangSucDanhGoc(int SucDanhCongThem, boolean choPhepHienThi) {
-        int[] chisoCaiTrang = getChisoCaiTrang();
-        int[] chisoAo = getChisoAo();
-        int[] chisoQuan = getChisoQuan();
-        int[] chisoGang = getChisoGang();
-        int[] chisoGiay = getChisoGiay();
-        int[] chisoRada = getChisoRada();
+        int[] chisoCaiTrang = getChisoTuSlot(5);
+        int[] chisoAo       = getChisoTuSlot(0);
+        int[] chisoQuan     = getChisoTuSlot(1);
+        int[] chisoGang     = getChisoTuSlot(2);
+        int[] chisoGiay     = getChisoTuSlot(3);
+        int[] chisoRada     = getChisoTuSlot(4);
 
         float tileCT = 0, tileAo = 0, tileQuan = 0, tileGang = 0, tileGiay = 0, tileRada = 0;
 
@@ -629,12 +622,12 @@ public class DeTu {
         this.SucDanhDeTu += s6;
     }
     public void giamSucDanhGoc(int SucDanhCongThem) {
-        int[] chisoCaiTrang = getChisoCaiTrang();
-        int[] chisoAo = getChisoAo();
-        int[] chisoQuan = getChisoQuan();
-        int[] chisoGang = getChisoGang();
-        int[] chisoGiay = getChisoGiay();
-        int[] chisoRada = getChisoRada();
+        int[] chisoCaiTrang = getChisoTuSlot(5);
+        int[] chisoAo       = getChisoTuSlot(0);
+        int[] chisoQuan     = getChisoTuSlot(1);
+        int[] chisoGang     = getChisoTuSlot(2);
+        int[] chisoGiay     = getChisoTuSlot(3);
+        int[] chisoRada     = getChisoTuSlot(4);
 
         float tileCT = 0, tileAo = 0, tileQuan = 0, tileGang = 0, tileGiay = 0, tileRada = 0;
 
@@ -859,445 +852,35 @@ public class DeTu {
         }
     }
 
-    // cai trang
-    public void setIdCaiTrang(String id) {
-        this.idCaiTrang = id;
+    private int[] getChisoTuSlot(int slot) {
+        Item item = hanhTrangDangMac.get(slot);
+        return item != null ? item.getChiso() : null;
     }
 
-    public String getIdCaiTrang() {
-        return idCaiTrang;
-    }
-    public void setTenCaiTrang(String ten) {
-        this.tenCaiTrang = ten;
-    }
-
-    public String getTenCaiTrang() {
-        return tenCaiTrang;
-    }
-    public void setMoTaCaiTrang(String mota) {
-        this.moTaCaiTrang = mota;
-    }
-
-    public String getMoTaCaiTrang() {
-        return moTaCaiTrang;
-    }
-
-    public void setChisoCaiTrang(int[] chiso) {
-        this.chisoCaiTrang = chiso;
-    }
-
-    public int[] getChisoCaiTrang() {
-        return chisoCaiTrang;
-    }
-
-    public void setHanSuDungCaiTrang(float hanSuDung){
-        this.hanSuDungCaiTrang = hanSuDung;
-    }
-
-    public float getHanSuDungCaiTrang() {
-        return hanSuDungCaiTrang;
-    }
-
-    public void setHanhTinhCaiTrang(String ht){
-        this.hanhTinhCaiTrang = ht;
-    }
-
-    public String getHanhTinhCaiTrang() {
-        return hanhTinhCaiTrang;
-    }
-
-    public void setSucManhYeuCauCaiTrang(long SucManhYeuCau) {
-        this.sucManhYeuCauCaiTrang = SucManhYeuCau;
-    }
-
-    public long getSucManhYeuCauCaiTrang() {
-        return sucManhYeuCauCaiTrang;
-    }
-
-    // ao
-    public void setIdAo(String id) {
-        this.idAo = id;
-    }
-
-    public String getIdAo() {
-        return idAo;
-    }
-
-    public void setTenAo(String ten) {
-        this.tenAo = ten;
-    }
-
-    public String getTenAo() {
-        return tenAo;
-    }
-
-    public void setMoTaAo(String mota) {
-        this.moTaAo = mota;
-    }
-
-    public String getMoTaAo() {
-        return moTaAo;
-    }
-
-    public void setChisoAo(int[] chiso) {
-        this.chisoAo = chiso;
-    }
-
-    public int[] getChisoAo() {
-        return chisoAo;
-    }
-
-    public void setSoSaoAo(int soSao) {
-        this.soSaoAo =  soSao;
-    }
-
-    public int getSoSaoAo() {
-        return soSaoAo;
-    }
-
-    public void setSoCapAo(int soCap) {
-        this.soCapAo =  soCap;
-    }
-
-    public int getSoCapAo() {
-        return soCapAo;
-    }
-
-    public void setHanhTinhAo(String ht) {
-        this.hanhTinhAo = ht;
-    }
-
-    public String getHanhTinhAo() {
-        return hanhTinhAo;
-    }
-
-    public void setSucManhYeuCauAo(long SucManhYeuCau) {
-        this.sucManhYeuCauAo = SucManhYeuCau;
-    }
-
-    public long getSucManhYeuCauAo() {
-        return sucManhYeuCauAo;
-    }
-
-    public void setSoSaoCuongHoaAo(int soSao) {
-        this.soSaoCuongHoaAo =  soSao;
-    }
-
-    public int getSoSaoCuongHoaAo() {
-        return soSaoCuongHoaAo;
-    }
-    // quan
-    public void setIdQuan(String id) {
-        this.idQuan = id;
-    }
-
-    public String getIdQuan() {
-        return idQuan;
-    }
-
-    public void setTenQuan(String ten) {
-        this.tenQuan = ten;
-    }
-
-    public String getTenQuan() {
-        return tenQuan;
-    }
-
-    public void setMoTaQuan(String mota) {
-        this.moTaQuan = mota;
-    }
-
-    public String getMoTaQuan() {
-        return moTaQuan;
-    }
-
-    public void setChisoQuan(int[] chiso) {
-        this.chisoQuan = chiso;
-    }
-
-    public int[] getChisoQuan() {
-        return chisoQuan;
-    }
-
-    public void setSoSaoQuan(int soSao) {
-        this.soSaoQuan =  soSao;
-    }
-
-    public int getSoSaoQuan() {
-        return soSaoQuan;
-    }
-
-    public void setSoCapQuan(int soCap) {
-        this.soCapQuan =  soCap;
-    }
-
-    public int getSoCapQuan() {
-        return soCapQuan;
-    }
-
-    public void setHanhTinhQuan(String ht) {
-        this.hanhTinhQuan = ht;
-    }
-
-    public String getHanhTinhQuan() {
-        return hanhTinhQuan;
-    }
-
-    public void setSucManhYeuCauQuan(long SucManhYeuCau) {
-        this.sucManhYeuCauQuan = SucManhYeuCau;
-    }
-
-    public long getSucManhYeuCauQuan() {
-        return sucManhYeuCauQuan;
-    }
-    public void setSoSaoCuongHoaQuan(int soSao) {
-        this.soSaoCuongHoaQuan =  soSao;
-    }
-
-    public int getSoSaoCuongHoaQuan() {
-        return soSaoCuongHoaQuan;
-    }
-    // gang
-    public void setIdGang(String id) {
-        this.idGang = id;
-    }
-
-    public String getIdGang() {
-        return idGang;
-    }
-    public void setTenGang(String ten) {
-        this.tenGang = ten;
-    }
-
-    public String getTenGang() {
-        return tenGang;
-    }
-
-    public void setMoTaGang(String mota) {
-        this.moTaGang = mota;
-    }
-
-    public String getMoTaGang() {
-        return moTaGang;
-    }
-
-    public void setChisoGang(int[] chiso) {
-        this.chisoGang = chiso;
-    }
-
-    public int[] getChisoGang() {
-        return chisoGang;
-    }
-
-    public void setSoSaoGang(int soSao) {
-        this.soSaoGang =  soSao;
-    }
-
-    public int getSoSaoGang() {
-        return soSaoGang;
-    }
-
-    public void setSoCapGang(int soCap) {
-        this.soCapGang =  soCap;
-    }
-
-    public int getSoCapGang() {
-        return soCapGang;
-    }
-
-    public void setHanhTinhGang(String ht) {
-        this.hanhTinhGang = ht;
-    }
-
-    public String getHanhTinhGang() {
-        return hanhTinhGang;
-    }
-
-    public void setSucManhYeuCauGang(long SucManhYeuCau) {
-        this.sucManhYeuCauGang = SucManhYeuCau;
-    }
-
-    public long getSucManhYeuCauGang() {
-        return sucManhYeuCauGang;
-    }
-    public void setSoSaoCuongHoaGang(int soSao) {
-        this.soSaoCuongHoaGang =  soSao;
-    }
-
-    public int getSoSaoCuongHoaGang() {
-        return soSaoCuongHoaGang;
-    }
-    //giay
-    public void setIdGiay(String id) {
-        this.idGiay = id;
-    }
-
-    public String getIdGiay() {
-        return idGiay;
-    }
-    public void setTenGiay(String ten) {
-        this.tenGiay = ten;
-    }
-
-    public String getTenGiay() {
-        return tenGiay;
-    }
-
-    public void setMoTaGiay(String mota) {
-        this.moTaGiay = mota;
-    }
-
-    public String getMoTaGiay() {
-        return moTaGiay;
-    }
-
-    public void setChisoGiay(int[] chiso) {
-        this.chisoGiay = chiso;
-    }
-
-    public int[] getChisoGiay() {
-        return chisoGiay;
-    }
-
-    public void setSoSaoGiay(int soSao) {
-        this.soSaoGiay =  soSao;
-    }
-
-    public int getSoSaoGiay() {
-        return soSaoGiay;
-    }
-
-    public void setSoCapGiay(int soCap) {
-        this.soCapGiay =  soCap;
-    }
-
-    public int getSoCapGiay() {
-        return soCapGiay;
-    }
-
-    public void setHanhTinhGiay(String ht) {
-        this.hanhTinhGiay = ht;
-    }
-
-    public String getHanhTinhGiay() {
-        return hanhTinhGiay;
-    }
-
-    public void setSucManhYeuCauGiay(long SucManhYeuCau) {
-        this.sucManhYeuCauGiay = SucManhYeuCau;
-    }
-
-    public long getSucManhYeuCauGiay() {
-        return sucManhYeuCauGiay;
-    }
-    public void setSoSaoCuongHoaGiay(int soSao) {
-        this.soSaoCuongHoaGiay =  soSao;
-    }
-
-    public int getSoSaoCuongHoaGiay() {
-        return soSaoCuongHoaGiay;
-    }
-
-    // rada
-    public void setIdRada(String id) {
-        this.idRada = id;
-    }
-
-    public String getIdRada() {
-        return idRada;
-    }
-    public void setTenRada(String ten) {
-        this.tenRada = ten;
-    }
-
-    public String getTenRada() {
-        return tenRada;
-    }
-
-    public void setMoTaRada(String mota) {
-        this.moTaRada = mota;
-    }
-
-    public String getMoTaRada() {
-        return moTaRada;
-    }
-
-    public void setChisoRada(int[] chiso) {
-        this.chisoRada = chiso;
-    }
-
-    public int[] getChisoRada() {
-        return chisoRada;
-    }
-
-    public void setSoSaoRada(int soSao) {
-        this.soSaoRada =  soSao;
-    }
-
-    public int getSoSaoRada() {
-        return soSaoRada;
-    }
-
-    public void setSoCapRada(int soCap) {
-        this.soCapRada =  soCap;
-    }
-
-    public int getSoCapRada() {
-        return soCapRada;
-    }
-
-    public void setHanhTinhRada(String ht) {
-        this.hanhTinhRada = ht;
-    }
-
-    public String getHanhTinhRada() {
-        return hanhTinhRada;
-    }
-
-    public void setSucManhYeuCauRada(long SucManhYeuCau) {
-        this.sucManhYeuCauRada = SucManhYeuCau;
-    }
-
-    public long getSucManhYeuCauRada() {
-        return sucManhYeuCauRada;
-    }
-    public void setSoSaoCuongHoaRada(int soSao) {
-        this.soSaoCuongHoaRada =  soSao;
-    }
-
-    public int getSoSaoCuongHoaRada() {
-        return soSaoCuongHoaRada;
-    }
-
-
-    public void fixCaiTrang
-        (Texture dau_dung, Texture dau_chay,
-         Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,
-         Texture chan_dung, Texture chan_nhay, Texture chan_roi, Texture[] chan_chay,
-         Texture than_bay, Texture chan_bay,Texture chan_gong,Texture than_thu, Map<TrangThaiDeTu, List<DoLechModular>> lechTheoTrangThai){
+    public void fixCaiTrang (DeTuCauHinh c){
 
-        this.dau_dung = dau_dung;
-        this.dau_chay = dau_chay;
-        this.than_dung = than_dung;
-        this.than_nhay = than_nhay;
-        this.than_roi = than_roi;
-        this.than_chay = than_chay;
+        this.dau_dung = c.dau_dung_de_tu;
+        this.dau_chay = c.dau_chay_de_tu;
+        this.than_dung = c.than_dung_de_tu;
+        this.than_nhay = c.than_nhay_de_tu;
+        this.than_roi = c.than_roi_de_tu;
+        this.than_chay = c.than_chay_de_tu;
 
-        this.chan_dung = chan_dung;
-        this.chan_nhay = chan_nhay;
-        this.chan_roi = chan_roi;
-        this.chan_chay = chan_chay;
+        this.chan_dung = c.chan_dung_de_tu;
+        this.chan_nhay = c.chan_nhay_de_tu;
+        this.chan_roi = c.chan_roi_de_tu;
+        this.chan_chay = c.chan_chay_de_tu;
 
-        this.than_bay = than_bay;
-        this.chan_bay = chan_bay;
+        this.than_bay = c.than_bay_de_tu;
+        this.chan_bay = c.chan_bay_de_tu;
 
-        this.chan_gong = chan_gong;
-        this.than_thu = than_thu;
+        this.chan_gong = c.chan_gong_de_tu;
+        this.than_thu = c.than_thu_de_tu;
 
         this.rong_de_tu = than_dung.getWidth() * tiLe;
         this.cao_de_tu = chan_dung.getHeight() * tiLe + than_dung.getHeight() * tiLe + dau_dung.getHeight() * 0.15f;
 
-        this.lechTheoTrangThai = lechTheoTrangThai;
+        this.lechTheoTrangThai = c.lechMapDeTu;
     }
     private DeTuCauHinh Doi_avt_ao_quan_DeTu(String HanhTinh, String TenAvatar , String ao, String quan){
         return DeTuXuLy.xuly_id("avatar_"+HanhTinh+"+"+TenAvatar+"+"+ao+"+"+quan);
@@ -1316,14 +899,7 @@ public class DeTu {
                 sucDanhTangBienKhi = 30+10*this.getCapSkill(3);
                 hpTangBienKhi = 30+10*this.getCapSkill(3);
                 DeTuCauHinh c2 = veHUD.DoicaitrangDeTu("khi_"+this.getCapSkill(3));
-                this.fixCaiTrang(
-                    c2.dau_dung_de_tu, c2.dau_chay_de_tu,
-                    c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
-                    c2.chan_dung_de_tu, c2.chan_nhay_de_tu, c2.chan_roi_de_tu, c2.chan_chay_de_tu,
-                    c2.than_bay_de_tu, c2.chan_bay_de_tu,
-                    c2.chan_gong_de_tu,c2.than_thu_de_tu,
-                    c2.lechMapDeTu
-                );
+                this.fixCaiTrang(c2);
             }
         }
         if (timeBienKhi > 0) {
@@ -2079,24 +1655,10 @@ public class DeTu {
         ArrayList<Item> danhSach = this.getHanhTrangDangMac();
         if (DeTuXuLy.getDangMacCaiTrang() && !DeTuXuLy.getDangMacAvatar() && danhSach.get(5) != null) {
             DeTuCauHinh c2 = veHUD.DoicaitrangDeTu(danhSach.get(5).getId());
-            this.fixCaiTrang(
-                c2.dau_dung_de_tu, c2.dau_chay_de_tu,
-                c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
-                c2.chan_dung_de_tu, c2.chan_nhay_de_tu, c2.chan_roi_de_tu, c2.chan_chay_de_tu,
-                c2.than_bay_de_tu, c2.chan_bay_de_tu,
-                c2.chan_gong_de_tu,c2.than_thu_de_tu,
-                c2.lechMapDeTu
-            );
+            this.fixCaiTrang(c2);
         } else {
             DeTuCauHinh c2 = veHUD.Doi_avt_ao_quan_DeTu(this.getHanhtinh(), avtdangmac,veHUD.aodetudangmac , veHUD.quandetudangmac);
-            this.fixCaiTrang(
-                c2.dau_dung_de_tu, c2.dau_chay_de_tu,
-                c2.than_dung_de_tu, c2.than_nhay_de_tu, c2.than_roi_de_tu, c2.than_chay_de_tu,
-                c2.chan_dung_de_tu, c2.chan_nhay_de_tu, c2.chan_roi_de_tu, c2.chan_chay_de_tu,
-                c2.than_bay_de_tu, c2.chan_bay_de_tu,
-                c2.chan_gong_de_tu,c2.than_thu_de_tu,
-                c2.lechMapDeTu
-            );
+            this.fixCaiTrang(c2);
         }
     }
 }

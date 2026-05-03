@@ -531,25 +531,39 @@ public class WorldState {
             VeHUD veHUD = State_Management.getVeHUD();
             DuLieuNguoiChoi duLieuNguoiChoi = veHUD.getDuLieuNguoiChoi();
 
-            int tmpId = obj.optInt("tmpId",-1);
-            String uuid = obj.optString("uuid","");
+            int tmpId = obj.optInt("tmpId", -1);
+            String uuid = obj.optString("uuid", "");
+
+            System.out.println("[onAddItem] tmpId=" + tmpId + " uuid=" + uuid);
 
             for (Item item : duLieuNguoiChoi.getHanhTrang()) {
-                if (item != null && item.tmpId == tmpId) {
-                    item.uuid = uuid;
-                    item.tmpId = -1;
+                if (item != null) {
+                    System.out.println("  [hanhTrang] id=" + item.getId() + " tmpId=" + item.tmpId + " uuid=" + item.uuid);
+                    if (item.tmpId == tmpId) {
+                        item.uuid = uuid;
+                        item.tmpId = -1;
+                        System.out.println("  → MATCH hanhTrang: " + item.getId());
+                    }
                 }
             }
             for (Item item : duLieuNguoiChoi.getHanhTrangDangMac()) {
-                if (item != null && item.tmpId == tmpId) {
-                    item.uuid = uuid;
-                    item.tmpId = -1;
+                if (item != null) {
+                    System.out.println("  [dangMac] id=" + item.getId() + " tmpId=" + item.tmpId + " uuid=" + item.uuid);
+                    if (item.tmpId == tmpId) {
+                        item.uuid = uuid;
+                        item.tmpId = -1;
+                        System.out.println("  → MATCH dangMac: " + item.getId());
+                    }
                 }
             }
             for (Item item : duLieuNguoiChoi.getHanhTrangRuongDo()) {
-                if (item != null && item.tmpId == tmpId) {
-                    item.uuid = uuid;
-                    item.tmpId = -1;
+                if (item != null) {
+                    System.out.println("  [ruongDo] id=" + item.getId() + " tmpId=" + item.tmpId + " uuid=" + item.uuid);
+                    if (item.tmpId == tmpId) {
+                        item.uuid = uuid;
+                        item.tmpId = -1;
+                        System.out.println("  → MATCH ruongDo: " + item.getId());
+                    }
                 }
             }
         } catch (Exception e) {

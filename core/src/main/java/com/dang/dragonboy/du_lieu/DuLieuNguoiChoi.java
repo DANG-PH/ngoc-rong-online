@@ -340,13 +340,13 @@ public class DuLieuNguoiChoi {
     }
 
     public void tangHpGoc(int HpCongThem,boolean choPhepHienThi){
-        int[] chisoCaiTrang = nhanVat.getChisoCaiTrang(); // chỉ số cải tranga
-        int[] chisoAo = nhanVat.getChisoAo();
-        int[] chisoQuan = nhanVat.getChisoQuan();
-        int[] chisoGang = nhanVat.getChisoGang();
-        int[] chisoGiay = nhanVat.getChisoGiay();
-        int[] chisoRada = nhanVat.getChisoRada();
-        int[] chisoGlt = nhanVat.getChisoGiapLuyenTap();
+        int[] chisoCaiTrang = getChisoTuSlot(5);
+        int[] chisoAo       = getChisoTuSlot(0);
+        int[] chisoQuan     = getChisoTuSlot(1);
+        int[] chisoGang     = getChisoTuSlot(2);
+        int[] chisoGiay     = getChisoTuSlot(3);
+        int[] chisoRada     = getChisoTuSlot(4);
+        int[] chisoGlt      = getChisoTuSlot(6);
         float tilePhanTramHPctrang = 0;
         float tilePhanTramHPao = 0;
         float tilePhanTramHPquan = 0;
@@ -401,13 +401,13 @@ public class DuLieuNguoiChoi {
         this.HpNhanVat += HpCongThemThucTeNappa;
     }
     public void giamHpGoc(int HpCongThem){
-        int[] chisoCaiTrang = nhanVat.getChisoCaiTrang(); // chỉ số cải trang
-        int[] chisoAo = nhanVat.getChisoAo();
-        int[] chisoQuan = nhanVat.getChisoQuan();
-        int[] chisoGang = nhanVat.getChisoGang();
-        int[] chisoGiay = nhanVat.getChisoGiay();
-        int[] chisoRada = nhanVat.getChisoRada();
-        int[] chisoGlt = nhanVat.getChisoGiapLuyenTap();
+        int[] chisoCaiTrang = getChisoTuSlot(5);
+        int[] chisoAo       = getChisoTuSlot(0);
+        int[] chisoQuan     = getChisoTuSlot(1);
+        int[] chisoGang     = getChisoTuSlot(2);
+        int[] chisoGiay     = getChisoTuSlot(3);
+        int[] chisoRada     = getChisoTuSlot(4);
+        int[] chisoGlt      = getChisoTuSlot(6);
         float tilePhanTramHPctrang = 0;
         float tilePhanTramHPao = 0;
         float tilePhanTramHPquan = 0;
@@ -455,13 +455,13 @@ public class DuLieuNguoiChoi {
     }
 
     public void tangKiGoc(int KiCongThem, boolean choPhepHienThi) {
-        int[] chisoCaiTrang = nhanVat.getChisoCaiTrang();
-        int[] chisoAo = nhanVat.getChisoAo();
-        int[] chisoQuan = nhanVat.getChisoQuan();
-        int[] chisoGang = nhanVat.getChisoGang();
-        int[] chisoGiay = nhanVat.getChisoGiay();
-        int[] chisoRada = nhanVat.getChisoRada();
-        int[] chisoGlt = nhanVat.getChisoGiapLuyenTap();
+        int[] chisoCaiTrang = getChisoTuSlot(5);
+        int[] chisoAo       = getChisoTuSlot(0);
+        int[] chisoQuan     = getChisoTuSlot(1);
+        int[] chisoGang     = getChisoTuSlot(2);
+        int[] chisoGiay     = getChisoTuSlot(3);
+        int[] chisoRada     = getChisoTuSlot(4);
+        int[] chisoGlt      = getChisoTuSlot(6);
 
         float tileCT = 0, tileAo = 0, tileQuan = 0, tileGang = 0, tileGiay = 0, tileRada = 0, tileGlt = 0;
 
@@ -490,13 +490,13 @@ public class DuLieuNguoiChoi {
         this.KiNhanVat += k7;
     }
     public void giamKiGoc(int KiCongThem) {
-        int[] chisoCaiTrang = nhanVat.getChisoCaiTrang();
-        int[] chisoAo = nhanVat.getChisoAo();
-        int[] chisoQuan = nhanVat.getChisoQuan();
-        int[] chisoGang = nhanVat.getChisoGang();
-        int[] chisoGiay = nhanVat.getChisoGiay();
-        int[] chisoRada = nhanVat.getChisoRada();
-        int[] chisoGlt = nhanVat.getChisoGiapLuyenTap();
+        int[] chisoCaiTrang = getChisoTuSlot(5);
+        int[] chisoAo       = getChisoTuSlot(0);
+        int[] chisoQuan     = getChisoTuSlot(1);
+        int[] chisoGang     = getChisoTuSlot(2);
+        int[] chisoGiay     = getChisoTuSlot(3);
+        int[] chisoRada     = getChisoTuSlot(4);
+        int[] chisoGlt      = getChisoTuSlot(6);
 
         float tileCT = 0, tileAo = 0, tileQuan = 0, tileGang = 0, tileGiay = 0, tileRada = 0, tileGlt = 0;
 
@@ -521,13 +521,13 @@ public class DuLieuNguoiChoi {
         this.KiNhanVat -= k7;
     }
     public void tangSucDanhGoc(int SucDanhCongThem, boolean choPhepHienThi) {
-        int[] chisoCaiTrang = nhanVat.getChisoCaiTrang();
-        int[] chisoAo = nhanVat.getChisoAo();
-        int[] chisoQuan = nhanVat.getChisoQuan();
-        int[] chisoGang = nhanVat.getChisoGang();
-        int[] chisoGiay = nhanVat.getChisoGiay();
-        int[] chisoRada = nhanVat.getChisoRada();
-        int[] chisoGlt = nhanVat.getChisoGiapLuyenTap();
+        int[] chisoCaiTrang = getChisoTuSlot(5);
+        int[] chisoAo       = getChisoTuSlot(0);
+        int[] chisoQuan     = getChisoTuSlot(1);
+        int[] chisoGang     = getChisoTuSlot(2);
+        int[] chisoGiay     = getChisoTuSlot(3);
+        int[] chisoRada     = getChisoTuSlot(4);
+        int[] chisoGlt      = getChisoTuSlot(6);
 
         float tileCT = 0, tileAo = 0, tileQuan = 0, tileGang = 0, tileGiay = 0, tileRada = 0, tileGlt = 0;
 
@@ -556,13 +556,13 @@ public class DuLieuNguoiChoi {
         this.SucDanhNhanVat += s7;
     }
     public void giamSucDanhGoc(int SucDanhCongThem) {
-        int[] chisoCaiTrang = nhanVat.getChisoCaiTrang();
-        int[] chisoAo = nhanVat.getChisoAo();
-        int[] chisoQuan = nhanVat.getChisoQuan();
-        int[] chisoGang = nhanVat.getChisoGang();
-        int[] chisoGiay = nhanVat.getChisoGiay();
-        int[] chisoRada = nhanVat.getChisoRada();
-        int[] chisoGlt = nhanVat.getChisoGiapLuyenTap();
+        int[] chisoCaiTrang = getChisoTuSlot(5);
+        int[] chisoAo       = getChisoTuSlot(0);
+        int[] chisoQuan     = getChisoTuSlot(1);
+        int[] chisoGang     = getChisoTuSlot(2);
+        int[] chisoGiay     = getChisoTuSlot(3);
+        int[] chisoRada     = getChisoTuSlot(4);
+        int[] chisoGlt      = getChisoTuSlot(6);
 
         float tileCT = 0, tileAo = 0, tileQuan = 0, tileGang = 0, tileGiay = 0, tileRada = 0, tileGlt = 0;
 
@@ -725,6 +725,11 @@ public class DuLieuNguoiChoi {
     }
     public void giamDau(){
         this.soDauThan -= 1;
+    }
+
+    private int[] getChisoTuSlot(int slot) {
+        Item item = hanhTrangDangMac.get(slot);
+        return item != null ? item.getChiso() : null;
     }
 
     //setter hop the

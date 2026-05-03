@@ -1567,7 +1567,7 @@ public class VeHUD {
                         if (duDieuKien) {
                             switch ((int) nuthanhtrangchon) {
                                 case 1 -> {
-                                    System.out.println(itemm.getId() + ", " +itemm.getViTri() + ", "+itemm.tmpId);
+                                    System.out.println(itemm.getId() + ", " +itemm.uuid + ", "+itemm.tmpId);
                                     // Call event websocket push item vào
                                     if (itemm.uuid == null || itemm.uuid.isEmpty()) {
                                         setTinNhanPet("Item chưa sẵn sàng, thử lại", 2f);
@@ -1642,15 +1642,7 @@ public class VeHUD {
                 sucDanhTangBienKhi = 30+10*duLieuNguoiChoi.getCapSkill(3);
                 hpTangBienKhi = 30+10*duLieuNguoiChoi.getCapSkill(3);
                 NhanVatCauHinh c2 = Doicaitrang("khi_"+duLieuNguoiChoi.getCapSkill(3));
-                nhanVat.fixCaiTrang(
-                    c2.dau_dung, c2.dau_chay,
-                    c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
-                    c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
-                    c2.than_bay, c2.chan_bay,
-                    c2.chan_gong,c2.than_thu,
-                    c2.lechMap,
-                    c2.avt
-                );
+                nhanVat.fixCaiTrang(c2);
                 texAvt = new Texture(nhanVat.doiavatar());
             }
         }
@@ -1721,15 +1713,7 @@ public class VeHUD {
                     if (!dangBienKhi) {
                         String hopTheDuocChon = dangHopTheThuong ? "hop_the_thuong_" + nhanVat.getHanhtinh() : (bongTaiDangDung.equals("bongtaic1") ? "bong_tai_1_" + nhanVat.getHanhtinh() : bongTaiDangDung.equals("bongtaic2") ? "bong_tai_2_" + nhanVat.getHanhtinh() : "bong_tai_3_" + nhanVat.getHanhtinh());
                         NhanVatCauHinh c2 = Doicaitrang(hopTheDuocChon);
-                        nhanVat.fixCaiTrang(
-                            c2.dau_dung, c2.dau_chay,
-                            c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
-                            c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
-                            c2.than_bay, c2.chan_bay,
-                            c2.chan_gong,c2.than_thu,
-                            c2.lechMap,
-                            c2.avt
-                        );
+                        nhanVat.fixCaiTrang(c2);
                         texAvt = new Texture(nhanVat.doiavatar());
                     }
                     if (dangHopTheThuong) {
@@ -1747,27 +1731,11 @@ public class VeHUD {
                         ArrayList<Item> danhSach = duLieuNguoiChoi.getHanhTrangDangMac();
                         if (NhanVatXuLy.getDangMacCaiTrang() && !NhanVatXuLy.getDangMacAvatar() && danhSach.get(5) != null) {
                             NhanVatCauHinh c2 = Doicaitrang(danhSach.get(5).getId());
-                            nhanVat.fixCaiTrang(
-                                c2.dau_dung, c2.dau_chay,
-                                c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
-                                c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
-                                c2.than_bay, c2.chan_bay,
-                                c2.chan_gong,c2.than_thu,
-                                c2.lechMap,
-                                c2.avt
-                            );
+                            nhanVat.fixCaiTrang(c2);
                             texAvt = new Texture(nhanVat.doiavatar());
                         } else {
                             NhanVatCauHinh c2 = Doi_avt_ao_quan(nhanVat.getHanhtinh(), avatardangmac, aodangmac, quandangmac);
-                            nhanVat.fixCaiTrang(
-                                c2.dau_dung, c2.dau_chay,
-                                c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
-                                c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
-                                c2.than_bay, c2.chan_bay,
-                                c2.chan_gong,c2.than_thu,
-                                c2.lechMap,
-                                c2.avt
-                            );
+                            nhanVat.fixCaiTrang(c2);
                             texAvt = new Texture(nhanVat.doiavatar());
                         }
                     }
@@ -1799,27 +1767,11 @@ public class VeHUD {
                 ArrayList<Item> danhSach = duLieuNguoiChoi.getHanhTrangDangMac();
                 if (NhanVatXuLy.getDangMacCaiTrang() && !NhanVatXuLy.getDangMacAvatar() && danhSach.get(5) != null) {
                     NhanVatCauHinh c2 = Doicaitrang(danhSach.get(5).getId());
-                    nhanVat.fixCaiTrang(
-                        c2.dau_dung, c2.dau_chay,
-                        c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
-                        c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
-                        c2.than_bay, c2.chan_bay,
-                        c2.chan_gong,c2.than_thu,
-                        c2.lechMap,
-                        c2.avt
-                    );
+                    nhanVat.fixCaiTrang(c2);
                     texAvt = new Texture(nhanVat.doiavatar());
                 } else {
                     NhanVatCauHinh c2 = Doi_avt_ao_quan(nhanVat.getHanhtinh(), avatardangmac, aodangmac, quandangmac);
-                    nhanVat.fixCaiTrang(
-                        c2.dau_dung, c2.dau_chay,
-                        c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
-                        c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
-                        c2.than_bay, c2.chan_bay,
-                        c2.chan_gong,c2.than_thu,
-                        c2.lechMap,
-                        c2.avt
-                    );
+                    nhanVat.fixCaiTrang(c2);
                     texAvt = new Texture(nhanVat.doiavatar());
                 }
             }
@@ -2660,41 +2612,17 @@ public class VeHUD {
         if (dangHopThe) {
             String hopTheDuocChon = dangHopTheThuong ? "hop_the_thuong_"+nhanVat.getHanhtinh() : (bongTaiDangDung.equals("bongtaic1") ? "bong_tai_1_"+nhanVat.getHanhtinh() : bongTaiDangDung.equals("bongtaic2") ? "bong_tai_2_"+nhanVat.getHanhtinh() : "bong_tai_3_"+nhanVat.getHanhtinh() );
             NhanVatCauHinh c2 = Doicaitrang(hopTheDuocChon);
-            nhanVat.fixCaiTrang(
-                c2.dau_dung, c2.dau_chay,
-                c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
-                c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
-                c2.than_bay, c2.chan_bay,
-                c2.chan_gong,c2.than_thu,
-                c2.lechMap,
-                c2.avt
-            );
+            nhanVat.fixCaiTrang(c2);
             texAvt = new Texture(nhanVat.doiavatar());
         } else {
             ArrayList<Item> danhSach = duLieuNguoiChoi.getHanhTrangDangMac();
             if (NhanVatXuLy.getDangMacCaiTrang() && !NhanVatXuLy.getDangMacAvatar() && danhSach.get(5) != null) {
                 NhanVatCauHinh c2 = Doicaitrang(danhSach.get(5).getId());
-                nhanVat.fixCaiTrang(
-                    c2.dau_dung, c2.dau_chay,
-                    c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
-                    c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
-                    c2.than_bay, c2.chan_bay,
-                    c2.chan_gong,c2.than_thu,
-                    c2.lechMap,
-                    c2.avt
-                );
+                nhanVat.fixCaiTrang(c2);
                 texAvt = new Texture(nhanVat.doiavatar());
             } else {
                 NhanVatCauHinh c2 = Doi_avt_ao_quan(nhanVat.getHanhtinh(), avatardangmac, aodangmac, quandangmac);
-                nhanVat.fixCaiTrang(
-                    c2.dau_dung, c2.dau_chay,
-                    c2.than_dung, c2.than_nhay, c2.than_roi, c2.than_chay,
-                    c2.chan_dung, c2.chan_nhay, c2.chan_roi, c2.chan_chay,
-                    c2.than_bay, c2.chan_bay,
-                    c2.chan_gong,c2.than_thu,
-                    c2.lechMap,
-                    c2.avt
-                );
+                nhanVat.fixCaiTrang(c2);
                 texAvt = new Texture(nhanVat.doiavatar());
             }
         }

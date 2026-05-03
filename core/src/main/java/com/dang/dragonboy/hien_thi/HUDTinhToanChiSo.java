@@ -219,7 +219,6 @@ public class HUDTinhToanChiSo {
 
             // Giảm thời gian sử dụng
             giap.tangHanSuDung();
-            nhanVat.setHanSuDungGiapLuyenTap(giap.getHanSuDung());
 
             float sdConLai;
             switch (giap.getId()) {
