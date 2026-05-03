@@ -30,12 +30,9 @@ public class MapToi {
 
     public static void veRongThan(SpriteBatch batch, String MAP_NAME) {
         RongThanState rongThanState = State_Management.getRongThanState();
-        // Điều kiện cũ: Phải đúng map mới thành map tối
-        boolean duDieuKienMapToiCu = rongThanState != null && rongThanState.map.equals(MAP_NAME);
-        // Điều kiện mới: chỉ cần có map đang tối thì các map khác cũng tối theo (behavior như phim)
-        boolean duDieuKienMapToiMoi = rongThanState != null;
-
-        if (duDieuKienMapToiMoi) {
+        // Vẽ rồng thần khác behavior của map tối
+        // Map tối có thể all map nhưng rồng thân chỉ được xuất hiện ở map của người ước
+        if (rongThanState != null && rongThanState.map.equals(MAP_NAME)) {
             HUDRongThan.veRongThan(batch, rongThanState.ngocRongUoc, rongThanState.nguoiUocId,(float) rongThanState.x,(float) rongThanState.y);
         }
     }
