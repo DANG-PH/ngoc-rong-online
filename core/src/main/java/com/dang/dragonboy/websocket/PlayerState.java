@@ -166,9 +166,13 @@ public class PlayerState {
         TrangThai trangThai = TrangThai.valueOf(this.trangthai);
 
         float daoDong;
-        daoDong = (trangThai == TrangThai.DUNG_YEN) ? (float) Math.sin(thoiGian) * 1.08f
-            : (trangThai == TrangThai.BAY_NGANG) ? (float) Math.sin(thoiGian) * 5f
-            : 0f;
+        if (dangMangVanBay) {
+            daoDong = (trangThai == TrangThai.DUNG_YEN || trangThai == TrangThai.BAY_NGANG) ? (float) Math.sin(thoiGian) * 1.08f : 0f;
+        } else {
+            daoDong = (trangThai == TrangThai.DUNG_YEN) ? (float) Math.sin(thoiGian) * 1.08f
+                : (trangThai == TrangThai.BAY_NGANG) ? (float) Math.sin(thoiGian) * 5f
+                : 0f;
+        }
 
 
         Texture chanVe = AssetMulti.getTexture(this.chan);

@@ -293,7 +293,7 @@ public class HUDPopupRenderer {
                 layout.setText(veHUD.fontsm, "Nhân vật: " + duLieuNguoiChoi.getTen());
                 veHUD.fontsm.draw(batch, layout, 125, 560);
 
-                layout.setText(veHUD.fontsm, "Máy chủ vũ trụ 1: " + "admin"); // sau fix vũ trụ + tài khoản user
+                layout.setText(veHUD.fontsm, "Máy chủ vũ trụ 1: " + State_Management.getUserResponse().username); // sau fix vũ trụ + tài khoản user
                 veHUD.fontsm.draw(batch, layout, 125, 535);
                 batch.flush();
                 Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
@@ -1341,6 +1341,7 @@ public class HUDPopupRenderer {
                 }
                 if (veHUD.dangHienThongBao) {
                     batch.draw(veHUD.anhThongBao, (Gdx.graphics.getWidth() - 720) / 2f, 65, 720, 175);
+                    veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
                     layout.setText(veHUD.fontTenSkill, "Bạn có chắc muốn hủy bỏ (mất luôn)");
                     veHUD.fontTenSkill.draw(batch, layout, (Gdx.graphics.getWidth() - layout.width) / 2, 175);
                     layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem() + " ?");

@@ -949,7 +949,7 @@ public class VeHUD {
             font.draw(batch, layout, odauthanX+(odauthanW- layout.width)/2f , odauthanY + 43);
 
         }
-        // Tên nhân vật ngay ở thanhhp.png
+        // Tên nhân vật/npc/người chơi khác ngay ở thanhhp.png
         font.setColor(0f / 255f, 83f / 255f, 37f / 255f, 1f);
         layout.setText(font, duLieuNguoiChoi.getTen());
         font.draw(batch, layout, 2.5f+(155- layout.width)/2f, screenHeight - 80 + 50);

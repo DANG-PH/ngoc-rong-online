@@ -1990,7 +1990,8 @@ public class DeTu {
         } else if (veHUD.trangthaide.equals("Về nhà")) {
             if (!getTrangthai().equals(veHUD.trangthaide) && !veHUD.dangHopThe) {
                 setTinNhanDeTuChat("Ok con về, bibi sư phụ", 1.5f);
-                this.veHUD.listHieuUngBienMat.them(this.x, this.y, this.rong_de_tu, this.cao_de_tu, 0.5f);
+                // Delay hết chat thì mới bắt đầu hiệu ứng biến mất
+                this.veHUD.listHieuUngBienMat.them(this.x, this.y, this.rong_de_tu, this.cao_de_tu, this.getTimeHienChat());
             }
         }
         setTrangthai(veHUD.trangthaide);
