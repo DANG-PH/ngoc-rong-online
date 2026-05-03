@@ -16,6 +16,8 @@ import com.dang.dragonboy.nhan_vat.DeTuXuLy;
 import com.dang.dragonboy.nhan_vat.DeTuCauHinh;
 import com.badlogic.gdx.math.MathUtils;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.dang.dragonboy.network.*;
 public class DuLieuNguoiChoi {
     public DeTu deTu;
@@ -93,6 +95,9 @@ public class DuLieuNguoiChoi {
 
     private float timeCapNhatAPISaveDuLieu = 20f;
 
+    // Dùng làm tmpId
+    private static final AtomicInteger idCounter = new AtomicInteger(0);
+
     // Constructor
     public DuLieuNguoiChoi(String ten, long sucManh, int theLuc,
                            float HpHienTai, float HpNhanVat, int HpGoc,
@@ -155,7 +160,7 @@ public class DuLieuNguoiChoi {
     public boolean themItemVaoHanhTrang(Item item) {
         boolean ketQua = themItemVaoHanhTrangNoSave(item);
         if (ketQua) {
-            int tmpId = (int)(System.currentTimeMillis() % 1000000)+(int)(Math.random()*100f);
+            int tmpId = idCounter.incrementAndGet();
             item.tmpId = tmpId;
             luuDuLieuItem(item, tmpId, "hanhtrang");
         }

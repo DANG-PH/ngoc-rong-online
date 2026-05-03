@@ -544,6 +544,20 @@ public class WorldState {
                     System.out.println("DONE UUID");
                 }
             }
+            for (Item item : duLieuNguoiChoi.getHanhTrangDangMac()) {
+                if (item.tmpId == tmpId) {
+                    item.uuid = uuid;
+                    item.tmpId = -1;
+                    System.out.println("DONE UUID");
+                }
+            }
+            for (Item item : duLieuNguoiChoi.getHanhTrangRuongDo()) {
+                if (item.tmpId == tmpId) {
+                    item.uuid = uuid;
+                    item.tmpId = -1;
+                    System.out.println("DONE UUID");
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
