@@ -96,7 +96,7 @@ public class DuLieuNguoiChoi {
     private float timeCapNhatAPISaveDuLieu = 20f;
 
     // Dùng làm tmpId
-    private static final AtomicInteger idCounter = new AtomicInteger(0);
+    private static final AtomicInteger idCounter = new AtomicInteger(1);
 
     // Constructor
     public DuLieuNguoiChoi(String ten, long sucManh, int theLuc,

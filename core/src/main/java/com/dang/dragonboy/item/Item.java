@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class Item {
     public String uuid;
-    public int tmpId;
+    public int tmpId = -1;
     private String maItem;
     private String ten;
     private transient LoaiItem loaiItem;

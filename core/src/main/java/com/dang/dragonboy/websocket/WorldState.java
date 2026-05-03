@@ -427,6 +427,8 @@ public class WorldState {
             String action = obj.optString("action", "");
             String itemUuid = obj.optString("itemUuid", "");
 
+            System.out.println("Item UUID nhận: " + itemUuid );
+
             if (action.isEmpty() || itemUuid.isEmpty()) return;
 
             switch (action) {
@@ -435,9 +437,9 @@ public class WorldState {
                         List<String> listt = new ArrayList<>();
                         listt.add(itemUuid);
                         List<ItemCanLuu> itemData = ApiItemService.getItemsByItemUuids(listt);
-
                         // Check cả null lẫn empty trước khi get(0)
                         if (itemData == null || itemData.isEmpty()) return;
+                        System.out.println("Item UUID nhận: " + itemData.toArray());
 
                         Gdx.app.postRunnable(() -> {
                             boolean exists = duLieuNguoiChoi.hanhTrangGiaoDichPlayer2

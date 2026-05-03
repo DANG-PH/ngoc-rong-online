@@ -1567,7 +1567,12 @@ public class VeHUD {
                         if (duDieuKien) {
                             switch ((int) nuthanhtrangchon) {
                                 case 1 -> {
+                                    System.out.println(itemm.getId() + ", " +itemm.getViTri() + ", "+itemm.tmpId);
                                     // Call event websocket push item vào
+                                    if (itemm.uuid == null || itemm.uuid.isEmpty()) {
+                                        setTinNhanPet("Item chưa sẵn sàng, thử lại", 2f);
+                                        break;
+                                    }
                                     try {
                                         GameSocket.tradeOfferAdd(playerGiaoDich.userId, itemm.uuid);
                                     } catch(Exception e) {
