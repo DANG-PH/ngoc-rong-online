@@ -12,6 +12,7 @@ import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.du_lieu.State_Management;
 import com.dang.dragonboy.item.Item;
 import com.dang.dragonboy.item.LoaiItem;
+import com.dang.dragonboy.network.DTO.UserResponse;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 
 import java.text.DecimalFormat;
@@ -293,7 +294,10 @@ public class HUDPopupRenderer {
                 layout.setText(veHUD.fontsm, "Nhân vật: " + duLieuNguoiChoi.getTen());
                 veHUD.fontsm.draw(batch, layout, 125, 560);
 
-                layout.setText(veHUD.fontsm, "Máy chủ vũ trụ 1: " + State_Management.getUserResponse().username); // sau fix vũ trụ + tài khoản user
+                UserResponse user = State_Management.getUserResponse();
+                if (user == null) return; // user đã logout, bỏ qua render popup
+                String name = user.username;
+                layout.setText(veHUD.fontsm, "Máy chủ vũ trụ 1\n" + name);
                 veHUD.fontsm.draw(batch, layout, 125, 535);
                 batch.flush();
                 Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);

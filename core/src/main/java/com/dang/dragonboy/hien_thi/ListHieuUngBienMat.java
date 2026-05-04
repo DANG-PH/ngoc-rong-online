@@ -10,7 +10,6 @@ public class ListHieuUngBienMat {
 
     private final ArrayList<HieuUngBienMat> list = new ArrayList<>();
     private Texture[] frames;
-    private SpriteBatch batch = null;
 
     public ListHieuUngBienMat(Texture[] frames) {
         this.frames = frames;
@@ -23,11 +22,10 @@ public class ListHieuUngBienMat {
 
     /** Gọi duy nhất 1 lần trong render() - tự vẽ + cập nhật + dọn rác */
     public void ve(SpriteBatch batch) {
-        if (this.batch == null) this.batch = batch;
         Iterator<HieuUngBienMat> it = list.iterator();
         while (it.hasNext()) {
             HieuUngBienMat hu = it.next();
-            hu.ve(this.batch, frames, Gdx.graphics.getDeltaTime());
+            hu.ve(batch, frames, Gdx.graphics.getDeltaTime());
             if (hu.daKetThuc) it.remove();
         }
     }
