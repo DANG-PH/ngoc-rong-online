@@ -206,6 +206,8 @@ public class DeTu {
     private int frameTtnl = 0, frameBom = 0;
     private float HpHopThe,KiHopThe,SdHopThe,ChiMangSuDung,SatThuongChiMangSuDung,GiamSatThuongSuDung;
 
+    public boolean deTuVeNha = false;
+
     public DeTu(float x, float y,boolean flipX,boolean diQuaPhai,String ten, String hanhtinh, Texture dau_dung, Texture dau_chay,
                 Texture than_dung, Texture than_nhay, Texture than_roi, Texture[] than_chay,
                 Texture chan_dung, Texture chan_nhay, Texture chan_roi, Texture[] chan_chay,
@@ -1138,6 +1140,11 @@ public class DeTu {
             timeHienChat -= delta;
             if (timeHienChat <= 0) {
                 tinNhanDeTuChat = "";
+                if (deTuVeNha) {
+                    deTuVeNha = false;
+                    // hết chat thì mới bắt đầu hiệu ứng biến mất
+                    this.veHUD.listHieuUngBienMat.them(this.x, this.y, this.rong_de_tu, this.cao_de_tu, 0);
+                }
             }
         }
 
@@ -1566,8 +1573,7 @@ public class DeTu {
         } else if (veHUD.trangthaide.equals("Về nhà")) {
             if (!getTrangthai().equals(veHUD.trangthaide) && !veHUD.dangHopThe) {
                 setTinNhanDeTuChat("Ok con về, bibi sư phụ", 1.5f);
-                // Delay hết chat thì mới bắt đầu hiệu ứng biến mất
-                this.veHUD.listHieuUngBienMat.them(this.x, this.y, this.rong_de_tu, this.cao_de_tu, this.getTimeHienChat());
+                this.deTuVeNha = true;
             }
         }
         setTrangthai(veHUD.trangthaide);

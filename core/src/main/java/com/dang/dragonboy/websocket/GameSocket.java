@@ -167,6 +167,33 @@ public class GameSocket {
         if (socket != null) socket.disconnect();
     }
 
+    /**
+     * Dùng khi muốn HOÀN TOÀN reset socket để chuẩn bị connect lại (ví dụ: login acc mới, MAX_RETRY).
+     *
+     * Tại sao KHÔNG dùng disconnect() trong các trường hợp này?
+     * → disconnect() set isManualDisconnect = true — flag này block MỌI reconnect/retry về sau.
+     * → retryCount KHÔNG được reset → khi acc mới connect, nếu lỗi xảy ra,
+     *   scheduleReconnect() check (retryCount >= MAX_RETRY) → return luôn, không retry được.
+     * → Tóm lại: disconnect() chỉ phù hợp khi thoát game hẳn, KHÔNG phù hợp khi
+     *   còn muốn connect lại (dù là acc khác).
+     *
+     * reset() khác disconnect() ở chỗ:
+     * → Xóa sạch toàn bộ state tĩnh (retryCount, isManualDisconnect, isReconnecting, eventsRegistered)
+     * → Đảm bảo lần connect() tiếp theo hoạt động hoàn toàn như lần đầu tiên.
+     */
+    public static void reset() {
+        eventsRegistered = false;
+        isManualDisconnect = false;
+        isReconnecting = false;
+        retryCount = 0;
+        if (socket != null) {
+            socket.off();
+            socket.close();
+            socket = null;
+        }
+        GameSocketGo.disconnect();
+    }
+
     private static void handleTokenExpired() {
         isManualDisconnect = true;
         State_Management.setForceLogout(true);

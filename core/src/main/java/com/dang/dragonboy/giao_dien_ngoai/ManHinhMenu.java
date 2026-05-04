@@ -136,6 +136,7 @@ public class ManHinhMenu implements Screen {
                                     State_Management.gameSessionId = gameSessionId;
 
                                     conn.disconnect();
+                                    GameSocket.reset();
                                     GameSocket.connect(token);
                                 } else {
                                     System.out.println("/play thất bại: " + responseCode);

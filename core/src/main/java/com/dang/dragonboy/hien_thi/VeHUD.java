@@ -708,7 +708,7 @@ public class VeHUD {
         if (State_Management.isForceLogout()) {
             Gdx.input.setInputProcessor(null);
             // 1. Ngắt WS TRƯỚC TIÊN — trước khi làm bất cứ điều gì khác
-            GameSocket.disconnect();
+            GameSocket.reset();
 
             // 2. Reset state
             State_Management.setToken("");
@@ -730,7 +730,7 @@ public class VeHUD {
             font.draw(batch, layout, (Gdx.graphics.getWidth() - layout.width) / 2, 180);
         }
         if (GameSocket.retryCount == GameSocket.MAX_RETRY && !GameSocket.isManualDisconnect && !State_Management.isForceLogout()) {
-            GameSocket.disconnect();
+            GameSocket.reset();
             State_Management.setToken("");
             State_Management.setRefresh_token("");
             State_Management.setAuth_id(0);
@@ -1281,7 +1281,7 @@ public class VeHUD {
                         } else if (oChiSoDangChon == 9) {
                             Gdx.input.setInputProcessor(null);
                             // 1. Ngắt WS TRƯỚC TIÊN — trước khi làm bất cứ điều gì khác
-                            GameSocket.disconnect();
+                            GameSocket.reset();
 
                             // 2. Reset state
                             State_Management.setToken("");
@@ -1309,7 +1309,7 @@ public class VeHUD {
                         } else if (oChiSoDangChon == 8) {
                             Gdx.input.setInputProcessor(null);
                             // 1. Ngắt WS TRƯỚC TIÊN — trước khi làm bất cứ điều gì khác
-                            GameSocket.disconnect();
+                            GameSocket.reset();
 
                             // 2. Reset state
                             State_Management.setToken("");
