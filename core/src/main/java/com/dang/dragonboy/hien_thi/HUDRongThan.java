@@ -182,9 +182,9 @@ public class HUDRongThan {
             batch.begin();
             String TextRongThan ;
             if (!veHUD.ngocRongUoc.equals("1saoden")) {
-                TextRongThan = "Ta sẽ ban cho ngươi một điều ước, ngươi có "+ veHUD.TIME_HIEN_RONG_THAN_MAX/60 +" phút, hãy suy nghĩ thật kỹ trước khi quyết định";
+                TextRongThan = "Ta sẽ ban cho ngươi một điều ước, ngươi có "+ (veHUD.TIME_HIEN_RONG_THAN_MAX >= 60f ? (int)veHUD.TIME_HIEN_RONG_THAN_MAX/60 + " phút" : (int)veHUD.TIME_HIEN_RONG_THAN_MAX + " giây" ) +", hãy suy nghĩ thật kỹ trước khi quyết định";
             } else {
-                TextRongThan = "Ta là Rồng Thần Bóng Tối, sẽ thực hiện cho ngươi 1 điều ước, ngươi có "+ veHUD.TIME_HIEN_RONG_THAN_MAX/60 +" phút, nên hãy chọn điều mà lòng ngươi khao khát nhất";
+                TextRongThan = "Ta là Rồng Thần Bóng Tối, sẽ thực hiện cho ngươi 1 điều ước, ngươi có "+ (veHUD.TIME_HIEN_RONG_THAN_MAX >= 60f ? (int)veHUD.TIME_HIEN_RONG_THAN_MAX/60 + " phút" : (int)veHUD.TIME_HIEN_RONG_THAN_MAX + " giây" ) +", nên hãy chọn điều mà lòng ngươi khao khát nhất";
             }
             layout.setText(
                 veHUD.fontchat,
