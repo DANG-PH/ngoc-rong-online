@@ -30,7 +30,13 @@
 </p>
 
 <p align="center">
-  <strong>🎮 Chơi ngay: <a href="https://ngocrongdark.com">ngocrongdark.com</a></strong>
+  <a href="https://ngocrongdark.com">
+    <img src="https://img.shields.io/badge/▶_CHƠI_NGAY-ngocrongdark.com-FF6B35?style=for-the-badge&logoColor=white" alt="Play Now"/>
+  </a>
+  &nbsp;
+  <a href="https://github.com/DANG-PH/NgocRongOnline/releases">
+    <img src="https://img.shields.io/badge/⬇_TẢI_VỀ-Latest_Release-181717?style=for-the-badge&logo=github&logoColor=white" alt="Download"/>
+  </a>
 </p>
 
 <p align="center">
