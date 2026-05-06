@@ -168,8 +168,8 @@ Channel của Go khiến việc đồng bộ giữa các goroutine trở nên r�
 ### 1. Clone repository
 
 ```bash
-git clone https://github.com/DANG-PH/dragonboy-libgdx-client.git
-cd dragonboy-libgdx-client
+git clone https://github.com/DANG-PH/ngoc-rong-online
+cd ngoc-rong-online
 ```
 
 ### 2. Cấu hình `secrets.properties`
