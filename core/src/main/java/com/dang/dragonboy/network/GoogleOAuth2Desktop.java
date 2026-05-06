@@ -1,18 +1,15 @@
 package com.dang.dragonboy.network;
 
-import com.badlogic.gdx.Gdx;
+import com.dang.dragonboy.he_thong.AppConfig;
 import com.dang.dragonboy.network.Templates.GameTemplates;
 import java.awt.Desktop;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
-import java.security.SecureRandom;
 import java.util.*;
-import java.util.concurrent.*;
 
 public class GoogleOAuth2Desktop {
-
-    private static final String CLIENT_ID     = "977963570920-mtgqrosdib14ulgd185mkbcgk7gi4cpf.apps.googleusercontent.com";
-    private static final String CLIENT_SECRET = "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";
+    private static final String CLIENT_ID     = AppConfig.get("google.client.id");
+    private static final String CLIENT_SECRET = AppConfig.get("google.client.secret");
     public interface Callback {
         void onSuccess(String idToken);
         void onFailure(String error);

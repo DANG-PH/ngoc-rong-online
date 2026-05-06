@@ -2,6 +2,7 @@ package com.dang.dragonboy.websocket;
 
 import com.badlogic.gdx.Gdx;
 import com.dang.dragonboy.du_lieu.State_Management;
+import com.dang.dragonboy.he_thong.AppConfig;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
@@ -68,7 +69,7 @@ public class GameSocketGo {
     private static final int MAX_RETRY = 5;
 
     // CONFIG: đổi thành URL Go server thật khi deploy
-    private static final String GO_WS_URL = "wss://ws-go.dangpham.id.vn/ws-game";
+    private static final String GO_WS_URL = AppConfig.get("ws.go.url");
     // Production: "wss://ws-go.dangpham.id.vn/ws-game"
 
     // ---------- Clock sync ----------

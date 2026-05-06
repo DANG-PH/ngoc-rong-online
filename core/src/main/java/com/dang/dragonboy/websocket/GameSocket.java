@@ -3,6 +3,7 @@ package com.dang.dragonboy.websocket;
 import com.badlogic.gdx.Gdx;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.du_lieu.State_Management;
+import com.dang.dragonboy.he_thong.AppConfig;
 import com.dang.dragonboy.item.Item;
 import com.dang.dragonboy.network.DTO.ItemCanLuu;
 import com.dang.dragonboy.nhan_vat.NhanVat;
@@ -38,7 +39,7 @@ public class GameSocket {
             auth.put("gameSessionId", State_Management.gameSessionId);
             opts.auth = auth;
 
-            socket = IO.socket("https://ws.dangpham.id.vn/ws-game", opts);
+            socket = IO.socket(AppConfig.get("ws.nestjs.url"), opts);
 
             socket.on(Socket.EVENT_CONNECT, args -> {
                 System.out.println("WS CONNECTED");
@@ -112,7 +113,7 @@ public class GameSocket {
             try {
                 if (isManualDisconnect) return;
 
-                URL url = new URL("https://api.dangpham.id.vn/game/play");
+                URL url = new URL(AppConfig.get("api.base.url")+"/game/play");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Authorization", "Bearer " + State_Management.getToken());

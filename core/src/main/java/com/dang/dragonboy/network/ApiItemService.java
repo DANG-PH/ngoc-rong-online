@@ -1,5 +1,6 @@
 package com.dang.dragonboy.network;
 
+import com.dang.dragonboy.he_thong.AppConfig;
 import com.dang.dragonboy.network.DTO.ItemCanLuu;
 import com.google.gson.Gson;
 
@@ -14,7 +15,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 public class ApiItemService {
-    private static final String BASE_URL = "https://api.dangpham.id.vn/item";
+    private static final String BASE_URL = AppConfig.get("api.base.url")+"/item";
     private static final Gson gson = new Gson();
 
     // Lưu danh sách item của user

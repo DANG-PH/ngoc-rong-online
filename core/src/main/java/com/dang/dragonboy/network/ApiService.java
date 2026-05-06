@@ -8,6 +8,7 @@ import java.net.URL;
 import com.badlogic.gdx.Gdx;
 import com.dang.dragonboy.du_lieu.LocalStorage;
 import com.dang.dragonboy.du_lieu.State_Management;
+import com.dang.dragonboy.he_thong.AppConfig;
 import com.dang.dragonboy.network.DTO.*;
 import com.dang.dragonboy.xu_ly_map.MapDataCache;
 import com.dang.dragonboy.xu_ly_map.MapIdHelper;
@@ -21,7 +22,7 @@ import java.util.function.Consumer;
 import com.google.gson.reflect.TypeToken;
 
 public class ApiService {
-    private static final String BASE_URL = "https://api.dangpham.id.vn";
+    private static final String BASE_URL = AppConfig.get("api.base.url");
     private static final Gson gson = new Gson();
 
     public static boolean healthCheck() {

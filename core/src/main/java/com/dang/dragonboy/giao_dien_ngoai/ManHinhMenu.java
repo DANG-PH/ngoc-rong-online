@@ -14,6 +14,7 @@ import com.dang.dragonboy.du_lieu.LocalStorage;
 import com.dang.dragonboy.du_lieu.State_Management;
 import com.dang.dragonboy.giao_dien_trong.ManHinhDoiHoaCuc;
 import com.dang.dragonboy.giao_dien_trong.ManHinhLangAru;
+import com.dang.dragonboy.he_thong.AppConfig;
 import com.dang.dragonboy.he_thong.Main;
 import com.dang.dragonboy.giao_dien_trong.ManHinhNhaGohan;
 import com.dang.dragonboy.network.ApiService;
@@ -115,7 +116,7 @@ public class ManHinhMenu implements Screen {
                     if (!GameSocket.isConnected()) {
                         new Thread(() -> {
                             try {
-                                URL url = new URL("https://api.dangpham.id.vn/game/play");
+                                URL url = new URL(AppConfig.get("api.base.url")+"/game/play");
                                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                                 conn.setRequestMethod("POST");
                                 conn.setRequestProperty("Authorization", "Bearer " + token);
