@@ -36,6 +36,13 @@ public class ThemItemTest {
             // Xử lý data + update GL objects phải về GL thread
             Gdx.app.postRunnable(() -> {
                 this.duLieu.setLaiHanhTrangTuDatabase(itemTuDatabase);
+//                duLieu.themItemVaoHanhTrangNoSave(new Item(
+//                    "candauvan", "Cân Đẩu Vân", LoaiItem.VANBAY,
+//                    "vatpham/vanbay/candauvan/candauvan.png",
+//                    "Dùng để bay và không tốn KI", 1,
+//                    new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0},
+//                    "all", 1500000L, null, 0, 0, 0, -1
+//                ));
             });
         }).start();
 
