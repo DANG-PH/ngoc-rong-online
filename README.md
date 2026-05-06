@@ -6,7 +6,7 @@
 
 <p align="center">
   Dự án cá nhân mô phỏng <strong>Ngọc Rồng Online</strong>,<br>
-  xây dựng bằng <strong>Java (LibGDX)</strong> cho client và <strong>NestJS</strong> cho server.
+  xây dựng bằng <strong>Java (LibGDX)</strong> cho client và <strong>NestJS & Golang</strong> cho server.
 </p>
 
 ---
