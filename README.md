@@ -5,18 +5,7 @@
 <h2 align="center">Ngọc Rồng Online – Java Multiplayer Game</h2>
 
 <p align="center">
-  Dự án cá nhân mô phỏng <strong>Ngọc Rồng Online</strong>,<br>
-  xây dựng bằng <strong>Java (LibGDX)</strong> cho client và <strong>NestJS & Golang</strong> cho server.
-</p>
-
-<p align="center">
-  <img src="https://i.pinimg.com/originals/fd/91/b1/fd91b1715061efc79dbb6678aea0f9b9.gif" width="220" alt="Ngọc Rồng Online">
-</p>
-
-<h2 align="center">Ngọc Rồng Online – Java Multiplayer Game</h2>
-
-<p align="center">
-  Dự án cá nhân tái hiện <strong>Ngọc Rồng Online</strong> – tựa game MMORPG hành động gắn liền với tuổi thơ của hàng triệu game thủ Việt,<br>
+  Dự án cá nhân tái hiện <strong>Ngọc Rồng Online</strong> – tựa game MMORPG gắn liền với tuổi thơ của hàng triệu game thủ Việt,<br>
   lấy cảm hứng từ bộ truyện tranh huyền thoại <strong>Dragon Ball (7 Viên Ngọc Rồng)</strong> của tác giả Akira Toriyama.
 </p>
 
