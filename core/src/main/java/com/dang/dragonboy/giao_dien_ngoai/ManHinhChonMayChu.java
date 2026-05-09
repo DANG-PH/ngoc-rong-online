@@ -108,12 +108,12 @@ public class ManHinhChonMayChu implements Screen {
             thoiGianClick += delta;
             if (thoiGianClick >= 0.1f) {
                 if (nutDuocClick == 8) {
-                    game.setScreen(new ManHinhMenu(game, "HAIDANG1", false));
+                    game.setScreen(new ManHinhMenu(game, "HAIDANG1", null));
                 } else {
                     int j = nutDuocClick % 4;
                     int i = nutDuocClick / 4;
                     int mayChu = 2 * j + (i == 0 ? 1 : 2);
-                    game.setScreen(new ManHinhMenu(game, mayChu, false));
+                    game.setScreen(new ManHinhMenu(game, mayChu, null));
                 }
             }
         }

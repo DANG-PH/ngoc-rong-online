@@ -13,6 +13,7 @@ import com.badlogic.gdx.InputAdapter;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.dang.dragonboy.du_lieu.LocalStorage;
+import com.dang.dragonboy.network.DTO.ProfileResult;
 import com.dang.dragonboy.network.DTO.UserResponse;
 
 import com.dang.dragonboy.du_lieu.State_Management;
@@ -254,14 +255,13 @@ public class ManHinhDoiTaiKhoan implements Screen {
                     duDieuKien = true; // Dev
                     if (duDieuKien) {
                         new Thread(() -> {
-                            UserResponse user = ApiService.verifyOTP(this.sessionId, maOTP);
+                            ProfileResult profileResult = ApiService.verifyOTP(this.sessionId, maOTP);
 
                             Gdx.app.postRunnable(() -> {
-                                if (user != null) {
+                                if (profileResult != null && profileResult.status == ProfileResult.Status.OK) {
                                     System.out.println("Đăng nhập thành công!");
-                                    State_Management.setUserResponse(user);
-                                    System.out.println(user);
-                                    game.setScreen(new ManHinhMenu(game, null, false));
+                                    State_Management.setUserResponse(profileResult.user);
+                                    game.setScreen(new ManHinhMenu(game, null, null));
                                 } else {
                                     System.out.println("Đăng nhập thất bại!");
                                 }
@@ -300,7 +300,7 @@ public class ManHinhDoiTaiKhoan implements Screen {
                     }).start();
                 }
                 else if (chuyenManHinhDong) {
-                    game.setScreen(new ManHinhMenu(game, null, false));
+                    game.setScreen(new ManHinhMenu(game, null, null));
                     chuyenManHinhDong = false;
                 } else if (isQuenMKPressed) {
                     trangThaiManHinh = TrangThaiManHinh.THONGBAO;
@@ -521,11 +521,13 @@ public class ManHinhDoiTaiKhoan implements Screen {
                                     State_Management.setRefresh_token(res.refreshToken);
 
                                     // Gọi getProfile
-                                    UserResponse user = ApiService.getProfile(res.accessToken);
+                                    ProfileResult user = ApiService.getProfile(res.accessToken);
 
                                     Gdx.app.postRunnable(() -> {
-                                        if (user != null) {
-                                            game.setScreen(new ManHinhMenu(game, null, false));
+                                        if (user != null && user.status == ProfileResult.Status.OK) {
+                                            game.setScreen(new ManHinhMenu(game, null, null));
+                                        } else if (user != null && user.status == ProfileResult.Status.BANNED) {
+                                            game.setScreen(new ManHinhMenu(game, null, ManHinhMenu.TrangThai.BAN));
                                         } else {
                                             System.out.println("Google login thất bại: không lấy được profile");
                                         }

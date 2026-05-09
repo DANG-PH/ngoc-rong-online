@@ -110,7 +110,7 @@ public class ManHinhSplash implements Screen {
             } else if (manHinhTiepTheo != null) {
                 game.setScreen(manHinhTiepTheo);
             } else {
-                game.setScreen(new ManHinhMenu(game, null, false));
+                game.setScreen(new ManHinhMenu(game, null, null));
             }
         }
     }

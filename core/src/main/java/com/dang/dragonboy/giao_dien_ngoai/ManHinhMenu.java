@@ -30,15 +30,15 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Scanner;
 
-enum TrangThaiManHinhMenu {
-    NONE,
-    BAN,
-    SERVER_ERROR,
-    FORCE_LOGOUT
-}
-
 public class ManHinhMenu implements Screen {
-    private TrangThaiManHinhMenu trangThaiManHinh = TrangThaiManHinhMenu.NONE;
+    public enum TrangThai {
+        NONE,
+        BAN,
+        SERVER_ERROR,
+        FORCE_LOGOUT
+    }
+
+    private TrangThai trangThaiManHinh = TrangThai.NONE;
     private Main game;
     private SpriteBatch batch;
     private ShapeRenderer shapeRenderer;
@@ -67,16 +67,16 @@ public class ManHinhMenu implements Screen {
     private String tenHienThi = "";
 
     private Object mayChu; // biến lưu máy chủ đc chọn
-    public ManHinhMenu(Main game ,Object mayChu, boolean isForceLogout) {
+    public ManHinhMenu(Main game ,Object mayChu, TrangThai trangThaiBanDau) {
         this.game = game;
         this.mayChu = (mayChu != null) ? mayChu : 1; // Nếu null thì mặc định là 1
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
         layout = new GlyphLayout();
 
-        if (isForceLogout) {
-            System.out.println("FORCE");
-            this.trangThaiManHinh = TrangThaiManHinhMenu.FORCE_LOGOUT;
+        System.out.println("VAO MAN MENU MOI");
+        if (trangThaiBanDau != null) {
+            this.trangThaiManHinh = trangThaiBanDau;
         }
     }
 
@@ -140,6 +140,7 @@ public class ManHinhMenu implements Screen {
                                     GameSocket.reset();
                                     GameSocket.connect(token);
                                 } else {
+                                    // K cần xét 403 vì isNotBan được gọi trước và đã check user có đang bị ban chưa rồi
                                     System.out.println("/play thất bại: " + responseCode);
                                     conn.disconnect();
                                 }
@@ -149,7 +150,7 @@ public class ManHinhMenu implements Screen {
                         }).start();
                     }
                 } else if (kq == TrangThaiApiGetBan.BAN) {
-                    trangThaiManHinh = TrangThaiManHinhMenu.BAN;
+                    trangThaiManHinh = TrangThai.BAN;
                 } else if (kq == TrangThaiApiGetBan.SERVER_ERROR) {
                     serverOnline = false;
                 }
@@ -162,11 +163,11 @@ public class ManHinhMenu implements Screen {
                 tenHienThi = "TK. " + username;
             }
         }
-        if (serverOnline != null && !serverOnline && trangThaiManHinh != TrangThaiManHinhMenu.SERVER_ERROR) trangThaiManHinh = TrangThaiManHinhMenu.SERVER_ERROR;
+        if (serverOnline != null && !serverOnline && trangThaiManHinh != TrangThai.SERVER_ERROR) trangThaiManHinh = TrangThai.SERVER_ERROR;
         if (Gdx.input.justTouched() && !dangKetNoi) {
             int mouseX = Gdx.input.getX();
             int mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
-            if (trangThaiManHinh == TrangThaiManHinhMenu.NONE) {
+            if (trangThaiManHinh == TrangThai.NONE) {
                 int[] ys = {320, 255, 190, 125};
 
                 int soNut = ys.length;
@@ -182,21 +183,21 @@ public class ManHinhMenu implements Screen {
                         nutDuocChon = i;
                     }
                 }
-            } else if (trangThaiManHinh == TrangThaiManHinhMenu.BAN) {
+            } else if (trangThaiManHinh == TrangThai.BAN) {
                 float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
                 float nutY = 70;
                 if (mouseX >= nutX && mouseX <= nutX + 140 &&
                     mouseY >= nutY && mouseY <= nutY + 50) {
                     timeClickNutThongBao = 0.1f;
                 }
-            } else if (trangThaiManHinh == TrangThaiManHinhMenu.SERVER_ERROR) {
+            } else if (trangThaiManHinh == TrangThai.SERVER_ERROR) {
                 float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
                 float nutY = 70;
                 if (mouseX >= nutX && mouseX <= nutX + 140 &&
                     mouseY >= nutY && mouseY <= nutY + 50) {
                     timeClickNutThongBao = 0.1f;
                 }
-            } else if (trangThaiManHinh == TrangThaiManHinhMenu.FORCE_LOGOUT) {
+            } else if (trangThaiManHinh == TrangThai.FORCE_LOGOUT) {
                 float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
                 float nutY = 70;
                 if (mouseX >= nutX && mouseX <= nutX + 140 &&
@@ -209,10 +210,10 @@ public class ManHinhMenu implements Screen {
         if (timeClickNutThongBao > 0) {
             timeClickNutThongBao -= delta;
             if (timeClickNutThongBao <= 0) {
-                if (trangThaiManHinh == TrangThaiManHinhMenu.SERVER_ERROR) {
+                if (trangThaiManHinh == TrangThai.SERVER_ERROR) {
                     serverOnline = true;
                 }
-                trangThaiManHinh = TrangThaiManHinhMenu.NONE;
+                trangThaiManHinh = TrangThai.NONE;
             }
         }
 
@@ -302,7 +303,7 @@ public class ManHinhMenu implements Screen {
             batch.draw(nuithap, scrollX_thap + i * 340, 0, 340, 280);
         }
 
-        if (trangThaiManHinh == TrangThaiManHinhMenu.NONE) {
+        if (trangThaiManHinh == TrangThai.NONE) {
             batch.draw(logo, 355, 360, 320, 200);
             String[] labels;
             if (State_Management.getUserResponse() != null) {
@@ -348,7 +349,8 @@ public class ManHinhMenu implements Screen {
                     font.draw(batch, layout, textX, textYs[i]);
                 }
             }
-        } else if (trangThaiManHinh == TrangThaiManHinhMenu.BAN) {
+        } else if (trangThaiManHinh == TrangThai.BAN) {
+            font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
             batch.draw(anhThongBao, (Gdx.graphics.getWidth() - 740) / 2f, 85, 740, 168);
             layout.setText(font, "Tài khoản đã bị khóa, vui lòng liên hệ admin để được hỗ trợ");
             font.draw(batch, layout, (Gdx.graphics.getWidth() - layout.width) / 2, 180);
@@ -357,7 +359,7 @@ public class ManHinhMenu implements Screen {
             batch.draw(timeClickNutThongBao > 0 ? nutclick1 : nutdn1, nutX, nutY, 140, 50);
             layout.setText(font, "OK");
             font.draw(batch, layout, nutX + (140 - layout.width) / 2f, nutY + 30);
-        } else if (trangThaiManHinh == TrangThaiManHinhMenu.SERVER_ERROR) {
+        } else if (trangThaiManHinh == TrangThai.SERVER_ERROR) {
             batch.draw(anhThongBao, (Gdx.graphics.getWidth() - 740) / 2f, 85, 740, 168);
             font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
             layout.setText(font, "Máy chủ mất kết nối, vui lòng thử lại sau");
@@ -367,7 +369,7 @@ public class ManHinhMenu implements Screen {
             batch.draw(timeClickNutThongBao > 0 ? nutclick1 : nutdn1, nutX, nutY, 140, 50);
             layout.setText(font, "OK");
             font.draw(batch, layout, nutX + (140 - layout.width) / 2f, nutY + 30);
-        } else if (trangThaiManHinh == TrangThaiManHinhMenu.FORCE_LOGOUT) {  // THÊM
+        } else if (trangThaiManHinh == TrangThai.FORCE_LOGOUT) {  // THÊM
             batch.draw(anhThongBao, (Gdx.graphics.getWidth() - 740) / 2f, 85, 740, 168);
             font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
             layout.setText(font, State_Management.getForceLogoutMessage());

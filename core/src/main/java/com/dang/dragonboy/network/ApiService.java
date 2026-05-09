@@ -8,6 +8,7 @@ import java.net.URL;
 import com.badlogic.gdx.Gdx;
 import com.dang.dragonboy.du_lieu.LocalStorage;
 import com.dang.dragonboy.du_lieu.State_Management;
+import com.dang.dragonboy.giao_dien_ngoai.ManHinhMenu;
 import com.dang.dragonboy.he_thong.AppConfig;
 import com.dang.dragonboy.network.DTO.*;
 import com.dang.dragonboy.xu_ly_map.MapDataCache;
@@ -49,6 +50,19 @@ public class ApiService {
             conn.setReadTimeout(2000);
 
             int status = conn.getResponseCode();
+
+            if (status == 403) {
+                String errorBody = readErrorStream(conn);
+                String banMessage = "Tài khoản đang bị tạm khóa";
+                try {
+                    JsonObject json = JsonParser.parseString(errorBody).getAsJsonObject();
+                    if (json.has("message")) {
+                        banMessage = json.get("message").getAsString();
+                    }
+                } catch (Exception e) { /* fallback giữ nguyên */ }
+                State_Management.setForceLogoutMessage(banMessage);
+                return TrangThaiApiGetBan.BAN;
+            }
 
             if (status < 200 || status >= 300) {
                 return TrangThaiApiGetBan.SERVER_ERROR;
@@ -170,7 +184,7 @@ public class ApiService {
         return null; // login fail
     }
 
-    public static UserResponse verifyOTP(String sessionId, String OTP) {
+    public static ProfileResult verifyOTP(String sessionId, String OTP) {
         try {
             URL url = new URL(BASE_URL + "/auth/verify-otp");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -216,8 +230,8 @@ public class ApiService {
                     State_Management.setRefresh_token(refresh_token);
 //                    System.out.println("verify otp thanh cong");
 
-                    UserResponse user = ApiService.getProfile(access_token);
-                    return user;
+                    ProfileResult profile = ApiService.getProfile(access_token);
+                    return profile;
                 }
                 return null;
             } else {
@@ -231,7 +245,7 @@ public class ApiService {
     }
 
     // 🟨 2️⃣ GET PROFILE → nhận token, trả về UserResponse
-    public static UserResponse getProfile(String token) {
+    public static ProfileResult getProfile(String token) {
         try {
             URL profileUrl = new URL(BASE_URL + "/user/profile/" + State_Management.getAuth_id());
             HttpURLConnection conn = (HttpURLConnection) profileUrl.openConnection();
@@ -241,9 +255,24 @@ public class ApiService {
             conn.setReadTimeout(5000);
 
             int status = conn.getResponseCode();
+            if (status == 401) {
+                return ProfileResult.tokenInvalid();
+            }
+
+            if (status == 403) {
+                String errorBody = readErrorStream(conn);
+                String banMessage = "Tài khoản đang bị tạm khóa";
+                try {
+                    JsonObject json = JsonParser.parseString(errorBody).getAsJsonObject();
+                    if (json.has("message")) {
+                        banMessage = json.get("message").getAsString();
+                    }
+                } catch (Exception e) { /* fallback */ }
+                return ProfileResult.banned(banMessage);
+            }
+
             if (status != 200) {
-                System.err.println("Token không hợp lệ hoặc hết hạn: HTTP " + status);
-                return null;
+                return ProfileResult.serverError();
             }
 
             BufferedReader br = new BufferedReader(
@@ -307,7 +336,7 @@ public class ApiService {
                     });
                 }
             }
-            return user;
+            return ProfileResult.ok(user);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -895,5 +924,20 @@ public class ApiService {
                 Gdx.app.error("ApiService", "layShopCuaNpc exception", e);
             }
         }).start();
+    }
+
+    private static String readErrorStream(HttpURLConnection conn) {
+        try {
+            BufferedReader br = new BufferedReader(
+                new InputStreamReader(conn.getErrorStream(), StandardCharsets.UTF_8)
+            );
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) sb.append(line);
+            br.close();
+            return sb.toString();
+        } catch (Exception e) {
+            return "";
+        }
     }
 }

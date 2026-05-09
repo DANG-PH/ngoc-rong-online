@@ -4,7 +4,6 @@ import java.time.ZonedDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -720,8 +719,8 @@ public class VeHUD {
 
             // 3. Chuyển màn hình — sau khi state đã sạch
             Main game = State_Management.game;
-            State_Management.setForceLogoutMessage("Tài khoản được đăng nhập tại nơi khác!");
-            game.setScreen(new ManHinhMenu(game, null, true));
+            State_Management.setForceLogoutMessage("Mất kết nối, vui lòng đăng nhập lại!");
+            game.setScreen(new ManHinhMenu(game, null, ManHinhMenu.TrangThai.FORCE_LOGOUT));
         }
         if (GameSocket.isReconnecting || GameSocket.retryCount > 0) {
             batch.draw(anhThongBao, (Gdx.graphics.getWidth() - 740) / 2f, 85, 740, 168);
@@ -740,7 +739,7 @@ public class VeHUD {
 
             Main game = State_Management.game;
             State_Management.setForceLogoutMessage("Kết nối bị gián đoạn, về màn hình chính.");
-            game.setScreen(new ManHinhMenu(game, null, true));
+            game.setScreen(new ManHinhMenu(game, null, ManHinhMenu.TrangThai.FORCE_LOGOUT));
         }
         float deltaTime = Gdx.graphics.getDeltaTime();
 
@@ -1293,7 +1292,7 @@ public class VeHUD {
 
                             // 3. Chuyển màn hình — sau khi state đã sạch
                             Main game = State_Management.game;
-                            game.setScreen(new ManHinhMenu(game, null, false));
+                            game.setScreen(new ManHinhMenu(game, null, null));
                         }
                     } else {
                         if (oChiSoDangChon == 0) {
@@ -1321,7 +1320,7 @@ public class VeHUD {
 
                             // 3. Chuyển màn hình — sau khi state đã sạch
                             Main game = State_Management.game;
-                            game.setScreen(new ManHinhMenu(game, null, false));
+                            game.setScreen(new ManHinhMenu(game, null, null));
                         }
                     }
                 }

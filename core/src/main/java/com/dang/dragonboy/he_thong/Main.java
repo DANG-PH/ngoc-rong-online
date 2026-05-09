@@ -11,6 +11,7 @@ import java.util.*;
 import com.dang.dragonboy.item.*;
 import com.dang.dragonboy.network.DTO.DeTuTheoUser;
 import com.dang.dragonboy.network.DTO.ItemCanLuu;
+import com.dang.dragonboy.network.DTO.ProfileResult;
 import com.dang.dragonboy.network.DTO.UserResponse;
 import com.dang.dragonboy.nhan_vat.AssetsDemo;
 import com.dang.dragonboy.websocket.GameSocket;
@@ -53,10 +54,10 @@ public class Main extends Game {
             String username = savedUser.get("lastUsername");
 
             // ✅ Gọi API /profile để kiểm tra token còn hạn không
-            UserResponse profile = ApiService.getProfile(token);
+            ProfileResult profile = ApiService.getProfile(token);
 
             if (profile != null) {
-                State_Management.setUserResponse(profile);
+                State_Management.setUserResponse(profile.user);
                 State_Management.setToken(token);
             } else {
                 System.out.println("Token hết hạn hoặc không hợp lệ → yêu cầu đăng nhập lại");
