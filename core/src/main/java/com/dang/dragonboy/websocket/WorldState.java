@@ -11,9 +11,11 @@ import com.dang.dragonboy.network.ApiItemService;
 import com.dang.dragonboy.network.ApiService;
 import com.dang.dragonboy.network.DTO.ItemCanLuu;
 import com.dang.dragonboy.network.DTO.RongThanState;
+import com.dang.dragonboy.xu_ly_map.npc.ShopCache;
 import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle.admin_thanhle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -344,6 +346,33 @@ public class WorldState {
         }
     }
 
+    public static void onReloadShop(Object... args) {
+        if (args.length == 0) return;
+        try {
+            JSONObject obj = toJsonObject(args[0]);
+            int npcId = obj.optInt("npcId",-1);
+
+            ShopCache.getInstance().xoa(npcId);
+
+            ShopCache.getInstance().xoa(npcId);
+
+            VeHUD veHUD = State_Management.getVeHUD();
+            if (veHUD != null && veHUD.daClickVaoNpc && veHUD.npcHienTai != null) {
+                if (veHUD.npcHienTai.npcHUDrender.ui_npc instanceof admin_thanhle ui) {
+                    ApiService.layShopCuaNpc(npcId, data -> {
+                        ShopCache.getInstance().luu(npcId, data);
+                        Gdx.app.postRunnable(() -> ui.apDungDuLieuShop(data));
+                    });
+                }
+            }
+            // Nếu NPC shop không đang mở → không cần gọi API ngay,
+            // lần sau mở shop sẽ tự fetch vì cache đã bị xóa
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void onTradeItem(Object... args) {
         if (args.length == 0) return;
         try {
@@ -534,35 +563,27 @@ public class WorldState {
             int tmpId = obj.optInt("tmpId", -1);
             String uuid = obj.optString("uuid", "");
 
-            System.out.println("[onAddItem] tmpId=" + tmpId + " uuid=" + uuid);
-
             for (Item item : duLieuNguoiChoi.getHanhTrang()) {
                 if (item != null) {
-                    System.out.println("  [hanhTrang] id=" + item.getId() + " tmpId=" + item.tmpId + " uuid=" + item.uuid);
                     if (item.tmpId == tmpId) {
                         item.uuid = uuid;
                         item.tmpId = -1;
-                        System.out.println("  → MATCH hanhTrang: " + item.getId());
                     }
                 }
             }
             for (Item item : duLieuNguoiChoi.getHanhTrangDangMac()) {
                 if (item != null) {
-                    System.out.println("  [dangMac] id=" + item.getId() + " tmpId=" + item.tmpId + " uuid=" + item.uuid);
                     if (item.tmpId == tmpId) {
                         item.uuid = uuid;
                         item.tmpId = -1;
-                        System.out.println("  → MATCH dangMac: " + item.getId());
                     }
                 }
             }
             for (Item item : duLieuNguoiChoi.getHanhTrangRuongDo()) {
                 if (item != null) {
-                    System.out.println("  [ruongDo] id=" + item.getId() + " tmpId=" + item.tmpId + " uuid=" + item.uuid);
                     if (item.tmpId == tmpId) {
                         item.uuid = uuid;
                         item.tmpId = -1;
-                        System.out.println("  → MATCH ruongDo: " + item.getId());
                     }
                 }
             }

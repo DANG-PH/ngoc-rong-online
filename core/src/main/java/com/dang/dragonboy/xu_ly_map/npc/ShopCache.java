@@ -13,4 +13,7 @@ public class ShopCache {
     public boolean daCo(int npcBaseId) { return cache.containsKey(npcBaseId); }
     public List<ShopItemServerData> lay(int npcBaseId) { return cache.get(npcBaseId); }
     public void luu(int npcBaseId, List<ShopItemServerData> data) { cache.put(npcBaseId, data); }
+    public void xoa(int npcBaseId) {
+        cache.remove(npcBaseId);
+    }
 }

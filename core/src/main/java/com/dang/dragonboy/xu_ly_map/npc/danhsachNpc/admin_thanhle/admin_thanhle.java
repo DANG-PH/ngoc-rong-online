@@ -64,7 +64,7 @@ public class admin_thanhle extends renderUInpc {
         }
     }
 
-    private void apDungDuLieuShop(List<ShopItemServerData> data) {
+    public void apDungDuLieuShop(List<ShopItemServerData> data) {
         danhSachItemAoQuan.clear();
         danhSachItemPhuKien.clear();
         danhSachItemDacBiet.clear();

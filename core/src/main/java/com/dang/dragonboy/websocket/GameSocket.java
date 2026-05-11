@@ -273,6 +273,8 @@ public class GameSocket {
                 e.printStackTrace();
             }
         });
+
+        socket.on("reloadShop", args -> WorldState.onReloadShop(args));
     }
 
     public static boolean isConnected() {
