@@ -1,5 +1,5 @@
 # Hướng Dẫn Toàn Diện: Xây Dựng Game MMORPG 2D Realtime
-## Từ Naive Đến Production — Hành Trình Của Dragon Boy
+## Từ Sơ khai Đến Production-grade — Hành Trình Của Dragon Boy
 
 > Đây là tài liệu tổng hợp toàn bộ kiến thức về netcode mình đã tích lũy được khi xây dựng Dragon Boy — một game MMORPG 2D inspired by Ngọc Rồng Online. Tài liệu đi từ phiên bản đầu tiên (NestJS + Socket.IO + JSON) đến kiến trúc hiện tại (Go + binary WebSocket + snapshot interpolation), giải thích **TẠI SAO** mỗi bước phải đổi, **VẤN ĐỀ** gặp phải, và **CÁCH XỬ LÝ** với code thực tế.
 >
