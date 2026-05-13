@@ -876,7 +876,7 @@ public class ApiService {
     public static void layShopCuaNpc(int npcBaseId, Consumer<List<ShopItemServerData>> onHoanThanh) {
         new Thread(() -> {
             try {
-                URL url = new URL(BASE_URL +"/game-data/npc-shop?npc_base_id=" + npcBaseId);
+                URL url = new URL(BASE_URL + "/game-data/npc-shop?npc_base_id=" + npcBaseId);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setConnectTimeout(5000);
@@ -904,17 +904,23 @@ public class ApiService {
                 for (var element : itemsArray) {
                     JsonObject obj = element.getAsJsonObject();
                     ShopItemServerData item = new ShopItemServerData();
-                    item.id         = obj.get("id").getAsInt();
+                    item.id           = obj.get("id").getAsInt();
                     item.item_base_id = obj.get("item_base_id").getAsInt();
                     item.ten_item     = obj.get("ten_item").getAsString();
                     item.ma_item      = obj.get("ma_item").getAsString();
+
                     JsonElement giaEl = obj.get("gia");
                     item.gia = giaEl.isJsonObject()
                         ? ApiService.parseProtoLong(giaEl.getAsJsonObject())
                         : giaEl.getAsLong();
-                    item.loaiTien   = obj.get("loaiTien").getAsString();
-                    item.tab        = obj.get("tab").getAsString();
-                    item.is_active  = obj.get("is_active").getAsBoolean();
+
+                    item.loaiTien  = obj.get("loaiTien").getAsString();
+                    item.tab       = obj.get("tab").getAsString();
+                    item.is_active = obj.get("is_active").getAsBoolean();
+
+                    item.start_at = parseOptionalLong(obj, "start_at");
+                    item.end_at   = parseOptionalLong(obj, "end_at");
+
                     danhSach.add(item);
                 }
 
@@ -939,5 +945,20 @@ public class ApiService {
         } catch (Exception e) {
             return "";
         }
+    }
+
+    /**
+     * Đọc field epoch millis có thể không tồn tại hoặc là null.
+     * Trả về null nếu field thiếu hoặc explicit null trong JSON.
+     * Hỗ trợ cả format proto Long (object {high, low}) lẫn number thường.
+     */
+    private static Long parseOptionalLong(JsonObject obj, String key) {
+        if (!obj.has(key)) return null;
+        JsonElement el = obj.get(key);
+        if (el == null || el.isJsonNull() || el.equals("null")) return null;
+        if (el.isJsonObject()) {
+            return ApiService.parseProtoLong(el.getAsJsonObject());
+        }
+        return el.getAsLong();
     }
 }

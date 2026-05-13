@@ -2,9 +2,7 @@ package com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Align;
@@ -51,6 +49,8 @@ public class admin_thanhle extends renderUInpc {
 
     private static final int NPC_BASE_ID = 3;
 
+    public static Map<Integer, ShopItemTime> ShopItemTime = new HashMap<>();
+
     public admin_thanhle(Npc npc, VeHUD veHUD, DuLieuNguoiChoi duLieuNguoiChoi, NhanVat nhanVat) {
         super(npc, veHUD, duLieuNguoiChoi, nhanVat);
         ShopCache cache = ShopCache.getInstance();
@@ -68,11 +68,18 @@ public class admin_thanhle extends renderUInpc {
         danhSachItemAoQuan.clear();
         danhSachItemPhuKien.clear();
         danhSachItemDacBiet.clear();
+        ShopItemTime.clear();
 
         for (ShopItemServerData s : data) {
             if (!s.is_active) continue;
             Item item = ItemThuongXuLi.taoItemTuTen(s.ten_item);
             if (item == null) continue;
+
+            item.tmpId = s.id;  // ← dùng id server (Lưu tạm vào tmpId và k lưu vào item.id vì item.id là id trong item_db(của user))
+            ShopItemTime.put(s.id, new ShopItemTime(
+                s.start_at,
+                s.end_at
+            ));
 
             switch (s.tab) {
                 case "AO_QUAN"  -> danhSachItemAoQuan.add(item);
@@ -215,9 +222,9 @@ public class admin_thanhle extends renderUInpc {
                         break;
                     case 0 :
                         String loi = null;
-                        Long giaItem = ItemGia.layGiaItem(veHUD.itemm);
+                        long giaItem = ItemGia.layGiaItem(veHUD.itemm);
                         LoaiTien loaiTien = ItemGia.layLoaiTien(veHUD.itemm);
-                        Long loaiTienCanSoSanh = loaiTien == LoaiTien.VANG ? duLieuNguoiChoi.getVang() : duLieuNguoiChoi.getNgoc();
+                        long loaiTienCanSoSanh = loaiTien == LoaiTien.VANG ? duLieuNguoiChoi.getVang() : duLieuNguoiChoi.getNgoc();
                         if (!duLieuNguoiChoi.duChoTrongHanhTrang(1)) {
                             loi = "Cần ít nhất 1 ô trống trong hành trang";
                         } else if (loaiTienCanSoSanh < giaItem) {

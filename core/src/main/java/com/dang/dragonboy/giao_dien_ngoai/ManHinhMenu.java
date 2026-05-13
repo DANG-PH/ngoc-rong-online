@@ -74,7 +74,6 @@ public class ManHinhMenu implements Screen {
         shapeRenderer = new ShapeRenderer();
         layout = new GlyphLayout();
 
-        System.out.println("VAO MAN MENU MOI");
         if (trangThaiBanDau != null) {
             this.trangThaiManHinh = trangThaiBanDau;
         }

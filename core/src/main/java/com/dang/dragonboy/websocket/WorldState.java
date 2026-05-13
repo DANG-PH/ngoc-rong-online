@@ -354,8 +354,6 @@ public class WorldState {
 
             ShopCache.getInstance().xoa(npcId);
 
-            ShopCache.getInstance().xoa(npcId);
-
             VeHUD veHUD = State_Management.getVeHUD();
             if (veHUD != null && veHUD.daClickVaoNpc && veHUD.npcHienTai != null) {
                 if (veHUD.npcHienTai.npcHUDrender.ui_npc instanceof admin_thanhle ui) {

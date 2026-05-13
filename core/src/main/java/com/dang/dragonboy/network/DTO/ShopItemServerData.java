@@ -9,4 +9,6 @@ public class ShopItemServerData {
     public String loaiTien;
     public String tab;
     public boolean is_active;
+    public Long start_at;  // null = bán ngay (không giới hạn thời gian bắt đầu)
+    public Long end_at;    // null = vô thời hạn
 }

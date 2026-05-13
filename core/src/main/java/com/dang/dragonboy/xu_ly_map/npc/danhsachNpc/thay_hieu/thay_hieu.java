@@ -3,7 +3,6 @@ package com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.thay_hieu;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -14,16 +13,10 @@ import com.dang.dragonboy.hien_thi.VeHUD;
 import com.dang.dragonboy.item.Item;
 import com.dang.dragonboy.item.LoaiItem;
 import com.dang.dragonboy.nhan_vat.NhanVat;
-import com.dang.dragonboy.xu_ly_map.npc.LoiThoai_ChucNang_Npc;
 import com.dang.dragonboy.xu_ly_map.npc.Npc;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.a_PHAN_LOAI_NPC.NPC_CUA_HANG;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.a_PHAN_LOAI_NPC.NPC_KHUNG_CHUNG;
-import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle.ItemGia;
-import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle.LoaiTien;
-import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle.TrangThaiChucNang_admin_thanhle;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.renderUInpc;
-
-import java.util.*;
 
 public class thay_hieu extends renderUInpc {
     public TrangThaiChucNang_PHA_LE_thay_hieu trangThaiPhaLe;

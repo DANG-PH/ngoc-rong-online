@@ -158,11 +158,11 @@ public class DuLieuNguoiChoi {
     }
 
     public boolean themItemVaoHanhTrang(Item item) {
-        boolean ketQua = themItemVaoHanhTrangNoSave(item);
+        Item itemMoi = item.sao();
+        boolean ketQua = themItemVaoHanhTrangNoSave(itemMoi);
         if (ketQua) {
-            int tmpId = idCounter.incrementAndGet();
-            item.tmpId = tmpId;
-            luuDuLieuItem(item, tmpId, "hanhtrang");
+            itemMoi.tmpId = idCounter.incrementAndGet();
+            luuDuLieuItem(itemMoi, itemMoi.tmpId, "hanhtrang");
         }
         return ketQua;
     }

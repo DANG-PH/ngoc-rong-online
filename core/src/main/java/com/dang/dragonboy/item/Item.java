@@ -147,4 +147,36 @@ public class Item {
     public String getViTri() {
         return viTri;
     }
+
+    /**
+     * Tạo bản sao của item này (deep copy đối với array, share texture).
+     * Dùng khi chuyển instance từ context này sang context khác,
+     * ví dụ shop → inventory, để tránh share state giữa 2 context.
+     *
+     * Lưu ý:
+     * - tmpId reset về -1 (sẽ được set lại khi add vào context mới).
+     * - uuid reset về null (chờ event WS từ server).
+     * - texture share cùng instance (LibGDX texture là native resource, không nên duplicate).
+     */
+    public Item sao() {
+        Item copy = new Item(
+            this.maItem,
+            this.ten,
+            this.loaiItem,
+            this.linkTexture,
+            this.moTa,
+            this.soLuong,
+            this.chiso == null ? null : this.chiso.clone(),
+            this.hanhtinh,
+            this.sucManhYeuCau,
+            this.setkichhoat,
+            this.soSaoPhaLe,
+            this.soSaoPhaLeCuongHoa,
+            this.soCap,
+            this.HanSuDung
+        );
+        copy.viTri = this.viTri;
+        // tmpId = -1, uuid = null (default từ class)
+        return copy;
+    }
 }
