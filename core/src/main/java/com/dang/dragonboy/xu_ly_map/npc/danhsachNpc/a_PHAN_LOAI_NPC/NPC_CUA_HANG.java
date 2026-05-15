@@ -284,7 +284,7 @@ public class NPC_CUA_HANG {
             } else if (conLai < 3_600_000L) { // < 1 giờ
                 mau = new Color(Color.valueOf("FFA500"));
             } else {
-                mau = new Color(Color.valueOf("AAAAAA"));
+                mau = new Color(0.0902f, 0.7490f, 0.0039f, 1f);
             }
         }
         mau.a = alpha;
