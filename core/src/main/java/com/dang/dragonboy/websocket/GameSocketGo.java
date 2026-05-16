@@ -1,16 +1,14 @@
 package com.dang.dragonboy.websocket;
 
-import com.badlogic.gdx.Gdx;
 import com.dang.dragonboy.du_lieu.State_Management;
 import com.dang.dragonboy.he_thong.AppConfig;
 import com.dang.dragonboy.nhan_vat.NhanVat;
+import com.dang.dragonboy.network.proto.GameProto.*;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.charset.StandardCharsets;
 
 /**
  * Connection tới Go game-service (binary WebSocket).
@@ -23,42 +21,15 @@ import java.nio.charset.StandardCharsets;
  * - Mất Socket.IO → kill luôn Go (do GameSocket gọi disconnectGo()).
  * - Mất Go → tự retry, KHÔNG động Socket.IO.
  *
- * BINARY PROTOCOL:
- * - BigEndian (network byte order).
- * - Mỗi packet: [msgType byte][payload bytes].
- * - String: [uint16 length BE][UTF-8 bytes].
- * - Float32: 4 bytes IEEE 754 BE.
+ * PROTOCOL: Protobuf (thay thế custom binary cũ).
+ * - Mỗi packet là 1 Envelope serialized.
+ * - Envelope.oneof payload xác định loại message (thay cho byte msgType đầu packet cũ).
+ * - GameProto.java được generate từ network/proto/game.proto.
  *
- * Handshake (FIRST PACKET sau khi WS connect):
- *   [0x00][PROTOCOL_VERSION uint16][userId int32][token string][gameSessionId string]
- *
- * Server reply:
- *   Ack:  [0x80]
- *   Nack: [0x81][reason uint8]
+ * Khi sửa game.proto, chạy lại từ root LibGDX project:
+ *   protoc --java_out=core/src/main/java core/src/main/java/com/dang/dragonboy/network/proto/game.proto
  */
 public class GameSocketGo {
-
-    // ---------- Protocol constants (PHẢI khớp với Go server) ----------
-    private static final int PROTOCOL_VERSION = 1;
-
-    // Client → Server
-    private static final byte MSG_HANDSHAKE   = (byte) 0x00;
-    private static final byte MSG_PLAYER_MOVE = (byte) 0x01;
-
-    // Server → Client
-    private static final byte MSG_HANDSHAKE_ACK  = (byte) 0x80;
-    private static final byte MSG_HANDSHAKE_NACK = (byte) 0x81;
-    private static final byte MSG_PLAYER_SYNC    = (byte) 0x82;
-    private static final byte MSG_PLAYER_SYNC_BATCH = (byte) 0x83;
-
-    // Trangthai enum (khớp với Go enums/trangthai.go và Java TrangThai.java)
-    private static final byte TRANGTHAI_DUNG_YEN   = 0;
-    private static final byte TRANGTHAI_DI_CHUYEN  = 1;
-    private static final byte TRANGTHAI_NHAY       = 2;
-    private static final byte TRANGTHAI_ROI        = 3;
-    private static final byte TRANGTHAI_BAY_NGANG  = 4;
-    private static final byte TRANGTHAI_THU        = 5;
-    private static final byte TRANGTHAI_GONG       = 6;
 
     // ---------- State ----------
     private static WebSocketClient client;
@@ -158,6 +129,7 @@ public class GameSocketGo {
                     waitingPong = false;
                     PlayerState.updateRenderDelay();
                 }
+
                 @Override
                 public void onError(Exception ex) {
                     System.out.println("GO WS ERROR: " + ex.getMessage());
@@ -220,29 +192,26 @@ public class GameSocketGo {
 
     /**
      * Handshake: first packet ngay sau khi WS open.
-     * Format: [0x00][version uint16][userId int32][token string][sessionId string]
+     *
+     * THAY ĐỔI SO VỚI CUSTOM BINARY:
+     *   - Cũ: tự build ByteBuffer [0x00][version uint16][userId int32][token string][sessionId string]
+     *   - Mới: Envelope.newBuilder().setHandshake(...).build().toByteArray()
      */
     private static void sendHandshake(String token) {
         try {
             int userId = State_Management.getUserResponse().id.intValue();
             String sessionId = State_Management.gameSessionId;
 
-            // Tính size buffer.
-            byte[] tokenBytes = token.getBytes(StandardCharsets.UTF_8);
-            byte[] sessionBytes = sessionId.getBytes(StandardCharsets.UTF_8);
-            int size = 1 + 2 + 4 + 2 + tokenBytes.length + 2 + sessionBytes.length;
+            Envelope env = Envelope.newBuilder()
+                .setHandshake(Handshake.newBuilder()
+                    .setProtocolVersion(1)
+                    .setUserId(userId)
+                    .setToken(token)
+                    .setGameSessionId(sessionId)
+                    .build())
+                .build();
 
-            ByteBuffer buf = ByteBuffer.allocate(size).order(ByteOrder.BIG_ENDIAN);
-            buf.put(MSG_HANDSHAKE);
-            buf.putShort((short) PROTOCOL_VERSION);
-            buf.putInt(userId);
-            buf.putShort((short) tokenBytes.length);
-            buf.put(tokenBytes);
-            buf.putShort((short) sessionBytes.length);
-            buf.put(sessionBytes);
-
-            buf.flip();
-            client.send(buf);
+            client.send(ByteBuffer.wrap(env.toByteArray()));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -250,66 +219,46 @@ public class GameSocketGo {
 
     /**
      * Gửi player-move tới Go.
-     * Format khớp với Go internal/shared/messages/player_move.go
      *
-     * Flow: client A move → Go → broadcast tới các client cùng map → các client nhận MsgPlayerSync.
+     * Flow: client A move → Go → broadcast tới các client cùng map → các client nhận PlayerSyncBatch.
+     *
+     * THAY ĐỔI SO VỚI CUSTOM BINARY:
+     *   - Cũ: tự tính size, allocate ByteBuffer, writeString thủ công
+     *   - Mới: PlayerMove.newBuilder() → proto lo hết serialization
+     *   - chanPath → setChanField() vì "chan" là keyword Go trong proto
      */
     public static void guiPlayerMove(NhanVat nhanVat) {
         if (!isConnected()) return;
 
         try {
-            String mapId = State_Management.getCurrentMap(); // CHÚ Ý: cần có hàm này
-            byte trangthai = trangthaiToByte(nhanVat.getTrangThai().name());
-            byte dir = (byte) (nhanVat.getFlipX() ? -1 : 1);
+            String mapId = State_Management.getCurrentMap();
 
-            byte[] mapBytes = stringBytes(mapId);
-            byte[] dauBytes = stringBytes(nhanVat.dauPath);
-            byte[] thanBytes = stringBytes(nhanVat.thanPath);
-            byte[] chanBytes = stringBytes(nhanVat.chanPath);
-            byte[] tenVanBayBytes = stringBytes(nhanVat.tenVanBay);
-            byte[] avatarBytes = stringBytes(nhanVat.doiavatar());
+            Envelope env = Envelope.newBuilder()
+                .setPlayerMove(PlayerMove.newBuilder()
+                    .setMapId(mapId)
+                    .setX((float) nhanVat.getX())
+                    .setY((float) nhanVat.getY())
+                    .setTrangthai(trangthaiToInt(nhanVat.getTrangThai().name()))
+                    .setDir(nhanVat.getFlipX() ? -1 : 1)
+                    .setDau(nhanVat.dauPath != null ? nhanVat.dauPath : "")
+                    .setThan(nhanVat.thanPath != null ? nhanVat.thanPath : "")
+                    .setChanField(nhanVat.chanPath != null ? nhanVat.chanPath : "") // ← "chan" → chanField trong proto
+                    .setTimeChoHienBay((float) nhanVat.timeChoHienBay)
+                    .setLechDauX((float) nhanVat.lechDauX)
+                    .setLechDauY((float) nhanVat.lechDauY)
+                    .setLechThanX((float) nhanVat.lechThanX)
+                    .setLechThanY((float) nhanVat.lechThanY)
+                    .setLechChanX((float) nhanVat.lechChanX)
+                    .setLechChanY((float) nhanVat.lechChanY)
+                    .setDangMangVanBay(nhanVat.dangMangVanBay)
+                    .setTenVanBay(nhanVat.tenVanBay != null ? nhanVat.tenVanBay : "")
+                    .setRong((float) nhanVat.rong)
+                    .setCao((float) nhanVat.cao)
+                    .setAvatar(nhanVat.doiavatar() != null ? nhanVat.doiavatar() : "")
+                    .build())
+                .build();
 
-            // Tính tổng size để allocate đúng (tránh resize)
-            int size = 1                          // msgType
-                + 2 + mapBytes.length             // mapID
-                + 4 + 4                           // x, y
-                + 1 + 1                           // trangthai, dir
-                + 2 + dauBytes.length
-                + 2 + thanBytes.length
-                + 2 + chanBytes.length
-                + 4                               // timeChoHienBay
-                + 4 * 6                           // lechDau/Than/Chan X/Y
-                + 1                               // dangMangVanBay
-                + 2 + tenVanBayBytes.length
-                + 4 + 4                           // rong, cao
-                + 2 + avatarBytes.length;
-
-            ByteBuffer buf = ByteBuffer.allocate(size).order(ByteOrder.BIG_ENDIAN);
-            buf.put(MSG_PLAYER_MOVE);
-
-            writeString(buf, mapBytes);
-            buf.putFloat((float) nhanVat.getX());
-            buf.putFloat((float) nhanVat.getY());
-            buf.put(trangthai);
-            buf.put(dir);
-            writeString(buf, dauBytes);
-            writeString(buf, thanBytes);
-            writeString(buf, chanBytes);
-            buf.putFloat((float) nhanVat.timeChoHienBay);
-            buf.putFloat((float) nhanVat.lechDauX);
-            buf.putFloat((float) nhanVat.lechDauY);
-            buf.putFloat((float) nhanVat.lechThanX);
-            buf.putFloat((float) nhanVat.lechThanY);
-            buf.putFloat((float) nhanVat.lechChanX);
-            buf.putFloat((float) nhanVat.lechChanY);
-            buf.put((byte) (nhanVat.dangMangVanBay ? 1 : 0));
-            writeString(buf, tenVanBayBytes);
-            buf.putFloat((float) nhanVat.rong);
-            buf.putFloat((float) nhanVat.cao);
-            writeString(buf, avatarBytes);
-
-            buf.flip();
-            client.send(buf);
+            client.send(ByteBuffer.wrap(env.toByteArray()));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -319,169 +268,95 @@ public class GameSocketGo {
     // RECEIVE - Server → Client
     // ====================================================================
 
+    /**
+     * THAY ĐỔI SO VỚI CUSTOM BINARY:
+     *   - Cũ: đọc byte đầu làm msgType, switch(msgType)
+     *   - Mới: Envelope.parseFrom(data), switch(env.getPayloadCase())
+     */
     private static void handleBinaryMessage(ByteBuffer bytes) {
-        bytes.order(ByteOrder.BIG_ENDIAN);
+        try {
+            byte[] data = new byte[bytes.remaining()];
+            bytes.get(data);
+            Envelope env = Envelope.parseFrom(data);
 
-        if (bytes.remaining() < 1) return;
-        byte msgType = bytes.get();
+            switch (env.getPayloadCase()) {
+                case HANDSHAKE_ACK:
+                    System.out.println("GO handshake OK");
+                    handshakeOk = true;
+                    retryCount = 0;
+                    startClockSync();
+                    try {
+                        NhanVat nv = State_Management.getNhanVat();
+                        if (nv != null && State_Management.getVeHUD() != null) {
+                            guiPlayerMove(nv);
+                        }
+                    } catch (Exception ignored) {}
+                    break;
 
-        switch (msgType) {
-            case MSG_HANDSHAKE_ACK:
-                System.out.println("GO handshake OK");
-                handshakeOk = true;
-                retryCount = 0;
-                startClockSync();
-                try {
-                    NhanVat nv = State_Management.getNhanVat();
-                    if (nv != null && State_Management.getVeHUD() != null) {
-                        guiPlayerMove(nv);
+                case HANDSHAKE_NACK:
+                    int reason = env.getHandshakeNack().getReason().getNumber();
+                    System.out.println("GO handshake REJECTED, reason=" + reason);
+                    handshakeOk = false;
+                    // Reason = 3 (session) → master Socket.IO chắc chắn đã invalid → đừng retry.
+                    // Reason khác → có thể retry.
+                    if (reason == NackReason.NACK_REASON_SESSION_VALUE) {
+                        isManualDisconnect = true;
                     }
-                } catch (Exception ignored) {}
-                break;
+                    break;
 
-            case MSG_HANDSHAKE_NACK:
-                int reason = bytes.remaining() > 0 ? (bytes.get() & 0xFF) : 0;
-                System.out.println("GO handshake REJECTED, reason=" + reason);
-                handshakeOk = false;
-                // Reason = 3 (session) → master Socket.IO chắc chắn đã invalid → đừng retry.
-                // Reason khác → có thể retry.
-                if (reason == 3 /* NackReasonSession */) {
-                    isManualDisconnect = true;
-                }
-                break;
+                case PLAYER_SYNC_BATCH:
+                    handlePlayerSyncBatch(env.getPlayerSyncBatch());
+                    break;
 
-//            case MSG_PLAYER_SYNC:
-//                handlePlayerSync(bytes);
-//                break;
-
-            case MSG_PLAYER_SYNC_BATCH:
-                handlePlayerSyncBatch(bytes);
-                break;
-
-            default:
-                System.out.println("GO unknown msgType: 0x" + String.format("%02x", msgType));
+                default:
+                    System.out.println("GO unknown payload case: " + env.getPayloadCase());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     /**
-     * Decode PlayerSync và gọi WorldState.onPlayerSync.
-     *
-     * Format khớp với Go messages/player_move.go encode:
-     *   [int32 userId][float32 x][float32 y][uint8 trangthai][int8 dir]
-     *   [string dau][string than][string chan]
-     *   [float32 timeChoHienBay]
-     *   [float32 lechDauX/Y][float32 lechThanX/Y][float32 lechChanX/Y]
-     *   [string tenVanBay]
-     *   [float32 rong][float32 cao]
-     *   [string avatar]
-     *
-     * Convert sang JSONObject để compat với WorldState.onPlayerSync hiện tại
-     * (đang nhận args[0] = JSONObject từ Socket.IO). KHÔNG phải sửa WorldState.
+     * THAY ĐỔI SO VỚI CUSTOM BINARY:
+     *   - Cũ: nhận ByteBuffer, đọc thủ công từng field (getInt, getFloat, readString...)
+     *   - Mới: nhận PlayerSyncBatch đã parse sẵn, gọi getter trực tiếp
+     *   - count không cần đọc thủ công — batch.getPlayersCount() tự có
+     *   - chan → getChanField()
+     *   - trangthai: int → intToTrangthai() thay vì byteToTrangthai()
      */
-//    private static void handlePlayerSync(ByteBuffer buf) {
-//        try {
-//            int userId = buf.getInt();
-//            float x = buf.getFloat();
-//            float y = buf.getFloat();
-//            byte trangthai = buf.get();
-//            byte dir = buf.get();
-//            String dau = readString(buf);
-//            String than = readString(buf);
-//            String chan = readString(buf);
-//            float timeChoHienBay = buf.getFloat();
-//            float lechDauX = buf.getFloat();
-//            float lechDauY = buf.getFloat();
-//            float lechThanX = buf.getFloat();
-//            float lechThanY = buf.getFloat();
-//            float lechChanX = buf.getFloat();
-//            float lechChanY = buf.getFloat();
-//            boolean dangMangVanBay = buf.get() != 0;
-//            String tenVanBay = readString(buf);
-//            float rong = buf.getFloat();
-//            float cao = buf.getFloat();
-//            String avatar = readString(buf);
-//            long serverTime = buf.getLong();
-//
-////            // Build JSONObject để gọi cùng handler với Socket.IO.
-////            org.json.JSONObject data = new org.json.JSONObject();
-////            data.put("userId", userId);
-////            data.put("x", x);
-////            data.put("y", y);
-////            data.put("trangthai", byteToTrangthai(trangthai));
-////            data.put("dir", (int) dir);
-////            data.put("dau", dau);
-////            data.put("than", than);
-////            data.put("chan", chan);
-////            data.put("timeChoHienBay", timeChoHienBay);
-////            data.put("lechDauX", lechDauX);
-////            data.put("lechDauY", lechDauY);
-////            data.put("lechThanX", lechThanX);
-////            data.put("lechThanY", lechThanY);
-////            data.put("lechChanX", lechChanX);
-////            data.put("lechChanY", lechChanY);
-////            data.put("dangMangVanBay", dangMangVanBay);
-////            data.put("tenVanBay", tenVanBay);
-////            data.put("rong", rong);
-////            data.put("cao", cao);
-////            data.put("avatar", avatar);
-////
-////            // Gọi cùng callback với Socket.IO playerSync — KHÔNG phải sửa WorldState.
-////            // KHÔNG postRunnable vì WorldState.onPlayerSync hiện tại comment "Race condition không
-////            // đáng kể với game → không cần postRunnable" — giữ nguyên behavior.
-////            WorldState.onPlayerSync(new Object[]{ data });
-//
-//            WorldState.onPlayerSyncBinary(
-//                userId, x, y, byteToTrangthai(trangthai), dir,
-//                dau, than, chan, timeChoHienBay,
-//                lechDauX, lechDauY, lechThanX, lechThanY, lechChanX, lechChanY,
-//                dangMangVanBay, tenVanBay, rong, cao, avatar, serverTime
-//            );
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-    private static void handlePlayerSyncBatch(ByteBuffer buf) {
+    private static void handlePlayerSyncBatch(PlayerSyncBatch batch) {
         try {
-            int count = buf.getShort() & 0xFFFF; // uint16
-            for (int i = 0; i < count; i++) {
-                int userId = buf.getInt();
-                float x = buf.getFloat();
-                float y = buf.getFloat();
-                byte trangthai = buf.get();
-                byte dir = buf.get();
-                String dau = readString(buf);
-                String than = readString(buf);
-                String chan = readString(buf);
-                float timeChoHienBay = buf.getFloat();
-                float lechDauX = buf.getFloat();
-                float lechDauY = buf.getFloat();
-                float lechThanX = buf.getFloat();
-                float lechThanY = buf.getFloat();
-                float lechChanX = buf.getFloat();
-                float lechChanY = buf.getFloat();
-                boolean dangMangVanBay = buf.get() != 0;
-                String tenVanBay = readString(buf);
-                float rong = buf.getFloat();
-                float cao = buf.getFloat();
-                String avatar = readString(buf);
-                long serverTime = buf.getLong();
+            for (int i = 0; i < batch.getPlayersCount(); i++) {
+                PlayerSync p = batch.getPlayers(i);
 
                 WorldState.onPlayerSyncBinary(
-                    userId, x, y, byteToTrangthai(trangthai), dir,
-                    dau, than, chan, timeChoHienBay,
-                    lechDauX, lechDauY, lechThanX, lechThanY, lechChanX, lechChanY,
-                    dangMangVanBay, tenVanBay, rong, cao, avatar, serverTime
+                    p.getUserId(),
+                    p.getX(),
+                    p.getY(),
+                    intToTrangthai(p.getTrangthai()),
+                    (byte) p.getDir(),
+                    p.getDau(),
+                    p.getThan(),
+                    p.getChanField(), // ← getChanField() thay vì "chan"
+                    p.getTimeChoHienBay(),
+                    p.getLechDauX(), p.getLechDauY(),
+                    p.getLechThanX(), p.getLechThanY(),
+                    p.getLechChanX(), p.getLechChanY(),
+                    p.getDangMangVanBay(),
+                    p.getTenVanBay(),
+                    p.getRong(),
+                    p.getCao(),
+                    p.getAvatar(),
+                    p.getServerTime()
                 );
 
-                // Chỉ calibrate 1 lần cho cả batch
+                // Chỉ calibrate clock 1 lần cho cả batch
                 if (i == 0) {
                     long now = System.currentTimeMillis();
-                    long newOffset = serverTime + lastRtt / 2 - now;
+                    long newOffset = p.getServerTime() + lastRtt / 2 - now;
 
                     if (!clockReady) {
                         clockOffset = newOffset;
-
                         lastClockSyncAt = now;
                         clockReady = true;
                         if (client != null && client.isOpen() && !waitingPong) {
@@ -504,7 +379,6 @@ public class GameSocketGo {
                             startClockSync();
                         }
                     }
-
                 }
             }
         } catch (Exception e) {
@@ -518,53 +392,36 @@ public class GameSocketGo {
     }
 
     // ====================================================================
-    // Binary helpers
+    // Trangthai enum mapping (khớp Go trangthai.go)
+    //
+    // THAY ĐỔI SO VỚI CUSTOM BINARY:
+    //   - trangthaiToByte(String) → trangthaiToInt(String)  (proto dùng int32, không có uint8)
+    //   - byteToTrangthai(byte)   → intToTrangthai(int)
     // ====================================================================
 
-    private static byte[] stringBytes(String s) {
-        if (s == null) s = "";
-        return s.getBytes(StandardCharsets.UTF_8);
-    }
-
-    private static void writeString(ByteBuffer buf, byte[] strBytes) {
-        buf.putShort((short) strBytes.length);
-        buf.put(strBytes);
-    }
-
-    private static String readString(ByteBuffer buf) {
-        int len = buf.getShort() & 0xFFFF; // unsigned uint16
-        byte[] bytes = new byte[len];
-        buf.get(bytes);
-        return new String(bytes, StandardCharsets.UTF_8);
-    }
-
-    // ====================================================================
-    // Trangthai enum mapping (khớp Go enums/trangthai.go)
-    // ====================================================================
-
-    private static byte trangthaiToByte(String name) {
+    private static int trangthaiToInt(String name) {
         switch (name) {
-            case "DUNG_YEN":   return TRANGTHAI_DUNG_YEN;
-            case "DI_CHUYEN":  return TRANGTHAI_DI_CHUYEN;
-            case "NHAY":       return TRANGTHAI_NHAY;
-            case "ROI":        return TRANGTHAI_ROI;
-            case "BAY_NGANG":  return TRANGTHAI_BAY_NGANG;
-            case "THU":        return TRANGTHAI_THU;
-            case "GONG":       return TRANGTHAI_GONG;
-            default:           return TRANGTHAI_DUNG_YEN;
+            case "DUNG_YEN":   return 0;
+            case "DI_CHUYEN":  return 1;
+            case "NHAY":       return 2;
+            case "ROI":        return 3;
+            case "BAY_NGANG":  return 4;
+            case "THU":        return 5;
+            case "GONG":       return 6;
+            default:           return 0;
         }
     }
 
-    private static String byteToTrangthai(byte b) {
-        switch (b) {
-            case TRANGTHAI_DUNG_YEN:   return "DUNG_YEN";
-            case TRANGTHAI_DI_CHUYEN:  return "DI_CHUYEN";
-            case TRANGTHAI_NHAY:       return "NHAY";
-            case TRANGTHAI_ROI:        return "ROI";
-            case TRANGTHAI_BAY_NGANG:  return "BAY_NGANG";
-            case TRANGTHAI_THU:        return "THU";
-            case TRANGTHAI_GONG:       return "GONG";
-            default:                   return "DUNG_YEN";
+    private static String intToTrangthai(int v) {
+        switch (v) {
+            case 0: return "DUNG_YEN";
+            case 1: return "DI_CHUYEN";
+            case 2: return "NHAY";
+            case 3: return "ROI";
+            case 4: return "BAY_NGANG";
+            case 5: return "THU";
+            case 6: return "GONG";
+            default: return "DUNG_YEN";
         }
     }
 }

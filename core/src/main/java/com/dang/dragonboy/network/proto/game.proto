@@ -1,0 +1,105 @@
+syntax = "proto3";
+
+package game;
+
+option go_package = "github.com/DANG-PH/game-service-go/internal/protocol/pb;gamepb";
+option java_package = "com.dang.dragonboy.network.proto";
+option java_outer_classname = "GameProto";
+
+// =============================================================
+// CLIENT → SERVER
+// =============================================================
+
+message Handshake {
+  uint32 protocol_version = 1;
+  int32  user_id          = 2;
+  string token            = 3;
+  string game_session_id  = 4;
+}
+
+message PlayerMove {
+  string map_id            = 1;
+  float  x                 = 2;
+  float  y                 = 3;
+  uint32 trangthai         = 4;
+  sint32 dir               = 5;
+  string dau               = 6;
+  string than              = 7;
+  string chan_field        = 8;
+  float  time_cho_hien_bay = 9;
+  float  lech_dau_x        = 10;
+  float  lech_dau_y        = 11;
+  float  lech_than_x       = 12;
+  float  lech_than_y       = 13;
+  float  lech_chan_x       = 14;
+  float  lech_chan_y       = 15;
+  bool   dang_mang_van_bay = 16;
+  string ten_van_bay       = 17;
+  float  rong              = 18;
+  float  cao               = 19;
+  string avatar            = 20;
+}
+
+// =============================================================
+// SERVER → CLIENT
+// =============================================================
+
+message HandshakeAck {}
+
+message HandshakeNack {
+  NackReason reason = 1;
+}
+
+enum NackReason {
+  NACK_REASON_UNSPECIFIED = 0;
+  NACK_REASON_VERSION     = 1;
+  NACK_REASON_AUTH        = 2;
+  NACK_REASON_SESSION     = 3;
+  NACK_REASON_INTERNAL    = 99;
+}
+
+message PlayerSync {
+  int32  user_id           = 1;
+  float  x                 = 2;
+  float  y                 = 3;
+  uint32 trangthai         = 4;
+  sint32 dir               = 5;
+  string dau               = 6;
+  string than              = 7;
+  string chan_field        = 8;
+  float  time_cho_hien_bay = 9;
+  float  lech_dau_x        = 10;
+  float  lech_dau_y        = 11;
+  float  lech_than_x       = 12;
+  float  lech_than_y       = 13;
+  float  lech_chan_x       = 14;
+  float  lech_chan_y       = 15;
+  bool   dang_mang_van_bay = 16;
+  string ten_van_bay       = 17;
+  float  rong              = 18;
+  float  cao               = 19;
+  string avatar            = 20;
+  int64  server_time       = 21;
+}
+
+message PlayerSyncBatch {
+  repeated PlayerSync players = 1;
+}
+
+// =============================================================
+// ENVELOPE — wrapper thay cho byte msgType đầu packet
+// =============================================================
+
+message Envelope {
+  oneof payload {
+    // Client → Server
+    Handshake       handshake         = 1;
+    PlayerMove      player_move       = 2;
+
+    // Server → Client
+    HandshakeAck    handshake_ack     = 10;
+    HandshakeNack   handshake_nack    = 11;
+    PlayerSync      player_sync       = 12;
+    PlayerSyncBatch player_sync_batch = 13;
+  }
+}
