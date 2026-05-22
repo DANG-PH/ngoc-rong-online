@@ -16,6 +16,7 @@ import com.dang.dragonboy.websocket.KhungGiaoDich;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_haidang.admin_haidang;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle.TrangThaiChucNang_CUA_HANG_admin_thanhle;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle.*;
+import com.dang.dragonboy.he_thong.MusicManager;
 
 import java.util.ArrayList;
 
@@ -710,7 +711,7 @@ public class HUDClickHandler {
             float viewY = 35;
             float viewHeight = 444 - 35;
             int KhoangCachItem = 49;
-            int tongSoO = veHUD.nhacNen.length;
+            int tongSoO = MusicManager.getDanhSach().size() + 1;
 
             // Kiểm tra có click vào vùng không
             if (x >= 3 && x <= 3 + 344 && y >= viewY && y <= viewY + viewHeight) {

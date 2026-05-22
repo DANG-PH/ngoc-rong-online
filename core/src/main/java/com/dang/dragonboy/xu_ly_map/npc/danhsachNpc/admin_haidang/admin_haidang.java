@@ -504,15 +504,15 @@ public class admin_haidang extends renderUInpc {
 
         switch (trangThai) {
             case GACHA:
-                if (veHUD.isDangPhatNhac()) {
-                    for (int i = 1; i < veHUD.nhacNen.length; i++) {
-                        if (veHUD.nhacNen[i].isPlaying() && i != 11) {
-                            veHUD.nhacNen[i].stop();
-                            veHUD.nhacNen[11].play();
-                            veHUD.setTinNhanPet("Đang phát bài Seasons", 2f);
-                        }
-                    }
-                }
+//                if (veHUD.isDangPhatNhac()) {
+//                    for (int i = 1; i < veHUD.nhacNen.length; i++) {
+//                        if (veHUD.nhacNen[i].isPlaying() && i != 11) {
+//                            veHUD.nhacNen[i].stop();
+//                            veHUD.nhacNen[11].play();
+//                            veHUD.setTinNhanPet("Đang phát bài Seasons", 2f);
+//                        }
+//                    }
+//                }
                 break;
             case QUY_DOI:
                 chucNangQuyDoiVeDangChon = 0;

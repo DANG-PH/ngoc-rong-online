@@ -22,6 +22,9 @@ import java.util.function.Consumer;
 
 import com.google.gson.reflect.TypeToken;
 
+import com.dang.dragonboy.network.DTO.MusicServerData;
+import com.badlogic.gdx.files.FileHandle;
+
 public class ApiService {
     private static final String BASE_URL = AppConfig.get("api.base.url");
     private static final Gson gson = new Gson();
@@ -944,6 +947,94 @@ public class ApiService {
             return sb.toString();
         } catch (Exception e) {
             return "";
+        }
+    }
+
+    /**
+     * Lấy danh sách nhạc nền từ server.
+     * Public API, không cần token.
+     */
+    public static void layDanhSachNhac(Consumer<List<MusicServerData>> onHoanThanh) {
+        new Thread(() -> {
+            try {
+                URL url = new URL(BASE_URL + "/game-data/music");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setConnectTimeout(5000);
+                conn.setReadTimeout(5000);
+
+                int status = conn.getResponseCode();
+                if (status != 200) {
+                    Gdx.app.error("ApiService", "layDanhSachNhac thất bại, HTTP: " + status);
+                    Gdx.app.postRunnable(() -> onHoanThanh.accept(new ArrayList<>()));
+                    return;
+                }
+
+                BufferedReader br = new BufferedReader(
+                    new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8)
+                );
+                StringBuilder response = new StringBuilder();
+                String line;
+                while ((line = br.readLine()) != null) response.append(line.trim());
+                br.close();
+
+                JsonArray arr = JsonParser.parseString(response.toString())
+                    .getAsJsonObject()
+                    .getAsJsonArray("musics");
+
+                List<MusicServerData> danhSach = new ArrayList<>();
+                for (var el : arr) {
+                    JsonObject obj = el.getAsJsonObject();
+                    MusicServerData m = new MusicServerData();
+                    m.id       = obj.get("id").getAsInt();
+                    m.name     = obj.get("name").getAsString();
+                    m.file_url = obj.get("file_url").getAsString();
+                    m.hash     = obj.get("hash").getAsString();
+                    m.status   = obj.get("status").getAsInt();
+                    danhSach.add(m);
+                }
+
+                Gdx.app.postRunnable(() -> onHoanThanh.accept(danhSach));
+
+            } catch (Exception e) {
+                Gdx.app.error("ApiService", "layDanhSachNhac exception", e);
+                Gdx.app.postRunnable(() -> onHoanThanh.accept(new ArrayList<>()));
+            }
+        }).start();
+    }
+
+    /**
+     * Tải file mp3 từ URL và lưu vào local storage.
+     * Chạy sync — nên gọi từ background thread.
+     * Trả về true nếu thành công hoặc file đã tồn tại.
+     */
+    public static boolean taiFileNhacVeLocal(String fileUrl, FileHandle dest) {
+        try {
+            URL url = new URL(fileUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setConnectTimeout(10000);
+            conn.setReadTimeout(60000); // file mp3 lớn, timeout dài hơn
+
+            int status = conn.getResponseCode();
+            if (status != 200) {
+                Gdx.app.error("ApiService", "Tải file thất bại, HTTP: " + status + " - " + fileUrl);
+                return false;
+            }
+
+            try (InputStream is = conn.getInputStream();
+                 OutputStream os = dest.write(false)) {
+                byte[] buf = new byte[8192];
+                int len;
+                while ((len = is.read(buf)) > 0) {
+                    os.write(buf, 0, len);
+                }
+            }
+            return true;
+
+        } catch (Exception e) {
+            Gdx.app.error("ApiService", "taiFileNhacVeLocal exception", e);
+            return false;
         }
     }
 

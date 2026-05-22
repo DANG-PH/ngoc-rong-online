@@ -18,7 +18,9 @@ import com.badlogic.gdx.utils.Align;
 import com.dang.dragonboy.du_lieu.State_Management;
 import com.dang.dragonboy.giao_dien_ngoai.ManHinhMenu;
 import com.dang.dragonboy.he_thong.Main;
+import com.dang.dragonboy.he_thong.MusicManager;
 import com.dang.dragonboy.item.LoaiItem;
+import com.dang.dragonboy.network.DTO.MusicServerData;
 import com.dang.dragonboy.nhan_vat.*;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.item.ThemItemTest;
@@ -30,6 +32,8 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.audio.Music;
 import java.util.LinkedList;
+import java.util.List;
+
 import com.dang.dragonboy.he_thong.TrangThaiChu;
 import com.dang.dragonboy.websocket.*;
 import com.dang.dragonboy.xu_ly_map.MapDoiHoaCuc;
@@ -213,8 +217,6 @@ public class VeHUD {
 
     public boolean dangChonHanhTrangPhai = false;
     public boolean dangChonHanhTrangTrai = false;
-
-    public Music[] nhacNen = new Music[13];
 
     public float timeMiniGame = 60f;
     public int ketQuaGiaiTruoc;
@@ -672,27 +674,10 @@ public class VeHUD {
         fontTen = generator4.generateFont(param4);
         generator4.dispose();
 
-        String[] tenFile = {
-            "", // 0 là tắt nhạc nên để trống
-            "khauthitamphi.mp3",
-            "demngayxaem.mp3",
-            "ketheoduoianhsang.mp3",
-            "thaproitudo.mp3",
-            "dieuanhbiet.mp3",
-            "dandan.mp3",
-            "saominhchuanamtaynhau.mp3",
-            "thoigiansetraloi.mp3",
-            "suthatdaboquen.mp3",
-            "khonglayduocvo.mp3",
-            "seasons.mp3",
-            "vokichcuaem.mp3"
-        };
-
-        for (int i = 1; i < tenFile.length; i++) {
-            nhacNen[i] = Gdx.audio.newMusic(Gdx.files.internal("nhacnen/" + tenFile[i]));
-            nhacNen[i].setLooping(true);
-            nhacNen[i].setVolume(0.5f);
-        }
+        MusicManager.refresh(() -> {
+            System.out.println("Load nhạc nền xong");
+            // Game tiếp tục bình thường
+        });
 
         muiTen = new Texture("hud/giaodientrong/clicknpc.png");
 
@@ -719,7 +704,6 @@ public class VeHUD {
 
             // 3. Chuyển màn hình — sau khi state đã sạch
             Main game = State_Management.game;
-            State_Management.setForceLogoutMessage("Mất kết nối, vui lòng đăng nhập lại!");
             game.setScreen(new ManHinhMenu(game, null, ManHinhMenu.TrangThai.FORCE_LOGOUT));
         }
         if (GameSocket.isReconnecting || GameSocket.retryCount > 0) {
@@ -1210,20 +1194,17 @@ public class VeHUD {
                         setTinNhanPet("Cần chờ "+(int)(delayHopTheThuong/60f)+" phút nữa để hợp thể Fushion Dance",2);
                     }
                 } else if (trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.NHAC_NEN) {
-                    String[] chucNang = {"Tắt nhạc","Khẩu thị tâm phi","Đếm ngày xa em","Kẻ theo đuổi ánh sáng","Tháp rơi tự do","Điều anh biết","DanDan Kokoro Hikareteku","Sao mình chưa nắm tay nhau","Thời gian sẽ trả lời","Sự thật đã bỏ quên", "Không lấy được vợ","Seasons","Vở kịch của em"};
+                    List<MusicServerData> danhSach = MusicManager.getDanhSach();
+
                     if (oChiSoDangChon == 0) {
-                        for (int i = 1; i < nhacNen.length; i++) {
-                            if (nhacNen[i].isPlaying()) nhacNen[i].stop();
-                            setTinNhanPet("Bạn vừa tắt nhạc",2f);
-                        }
-                    } else if (oChiSoDangChon >= 1 && oChiSoDangChon < nhacNen.length) {
-                        // Tắt nhạc cũ nếu có
-                        for (int i = 1; i < nhacNen.length; i++) {
-                            if (nhacNen[i].isPlaying()) nhacNen[i].stop();
-                        }
-                        // Phát nhạc mới
-                        nhacNen[oChiSoDangChon].play();
-                        setTinNhanPet("Đang phát bài "+chucNang[oChiSoDangChon],2f);
+                        // Tắt nhạc
+                        MusicManager.stopAll();
+                        setTinNhanPet("Bạn vừa tắt nhạc", 2f);
+                    } else if (oChiSoDangChon >= 1 && oChiSoDangChon <= danhSach.size()) {
+                        // oChiSoDangChon - 1 vì index 0 là "Tắt nhạc"
+                        MusicServerData nhac = danhSach.get(oChiSoDangChon - 1);
+                        MusicManager.play(nhac.id);
+                        setTinNhanPet("Đang phát bài " + nhac.name, 2f);
                     }
                     trangThaiChucNangHUDChucNang = TrangThaiChucNangHUD_ChucNang.NONE;
                 } else if (trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.TAI_KHOAN) {
@@ -1278,6 +1259,10 @@ public class VeHUD {
                         } else if (oChiSoDangChon == 8) {
                             trangThaiChucNangHUDChucNang = TrangThaiChucNangHUD_ChucNang.TAI_KHOAN;
                         } else if (oChiSoDangChon == 9) {
+                            if (isDangPhatNhac()) {
+                                MusicManager.stopAll();
+                            }
+
                             Gdx.input.setInputProcessor(null);
                             // 1. Ngắt WS TRƯỚC TIÊN — trước khi làm bất cứ điều gì khác
                             GameSocket.reset();
@@ -1306,6 +1291,10 @@ public class VeHUD {
                         } else if (oChiSoDangChon == 7) {
                             trangThaiChucNangHUDChucNang = TrangThaiChucNangHUD_ChucNang.TAI_KHOAN;
                         } else if (oChiSoDangChon == 8) {
+                            if (isDangPhatNhac()) {
+                                MusicManager.stopAll();
+                            }
+
                             Gdx.input.setInputProcessor(null);
                             // 1. Ngắt WS TRƯỚC TIÊN — trước khi làm bất cứ điều gì khác
                             GameSocket.reset();
@@ -2652,8 +2641,8 @@ public class VeHUD {
     }
 
     public boolean isDangPhatNhac() {
-        for (int i = 1; i < nhacNen.length; i++) {
-            if (nhacNen[i].isPlaying()) return true;
+        for (Music m : MusicManager.nhacNen.values()) {
+            if (m != null && m.isPlaying()) return true;
         }
         return false;
     }
@@ -2724,9 +2713,6 @@ public class VeHUD {
         if (nenTrangNga!= null) nenTrangNga.dispose();
         if (nenTrangNgaClick!= null) nenTrangNgaClick.dispose();
 
-        for (int i = 1; i < nhacNen.length; i++) {
-            if (nhacNen[i] != null) nhacNen[i].dispose();
-        }
         if (framesPet != null) {
             for (Texture tex : framesPet) if (tex != null) tex.dispose();
         }

@@ -17,6 +17,7 @@ import com.dang.dragonboy.giao_dien_trong.ManHinhLangAru;
 import com.dang.dragonboy.he_thong.AppConfig;
 import com.dang.dragonboy.he_thong.Main;
 import com.dang.dragonboy.giao_dien_trong.ManHinhNhaGohan;
+import com.dang.dragonboy.he_thong.MusicManager;
 import com.dang.dragonboy.network.ApiService;
 import com.dang.dragonboy.network.DTO.UserResponse;
 import com.dang.dragonboy.network.TrangThaiApiGetBan;
@@ -142,6 +143,15 @@ public class ManHinhMenu implements Screen {
                                     // K cần xét 403 vì isNotBan được gọi trước và đã check user có đang bị ban chưa rồi
                                     System.out.println("/play thất bại: " + responseCode);
                                     conn.disconnect();
+
+                                    // Fail fast cho case 503 bảo trì — user đang ở loading splash hoặc vừa vào màn game,
+                                    // chuyển về menu ngay để hiển thị message bảo trì
+                                    if (responseCode == 503) {
+                                        Gdx.app.postRunnable(() -> {
+                                            State_Management.setForceLogoutMessage("Server đang bảo trì, vui lòng quay lại sau");
+                                            game.setScreen(new ManHinhMenu(game, mayChu, ManHinhMenu.TrangThai.FORCE_LOGOUT));
+                                        });
+                                    }
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();

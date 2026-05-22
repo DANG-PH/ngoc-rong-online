@@ -272,39 +272,6 @@ echo $JAVA_HOME  # phải trỏ đến thư mục JDK
 
 ---
 
-## 🤝 Đóng góp
 
-Game vẫn đang trong giai đoạn hoàn thiện và mình rất mong nhận được góp ý từ cộng đồng. Mọi đóng góp đều được chào đón!
 
-1. **Fork** repository này
-2. Tạo branch mới: `git checkout -b feature/ten-tinh-nang`
-3. Commit theo chuẩn [Conventional Commits](https://www.conventionalcommits.org/): `feat: them he thong cuong hoa`
-4. Push lên fork và mở **Pull Request**
 
-Trước khi làm tính năng lớn, vui lòng mở **Issue** để thảo luận trước — tránh trùng lặp công sức.
-
-Bạn cũng có thể đóng góp bằng cách **báo bug** hoặc **đề xuất tính năng** qua tab Issues — mọi feedback đều quý giá với mình.
-
----
-
-## 📜 License
-
-Dự án phát hành dưới giấy phép [MIT License](LICENSE) — bạn được tự do sử dụng, chỉnh sửa, phân phối với điều kiện giữ lại copyright notice. **Lưu ý**: dự án này là **fan-made**, không liên quan đến Hiker Games hay bất kỳ chủ sở hữu thương mại nào của Ngọc Rồng Online. Chỉ dùng cho mục đích **học tập và nghiên cứu**.
-
----
-
-<p align="center">
-  💥 Cảm ơn bạn đã quan tâm đến dự án Ngọc Rồng Online 💥
-</p>
-
-<p align="center">
-  Nếu thấy hữu ích, hãy cho repo một ⭐ để ủng hộ mình nhé!
-</p>
-
-<p align="center">
-  🎮 <a href="https://ngocrongdark.com">Chơi ngay tại ngocrongdark.com</a>
-</p>
-
-<p align="center">
-  <a href="https://github.com/DANG-PH">👉 Xem thêm các dự án khác trên GitHub</a>
-</p>

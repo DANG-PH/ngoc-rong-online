@@ -10,13 +10,16 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Align;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.du_lieu.State_Management;
+import com.dang.dragonboy.he_thong.MusicManager;
 import com.dang.dragonboy.item.Item;
 import com.dang.dragonboy.item.LoaiItem;
+import com.dang.dragonboy.network.DTO.MusicServerData;
 import com.dang.dragonboy.network.DTO.UserResponse;
 import com.dang.dragonboy.nhan_vat.NhanVat;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 public class HUDPopupRenderer {
     private final VeHUD veHUD;
@@ -1373,8 +1376,13 @@ public class HUDPopupRenderer {
                 veHUD.fontsm.draw(batch, layout, 125, 535);
             }
             if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.NHAC_NEN) {
-                String[] chucNang = {"Tắt nhạc", "Khẩu thị tâm phi", "Đếm ngày xa em", "Kẻ theo đuổi ánh sáng", "Tháp rơi tự do", "Điều anh biết", "DanDan Kokoro Hikareteku", "Sao mình chưa nắm tay nhau", "Thời gian sẽ trả lời", "Sự thật đã bỏ quên", "Không lấy được vợ", "Seasons","Vở kịch của em"};
-                veFormNut(batch,chucNang);
+                List<MusicServerData> danhSach = MusicManager.getDanhSach();
+                String[] chucNang = new String[danhSach.size() + 1];
+                chucNang[0] = "Tắt nhạc";
+                for (int i = 0; i < danhSach.size(); i++) {
+                    chucNang[i + 1] = danhSach.get(i).name;
+                }
+                veFormNut(batch, chucNang);
             }
             if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.TAI_KHOAN) {
                 String textFPS = veHUD.dangBatFPS ? "Tắt FPS" : "Bật FPS";
