@@ -1,0 +1,131 @@
+buildscript {
+  repositories {
+    mavenCentral()
+    google()
+    gradlePluginPortal()
+  }
+}
+
+apply plugin: 'com.android.application'
+
+android {
+  namespace 'com.dang.dragonboy.android'
+  compileSdkVersion 35
+  buildToolsVersion "35.0.0"
+
+  sourceSets {
+    main {
+      manifest.srcFile 'AndroidManifest.xml'
+      java.srcDirs = ['src/main/java']
+      jniLibs.srcDirs = ['libs']
+      res.srcDirs = ['res']
+      assets.srcDirs = [rootProject.file('assets').path]
+    }
+  }
+
+  packagingOptions {
+    exclude 'META-INF/robovm/ios/robovm.xml'
+  }
+
+  defaultConfig {
+    applicationId 'com.dang.dragonboy.android'
+    minSdkVersion 21
+    targetSdkVersion 35
+    versionCode 1
+    versionName "$projectVersion"
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_17
+    targetCompatibility JavaVersion.VERSION_17
+    coreLibraryDesugaringEnabled true
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+  }
+}
+
+eclipse.project.name = appName + '-android'
+
+configurations { natives }
+
+dependencies {
+  coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
+
+  implementation "com.badlogicgames.gdx-controllers:gdx-controllers-android:$gdxControllersVersion"
+  implementation "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
+
+  // Đăng nhập Google trên Android BẮT BUỘC phải qua Credential Manager (Google Identity Services) —
+  // Google chặn luồng redirect qua browser thông thường (như desktop dùng) cho OAuth Client loại
+  // "Android" vì lý do bảo mật (xem AndroidGoogleOAuth.java).
+  implementation "androidx.credentials:credentials:1.5.0"
+  implementation "androidx.credentials:credentials-play-services-auth:1.5.0"
+  implementation "com.google.android.libraries.identity.googleid:googleid:1.1.1"
+  natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
+  natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
+  natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
+  natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"
+  natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-armeabi-v7a"
+  natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-arm64-v8a"
+  natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86"
+  natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86_64"
+  natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi-v7a"
+  natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-arm64-v8a"
+  natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
+  natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64"
+  implementation project(':core')
+}
+
+// Called every time gradle gets executed, takes the native dependencies of
+// the natives configuration, and extracts them into the proper libs/<abi>
+// folders so they get packaged into the APK as jniLibs.
+task copyAndroidNatives {
+  doFirst {
+    file("libs/armeabi-v7a/").mkdirs()
+    file("libs/arm64-v8a/").mkdirs()
+    file("libs/x86_64/").mkdirs()
+    file("libs/x86/").mkdirs()
+
+    configurations.natives.files.each { jar ->
+      def outputDir = null
+      if (jar.name.endsWith("natives-armeabi-v7a.jar")) outputDir = file("libs/armeabi-v7a")
+      if (jar.name.endsWith("natives-arm64-v8a.jar")) outputDir = file("libs/arm64-v8a")
+      if (jar.name.endsWith("natives-x86_64.jar")) outputDir = file("libs/x86_64")
+      if (jar.name.endsWith("natives-x86.jar")) outputDir = file("libs/x86")
+      if (outputDir != null) {
+        copy {
+          from zipTree(jar)
+          into outputDir
+          include "*.so"
+        }
+      }
+    }
+  }
+}
+
+tasks.whenTaskAdded { packageTask ->
+  if (packageTask.name.contains("package")) {
+    packageTask.dependsOn 'copyAndroidNatives'
+  }
+}
+
+// Installs the current build and starts it on a connected device/emulator.
+tasks.register('run', Exec) {
+  def path
+  def localProperties = project.file("../local.properties")
+  if (localProperties.exists()) {
+    Properties properties = new Properties()
+    localProperties.withInputStream { instr -> properties.load(instr) }
+    def sdkDir = properties.getProperty('sdk.dir')
+    path = sdkDir ?: "$System.env.ANDROID_HOME"
+  } else {
+    path = "$System.env.ANDROID_HOME"
+  }
+
+  def adb = path + "/platform-tools/adb"
+  commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.dang.dragonboy.android/com.dang.dragonboy.android.AndroidLauncher'
+}

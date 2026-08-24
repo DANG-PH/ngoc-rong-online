@@ -9,8 +9,7 @@ buildscript {
     maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
   }
   dependencies {
-
-
+    classpath "com.android.tools.build:gradle:$androidPluginVersion"
   }
 }
 
@@ -27,7 +26,7 @@ allprojects {
   }
 }
 
-configure(subprojects) {
+configure(subprojects - project(':android')) {
   apply plugin: 'java-library'
   sourceCompatibility = 17
 
@@ -64,6 +63,7 @@ subprojects {
     maven { url 'https://s01.oss.sonatype.org' }
     // You may want to remove the following line if you have errors downloading dependencies.
     mavenLocal()
+    google()
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
     maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
     maven { url 'https://jitpack.io' }
