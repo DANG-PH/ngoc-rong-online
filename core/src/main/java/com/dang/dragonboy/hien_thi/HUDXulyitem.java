@@ -524,7 +524,7 @@ public class HUDXulyitem {
 // ==================== AO DE TU ====================
 
     private void macAoMoiDeTu(Item item, int indexx, ArrayList<Item> danhSach) {
-        Item aoCu = duLieuNguoiChoi.getHanhTrangDangMac().get(0);
+        Item aoCu = duLieuNguoiChoi.deTu.getHanhTrangDangMac().get(0);
 
         huyHieuUngSetDeTu(veHUD.skha_detu);
         duLieuNguoiChoi.deTu.dangMacAo(false);
@@ -547,7 +547,7 @@ public class HUDXulyitem {
 
     public void goAoDeTu() {
         if (veHUD.aoDeTu == null) return;
-        Item aoCu = duLieuNguoiChoi.getHanhTrangDangMac().get(0);
+        Item aoCu = duLieuNguoiChoi.deTu.getHanhTrangDangMac().get(0);
         duLieuNguoiChoi.deTu.setItemVaoHanhTrangDangMac(null, 0);
 
         huyHieuUngSetDeTu(veHUD.skha_detu);
@@ -614,7 +614,7 @@ public class HUDXulyitem {
 // ==================== QUAN DE TU ====================
 
     private void macQuanMoiDeTu(Item item, int indexx, ArrayList<Item> danhSach) {
-        Item quanCu = duLieuNguoiChoi.getHanhTrangDangMac().get(1);
+        Item quanCu = duLieuNguoiChoi.deTu.getHanhTrangDangMac().get(1);
 
         huyHieuUngSetDeTu(veHUD.skhq_detu);
         duLieuNguoiChoi.deTu.dangMacQuan(false);
@@ -637,7 +637,7 @@ public class HUDXulyitem {
 
     public void goQuanDeTu() {
         if (veHUD.quanDeTu == null) return;
-        Item quanCu = duLieuNguoiChoi.getHanhTrangDangMac().get(1);
+        Item quanCu = duLieuNguoiChoi.deTu.getHanhTrangDangMac().get(1);
         duLieuNguoiChoi.deTu.setItemVaoHanhTrangDangMac(null, 1);
 
         huyHieuUngSetDeTu(veHUD.skhq_detu);
@@ -694,7 +694,7 @@ public class HUDXulyitem {
 // ==================== GANG DE TU ====================
 
     private void macGangMoiDeTu(Item item, int indexx, ArrayList<Item> danhSach) {
-        Item gangCu = duLieuNguoiChoi.getHanhTrangDangMac().get(2);
+        Item gangCu = duLieuNguoiChoi.deTu.getHanhTrangDangMac().get(2);
 
         huyHieuUngSetDeTu(veHUD.skhg_detu);
         duLieuNguoiChoi.deTu.dangMacGang(false);
@@ -712,7 +712,7 @@ public class HUDXulyitem {
 
     public void goGangDeTu() {
         if (veHUD.gangDeTu == null) return;
-        Item gangCu = duLieuNguoiChoi.getHanhTrangDangMac().get(2);
+        Item gangCu = duLieuNguoiChoi.deTu.getHanhTrangDangMac().get(2);
         duLieuNguoiChoi.deTu.setItemVaoHanhTrangDangMac(null, 2);
 
         huyHieuUngSetDeTu(veHUD.skhg_detu);
@@ -764,7 +764,7 @@ public class HUDXulyitem {
 // ==================== GIAY DE TU ====================
 
     private void macGiayMoiDeTu(Item item, int indexx, ArrayList<Item> danhSach) {
-        Item giayCu = duLieuNguoiChoi.getHanhTrangDangMac().get(3);
+        Item giayCu = duLieuNguoiChoi.deTu.getHanhTrangDangMac().get(3);
 
         huyHieuUngSetDeTu(veHUD.skhj_detu);
         duLieuNguoiChoi.deTu.dangMacGiay(false);
@@ -782,7 +782,7 @@ public class HUDXulyitem {
 
     public void goGiayDeTu() {
         if (veHUD.giayDeTu == null) return;
-        Item giayCu = duLieuNguoiChoi.getHanhTrangDangMac().get(3);
+        Item giayCu = duLieuNguoiChoi.deTu.getHanhTrangDangMac().get(3);
         duLieuNguoiChoi.deTu.setItemVaoHanhTrangDangMac(null, 3);
 
         huyHieuUngSetDeTu(veHUD.skhj_detu);
@@ -834,7 +834,7 @@ public class HUDXulyitem {
 // ==================== RADA DE TU ====================
 
     private void macRadaMoiDeTu(Item item, int indexx, ArrayList<Item> danhSach) {
-        Item radaCu = duLieuNguoiChoi.getHanhTrangDangMac().get(4);
+        Item radaCu = duLieuNguoiChoi.deTu.getHanhTrangDangMac().get(4);
 
         huyHieuUngSetDeTu(veHUD.skhrada_detu);
         duLieuNguoiChoi.deTu.dangMacRada(false);
@@ -852,7 +852,7 @@ public class HUDXulyitem {
 
     public void goRadaDeTu() {
         if (veHUD.radaDeTu == null) return;
-        Item radaCu = duLieuNguoiChoi.getHanhTrangDangMac().get(4);
+        Item radaCu = duLieuNguoiChoi.deTu.getHanhTrangDangMac().get(4);
         duLieuNguoiChoi.deTu.setItemVaoHanhTrangDangMac(null, 4);
 
         huyHieuUngSetDeTu(veHUD.skhrada_detu);
