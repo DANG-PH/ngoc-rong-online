@@ -41,14 +41,18 @@ public class HUDPopupHanhTrang {
             PopupX = veHUD.PopupHanhTrangX_Phai;
             PopupY = veHUD.PopupHanhTrangY_Phai;
             PopupW = veHUD.PopupHanhTrangW_Phai;
-            PopupH = veHUD.PopupHanhTrangH_Phai;
+            // LUÔN bắt đầu từ 0, KHÔNG đọc lại veHUD.PopupHanhTrangH_Phai — vì cuối hàm này giờ có
+            // ghi ngược PopupH đã tính xong về field đó (để phần click đọc đúng), nếu đọc lại chính
+            // field đó làm điểm khởi đầu thì mỗi frame sau sẽ cộng dồn tiếp lên giá trị của frame
+            // trước → PopupH phình to vô hạn qua từng frame (khung/viền ngày càng to ra).
+            PopupH = 0;
             xCongThem = 1020 - PopupW - 10;
         } else {
             xCongThem = 0;
             PopupX = veHUD.PopupHanhTrangX_Trai;
             PopupY = veHUD.PopupHanhTrangY_Trai;
             PopupW = veHUD.PopupHanhTrangW_Trai;
-            PopupH = veHUD.PopupHanhTrangH_Trai;
+            PopupH = 0;
         }
 
         if (veHUD.itemm!=null) {
@@ -441,6 +445,19 @@ public class HUDPopupHanhTrang {
             }
             if ((PopupY + PopupH) > 590) {
                 PopupY = 590 - PopupH;
+            }
+            // PopupY/PopupH ở trên chỉ là biến cục bộ của lượt vẽ này — PopupH tăng dần tuỳ nội
+            // dung item (mô tả dài/ngắn khác nhau) nên chỉ biết được giá trị thật sau khi cộng dồn
+            // xong, và PopupY vừa bị kẹp lại để không tràn khung phía trên/dưới. Phải ghi ngược giá
+            // trị đã kẹp này về veHUD thì các nút bấm bên trong popup (mặc/tháo đồ...) mới tính đúng
+            // vùng chạm khớp với vị trí ĐANG hiển thị — nếu không, click sẽ dùng toạ độ cũ (chưa kẹp,
+            // PopupH=0 lúc mới mở popup) nên bấm trúng vào chỗ khác với những gì đang thấy trên màn.
+            if (benPhai) {
+                veHUD.PopupHanhTrangY_Phai = PopupY;
+                veHUD.PopupHanhTrangH_Phai = PopupH;
+            } else {
+                veHUD.PopupHanhTrangY_Trai = PopupY;
+                veHUD.PopupHanhTrangH_Trai = PopupH;
             }
 
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
