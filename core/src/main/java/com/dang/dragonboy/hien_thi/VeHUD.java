@@ -43,6 +43,8 @@ import com.dang.dragonboy.xu_ly_map.npc.Npc;
 import com.dang.dragonboy.xu_ly_map.MapCoBan;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_haidang.admin_haidang;
 import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_thanhle.admin_thanhle;
+import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_dungle.admin_dungle;
+import com.dang.dragonboy.xu_ly_map.npc.danhsachNpc.admin_dungle.TrangThaiChucNang_admin_dungle;
 
 public class VeHUD {
     //Map hien tai
@@ -586,6 +588,11 @@ public class VeHUD {
         // Load font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        // Bật lọc Linear thay vì Nearest (mặc định) — chữ FreeType generate ở kích thước cố định
+        // rồi bị phóng to theo viewport ảo trên điện thoại (tỉ lệ luôn > 1x), Nearest filter làm chữ
+        // vỡ nét/răng cưa khi phóng to, Linear cho chữ mượt hơn nhiều.
+        param.minFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
+        param.magFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
         param.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
             "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ ễ ằ ừ — ẳ ữ ỗ ằ ễ ỗ ừ ẵ ê : ĩ ≤";
         param.size = 18;
@@ -608,6 +615,11 @@ public class VeHUD {
         // Font có viền đen dành riêng cho dòng chữ "Đậu thần cấp ..."
         FreeTypeFontGenerator generator2 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchinh.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        // Bật lọc Linear thay vì Nearest (mặc định) — chữ FreeType generate ở kích thước cố định
+        // rồi bị phóng to theo viewport ảo trên điện thoại (tỉ lệ luôn > 1x), Nearest filter làm chữ
+        // vỡ nét/răng cưa khi phóng to, Linear cho chữ mượt hơn nhiều.
+        param2.minFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
+        param2.magFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
         param2.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
             "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ ễ ằ ừ — ẳ ữ ỗ ằ ễ ỗ ừ ẵ ê : ĩ ≤";
         param2.size = 22;
@@ -619,6 +631,11 @@ public class VeHUD {
         // font cho mấy chữ chức năng
         FreeTypeFontGenerator generator3 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchucnang.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param3 = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        // Bật lọc Linear thay vì Nearest (mặc định) — chữ FreeType generate ở kích thước cố định
+        // rồi bị phóng to theo viewport ảo trên điện thoại (tỉ lệ luôn > 1x), Nearest filter làm chữ
+        // vỡ nét/răng cưa khi phóng to, Linear cho chữ mượt hơn nhiều.
+        param3.minFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
+        param3.magFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
         param3.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
             "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ ễ ằ ừ — ẳ ữ ỗ ằ ễ ỗ ừ ẵ ê : ĩ ≤";
         param3.size = 14;
@@ -668,6 +685,11 @@ public class VeHUD {
 
         FreeTypeFontGenerator generator4 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchinh.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param4 = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        // Bật lọc Linear thay vì Nearest (mặc định) — chữ FreeType generate ở kích thước cố định
+        // rồi bị phóng to theo viewport ảo trên điện thoại (tỉ lệ luôn > 1x), Nearest filter làm chữ
+        // vỡ nét/răng cưa khi phóng to, Linear cho chữ mượt hơn nhiều.
+        param4.minFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
+        param4.magFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
         param4.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
             "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ Đ";
         param4.size = 21;
@@ -688,7 +710,130 @@ public class VeHUD {
         listHieuUngBienMat = new ListHieuUngBienMat(this.bien_mat);
     }
 
+    // Trên Android không có bàn phím vật lý — cần chủ động hiện bàn phím ảo mỗi khi có 1 ô nhập
+    // text đang mở (chat, mini-game, popup NPC...), nếu không tap vào các ô này sẽ không có phản
+    // hồi gì vì bàn phím ảo không tự bật.
+    private boolean coOnhapDangDuocChon() {
+        if (dangHienKhungChat) return true;
+        if (trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.THAM_GIA_CSMM
+            || trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.THAM_GIA_CHAN_LE) {
+            return true;
+        }
+        if (npcHienTai != null && npcHienTai.npcHUDrender != null) {
+            Object uiNpc = npcHienTai.npcHUDrender.ui_npc;
+            if (uiNpc instanceof admin_haidang && ((admin_haidang) uiNpc).dangHienChatDoiVeQuay) return true;
+            if (uiNpc instanceof admin_dungle && ((admin_dungle) uiNpc).trangThai == TrangThaiChucNang_admin_dungle.DOI_GIFT_CODE) return true;
+        }
+        return false;
+    }
+
+    // Xác nhận đặt cược "chẵn số may mắn" — dùng chung cho cả bấm nút xác nhận lẫn Enter/Done.
+    public void xuLyGuiCSMM() {
+        if (soNgocNguoiChoiNhap.isEmpty()) return;
+        if (soNgocNguoiChoiNhap.contains("/") && soNgocNguoiChoiNhap.split("/").length == 2) {
+            try {
+                String[] parts = soNgocNguoiChoiNhap.split("/");
+                int soNgoc = Integer.parseInt(parts[0].trim());
+                int soChon = Integer.parseInt(parts[1].trim());
+                if (soNgoc >= 1 && soChon >= 1 && soChon <= 99 && soNgocCuoc == 0 && soNguoiChoiChon == 0 && duLieuNguoiChoi.getNgoc() >= soNgoc) {
+                    soNgocCuoc = soNgoc;
+                    duLieuNguoiChoi.giamNgoc(soNgoc);
+                    soNguoiChoiChon = soChon;
+                }
+            } catch (NumberFormatException ignored) {
+            }
+        }
+        trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE_CSMM;
+        soNgocNguoiChoiNhap = "";
+        nutduocchon = -1;
+    }
+
+    // Xác nhận đặt cược "chẵn lẻ" — dùng chung cho cả bấm nút xác nhận lẫn Enter/Done.
+    public void xuLyGuiChanLe() {
+        if (soVangNguoiChoiNhapChanLe.isEmpty()) return;
+        if (soVangNguoiChoiNhapChanLe.contains("/") && soVangNguoiChoiNhapChanLe.split("/").length == 2) {
+            try {
+                String[] parts = soVangNguoiChoiNhapChanLe.split("/");
+                long soVang = Long.parseLong(parts[0].trim());
+                String duDoan = parts[1].trim();
+                if (soVang >= 1 && (duDoan.equals("chan") || duDoan.equals("le")) && soVangCuocChanLe == 0 && "".equals(NguoiChoiChonChanLe) && duLieuNguoiChoi.getVang() >= soVang) {
+                    soVangCuocChanLe = soVang;
+                    duLieuNguoiChoi.giamVang(soVang);
+                    NguoiChoiChonChanLe = duDoan;
+                }
+            } catch (NumberFormatException ignored) {
+            }
+        }
+        trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE_CHAN_LE;
+        soVangNguoiChoiNhapChanLe = "";
+        nutduocchon = -1;
+    }
+
+    // Gửi tin nhắn trong khung chat — dùng chung cho cả bấm nút "Gửi" lẫn bấm Enter/Done trên bàn
+    // phím ảo Android (ThaoTac.keyTyped bắt ký tự '\n' rồi gọi hàm này).
+    public void guiTinNhanChat() {
+        if (tinNhanChat.isEmpty()) return;
+        dangHienTinNhanChat = true;
+        dangHienKhungChat = false;
+        nutduocchon = -1;
+
+        if (duLieuNguoiChoi.coDeTu()) {
+            if (tinNhanChat.equals("bao ve") || tinNhanChat.equals("protect")) {
+                trangthaide = "Bảo vệ";
+                duLieuNguoiChoi.deTu.capNhatTrangThaiDeTu();
+            } else if (tinNhanChat.equals("tan cong") || tinNhanChat.equals("attack")) {
+                trangthaide = "Tấn công";
+                duLieuNguoiChoi.deTu.capNhatTrangThaiDeTu();
+            } else if (tinNhanChat.equals("di theo") || tinNhanChat.equals("follow")) {
+                trangthaide = "Đi theo";
+                duLieuNguoiChoi.deTu.capNhatTrangThaiDeTu();
+            } else if (tinNhanChat.equals("ve nha") || tinNhanChat.equals("go home")) {
+                trangthaide = "Về nhà";
+                duLieuNguoiChoi.deTu.capNhatTrangThaiDeTu();
+            }
+            if (tinNhanChat.equals("bien hinh") || tinNhanChat.equals("transformation")) {
+                if (duLieuNguoiChoi.deTu.getTenSkill(3) != null && duLieuNguoiChoi.deTu.getTenSkill(3).equals("Biến hình") && duLieuNguoiChoi.deTu.timeCoolDownBienKhi == 0 && duLieuNguoiChoi.deTu.timeChoBienKhi == 0) {
+                    duLieuNguoiChoi.deTu.timeChoBienKhi = 0.6f;
+                    duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Dạ sư phụ",3f);
+                }
+            }
+            if (tinNhanChat.equals("huy bien hinh")) {
+                if (duLieuNguoiChoi.deTu.getTenSkill(3) != null && duLieuNguoiChoi.deTu.getTenSkill(3).equals("Biến hình") && duLieuNguoiChoi.deTu.dangBienKhi) {
+                    duLieuNguoiChoi.deTu.huyBienKhi();
+                    duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Dạ sư phụ",3f);
+                }
+            }
+            if (tinNhanChat.contains("ten con la:")) {
+                String[] part = tinNhanChat.split(":", -1);
+                String tenDeTu = part[1].trim();
+                if (duLieuNguoiChoi.deTu.chuaSetTenDeTu) {
+                    if (!tenDeTu.isEmpty()) {
+                        duLieuNguoiChoi.deTu.setTenDeTu(tenDeTu);
+                        String[] text = {
+                            "Con xin nhận tên " + tenDeTu + " ạ, con sẽ không làm sư phụ thất vọng.",
+                            "Tên " + tenDeTu + " , đệ tử xin ghi nhớ!",
+                            "Từ nay con là " + tenDeTu + ", cám ơn sư phụ."
+                        };
+                        duLieuNguoiChoi.deTu.setTinNhanDeTuChat(text[MathUtils.random(text.length - 1)], 4f);
+                        duLieuNguoiChoi.deTu.chuaSetTenDeTu = false;
+                    } else {
+                        duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Sư phụ chưa đặt tên rõ ràng cho con...", 4f);
+                    }
+                } else {
+                    duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Sư phụ, tên con là " + duLieuNguoiChoi.deTu.getTen() + " mà...", 4f);
+                }
+            }
+        }
+
+        try {
+            GameSocket.guiChat(tinNhanChat);
+        } catch (Exception e) {
+
+        }
+    }
+
     public void render(SpriteBatch batch) {
+        Gdx.input.setOnscreenKeyboardVisible(coOnhapDangDuocChon());
         if (State_Management.isForceLogout()) {
             Gdx.input.setInputProcessor(null);
             // 1. Ngắt WS TRƯỚC TIÊN — trước khi làm bất cứ điều gì khác
@@ -707,10 +852,10 @@ public class VeHUD {
             game.setScreen(new ManHinhMenu(game, null, ManHinhMenu.TrangThai.FORCE_LOGOUT));
         }
         if (GameSocket.isReconnecting || GameSocket.retryCount > 0) {
-            batch.draw(anhThongBao, (Gdx.graphics.getWidth() - 740) / 2f, 85, 740, 168);
+            batch.draw(anhThongBao, (QuanLyCamera.VIRTUAL_WIDTH - 740) / 2f, 85, 740, 168);
             font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
             layout.setText(font, "Kết nối thất bại, đang thử lại lần " + GameSocket.retryCount + "/" + GameSocket.MAX_RETRY);
-            font.draw(batch, layout, (Gdx.graphics.getWidth() - layout.width) / 2, 180);
+            font.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH - layout.width) / 2, 180);
         }
         if (GameSocket.retryCount == GameSocket.MAX_RETRY && !GameSocket.isManualDisconnect && !State_Management.isForceLogout()) {
             GameSocket.reset();
@@ -773,8 +918,12 @@ public class VeHUD {
         int widthKI = (int) (thanhkinv.getWidth() *
             (duLieuNguoiChoi.getKiHienTai() / duLieuNguoiChoi.getKiHopThe()));
         thanhkinv1 = new TextureRegion(thanhkinv, 0, 0, widthKI, thanhkinv.getHeight());
-        float screenWidth = Gdx.graphics.getWidth();
-        float screenHeight = Gdx.graphics.getHeight();
+        // Dùng độ phân giải ảo cố định (không phải Gdx.graphics.getWidth/getHeight thật của
+        // thiết bị) vì batch ở đây được project qua camManager.uiCamera (FitViewport 1020x610) —
+        // nếu dùng kích thước màn hình thật thì trên điện thoại các phần tử này sẽ vẽ ra ngoài
+        // vùng ảo, lệch/mất hẳn khỏi màn hình.
+        float screenWidth = QuanLyCamera.VIRTUAL_WIDTH;
+        float screenHeight = QuanLyCamera.VIRTUAL_HEIGHT;
 
         if (!dangHienKhungChat && !daClickVaoNpc && !dangHienDauThan && !(timeHienRongThan<=TIME_HIEN_RONG_THAN_MAX-2.1f && timeHienRongThan>0)) {
             // RENDER SAU ẢNH ĐẬU THẦN ( trắng )
@@ -944,11 +1093,11 @@ public class VeHUD {
             shapeRenderer.setProjectionMatrix(camManager.uiCamera.combined);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
-            shapeRenderer.rect((Gdx.graphics.getWidth() - 528) / 2f - 2f, 35 -1f, 528 +4f, 149 +3f);
+            shapeRenderer.rect((QuanLyCamera.VIRTUAL_WIDTH - 528) / 2f - 2f, 35 -1f, 528 +4f, 149 +3f);
             shapeRenderer.end();
             batch.begin();
-            batch.draw(khungchat,(Gdx.graphics.getWidth() - 528) / 2f,35 , 528, 149);
-            float nX = (Gdx.graphics.getWidth() - 140) / 2f;
+            batch.draw(khungchat,(QuanLyCamera.VIRTUAL_WIDTH - 528) / 2f,35 , 528, 149);
+            float nX = (QuanLyCamera.VIRTUAL_WIDTH - 140) / 2f;
             float nutY = 12;
             fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
             batch.draw(isThongBaoOKPressed>0 && nutduocchon==1? nutclick : nutdn, nX-81, nutY, 140, 48);
@@ -960,10 +1109,10 @@ public class VeHUD {
 
             fontTenSkill.setColor(0f / 255f, 85f / 255f, 38f / 255f, 1f);
             layout.setText(fontTenSkill, "Chat");
-            fontTenSkill.draw(batch, layout, (Gdx.graphics.getWidth() - 528) / 2f + 15, 35 + 115);
+            fontTenSkill.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH - 528) / 2f + 15, 35 + 115);
 
             // Các thông số
-            float khungX = (Gdx.graphics.getWidth() - 528) / 2f + 25;
+            float khungX = (QuanLyCamera.VIRTUAL_WIDTH - 528) / 2f + 25;
             float khungY = 35;
             float khungWidth = 465;
             float khungHeight = 68;
@@ -983,7 +1132,7 @@ public class VeHUD {
             }
             batch.flush();
             Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
-            Gdx.gl.glScissor((int) khungX, (int) khungY, (int) khungWidth, (int) khungHeight);
+            camManager.scissor(khungX, khungY, khungWidth, khungHeight);
             fontText.draw(batch, layout, khungX - offsetX, khungY + khungHeight );
             batch.flush();
             Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
@@ -1035,7 +1184,7 @@ public class VeHUD {
             } else {
                 batch.setColor(1, 1, 1, 0.7f);
             }
-            batch.draw(nenflash,0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+            batch.draw(nenflash,0,0,QuanLyCamera.VIRTUAL_WIDTH,QuanLyCamera.VIRTUAL_HEIGHT);
             batch.setColor(1, 1, 1, 1);
         }
         // yc gd
@@ -1857,65 +2006,7 @@ public class VeHUD {
                         nutduocchon = -1;
                         tinNhanChat = "";
                     } else if (nutduocchon == 1) {
-                        if (!tinNhanChat.isEmpty()){
-                            dangHienTinNhanChat = true;
-                            dangHienKhungChat = false;
-                            nutduocchon = -1;
-
-                            if (duLieuNguoiChoi.coDeTu()) {
-                                if (tinNhanChat.equals("bao ve") || tinNhanChat.equals("protect")) {
-                                    trangthaide = "Bảo vệ";
-                                    duLieuNguoiChoi.deTu.capNhatTrangThaiDeTu();
-                                } else if (tinNhanChat.equals("tan cong") || tinNhanChat.equals("attack")) {
-                                    trangthaide = "Tấn công";
-                                    duLieuNguoiChoi.deTu.capNhatTrangThaiDeTu();
-                                } else if (tinNhanChat.equals("di theo") || tinNhanChat.equals("follow")) {
-                                    trangthaide = "Đi theo";
-                                    duLieuNguoiChoi.deTu.capNhatTrangThaiDeTu();
-                                } else if (tinNhanChat.equals("ve nha") || tinNhanChat.equals("go home")) {
-                                    trangthaide = "Về nhà";
-                                    duLieuNguoiChoi.deTu.capNhatTrangThaiDeTu();
-                                }
-                                if (tinNhanChat.equals("bien hinh") || tinNhanChat.equals("transformation")) {
-                                    if (duLieuNguoiChoi.deTu.getTenSkill(3) != null && duLieuNguoiChoi.deTu.getTenSkill(3).equals("Biến hình") && duLieuNguoiChoi.deTu.timeCoolDownBienKhi == 0 && duLieuNguoiChoi.deTu.timeChoBienKhi == 0) {
-                                        duLieuNguoiChoi.deTu.timeChoBienKhi = 0.6f;
-                                        duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Dạ sư phụ",3f);
-                                    }
-                                }
-                                if (tinNhanChat.equals("huy bien hinh")) {
-                                    if (duLieuNguoiChoi.deTu.getTenSkill(3) != null && duLieuNguoiChoi.deTu.getTenSkill(3).equals("Biến hình") && duLieuNguoiChoi.deTu.dangBienKhi) {
-                                        duLieuNguoiChoi.deTu.huyBienKhi();
-                                        duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Dạ sư phụ",3f);
-                                    }
-                                }
-                                if (tinNhanChat.contains("ten con la:")) {
-                                    String[] part = tinNhanChat.split(":", -1);
-                                    String tenDeTu = part[1].trim();
-                                    if (duLieuNguoiChoi.deTu.chuaSetTenDeTu) {
-                                        if (!tenDeTu.isEmpty()) {
-                                            duLieuNguoiChoi.deTu.setTenDeTu(tenDeTu);
-                                            String[] text = {
-                                                "Con xin nhận tên " + tenDeTu + " ạ, con sẽ không làm sư phụ thất vọng.",
-                                                "Tên " + tenDeTu + " , đệ tử xin ghi nhớ!",
-                                                "Từ nay con là " + tenDeTu + ", cám ơn sư phụ."
-                                            };
-                                            duLieuNguoiChoi.deTu.setTinNhanDeTuChat(text[MathUtils.random(text.length - 1)], 4f);
-                                            duLieuNguoiChoi.deTu.chuaSetTenDeTu = false;
-                                        } else {
-                                            duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Sư phụ chưa đặt tên rõ ràng cho con...", 4f);
-                                        }
-                                    } else {
-                                        duLieuNguoiChoi.deTu.setTinNhanDeTuChat("Sư phụ, tên con là " + duLieuNguoiChoi.deTu.getTen() + " mà...", 4f);
-                                    }
-                                }
-                            }
-
-                            try {
-                                GameSocket.guiChat(tinNhanChat);
-                            } catch (Exception e) {
-
-                            }
-                        }
+                        guiTinNhanChat();
                     }
                 } else if (trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.GIOI_THIEU_GAME) {
                     if (chuaNhanQuaLanDau) {
@@ -1937,31 +2028,7 @@ public class VeHUD {
                         nutduocchon = -1;
                         soNgocNguoiChoiNhap = "";
                     } else if (nutduocchon == 1) {
-                        if (!soNgocNguoiChoiNhap.isEmpty()){
-                            if (soNgocNguoiChoiNhap.contains("/") && soNgocNguoiChoiNhap.split("/").length == 2) {
-                                try {
-                                    String[] parts = soNgocNguoiChoiNhap.split("/");
-                                    int soNgoc = Integer.parseInt(parts[0].trim());
-                                    int soChon = Integer.parseInt(parts[1].trim());
-                                    if (soNgoc >= 1 && soChon>=1 && soChon <= 99 && soNgocCuoc == 0 && soNguoiChoiChon == 0 && duLieuNguoiChoi.getNgoc()>=soNgoc) {
-                                        soNgocCuoc = soNgoc;
-                                        duLieuNguoiChoi.giamNgoc(soNgoc);
-                                        soNguoiChoiChon = soChon;
-                                    }
-                                    trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE_CSMM;
-                                    soNgocNguoiChoiNhap = "";
-                                    nutduocchon = -1;
-                                } catch (NumberFormatException e) {
-                                    trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE_CSMM;
-                                    soNgocNguoiChoiNhap = "";
-                                    nutduocchon = -1;
-                                }
-                            } else {
-                                trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE_CSMM;
-                                soNgocNguoiChoiNhap = "";
-                                nutduocchon = -1;
-                            }
-                        }
+                        xuLyGuiCSMM();
                     }
                 } else if (trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.THAM_GIA_CHAN_LE) {
                     if (nutduocchon == 2){
@@ -1969,31 +2036,7 @@ public class VeHUD {
                         nutduocchon = -1;
                         soVangNguoiChoiNhapChanLe = "";
                     } else if (nutduocchon == 1) {
-                        if (!soVangNguoiChoiNhapChanLe.isEmpty()){
-                            if (soVangNguoiChoiNhapChanLe.contains("/") && soVangNguoiChoiNhapChanLe.split("/").length == 2) {
-                                try {
-                                    String[] parts = soVangNguoiChoiNhapChanLe.split("/");
-                                    long soVang = Long.parseLong(parts[0].trim());
-                                    String duDoan = parts[1].trim();
-                                    if (soVang >= 1 && (duDoan.equals("chan") || duDoan.equals("le")) && soVangCuocChanLe == 0 && "".equals(NguoiChoiChonChanLe) && duLieuNguoiChoi.getVang()>=soVang) {
-                                        soVangCuocChanLe = soVang;
-                                        duLieuNguoiChoi.giamVang(soVang);
-                                        NguoiChoiChonChanLe = duDoan;
-                                    }
-                                    trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE_CHAN_LE;
-                                    soVangNguoiChoiNhapChanLe = "";
-                                    nutduocchon = -1;
-                                } catch (NumberFormatException e) {
-                                    trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE_CHAN_LE;
-                                    soVangNguoiChoiNhapChanLe = "";
-                                    nutduocchon = -1;
-                                }
-                            } else {
-                                trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE_CHAN_LE;
-                                soVangNguoiChoiNhapChanLe = "";
-                                nutduocchon = -1;
-                            }
-                        }
+                        xuLyGuiChanLe();
                     }
                 }
             }
@@ -2068,13 +2111,13 @@ public class VeHUD {
             batch.setProjectionMatrix(camManager.camera.combined);
             float offsetY;
             if (timeHienTinNhanPet>=1.7f && !daRoiPetXuong) {
-                offsetY = (timeHienTinNhanPet-1.7f)/0.3f*Gdx.graphics.getHeight();
+                offsetY = (timeHienTinNhanPet-1.7f)/0.3f*QuanLyCamera.VIRTUAL_HEIGHT;
             } else if (timeHienTinNhanPet<1.7f && timeHienTinNhanPet>0.3f) {
                 offsetY = 0;
                 daRoiPetXuong = true;
             } else {
                 if (daDuocBayLen) {
-                    offsetY = (0.3f - timeHienTinNhanPet) / 0.3f * Gdx.graphics.getHeight();
+                    offsetY = (0.3f - timeHienTinNhanPet) / 0.3f * QuanLyCamera.VIRTUAL_HEIGHT;
                 } else {
                     offsetY = 0;
                 }

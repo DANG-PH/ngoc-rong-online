@@ -12,9 +12,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
 import com.dang.dragonboy.he_thong.Main;
+import com.dang.dragonboy.hien_thi.QuanLyCamera;
 
 public class ManHinhKhoiDong implements Screen {
     private Main game;
+    // Logo vẽ theo kích thước pixel gốc của texture, định vị theo Gdx.graphics.getWidth/getHeight
+    // thật của thiết bị — trên điện thoại có mật độ điểm ảnh cao hơn PC (1020x610) nhiều thì logo
+    // sẽ trông rất nhỏ. Dùng viewport ảo cố định để phóng to đúng tỉ lệ như trên PC.
+    private final QuanLyCamera camManager = new QuanLyCamera();
     private Texture logogame, logoptit1, logoptit2, logochu1, logochu2, nen;
     private SpriteBatch batch;
     private ShapeRenderer shapeRenderer;
@@ -58,6 +63,11 @@ public class ManHinhKhoiDong implements Screen {
         shapeRenderer = new ShapeRenderer();
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchinh.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        // Bật lọc Linear thay vì Nearest (mặc định) — chữ FreeType generate ở kích thước cố định
+        // rồi bị phóng to theo viewport ảo trên điện thoại (tỉ lệ luôn > 1x), Nearest filter làm chữ
+        // vỡ nét/răng cưa khi phóng to, Linear cho chữ mượt hơn nhiều.
+        param.minFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
+        param.magFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
         param.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ ễ ằ ừ — ẳ ữ ỗ ằ ễ ỗ ừ ẵ ê : ĩ ≤";
         param.size = 18;
         font = generator.generateFont(param);
@@ -100,11 +110,12 @@ public class ManHinhKhoiDong implements Screen {
 
         // ── Vẽ logo fade-in ──────────────────────────────────────────
         float alpha = (thoiGian <= 0.8f) ? 1 - (0.8f - thoiGian) / 0.8f : 1f;
+        batch.setProjectionMatrix(camManager.uiCamera.combined);
         batch.begin();
         float scaledWidth  = logogame.getWidth();
         float scaledHeight = logogame.getHeight();
-        float x = (Gdx.graphics.getWidth()  - scaledWidth)  / 2f;
-        float y = (Gdx.graphics.getHeight() - scaledHeight) / 2f;
+        float x = (QuanLyCamera.VIRTUAL_WIDTH  - scaledWidth)  / 2f;
+        float y = (QuanLyCamera.VIRTUAL_HEIGHT - scaledHeight) / 2f;
         batch.setColor(1f, 1f, 1f, alpha);
         batch.draw(logogame, x, y, scaledWidth, scaledHeight);
         batch.setColor(1f, 1f, 1f, 1f);
@@ -114,10 +125,10 @@ public class ManHinhKhoiDong implements Screen {
         if (isDownloading) {
             float barX      = 100f;
             float barY      = 50f;
-            float barWidth  = Gdx.graphics.getWidth() - 200f;
+            float barWidth  = QuanLyCamera.VIRTUAL_WIDTH - 200f;
             float barHeight = 20f;
 
-            shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix()); // ← FIX BUG 2
+            shapeRenderer.setProjectionMatrix(camManager.uiCamera.combined);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(0.3f, 0.3f, 0.3f, 1f);
             shapeRenderer.rect(barX, barY, barWidth, barHeight);
@@ -154,13 +165,13 @@ public class ManHinhKhoiDong implements Screen {
             String pct = "DOWNLOAD NEW VERSION - HAI DANG GAME... " +(int)(downloadProgress * 100) + "%";
             GlyphLayout pctLayout = new GlyphLayout(fontTo, pct);
             fontTo.draw(batch, pct,
-                (Gdx.graphics.getWidth() - pctLayout.width) / 2f, barY + 48f);
+                (QuanLyCamera.VIRTUAL_WIDTH - pctLayout.width) / 2f, barY + 48f);
 
             // Dòng fade bên dưới bar
             font.setColor(0.2f, 0.2f, 0.2f, textAlpha);
             GlyphLayout fadeLayout = new GlyphLayout(font, fadeText);
             font.draw(batch, fadeText,
-                (Gdx.graphics.getWidth() - fadeLayout.width) / 2f, barY - 20f);
+                (QuanLyCamera.VIRTUAL_WIDTH - fadeLayout.width) / 2f, barY - 20f);
 
             font.setColor(1f, 1f, 1f, 1f);
             batch.end();
@@ -191,7 +202,9 @@ public class ManHinhKhoiDong implements Screen {
         }
     }
 
-    @Override public void resize(int width, int height) {}
+    @Override public void resize(int width, int height) {
+        camManager.resize(width, height);
+    }
     @Override public void pause() {}
     @Override public void resume() {}
     @Override public void hide() {}

@@ -93,6 +93,11 @@ public class ManHinhNhaBroly implements Screen {
         // Load font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        // Bật lọc Linear thay vì Nearest (mặc định) — chữ FreeType generate ở kích thước cố định
+        // rồi bị phóng to theo viewport ảo trên điện thoại (tỉ lệ luôn > 1x), Nearest filter làm chữ
+        // vỡ nét/răng cưa khi phóng to, Linear cho chữ mượt hơn nhiều.
+        param.minFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
+        param.magFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
         param.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
             "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ";
         param.size = 18;
@@ -103,6 +108,11 @@ public class ManHinhNhaBroly implements Screen {
         // Font có viền đen dành riêng cho dòng chữ "Đậu thần cấp ..."
         FreeTypeFontGenerator generator2 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchinh.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        // Bật lọc Linear thay vì Nearest (mặc định) — chữ FreeType generate ở kích thước cố định
+        // rồi bị phóng to theo viewport ảo trên điện thoại (tỉ lệ luôn > 1x), Nearest filter làm chữ
+        // vỡ nét/răng cưa khi phóng to, Linear cho chữ mượt hơn nhiều.
+        param2.minFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
+        param2.magFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
         param2.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
             "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể";
         param2.size = 22;
@@ -241,7 +251,7 @@ public class ManHinhNhaBroly implements Screen {
     }
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 0.1f);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         // Cập nhật camera theo vị trí nhân vật
         float targetX = nhanVat.getX();
@@ -249,6 +259,7 @@ public class ManHinhNhaBroly implements Screen {
 
         // Giới hạn camera trong vùng bản đồ (1420x760)
         camManager.updateMainCamera(nhanVat.getX(), nhanVat.getY(), 1420, 7600,0,0);
+        camManager.viewport.apply();
         batch.setProjectionMatrix(camManager.camera.combined);
         shapeRenderer.setColor(5 / 255f, 194 / 255f, 168 / 255f, 1);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -425,6 +436,7 @@ public class ManHinhNhaBroly implements Screen {
 //            }
 //        }
         // 2. Vẽ UI cố định
+        camManager.uiViewport.apply();
         batch.setProjectionMatrix(camManager.uiCamera.combined);
         batch.begin();
         hudRenderer.render(batch);

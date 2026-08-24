@@ -68,7 +68,7 @@ public class HUDFormPopupNhanVatPhai {
 
         batch.flush();
         Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
-        Gdx.gl.glScissor(1020 - 350, (int) viewY, 350, (int) viewHeight);
+        veHUD.camManager.scissor(1020 - 350, viewY, 350, viewHeight);
         // Vị trí bắt đầu vẽ từ trên xuống
         float startY = viewY + viewHeight - KhoangCachItem + veHUD.scrollYPhai;
 
@@ -314,7 +314,7 @@ public class HUDFormPopupNhanVatPhai {
         if (!veHUD.dangHienThongBao) return;
 
         // vẽ nền thông báo
-        float thongBaoX = (Gdx.graphics.getWidth() - 720) / 2f;
+        float thongBaoX = (QuanLyCamera.VIRTUAL_WIDTH - 720) / 2f;
         float thongBaoY = 65;
         batch.draw(veHUD.anhThongBao, thongBaoX, thongBaoY, 720, 175);
 
@@ -324,25 +324,25 @@ public class HUDFormPopupNhanVatPhai {
         if (veHUD.daClickVaoNpc && veHUD.npcHienTai.npcHUDrender.ui_npc instanceof admin_thanhle) {
             // trường hợp bán item
             veHUD.layout.setText(veHUD.fontTenSkill, "Bạn có chắc muốn bán");
-            veHUD.fontTenSkill.draw(batch, veHUD.layout, (Gdx.graphics.getWidth() - veHUD.layout.width) / 2f, 190);
+            veHUD.fontTenSkill.draw(batch, veHUD.layout, (QuanLyCamera.VIRTUAL_WIDTH - veHUD.layout.width) / 2f, 190);
 
             veHUD.layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem());
-            veHUD.fontTenSkill.draw(batch, veHUD.layout, (Gdx.graphics.getWidth() - veHUD.layout.width) / 2f, 165);
+            veHUD.fontTenSkill.draw(batch, veHUD.layout, (QuanLyCamera.VIRTUAL_WIDTH - veHUD.layout.width) / 2f, 165);
 
             String giaBan = "với giá là " + veHUD.formatVangNgoc(ItemGia.layGiaItem(veHUD.itemm) / 4) + " ?";
             veHUD.layout.setText(veHUD.fontTenSkill, giaBan);
-            veHUD.fontTenSkill.draw(batch, veHUD.layout, (Gdx.graphics.getWidth() - veHUD.layout.width) / 2f, 140);
+            veHUD.fontTenSkill.draw(batch, veHUD.layout, (QuanLyCamera.VIRTUAL_WIDTH - veHUD.layout.width) / 2f, 140);
         } else {
             // trường hợp hủy bỏ
             veHUD.layout.setText(veHUD.fontTenSkill, "Bạn có chắc muốn hủy bỏ (mất luôn)");
-            veHUD.fontTenSkill.draw(batch, veHUD.layout, (Gdx.graphics.getWidth() - veHUD.layout.width) / 2f, 175);
+            veHUD.fontTenSkill.draw(batch, veHUD.layout, (QuanLyCamera.VIRTUAL_WIDTH - veHUD.layout.width) / 2f, 175);
 
             veHUD.layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem() + " ?");
-            veHUD.fontTenSkill.draw(batch, veHUD.layout, (Gdx.graphics.getWidth() - veHUD.layout.width) / 2f, 150);
+            veHUD.fontTenSkill.draw(batch, veHUD.layout, (QuanLyCamera.VIRTUAL_WIDTH - veHUD.layout.width) / 2f, 150);
         }
 
         // vẽ 2 nút Có / Không
-        float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
+        float nutX = (QuanLyCamera.VIRTUAL_WIDTH - 140) / 2f;
         float nutY = 50;
 
         veNutThongBao(batch, veHUD, nutX - 81, nutY, "Có", veHUD.nutduocchon == 1, veHUD.isThongBaoOKPressed > 0);

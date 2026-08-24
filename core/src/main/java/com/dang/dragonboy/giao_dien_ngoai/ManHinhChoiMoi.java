@@ -11,13 +11,16 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
+import com.badlogic.gdx.math.Vector2;
 import com.dang.dragonboy.giao_dien_trong.ManHinhNhaBroly;
 import com.dang.dragonboy.he_thong.Main;
 import com.dang.dragonboy.giao_dien_trong.ManHinhNhaGohan;
+import com.dang.dragonboy.hien_thi.QuanLyCamera;
 
 public class ManHinhChoiMoi implements Screen {
 
     private Main game;
+    private final QuanLyCamera camManager = new QuanLyCamera();
     private ShapeRenderer shapeRenderer;
     private SpriteBatch batch;
     private BitmapFont font, fontText;
@@ -108,9 +111,13 @@ public class ManHinhChoiMoi implements Screen {
 
     @Override
     public void render(float delta) {
+        // Trên Android không có bàn phím vật lý — cần chủ động hiện bàn phím ảo khi ô nhập tên
+        // đang được chọn, nếu không tap vào ô nhập sẽ không có phản hồi gì (không hiện bàn phím).
+        Gdx.input.setOnscreenKeyboardVisible(oNhapDuocChon);
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+        batch.setProjectionMatrix(camManager.uiCamera.combined);
+        shapeRenderer.setProjectionMatrix(camManager.uiCamera.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         // Chỉnh màu shapeRenderer theo hành tinh
         switch (hanhTinhDuocChon) {
@@ -207,7 +214,7 @@ public class ManHinhChoiMoi implements Screen {
         veNhanVatDung(batch, 205, 105);
         // Nút "Máy chủ" góc trái trên
         int nutMayChuX = 20;
-        int nutMayChuY = Gdx.graphics.getHeight() - 70;
+        float nutMayChuY = QuanLyCamera.VIRTUAL_HEIGHT - 70;
         Texture textureMayChu = (isMayChuPressed &&  thoiGianHienNutClick> 0) ? nutclick : nutdn;
         batch.draw(textureMayChu, nutMayChuX, nutMayChuY, 135, 50);
         layout.setText(font, "Máy chủ");
@@ -222,7 +229,7 @@ public class ManHinhChoiMoi implements Screen {
         font.draw(batch, layout, nutDongX + (135 - layout.width) / 2, nutDongY + 30);
 
         // Nút "Tạo mới" giữa dưới
-        int nutTaoMoiX = Gdx.graphics.getWidth() / 2 - 135 / 2;
+        float nutTaoMoiX = QuanLyCamera.VIRTUAL_WIDTH / 2 - 135 / 2;
         int nutTaoMoiY = 20;
         Texture textureTaoMoi = (isTaoMoiPressed && thoiGianHienNutClick > 0) ? nutclick : nutdn;
         batch.draw(textureTaoMoi, nutTaoMoiX, nutTaoMoiY, 135, 50);
@@ -232,8 +239,9 @@ public class ManHinhChoiMoi implements Screen {
 
         // Xử lý chuột click chọn
         if (Gdx.input.justTouched()) {
-            int mouseX = Gdx.input.getX();
-            int mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
+            Vector2 diem = camManager.uiViewport.unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+            int mouseX = (int) diem.x;
+            int mouseY = (int) diem.y;
 
             if (mouseX >= 362 && mouseX <= 682 && mouseY >= 480 && mouseY <= 530) {
                 oNhapDuocChon = true;
@@ -242,7 +250,7 @@ public class ManHinhChoiMoi implements Screen {
             }
             // Click nút Máy chủ
             if (mouseX >= 20 && mouseX <= 20 + 135 &&
-                mouseY >= Gdx.graphics.getHeight() - 70 && mouseY <= Gdx.graphics.getHeight() - 20) {
+                mouseY >= QuanLyCamera.VIRTUAL_HEIGHT - 70 && mouseY <= QuanLyCamera.VIRTUAL_HEIGHT - 20) {
                 isMayChuPressed = true;
                 thoiGianHienNutClick = 0.2f;
                 chuyenManHinhMayChu = true; // Ghi nhớ chuyển sau
@@ -388,6 +396,11 @@ public class ManHinhChoiMoi implements Screen {
         // Load font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        // Bật lọc Linear thay vì Nearest (mặc định) — chữ FreeType generate ở kích thước cố định
+        // rồi bị phóng to theo viewport ảo trên điện thoại (tỉ lệ luôn > 1x), Nearest filter làm chữ
+        // vỡ nét/răng cưa khi phóng to, Linear cho chữ mượt hơn nhiều.
+        param.minFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
+        param.magFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
         param.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
             "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ";
         param.size = 18;
@@ -404,7 +417,9 @@ public class ManHinhChoiMoi implements Screen {
         bautroixd = new Texture("hud/giaodienngoai/xayda/bautroixayda.jpg");
         capNhatTaiNguyenTheoHanhTinh();
     }
-    @Override public void resize(int width, int height) {}
+    @Override public void resize(int width, int height) {
+        camManager.resize(width, height);
+    }
     @Override public void pause() {}
     @Override public void resume() {}
     @Override public void hide() {}

@@ -290,6 +290,11 @@ public class DeTu {
 
         FreeTypeFontGenerator generator2 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchinh.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        // Bật lọc Linear thay vì Nearest (mặc định) — chữ FreeType generate ở kích thước cố định
+        // rồi bị phóng to theo viewport ảo trên điện thoại (tỉ lệ luôn > 1x), Nearest filter làm chữ
+        // vỡ nét/răng cưa khi phóng to, Linear cho chữ mượt hơn nhiều.
+        param2.minFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
+        param2.magFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
         param2.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
             "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể ộ ứ ỹ ệ ợ ặ ề ở ự ỷ ị ổ ế ờ ử ắ ỉ ẩ , ỡ ẫ Đ";
         param2.size = 19;

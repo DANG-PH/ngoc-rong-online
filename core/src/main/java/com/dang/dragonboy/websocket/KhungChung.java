@@ -56,7 +56,7 @@ public class KhungChung {
 
             batch.flush();
             Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
-            Gdx.gl.glScissor(0, (int) viewY, 350, (int) viewHeight);
+            veHUD.camManager.scissor(0, viewY, 350, viewHeight);
             float totalHeight = chucNang.length * KhoangCachO;
             veHUD.maxScrollPhai = Math.max(0, totalHeight - viewHeight);
             float startY = viewY + viewHeight - KhoangCachO + veHUD.scrollYPhai;

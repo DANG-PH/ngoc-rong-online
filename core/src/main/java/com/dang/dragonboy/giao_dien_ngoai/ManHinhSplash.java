@@ -8,11 +8,17 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
 import com.dang.dragonboy.he_thong.Main;
+import com.dang.dragonboy.hien_thi.QuanLyCamera;
 
 import java.util.function.Supplier;
 
 public class ManHinhSplash implements Screen {
     private Main game;
+    // Vẽ logo/icon loading theo kích thước pixel cố định (thiết kế cho màn PC 1020x610). Nếu định
+    // vị theo Gdx.graphics.getWidth/getHeight thật của thiết bị mà không quy đổi kích thước, trên
+    // điện thoại có mật độ điểm ảnh cao hơn nhiều thì logo sẽ trông rất nhỏ. Dùng viewport ảo cố
+    // định để logo được phóng to tỉ lệ đúng như trên PC thay vì giữ nguyên size pixel gốc.
+    private final QuanLyCamera camManager = new QuanLyCamera();
     private Texture splashImage;
     private BitmapFont font;
     private SpriteBatch batch;
@@ -56,10 +62,11 @@ public class ManHinhSplash implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        batch.setProjectionMatrix(camManager.uiCamera.combined);
         batch.begin();
         float size = 25;
-        float centerX = Gdx.graphics.getWidth() / 2f;
-        float centerY = Gdx.graphics.getHeight() / 2f;
+        float centerX = QuanLyCamera.VIRTUAL_WIDTH / 2f;
+        float centerY = QuanLyCamera.VIRTUAL_HEIGHT / 2f;
         if (hienLogoVaChu) {
             float logoWidth = 320, logoHeight = 200;
             batch.draw(logo, centerX - logoWidth / 2f + 4, centerY , logoWidth, logoHeight);
@@ -70,8 +77,8 @@ public class ManHinhSplash implements Screen {
 
         batch.draw(
             splashImage,
-            (Gdx.graphics.getWidth() - size) / 2f,
-            (Gdx.graphics.getHeight() - size) / 2f,
+            (QuanLyCamera.VIRTUAL_WIDTH - size) / 2f,
+            (QuanLyCamera.VIRTUAL_HEIGHT - size) / 2f,
             size / 2f, size / 2f,
             size, size,
             1, 1,
@@ -83,7 +90,7 @@ public class ManHinhSplash implements Screen {
 
         layout.setText(font, "Xóa dữ liệu");
         font.setColor(1, 1, 1, 1);
-        font.draw(batch, layout, Gdx.graphics.getWidth() - layout.width - 10, 30);
+        font.draw(batch, layout, QuanLyCamera.VIRTUAL_WIDTH - layout.width - 10, 30);
         batch.end();
 
         if (thoiGian > 1f) {
@@ -129,12 +136,19 @@ public class ManHinhSplash implements Screen {
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        // Bật lọc Linear thay vì Nearest (mặc định) — chữ FreeType generate ở kích thước cố định
+        // rồi bị phóng to theo viewport ảo trên điện thoại (tỉ lệ luôn > 1x), Nearest filter làm chữ
+        // vỡ nét/răng cưa khi phóng to, Linear cho chữ mượt hơn nhiều.
+        parameter.minFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
+        parameter.magFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
         parameter.size = 14;
         parameter.characters = "Xóa dữ liệu ờ abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?., ";
         font = generator.generateFont(parameter);
         generator.dispose();
     }
-    @Override public void resize(int width, int height) {}
+    @Override public void resize(int width, int height) {
+        camManager.resize(width, height);
+    }
     @Override public void pause() {}
     @Override public void resume() {}
     @Override public void hide() {}

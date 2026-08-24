@@ -54,7 +54,7 @@ public class NPC_CUA_HANG {
 
         batch.flush();
         Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
-        Gdx.gl.glScissor((int) viewX, (int) viewY, 350, (int) viewHeight);
+        veHUD.camManager.scissor(viewX, viewY, 350, viewHeight);
         float startY = viewY + viewHeight - khoangCachItem + (benTrai ? veHUD.scrollYTrai : veHUD.scrollYPhai);
 
         for (int i = 0; i < tongSoRuongDo; i++) {

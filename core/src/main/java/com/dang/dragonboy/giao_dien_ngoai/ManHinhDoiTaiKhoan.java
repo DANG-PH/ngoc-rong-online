@@ -12,7 +12,9 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.InputAdapter;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.dang.dragonboy.du_lieu.LocalStorage;
+import com.dang.dragonboy.hien_thi.QuanLyCamera;
 import com.dang.dragonboy.network.DTO.ProfileResult;
 import com.dang.dragonboy.network.DTO.UserResponse;
 
@@ -32,6 +34,7 @@ enum TrangThaiManHinh {
 public class ManHinhDoiTaiKhoan implements Screen {
     private TrangThaiManHinh trangThaiManHinh = TrangThaiManHinh.NONE;
     private Main game;
+    private final QuanLyCamera camManager = new QuanLyCamera();
     private ShapeRenderer shapeRenderer;
     private SpriteBatch batch;
     private BitmapFont font, fontText, fontThuong;
@@ -54,6 +57,7 @@ public class ManHinhDoiTaiKhoan implements Screen {
 
     private Texture anhThongBao;
     private boolean isThongBaoOKPressed = false;
+    private String noiDungThongBao = "Để lấy lại mật khẩu xin vui lòng truy cập website https://nronline.vercel.app";
 
     private String tenTaiKhoanDky = "";
     private String matKhauDky = "";
@@ -115,6 +119,11 @@ public class ManHinhDoiTaiKhoan implements Screen {
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        // Bật lọc Linear thay vì Nearest (mặc định) — chữ FreeType generate ở kích thước cố định
+        // rồi bị phóng to theo viewport ảo trên điện thoại (tỉ lệ luôn > 1x), Nearest filter làm chữ
+        // vỡ nét/răng cưa khi phóng to, Linear cho chữ mượt hơn nhiều.
+        param.minFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
+        param.magFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
         param.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ" + "ớờởỡợắằẳẵặấầẩẫậếềểễệốồổỗộứừửữựíìỉĩịóòỏõọúùủũụ" + "ỚỜỞỠỢẮẰẲẴẶẤẦẨẪẬẾỀỂỄỆỐỒỔỖỘỨỪỬỮỰÍÌỈĨỊÓÒỎÕỌÚÙỦŨỤ" + ".,;:!?'\"-()[]{}/@#$%^&*+=<>|\\~`" + "http://https://www._" + " —–·•…" + "0123456789";
         param.size = 18;
         font = generator.generateFont(param);
@@ -124,6 +133,11 @@ public class ManHinhDoiTaiKhoan implements Screen {
 
         FreeTypeFontGenerator genThuong = new FreeTypeFontGenerator(Gdx.files.internal("font/fontthuong.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter paramThuong = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        // Bật lọc Linear thay vì Nearest (mặc định) — chữ FreeType generate ở kích thước cố định
+        // rồi bị phóng to theo viewport ảo trên điện thoại (tỉ lệ luôn > 1x), Nearest filter làm chữ
+        // vỡ nét/răng cưa khi phóng to, Linear cho chữ mượt hơn nhiều.
+        paramThuong.minFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
+        paramThuong.magFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
         paramThuong.size = 25;
         paramThuong.characters = param.characters;
         fontThuong = genThuong.generateFont(paramThuong);
@@ -131,6 +145,21 @@ public class ManHinhDoiTaiKhoan implements Screen {
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean keyTyped(char character) {
+                // Bàn phím ảo Android gửi ký tự '\n' khi bấm Enter/Done — coi như bấm nút xác nhận
+                // chính của màn hình hiện tại (OK / Tiếp theo / Xác nhận), giống hệt lúc tap chuột.
+                if (character == '\n' || character == '\r') {
+                    if (trangThaiManHinh == TrangThaiManHinh.NONE) {
+                        chuyenManHinhOK = true;
+                        thoiGianHienNutClick = 0.1f;
+                    } else if (trangThaiManHinh == TrangThaiManHinh.DANGKY_STEP1
+                        || trangThaiManHinh == TrangThaiManHinh.DANGKY_STEP2
+                        || trangThaiManHinh == TrangThaiManHinh.DANGKY_STEP3
+                        || trangThaiManHinh == TrangThaiManHinh.VERIFY_OTP) {
+                        nutManHinhDangKyChon = 0;
+                        thoiGianHienNutClick = 0.1f;
+                    }
+                    return true;
+                }
                 if (trangThaiManHinh == TrangThaiManHinh.NONE) {
                     if (oNhapTaiKhoanDuocChon) {
                         if (character == '\b') {
@@ -240,8 +269,20 @@ public class ManHinhDoiTaiKhoan implements Screen {
         });
     }
 
+    // Trên Android không có bàn phím vật lý — tap vào ô nhập chỉ set cờ "đang chọn" chứ không tự
+    // hiện bàn phím ảo như desktop. Phải chủ động gọi setOnscreenKeyboardVisible mỗi khi có ô nào
+    // đang được chọn, nếu không người dùng sẽ thấy như "không bấm được" vào ô nhập trên điện thoại.
+    private boolean coOnhapDangDuocChon() {
+        return oNhapTaiKhoanDuocChon || oNhapMatKhauDuocChon
+            || oNhapTaiKhoanDuocChonDky || oNhapMatKhauDuocChonDky
+            || oNhapEmailDuocChonDky || oNhapRealnameDuocChonDky
+            || oNhapGameNameDuocChonDky
+            || oNhapMaOTP || oNhapMaCapcha;
+    }
+
     @Override
     public void render(float delta) {
+        Gdx.input.setOnscreenKeyboardVisible(coOnhapDangDuocChon());
         thoiGianHienNutClick -= delta;
         if (thoiGianHienNutClick <= 0) {
             if (trangThaiManHinh == TrangThaiManHinh.VERIFY_OTP) {
@@ -373,9 +414,10 @@ public class ManHinhDoiTaiKhoan implements Screen {
         }
 
         if (Gdx.input.justTouched()) {
-            int mouseX = Gdx.input.getX();
-            int mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
-            float oX = (Gdx.graphics.getWidth() - 320) / 2f ;
+            Vector2 diem = camManager.uiViewport.unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+            int mouseX = (int) diem.x;
+            int mouseY = (int) diem.y;
+            float oX = (QuanLyCamera.VIRTUAL_WIDTH - 320) / 2f ;
             float oY1 = 272;
             float oY2 = 196;
 
@@ -427,7 +469,7 @@ public class ManHinhDoiTaiKhoan implements Screen {
                 }
             }
             if (trangThaiManHinh == TrangThaiManHinh.THONGBAO) {
-                float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
+                float nutX = (QuanLyCamera.VIRTUAL_WIDTH - 140) / 2f;
                 float nutY = 70;
                 if (mouseX >= nutX && mouseX <= nutX + 140 &&
                     mouseY >= nutY && mouseY <= nutY + 50) {
@@ -439,9 +481,9 @@ public class ManHinhDoiTaiKhoan implements Screen {
 
             float kdnW = 365;
             float kdnH = 210;
-            float okX = (Gdx.graphics.getWidth() - kdnW) / 2f + 18;
+            float okX = (QuanLyCamera.VIRTUAL_WIDTH - kdnW) / 2f + 18;
             float okY = kdnH - 110;
-            float quenX = (Gdx.graphics.getWidth() - kdnW) / 2f + 200;
+            float quenX = (QuanLyCamera.VIRTUAL_WIDTH - kdnW) / 2f + 200;
             float quenY = kdnH - 110;
 
             if (mouseX >= 20 && mouseX <= 155 && mouseY >= 20 && mouseY <= 70) {
@@ -501,14 +543,21 @@ public class ManHinhDoiTaiKhoan implements Screen {
             }
 
             if (trangThaiManHinh == TrangThaiManHinh.NONE) {
-                float nutGoogleX = (Gdx.graphics.getWidth() - 200) / 2f;
+                float nutGoogleX = (QuanLyCamera.VIRTUAL_WIDTH - 200) / 2f;
                 float nutGoogleY = 20;
                 if (mouseX >= nutGoogleX && mouseX <= nutGoogleX + 200
                     && mouseY >= nutGoogleY && mouseY <= nutGoogleY + 50) {
                     isGooglePressed = true;
                     thoiGianHienNutClick = 0.1f;
 
-                    GoogleOAuth2Desktop.login(new GoogleOAuth2Desktop.Callback() {
+                    // Mỗi nền tảng đăng ký sẵn 1 GoogleOAuthProvider phù hợp vào PlatformBridge lúc
+                    // khởi động (Lwjgl3Launcher / AndroidLauncher) — core chỉ cần gọi qua interface.
+                    if (com.dang.dragonboy.he_thong.PlatformBridge.googleOAuth == null) {
+                        System.out.println("Đăng nhập Google chưa hỗ trợ trên nền tảng này");
+                        return;
+                    }
+
+                    com.dang.dragonboy.he_thong.PlatformBridge.googleOAuth.login(new GoogleLoginCallback() {
                         @Override
                         public void onSuccess(String idToken) {
                             new Thread(() -> {
@@ -533,16 +582,28 @@ public class ManHinhDoiTaiKhoan implements Screen {
                                         }
                                     });
                                 } else {
-                                    Gdx.app.postRunnable(() ->
-                                        System.out.println("Google login thất bại"));
+                                    Gdx.app.postRunnable(() -> {
+                                        System.out.println("Google login thất bại: server từ chối idToken");
+                                        // Nếu Android dùng Credential Manager thì idToken có "aud" là
+                                        // Web Client ID (google.client.id.web), khác với Desktop client
+                                        // ID cũ — backend cần chấp nhận CẢ HAI client ID làm audience
+                                        // hợp lệ, nếu không mọi lượt đăng nhập Google từ Android sẽ luôn
+                                        // bị từ chối ở bước này dù chọn tài khoản thành công.
+                                        noiDungThongBao = "Đăng nhập Google thất bại: server từ chối token. " +
+                                            "Có thể backend chưa chấp nhận audience của client Android/Web.";
+                                        trangThaiManHinh = TrangThaiManHinh.THONGBAO;
+                                    });
                                 }
                             }).start();
                         }
 
                         @Override
                         public void onFailure(String error) {
-                            Gdx.app.postRunnable(() ->
-                                System.out.println("Lỗi: " + error));
+                            Gdx.app.postRunnable(() -> {
+                                System.out.println("Lỗi đăng nhập Google: " + error);
+                                noiDungThongBao = "Đăng nhập Google thất bại: " + error;
+                                trangThaiManHinh = TrangThaiManHinh.THONGBAO;
+                            });
                         }
                     });
                 }
@@ -554,6 +615,8 @@ public class ManHinhDoiTaiKhoan implements Screen {
         if (scrollX_cay <= -340) scrollX_cay += 340;
         if (scrollX_thap <= -340) scrollX_thap += 340;
 
+        batch.setProjectionMatrix(camManager.uiCamera.combined);
+        shapeRenderer.setProjectionMatrix(camManager.uiCamera.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(25 / 255f, 176 / 255f, 248 / 255f, 1);
         shapeRenderer.rect(0, 460, 1020, 150);
@@ -577,10 +640,10 @@ public class ManHinhDoiTaiKhoan implements Screen {
 
         if (trangThaiManHinh == TrangThaiManHinh.THONGBAO) {
             batch.begin();
-            batch.draw(anhThongBao, (Gdx.graphics.getWidth() - 740) / 2f, 85, 740, 168);
-            layout.setText(font, "Để lấy lại mật khẩu xin vui lòng truy cập website https://nronline.vercel.app");
-            font.draw(batch, layout, (Gdx.graphics.getWidth() - layout.width) / 2, 180);
-            float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
+            batch.draw(anhThongBao, (QuanLyCamera.VIRTUAL_WIDTH - 740) / 2f, 85, 740, 168);
+            layout.setText(font, noiDungThongBao, font.getColor(), 700, com.badlogic.gdx.utils.Align.center, true);
+            font.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH - 700) / 2f, 180 + layout.height / 2f);
+            float nutX = (QuanLyCamera.VIRTUAL_WIDTH - 140) / 2f;
             float nutY = 70;
             batch.draw(isThongBaoOKPressed ? nutclick : nutdn, nutX, nutY, 140, 50);
             layout.setText(font, "OK");
@@ -592,15 +655,15 @@ public class ManHinhDoiTaiKhoan implements Screen {
 
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(108f / 255f, 74f / 255f, 0f, 1f);
-            shapeRenderer.rect((Gdx.graphics.getWidth() - 369) / 2f, 214 - 49, 369, 214);
+            shapeRenderer.rect((QuanLyCamera.VIRTUAL_WIDTH - 369) / 2f, 214 - 49, 369, 214);
             shapeRenderer.end();
 
             batch.begin();
             float kdnW = 365;
             float kdnH = 210;
-            batch.draw(khungdangnhap, (Gdx.graphics.getWidth() - kdnW) / 2f, kdnH - 43, kdnW, kdnH);
+            batch.draw(khungdangnhap, (QuanLyCamera.VIRTUAL_WIDTH - kdnW) / 2f, kdnH - 43, kdnW, kdnH);
             // Hiển thị ô tên tài khoản
-            float oX = (Gdx.graphics.getWidth() - 320) / 2f;
+            float oX = (QuanLyCamera.VIRTUAL_WIDTH - 320) / 2f;
             float oY1 = 272;
             float oY2 = 196;
             if (tenTaiKhoan.isEmpty()) {
@@ -626,14 +689,14 @@ public class ManHinhDoiTaiKhoan implements Screen {
 
             layout.setText(fontThuong, "nronline.vercel.app");
             fontThuong.setColor(1, 1, 1, 1);
-            fontThuong.draw(batch, layout, Gdx.graphics.getWidth() - layout.width - 10, 600);
+            fontThuong.draw(batch, layout, QuanLyCamera.VIRTUAL_WIDTH - layout.width - 10, 600);
             layout.setText(fontThuong, "V0.0.0");
-            fontThuong.draw(batch, layout, Gdx.graphics.getWidth() - layout.width - 10, 580);
+            fontThuong.draw(batch, layout, QuanLyCamera.VIRTUAL_WIDTH - layout.width - 10, 580);
 
             font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
-            float nutOkX = (Gdx.graphics.getWidth() - kdnW) / 2f + 18;
+            float nutOkX = (QuanLyCamera.VIRTUAL_WIDTH - kdnW) / 2f + 18;
             float nutOkY = kdnH - 110;
-            float nutQuenX = (Gdx.graphics.getWidth() - kdnW) / 2f + 200;
+            float nutQuenX = (QuanLyCamera.VIRTUAL_WIDTH - kdnW) / 2f + 200;
             float nutQuenY = kdnH - 110;
             int nutDongX = 20;
             int nutDongY = 20;
@@ -654,7 +717,7 @@ public class ManHinhDoiTaiKhoan implements Screen {
             layout.setText(font, "Quên M.Khẩu");
             font.draw(batch, layout, nutQuenX + (142 - layout.width) / 2, nutQuenY + 30);
 
-            float nutGoogleX = (Gdx.graphics.getWidth() - 200) / 2f;
+            float nutGoogleX = (QuanLyCamera.VIRTUAL_WIDTH - 200) / 2f;
             float nutGoogleY = nutDongY;
             batch.draw(isGooglePressed ? nutclick : nutdn, nutGoogleX, nutGoogleY, 200, 48);
             layout.setText(font, "Đăng nhập Google");
@@ -666,15 +729,15 @@ public class ManHinhDoiTaiKhoan implements Screen {
 
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(108f / 255f, 74f / 255f, 0f, 1f);
-            shapeRenderer.rect((Gdx.graphics.getWidth() - 369) / 2f, 214 - 49, 369, 214);
+            shapeRenderer.rect((QuanLyCamera.VIRTUAL_WIDTH - 369) / 2f, 214 - 49, 369, 214);
             shapeRenderer.end();
 
             batch.begin();
             float kdnW = 365;
             float kdnH = 210;
-            batch.draw(khungdangnhap, (Gdx.graphics.getWidth() - kdnW) / 2f, kdnH - 43, kdnW, kdnH);
+            batch.draw(khungdangnhap, (QuanLyCamera.VIRTUAL_WIDTH - kdnW) / 2f, kdnH - 43, kdnW, kdnH);
             // Hiển thị ô tên tài khoản
-            float oX = (Gdx.graphics.getWidth() - 320) / 2f;
+            float oX = (QuanLyCamera.VIRTUAL_WIDTH - 320) / 2f;
             float oY1 = 272;
             float oY2 = 196;
             if (tenTaiKhoanDky.isEmpty()) {
@@ -700,14 +763,14 @@ public class ManHinhDoiTaiKhoan implements Screen {
 
             layout.setText(fontThuong, "nronline.vercel.app");
             fontThuong.setColor(1, 1, 1, 1);
-            fontThuong.draw(batch, layout, Gdx.graphics.getWidth() - layout.width - 10, 600);
+            fontThuong.draw(batch, layout, QuanLyCamera.VIRTUAL_WIDTH - layout.width - 10, 600);
             layout.setText(fontThuong, "V0.0.0");
-            fontThuong.draw(batch, layout, Gdx.graphics.getWidth() - layout.width - 10, 580);
+            fontThuong.draw(batch, layout, QuanLyCamera.VIRTUAL_WIDTH - layout.width - 10, 580);
 
             font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
-            float nutOkX = (Gdx.graphics.getWidth() - kdnW) / 2f + 18;
+            float nutOkX = (QuanLyCamera.VIRTUAL_WIDTH - kdnW) / 2f + 18;
             float nutOkY = kdnH - 110;
-            float nutQuenX = (Gdx.graphics.getWidth() - kdnW) / 2f + 200;
+            float nutQuenX = (QuanLyCamera.VIRTUAL_WIDTH - kdnW) / 2f + 200;
             float nutQuenY = kdnH - 110;
 
             batch.draw(thoiGianHienNutClick > 0 && nutManHinhDangKyChon == 0 ? nutclick : nutdn, nutOkX, nutOkY, 142, 48);
@@ -725,15 +788,15 @@ public class ManHinhDoiTaiKhoan implements Screen {
 
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(108f / 255f, 74f / 255f, 0f, 1f);
-            shapeRenderer.rect((Gdx.graphics.getWidth() - 369) / 2f, 214 - 49, 369, 214);
+            shapeRenderer.rect((QuanLyCamera.VIRTUAL_WIDTH - 369) / 2f, 214 - 49, 369, 214);
             shapeRenderer.end();
 
             batch.begin();
             float kdnW = 365;
             float kdnH = 210;
-            batch.draw(khungdangnhap, (Gdx.graphics.getWidth() - kdnW) / 2f, kdnH - 43, kdnW, kdnH);
+            batch.draw(khungdangnhap, (QuanLyCamera.VIRTUAL_WIDTH - kdnW) / 2f, kdnH - 43, kdnW, kdnH);
             // Hiển thị ô tên tài khoản
-            float oX = (Gdx.graphics.getWidth() - 320) / 2f;
+            float oX = (QuanLyCamera.VIRTUAL_WIDTH - 320) / 2f;
             float oY1 = 272;
             float oY2 = 196;
             if (tenEmailDky.isEmpty()) {
@@ -758,14 +821,14 @@ public class ManHinhDoiTaiKhoan implements Screen {
 
             layout.setText(fontThuong, "nronline.vercel.app");
             fontThuong.setColor(1, 1, 1, 1);
-            fontThuong.draw(batch, layout, Gdx.graphics.getWidth() - layout.width - 10, 600);
+            fontThuong.draw(batch, layout, QuanLyCamera.VIRTUAL_WIDTH - layout.width - 10, 600);
             layout.setText(fontThuong, "V0.0.0");
-            fontThuong.draw(batch, layout, Gdx.graphics.getWidth() - layout.width - 10, 580);
+            fontThuong.draw(batch, layout, QuanLyCamera.VIRTUAL_WIDTH - layout.width - 10, 580);
 
             font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
-            float nutOkX = (Gdx.graphics.getWidth() - kdnW) / 2f + 18;
+            float nutOkX = (QuanLyCamera.VIRTUAL_WIDTH - kdnW) / 2f + 18;
             float nutOkY = kdnH - 110;
-            float nutQuenX = (Gdx.graphics.getWidth() - kdnW) / 2f + 200;
+            float nutQuenX = (QuanLyCamera.VIRTUAL_WIDTH - kdnW) / 2f + 200;
             float nutQuenY = kdnH - 110;
 
             batch.draw(thoiGianHienNutClick > 0 && nutManHinhDangKyChon == 0 ? nutclick : nutdn, nutOkX, nutOkY, 142, 48);
@@ -783,15 +846,15 @@ public class ManHinhDoiTaiKhoan implements Screen {
 
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(108f / 255f, 74f / 255f, 0f, 1f);
-            shapeRenderer.rect((Gdx.graphics.getWidth() - 369) / 2f, 214 - 49, 369, 214);
+            shapeRenderer.rect((QuanLyCamera.VIRTUAL_WIDTH - 369) / 2f, 214 - 49, 369, 214);
             shapeRenderer.end();
 
             batch.begin();
             float kdnW = 365;
             float kdnH = 210;
-            batch.draw(khungdangnhap, (Gdx.graphics.getWidth() - kdnW) / 2f, kdnH - 43, kdnW, kdnH);
+            batch.draw(khungdangnhap, (QuanLyCamera.VIRTUAL_WIDTH - kdnW) / 2f, kdnH - 43, kdnW, kdnH);
 
-            float oX = (Gdx.graphics.getWidth() - 320) / 2f;
+            float oX = (QuanLyCamera.VIRTUAL_WIDTH - 320) / 2f;
             float oY1 = 272; // ô trên → nhập GameName
             float oY2 = 196; // ô dưới → text cố định "Chào mừng bạn!"
 
@@ -814,14 +877,14 @@ public class ManHinhDoiTaiKhoan implements Screen {
 
             layout.setText(fontThuong, "nronline.vercel.app");
             fontThuong.setColor(1, 1, 1, 1);
-            fontThuong.draw(batch, layout, Gdx.graphics.getWidth() - layout.width - 10, 600);
+            fontThuong.draw(batch, layout, QuanLyCamera.VIRTUAL_WIDTH - layout.width - 10, 600);
             layout.setText(fontThuong, "V0.0.0");
-            fontThuong.draw(batch, layout, Gdx.graphics.getWidth() - layout.width - 10, 580);
+            fontThuong.draw(batch, layout, QuanLyCamera.VIRTUAL_WIDTH - layout.width - 10, 580);
 
             font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
-            float nutOkX = (Gdx.graphics.getWidth() - kdnW) / 2f + 18;
+            float nutOkX = (QuanLyCamera.VIRTUAL_WIDTH - kdnW) / 2f + 18;
             float nutOkY = kdnH - 110;
-            float nutQuenX = (Gdx.graphics.getWidth() - kdnW) / 2f + 200;
+            float nutQuenX = (QuanLyCamera.VIRTUAL_WIDTH - kdnW) / 2f + 200;
             float nutQuenY = kdnH - 110;
 
             batch.draw(thoiGianHienNutClick > 0 && nutManHinhDangKyChon == 0 ? nutclick : nutdn, nutOkX, nutOkY, 142, 48);
@@ -839,15 +902,15 @@ public class ManHinhDoiTaiKhoan implements Screen {
 
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(108f / 255f, 74f / 255f, 0f, 1f);
-            shapeRenderer.rect((Gdx.graphics.getWidth() - 369) / 2f, 214 - 49, 369, 214);
+            shapeRenderer.rect((QuanLyCamera.VIRTUAL_WIDTH - 369) / 2f, 214 - 49, 369, 214);
             shapeRenderer.end();
 
             batch.begin();
             float kdnW = 365;
             float kdnH = 210;
-            batch.draw(khungdangnhap, (Gdx.graphics.getWidth() - kdnW) / 2f, kdnH - 43, kdnW, kdnH);
+            batch.draw(khungdangnhap, (QuanLyCamera.VIRTUAL_WIDTH - kdnW) / 2f, kdnH - 43, kdnW, kdnH);
             // Hiển thị ô tên tài khoản
-            float oX = (Gdx.graphics.getWidth() - 320) / 2f;
+            float oX = (QuanLyCamera.VIRTUAL_WIDTH - 320) / 2f;
             float oY1 = 272;
             float oY2 = 196;
             if (maOTP.isEmpty()) {
@@ -872,14 +935,14 @@ public class ManHinhDoiTaiKhoan implements Screen {
 
             layout.setText(fontThuong, "nronline.vercel.app");
             fontThuong.setColor(1, 1, 1, 1);
-            fontThuong.draw(batch, layout, Gdx.graphics.getWidth() - layout.width - 10, 600);
+            fontThuong.draw(batch, layout, QuanLyCamera.VIRTUAL_WIDTH - layout.width - 10, 600);
             layout.setText(fontThuong, "V0.0.0");
-            fontThuong.draw(batch, layout, Gdx.graphics.getWidth() - layout.width - 10, 580);
+            fontThuong.draw(batch, layout, QuanLyCamera.VIRTUAL_WIDTH - layout.width - 10, 580);
 
             font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
-            float nutOkX = (Gdx.graphics.getWidth() - kdnW) / 2f + 18;
+            float nutOkX = (QuanLyCamera.VIRTUAL_WIDTH - kdnW) / 2f + 18;
             float nutOkY = kdnH - 110;
-            float nutQuenX = (Gdx.graphics.getWidth() - kdnW) / 2f + 200;
+            float nutQuenX = (QuanLyCamera.VIRTUAL_WIDTH - kdnW) / 2f + 200;
             float nutQuenY = kdnH - 110;
 
             batch.draw(thoiGianHienNutClick > 0 && nutManHinhDangKyChon == 0 ? nutclick : nutdn, nutOkX, nutOkY, 142, 48);
@@ -905,7 +968,9 @@ public class ManHinhDoiTaiKhoan implements Screen {
         return sb.toString();
     }
 
-    @Override public void resize(int width, int height) {}
+    @Override public void resize(int width, int height) {
+        camManager.resize(width, height);
+    }
     @Override public void pause() {}
     @Override public void resume() {}
     @Override public void hide() {}

@@ -203,6 +203,11 @@ public class ManHinhDoiHoaCuc implements Screen {
         // Font có viền đen dành riêng cho dòng chữ "Đậu thần cấp ..."
         FreeTypeFontGenerator generator2 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchinh.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        // Bật lọc Linear thay vì Nearest (mặc định) — chữ FreeType generate ở kích thước cố định
+        // rồi bị phóng to theo viewport ảo trên điện thoại (tỉ lệ luôn > 1x), Nearest filter làm chữ
+        // vỡ nét/răng cưa khi phóng to, Linear cho chữ mượt hơn nhiều.
+        param2.minFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
+        param2.magFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
         param2.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
             "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ";
         param2.size = 22;
@@ -250,6 +255,7 @@ public class ManHinhDoiHoaCuc implements Screen {
         shapeRenderer.rect(0, 300 + camOffsetY, 3000, 800);
         shapeRenderer.end();
 
+        camManager.viewport.apply();
         batch.setProjectionMatrix(camManager.camera.combined);
         batch.begin();
         // background xa
@@ -353,6 +359,7 @@ public class ManHinhDoiHoaCuc implements Screen {
         }
         batch.end();
 
+        camManager.uiViewport.apply();
         batch.setProjectionMatrix(camManager.uiCamera.combined);
         batch.begin();
         hud.update(delta); // cập nhật trạng thái HUD

@@ -2,6 +2,7 @@ package com.dang.dragonboy.giao_dien_trong;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Vector2;
 import java.util.List;
 import java.util.Map;
 
@@ -233,6 +234,11 @@ public class ManHinhNhaGohan implements Screen {
         // Load font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        // Bật lọc Linear thay vì Nearest (mặc định) — chữ FreeType generate ở kích thước cố định
+        // rồi bị phóng to theo viewport ảo trên điện thoại (tỉ lệ luôn > 1x), Nearest filter làm chữ
+        // vỡ nét/răng cưa khi phóng to, Linear cho chữ mượt hơn nhiều.
+        param.minFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
+        param.magFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
         param.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
             "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ";
         param.size = 18;
@@ -243,6 +249,11 @@ public class ManHinhNhaGohan implements Screen {
         // Font có viền đen dành riêng cho dòng chữ "Đậu thần cấp ..."
         FreeTypeFontGenerator generator2 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchinh.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        // Bật lọc Linear thay vì Nearest (mặc định) — chữ FreeType generate ở kích thước cố định
+        // rồi bị phóng to theo viewport ảo trên điện thoại (tỉ lệ luôn > 1x), Nearest filter làm chữ
+        // vỡ nét/răng cưa khi phóng to, Linear cho chữ mượt hơn nhiều.
+        param2.minFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
+        param2.magFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
         param2.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
             "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể";
         param2.size = 22;
@@ -310,7 +321,7 @@ public class ManHinhNhaGohan implements Screen {
     }
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 0.1f);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         // Cập nhật camera theo vị trí nhân vật
         float targetX = nhanVat.getX();
@@ -318,6 +329,12 @@ public class ManHinhNhaGohan implements Screen {
 
         // Giới hạn camera trong vùng bản đồ (1420x760)
         camManager.updateMainCamera(nhanVat.getX(), nhanVat.getY(), 1420, 760,0,0);
+        // QUAN TRỌNG: viewport.apply() thật sự set vùng pixel (Gdx.gl.glViewport) sẽ render vào,
+        // KHÁC với setProjectionMatrix (chỉ đổi ma trận chiếu toạ độ). world dùng ExtendViewport
+        // (lấp đầy màn hình) còn UI dùng FitViewport (khung 1020x610 cố định) — 2 viewport có vùng
+        // pixel khác nhau, nên phải apply() lại đúng viewport trước mỗi lượt vẽ tương ứng, nếu
+        // không lượt vẽ sau sẽ bị "dính" vùng pixel của viewport gọi apply() gần nhất.
+        camManager.viewport.apply();
         batch.setProjectionMatrix(camManager.camera.combined);
         shapeRenderer.setColor(5 / 255f, 194 / 255f, 168 / 255f, 1);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -463,14 +480,23 @@ public class ManHinhNhaGohan implements Screen {
             fontDauThan.draw(batch,layout,760+(230-layout.width)/2f,250+65+20);
             batch.end();
         }
-        // Kiểm tra nếu đứng trong vùng "Làng Aru" và bấm Enter thì chuyển màn
+        // Đứng gần cửa "Làng Aru" rồi bấm Enter (PC, như trước) HOẶC tap vào đúng khung tối
+        // (mobile không có phím Enter nên thêm tap xác nhận) mới chuyển màn — không tự chuyển khi
+        // chỉ đi ngang qua.
         if (targetX > 760 && targetX < 990 && targetY >= 0 && targetY <= 400) {
-            if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+            boolean bamEnter = Gdx.input.isKeyJustPressed(Input.Keys.ENTER);
+            boolean tapDungKhung = false;
+            if (Gdx.input.justTouched()) {
+                Vector2 diemTap = camManager.viewport.unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+                tapDungKhung = diemTap.x >= 760 && diemTap.x <= 760 + 230 && diemTap.y >= 300 && diemTap.y <= 300 + 60;
+            }
+            if (bamEnter || tapDungKhung) {
                 ThongTinChuyenMap info = new ThongTinChuyenMap(hudRenderer.getDuLieuNguoiChoi(),nhanVat, "nhagohan",hudRenderer,camManager, map, mapLangAru);
                 game.setScreen(new ManHinhSplash(game, new ManHinhLangAru(game, info)));
             }
         }
         // 2. Vẽ UI cố định
+        camManager.uiViewport.apply();
         batch.setProjectionMatrix(camManager.uiCamera.combined);
         batch.begin();
         hudRenderer.render(batch);

@@ -78,8 +78,8 @@ public class HUDClickHandler {
 
         MultiplayerRenderer.checkClick(worldX, worldY, veHUD);
 
-        float screenWidth = Gdx.graphics.getWidth();
-        float screenHeight = Gdx.graphics.getHeight();
+        float screenWidth = QuanLyCamera.VIRTUAL_WIDTH;
+        float screenHeight = QuanLyCamera.VIRTUAL_HEIGHT;
 
         // === VÙNG Ô SKILL ===
         int oskillW = 50;
@@ -448,12 +448,12 @@ public class HUDClickHandler {
         // chuc nang mini game
         if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.MINIGAME && veHUD.trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.NONE) {
             for (int i = 0; i < 2; i++) {
-                if (x >= (Gdx.graphics.getWidth()-240)/2f + i * 120 && x <= (Gdx.graphics.getWidth()-240)/2f + i * 120 + 115 && y >= 120 - 115 && y <= 120) {
+                if (x >= (QuanLyCamera.VIRTUAL_WIDTH-240)/2f + i * 120 && x <= (QuanLyCamera.VIRTUAL_WIDTH-240)/2f + i * 120 + 115 && y >= 120 - 115 && y <= 120) {
                     veHUD.nutClickTimer3 = 0.3f;
                     veHUD.nuthanhtrangchon = i;
                 }
             }
-            if (x < (Gdx.graphics.getWidth()-240)/2f || x > (Gdx.graphics.getWidth()-240)/2f + 240) {
+            if (x < (QuanLyCamera.VIRTUAL_WIDTH-240)/2f || x > (QuanLyCamera.VIRTUAL_WIDTH-240)/2f + 240) {
                 veHUD.trangThaiChucNangHUDChucNang = TrangThaiChucNangHUD_ChucNang.NONE;
             } else {
                 if (y > 120) {
@@ -463,12 +463,12 @@ public class HUDClickHandler {
         }
         if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.MINIGAME && veHUD.trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.NONE_CSMM) {
             for (int i = 0; i < 3; i++) {
-                if (x >= (Gdx.graphics.getWidth()-360)/2f + i * 120 && x <= (Gdx.graphics.getWidth()-360)/2f + i * 120 + 115 && y >= 120 - 115 && y <= 120) {
+                if (x >= (QuanLyCamera.VIRTUAL_WIDTH-360)/2f + i * 120 && x <= (QuanLyCamera.VIRTUAL_WIDTH-360)/2f + i * 120 + 115 && y >= 120 - 115 && y <= 120) {
                     veHUD.nutClickTimer3 = 0.3f;
                     veHUD.nuthanhtrangchon = i;
                 }
             }
-            if (x < (Gdx.graphics.getWidth()-360)/2f || x > (Gdx.graphics.getWidth()-360)/2f + 360) {
+            if (x < (QuanLyCamera.VIRTUAL_WIDTH-360)/2f || x > (QuanLyCamera.VIRTUAL_WIDTH-360)/2f + 360) {
                 veHUD.trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE;
             } else {
                 if (y > 120) {
@@ -478,11 +478,11 @@ public class HUDClickHandler {
         }
         if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.MINIGAME && veHUD.trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.HUONG_DAN_THEM_CSMM) {
             float i = 1;
-            if (x >= (Gdx.graphics.getWidth()-360)/2f + i * 120 && x <= (Gdx.graphics.getWidth()-360)/2f + i * 120 + 115 && y >= 120 - 115 && y <= 120) {
+            if (x >= (QuanLyCamera.VIRTUAL_WIDTH-360)/2f + i * 120 && x <= (QuanLyCamera.VIRTUAL_WIDTH-360)/2f + i * 120 + 115 && y >= 120 - 115 && y <= 120) {
                 veHUD.nutClickTimer3 = 0.3f;
                 veHUD.nuthanhtrangchon = i;
             }
-            if (x < (Gdx.graphics.getWidth()-360)/2f || x > (Gdx.graphics.getWidth()-360)/2f + 360) {
+            if (x < (QuanLyCamera.VIRTUAL_WIDTH-360)/2f || x > (QuanLyCamera.VIRTUAL_WIDTH-360)/2f + 360) {
                 veHUD.trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE_CSMM;
             } else {
                 if (y > 120) {
@@ -491,7 +491,7 @@ public class HUDClickHandler {
             }
         }
         if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.MINIGAME && veHUD.trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.THAM_GIA_CSMM) {
-            float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
+            float nutX = (QuanLyCamera.VIRTUAL_WIDTH - 140) / 2f;
             float nutY = 12;
             if (x >= nutX-81 && x <= nutX-81 + 140 && y >= nutY && y <= nutY + 50 ) {
                 veHUD.isThongBaoOKPressed=0.3f;
@@ -504,12 +504,12 @@ public class HUDClickHandler {
         }
         if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.MINIGAME && veHUD.trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.NONE_CHAN_LE) {
             for (int i = 0; i < 3; i++) {
-                if (x >= (Gdx.graphics.getWidth()-360)/2f + i * 120 && x <= (Gdx.graphics.getWidth()-360)/2f + i * 120 + 115 && y >= 120 - 115 && y <= 120) {
+                if (x >= (QuanLyCamera.VIRTUAL_WIDTH-360)/2f + i * 120 && x <= (QuanLyCamera.VIRTUAL_WIDTH-360)/2f + i * 120 + 115 && y >= 120 - 115 && y <= 120) {
                     veHUD.nutClickTimer3 = 0.3f;
                     veHUD.nuthanhtrangchon = i;
                 }
             }
-            if (x < (Gdx.graphics.getWidth()-360)/2f || x > (Gdx.graphics.getWidth()-360)/2f + 360) {
+            if (x < (QuanLyCamera.VIRTUAL_WIDTH-360)/2f || x > (QuanLyCamera.VIRTUAL_WIDTH-360)/2f + 360) {
                 veHUD.trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE;
             } else {
                 if (y > 120) {
@@ -519,11 +519,11 @@ public class HUDClickHandler {
         }
         if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.MINIGAME && veHUD.trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.HUONG_DAN_THEM_CHAN_LE) {
             float i = 1;
-            if (x >= (Gdx.graphics.getWidth()-360)/2f + i * 120 && x <= (Gdx.graphics.getWidth()-360)/2f + i * 120 + 115 && y >= 120 - 115 && y <= 120) {
+            if (x >= (QuanLyCamera.VIRTUAL_WIDTH-360)/2f + i * 120 && x <= (QuanLyCamera.VIRTUAL_WIDTH-360)/2f + i * 120 + 115 && y >= 120 - 115 && y <= 120) {
                 veHUD.nutClickTimer3 = 0.3f;
                 veHUD.nuthanhtrangchon = i;
             }
-            if (x < (Gdx.graphics.getWidth()-360)/2f || x > (Gdx.graphics.getWidth()-360)/2f + 360) {
+            if (x < (QuanLyCamera.VIRTUAL_WIDTH-360)/2f || x > (QuanLyCamera.VIRTUAL_WIDTH-360)/2f + 360) {
                 veHUD.trangThaiChucNangHUDChucNangMiniGame = TrangThaiChucNangHUD_ChucNang_MiniGame.NONE_CHAN_LE;
             } else {
                 if (y > 120) {
@@ -532,7 +532,7 @@ public class HUDClickHandler {
             }
         }
         if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.MINIGAME && veHUD.trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.THAM_GIA_CHAN_LE) {
-            float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
+            float nutX = (QuanLyCamera.VIRTUAL_WIDTH - 140) / 2f;
             float nutY = 12;
             if (x >= nutX-81 && x <= nutX-81 + 140 && y >= nutY && y <= nutY + 50 ) {
                 veHUD.isThongBaoOKPressed=0.3f;
@@ -755,7 +755,7 @@ public class HUDClickHandler {
 
         // Popup bỏ vật phẩm
         if (veHUD.dangHienThongBao) {
-            float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
+            float nutX = (QuanLyCamera.VIRTUAL_WIDTH - 140) / 2f;
             float nutY = 50;
             if (x >= nutX-81 && x <= nutX-81 + 140 && y >= nutY && y <= nutY + 50 ) {
                 veHUD.isThongBaoOKPressed=0.3f;
@@ -998,7 +998,7 @@ public class HUDClickHandler {
             }
         }
         if (veHUD.dangHienKhungChat) {
-            float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
+            float nutX = (QuanLyCamera.VIRTUAL_WIDTH - 140) / 2f;
             float nutY = 12;
             if (x >= nutX-81 && x <= nutX-81 + 140 && y >= nutY && y <= nutY + 50 ) {
                 veHUD.isThongBaoOKPressed=0.3f;

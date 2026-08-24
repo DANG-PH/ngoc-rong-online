@@ -18,6 +18,8 @@ import com.dang.dragonboy.he_thong.AppConfig;
 import com.dang.dragonboy.he_thong.Main;
 import com.dang.dragonboy.giao_dien_trong.ManHinhNhaGohan;
 import com.dang.dragonboy.he_thong.MusicManager;
+import com.dang.dragonboy.hien_thi.QuanLyCamera;
+import com.badlogic.gdx.math.Vector2;
 import com.dang.dragonboy.network.ApiService;
 import com.dang.dragonboy.network.DTO.UserResponse;
 import com.dang.dragonboy.network.TrangThaiApiGetBan;
@@ -43,6 +45,11 @@ public class ManHinhMenu implements Screen {
     private Main game;
     private SpriteBatch batch;
     private ShapeRenderer shapeRenderer;
+    // Màn hình này chưa từng dùng camera/viewport nào — vẽ theo hệ pixel THẬT của thiết bị
+    // (mặc định của SpriteBatch/ShapeRenderer), trong khi toàn bộ toạ độ trong file là hằng số
+    // ảo 1020x610. Trên PC trùng khớp vì cửa sổ luôn đúng 1020x610, nhưng vỡ layout/bắt sai click
+    // trên điện thoại. Thêm 1 viewport ảo cố định để cả vẽ lẫn chạm đều đúng trên mọi màn hình.
+    private final QuanLyCamera camManager = new QuanLyCamera();
 
     private Texture anhThongBao;
     private float timeClickNutThongBao = 0f;
@@ -174,8 +181,9 @@ public class ManHinhMenu implements Screen {
         }
         if (serverOnline != null && !serverOnline && trangThaiManHinh != TrangThai.SERVER_ERROR) trangThaiManHinh = TrangThai.SERVER_ERROR;
         if (Gdx.input.justTouched() && !dangKetNoi) {
-            int mouseX = Gdx.input.getX();
-            int mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
+            Vector2 diem = camManager.uiViewport.unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+            int mouseX = (int) diem.x;
+            int mouseY = (int) diem.y;
             if (trangThaiManHinh == TrangThai.NONE) {
                 int[] ys = {320, 255, 190, 125};
 
@@ -193,21 +201,21 @@ public class ManHinhMenu implements Screen {
                     }
                 }
             } else if (trangThaiManHinh == TrangThai.BAN) {
-                float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
+                float nutX = (QuanLyCamera.VIRTUAL_WIDTH - 140) / 2f;
                 float nutY = 70;
                 if (mouseX >= nutX && mouseX <= nutX + 140 &&
                     mouseY >= nutY && mouseY <= nutY + 50) {
                     timeClickNutThongBao = 0.1f;
                 }
             } else if (trangThaiManHinh == TrangThai.SERVER_ERROR) {
-                float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
+                float nutX = (QuanLyCamera.VIRTUAL_WIDTH - 140) / 2f;
                 float nutY = 70;
                 if (mouseX >= nutX && mouseX <= nutX + 140 &&
                     mouseY >= nutY && mouseY <= nutY + 50) {
                     timeClickNutThongBao = 0.1f;
                 }
             } else if (trangThaiManHinh == TrangThai.FORCE_LOGOUT) {
-                float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
+                float nutX = (QuanLyCamera.VIRTUAL_WIDTH - 140) / 2f;
                 float nutY = 70;
                 if (mouseX >= nutX && mouseX <= nutX + 140 &&
                     mouseY >= nutY && mouseY <= nutY + 50) {
@@ -289,9 +297,11 @@ public class ManHinhMenu implements Screen {
         if (scrollX_cay <= -340) scrollX_cay += 340;
         if (scrollX_thap <= -340) scrollX_thap += 340;
 
-        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        batch.setProjectionMatrix(camManager.uiCamera.combined);
+        shapeRenderer.setProjectionMatrix(camManager.uiCamera.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(25 / 255f, 176 / 255f, 248 / 255f, 1);
         shapeRenderer.rect(0, 460, 1020, 150);
@@ -360,30 +370,30 @@ public class ManHinhMenu implements Screen {
             }
         } else if (trangThaiManHinh == TrangThai.BAN) {
             font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
-            batch.draw(anhThongBao, (Gdx.graphics.getWidth() - 740) / 2f, 85, 740, 168);
+            batch.draw(anhThongBao, (QuanLyCamera.VIRTUAL_WIDTH - 740) / 2f, 85, 740, 168);
             layout.setText(font, "Tài khoản đã bị khóa, vui lòng liên hệ admin để được hỗ trợ");
-            font.draw(batch, layout, (Gdx.graphics.getWidth() - layout.width) / 2, 180);
-            float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
+            font.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH - layout.width) / 2, 180);
+            float nutX = (QuanLyCamera.VIRTUAL_WIDTH - 140) / 2f;
             float nutY = 70;
             batch.draw(timeClickNutThongBao > 0 ? nutclick1 : nutdn1, nutX, nutY, 140, 50);
             layout.setText(font, "OK");
             font.draw(batch, layout, nutX + (140 - layout.width) / 2f, nutY + 30);
         } else if (trangThaiManHinh == TrangThai.SERVER_ERROR) {
-            batch.draw(anhThongBao, (Gdx.graphics.getWidth() - 740) / 2f, 85, 740, 168);
+            batch.draw(anhThongBao, (QuanLyCamera.VIRTUAL_WIDTH - 740) / 2f, 85, 740, 168);
             font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
             layout.setText(font, "Máy chủ mất kết nối, vui lòng thử lại sau");
-            font.draw(batch, layout, (Gdx.graphics.getWidth() - layout.width) / 2, 180);
-            float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
+            font.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH - layout.width) / 2, 180);
+            float nutX = (QuanLyCamera.VIRTUAL_WIDTH - 140) / 2f;
             float nutY = 70;
             batch.draw(timeClickNutThongBao > 0 ? nutclick1 : nutdn1, nutX, nutY, 140, 50);
             layout.setText(font, "OK");
             font.draw(batch, layout, nutX + (140 - layout.width) / 2f, nutY + 30);
         } else if (trangThaiManHinh == TrangThai.FORCE_LOGOUT) {  // THÊM
-            batch.draw(anhThongBao, (Gdx.graphics.getWidth() - 740) / 2f, 85, 740, 168);
+            batch.draw(anhThongBao, (QuanLyCamera.VIRTUAL_WIDTH - 740) / 2f, 85, 740, 168);
             font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
             layout.setText(font, State_Management.getForceLogoutMessage());
-            font.draw(batch, layout, (Gdx.graphics.getWidth() - layout.width) / 2, 180);
-            float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
+            font.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH - layout.width) / 2, 180);
+            float nutX = (QuanLyCamera.VIRTUAL_WIDTH - 140) / 2f;
             float nutY = 70;
             batch.draw(timeClickNutThongBao > 0 ? nutclick1 : nutdn1, nutX, nutY, 140, 50);
             layout.setText(font, "OK");
@@ -392,14 +402,14 @@ public class ManHinhMenu implements Screen {
 
         layout.setText(fontSplash, "Xóa dữ liệu");
         fontSplash.setColor(1, 1, 1, 1);
-        fontSplash.draw(batch, layout, Gdx.graphics.getWidth() - layout.width - 10, 30);
+        fontSplash.draw(batch, layout, QuanLyCamera.VIRTUAL_WIDTH - layout.width - 10, 30);
 
         layout.setText(fontThuong, "nronline.vercel.app");
         fontThuong.setColor(1, 1, 1, 1);
-        fontThuong.draw(batch, layout, Gdx.graphics.getWidth() - layout.width - 10, 600);
+        fontThuong.draw(batch, layout, QuanLyCamera.VIRTUAL_WIDTH - layout.width - 10, 600);
 
         layout.setText(fontThuong, "V0.0.0");
-        fontThuong.draw(batch, layout, Gdx.graphics.getWidth() - layout.width - 10, 580);
+        fontThuong.draw(batch, layout, QuanLyCamera.VIRTUAL_WIDTH - layout.width - 10, 580);
         batch.end();
     }
 
@@ -431,6 +441,11 @@ public class ManHinhMenu implements Screen {
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        // Bật lọc Linear thay vì Nearest (mặc định) — chữ FreeType generate ở kích thước cố định
+        // rồi bị phóng to theo viewport ảo trên điện thoại (tỉ lệ luôn > 1x), Nearest filter làm chữ
+        // vỡ nét/răng cưa khi phóng to, Linear cho chữ mượt hơn nhiều.
+        parameter.minFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
+        parameter.magFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
         parameter.size = 18;
         parameter.characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?.,  @ ! , % # Xóa dữ liệu Đă ậ ở ớ ổ à ả á ế ủ vũ trụ ơ : ị ò ê đ ư ợ ỗ ợ ể ã máy chủ mất kết nối vui lòng thử lại sau tài khoản được đăng nhập tại nơi khác kết nối bị gián đoạn quay về màn hình chính";
         font = generator.generateFont(parameter);
@@ -440,12 +455,19 @@ public class ManHinhMenu implements Screen {
 
         FreeTypeFontGenerator genThuong = new FreeTypeFontGenerator(Gdx.files.internal("font/fontthuong.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter paramThuong = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        // Bật lọc Linear thay vì Nearest (mặc định) — chữ FreeType generate ở kích thước cố định
+        // rồi bị phóng to theo viewport ảo trên điện thoại (tỉ lệ luôn > 1x), Nearest filter làm chữ
+        // vỡ nét/răng cưa khi phóng to, Linear cho chữ mượt hơn nhiều.
+        paramThuong.minFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
+        paramThuong.magFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
         paramThuong.size = 25;
         paramThuong.characters = parameter.characters;
         fontThuong = genThuong.generateFont(paramThuong);
         genThuong.dispose();
     }
-    @Override public void resize(int width, int height) {}
+    @Override public void resize(int width, int height) {
+        camManager.resize(width, height);
+    }
     @Override public void pause() {}
     @Override public void resume() {}
     @Override public void hide() {}

@@ -169,14 +169,18 @@ public class HUDRongThan {
                 veHUD.font.draw(batch,layout,210 + i * 120+7f,5+(114+layout.height)/2f);
             }
             batch.end();
+            // shapeRenderer là object chiếu (projection) riêng, độc lập với batch — setProjectionMatrix
+            // cho batch KHÔNG áp dụng cho shapeRenderer. Thiếu dòng này khiến hình chữ nhật vẽ theo
+            // mặc định (pixel màn hình thật lúc khởi tạo), nhỏ/lệch hẳn trên điện thoại.
+            shapeRenderer.setProjectionMatrix(veHUD.camManager.uiCamera.combined);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(1f, 1f, 1f, 1f);
-            shapeRenderer.rect((Gdx.graphics.getWidth()-594)/2f, 120, 594,80);
+            shapeRenderer.rect((QuanLyCamera.VIRTUAL_WIDTH-594)/2f, 120, 594,80);
             shapeRenderer.end();
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
             shapeRenderer.setColor(Color.BLACK);
             for (int i = 0; i < 2; i++) {
-                shapeRenderer.rect((Gdx.graphics.getWidth()-594)/2f - i , 120 - i, 594 + i * 2, 80 + i * 2);
+                shapeRenderer.rect((QuanLyCamera.VIRTUAL_WIDTH-594)/2f - i , 120 - i, 594 + i * 2, 80 + i * 2);
             }
             shapeRenderer.end();
             batch.begin();
@@ -194,7 +198,7 @@ public class HUDRongThan {
                 Align.center,
                 true
             );
-            veHUD.fontchat.draw(batch,layout,(Gdx.graphics.getWidth()-594)/2f+30f,120+(80+layout.height)/2f);
+            veHUD.fontchat.draw(batch,layout,(QuanLyCamera.VIRTUAL_WIDTH-594)/2f+30f,120+(80+layout.height)/2f);
         }
     }
     public void dispose() {

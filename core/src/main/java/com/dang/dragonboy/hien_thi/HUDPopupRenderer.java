@@ -29,7 +29,10 @@ public class HUDPopupRenderer {
     private NhanVat nhanVat;
     private Texture dauhoicham;
     public HUDPopupRenderer(VeHUD veHUD, GlyphLayout layout, DuLieuNguoiChoi duLieuNguoiChoi, NhanVat nhanVat) {
-        shapeRenderer = new ShapeRenderer();
+        // Dùng chung shapeRenderer của VeHUD (đã được project đúng qua camManager.uiCamera) thay vì
+        // tạo instance riêng — instance riêng sẽ dùng projection mặc định theo pixel màn hình thật,
+        // vẽ sai vị trí trên thiết bị có độ phân giải khác 1020x610.
+        shapeRenderer = veHUD.shapeRenderer;
         this.veHUD = veHUD;
         this.layout = layout;
         this.duLieuNguoiChoi = duLieuNguoiChoi;
@@ -194,7 +197,7 @@ public class HUDPopupRenderer {
 
             batch.flush();
             Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
-            Gdx.gl.glScissor(0, (int)viewY, 350, (int)viewHeight);
+            veHUD.camManager.scissor(0, viewY, 350, viewHeight);
 
             // Vị trí bắt đầu vẽ từ trên xuống
             float startY = viewY + viewHeight - KhoangCachO + veHUD.scrollYPhai;
@@ -304,7 +307,7 @@ public class HUDPopupRenderer {
                 veHUD.fontsm.draw(batch, layout, 125, 535);
                 batch.flush();
                 Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
-                Gdx.gl.glScissor(0, (int) viewY, 350, (int) viewHeight);
+                veHUD.camManager.scissor(0, viewY, 350, viewHeight);
                 float totalHeight = chucNang.length * KhoangCachO;
                 veHUD.maxScrollPhai = Math.max(0, totalHeight - viewHeight);
                 float startY = viewY + viewHeight - KhoangCachO + veHUD.scrollYPhai;
@@ -339,7 +342,7 @@ public class HUDPopupRenderer {
                 float viewHeight = 444 - 35;
                 batch.flush();
                 Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
-                Gdx.gl.glScissor(0, (int) viewY, 350, (int) viewHeight);
+                veHUD.camManager.scissor(0, viewY, 350, viewHeight);
                 batch.draw(new Texture("hud/giaodienngoai/chung/icon128_1.png"), (350 - 115) / 2f, 444 - 115 - 20 + veHUD.scrollYPhai, 115, 115);
                 layout.setText(
                     veHUD.font,
@@ -373,23 +376,23 @@ public class HUDPopupRenderer {
             }
             if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.MINIGAME && veHUD.trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.NONE) {
                 float daoDong = (float) Math.sin(nhanVat.thoiGianTichLuy) * 1.3f;
-                batch.draw(veHUD.avtPetTheoHanhTinh, (Gdx.graphics.getWidth() - 600) / 2f + 30, 120 + 60 + daoDong, veHUD.avtPetTheoHanhTinh.getWidth() * 0.5f, veHUD.avtPetTheoHanhTinh.getHeight() * 0.5f);
+                batch.draw(veHUD.avtPetTheoHanhTinh, (QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f + 30, 120 + 60 + daoDong, veHUD.avtPetTheoHanhTinh.getWidth() * 0.5f, veHUD.avtPetTheoHanhTinh.getHeight() * 0.5f);
                 batch.end();
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
                 shapeRenderer.setColor(1, 1, 1, 1);
-                shapeRenderer.rect((Gdx.graphics.getWidth() - 600) / 2f, 120, 600, 60);
+                shapeRenderer.rect((QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f, 120, 600, 60);
                 shapeRenderer.end();
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
                 shapeRenderer.setColor(Color.BLACK);
                 for (int i = 0; i < 2; i++) {
-                    shapeRenderer.rect((Gdx.graphics.getWidth() - 600) / 2f - i, 120 - i, 600 + i * 2, 60 + i * 2);
+                    shapeRenderer.rect((QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f - i, 120 - i, 600 + i * 2, 60 + i * 2);
                 }
                 shapeRenderer.end();
                 batch.begin();
                 layout.setText(veHUD.fontMotaHanhTrang, "Vui lòng chọn 1 mini game!");
-                veHUD.fontMotaHanhTrang.draw(batch, layout, (Gdx.graphics.getWidth() - 600) / 2f + (600 - layout.width) / 2f, 120 + 35);
+                veHUD.fontMotaHanhTrang.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f + (600 - layout.width) / 2f, 120 + 35);
                 for (int i = 0; i < 2; i++) {
-                    float nutX = (Gdx.graphics.getWidth() - 240) / 2f + i * 120;
+                    float nutX = (QuanLyCamera.VIRTUAL_WIDTH - 240) / 2f + i * 120;
                     float nutY = 120 - 115;
                     if (veHUD.nuthanhtrangchon == i) {
                         Texture nutVe = veHUD.nutClickTimer3 > 0 ? veHUD.nutvuongclick : veHUD.nutvuong;
@@ -412,34 +415,34 @@ public class HUDPopupRenderer {
             }
             if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.MINIGAME && veHUD.trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.NONE_CSMM) {
                 float daoDong = (float) Math.sin(nhanVat.thoiGianTichLuy) * 1.3f;
-                batch.draw(veHUD.avtPetTheoHanhTinh, (Gdx.graphics.getWidth() - 600) / 2f + 30, 120 + 160 + daoDong, veHUD.avtPetTheoHanhTinh.getWidth() * 0.5f, veHUD.avtPetTheoHanhTinh.getHeight() * 0.5f);
+                batch.draw(veHUD.avtPetTheoHanhTinh, (QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f + 30, 120 + 160 + daoDong, veHUD.avtPetTheoHanhTinh.getWidth() * 0.5f, veHUD.avtPetTheoHanhTinh.getHeight() * 0.5f);
                 batch.end();
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
                 shapeRenderer.setColor(1, 1, 1, 1);
-                shapeRenderer.rect((Gdx.graphics.getWidth() - 600) / 2f, 120, 600, 160);
+                shapeRenderer.rect((QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f, 120, 600, 160);
                 shapeRenderer.end();
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
                 shapeRenderer.setColor(Color.BLACK);
                 for (int i = 0; i < 2; i++) {
-                    shapeRenderer.rect((Gdx.graphics.getWidth() - 600) / 2f - i, 120 - i, 600 + i * 2, 160 + i * 2);
+                    shapeRenderer.rect((QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f - i, 120 - i, 600 + i * 2, 160 + i * 2);
                 }
                 shapeRenderer.end();
                 batch.begin();
                 DecimalFormat dinhDang = new DecimalFormat("#,###");
                 layout.setText(veHUD.fontMotaHanhTrang, "Kết quả giải trước: " + (veHUD.ketQuaGiaiTruoc == 0 ? "chưa bắt đầu" : veHUD.ketQuaGiaiTruoc));
-                veHUD.fontMotaHanhTrang.draw(batch, layout, (Gdx.graphics.getWidth() - 600) / 2f + (600 - layout.width) / 2f, 120 + 135);
+                veHUD.fontMotaHanhTrang.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f + (600 - layout.width) / 2f, 120 + 135);
                 layout.setText(veHUD.fontMotaHanhTrang, "Số ngọc đang cược: " + (veHUD.soNgocCuoc == 0 ? "chưa tham gia" : dinhDang.format(veHUD.soNgocCuoc)));
-                veHUD.fontMotaHanhTrang.draw(batch, layout, (Gdx.graphics.getWidth() - 600) / 2f + (600 - layout.width) / 2f, 120 + 115);
+                veHUD.fontMotaHanhTrang.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f + (600 - layout.width) / 2f, 120 + 115);
                 layout.setText(veHUD.fontMotaHanhTrang, "Số may mắn đang chọn: " + (veHUD.soNguoiChoiChon == 0 ? "chưa tham gia" : veHUD.soNguoiChoiChon));
-                veHUD.fontMotaHanhTrang.draw(batch, layout, (Gdx.graphics.getWidth() - 600) / 2f + (600 - layout.width) / 2f, 120 + 95);
+                veHUD.fontMotaHanhTrang.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f + (600 - layout.width) / 2f, 120 + 95);
                 layout.setText(veHUD.fontMotaHanhTrang, "Số ngọc thưởng nhận gần nhất: " + (veHUD.soNgocDuocNhanGanNhat == 0 ? "chưa nhận thưởng" : dinhDang.format(veHUD.soNgocDuocNhanGanNhat)));
-                veHUD.fontMotaHanhTrang.draw(batch, layout, (Gdx.graphics.getWidth() - 600) / 2f + (600 - layout.width) / 2f, 120 + 75);
+                veHUD.fontMotaHanhTrang.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f + (600 - layout.width) / 2f, 120 + 75);
                 layout.setText(veHUD.fontMotaHanhTrang, "Tham gia với tổng giải thưởng gấp 90 lần!");
-                veHUD.fontMotaHanhTrang.draw(batch, layout, (Gdx.graphics.getWidth() - 600) / 2f + (600 - layout.width) / 2f, 120 + 55);
+                veHUD.fontMotaHanhTrang.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f + (600 - layout.width) / 2f, 120 + 55);
                 layout.setText(veHUD.fontMotaHanhTrang, "Còn :" + (int) veHUD.timeMiniGame + " giây");
-                veHUD.fontMotaHanhTrang.draw(batch, layout, (Gdx.graphics.getWidth() - 600) / 2f + (600 - layout.width) / 2f, 120 + 35);
+                veHUD.fontMotaHanhTrang.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f + (600 - layout.width) / 2f, 120 + 35);
                 for (int i = 0; i < 3; i++) {
-                    float nutX = (Gdx.graphics.getWidth() - 360) / 2f + i * 120;
+                    float nutX = (QuanLyCamera.VIRTUAL_WIDTH - 360) / 2f + i * 120;
                     float nutY = 120 - 115;
                     if (veHUD.nuthanhtrangchon == i) {
                         Texture nutVe = veHUD.nutClickTimer3 > 0 ? veHUD.nutvuongclick : veHUD.nutvuong;
@@ -468,15 +471,15 @@ public class HUDPopupRenderer {
 
             if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.MINIGAME && veHUD.trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.THAM_GIA_CSMM) {
                 float daoDong = (float) Math.sin(nhanVat.thoiGianTichLuy) * 1.3f;
-                batch.draw(veHUD.avtPetTheoHanhTinh, (Gdx.graphics.getWidth() - 528) / 2f + 30, 35 + 149 + 1 + daoDong, veHUD.avtPetTheoHanhTinh.getWidth() * 0.5f, veHUD.avtPetTheoHanhTinh.getHeight() * 0.5f);
+                batch.draw(veHUD.avtPetTheoHanhTinh, (QuanLyCamera.VIRTUAL_WIDTH - 528) / 2f + 30, 35 + 149 + 1 + daoDong, veHUD.avtPetTheoHanhTinh.getWidth() * 0.5f, veHUD.avtPetTheoHanhTinh.getHeight() * 0.5f);
                 batch.end();
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
                 shapeRenderer.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
-                shapeRenderer.rect((Gdx.graphics.getWidth() - 528) / 2f - 2f, 35 - 1f, 528 + 4f, 149 + 3f);
+                shapeRenderer.rect((QuanLyCamera.VIRTUAL_WIDTH - 528) / 2f - 2f, 35 - 1f, 528 + 4f, 149 + 3f);
                 shapeRenderer.end();
                 batch.begin();
-                batch.draw(veHUD.khungchat, (Gdx.graphics.getWidth() - 528) / 2f, 35, 528, 149);
-                float nX = (Gdx.graphics.getWidth() - 140) / 2f;
+                batch.draw(veHUD.khungchat, (QuanLyCamera.VIRTUAL_WIDTH - 528) / 2f, 35, 528, 149);
+                float nX = (QuanLyCamera.VIRTUAL_WIDTH - 140) / 2f;
                 float nutY = 12;
                 veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
                 batch.draw(veHUD.isThongBaoOKPressed > 0 && veHUD.nutduocchon == 1 ? veHUD.nutclick : veHUD.nutdn, nX - 81, nutY, 140, 48);
@@ -488,10 +491,10 @@ public class HUDPopupRenderer {
 
                 veHUD.fontTenSkill.setColor(0f / 255f, 85f / 255f, 38f / 255f, 1f);
                 layout.setText(veHUD.fontTenSkill, "Con số may mắn");
-                veHUD.fontTenSkill.draw(batch, layout, (Gdx.graphics.getWidth() - 528) / 2f + 15, 35 + 115);
+                veHUD.fontTenSkill.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH - 528) / 2f + 15, 35 + 115);
 
                 // Các thông số
-                float khungX = (Gdx.graphics.getWidth() - 528) / 2f + 25;
+                float khungX = (QuanLyCamera.VIRTUAL_WIDTH - 528) / 2f + 25;
                 float khungY = 35;
                 float khungWidth = 465;
                 float khungHeight = 68;
@@ -511,7 +514,7 @@ public class HUDPopupRenderer {
                 }
                 batch.flush();
                 Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
-                Gdx.gl.glScissor((int) khungX, (int) khungY, (int) khungWidth, (int) khungHeight);
+                veHUD.camManager.scissor(khungX, khungY, khungWidth, khungHeight);
                 veHUD.fontText.draw(batch, layout, khungX - offsetX, khungY + khungHeight);
                 batch.flush();
                 Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
@@ -531,22 +534,22 @@ public class HUDPopupRenderer {
                     true
                 );
                 float daoDong = (float) Math.sin(nhanVat.thoiGianTichLuy) * 1.3f;
-                batch.draw(veHUD.avtPetTheoHanhTinh, (Gdx.graphics.getWidth() - 600) / 2f + 30, 120 + layout.height + 35 * 2 + daoDong, veHUD.avtPetTheoHanhTinh.getWidth() * 0.5f, veHUD.avtPetTheoHanhTinh.getHeight() * 0.5f);
+                batch.draw(veHUD.avtPetTheoHanhTinh, (QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f + 30, 120 + layout.height + 35 * 2 + daoDong, veHUD.avtPetTheoHanhTinh.getWidth() * 0.5f, veHUD.avtPetTheoHanhTinh.getHeight() * 0.5f);
                 batch.end();
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
                 shapeRenderer.setColor(1, 1, 1, 1);
-                shapeRenderer.rect((Gdx.graphics.getWidth() - 600) / 2f, 120, 600, layout.height + 35 * 2);
+                shapeRenderer.rect((QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f, 120, 600, layout.height + 35 * 2);
                 shapeRenderer.end();
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
                 shapeRenderer.setColor(Color.BLACK);
                 for (int i = 0; i < 2; i++) {
-                    shapeRenderer.rect((Gdx.graphics.getWidth() - 600) / 2f - i, 120 - i, 600 + i * 2, layout.height + 35 * 2 + i * 2);
+                    shapeRenderer.rect((QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f - i, 120 - i, 600 + i * 2, layout.height + 35 * 2 + i * 2);
                 }
                 shapeRenderer.end();
                 batch.begin();
-                veHUD.fontMotaHanhTrang.draw(batch, layout, (Gdx.graphics.getWidth() - 600) / 2f + 25, 120 + layout.height + 35);
+                veHUD.fontMotaHanhTrang.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f + 25, 120 + layout.height + 35);
                 float i = 1;
-                float nutX = (Gdx.graphics.getWidth() - 360) / 2f + i * 120;
+                float nutX = (QuanLyCamera.VIRTUAL_WIDTH - 360) / 2f + i * 120;
                 float nutY = 120 - 115;
                 if (veHUD.nuthanhtrangchon == i) {
                     Texture nutVe = veHUD.nutClickTimer3 > 0 ? veHUD.nutvuongclick : veHUD.nutvuong;
@@ -562,34 +565,34 @@ public class HUDPopupRenderer {
 
             if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.MINIGAME && veHUD.trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.NONE_CHAN_LE) {
                 float daoDong = (float) Math.sin(nhanVat.thoiGianTichLuy) * 1.5f;
-                batch.draw(veHUD.avtPetTheoHanhTinh, (Gdx.graphics.getWidth() - 600) / 2f + 30, 120 + 160 + daoDong, veHUD.avtPetTheoHanhTinh.getWidth() * 0.5f, veHUD.avtPetTheoHanhTinh.getHeight() * 0.5f);
+                batch.draw(veHUD.avtPetTheoHanhTinh, (QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f + 30, 120 + 160 + daoDong, veHUD.avtPetTheoHanhTinh.getWidth() * 0.5f, veHUD.avtPetTheoHanhTinh.getHeight() * 0.5f);
                 batch.end();
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
                 shapeRenderer.setColor(1, 1, 1, 1);
-                shapeRenderer.rect((Gdx.graphics.getWidth() - 600) / 2f, 120, 600, 160);
+                shapeRenderer.rect((QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f, 120, 600, 160);
                 shapeRenderer.end();
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
                 shapeRenderer.setColor(Color.BLACK);
                 for (int i = 0; i < 2; i++) {
-                    shapeRenderer.rect((Gdx.graphics.getWidth() - 600) / 2f - i, 120 - i, 600 + i * 2, 160 + i * 2);
+                    shapeRenderer.rect((QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f - i, 120 - i, 600 + i * 2, 160 + i * 2);
                 }
                 shapeRenderer.end();
                 batch.begin();
                 DecimalFormat dinhDang = new DecimalFormat("#,###");
                 layout.setText(veHUD.fontMotaHanhTrang, "Kết quả giải trước: " + (veHUD.ketQuaGiaiTruocChanLe == 0 ? "chưa bắt đầu" : veHUD.ketQuaGiaiTruocChanLe + " (" + (veHUD.ketQuaGiaiTruocChanLe % 2 == 0 ? "chẵn" : "lẻ") + ")"));
-                veHUD.fontMotaHanhTrang.draw(batch, layout, (Gdx.graphics.getWidth() - 600) / 2f + (600 - layout.width) / 2f, 120 + 135);
+                veHUD.fontMotaHanhTrang.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f + (600 - layout.width) / 2f, 120 + 135);
                 layout.setText(veHUD.fontMotaHanhTrang, "Số vàng đang cược: " + (veHUD.soVangCuocChanLe == 0 ? "chưa tham gia" : dinhDang.format(veHUD.soVangCuocChanLe)));
-                veHUD.fontMotaHanhTrang.draw(batch, layout, (Gdx.graphics.getWidth() - 600) / 2f + (600 - layout.width) / 2f, 120 + 115);
+                veHUD.fontMotaHanhTrang.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f + (600 - layout.width) / 2f, 120 + 115);
                 layout.setText(veHUD.fontMotaHanhTrang, "Bạn đã đặt cược vào: " + ("".equals(veHUD.NguoiChoiChonChanLe) ? "chưa tham gia" : (veHUD.NguoiChoiChonChanLe.equals("chan") ? "Chẵn" : "lẻ")));
-                veHUD.fontMotaHanhTrang.draw(batch, layout, (Gdx.graphics.getWidth() - 600) / 2f + (600 - layout.width) / 2f, 120 + 95);
+                veHUD.fontMotaHanhTrang.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f + (600 - layout.width) / 2f, 120 + 95);
                 layout.setText(veHUD.fontMotaHanhTrang, "Số vàng thưởng nhận gần nhất: " + (veHUD.soVangDuocNhanGanNhatChanLe == 0 ? "chưa nhận thưởng" : dinhDang.format(veHUD.soVangDuocNhanGanNhatChanLe)));
-                veHUD.fontMotaHanhTrang.draw(batch, layout, (Gdx.graphics.getWidth() - 600) / 2f + (600 - layout.width) / 2f, 120 + 75);
+                veHUD.fontMotaHanhTrang.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f + (600 - layout.width) / 2f, 120 + 75);
                 layout.setText(veHUD.fontMotaHanhTrang, "Tham gia để có cơ hội nhận giải thưởng gấp 1.9 lần!");
-                veHUD.fontMotaHanhTrang.draw(batch, layout, (Gdx.graphics.getWidth() - 600) / 2f + (600 - layout.width) / 2f, 120 + 55);
+                veHUD.fontMotaHanhTrang.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f + (600 - layout.width) / 2f, 120 + 55);
                 layout.setText(veHUD.fontMotaHanhTrang, "Còn :" + (int) veHUD.timeMiniGameChanLe + " giây");
-                veHUD.fontMotaHanhTrang.draw(batch, layout, (Gdx.graphics.getWidth() - 600) / 2f + (600 - layout.width) / 2f, 120 + 35);
+                veHUD.fontMotaHanhTrang.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f + (600 - layout.width) / 2f, 120 + 35);
                 for (int i = 0; i < 3; i++) {
-                    float nutX = (Gdx.graphics.getWidth() - 360) / 2f + i * 120;
+                    float nutX = (QuanLyCamera.VIRTUAL_WIDTH - 360) / 2f + i * 120;
                     float nutY = 120 - 115;
                     if (veHUD.nuthanhtrangchon == i) {
                         Texture nutVe = veHUD.nutClickTimer3 > 0 ? veHUD.nutvuongclick : veHUD.nutvuong;
@@ -618,15 +621,15 @@ public class HUDPopupRenderer {
 
             if (veHUD.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.MINIGAME && veHUD.trangThaiChucNangHUDChucNangMiniGame == TrangThaiChucNangHUD_ChucNang_MiniGame.THAM_GIA_CHAN_LE) {
                 float daoDong = (float) Math.sin(nhanVat.thoiGianTichLuy) * 1.3f;
-                batch.draw(veHUD.avtPetTheoHanhTinh, (Gdx.graphics.getWidth() - 528) / 2f + 30, 35 + 149 + 1 + daoDong, veHUD.avtPetTheoHanhTinh.getWidth() * 0.5f, veHUD.avtPetTheoHanhTinh.getHeight() * 0.5f);
+                batch.draw(veHUD.avtPetTheoHanhTinh, (QuanLyCamera.VIRTUAL_WIDTH - 528) / 2f + 30, 35 + 149 + 1 + daoDong, veHUD.avtPetTheoHanhTinh.getWidth() * 0.5f, veHUD.avtPetTheoHanhTinh.getHeight() * 0.5f);
                 batch.end();
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
                 shapeRenderer.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
-                shapeRenderer.rect((Gdx.graphics.getWidth() - 528) / 2f - 2f, 35 - 1f, 528 + 4f, 149 + 3f);
+                shapeRenderer.rect((QuanLyCamera.VIRTUAL_WIDTH - 528) / 2f - 2f, 35 - 1f, 528 + 4f, 149 + 3f);
                 shapeRenderer.end();
                 batch.begin();
-                batch.draw(veHUD.khungchat, (Gdx.graphics.getWidth() - 528) / 2f, 35, 528, 149);
-                float nX = (Gdx.graphics.getWidth() - 140) / 2f;
+                batch.draw(veHUD.khungchat, (QuanLyCamera.VIRTUAL_WIDTH - 528) / 2f, 35, 528, 149);
+                float nX = (QuanLyCamera.VIRTUAL_WIDTH - 140) / 2f;
                 float nutY = 12;
                 veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
                 batch.draw(veHUD.isThongBaoOKPressed > 0 && veHUD.nutduocchon == 1 ? veHUD.nutclick : veHUD.nutdn, nX - 81, nutY, 140, 48);
@@ -638,10 +641,10 @@ public class HUDPopupRenderer {
 
                 veHUD.fontTenSkill.setColor(0f / 255f, 85f / 255f, 38f / 255f, 1f);
                 layout.setText(veHUD.fontTenSkill, "Chẵn lẻ");
-                veHUD.fontTenSkill.draw(batch, layout, (Gdx.graphics.getWidth() - 528) / 2f + 15, 35 + 115);
+                veHUD.fontTenSkill.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH - 528) / 2f + 15, 35 + 115);
 
                 // Các thông số khung
-                float khungX = (Gdx.graphics.getWidth() - 528) / 2f + 25;
+                float khungX = (QuanLyCamera.VIRTUAL_WIDTH - 528) / 2f + 25;
                 float khungY = 35;
                 float khungWidth = 465;
                 float khungHeight = 68;
@@ -668,7 +671,7 @@ public class HUDPopupRenderer {
                 // Cắt bớt nếu quá dài (scissor)
                 batch.flush();
                 Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
-                Gdx.gl.glScissor((int) khungX, (int) khungY, (int) khungWidth, (int) khungHeight);
+                veHUD.camManager.scissor(khungX, khungY, khungWidth, khungHeight);
                 veHUD.fontText.draw(batch, layout, khungX - offsetX, khungY + khungHeight);
                 batch.flush();
                 Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
@@ -688,22 +691,22 @@ public class HUDPopupRenderer {
                     true
                 );
                 float daoDong = (float) Math.sin(nhanVat.thoiGianTichLuy) * 1.3f;
-                batch.draw(veHUD.avtPetTheoHanhTinh, (Gdx.graphics.getWidth() - 600) / 2f + 30, 120 + layout.height + 35 * 2 + daoDong, veHUD.avtPetTheoHanhTinh.getWidth() * 0.5f, veHUD.avtPetTheoHanhTinh.getHeight() * 0.5f);
+                batch.draw(veHUD.avtPetTheoHanhTinh, (QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f + 30, 120 + layout.height + 35 * 2 + daoDong, veHUD.avtPetTheoHanhTinh.getWidth() * 0.5f, veHUD.avtPetTheoHanhTinh.getHeight() * 0.5f);
                 batch.end();
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
                 shapeRenderer.setColor(1, 1, 1, 1);
-                shapeRenderer.rect((Gdx.graphics.getWidth() - 600) / 2f, 120, 600, layout.height + 35 * 2);
+                shapeRenderer.rect((QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f, 120, 600, layout.height + 35 * 2);
                 shapeRenderer.end();
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
                 shapeRenderer.setColor(Color.BLACK);
                 for (int i = 0; i < 2; i++) {
-                    shapeRenderer.rect((Gdx.graphics.getWidth() - 600) / 2f - i, 120 - i, 600 + i * 2, layout.height + 35 * 2 + i * 2);
+                    shapeRenderer.rect((QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f - i, 120 - i, 600 + i * 2, layout.height + 35 * 2 + i * 2);
                 }
                 shapeRenderer.end();
                 batch.begin();
-                veHUD.fontMotaHanhTrang.draw(batch, layout, (Gdx.graphics.getWidth() - 600) / 2f + 25, 120 + layout.height + 35);
+                veHUD.fontMotaHanhTrang.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f + 25, 120 + layout.height + 35);
                 float i = 1;
-                float nutX = (Gdx.graphics.getWidth() - 360) / 2f + i * 120;
+                float nutX = (QuanLyCamera.VIRTUAL_WIDTH - 360) / 2f + i * 120;
                 float nutY = 120 - 115;
                 if (veHUD.nuthanhtrangchon == i) {
                     Texture nutVe = veHUD.nutClickTimer3 > 0 ? veHUD.nutvuongclick : veHUD.nutvuong;
@@ -753,7 +756,7 @@ public class HUDPopupRenderer {
                 float viewHeight = 444 - 35;
                 batch.flush();
                 Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
-                Gdx.gl.glScissor(0, (int) viewY, 350, (int) viewHeight);
+                veHUD.camManager.scissor(0, viewY, 350, viewHeight);
                 batch.draw(new Texture("hud/giaodienngoai/chung/logogame4.png"), (350 - 112) / 2f, 444 - 53 - 20 + veHUD.scrollYPhai, 112, 53);
                 layout.setText(
                     veHUD.font,
@@ -793,7 +796,7 @@ public class HUDPopupRenderer {
                 float viewHeight = 444 - 35;
                 batch.flush();
                 Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
-                Gdx.gl.glScissor(0, (int) viewY, 350, (int) viewHeight);
+                veHUD.camManager.scissor(0, viewY, 350, viewHeight);
                 layout.setText(
                     veHUD.font,
                     "Vui lòng theo dõi tại trang web:" + "\n" + "ngocrongdark.com",
@@ -813,7 +816,7 @@ public class HUDPopupRenderer {
                 float viewHeight = 444 - 35;
                 batch.flush();
                 Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
-                Gdx.gl.glScissor(0, (int) viewY, 350, (int) viewHeight);
+                veHUD.camManager.scissor(0, viewY, 350, viewHeight);
                 layout.setText(
                     veHUD.font,
                     "Hiện chưa có x2, x3 EXP",
@@ -833,7 +836,7 @@ public class HUDPopupRenderer {
                 float viewHeight = 444 - 35;
                 batch.flush();
                 Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
-                Gdx.gl.glScissor(0, (int) viewY, 350, (int) viewHeight);
+                veHUD.camManager.scissor(0, viewY, 350, viewHeight);
                 layout.setText(
                     veHUD.font,
                     "Giftcode tân thủ:" + "\n" +
@@ -857,7 +860,7 @@ public class HUDPopupRenderer {
                 float viewHeight = 444 - 35;
                 batch.flush();
                 Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
-                Gdx.gl.glScissor(0, (int) viewY, 350, (int) viewHeight);
+                veHUD.camManager.scissor(0, viewY, 350, viewHeight);
                 layout.setText(
                     veHUD.font,
                     "Hiện tại chưa có Event",
@@ -922,7 +925,7 @@ public class HUDPopupRenderer {
 
                 batch.flush();
                 Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
-                Gdx.gl.glScissor(1020 - 350, (int) viewY, 350, (int) viewHeight);
+                veHUD.camManager.scissor(1020 - 350, viewY, 350, viewHeight);
                 // Vị trí bắt đầu vẽ từ trên xuống
                 float startY = viewY + viewHeight - KhoangCachItem + veHUD.scrollYPhai;
 
@@ -1199,7 +1202,7 @@ public class HUDPopupRenderer {
 
                     batch.flush();
                     Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
-                    Gdx.gl.glScissor(0, (int) viewY, 350, (int) viewHeight);
+                    veHUD.camManager.scissor(0, viewY, 350, viewHeight);
                     // Vị trí bắt đầu vẽ từ trên xuống
                     float startYDeTu = viewY + viewHeight - KhoangCachItemDeTu + veHUD.scrollYTrai;
 
@@ -1347,13 +1350,13 @@ public class HUDPopupRenderer {
                     }
                 }
                 if (veHUD.dangHienThongBao) {
-                    batch.draw(veHUD.anhThongBao, (Gdx.graphics.getWidth() - 720) / 2f, 65, 720, 175);
+                    batch.draw(veHUD.anhThongBao, (QuanLyCamera.VIRTUAL_WIDTH - 720) / 2f, 65, 720, 175);
                     veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
                     layout.setText(veHUD.fontTenSkill, "Bạn có chắc muốn hủy bỏ (mất luôn)");
-                    veHUD.fontTenSkill.draw(batch, layout, (Gdx.graphics.getWidth() - layout.width) / 2, 175);
+                    veHUD.fontTenSkill.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH - layout.width) / 2, 175);
                     layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem() + " ?");
-                    veHUD.fontTenSkill.draw(batch, layout, (Gdx.graphics.getWidth() - layout.width) / 2, 150);
-                    float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
+                    veHUD.fontTenSkill.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH - layout.width) / 2, 150);
+                    float nutX = (QuanLyCamera.VIRTUAL_WIDTH - 140) / 2f;
                     float nutY = 50;
                     batch.draw(veHUD.isThongBaoOKPressed > 0 && veHUD.nutduocchon == 1 ? veHUD.nutclick : veHUD.nutdn, nutX - 81, nutY, 140, 50);
                     layout.setText(veHUD.fontTenSkill, "Có");
@@ -1405,7 +1408,7 @@ public class HUDPopupRenderer {
         int KhoangCachO = 49;
         batch.flush();
         Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
-        Gdx.gl.glScissor(0, (int) viewY, 350, (int) viewHeight);
+        veHUD.camManager.scissor(0, viewY, 350, viewHeight);
         float totalHeight = chucNang.length * KhoangCachO;
         veHUD.maxScrollPhai = Math.max(0, totalHeight - viewHeight);
         float startY = viewY + viewHeight - KhoangCachO + veHUD.scrollYPhai;
@@ -1447,7 +1450,7 @@ public class HUDPopupRenderer {
 
         batch.flush();
         Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
-        Gdx.gl.glScissor(0, (int)viewY, 350, (int)viewHeight);
+        veHUD.camManager.scissor(0, viewY, 350, viewHeight);
         // Vị trí bắt đầu vẽ từ trên xuống
         float startY = viewY + viewHeight - KhoangCachItem + (isHaiPopup ? veHUD.scrollYTrai : veHUD.scrollYPhai);
 
@@ -1673,12 +1676,12 @@ public class HUDPopupRenderer {
         batch.begin();
         if (veHUD.dangHienThongBao){
             veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
-            batch.draw(veHUD.anhThongBao, (Gdx.graphics.getWidth() - 720) / 2f, 65, 720, 175);
+            batch.draw(veHUD.anhThongBao, (QuanLyCamera.VIRTUAL_WIDTH - 720) / 2f, 65, 720, 175);
             layout.setText(veHUD.fontTenSkill, "Bạn có chắc muốn hủy bỏ (mất luôn)");
-            veHUD.fontTenSkill.draw(batch, layout, (Gdx.graphics.getWidth() - layout.width) / 2, 175);
+            veHUD.fontTenSkill.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH - layout.width) / 2, 175);
             layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem()+" ?");
-            veHUD.fontTenSkill.draw(batch, layout, (Gdx.graphics.getWidth() - layout.width) / 2, 150);
-            float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
+            veHUD.fontTenSkill.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH - layout.width) / 2, 150);
+            float nutX = (QuanLyCamera.VIRTUAL_WIDTH - 140) / 2f;
             float nutY = 50;
             batch.draw(veHUD.isThongBaoOKPressed>0 && veHUD.nutduocchon==1? veHUD.nutclick : veHUD.nutdn, nutX-81, nutY, 140, 50);
             layout.setText(veHUD.fontTenSkill, "Có");

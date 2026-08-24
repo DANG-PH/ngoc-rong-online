@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Align;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.hien_thi.VeHUD;
+import com.dang.dragonboy.hien_thi.QuanLyCamera;
 import com.dang.dragonboy.item.Item;
 import com.dang.dragonboy.item.ItemThuongXuLi;
 import com.dang.dragonboy.item.LoaiItem;
@@ -114,26 +115,26 @@ public class admin_thanhle extends renderUInpc {
         float daoDong = (float) Math.sin(nhanVat.thoiGianTichLuy) * 1.3f;
         float doDaiShaperender = 120 * npc.getChucNang().length;
         if (doDaiShaperender < 500 ) doDaiShaperender = 500;
-        batch.draw(npc.taiAnh.avtNpc,(Gdx.graphics.getWidth() - doDaiShaperender) / 2f+30,120+60+daoDong,npc.taiAnh.avtNpc.getWidth()*0.5f,npc.taiAnh.avtNpc.getHeight()*0.5f);
+        batch.draw(npc.taiAnh.avtNpc,(QuanLyCamera.VIRTUAL_WIDTH - doDaiShaperender) / 2f+30,120+60+daoDong,npc.taiAnh.avtNpc.getWidth()*0.5f,npc.taiAnh.avtNpc.getHeight()*0.5f);
         batch.end();
         veHUD.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         veHUD.shapeRenderer.setColor(1, 1, 1, 1);
-        veHUD.shapeRenderer.rect((Gdx.graphics.getWidth() - doDaiShaperender) / 2f, 120, doDaiShaperender, 60);
+        veHUD.shapeRenderer.rect((QuanLyCamera.VIRTUAL_WIDTH - doDaiShaperender) / 2f, 120, doDaiShaperender, 60);
         veHUD.shapeRenderer.end();
         veHUD.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         veHUD.shapeRenderer.setColor(Color.BLACK);
         for (int i = 0; i < 2; i++) {
-            veHUD.shapeRenderer.rect((Gdx.graphics.getWidth() - doDaiShaperender) / 2f - i, 120 - i, doDaiShaperender + i * 2, 60 + i * 2);
+            veHUD.shapeRenderer.rect((QuanLyCamera.VIRTUAL_WIDTH - doDaiShaperender) / 2f - i, 120 - i, doDaiShaperender + i * 2, 60 + i * 2);
         }
         veHUD.shapeRenderer.end();
         batch.begin();
         veHUD.layout.setText(veHUD.fontMotaHanhTrang,npc.getLoiThoaiTrong()[0]);
-        veHUD.fontMotaHanhTrang.draw(batch,veHUD.layout,(Gdx.graphics.getWidth() - doDaiShaperender) / 2f + (doDaiShaperender-veHUD.layout.width)/2f,120+35);
+        veHUD.fontMotaHanhTrang.draw(batch,veHUD.layout,(QuanLyCamera.VIRTUAL_WIDTH - doDaiShaperender) / 2f + (doDaiShaperender-veHUD.layout.width)/2f,120+35);
 
         int soNut = npc.getChucNang().length;
 
         for (int i = 0; i < soNut; i++) {
-            float nutX = (Gdx.graphics.getWidth()-(soNut-1)*120-114)/2f + i * 120;
+            float nutX = (QuanLyCamera.VIRTUAL_WIDTH-(soNut-1)*120-114)/2f + i * 120;
             float nutY = 120 - 115;
             if (nutChucNangDangChon == i) {
                 Texture nutVe = timeClickNut > 0 ? veHUD.nutvuongclick : veHUD.nutvuong;

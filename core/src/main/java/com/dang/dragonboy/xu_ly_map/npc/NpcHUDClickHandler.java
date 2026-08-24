@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.hien_thi.TrangThaiChucNangHUD;
 import com.dang.dragonboy.hien_thi.VeHUD;
+import com.dang.dragonboy.hien_thi.QuanLyCamera;
 import com.dang.dragonboy.item.Item;
 import com.dang.dragonboy.item.LoaiItem;
 import com.dang.dragonboy.nhan_vat.NhanVat;
@@ -41,14 +42,14 @@ public class NpcHUDClickHandler {
         // Thoát + chức năng chính NPC
         boolean duDieuKienThoat_Npc = ui.trangThai == TrangThaiChucNang_admin_haidang.NONE;
         if (duDieuKienThoat_Npc) {
-            float nutX = (Gdx.graphics.getWidth()-(soNut-1)*120-114)/2f;
+            float nutX = (QuanLyCamera.VIRTUAL_WIDTH-(soNut-1)*120-114)/2f;
             if (x<nutX || x>nutX+360 || y>120) {
                 veHUD.daClickVaoNpc = false;
                 veHUD.vuaThoatNpc = true;
             }
         }
         for (int i = 0; i < soNut; i++){
-            float nutX = (Gdx.graphics.getWidth()-(soNut-1)*120-114)/2f + i * 120;
+            float nutX = (QuanLyCamera.VIRTUAL_WIDTH-(soNut-1)*120-114)/2f + i * 120;
             if (x>=nutX && x <= nutX+114 && y>=5 && y<=5+114 && duDieuKienThoat_Npc){
                 ui.timeClickNut = 0.3f;
                 ui.nutChucNangDangChon = i;
@@ -59,7 +60,7 @@ public class NpcHUDClickHandler {
             for (int i = 0; i < 3; i++) {
                 float nutWidth = 140;
                 float nutHeight = 50;
-                float nutX = (Gdx.graphics.getWidth() - ui.anhGachaBase.getWidth()) / 2f + 8 + (ui.anhGachaBase.getWidth() - nutWidth) / 2f - 3f;
+                float nutX = (QuanLyCamera.VIRTUAL_WIDTH - ui.anhGachaBase.getWidth()) / 2f + 8 + (ui.anhGachaBase.getWidth() - nutWidth) / 2f - 3f;
                 float nutY = 55 + 300 - i * 60;
                 if (x >= nutX && x <= nutX + 140 && y >= nutY && y <= nutY + nutHeight) {
                     if (i != 2) {
@@ -72,7 +73,7 @@ public class NpcHUDClickHandler {
             }
         }
         if (ui.trangThai == TrangThaiChucNang_admin_haidang.GACHA_THONG_BAO) {
-            float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
+            float nutX = (QuanLyCamera.VIRTUAL_WIDTH - 140) / 2f;
             float nutY = 50;
             if (x >= nutX && x <= nutX + 140 && y >= nutY && y <= nutY + 50) {
                 ui.timeBamNutOk = 0.3f;
@@ -82,7 +83,7 @@ public class NpcHUDClickHandler {
         if (ui.trangThai == TrangThaiChucNang_admin_haidang.QUY_DOI) {
             if (!ui.dangHienChatDoiVeQuay) {
                 for (int i = 0; i < 2; i++) {
-                    float nutX = (Gdx.graphics.getWidth() - 680) / 2f + 12.5f;
+                    float nutX = (QuanLyCamera.VIRTUAL_WIDTH - 680) / 2f + 12.5f;
                     float nutY = 416 - i * 46;
                     if (x >= nutX && x <= nutX + 200 && y >= nutY && y <= nutY + 36) {
                         ui.chucNangQuyDoiVeDangChon = i;
@@ -95,10 +96,10 @@ public class NpcHUDClickHandler {
                         }
                     }
                 }
-                if (x >= (Gdx.graphics.getWidth() - 680) / 2f + 12.5f && x <= (Gdx.graphics.getWidth() - 680) / 2f + 12.5f + 200 && y >= 65 + 30 && y <= 65 + 30 + 36) {
+                if (x >= (QuanLyCamera.VIRTUAL_WIDTH - 680) / 2f + 12.5f && x <= (QuanLyCamera.VIRTUAL_WIDTH - 680) / 2f + 12.5f + 200 && y >= 65 + 30 && y <= 65 + 30 + 36) {
                     ui.timeChoTatChucNang = 0.3f;
                 }
-                if (x >= (Gdx.graphics.getWidth() - 680) / 2f + 12.5f && x <= (Gdx.graphics.getWidth() - 680) / 2f + 12.5f + 200 && y >= 65 + 30 + 38 && y <= 65 + 30 + 36 + 38) {
+                if (x >= (QuanLyCamera.VIRTUAL_WIDTH - 680) / 2f + 12.5f && x <= (QuanLyCamera.VIRTUAL_WIDTH - 680) / 2f + 12.5f + 200 && y >= 65 + 30 + 38 && y <= 65 + 30 + 36 + 38) {
                     ui.timeChoHienChatDoiVeQuay = 0.3f;
                 }
                for (int i = 0; i < 3; i++) {
@@ -118,7 +119,7 @@ public class NpcHUDClickHandler {
                }
             }
             if (ui.dangHienChatDoiVeQuay) {
-                float nX = (Gdx.graphics.getWidth() - 140) / 2f;
+                float nX = (QuanLyCamera.VIRTUAL_WIDTH - 140) / 2f;
                 float nutY = 12;
                 if (x >= nX - 81 && x <= nX - 81 + 140 && y >= nutY && y <= nutY + 48) {
                     ui.timeChoHienChatDoiVeQuay = 0.3f;
@@ -131,7 +132,7 @@ public class NpcHUDClickHandler {
             }
         }
         if (ui.trangThai == TrangThaiChucNang_admin_haidang.HUONG_DAN) {
-            float nutX = (Gdx.graphics.getWidth()-114)/2f;
+            float nutX = (QuanLyCamera.VIRTUAL_WIDTH-114)/2f;
             float nutY = 120 - 115;
             if (checkChuotTrongNut(x,y,nutX,nutY,114,114)) {
                 ui.timeBamNutOkHuongDan = 0.3f;
@@ -143,12 +144,12 @@ public class NpcHUDClickHandler {
         admin_thanhle ui = (admin_thanhle) npc.npcHUDrender.ui_npc;
         int soNut = npc.getChucNang().length;
         if (ui.trangThai == TrangThaiChucNang_admin_thanhle.NONE) {
-            if (!checkChuotTrongNut(x,y,(Gdx.graphics.getWidth()-soNut*120)/2f,5,120*soNut,114)) {
+            if (!checkChuotTrongNut(x,y,(QuanLyCamera.VIRTUAL_WIDTH-soNut*120)/2f,5,120*soNut,114)) {
                 veHUD.daClickVaoNpc = false;
                 veHUD.vuaThoatNpc = true;
             }
             for (int i = 0; i <= 2; i++) {
-                if (checkChuotTrongNut(x, y, (Gdx.graphics.getWidth() - soNut * 120) / 2f + 120*i, 5, 114, 114)) {
+                if (checkChuotTrongNut(x, y, (QuanLyCamera.VIRTUAL_WIDTH - soNut * 120) / 2f + 120*i, 5, 114, 114)) {
                     ui.nutChucNangDangChon = i;
                     ui.timeClickNut = 0.3f;
                 }
@@ -239,19 +240,19 @@ public class NpcHUDClickHandler {
         admin_dungle ui = (admin_dungle) npc.npcHUDrender.ui_npc;
         int soNut = npc.getChucNang().length;
         if (ui.trangThai == TrangThaiChucNang_admin_dungle.NONE) {
-            if (!checkChuotTrongNut(x,y,(Gdx.graphics.getWidth()-soNut*120)/2f,5,120*soNut,114)) {
+            if (!checkChuotTrongNut(x,y,(QuanLyCamera.VIRTUAL_WIDTH-soNut*120)/2f,5,120*soNut,114)) {
                 veHUD.daClickVaoNpc = false;
                 veHUD.vuaThoatNpc = true;
             }
             for (int i = 0; i <= 3; i++) {
-                if (checkChuotTrongNut(x, y, (Gdx.graphics.getWidth() - soNut * 120) / 2f + 120*i, 5, 114, 114)) {
+                if (checkChuotTrongNut(x, y, (QuanLyCamera.VIRTUAL_WIDTH - soNut * 120) / 2f + 120*i, 5, 114, 114)) {
                     ui.nutChucNangDangChon = i;
                     ui.timeClickNut = 0.3f;
                 }
             }
         }
         if (ui.trangThai == TrangThaiChucNang_admin_dungle.DOI_GIFT_CODE) {
-            float nX = (Gdx.graphics.getWidth() - 140) / 2f;
+            float nX = (QuanLyCamera.VIRTUAL_WIDTH - 140) / 2f;
             float nutY = 12;
             if (x >= nX - 81 && x <= nX - 81 + 140 && y >= nutY && y <= nutY + 48) {
                 ui.timeChoDoiGiftCode = 0.3f;
@@ -263,7 +264,7 @@ public class NpcHUDClickHandler {
             }
         }
         if (ui.trangThai == TrangThaiChucNang_admin_dungle.NHAN_QUA_THANH_CONG) {
-            if (checkChuotTrongNut(x,y,(Gdx.graphics.getWidth()-114)/2f,5,114,114)) {
+            if (checkChuotTrongNut(x,y,(QuanLyCamera.VIRTUAL_WIDTH-114)/2f,5,114,114)) {
                 ui.timeClickNut = 0.3f;
                 ui.nutChucNangDangChon = 0;
             }
@@ -271,7 +272,7 @@ public class NpcHUDClickHandler {
         if (ui.trangThai == TrangThaiChucNang_admin_dungle.NHAN_VAT_PHAM_NAP_WEB) {
             int soNutt = 4;
             for (int i = 0; i < soNutt; i++) {
-                if (checkChuotTrongNut(x, y, (Gdx.graphics.getWidth() - soNutt * 120) / 2f + 120*i, 5, 114, 114)) {
+                if (checkChuotTrongNut(x, y, (QuanLyCamera.VIRTUAL_WIDTH - soNutt * 120) / 2f + 120*i, 5, 114, 114)) {
                     ui.nutChucNangDangChon_nhan_qua_web = i;
                     ui.timeClickNut_nhan_qua_web = 0.3f;
                 }
@@ -290,12 +291,12 @@ public class NpcHUDClickHandler {
             }
             if (!veHUD.dangHienPopupNhanVatPhai) {
                 for (int i = 0; i <= soNut; i++) {
-                    if (checkChuotTrongNut(x, y, (Gdx.graphics.getWidth() - soNut * 120) / 2f + 120 * i, 5, 114, 114)) {
+                    if (checkChuotTrongNut(x, y, (QuanLyCamera.VIRTUAL_WIDTH - soNut * 120) / 2f + 120 * i, 5, 114, 114)) {
                         ui.nutChucNangDangChon = i;
                         ui.timeClickNut = 0.3f;
                     }
                 }
-                if (!checkChuotTrongNut(x, y, (Gdx.graphics.getWidth() - soNut * 120) / 2f, 5, 120 * soNut, 114)) {
+                if (!checkChuotTrongNut(x, y, (QuanLyCamera.VIRTUAL_WIDTH - soNut * 120) / 2f, 5, 120 * soNut, 114)) {
                     switch (ui.trangThai) {
                         case NONE:
                             veHUD.daClickVaoNpc = false;
@@ -382,7 +383,7 @@ public class NpcHUDClickHandler {
                 case POPUP_XAC_NHAN -> {
                     int soNut = 4;
                     for (int i = 0; i < soNut; i++) {
-                        if (checkChuotTrongNut(x, y, (Gdx.graphics.getWidth() - soNut * 120) / 2f + 120*i, 5, 114, 114)) {
+                        if (checkChuotTrongNut(x, y, (QuanLyCamera.VIRTUAL_WIDTH - soNut * 120) / 2f + 120*i, 5, 114, 114)) {
                             ui.nutChucNangDangChon_pha_le_hoa = i;
                             ui.timeClickNut_pha_le_hoa = 0.3f;
                         }

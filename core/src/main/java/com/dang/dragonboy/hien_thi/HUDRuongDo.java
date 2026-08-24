@@ -28,7 +28,9 @@ public class HUDRuongDo {
 
     public HUDRuongDo(VeHUD veHUD, DuLieuNguoiChoi duLieuNguoiChoi, NhanVat nhanVat) {
         layout = new GlyphLayout();
-        shapeRenderer = new ShapeRenderer();
+        // Dùng chung shapeRenderer của VeHUD (đã project đúng qua camManager.uiCamera) thay vì tạo
+        // instance riêng — instance riêng dùng projection mặc định theo pixel màn hình thật.
+        shapeRenderer = veHUD.shapeRenderer;
         this.veHUD = veHUD;
         this.duLieuNguoiChoi = duLieuNguoiChoi;
         this.nhanVat = nhanVat;
@@ -87,7 +89,7 @@ public class HUDRuongDo {
 
         batch.flush();
         Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
-        Gdx.gl.glScissor(1020 - 350, (int) viewY, 350, (int) viewHeight);
+        veHUD.camManager.scissor(1020 - 350, viewY, 350, viewHeight);
         // Vị trí bắt đầu vẽ từ trên xuống
         float startY = viewY + viewHeight - KhoangCachItem + veHUD.scrollYPhai;
 
@@ -338,7 +340,7 @@ public class HUDRuongDo {
 
         batch.flush();
         Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
-        Gdx.gl.glScissor(0, (int) viewY, 350, (int) viewHeight);
+        veHUD.camManager.scissor(0, viewY, 350, viewHeight);
         // Vị trí bắt đầu vẽ từ trên xuống
         float startYRuongDo = viewY + viewHeight - KhoangCachItem + veHUD.scrollYTrai;
 
@@ -462,12 +464,12 @@ public class HUDRuongDo {
         batch.begin();
         if (veHUD.dangHienThongBao){
             veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
-            batch.draw(veHUD.anhThongBao, (Gdx.graphics.getWidth() - 720) / 2f, 65, 720, 175);
+            batch.draw(veHUD.anhThongBao, (QuanLyCamera.VIRTUAL_WIDTH - 720) / 2f, 65, 720, 175);
             layout.setText(veHUD.fontTenSkill, "Bạn có chắc muốn hủy bỏ (mất luôn)");
-            veHUD.fontTenSkill.draw(batch, layout, (Gdx.graphics.getWidth() - layout.width) / 2, 175);
+            veHUD.fontTenSkill.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH - layout.width) / 2, 175);
             layout.setText(veHUD.fontTenSkill, veHUD.itemm.getTenItem()+" ?");
-            veHUD.fontTenSkill.draw(batch, layout, (Gdx.graphics.getWidth() - layout.width) / 2, 150);
-            float nutX = (Gdx.graphics.getWidth() - 140) / 2f;
+            veHUD.fontTenSkill.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH - layout.width) / 2, 150);
+            float nutX = (QuanLyCamera.VIRTUAL_WIDTH - 140) / 2f;
             float nutY = 50;
             batch.draw(veHUD.isThongBaoOKPressed>0 && veHUD.nutduocchon==1? veHUD.nutclick : veHUD.nutdn, nutX-81, nutY, 140, 50);
             layout.setText(veHUD.fontTenSkill, "Có");

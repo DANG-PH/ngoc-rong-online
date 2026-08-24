@@ -1,9 +1,10 @@
 package com.dang.dragonboy.giao_dien_trong;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -219,6 +220,11 @@ public class ManHinhLangAru implements Screen {
         // Font có viền đen dành riêng cho dòng chữ "Đậu thần cấp ..."
         FreeTypeFontGenerator generator2 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchinh.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        // Bật lọc Linear thay vì Nearest (mặc định) — chữ FreeType generate ở kích thước cố định
+        // rồi bị phóng to theo viewport ảo trên điện thoại (tỉ lệ luôn > 1x), Nearest filter làm chữ
+        // vỡ nét/răng cưa khi phóng to, Linear cho chữ mượt hơn nhiều.
+        param2.minFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
+        param2.magFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
         param2.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
             "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ";
         param2.size = 22;
@@ -287,6 +293,7 @@ public class ManHinhLangAru implements Screen {
         shapeRenderer.rect(0, 300 + camOffsetY, 2542, 800);
         shapeRenderer.end();
 
+        camManager.viewport.apply();
         batch.setProjectionMatrix(camManager.camera.combined);
         batch.begin();
         // background xa
@@ -392,6 +399,7 @@ public class ManHinhLangAru implements Screen {
         }
         batch.end();
 
+        camManager.uiViewport.apply();
         batch.setProjectionMatrix(camManager.uiCamera.combined);
         batch.begin();
         hud.update(delta); // cập nhật trạng thái HUD
@@ -446,9 +454,17 @@ public class ManHinhLangAru implements Screen {
             batch.end();
         }
         batch.begin();
-        // Kiểm tra nếu đứng trong vùng "Làng Aru" và bấm Enter thì chuyển màn
+        // Đứng gần cửa "Nhà Gôhan" rồi bấm Enter (PC, như trước) HOẶC tap vào đúng khung tối
+        // (mobile không có phím Enter nên thêm tap xác nhận) mới chuyển màn — không tự chuyển khi
+        // chỉ đi ngang qua.
         if (nhanVat.getX() > 560 && nhanVat.getX() < 790 && nhanVat.getY() >= 0 && nhanVat.getY() <= 400) {
-            if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+            boolean bamEnter = Gdx.input.isKeyJustPressed(Input.Keys.ENTER);
+            boolean tapDungKhung = false;
+            if (Gdx.input.justTouched()) {
+                Vector2 diemTap = camManager.viewport.unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+                tapDungKhung = diemTap.x >= 560 && diemTap.x <= 560 + 230 && diemTap.y >= 300 && diemTap.y <= 300 + 60;
+            }
+            if (bamEnter || tapDungKhung) {
                 ThongTinChuyenMap info = new ThongTinChuyenMap(hud.getDuLieuNguoiChoi(),nhanVat, "langaru",hud,camManager, map, mapNhaGohan);
                 game.setScreen(new ManHinhSplash(game, new ManHinhNhaGohan(game,nhanVat.getTen(),nhanVat.getHanhtinh(),nhanVat.getNhanvat(),info)));
             }

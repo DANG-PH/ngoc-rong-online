@@ -98,7 +98,7 @@ public class HUDTradeItem {
         int scissorW = (int) khungWidth;
         int scissorH = (int) khungHeight;
 
-        Gdx.gl.glScissor(scissorX, scissorY, scissorW, scissorH);
+        veHUD.camManager.scissor(scissorX, scissorY, scissorW, scissorH);
 
         float textY = khungY + (khungHeight + veHUD.layout.height) / 2f;
         font.setColor(Color.BLACK);

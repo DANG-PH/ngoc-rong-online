@@ -53,6 +53,11 @@ public class Npc {
         // Load font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        // Bật lọc Linear thay vì Nearest (mặc định) — chữ FreeType generate ở kích thước cố định
+        // rồi bị phóng to theo viewport ảo trên điện thoại (tỉ lệ luôn > 1x), Nearest filter làm chữ
+        // vỡ nét/răng cưa khi phóng to, Linear cho chữ mượt hơn nhiều.
+        param.minFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
+        param.magFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
         param.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
             "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ế Ế";
         param.size = 16;
@@ -64,6 +69,11 @@ public class Npc {
         // Font có viền đen dành riêng cho dòng chữ "Đậu thần cấp ..."
         FreeTypeFontGenerator generator2 = new FreeTypeFontGenerator(Gdx.files.internal("font/fontchinh.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        // Bật lọc Linear thay vì Nearest (mặc định) — chữ FreeType generate ở kích thước cố định
+        // rồi bị phóng to theo viewport ảo trên điện thoại (tỉ lệ luôn > 1x), Nearest filter làm chữ
+        // vỡ nét/răng cưa khi phóng to, Linear cho chữ mượt hơn nhiều.
+        param2.minFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
+        param2.magFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
         param2.characters = FreeTypeFontGenerator.DEFAULT_CHARS +
             "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ồ ầ ể";
         param2.size = 22;
@@ -304,11 +314,15 @@ public class Npc {
         }
     }
 
+    // Đệm thêm quanh vùng nhận chạm NPC để ngón tay dễ trúng hơn trên di động — không đổi kích
+    // thước hiển thị, chỉ nới vùng NHẬN chạm rộng hơn vùng VẼ 1 chút (chuẩn UX cho touch target).
+    private static final float DEM_CHAM_NPC = 20f;
+
     public void checkClick(float x_check, float y_check) {
         if (loainpc == LoaiNPC.NGUOI) {
-            if (x_check >= x && x_check <= x + taiAnh.getChan().getWidth() * 0.5f &&
-                y_check >= y && y_check <= y + taiAnh.getChan().getHeight() * 0.5f
-                + taiAnh.getThan().getHeight() * 0.5f + taiAnh.getDau().getHeight() * 0.5f) {
+            if (x_check >= x - DEM_CHAM_NPC && x_check <= x + taiAnh.getChan().getWidth() * 0.5f + DEM_CHAM_NPC &&
+                y_check >= y - DEM_CHAM_NPC && y_check <= y + taiAnh.getChan().getHeight() * 0.5f
+                + taiAnh.getThan().getHeight() * 0.5f + taiAnh.getDau().getHeight() * 0.5f + DEM_CHAM_NPC) {
                 if (!dangClickNpc) {
                     dangClickNpc = true;
                     nhanVat.vuaClick = false;

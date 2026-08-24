@@ -10,10 +10,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.utils.Align;
 
+import com.badlogic.gdx.math.Vector2;
 import com.dang.dragonboy.he_thong.Main;
+import com.dang.dragonboy.hien_thi.QuanLyCamera;
 
 public class ManHinhChonMayChu implements Screen {
     private Main game;
+    private final QuanLyCamera camManager = new QuanLyCamera();
     private ShapeRenderer shapeRenderer;
     private BitmapFont font, fontText, fontThuong;
     private SpriteBatch batch;
@@ -53,6 +56,11 @@ public class ManHinhChonMayChu implements Screen {
         formmaychu = new Texture("hud/giaodienngoai/chung/formmaychu.jpg");
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/fontt.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        // Bật lọc Linear thay vì Nearest (mặc định) — chữ FreeType generate ở kích thước cố định
+        // rồi bị phóng to theo viewport ảo trên điện thoại (tỉ lệ luôn > 1x), Nearest filter làm chữ
+        // vỡ nét/răng cưa khi phóng to, Linear cho chữ mượt hơn nhiều.
+        param.minFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
+        param.magFilter = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
         param.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "ăậâấốỐđêôơưáàảãạéèẻẽẹíìịóòỏõọúùủũụĂÂĐÊÔƠƯÁÀẢÃẠÉÈẺẼẸÍÌỊÓÒỎÕỌÚÙỦŨỤ ớ ẩ ế ồ ạ ả ể ẩ ờ ừ ở http://";
         param.size = 18;
         font = generator.generateFont(param);
@@ -63,11 +71,12 @@ public class ManHinhChonMayChu implements Screen {
 
     @Override
     public void render(float delta) {
-        int mouseX = Gdx.input.getX();
-        int mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
+        Vector2 diem = camManager.uiViewport.unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+        int mouseX = (int) diem.x;
+        int mouseY = (int) diem.y;
 
         if (Gdx.input.justTouched() && !dangChuyenManHinh) {
-            float baseX = (Gdx.graphics.getWidth() - 680) / 2f + 12.5f;
+            float baseX = (QuanLyCamera.VIRTUAL_WIDTH - 680) / 2f + 12.5f;
 
             if (dangDoiMayChu) {
                 // Click "máy chủ tiêu chuẩn" để quay lại
@@ -75,7 +84,7 @@ public class ManHinhChonMayChu implements Screen {
                     dangDoiMayChu = false;
                 }
                 // Click nút vào HAIDANG1
-                float haidangX = (Gdx.graphics.getWidth() - 400) / 2f + 150;
+                float haidangX = (QuanLyCamera.VIRTUAL_WIDTH - 400) / 2f + 150;
                 float haidangY = 395;
                 if (mouseX >= haidangX && mouseX <= haidangX + 145 && mouseY >= haidangY && mouseY <= haidangY + 46) {
                     nutDuocClick = 8;
@@ -91,7 +100,7 @@ public class ManHinhChonMayChu implements Screen {
                     for (int i = 0; i < 7; i++) {
                         int row = i % 4;
                         int col = i / 4;
-                        float x = (Gdx.graphics.getWidth() - 400) / 2f + 150 + (col == 1 ? 165 : 0);
+                        float x = (QuanLyCamera.VIRTUAL_WIDTH - 400) / 2f + 150 + (col == 1 ? 165 : 0);
                         float y = 395 - row * 60;
                         if (mouseX >= x && mouseX <= x + 145 && mouseY >= y && mouseY <= y + 46) {
                             nutDuocClick = i;
@@ -123,7 +132,8 @@ public class ManHinhChonMayChu implements Screen {
         if (scrollX_cay <= -340) scrollX_cay += 340;
         if (scrollX_thap <= -340) scrollX_thap += 340;
 
-        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+        batch.setProjectionMatrix(camManager.uiCamera.combined);
+        shapeRenderer.setProjectionMatrix(camManager.uiCamera.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(25 / 255f, 176 / 255f, 248 / 255f, 1);
         shapeRenderer.rect(0, 460, 1020, 150);
@@ -143,16 +153,16 @@ public class ManHinhChonMayChu implements Screen {
         for (int i = 0; i < 4; i++) {
             batch.draw(nuithap, scrollX_thap + i * 340, 0, 340, 280);
         }
-        batch.draw(formmaychu,(Gdx.graphics.getWidth()-680)/2,65,680,400);
+        batch.draw(formmaychu,(QuanLyCamera.VIRTUAL_WIDTH-680)/2,65,680,400);
         //tieu de chon may chu
-        batch.draw(nutsv,(Gdx.graphics.getWidth()-190)/2,490,190,36);
+        batch.draw(nutsv,(QuanLyCamera.VIRTUAL_WIDTH-190)/2,490,190,36);
         font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
         layout.setText(font, "Chọn máy chủ");
-        font.draw(batch, layout, (Gdx.graphics.getWidth()-190)/2f + (190-layout.width)/2f, 490 + 25);
+        font.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH-190)/2f + (190-layout.width)/2f, 490 + 25);
         //footer
         fontText.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
         layout.setText(fontText, "© 2025 Chiến Binh Rồng Thiêng | Phạm Hải Đăng");
-        fontText.draw(batch, layout, (Gdx.graphics.getWidth()-680)/2 + 5, 65 + 20);
+        fontText.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH-680)/2 + 5, 65 + 20);
         if (dangDoiMayChu){
             fontText.setColor(1.0f, 0.956f, 0.863f, 1f);
             layout.setText(fontText,
@@ -161,20 +171,20 @@ public class ManHinhChonMayChu implements Screen {
                 165,                 // wrapWidth
                 Align.left,          // căn trái mặc định
                 true);               // bật tự xuống dòng
-            fontText.draw(batch, layout, (Gdx.graphics.getWidth()-680)/2 +(200-layout.width)/2f, 330 + 20);
-            batch.draw(nutsv,(Gdx.graphics.getWidth()-680)/2 + 12.5f,416,200,36);
+            fontText.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH-680)/2 +(200-layout.width)/2f, 330 + 20);
+            batch.draw(nutsv,(QuanLyCamera.VIRTUAL_WIDTH-680)/2 + 12.5f,416,200,36);
             font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
             layout.setText(font, "Máy chủ tiêu chuẩn");
-            font.draw(batch, layout, (Gdx.graphics.getWidth()-680)/2f + 12.5f + (200-layout.width)/2f, 416 + 23);
+            font.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH-680)/2f + 12.5f + (200-layout.width)/2f, 416 + 23);
             //nút server cho admin
-            batch.draw(nutclicksv,(Gdx.graphics.getWidth()-680)/2 + 12.5f,370,200,36);
+            batch.draw(nutclicksv,(QuanLyCamera.VIRTUAL_WIDTH-680)/2 + 12.5f,370,200,36);
             font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
             layout.setText(font, "Máy chủ admin");
-            font.draw(batch, layout, (Gdx.graphics.getWidth()-680)/2f + 12.5f + (200-layout.width)/2f, 370 + 23);
+            font.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH-680)/2f + 12.5f + (200-layout.width)/2f, 370 + 23);
             Texture tex = (nutDuocClick == 8) ? nutclick : nutdn;
-            batch.draw(tex, (Gdx.graphics.getWidth() - 400) / 2 + 150, 395, 145, 46);
+            batch.draw(tex, (QuanLyCamera.VIRTUAL_WIDTH - 400) / 2 + 150, 395, 145, 46);
             layout.setText(font, "HAIDANG1");
-            font.draw(batch, layout, (Gdx.graphics.getWidth() - 400) / 2 + 150+ (145 - layout.width) / 2f,395 + 28);
+            font.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH - 400) / 2 + 150+ (145 - layout.width) / 2f,395 + 28);
             batch.end();
             return;
         }
@@ -185,24 +195,24 @@ public class ManHinhChonMayChu implements Screen {
             165,                 // wrapWidth
             Align.left,          // căn trái mặc định
             true);               // bật tự xuống dòng
-        fontText.draw(batch, layout, (Gdx.graphics.getWidth()-680)/2 +(200-layout.width)/2f, 330 + 20);
+        fontText.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH-680)/2 +(200-layout.width)/2f, 330 + 20);
         //nút server thường
-        batch.draw(nutclicksv,(Gdx.graphics.getWidth()-680)/2 + 12.5f,416,200,36);
+        batch.draw(nutclicksv,(QuanLyCamera.VIRTUAL_WIDTH-680)/2 + 12.5f,416,200,36);
         font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
         layout.setText(font, "Máy chủ tiêu chuẩn");
-        font.draw(batch, layout, (Gdx.graphics.getWidth()-680)/2f + 12.5f + (200-layout.width)/2f, 416 + 23);
+        font.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH-680)/2f + 12.5f + (200-layout.width)/2f, 416 + 23);
         //nút server cho admin
-        batch.draw(nutsv,(Gdx.graphics.getWidth()-680)/2 + 12.5f,370,200,36);
+        batch.draw(nutsv,(QuanLyCamera.VIRTUAL_WIDTH-680)/2 + 12.5f,370,200,36);
         font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
         layout.setText(font, "Máy chủ admin");
-        font.draw(batch, layout, (Gdx.graphics.getWidth()-680)/2f + 12.5f + (200-layout.width)/2f, 370 + 23);
+        font.draw(batch, layout, (QuanLyCamera.VIRTUAL_WIDTH-680)/2f + 12.5f + (200-layout.width)/2f, 370 + 23);
         //vẽ các server ở form máy chủ tiêu chuẩn
         for (int i = 0; i < 2; i++) {
             if (i == 0) {
                 for (int j = 0; j < 4; j++) {
                     int index = i * 4 + j; // từ 0 đến 3
                     int maychu = 2 * j + 1;
-                    float x = (Gdx.graphics.getWidth() - 400) / 2 + 150;
+                    float x = (QuanLyCamera.VIRTUAL_WIDTH - 400) / 2 + 150;
                     float y = 395 - j * 60;
                     Texture tex = (nutDuocClick == index) ? nutclick : nutdn;
                     batch.draw(tex, x, y, 145, 46);
@@ -213,7 +223,7 @@ public class ManHinhChonMayChu implements Screen {
                 for (int j = 0; j < 3; j++) {
                     int index = i * 4 + j; // từ 4 đến 6
                     int maychu = 2 * j + 2;
-                    float x = (Gdx.graphics.getWidth() - 400) / 2 + 150 + 165;
+                    float x = (QuanLyCamera.VIRTUAL_WIDTH - 400) / 2 + 150 + 165;
                     float y = 395 - j * 60;
                     Texture tex = (nutDuocClick == index) ? nutclick : nutdn;
                     batch.draw(tex, x, y, 145, 46);
@@ -227,7 +237,9 @@ public class ManHinhChonMayChu implements Screen {
 
     }
 
-    @Override public void resize(int width, int height) {}
+    @Override public void resize(int width, int height) {
+        camManager.resize(width, height);
+    }
     @Override public void pause() {}
     @Override public void resume() {}
     @Override public void hide() {}

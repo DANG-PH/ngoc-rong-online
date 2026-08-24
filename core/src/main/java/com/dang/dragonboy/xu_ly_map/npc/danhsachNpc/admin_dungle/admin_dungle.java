@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Align;
 import com.dang.dragonboy.du_lieu.DuLieuNguoiChoi;
 import com.dang.dragonboy.hien_thi.VeHUD;
+import com.dang.dragonboy.hien_thi.QuanLyCamera;
 import com.dang.dragonboy.item.Item;
 import com.dang.dragonboy.item.LoaiItem;
 import com.dang.dragonboy.nhan_vat.NhanVat;
@@ -59,26 +60,26 @@ public class admin_dungle extends renderUInpc {
         float daoDong = (float) Math.sin(nhanVat.thoiGianTichLuy) * 1.3f;
         float doDaiShaperender = 120 * npc.getChucNang().length;
         if (doDaiShaperender < 500 ) doDaiShaperender = 500;
-        batch.draw(npc.taiAnh.avtNpc,(Gdx.graphics.getWidth() - doDaiShaperender) / 2f+30,120+60+daoDong,npc.taiAnh.avtNpc.getWidth()*0.5f,npc.taiAnh.avtNpc.getHeight()*0.5f);
+        batch.draw(npc.taiAnh.avtNpc,(QuanLyCamera.VIRTUAL_WIDTH - doDaiShaperender) / 2f+30,120+60+daoDong,npc.taiAnh.avtNpc.getWidth()*0.5f,npc.taiAnh.avtNpc.getHeight()*0.5f);
         batch.end();
         veHUD.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         veHUD.shapeRenderer.setColor(1, 1, 1, 1);
-        veHUD.shapeRenderer.rect((Gdx.graphics.getWidth() - doDaiShaperender) / 2f, 120, doDaiShaperender, 60);
+        veHUD.shapeRenderer.rect((QuanLyCamera.VIRTUAL_WIDTH - doDaiShaperender) / 2f, 120, doDaiShaperender, 60);
         veHUD.shapeRenderer.end();
         veHUD.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         veHUD.shapeRenderer.setColor(Color.BLACK);
         for (int i = 0; i < 2; i++) {
-            veHUD.shapeRenderer.rect((Gdx.graphics.getWidth() - doDaiShaperender) / 2f - i, 120 - i, doDaiShaperender + i * 2, 60 + i * 2);
+            veHUD.shapeRenderer.rect((QuanLyCamera.VIRTUAL_WIDTH - doDaiShaperender) / 2f - i, 120 - i, doDaiShaperender + i * 2, 60 + i * 2);
         }
         veHUD.shapeRenderer.end();
         batch.begin();
         veHUD.layout.setText(veHUD.fontMotaHanhTrang,npc.getLoiThoaiTrong()[0]);
-        veHUD.fontMotaHanhTrang.draw(batch,veHUD.layout,(Gdx.graphics.getWidth() - doDaiShaperender) / 2f + (doDaiShaperender-veHUD.layout.width)/2f,120+35);
+        veHUD.fontMotaHanhTrang.draw(batch,veHUD.layout,(QuanLyCamera.VIRTUAL_WIDTH - doDaiShaperender) / 2f + (doDaiShaperender-veHUD.layout.width)/2f,120+35);
 
         int soNut = npc.getChucNang().length;
 
         for (int i = 0; i < soNut; i++) {
-            float nutX = (Gdx.graphics.getWidth()-(soNut-1)*120-114)/2f + i * 120;
+            float nutX = (QuanLyCamera.VIRTUAL_WIDTH-(soNut-1)*120-114)/2f + i * 120;
             float nutY = 120 - 115;
             if (nutChucNangDangChon == i) {
                 Texture nutVe = timeClickNut > 0 ? veHUD.nutvuongclick : veHUD.nutvuong;
@@ -105,11 +106,11 @@ public class admin_dungle extends renderUInpc {
         batch.end();
         veHUD.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         veHUD.shapeRenderer.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
-        veHUD.shapeRenderer.rect((Gdx.graphics.getWidth() - 528) / 2f - 2f, 35 -1f, 528 +4f, 149 +3f);
+        veHUD.shapeRenderer.rect((QuanLyCamera.VIRTUAL_WIDTH - 528) / 2f - 2f, 35 -1f, 528 +4f, 149 +3f);
         veHUD.shapeRenderer.end();
         batch.begin();
-        batch.draw(veHUD.khungchat,(Gdx.graphics.getWidth() - 528) / 2f,35 , 528, 149);
-        float nX = (Gdx.graphics.getWidth() - 140) / 2f;
+        batch.draw(veHUD.khungchat,(QuanLyCamera.VIRTUAL_WIDTH - 528) / 2f,35 , 528, 149);
+        float nX = (QuanLyCamera.VIRTUAL_WIDTH - 140) / 2f;
         float nutY = 12;
         veHUD.fontTenSkill.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
         batch.draw(timeChoDoiGiftCode>0 && nutDuocChonKhiChat==0? veHUD.nutclick : veHUD.nutdn, nX-81, nutY, 140, 48);
@@ -121,10 +122,10 @@ public class admin_dungle extends renderUInpc {
 
         veHUD.fontTenSkill.setColor(0f / 255f, 85f / 255f, 38f / 255f, 1f);
         veHUD.layout.setText(veHUD.fontTenSkill, "Đổi Giftcode");
-        veHUD.fontTenSkill.draw(batch, veHUD.layout, (Gdx.graphics.getWidth() - 528) / 2f + 15, 35 + 115);
+        veHUD.fontTenSkill.draw(batch, veHUD.layout, (QuanLyCamera.VIRTUAL_WIDTH - 528) / 2f + 15, 35 + 115);
 
         // Các thông số
-        float khungX = (Gdx.graphics.getWidth() - 528) / 2f + 25;
+        float khungX = (QuanLyCamera.VIRTUAL_WIDTH - 528) / 2f + 25;
         float khungY = 35;
         float khungWidth = 465;
         float khungHeight = 68;
@@ -144,7 +145,7 @@ public class admin_dungle extends renderUInpc {
         }
         batch.flush();
         Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
-        Gdx.gl.glScissor((int) khungX, (int) khungY, (int) khungWidth, (int) khungHeight);
+        veHUD.camManager.scissor(khungX, khungY, khungWidth, khungHeight);
         veHUD.fontText.draw(batch, veHUD.layout, khungX - offsetX, khungY + khungHeight );
         batch.flush();
         Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
@@ -168,22 +169,22 @@ public class admin_dungle extends renderUInpc {
         );
 
         float daoDong = (float) Math.sin(nhanVat.thoiGianTichLuy) * 1.3f;
-        batch.draw(npc.taiAnh.avtNpc,(Gdx.graphics.getWidth() - 600) / 2f+30,120+veHUD.layout.height+35*2+daoDong,npc.taiAnh.avtNpc.getWidth()*0.5f,npc.taiAnh.avtNpc.getHeight()*0.5f);
+        batch.draw(npc.taiAnh.avtNpc,(QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f+30,120+veHUD.layout.height+35*2+daoDong,npc.taiAnh.avtNpc.getWidth()*0.5f,npc.taiAnh.avtNpc.getHeight()*0.5f);
         batch.end();
         veHUD.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         veHUD.shapeRenderer.setColor(1, 1, 1, 1);
-        veHUD.shapeRenderer.rect((Gdx.graphics.getWidth() - 600) / 2f, 120, 600, veHUD.layout.height+35*2);
+        veHUD.shapeRenderer.rect((QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f, 120, 600, veHUD.layout.height+35*2);
         veHUD.shapeRenderer.end();
         veHUD.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         veHUD.shapeRenderer.setColor(Color.BLACK);
         for (int i = 0; i < 2; i++) {
-            veHUD.shapeRenderer.rect((Gdx.graphics.getWidth() - 600) / 2f - i, 120 - i, 600 + i * 2, veHUD.layout.height+35*2 + i * 2);
+            veHUD.shapeRenderer.rect((QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f - i, 120 - i, 600 + i * 2, veHUD.layout.height+35*2 + i * 2);
         }
         veHUD.shapeRenderer.end();
         batch.begin();
-        veHUD.fontTenSkill.draw(batch,veHUD.layout,(Gdx.graphics.getWidth() - 600) / 2f+25,120+ veHUD.layout.height+35);
+        veHUD.fontTenSkill.draw(batch,veHUD.layout,(QuanLyCamera.VIRTUAL_WIDTH - 600) / 2f+25,120+ veHUD.layout.height+35);
 
-        float nutX = (Gdx.graphics.getWidth()-114)/2f;
+        float nutX = (QuanLyCamera.VIRTUAL_WIDTH-114)/2f;
         float nutY = 120 - 115;
         batch.draw(timeClickNut > 0 ? veHUD.nutvuongclick : veHUD.nutvuong, nutX, nutY, 114, 114);
 
@@ -235,26 +236,37 @@ public class admin_dungle extends renderUInpc {
             }
         }
     }
+    // Gọi từ ThaoTac.keyTyped khi bấm Enter/Done trên bàn phím ảo Android — tương đương bấm nút
+    // "Đổi" (nutDuocChonKhiChat == 0) thay vì chờ chạm nút + hết timer.
+    public void xuLyEnterGiftCode() {
+        nutDuocChonKhiChat = 0;
+        xuLyXacNhanGiftCode();
+    }
+
+    private void xuLyXacNhanGiftCode() {
+        switch (nutDuocChonKhiChat) {
+            case 0:
+                duLieuNguoiChoi.suDungGiftCode(tinNhanChat,danhSachPhanThuong);
+                if (!danhSachPhanThuong.isEmpty()) {
+                    trangThai = TrangThaiChucNang_admin_dungle.NHAN_QUA_THANH_CONG;
+                } else {
+                    trangThai = TrangThaiChucNang_admin_dungle.NONE;
+                }
+                break;
+            case 1:
+                trangThai = TrangThaiChucNang_admin_dungle.NONE;
+                break;
+        }
+        tinNhanChat = "";
+        nutDuocChonKhiChat = -1;
+    }
+
     public void capNhatTimeChoDoiGiftCode(float delta) {
         if (timeChoDoiGiftCode > 0) {
             timeChoDoiGiftCode -= delta;
             if (timeChoDoiGiftCode <= 0) {
                 timeChoDoiGiftCode = 0;
-                switch (nutDuocChonKhiChat) {
-                    case 0:
-                        duLieuNguoiChoi.suDungGiftCode(tinNhanChat,danhSachPhanThuong);
-                        if (!danhSachPhanThuong.isEmpty()) {
-                            trangThai = TrangThaiChucNang_admin_dungle.NHAN_QUA_THANH_CONG;
-                        } else {
-                            trangThai = TrangThaiChucNang_admin_dungle.NONE;
-                        }
-                        break;
-                    case 1:
-                        trangThai = TrangThaiChucNang_admin_dungle.NONE;
-                        break;
-                }
-                tinNhanChat = "";
-                nutDuocChonKhiChat = -1;
+                xuLyXacNhanGiftCode();
             }
         }
     }
