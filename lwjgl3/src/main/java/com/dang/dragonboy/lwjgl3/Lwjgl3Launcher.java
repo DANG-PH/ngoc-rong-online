@@ -3,6 +3,8 @@ package com.dang.dragonboy.lwjgl3;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.dang.dragonboy.he_thong.Main;
+import com.dang.dragonboy.he_thong.PlatformBridge;
+import com.dang.dragonboy.network.GoogleOAuth2Desktop;
 
 public class Lwjgl3Launcher {
     public static void main(String[] args) {
@@ -11,6 +13,7 @@ public class Lwjgl3Launcher {
     }
 
     private static Lwjgl3Application taoUngDung() {
+        PlatformBridge.googleOAuth = new GoogleOAuth2Desktop();
         return new Lwjgl3Application(new Main(), layCauHinh());
     }
 

@@ -7,12 +7,11 @@ import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-public class GoogleOAuth2Desktop {
+public class GoogleOAuth2Desktop implements GoogleOAuthProvider {
     private static final String CLIENT_ID     = AppConfig.get("google.client.id");
     private static final String CLIENT_SECRET = AppConfig.get("google.client.secret");
-    public interface Callback {
-        void onSuccess(String idToken);
-        void onFailure(String error);
+    // Giữ lại alias cũ để không phải sửa nơi khác lỡ còn tham chiếu GoogleOAuth2Desktop.Callback
+    public interface Callback extends GoogleLoginCallback {
     }
 
     /*
@@ -44,7 +43,8 @@ public class GoogleOAuth2Desktop {
         callback.onFailure("Hết thời gian đăng nhập")  ← nhảy thẳng vào đây
     }
     * */
-    public static void login(Callback callback) {
+    @Override
+    public void login(GoogleLoginCallback callback) {
         new Thread(() -> {
             java.net.ServerSocket serverSocket = null;
             try {
