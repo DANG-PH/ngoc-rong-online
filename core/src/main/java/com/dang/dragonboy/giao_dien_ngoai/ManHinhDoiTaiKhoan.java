@@ -303,6 +303,9 @@ public class ManHinhDoiTaiKhoan implements Screen {
                                     System.out.println("Đăng nhập thành công!");
                                     State_Management.setUserResponse(profileResult.user);
                                     game.setScreen(new ManHinhMenu(game, null, null));
+                                } else if (ApiService.loiMangGanNhat) {
+                                    noiDungThongBao = "Mất kết nối mạng, vui lòng kiểm tra Internet rồi thử lại.";
+                                    trangThaiManHinh = TrangThaiManHinh.THONGBAO;
                                 } else {
                                     System.out.println("Đăng nhập thất bại!");
                                 }
@@ -336,6 +339,9 @@ public class ManHinhDoiTaiKhoan implements Screen {
                                 this.sessionId = sessionId;
                                 trangThaiManHinh = TrangThaiManHinh.VERIFY_OTP;
                                 this.maRandomCapcha = taoCaptcha6KyTu();
+                            } else if (ApiService.loiMangGanNhat) {
+                                noiDungThongBao = "Mất kết nối mạng, vui lòng kiểm tra Internet rồi thử lại.";
+                                trangThaiManHinh = TrangThaiManHinh.THONGBAO;
                             }
                         });
                     }).start();
@@ -369,6 +375,9 @@ public class ManHinhDoiTaiKhoan implements Screen {
                                 tenEmailDky = "";
                                 RealnameDky = "";
                                 GameNameDky = "";
+                            } else if (ApiService.loiMangGanNhat) {
+                                noiDungThongBao = "Mất kết nối mạng, vui lòng kiểm tra Internet rồi thử lại.";
+                                trangThaiManHinh = TrangThaiManHinh.THONGBAO;
                             } else {
                                 System.out.println("Đăng ký thất bại!");
                             }
@@ -577,9 +586,17 @@ public class ManHinhDoiTaiKhoan implements Screen {
                                             game.setScreen(new ManHinhMenu(game, null, null));
                                         } else if (user != null && user.status == ProfileResult.Status.BANNED) {
                                             game.setScreen(new ManHinhMenu(game, null, ManHinhMenu.TrangThai.BAN));
+                                        } else if (ApiService.loiMangGanNhat) {
+                                            noiDungThongBao = "Mất kết nối mạng, vui lòng kiểm tra Internet rồi thử lại.";
+                                            trangThaiManHinh = TrangThaiManHinh.THONGBAO;
                                         } else {
                                             System.out.println("Google login thất bại: không lấy được profile");
                                         }
+                                    });
+                                } else if (ApiService.loiMangGanNhat) {
+                                    Gdx.app.postRunnable(() -> {
+                                        noiDungThongBao = "Mất kết nối mạng, vui lòng kiểm tra Internet rồi thử lại.";
+                                        trangThaiManHinh = TrangThaiManHinh.THONGBAO;
                                     });
                                 } else {
                                     Gdx.app.postRunnable(() -> {

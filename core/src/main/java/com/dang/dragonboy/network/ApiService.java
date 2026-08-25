@@ -29,6 +29,21 @@ public class ApiService {
     private static final String BASE_URL = AppConfig.get("api.base.url");
     private static final Gson gson = new Gson();
 
+    // Nhiều hàm API bên dưới trả về null/false cho CẢ 2 trường hợp: sai tài khoản/mật khẩu (server
+    // trả lỗi bình thường) LẪN không có mạng/không kết nối được tới server (ngoại lệ mạng) — người
+    // dùng không phân biệt được "sai mật khẩu" với "điện thoại mất mạng". Cờ này set true ngay khi
+    // lần gọi API gần nhất thất bại do lỗi MẠNG (không phải do server từ chối), để màn hình gọi API
+    // hiện đúng thông báo "Mất kết nối mạng" thay vì thông báo sai chung chung. Reset về false ở đầu
+    // mỗi hàm gọi API để không bị "dính" trạng thái từ lần gọi trước.
+    public static volatile boolean loiMangGanNhat = false;
+
+    private static boolean laLoiMangInternet(Exception e) {
+        return e instanceof java.net.UnknownHostException
+            || e instanceof java.net.ConnectException
+            || e instanceof java.net.SocketTimeoutException
+            || e instanceof java.net.NoRouteToHostException;
+    }
+
     public static boolean healthCheck() {
         try {
             URL url = new URL(BASE_URL + "/health");
@@ -98,6 +113,7 @@ public class ApiService {
     }
 
     public static boolean register(String username, String password, String realname, String email, String gameName) {
+        loiMangGanNhat = false;
         try {
             URL url = new URL(BASE_URL + "/auth/register");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -123,12 +139,14 @@ public class ApiService {
             return conn.getResponseCode() == 201;
 
         } catch (Exception e) {
+            loiMangGanNhat = laLoiMangInternet(e);
             e.printStackTrace();
             return false;
         }
     }
 
     public static String login(String username, String password) {
+        loiMangGanNhat = false;
         try {
             // === 1️⃣ GỬI REQUEST LOGIN ===
             URL url = new URL(BASE_URL + "/auth/login");
@@ -182,12 +200,14 @@ public class ApiService {
             }
 
         } catch (Exception e) {
+            loiMangGanNhat = laLoiMangInternet(e);
             e.printStackTrace();
         }
         return null; // login fail
     }
 
     public static ProfileResult verifyOTP(String sessionId, String OTP) {
+        loiMangGanNhat = false;
         try {
             URL url = new URL(BASE_URL + "/auth/verify-otp");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -242,6 +262,7 @@ public class ApiService {
             }
 
         } catch (Exception e) {
+            loiMangGanNhat = laLoiMangInternet(e);
             e.printStackTrace();
         }
         return null; // login fail
@@ -249,6 +270,7 @@ public class ApiService {
 
     // 🟨 2️⃣ GET PROFILE → nhận token, trả về UserResponse
     public static ProfileResult getProfile(String token) {
+        loiMangGanNhat = false;
         try {
             URL profileUrl = new URL(BASE_URL + "/user/profile/" + State_Management.getAuth_id());
             HttpURLConnection conn = (HttpURLConnection) profileUrl.openConnection();
@@ -342,6 +364,7 @@ public class ApiService {
             return ProfileResult.ok(user);
 
         } catch (Exception e) {
+            loiMangGanNhat = laLoiMangInternet(e);
             e.printStackTrace();
         }
         return null;
@@ -772,6 +795,7 @@ public class ApiService {
     }
 
     public static LoginWithGoogleResponse loginWithGoogle(String idToken) {
+        loiMangGanNhat = false;
         HttpURLConnection conn = null;
         try {
             String body = "{\"tokenFromGoogle\":\"" + idToken + "\"}";
@@ -815,6 +839,7 @@ public class ApiService {
             }
 
         } catch (Exception e) {
+            loiMangGanNhat = laLoiMangInternet(e);
         } finally {
             if (conn != null) conn.disconnect();
         }

@@ -59,6 +59,11 @@ public class Main extends Game {
             if (profile != null) {
                 State_Management.setUserResponse(profile.user);
                 State_Management.setToken(token);
+            } else if (ApiService.loiMangGanNhat) {
+                // Không có mạng lúc mở app thì không tự đăng nhập lại được — KHÔNG phải token hết
+                // hạn, chỉ là chưa kiểm tra được. Token vẫn còn nguyên trong LocalStorage, lần mở
+                // app kế tiếp có mạng sẽ tự đăng nhập lại bình thường.
+                System.out.println("Không có mạng lúc mở app → chưa kiểm tra được token, yêu cầu đăng nhập lại tạm thời");
             } else {
                 System.out.println("Token hết hạn hoặc không hợp lệ → yêu cầu đăng nhập lại");
             }
