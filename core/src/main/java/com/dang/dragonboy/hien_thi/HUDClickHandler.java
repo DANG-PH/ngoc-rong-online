@@ -81,10 +81,10 @@ public class HUDClickHandler {
         float screenWidth = QuanLyCamera.VIRTUAL_WIDTH;
         float screenHeight = QuanLyCamera.VIRTUAL_HEIGHT;
 
-        // === VÙNG Ô SKILL ===
+        // === VÙNG Ô SKILL === (dời ra giữa khi bật nút điều khiển ảo, khớp với chỗ vẽ trong VeHUD)
         int oskillW = 50;
         int oskillH = 50;
-        float skillBaseX = 30;
+        float skillBaseX = veHUD.dangHienNutDieuKhien ? (QuanLyCamera.VIRTUAL_WIDTH - (4 * 65f + oskillW)) / 2f : 30;
         float skillY = 25f;
 
         for (int i = 0; i < 5; i++) {
@@ -116,14 +116,26 @@ public class HUDClickHandler {
             }
         }
 
-        // === VÙNG Ô ĐẬU THẦN ===
-        int odauthanW = 75;
-        int odauthanH = 75;
-        float odauthanX = screenWidth - odauthanW - 10;
-        float odauthanY = 10;
-        if (x >= odauthanX && x <= odauthanX + 75 && y >= odauthanY && y <= odauthanY + 75) {
+        // === VÙNG Ô ĐẬU THẦN === (thu nhỏ khi bật cụm nút điều khiển mobile, khớp với VeHUD)
+        float odauthanW = veHUD.dangHienNutDieuKhien ? VeHUD.NUT_DAUTHAN_NHO_W : 75;
+        float odauthanH = veHUD.dangHienNutDieuKhien ? VeHUD.NUT_DAUTHAN_NHO_H : 75;
+        float odauthanX = veHUD.dangHienNutDieuKhien ? VeHUD.NUT_DAUTHAN_NHO_X : (screenWidth - odauthanW - 10);
+        float odauthanY = veHUD.dangHienNutDieuKhien ? VeHUD.NUT_DAUTHAN_NHO_Y : 10;
+        if (x >= odauthanX && x <= odauthanX + odauthanW && y >= odauthanY && y <= odauthanY + odauthanH) {
             if (!veHUD.dangHienPopup && !veHUD.dangHienDauThan && !veHUD.daClickVaoNpc && !veHUD.dangHienKhungChat && !(veHUD.timeHienRongThan<=veHUD.TIME_HIEN_RONG_THAN_MAX-2.1f && veHUD.timeHienRongThan>0)) {
                 veHUD.clickODauThan();
+            }
+        }
+
+        // === NÚT TẤN CÔNG / ĐỔI MỤC TIÊU ẢO (mobile) ===
+        if (veHUD.dangHienNutDieuKhien && !veHUD.dangHienPopup && !veHUD.dangHienDauThan && !veHUD.daClickVaoNpc && !veHUD.dangHienKhungChat) {
+            if (x >= VeHUD.NUT_ATTACK_X && x <= VeHUD.NUT_ATTACK_X + VeHUD.NUT_ATTACK_W
+                && y >= VeHUD.NUT_ATTACK_Y && y <= VeHUD.NUT_ATTACK_Y + VeHUD.NUT_ATTACK_H) {
+                veHUD.clickAttack();
+            }
+            if (x >= VeHUD.NUT_CHANGE_X && x <= VeHUD.NUT_CHANGE_X + VeHUD.NUT_CHANGE_W
+                && y >= VeHUD.NUT_CHANGE_Y && y <= VeHUD.NUT_CHANGE_Y + VeHUD.NUT_CHANGE_H) {
+                veHUD.clickChangeTarget();
             }
         }
         // Vùng mở popup
@@ -734,7 +746,7 @@ public class HUDClickHandler {
             float viewY = 35;
             float viewHeight = 444 - 35;
             int KhoangCachItem = 49;
-            int tongSoO = 5;
+            int tongSoO = 6;
 
             // Kiểm tra có click vào vùng không
             if (x >= 3 && x <= 3 + 344 && y >= viewY && y <= viewY + viewHeight) {

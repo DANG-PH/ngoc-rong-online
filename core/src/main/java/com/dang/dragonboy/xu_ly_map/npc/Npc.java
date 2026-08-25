@@ -30,6 +30,13 @@ public class Npc {
     private int soLanChay = 0;
     private boolean dangClickNpc2 = false;
     public boolean dangClickNpc = false;
+
+    // Dùng khi đổi mục tiêu bằng nút "change" (mobile) thay vì tap trực tiếp vào NPC — bỏ chọn
+    // sạch cả 2 cờ để không còn hiện icon "đã click 2 lần" của NPC vừa bị bỏ chọn.
+    public void boChon() {
+        dangClickNpc = false;
+        dangClickNpc2 = false;
+    }
     ShapeRenderer shapeRenderer = new ShapeRenderer();
 
     LoaiNPC loainpc;

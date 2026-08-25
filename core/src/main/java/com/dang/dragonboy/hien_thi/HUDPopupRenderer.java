@@ -1393,7 +1393,8 @@ public class HUDPopupRenderer {
                 String textMap = veHUD.dangHienMapHienTai ? "Tắt Hiện Map" : "Bật Hiện Map";
                 String textNgayGio = veHUD.dangHienNgayGioHienTai ? "Tắt hiện ngày giờ" : "Bật ngày giờ";
                 String textHPKI = veHUD.dangHienChiSo ? "Tắt hiện chỉ số" : "Bật hiện chỉ số";
-                veFormNut(batch,new String[]{textFPS,textCoolDown,textMap,textNgayGio,textHPKI});
+                String textNutDieuKhien = veHUD.dangHienNutDieuKhien ? "Tắt nút điều khiển" : "Bật nút điều khiển";
+                veFormNut(batch,new String[]{textFPS,textCoolDown,textMap,textNgayGio,textHPKI,textNutDieuKhien});
             }
         }
         if (veHUD.timeGlow > 0) {

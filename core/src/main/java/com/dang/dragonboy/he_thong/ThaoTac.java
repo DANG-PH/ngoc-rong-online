@@ -26,6 +26,9 @@ public class ThaoTac extends InputAdapter {
     private boolean vuotNguongKeoPhai = false;
     private int diemBatDauKeoTraiY = 0;
     private boolean vuotNguongKeoTrai = false;
+    // Ngón tay nào (pointer id) đang giữ joystick ảo — -1 nghĩa là chưa có ngón nào giữ. Cần theo
+    // dõi theo pointer để không lẫn với ngón tay khác đang kéo camera/kéo hành trang cùng lúc.
+    private int joystickPointer = -1;
     private final NhanVat nhanVat;
     private final VeHUD hud;
     private final QuanLyCamera camera;
@@ -138,8 +141,28 @@ public class ThaoTac extends InputAdapter {
         Vector2 diem = camera.uiViewport.unproject(new Vector2(screenX, screenY));
         int vx = (int) diem.x;
         int vy = (int) diem.y;
-        if (button == Input.Buttons.LEFT && !hud.dangGiaoDich && !hud.dangHienKhungChung && !hud.dangHienPopup && !hud.dangHienRuongDo && !hud.daClickVaoNpc) {
+        // Ngón tay bấm vào trong vòng ngoài joystick ảo thì không được tính là kéo camera, nếu
+        // không camera sẽ bị pan theo cùng lúc nhân vật di chuyển.
+        float dxJoy = vx - VeHUD.JOYSTICK_CX;
+        float dyJoy = vy - VeHUD.JOYSTICK_CY;
+        boolean chamVaoJoystick = hud.dangHienNutDieuKhien
+            && dxJoy * dxJoy + dyJoy * dyJoy <= VeHUD.JOYSTICK_R_NGOAI * VeHUD.JOYSTICK_R_NGOAI;
+        if (button == Input.Buttons.LEFT && !hud.dangGiaoDich && !hud.dangHienKhungChung && !hud.dangHienPopup && !hud.dangHienRuongDo && !hud.daClickVaoNpc && !chamVaoJoystick) {
             camera.batDauKeoCamera(vx, vy);
+        }
+
+        // Joystick ảo (mobile): bấm trong vòng ngoài để bắt đầu kéo di chuyển nhân vật — chỉ nhận
+        // khi không có popup/khung nào đang mở, giống điều kiện cho phép click-to-move ở touchUp.
+        if (chamVaoJoystick && joystickPointer == -1 &&
+            !hud.dangGiaoDich && !hud.dangHienKhungChung && !hud.dangHienPopup && !hud.dangHienRuongDo &&
+            !hud.daClickVaoNpc && !hud.dangHienDauThan && !hud.dangHienKhungChat && !hud.dangHienDieuUocRongThan &&
+            hud.timeChoBienKhi == 0 && hud.timeChoHopThe == 0) {
+            joystickPointer = pointer;
+            hud.dangKeoJoystick = true;
+            if (nhanVat.diChuyenDenMucTieu) {
+                nhanVat.diChuyenDenMucTieu = false;
+            }
+            capNhatJoystick(vx, vy);
         }
 
         if (hud.trangThaiChucNangHUDChucNang == TrangThaiChucNangHUD_ChucNang.DE_TU ||
@@ -266,6 +289,10 @@ public class ThaoTac extends InputAdapter {
         Vector2 diem = camera.uiViewport.unproject(new Vector2(screenX, screenY));
         int vx = (int) diem.x;
         int vy = (int) diem.y;
+        if (pointer == joystickPointer) {
+            capNhatJoystick(vx, vy);
+            return true;
+        }
         camera.keoCamera(vx, vy);
         if (!hud.DangHienPopupThongTin1 && !hud.DangHienPopupThongTin2 && !hud.DangHienPopupThongTin3) {
             if (hud.keoHanhTrangPhai) {
@@ -306,6 +333,11 @@ public class ThaoTac extends InputAdapter {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         if (GameSocket.isReconnecting || GameSocket.retryCount > 0) return true;
+        if (pointer == joystickPointer) {
+            joystickPointer = -1;
+            ketThucJoystick();
+            return true;
+        }
         Vector2 diem = camera.uiViewport.unproject(new Vector2(screenX, screenY));
         int vx = (int) diem.x;
         int vy = (int) diem.y;
@@ -461,15 +493,79 @@ public class ThaoTac extends InputAdapter {
         }
         return true;
     }
+    // Cập nhật vị trí vòng trong joystick theo ngón tay đang kéo (kẹp trong bán kính vòng ngoài),
+    // rồi suy ra hướng trái/phải/nhảy giữ phím kiểu cũ (phimTraiDangGiu/phimPhaiDangGiu/phimNhayDangGiu)
+    // để tái dùng nguyên logic di chuyển hiện có của NhanVat — chỉ đổi nguồn input, không đổi cách di chuyển.
+    private void capNhatJoystick(float vx, float vy) {
+        float dx = vx - VeHUD.JOYSTICK_CX;
+        float dy = vy - VeHUD.JOYSTICK_CY;
+        float dist = (float) Math.sqrt(dx * dx + dy * dy);
+        if (dist > VeHUD.JOYSTICK_R_NGOAI) {
+            dx = dx / dist * VeHUD.JOYSTICK_R_NGOAI;
+            dy = dy / dist * VeHUD.JOYSTICK_R_NGOAI;
+        }
+        hud.joystickDx = dx;
+        hud.joystickDy = dy;
+
+        boolean traiGiu = dx < -VeHUD.JOYSTICK_NGUONG;
+        boolean phaiGiu = dx > VeHUD.JOYSTICK_NGUONG;
+        boolean nhayGiu = dy > VeHUD.JOYSTICK_NGUONG;
+
+        if (traiGiu && !nhanVat.phimTraiDangGiu) {
+            nhanVat.diTrai();
+            nhanVat.setFlipTrai();
+        } else if (!traiGiu && nhanVat.phimTraiDangGiu) {
+            nhanVat.dungTrai();
+        }
+        if (phaiGiu && !nhanVat.phimPhaiDangGiu) {
+            nhanVat.diPhai();
+            nhanVat.setFlipPhai();
+        } else if (!phaiGiu && nhanVat.phimPhaiDangGiu) {
+            nhanVat.dungPhai();
+        }
+        if (nhayGiu && !nhanVat.phimNhayDangGiu) {
+            nhanVat.nhanNhay();
+        } else if (!nhayGiu && nhanVat.phimNhayDangGiu) {
+            nhanVat.thaNhay();
+        }
+    }
+
+    // Nhả joystick: vòng trong bật về giữa và thả hết các hướng đang giữ.
+    private void ketThucJoystick() {
+        hud.joystickDx = 0f;
+        hud.joystickDy = 0f;
+        hud.dangKeoJoystick = false;
+        if (nhanVat.phimTraiDangGiu) nhanVat.dungTrai();
+        if (nhanVat.phimPhaiDangGiu) nhanVat.dungPhai();
+        if (nhanVat.phimNhayDangGiu) nhanVat.thaNhay();
+    }
+
     public boolean laClickTrenHUD(float x, float y) {
-        // === VÙNG Ô SKILL ===
+        // === VÙNG Ô SKILL === (dời ra giữa khi bật nút điều khiển ảo, khớp với chỗ vẽ trong VeHUD)
         int oskillW = 50;
         int oskillH = 50;
-        float skillBaseX = 30;
+        float skillBaseX = hud.dangHienNutDieuKhien ? (QuanLyCamera.VIRTUAL_WIDTH - (4 * 65f + oskillW)) / 2f : 30;
         float skillY = 25f;
         for (int i = 0; i < 5; i++) {
             float x_ve = skillBaseX + i * 65f;
             if (x >= x_ve && x <= x_ve + oskillW && y >= skillY && y <= skillY + oskillH) {
+                return true;
+            }
+        }
+
+        // === NÚT ĐIỀU KHIỂN ẢO (mobile): joystick trái dưới, tấn công + đổi mục tiêu phải ===
+        if (hud.dangHienNutDieuKhien) {
+            float dx = x - VeHUD.JOYSTICK_CX;
+            float dy = y - VeHUD.JOYSTICK_CY;
+            if (dx * dx + dy * dy <= VeHUD.JOYSTICK_R_NGOAI * VeHUD.JOYSTICK_R_NGOAI) {
+                return true;
+            }
+            if (x >= VeHUD.NUT_ATTACK_X && x <= VeHUD.NUT_ATTACK_X + VeHUD.NUT_ATTACK_W
+                && y >= VeHUD.NUT_ATTACK_Y && y <= VeHUD.NUT_ATTACK_Y + VeHUD.NUT_ATTACK_H) {
+                return true;
+            }
+            if (x >= VeHUD.NUT_CHANGE_X && x <= VeHUD.NUT_CHANGE_X + VeHUD.NUT_CHANGE_W
+                && y >= VeHUD.NUT_CHANGE_Y && y <= VeHUD.NUT_CHANGE_Y + VeHUD.NUT_CHANGE_H) {
                 return true;
             }
         }
@@ -483,11 +579,11 @@ public class ThaoTac extends InputAdapter {
             return true;
         }
 
-        // === VÙNG Ô ĐẬU THẦN ===
-        int odauthanW = 75;
-        int odauthanH = 75;
-        float odauthanX = QuanLyCamera.VIRTUAL_WIDTH - odauthanW - 10;
-        float odauthanY = 10;
+        // === VÙNG Ô ĐẬU THẦN === (thu nhỏ khi bật cụm nút điều khiển mobile, khớp với VeHUD)
+        float odauthanW = hud.dangHienNutDieuKhien ? VeHUD.NUT_DAUTHAN_NHO_W : 75;
+        float odauthanH = hud.dangHienNutDieuKhien ? VeHUD.NUT_DAUTHAN_NHO_H : 75;
+        float odauthanX = hud.dangHienNutDieuKhien ? VeHUD.NUT_DAUTHAN_NHO_X : (QuanLyCamera.VIRTUAL_WIDTH - odauthanW - 10);
+        float odauthanY = hud.dangHienNutDieuKhien ? VeHUD.NUT_DAUTHAN_NHO_Y : 10;
         if (x >= odauthanX && x <= odauthanX + odauthanW && y >= odauthanY && y <= odauthanY + odauthanH) {
             return true;
         }

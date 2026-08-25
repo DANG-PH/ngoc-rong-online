@@ -92,6 +92,37 @@ public class VeHUD {
     public Texture odauthan, odauthanclick;
     public Texture oskill, oskillclick;
     public Texture nutpopup;
+    // Nút điều khiển ảo cho mobile (bật/tắt ở popup nhân vật -> Chức năng -> Tài khoản)
+    public Texture nutAttack, nutAttackClick, nutChange, nutChangeClick;
+    // Mặc định bật trên Android, tắt trên các nền tảng khác — người dùng đổi được trong Tài khoản.
+    public boolean dangHienNutDieuKhien = Gdx.app.getType() == com.badlogic.gdx.Application.ApplicationType.Android;
+    public float thoiGianClickAttack = 0f;
+    public float thoiGianClickChange = 0f;
+    // Toạ độ vùng nút điều khiển ảo — public static final để cả VeHUD (vẽ) lẫn ThaoTac (bắt chạm)
+    // dùng chung ĐÚNG MỘT nguồn, tránh lệch giữa chỗ vẽ và chỗ nhận chạm như từng gặp ở popup item.
+    // Joystick ảo (2 vòng tròn — kéo vòng trong bên trong vòng ngoài để di chuyển): kéo ngang để
+    // đi trái/phải, kéo lên để nhảy (thay cho D-pad rời từng nút).
+    public static final float JOYSTICK_CX = 100, JOYSTICK_CY = 100;
+    public static final float JOYSTICK_R_NGOAI = 65;
+    public static final float JOYSTICK_R_TRONG = 30;
+    public static final float JOYSTICK_NGUONG = 18f; // vượt ngưỡng này mới tính là đang bấm hướng đó
+    // Vị trí hiện tại của vòng trong so với tâm — ThaoTac cập nhật lúc kéo, VeHUD đọc để vẽ.
+    public float joystickDx = 0f, joystickDy = 0f;
+    public boolean dangKeoJoystick = false;
+    // Cụm nút góc phải dưới khi bật nút điều khiển ảo — xếp hình tam giác, KHÔNG phải hàng ngang:
+    // tấn công làm tâm, gần sát mép phải, to nhất; đổi mục tiêu nằm phía trên tấn công và lệch nhẹ
+    // sang phải; đậu thần (thu nhỏ từ 75 xuống 55) nằm bên trái tấn công và thấp hơn tấn công 1 chút.
+    public static final float NUT_ATTACK_W = 90, NUT_ATTACK_H = 90;
+    public static final float NUT_ATTACK_X = QuanLyCamera.VIRTUAL_WIDTH - NUT_ATTACK_W - 15;
+    public static final float NUT_ATTACK_Y = 25;
+
+    public static final float NUT_CHANGE_W = 55, NUT_CHANGE_H = 55;
+    public static final float NUT_CHANGE_X = NUT_ATTACK_X + 32;
+    public static final float NUT_CHANGE_Y = NUT_ATTACK_Y + NUT_ATTACK_H + 12;
+
+    public static final float NUT_DAUTHAN_NHO_W = 55, NUT_DAUTHAN_NHO_H = 55;
+    public static final float NUT_DAUTHAN_NHO_X = NUT_ATTACK_X - NUT_DAUTHAN_NHO_W - 12;
+    public static final float NUT_DAUTHAN_NHO_Y = NUT_ATTACK_Y - 10;
 
     public BitmapFont fontTen,font,fontNgayGioHienTai, fontChucnang,fontChucnang1, fontDauThan, fontNhiemVu, fontNhiemVu1, fontNhiemVuChuaLam, fontMotaNhiemVu, fontvangngoc, fontsm, fontSkilldaco, fontSkillchuaco, fontMotaSkill, fontCapSKill, fontMotaNoiTai, fontTiemNang, fontTenSkill, fontchat, fontMotaNganSkill, fontMotaNganSkill1, fontSkillchuaco1, fontMotaHanhTrang, fontMotaHanhTrang1, fontText, fontMoTaQuyDoiVe, fontMotaChucNangNpc;
     public GlyphLayout layout;
@@ -456,6 +487,10 @@ public class VeHUD {
         odauthanclick = new Texture("hud/giaodientrong/odauthanclick.png");
         oskill = new Texture("hud/giaodientrong/oskill.png");
         oskillclick = new Texture("hud/giaodientrong/oskillclick.png");
+        nutAttack = new Texture("hud/giaodientrong/bg_attack.png");
+        nutAttackClick = new Texture("hud/giaodientrong/bg_attack_click.png");
+        nutChange = new Texture("hud/giaodientrong/change.png");
+        nutChangeClick = new Texture("hud/giaodientrong/change_click.png");
         nutpopup = new Texture("hud/giaodientrong/nutpopup.png");
         popupNhanVat = new Texture("hud/giaodientrong/popupnhanvat.jpg");
         nutX = new Texture("hud/giaodientrong/nutX.png");
@@ -933,11 +968,17 @@ public class VeHUD {
         float screenHeight = QuanLyCamera.VIRTUAL_HEIGHT;
 
         if (!dangHienKhungChat && !daClickVaoNpc && !dangHienDauThan && !(timeHienRongThan<=TIME_HIEN_RONG_THAN_MAX-2.1f && timeHienRongThan>0)) {
-            // RENDER SAU ẢNH ĐẬU THẦN ( trắng )
+            // RENDER SAU ẢNH ĐẬU THẦN ( trắng ) — vị trí/kích thước phải bám theo đúng ô đậu thần
+            // đang vẽ (thu nhỏ khi bật cụm nút điều khiển mobile), nếu không nó sẽ đứng yên ở vị trí
+            // cũ trong khi ảnh đậu thần đã chuyển chỗ.
+            float odWChoRender = dangHienNutDieuKhien ? NUT_DAUTHAN_NHO_W : 75f;
+            float odXChoRender = dangHienNutDieuKhien ? NUT_DAUTHAN_NHO_X : (screenWidth - 75f - 10f);
+            float odYChoRender = dangHienNutDieuKhien ? NUT_DAUTHAN_NHO_Y : 10f;
+            float tiLeDauThan = odWChoRender / 75f;
             shapeRenderer.setProjectionMatrix(camManager.uiCamera.combined);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(1f, 1f, 1f, 1f);
-            shapeRenderer.rect(screenWidth - 75 - 10 + 10, 10 + 10, 53, dauThanRenderH);
+            shapeRenderer.rect(odXChoRender + 10f * tiLeDauThan, odYChoRender + 10f * tiLeDauThan, 53f * tiLeDauThan, dauThanRenderH * tiLeDauThan);
             shapeRenderer.end();
             Gdx.gl.glEnable(GL20.GL_BLEND);
             shapeRenderer.setProjectionMatrix(camManager.uiCamera.combined);
@@ -1000,10 +1041,11 @@ public class VeHUD {
             batch.draw(texOChat, ochatX, ochatY, ochatW, ochatH);
 
 
-            // ô skill (hàng ngang phía dưới)
+            // ô skill (hàng ngang phía dưới) — khi bật nút điều khiển ảo thì D-pad chiếm góc trái,
+            // nên dời thanh skill ra giữa màn hình để không đè lên nhau.
             int oskillW = 50;
             int oskillH = 50;
-            float skillBaseX = 30;
+            float skillBaseX = dangHienNutDieuKhien ? (QuanLyCamera.VIRTUAL_WIDTH - (4 * 65f + oskillW)) / 2f : 30;
             float skillY = 25f;
 
             for (int i = 0; i < 5; i++) {
@@ -1063,11 +1105,14 @@ public class VeHUD {
                     }
                 }
 
-                // số kỹ năng
-                font.setColor(Color.WHITE);
-                String text = (i + 1) + "";
-                layout.setText(font, text);
-                font.draw(batch, layout, x + (oskillW - layout.width) / 2, skillY + oskillH + 15f);
+                // số kỹ năng — chỉ hiện trên PC vì đó là phím tắt số 1-5, mobile không bấm phím
+                // được nên số này vô nghĩa trên đó.
+                if (!dangHienNutDieuKhien) {
+                    font.setColor(Color.WHITE);
+                    String text = (i + 1) + "";
+                    layout.setText(font, text);
+                    font.draw(batch, layout, x + (oskillW - layout.width) / 2, skillY + oskillH + 15f);
+                }
             }
 
             // nút popup thông tin nhân vật (bên trái trên)
@@ -1075,19 +1120,70 @@ public class VeHUD {
             float nutpopupY = screenHeight / 4f * 3;
             batch.draw(nutpopup, nutpopupX, nutpopupY, 22, 38);
 
-            // ô đậu thần (góc phải dưới)
-            int odauthanW = 75;
-            int odauthanH = 75;
-            float odauthanX = screenWidth - odauthanW - 10;
-            float odauthanY = 10;
+            // ô đậu thần (góc phải dưới) — thu nhỏ khi bật cụm nút điều khiển mobile để nhường chỗ
+            // cho nút tấn công/đổi mục tiêu, dùng chung 1 nguồn kích thước/vị trí với HUDClickHandler.
+            float odauthanW = dangHienNutDieuKhien ? NUT_DAUTHAN_NHO_W : 75;
+            float odauthanH = dangHienNutDieuKhien ? NUT_DAUTHAN_NHO_H : 75;
+            float odauthanX = dangHienNutDieuKhien ? NUT_DAUTHAN_NHO_X : (screenWidth - odauthanW - 10);
+            float odauthanY = dangHienNutDieuKhien ? NUT_DAUTHAN_NHO_Y : 10;
             Texture texODauThan = (thoiGianClickODauThan > 0) ? odauthanclick : odauthan;
             batch.draw(texODauThan, odauthanX, odauthanY, odauthanW, odauthanH);
 
             // số đậu thần
             font.setColor(83 / 255f, 41 / 255f, 5 / 255f, 1);
             layout.setText(font, duLieuNguoiChoi.getSoDauThan()+"");
-            font.draw(batch, layout, odauthanX+(odauthanW- layout.width)/2f , odauthanY + 43);
+            font.draw(batch, layout, odauthanX+(odauthanW- layout.width)/2f , odauthanY + odauthanH * 43f / 75f);
 
+            // Nút điều khiển ảo cho mobile (tự vẽ bằng ShapeRenderer, chưa có asset riêng): joystick
+            // ảo góc trái dưới (thay chỗ thanh skill cũ) — kéo vòng trong bên trong vòng ngoài để đi
+            // trái/phải/nhảy, giống joystick ảo các game mobile hay dùng. Nút đổi mục tiêu + tấn công
+            // ở góc phải, phía trên ô đậu thần.
+            if (dangHienNutDieuKhien) {
+                batch.end();
+                Gdx.gl.glEnable(GL20.GL_BLEND);
+                shapeRenderer.setProjectionMatrix(camManager.uiCamera.combined);
+
+                // Vòng ngoài (cố định, viền)
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                shapeRenderer.setColor(0f, 0f, 0f, 0.3f);
+                shapeRenderer.circle(JOYSTICK_CX, JOYSTICK_CY, JOYSTICK_R_NGOAI, 30);
+                shapeRenderer.end();
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+                shapeRenderer.setColor(1f, 1f, 1f, 0.6f);
+                shapeRenderer.circle(JOYSTICK_CX, JOYSTICK_CY, JOYSTICK_R_NGOAI, 30);
+                shapeRenderer.end();
+
+                // Vòng trong (di chuyển theo ngón tay, đứng giữa khi không kéo) — tông cam đỏ đậm,
+                // rực hơn bản trước (bớt pha nhạt) để nhìn có sức sống, không dùng trắng nữa.
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                shapeRenderer.setColor(1f, 0.32f, 0.02f, dangKeoJoystick ? 1f : 0.7f);
+                shapeRenderer.circle(JOYSTICK_CX + joystickDx, JOYSTICK_CY + joystickDy, JOYSTICK_R_TRONG, 24);
+                shapeRenderer.end();
+                Gdx.gl.glDisable(GL20.GL_BLEND);
+
+                batch.begin();
+                // Nút tấn công — chỉ hiệu ứng bấm, CHƯA gắn logic đánh. Lúc vừa bấm thì thu nhỏ lại
+                // một chút rồi phóng to dần về đúng kích thước gốc trong lúc ảnh click còn hiện,
+                // tâm nút luôn giữ nguyên (không lệch sang 1 phía khi thu nhỏ).
+                Texture texAttack = (thoiGianClickAttack > 0) ? nutAttackClick : nutAttack;
+                float tiLeAttack = (thoiGianClickAttack > 0) ? (1f - 0.15f * (thoiGianClickAttack / 0.2f)) : 1f;
+                float attackDrawW = NUT_ATTACK_W * tiLeAttack;
+                float attackDrawH = NUT_ATTACK_H * tiLeAttack;
+                float attackDrawX = NUT_ATTACK_X + (NUT_ATTACK_W - attackDrawW) / 2f;
+                float attackDrawY = NUT_ATTACK_Y + (NUT_ATTACK_H - attackDrawH) / 2f;
+                batch.draw(texAttack, attackDrawX, attackDrawY, attackDrawW, attackDrawH);
+                // Nút đổi mục tiêu giữa các NPC trong map — cùng hiệu ứng thu nhỏ/phóng to như nút
+                // tấn công, để bấm dồn dập vẫn thấy nút "nảy" theo từng lần bấm thay vì đứng im
+                // như 1 ảnh tĩnh (trước đây chỉ đổi texture, không có chuyển động nên spam click
+                // trông như nút bị đơ).
+                Texture texChange = (thoiGianClickChange > 0) ? nutChangeClick : nutChange;
+                float tiLeChange = (thoiGianClickChange > 0) ? (1f - 0.15f * (thoiGianClickChange / 0.2f)) : 1f;
+                float changeDrawW = NUT_CHANGE_W * tiLeChange;
+                float changeDrawH = NUT_CHANGE_H * tiLeChange;
+                float changeDrawX = NUT_CHANGE_X + (NUT_CHANGE_W - changeDrawW) / 2f;
+                float changeDrawY = NUT_CHANGE_Y + (NUT_CHANGE_H - changeDrawH) / 2f;
+                batch.draw(texChange, changeDrawX, changeDrawY, changeDrawW, changeDrawH);
+            }
         }
         // Tên nhân vật/npc/người chơi khác ngay ở thanhhp.png
         font.setColor(0f / 255f, 83f / 255f, 37f / 255f, 1f);
@@ -1228,6 +1324,65 @@ public class VeHUD {
 
     public void clickOChat() {
         thoiGianClickOChat = 0.2f;
+    }
+    // Nút tấn công ảo (mobile) — CHƯA gắn logic đánh quái thật sự. Nếu đang có NPC được chọn (mũi
+    // tên đang hiện, chọn qua nút change hoặc tap trực tiếp), bấm tấn công sẽ tự đi tới chỗ NPC đó
+    // y hệt cơ chế click-to-move bằng chuột/chạm; nếu đã đứng đủ gần rồi (dùng lại đúng ngưỡng 60
+    // của thucHienHanhDongNpc()) thì mở luôn popup/tương tác với NPC đó, không cần bấm lại vào NPC.
+    public void clickAttack() {
+        thoiGianClickAttack = 0.2f;
+        if (mapHienTai == null || nhanVat == null) return;
+        java.util.List<com.dang.dragonboy.xu_ly_map.npc.Npc> ds = mapHienTai.LayDanhSachNpc();
+        if (ds == null) return;
+        for (com.dang.dragonboy.xu_ly_map.npc.Npc npc : ds) {
+            if (!npc.dangClickNpc) continue;
+            float dx = nhanVat.getX() - npc.getX();
+            float dy = nhanVat.getY() - npc.getY();
+            float khoangCach = (float) Math.sqrt(dx * dx + dy * dy);
+            if (khoangCach < 60f) {
+                npc.thucHienHanhDongNpc();
+            } else {
+                nhanVat.diChuyenDenMucTieu = true;
+                nhanVat.setToaDoMucTieu(npc.getX(), npc.getY());
+            }
+            break;
+        }
+    }
+    // Nút đổi mục tiêu ảo (mobile) — chọn NPC gần nhân vật nhất trong map hiện tại (giống việc
+    // click trực tiếp vào NPC: hiện mũi tên + tên nhô lên), bấm tiếp thì chuyển dần sang NPC xa
+    // hơn theo thứ tự khoảng cách gần -> xa, hết danh sách thì quay lại NPC gần nhất.
+    public void clickChangeTarget() {
+        thoiGianClickChange = 0.2f;
+        if (mapHienTai == null || nhanVat == null) return;
+        java.util.List<com.dang.dragonboy.xu_ly_map.npc.Npc> dsGoc = mapHienTai.LayDanhSachNpc();
+        if (dsGoc == null || dsGoc.isEmpty()) return;
+        // Sắp trên 1 bản sao — không sort trực tiếp danh sách gốc của map vì thứ tự đó có thể
+        // đang được vẽ/xử lý va chạm dựa theo, sort tại chỗ sẽ làm xáo trộn ngoài ý muốn.
+        float px = nhanVat.getX();
+        float py = nhanVat.getY();
+        java.util.List<com.dang.dragonboy.xu_ly_map.npc.Npc> ds = new java.util.ArrayList<>(dsGoc);
+        ds.sort(java.util.Comparator.comparingDouble(npc -> {
+            float dx = npc.getX() - px;
+            float dy = npc.getY() - py;
+            return dx * dx + dy * dy;
+        }));
+        int chiSoHienTai = -1;
+        for (int i = 0; i < ds.size(); i++) {
+            if (ds.get(i).dangClickNpc) { chiSoHienTai = i; break; }
+        }
+        for (com.dang.dragonboy.xu_ly_map.npc.Npc npc : ds) {
+            npc.boChon();
+        }
+        int chiSoKeTiep = (chiSoHienTai + 1) % ds.size();
+        com.dang.dragonboy.xu_ly_map.npc.Npc npcChon = ds.get(chiSoKeTiep);
+        npcChon.dangClickNpc = true;
+        // Mỗi frame, map đều tự gọi lại checkClick(nhanVat.x_check_npc, nhanVat.y_check_npc) cho
+        // TỪNG npc để xác nhận lại NPC nào đang được chọn dựa theo điểm chạm world lần cuối — nếu
+        // không đồng bộ điểm chạm này về đúng NPC vừa chọn, ngay frame kế tiếp checkClick() sẽ tự
+        // set dangClickNpc = false lại (vì điểm chạm cũ không nằm trên NPC này), xoá mất lựa chọn
+        // vừa gán ở trên gần như ngay lập tức.
+        nhanVat.x_check_npc = npcChon.getX();
+        nhanVat.y_check_npc = npcChon.getY();
     }
     public void clickODauThan() {
         thoiGianClickODauThan = 0.2f;
@@ -1396,6 +1551,12 @@ public class VeHUD {
                             else thongBao = "Đã ẩn chỉ số";
                             setTinNhanPet(thongBao,2f);
                             break;
+                        case 5:
+                            dangHienNutDieuKhien = !dangHienNutDieuKhien;
+                            if (dangHienNutDieuKhien) thongBao = "Đã bật nút điều khiển";
+                            else thongBao = "Đã tắt nút điều khiển";
+                            setTinNhanPet(thongBao,2f);
+                            break;
                     }
                 } else {
                     if (duLieuNguoiChoi.coDeTu()) {
@@ -1506,6 +1667,12 @@ public class VeHUD {
         }
         if (thoiGianClickODauThan > 0) {
             thoiGianClickODauThan -= delta;
+        }
+        if (thoiGianClickAttack > 0) {
+            thoiGianClickAttack -= delta;
+        }
+        if (thoiGianClickChange > 0) {
+            thoiGianClickChange -= delta;
         }
         if (nutClickTimer > 0) {
             nutClickTimer -= Gdx.graphics.getDeltaTime();
@@ -2732,6 +2899,7 @@ public class VeHUD {
         Texture[] textures = {
             saoden, saoxanh, ochat, ochatclick, thanhhp,
             odauthan, odauthanclick, oskill, oskillclick,
+            nutAttack, nutAttackClick, nutChange, nutChangeClick,
             nutpopup, popupNhanVat, nutX, nutchucnang, nutchucnangclick,
             vang, ngoc, thanhtheluc, thanhtheluc2,
             hanh_trang, hanh_trang_click, hanh_trang_dang_mac, hanh_trang_dang_mac_click,
