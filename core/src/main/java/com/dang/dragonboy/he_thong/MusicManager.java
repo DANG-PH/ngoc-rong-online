@@ -32,6 +32,10 @@ public class MusicManager {
     // Danh sách nhạc active có thứ tự (cho UI hiển thị)
     private static final List<MusicServerData> danhSachNhac = new ArrayList<>();
 
+    // Tên các bài tải/load lỗi ở lần refresh gần nhất — cho VeHUD đọc để báo qua pet, tránh lỗi
+    // bị nuốt âm thầm (trước đây chỉ log Gdx.app.error, không có gì hiện trong game để biết).
+    private static final List<String> loiTaiNhac = new ArrayList<>();
+
     private static boolean daLoad = false;
 
     /**
@@ -63,6 +67,7 @@ public class MusicManager {
 
         // Lưu lại danh sách active cho UI
         danhSachNhac.clear();
+        loiTaiNhac.clear();
         for (MusicServerData m : danhSach) {
             if (m.status == MusicStatus.ACTIVE) {
                 danhSachNhac.add(m);
@@ -83,6 +88,7 @@ public class MusicManager {
                 boolean ok = ApiService.taiFileNhacVeLocal(m.file_url, local);
                 if (!ok) {
                     Gdx.app.error("MusicManager", "Không tải được: " + m.name);
+                    loiTaiNhac.add(m.name);
                     continue;
                 }
             }
@@ -98,6 +104,7 @@ public class MusicManager {
                     nhacNen.put(id, music);
                 } catch (Exception e) {
                     Gdx.app.error("MusicManager", "Load music fail: " + name, e);
+                    loiTaiNhac.add(name);
                 }
             });
         }
@@ -118,6 +125,13 @@ public class MusicManager {
      */
     public static List<MusicServerData> getDanhSach() {
         return danhSachNhac;
+    }
+
+    /**
+     * Tên các bài tải/load lỗi ở lần refresh gần nhất (rỗng nếu không có lỗi).
+     */
+    public static List<String> getLoiTaiNhac() {
+        return loiTaiNhac;
     }
 
     /**

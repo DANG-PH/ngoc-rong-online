@@ -698,6 +698,13 @@ public class VeHUD {
 
         MusicManager.refresh(() -> {
             System.out.println("Load nhạc nền xong");
+            // Báo qua pet nếu có bài tải/load lỗi — trước đây chỉ log Gdx.app.error, không hiện
+            // gì trong game nên rất khó biết khi đang cầm máy thật (đặc biệt Android lần đầu cài,
+            // chưa có cache local nên bắt buộc phải tải, lỗi mạng/server sẽ lộ ra ở đây).
+            java.util.List<String> loiNhac = MusicManager.getLoiTaiNhac();
+            if (!loiNhac.isEmpty()) {
+                setTinNhanPet("Tải nhạc nền lỗi " + loiNhac.size() + " bài, kiểm tra lại mạng/server nhạc", 3f);
+            }
             // Game tiếp tục bình thường
         });
 
