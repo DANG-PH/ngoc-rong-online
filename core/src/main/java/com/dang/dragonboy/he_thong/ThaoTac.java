@@ -141,6 +141,18 @@ public class ThaoTac extends InputAdapter {
         Vector2 diem = camera.uiViewport.unproject(new Vector2(screenX, screenY));
         int vx = (int) diem.x;
         int vy = (int) diem.y;
+        // Tự dọn joystickPointer nếu bị "kẹt": 1 pointer không thể có 2 lần touchDown liên tiếp mà
+        // thiếu touchUp ở giữa, nên nếu thấy touchDown MỚI trên đúng pointer đang được ghi nhận là
+        // đang giữ joystick thì chắc chắn phiên giữ trước đó đã kết thúc ngoài ý muốn (mất sự kiện
+        // touchUp, ví dụ app bị gián đoạn giữa lúc đang kéo) — không dọn thì touchUp/touchDragged
+        // của lần bấm KẾ TIẾP trên cùng pointer đó sẽ bị nhầm là vẫn thuộc về joystick cũ và bị
+        // nuốt mất (đúng hiện tượng bấm lần đầu không ăn, bấm lần 2 mới ăn).
+        if (pointer == joystickPointer) {
+            joystickPointer = -1;
+            hud.dangKeoJoystick = false;
+            hud.joystickDx = 0f;
+            hud.joystickDy = 0f;
+        }
         // Ngón tay bấm vào trong vòng ngoài joystick ảo thì không được tính là kéo camera, nếu
         // không camera sẽ bị pan theo cùng lúc nhân vật di chuyển.
         float dxJoy = vx - VeHUD.JOYSTICK_CX;
